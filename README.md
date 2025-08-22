@@ -50,6 +50,7 @@ Massimino creates a zero-tolerance, anti-creep environment for fitness professio
 
 ## 📁 Project Structure
 massimino/
+
 ├── prisma/ # Database schema & seeds
 ├── src/
 │ ├── app/ # Auth, dashboard, and API routes
