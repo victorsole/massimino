@@ -51,20 +51,110 @@ Massimino creates a zero-tolerance, anti-creep environment for fitness professio
 ## 📁 Project Structure
 massimino/
 
-├── prisma/ # Database schema & seeds
+├── prisma/
+│   ├── schema.prisma              # Core schema with safety-focused models
+│   ├── seeds/
+│   │   ├── users.ts              # Seed data for different user types
+│   │   └── moderation-rules.ts   # Seed moderation rules & thresholds
+│   └── migrations/               # Database version control
+│
 ├── src/
-│ ├── app/ # Auth, dashboard, and API routes
-│ ├── components/ # UI and form components
-│ ├── lib/ # Core logic (auth, moderation, payments, etc.)
-│ ├── types/ # TypeScript interfaces
-│ └── hooks/ # Custom React hooks
-├── tests/ # Unit & e2e tests
-├── public/ # Static assets and icons
-├── docs/ # API and deployment guides
-├── .env.example # Env variable template
-├── tailwind.config.js # Tailwind setup
-├── next.config.js # Next.js config
-└── README.md
+│   ├── app/                      # Next.js 15 App Router
+│   │   ├── api/
+│   │   │   ├── auth/             # OAuth endpoints
+│   │   │   ├── moderation/       # Content moderation endpoints
+│   │   │   ├── users/            # User management
+│   │   │   └── reports/          # Safety reporting system
+│   │   ├── auth/                 # Auth pages (login, callback)
+│   │   ├── dashboard/            # User dashboards by role
+│   │   ├── safety/               # Safety center & reports
+│   │   └── globals.css           # Tailwind imports
+│   │
+│   ├── components/
+│   │   ├── ui/                   # Base UI components
+│   │   ├── auth/                 # Auth-related components
+│   │   ├── safety/               # Safety & moderation components
+│   │   │   ├── ModerationAlert.tsx
+│   │   │   ├── ReportButton.tsx
+│   │   │   └── SafetyBadge.tsx
+│   │   ├── forms/                # Form components with built-in moderation
+│   │   └── layout/               # Layout components
+│   │
+│   ├── lib/
+│   │   ├── auth/
+│   │   │   ├── config.ts         # Auth configuration
+│   │   │   ├── providers.ts      # OAuth providers setup
+│   │   │   └── session.ts        # Session management
+│   │   ├── moderation/
+│   │   │   ├── openai.ts         # OpenAI integration
+│   │   │   ├── rules.ts          # Custom moderation rules
+│   │   │   ├── middleware.ts     # Content filtering middleware
+│   │   │   ├── logger.ts         # Moderation action logging
+│   │   │   └── enforcement.ts    # Tiered enforcement system
+│   │   ├── safety/
+│   │   │   ├── reporting.ts      # User reporting system
+│   │   │   ├── reputation.ts     # User reputation scoring
+│   │   │   └── privacy.ts        # Privacy controls
+│   │   ├── database/
+│   │   │   ├── client.ts         # Prisma client setup
+│   │   │   └── queries.ts        # Common DB queries
+│   │   ├── utils/
+│   │   │   ├── validation.ts     # Input validation schemas
+│   │   │   └── constants.ts      # App constants & configs
+│   │   └── email/                # Email notifications (future)
+│   │
+│   ├── types/
+│   │   ├── auth.ts               # Authentication types
+│   │   ├── moderation.ts         # Moderation & safety types
+│   │   ├── user.ts               # User & role types
+│   │   ├── database.ts           # Database model types
+│   │   └── api.ts                # API response types
+│   │
+│   ├── hooks/
+│   │   ├── useAuth.ts            # Authentication hook
+│   │   ├── useModeration.ts      # Content moderation hook
+│   │   ├── useSafety.ts          # Safety features hook
+│   │   └── useRole.ts            # Role-based permissions hook
+│   │
+│   └── middleware.ts             # Next.js middleware for route protection
+│
+├── tests/
+│   ├── __mocks__/                # Test mocks
+│   ├── unit/
+│   │   ├── moderation/           # Moderation system tests
+│   │   ├── auth/                 # Authentication tests
+│   │   └── safety/               # Safety feature tests
+│   ├── integration/              # API integration tests
+│   ├── e2e/                      # End-to-end tests
+│   └── utils/                    # Test utilities
+│
+├── public/
+│   ├── icons/                    # App icons & favicons
+│   ├── images/
+│   │   ├── safety/               # Safety-related imagery
+│   │   └── branding/             # Brand assets
+│   └── manifest.json             # PWA manifest
+│
+├── docs/
+│   ├── API.md                    # API documentation
+│   ├── SAFETY.md                 # Safety policies & enforcement
+│   ├── MODERATION.md             # Moderation system guide
+│   ├── DEPLOYMENT.md             # Deployment instructions
+│   └── CONTRIBUTING.md           # Development guidelines
+│
+├── config/
+│   ├── moderation-rules.json     # Configurable moderation rules
+│   ├── safety-thresholds.json    # Safety enforcement thresholds
+│   └── user-roles.json          # Role definitions & permissions
+│
+├── .env.example                  # Environment variables template
+├── .env.local                    # Local development env
+├── tailwind.config.js            # Tailwind configuration
+├── next.config.js                # Next.js configuration
+├── tsconfig.json                 # TypeScript configuration
+├── eslint.config.js              # ESLint rules
+├── prettier.config.js            # Code formatting
+└── README.md                     # Project documentation
 
 ## Ownership
 Massimino is a product of Beresol BV and developed by Victor Solé Ferioli.
