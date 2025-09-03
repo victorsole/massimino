@@ -4,7 +4,7 @@
  */
 
 import { z } from 'zod';
-import { UserRole, UserStatus, ViolationType, ModerationAction } from '@prisma/client';
+import { UserRole, ViolationType, ModerationAction as PrismaModerationAction } from '@prisma/client';
 
 // ============================================================================
 // BASIC VALIDATION HELPERS
@@ -275,7 +275,7 @@ export const ReportSubmissionSchema = z.object({
 export const ModerationActionSchema = z.object({
   userId: z.string().uuid('Invalid user ID'),
   
-  action: z.nativeEnum(ModerationAction),
+  action: z.nativeEnum(PrismaModerationAction),
   
   reason: z.string()
     .min(10, 'Please provide a detailed reason')
@@ -508,41 +508,8 @@ export function validateHashtags(content: string): {
 }
 
 // ============================================================================
-// EXPORT ALL SCHEMAS AND UTILITIES
+// EXPORT UTILITIES
 // ============================================================================
-
-export {
-  // User schemas
-  UserRegistrationSchema,
-  UserProfileUpdateSchema,
-  TrainerProfileSchema,
-  
-  // Content schemas
-  PostCreationSchema,
-  CommentCreationSchema,
-  DirectMessageSchema,
-  CommunityCreationSchema,
-  
-  // Moderation schemas
-  ReportSubmissionSchema,
-  ModerationActionSchema,
-  
-  // Utility schemas
-  SearchSchema,
-  PaginationSchema,
-  ApiResponseSchema,
-  FileUploadSchema,
-  
-  // Validation utilities
-  validateContentSafety,
-  sanitizeTextInput,
-  validateMentions,
-  validateHashtags,
-  
-  // Constants
-  ValidationPatterns,
-  ContentLimits,
-};
 
 // Type exports for TypeScript
 export type UserRegistration = z.infer<typeof UserRegistrationSchema>;

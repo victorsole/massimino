@@ -469,8 +469,6 @@ export function isFeatureEnabled(
 export {
   UserRole,
   UserStatus,
-  REPUTATION_THRESHOLDS,
-  BASE_PERMISSIONS,
 };
 
 export type {
