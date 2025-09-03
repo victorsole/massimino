@@ -1,0 +1,403 @@
+// Prisma schema for Massimino - Safety-first fitness platform
+// This schema prioritizes user safety, content moderation, and role-based access
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// USER MANAGEMENT & AUTHENTICATION
+// ============================================================================
+
+enum UserRole {
+  CLIENT     // Regular gym-goers and fitness enthusiasts
+  TRAINER    // Personal trainers and fitness professionals
+  ADMIN      // Platform administrators
+}
+
+enum UserStatus {
+  ACTIVE     // Normal active user
+  SUSPENDED  // Temporarily suspended
+  BANNED     // Permanently banned
+  PENDING    // Awaiting verification (trainers)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  image         String?   // Profile picture URL
+  role          UserRole  @default(CLIENT)
+  status        UserStatus @default(ACTIVE)
+  
+  // OAuth fields
+  googleId      String?   @unique
+  emailVerified DateTime?
+  
+  // Safety & Privacy settings
+  acceptDMs           Boolean   @default(false)  // Allow direct messages
+  onlyTrainerDMs      Boolean   @default(true)   // Only trainers can DM
+  profileVisibility   String    @default("PUBLIC") // PUBLIC, PRIVATE, TRAINERS_ONLY
+  showRealName        Boolean   @default(false)  // Show real name vs username
+  
+  // Trainer-specific fields
+  trainerVerified     Boolean   @default(false)
+  trainerBio          String?
+  trainerCredentials  String?   // JSON string for certifications
+  trainerRating       Float?    @default(0.0)
+  
+  // Reputation & Safety scoring
+  reputationScore     Int       @default(100)    // Starts at 100, decreases with violations
+  warningCount        Int       @default(0)      // Number of warnings received
+  
+  // Timestamps
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastLoginAt   DateTime?
+  suspendedUntil DateTime? // When suspension expires
+  
+  // Relationships
+  accounts            Account[]
+  sessions            Session[]
+  moderationLogs      ModerationLog[]
+  violations          UserViolation[]
+  reportsSubmitted    SafetyReport[]    @relation("ReportSubmitter")
+  reportsReceived     SafetyReport[]    @relation("ReportedUser")
+  safetySettings      SafetySettings?
+  
+  // Community relationships
+  communitiesOwned    Community[]       @relation("CommunityOwner")
+  communityMemberships CommunityMember[]
+  posts               Post[]
+  comments            Comment[]
+  
+  @@map("users")
+}
+
+// NextAuth.js required models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verificationtokens")
+}
+
+// ============================================================================
+// SAFETY & MODERATION SYSTEM
+// ============================================================================
+
+enum ModerationAction {
+  APPROVED    // Content passed moderation
+  FLAGGED     // Flagged for human review
+  BLOCKED     // Automatically blocked
+  EDITED      // Auto-edited (profanity filter)
+}
+
+enum ModerationSource {
+  OPENAI_API     // OpenAI moderation API
+  CUSTOM_RULES   // Custom fitness-specific rules
+  USER_REPORT    // User-submitted report
+  ADMIN_ACTION   // Manual admin action
+}
+
+enum ViolationType {
+  INAPPROPRIATE_CONTENT  // Sexual, suggestive content
+  HARASSMENT            // Bullying, harassment
+  SPAM                  // Spam or promotional content
+  IMPERSONATION        // Fake trainer credentials
+  OFF_TOPIC            // Non-fitness related content
+  PRIVACY_VIOLATION    // Sharing personal info without consent
+  HATE_SPEECH          // Discriminatory language
+  THREAT               // Threats or violence
+}
+
+model ModerationLog {
+  id          String            @id @default(cuid())
+  userId      String?           // User who created the content
+  contentType String            // 'POST', 'COMMENT', 'MESSAGE', 'PROFILE'
+  contentId   String            // ID of the moderated content
+  content     String            @db.Text // Original content
+  
+  // Moderation results
+  action         ModerationAction
+  source         ModerationSource
+  flaggedReason  String?          // Why it was flagged
+  confidence     Float?           // AI confidence score (0-1)
+  
+  // OpenAI API response
+  openaiResponse Json?            // Full OpenAI response
+  
+  // Processing details
+  processedAt    DateTime         @default(now())
+  reviewedAt     DateTime?        // When human reviewed (if needed)
+  reviewedBy     String?          // Admin who reviewed
+  
+  // Timestamps
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  
+  // Relationships
+  user           User?            @relation(fields: [userId], references: [id])
+  
+  @@index([userId, createdAt])
+  @@index([action, source])
+  @@map("moderation_logs")
+}
+
+model UserViolation {
+  id              String        @id @default(cuid())
+  userId          String
+  violationType   ViolationType
+  description     String        @db.Text
+  severity        Int           @default(1) // 1-5 scale
+  
+  // Actions taken
+  warningIssued   Boolean       @default(false)
+  suspensionHours Int?          // Hours of suspension (null = no suspension)
+  reputationHit   Int           @default(0) // Points deducted from reputation
+  
+  // Context
+  contentType     String?       // What content caused violation
+  contentId       String?       // ID of violating content
+  moderationLogId String?       // Related moderation log
+  
+  // Resolution
+  resolved        Boolean       @default(false)
+  resolvedAt      DateTime?
+  resolvedBy      String?       // Admin who resolved
+  
+  createdAt       DateTime      @default(now())
+  
+  // Relationships
+  user            User          @relation(fields: [userId], references: [id])
+  
+  @@index([userId, createdAt])
+  @@index([violationType, severity])
+  @@map("user_violations")
+}
+
+model SafetyReport {
+  id              String        @id @default(cuid())
+  reporterId      String        // User making the report
+  reportedUserId  String        // User being reported
+  violationType   ViolationType
+  description     String        @db.Text
+  evidence        Json?         // Screenshots, message IDs, etc.
+  
+  // Context
+  contentType     String?       // POST, COMMENT, MESSAGE, PROFILE
+  contentId       String?       // ID of reported content
+  
+  // Status
+  status          String        @default("PENDING") // PENDING, INVESTIGATING, RESOLVED, DISMISSED
+  priority        String        @default("NORMAL")  // LOW, NORMAL, HIGH, URGENT
+  
+  // Resolution
+  resolvedAt      DateTime?
+  resolvedBy      String?       // Admin who handled it
+  resolution      String?       @db.Text // What action was taken
+  
+  createdAt       DateTime      @default(now())
+  
+  // Relationships
+  reporter        User          @relation("ReportSubmitter", fields: [reporterId], references: [id])
+  reportedUser    User          @relation("ReportedUser", fields: [reportedUserId], references: [id])
+  
+  @@index([reportedUserId, createdAt])
+  @@index([status, priority])
+  @@map("safety_reports")
+}
+
+model SafetySettings {
+  id                    String  @id @default(cuid())
+  userId                String  @unique
+  
+  // Message settings
+  allowDirectMessages   Boolean @default(false)
+  allowTrainerMessages  Boolean @default(true)
+  allowGroupMessages    Boolean @default(true)
+  
+  // Visibility settings
+  profileVisibility     String  @default("PUBLIC")    // PUBLIC, PRIVATE, TRAINERS_ONLY
+  showOnlineStatus      Boolean @default(false)
+  showLastSeen          Boolean @default(false)
+  
+  // Safety preferences
+  autoBlockFlaggedUsers Boolean @default(true)
+  requireVerifiedTrainers Boolean @default(false)
+  contentFilterStrength String  @default("MEDIUM")    // LOW, MEDIUM, HIGH, STRICT
+  
+  // Notification preferences
+  safetyAlerts          Boolean @default(true)
+  moderationNotifications Boolean @default(true)
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  // Relationships
+  user                  User    @relation(fields: [userId], references: [id])
+  
+  @@map("safety_settings")
+}
+
+// ============================================================================
+// COMMUNITY & CONTENT SYSTEM
+// ============================================================================
+
+enum CommunityType {
+  PUBLIC     // Open to all users
+  PRIVATE    // Invite-only
+  TRAINER    // Only for specific trainer's clients
+}
+
+model Community {
+  id              String        @id @default(cuid())
+  name            String
+  description     String?       @db.Text
+  type            CommunityType @default(PUBLIC)
+  ownerId         String        // Trainer who owns this community
+  
+  // Safety settings
+  moderationEnabled Boolean     @default(true)
+  requireApproval   Boolean     @default(false)  // Posts need approval
+  
+  // Metadata
+  memberCount     Int           @default(0)
+  postCount       Int           @default(0)
+  isActive        Boolean       @default(true)
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  // Relationships
+  owner           User          @relation("CommunityOwner", fields: [ownerId], references: [id])
+  members         CommunityMember[]
+  posts           Post[]
+  
+  @@index([ownerId, type])
+  @@map("communities")
+}
+
+model CommunityMember {
+  id          String    @id @default(cuid())
+  userId      String
+  communityId String
+  role        String    @default("MEMBER") // MEMBER, MODERATOR
+  joinedAt    DateTime  @default(now())
+  isActive    Boolean   @default(true)
+  
+  // Relationships
+  user        User      @relation(fields: [userId], references: [id])
+  community   Community @relation(fields: [communityId], references: [id])
+  
+  @@unique([userId, communityId])
+  @@map("community_members")
+}
+
+enum PostStatus {
+  PUBLISHED  // Live and visible
+  PENDING    // Awaiting moderation approval
+  FLAGGED    // Flagged by moderation system
+  REMOVED    // Removed by moderator
+  DRAFT      // Not yet published
+}
+
+model Post {
+  id            String      @id @default(cuid())
+  title         String?
+  content       String      @db.Text
+  authorId      String
+  communityId   String?     // Optional - can be general posts
+  
+  // Content metadata
+  contentType   String      @default("TEXT") // TEXT, IMAGE, VIDEO
+  attachments   Json?       // File URLs, metadata
+  
+  // Moderation status
+  status        PostStatus  @default(PUBLISHED)
+  moderatedAt   DateTime?
+  moderatedBy   String?
+  
+  // Engagement
+  likesCount    Int         @default(0)
+  commentsCount Int         @default(0)
+  reportsCount  Int         @default(0)
+  
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  
+  // Relationships
+  author        User        @relation(fields: [authorId], references: [id])
+  community     Community?  @relation(fields: [communityId], references: [id])
+  comments      Comment[]
+  
+  @@index([authorId, createdAt])
+  @@index([communityId, status, createdAt])
+  @@map("posts")
+}
+
+model Comment {
+  id          String      @id @default(cuid())
+  content     String      @db.Text
+  authorId    String
+  postId      String
+  parentId    String?     // For nested comments
+  
+  // Moderation
+  status      PostStatus  @default(PUBLISHED)
+  moderatedAt DateTime?
+  
+  // Engagement
+  likesCount  Int         @default(0)
+  reportsCount Int        @default(0)
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  
+  // Relationships
+  author      User        @relation(fields: [authorId], references: [id])
+  post        Post        @relation(fields: [postId], references: [id])
+  parent      Comment?    @relation("CommentReplies", fields: [parentId], references: [id])
+  replies     Comment[]   @relation("CommentReplies")
+  
+  @@index([postId, createdAt])
+  @@index([authorId, status])
+  @@map("comments")
+}
