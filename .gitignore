@@ -1,1 +1,11 @@
 node_modules
+
+# Secrets
+.env
+.env.*
+*.env
+
+# Secrets
+.env
+.env.*
+*.env
