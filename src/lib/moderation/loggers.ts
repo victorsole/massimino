@@ -92,7 +92,7 @@ class ModerationLogger {
     });
 
     // Extract metrics
-    this.extractMetrics(entry, timestamp, logId);
+    this.extractMetrics(entry, timestamp);
 
     // Console logging for immediate visibility
     this.logToConsole(entry, timestamp, logId);
@@ -135,21 +135,33 @@ class ModerationLogger {
     try {
       // Batch insert to database
       await prisma.moderationLog.createMany({
-        data: logsToFlush.map(({ entry, timestamp, id }) => ({
-          id,
-          userId: entry.userId,
-          contentType: entry.contentType,
-          contentId: this.extractContentId(entry.content),
-          content: this.truncateContent(entry.content),
-          action: entry.action,
-          source: entry.result.source,
-          flaggedReason: entry.result.reason,
-          confidence: entry.result.confidence,
-          openaiResponse: this.serializeOpenAIResponse(entry.result),
-          processedAt: entry.result.moderatedAt,
-          createdAt: timestamp,
-          updatedAt: timestamp,
-        })),
+        data: logsToFlush.map(({ entry, timestamp, id }) => {
+          const contentId = this.extractContentId(entry.content);
+          const data: any = {
+            id,
+            contentType: entry.contentType,
+            content: this.truncateContent(entry.content),
+            action: entry.action,
+            source: entry.result.source,
+            confidence: entry.result.confidence,
+            openaiResponse: this.serializeOpenAIResponse(entry.result),
+            processedAt: entry.result.moderatedAt,
+            createdAt: timestamp,
+            updatedAt: timestamp,
+          };
+
+          if (entry.userId) {
+            data.userId = entry.userId;
+          }
+          if (contentId) {
+            data.contentId = contentId;
+          }
+          if (entry.result.reason) {
+            data.flaggedReason = entry.result.reason;
+          }
+
+          return data;
+        }),
         skipDuplicates: true,
       });
 
@@ -167,24 +179,28 @@ class ModerationLogger {
    */
   private extractMetrics(
     entry: ModerationLogEntry,
-    timestamp: Date,
-    logId: string
+    timestamp: Date
   ): void {
     const maxSeverity = Math.max(
       ...entry.result.categories.map(c => c.severity),
       1
     );
 
-    this.metricsQueue.push({
+    const metrics: LogMetrics = {
       timestamp,
       action: entry.action,
       duration: this.calculateProcessingDuration(entry.result),
       success: entry.result.action !== ModerationAction.BLOCKED,
-      userId: entry.userId,
       contentLength: entry.content.length,
       confidence: entry.result.confidence,
       severity: maxSeverity,
-    });
+    };
+
+    if (entry.userId) {
+      metrics.userId = entry.userId;
+    }
+
+    this.metricsQueue.push(metrics);
 
     // Keep metrics queue manageable
     if (this.metricsQueue.length > 1000) {
@@ -279,7 +295,7 @@ class ModerationLogger {
   /**
    * Extract content ID if available
    */
-  private extractContentId(content: string): string | null {
+  private extractContentId(_content: string): string | null {
     // Try to extract ID from content metadata
     // This would depend on how content is structured
     return null;
@@ -453,7 +469,7 @@ export async function getRecentModerationActivity(limit: number = 20): Promise<A
     role: string;
   };
 }>> {
-  return prisma.moderationLog.findMany({
+  const logs = await prisma.moderationLog.findMany({
     take: limit,
     orderBy: { createdAt: 'desc' },
     include: {
@@ -465,6 +481,16 @@ export async function getRecentModerationActivity(limit: number = 20): Promise<A
       },
     },
   });
+
+  return logs.map(log => ({
+    id: log.id,
+    userId: log.userId,
+    action: log.action,
+    contentType: log.contentType,
+    confidence: log.confidence,
+    createdAt: log.createdAt,
+    ...(log.user && { user: { name: log.user.name, role: log.user.role } }),
+  }));
 }
 
 /**
@@ -574,17 +600,10 @@ export function getRealTimeMetrics(timeWindow: number = 3600000): {
 }
 
 // ============================================================================
-// EXPORT API
+// EXPORT UTILITIES
 // ============================================================================
 
 export {
-  logModerationAction,
-  getUserModerationLogs,
-  getModerationStats,
-  getRecentModerationActivity,
-  searchModerationLogs,
-  cleanupOldLogs,
-  getRealTimeMetrics,
   LOGGING_CONFIG,
 };
 

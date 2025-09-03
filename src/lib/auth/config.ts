@@ -32,7 +32,7 @@ export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: requiredEnvVars.GOOGLE_CLIENT_ID!,
-      clientSecret: requiredEnvVars.GOOGLE_CLIENT_SECRET,
+      clientSecret: requiredEnvVars.GOOGLE_CLIENT_SECRET!,
       authorization: {
         params: {
           // Request additional permissions for safety
@@ -186,7 +186,7 @@ export const authOptions: NextAuthOptions = {
     },
 
     // Handle JWT tokens for API routes
-    async jwt({ token, user, account }) {
+    async jwt({ token, user }) {
       // Store user ID in token on first sign in
       if (user) {
         token.userId = user.id;
@@ -214,12 +214,12 @@ export const authOptions: NextAuthOptions = {
 
   // Event handlers for logging and safety
   events: {
-    async signIn({ user, account, profile, isNewUser }) {
+    async signIn({ user, account: _account, isNewUser }) {
       console.log('User signed in:', {
         userId: user.id,
         email: user.email,
         isNewUser,
-        provider: account?.provider,
+        provider: _account?.provider,
       });
 
       // Log new user registrations for safety monitoring
@@ -227,7 +227,7 @@ export const authOptions: NextAuthOptions = {
         console.log('New user registered:', {
           userId: user.id,
           email: user.email,
-          provider: account?.provider,
+          provider: _account?.provider,
           timestamp: new Date().toISOString(),
         });
       }

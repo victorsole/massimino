@@ -4,13 +4,12 @@
  */
 
 import { prisma } from '@/lib/database/client';
-import { logModerationAction } from './logger';
+import { logModerationAction } from './loggers';
 import type { 
   ModerationResult,
   EnforcementConfig,
   EnforcementResult,
-  UserAction,
-  SafetyChecks 
+  UserAction
 } from '@/types/moderation';
 import { UserStatus, ViolationType } from '@prisma/client';
 
@@ -95,7 +94,7 @@ export async function getEnforcementAction(
     const severity = calculateViolationSeverity(moderationResult);
     
     // Determine appropriate action
-    const action = await determineEnforcementAction(user, severity, moderationResult);
+    const action = await determineEnforcementAction(user, severity);
     
     // Calculate penalties
     const reputationChange = calculateReputationPenalty(user, severity, moderationResult);
@@ -198,7 +197,7 @@ async function getUserSafetyInfo(userId: string): Promise<UserSafetyInfo | null>
       recent: recentViolations.length,
       bySeverity,
       byType,
-      lastViolation: violations[0]?.createdAt,
+      ...(violations[0]?.createdAt && { lastViolation: violations[0].createdAt }),
     },
     suspensionHistory,
   };
@@ -229,8 +228,7 @@ function calculateViolationSeverity(result: ModerationResult): number {
  */
 async function determineEnforcementAction(
   user: UserSafetyInfo,
-  severity: number,
-  result: ModerationResult
+  severity: number
 ): Promise<UserAction> {
   const config = ENFORCEMENT_CONFIG;
   
@@ -288,13 +286,15 @@ function calculateReputationPenalty(
   // Apply violation type penalty
   if (result.categories.length > 0) {
     const primaryCategory = result.categories[0];
-    const typeKey = Object.keys(ViolationType).find(key => 
-      ViolationType[key as keyof typeof ViolationType] === primaryCategory.subcategory
-    );
-    
-    if (typeKey) {
-      const typePenalty = config.reputationPenalties[primaryCategory.subcategory as ViolationType];
-      penalty = Math.max(penalty, typePenalty);
+    if (primaryCategory && primaryCategory.subcategory) {
+      const typeKey = Object.keys(ViolationType).find(key => 
+        ViolationType[key as keyof typeof ViolationType] === primaryCategory.subcategory
+      );
+      
+      if (typeKey) {
+        const typePenalty = config.reputationPenalties[primaryCategory.subcategory as ViolationType];
+        penalty = Math.max(penalty, typePenalty);
+      }
     }
   }
   
@@ -327,8 +327,8 @@ async function applyEnforcementAction(
 ): Promise<EnforcementResult> {
   const actionDetails = parseUserAction(action);
   
-  // Start database transaction
-  const result = await prisma.$transaction(async (tx) => {
+      // Start database transaction
+    const result = await prisma.$transaction(async (tx) => {
     // Get current user state
     const currentUser = await tx.user.findUniqueOrThrow({
       where: { id: userId },
@@ -341,13 +341,13 @@ async function applyEnforcementAction(
     const newStatus = actionDetails.newStatus || currentUser.status;
     
     // Update user record
-    const updatedUser = await tx.user.update({
+    await tx.user.update({
       where: { id: userId },
       data: {
         reputationScore: newReputationScore,
         warningCount: newWarningCount,
         status: newStatus,
-        suspendedUntil: actionDetails.suspendedUntil,
+        ...(actionDetails.suspendedUntil && { suspendedUntil: actionDetails.suspendedUntil }),
       },
     });
 
@@ -358,19 +358,17 @@ async function applyEnforcementAction(
         violationType: getViolationTypeFromResult(moderationResult),
         severity,
         description: moderationResult.reason || 'Content violation detected',
-        contentId,
-        contentType,
-        actionTaken: action,
+        ...(contentId && { contentId }),
+        ...(contentType && { contentType }),
         warningIssued: actionDetails.isWarning,
-        suspensionHours: actionDetails.duration,
+        ...(actionDetails.duration && { suspensionHours: actionDetails.duration }),
         reputationHit: reputationPenalty,
         moderationLogId: 'temp', // Would be set by the logging system
       },
     });
 
-    return {
+    const result: EnforcementResult = {
       action,
-      duration: actionDetails.duration,
       reason: generateEnforcementReason(action, severity, moderationResult),
       severity,
       reputationChange: -reputationPenalty,
@@ -381,8 +379,18 @@ async function applyEnforcementAction(
       notifyReporter: shouldNotifyReporter(action),
       escalateToAdmin: shouldEscalateToAdmin(action, severity),
       canAppeal: canAppealAction(action),
-      appealDeadline: getAppealDeadline(action),
     };
+
+    if (actionDetails.duration) {
+      result.duration = actionDetails.duration;
+    }
+
+    const appealDeadline = getAppealDeadline(action);
+    if (appealDeadline) {
+      result.appealDeadline = appealDeadline;
+    }
+
+    return result;
   });
 
   // Log the enforcement action
@@ -527,7 +535,10 @@ function getViolationTypeFromResult(result: ModerationResult): ViolationType {
   if (result.categories.length === 0) return ViolationType.OFF_TOPIC;
   
   // Map category to violation type
-  const category = result.categories[0].category.toLowerCase();
+  const firstCategory = result.categories[0];
+  if (!firstCategory) return ViolationType.OFF_TOPIC;
+  
+  const category = firstCategory.category.toLowerCase();
   
   if (category.includes('sexual') || category.includes('inappropriate')) {
     return ViolationType.INAPPROPRIATE_CONTENT;
@@ -573,13 +584,10 @@ export function getEnforcementConfig(): EnforcementConfig {
 }
 
 // ============================================================================
-// EXPORT API
+// EXPORT UTILITIES
 // ============================================================================
 
 export {
-  getEnforcementAction,
-  updateEnforcementConfig,
-  getEnforcementConfig,
   DEFAULT_ENFORCEMENT_CONFIG,
 };
 

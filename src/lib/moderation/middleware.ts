@@ -5,16 +5,15 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { moderateContent } from './openai';
-import { applyCustomRules } from './rules';
-import { logModerationAction } from './logger';
-import { getEnforcementAction } from './enforcement';
+import { applyCustomRules } from '@/lib/moderation/rules';
+import { logModerationAction } from '@/lib/moderation/loggers';
+import { getEnforcementAction } from '@/lib/moderation/enforcement';
 import type { 
   ModerationResult, 
-  ModerationTarget,
   ModerationContext,
   ContentType 
 } from '@/types/moderation';
-import { ModerationAction } from '@prisma/client';
+import { ModerationAction, ModerationSource } from '@prisma/client';
 
 // ============================================================================
 // MIDDLEWARE CONFIGURATION
@@ -50,7 +49,7 @@ const moderationCache = new Map<string, { result: ModerationResult; timestamp: n
  */
 export async function moderationMiddleware(
   request: NextRequest,
-  context: { params?: Record<string, any> }
+  _context: { params?: Record<string, any> }
 ): Promise<NextResponse | void> {
   // Skip if moderation is disabled
   if (!MIDDLEWARE_CONFIG.enabled) {
@@ -86,37 +85,65 @@ export async function moderationMiddleware(
     
     if (blockedContent.length > 0) {
       // Log the blocked attempt
-      await logModerationAction({
-        userId: userContext?.userId,
-        action: ModerationAction.BLOCKED,
-        contentType: getContentType(request.url),
-        content: blockedContent[0].content,
-        result: blockedContent[0].result,
-        userAgent: request.headers.get('user-agent'),
-        ipAddress: getClientIP(request),
-      });
+      if (blockedContent[0]) {
+        const logEntry: any = {
+          action: ModerationAction.BLOCKED,
+          contentType: getContentType(request.url),
+          content: blockedContent[0].content,
+          result: blockedContent[0].result,
+          metadata: {
+            ipAddress: getClientIP(request),
+          },
+        };
+        if (userContext?.userId) {
+          logEntry.userId = userContext.userId;
+        }
+        if (request.headers.get('user-agent')) {
+          logEntry.metadata.userAgent = request.headers.get('user-agent');
+        }
+        await logModerationAction(logEntry);
+      }
 
       // Apply enforcement action
-      if (userContext?.userId) {
+      if (userContext?.userId && blockedContent[0]) {
         await getEnforcementAction(userContext.userId, blockedContent[0].result);
       }
 
-      return createBlockedResponse(blockedContent[0].result);
+      return createBlockedResponse(blockedContent[0]?.result || { 
+        action: ModerationAction.BLOCKED,
+        blocked: true, 
+        flagged: false, 
+        categories: [], 
+        confidence: 0, 
+        reason: 'Content blocked', 
+        moderatedAt: new Date(), 
+        appealable: false,
+        source: ModerationSource.CUSTOM_RULES,
+        requiresHumanReview: false,
+        reviewPriority: 'LOW'
+      });
     }
 
     // Log flagged content for review
     const flaggedContent = moderationResults.filter(r => r.result.flagged);
     
     for (const flagged of flaggedContent) {
-      await logModerationAction({
-        userId: userContext?.userId,
+      const logEntry: any = {
         action: ModerationAction.FLAGGED,
         contentType: getContentType(request.url),
         content: flagged.content,
         result: flagged.result,
-        userAgent: request.headers.get('user-agent'),
-        ipAddress: getClientIP(request),
-      });
+        metadata: {
+          ipAddress: getClientIP(request),
+        },
+      };
+      if (userContext?.userId) {
+        logEntry.userId = userContext.userId;
+      }
+      if (request.headers.get('user-agent')) {
+        logEntry.metadata.userAgent = request.headers.get('user-agent');
+      }
+      await logModerationAction(logEntry);
     }
 
     // Continue processing if content is approved or just flagged
@@ -250,7 +277,7 @@ interface UserContext {
 /**
  * Get user context from request
  */
-async function getUserContext(request: NextRequest): Promise<UserContext | undefined> {
+async function getUserContext(_request: NextRequest): Promise<UserContext | undefined> {
   // This would typically extract user info from session/JWT
   // For now, return undefined - would be implemented with actual auth
   
@@ -350,7 +377,9 @@ function extractMentions(content: string): string[] {
   let match;
   
   while ((match = mentionRegex.exec(content)) !== null) {
-    mentions.push(match[1]);
+    if (match[1]) {
+      mentions.push(match[1]);
+    }
   }
   
   return mentions;
@@ -364,14 +393,14 @@ function getClientIP(request: NextRequest): string {
   const realIP = request.headers.get('x-real-ip');
   
   if (forwarded) {
-    return forwarded.split(',')[0].trim();
+    return forwarded.split(',')[0]?.trim() || 'unknown';
   }
   
   if (realIP) {
     return realIP;
   }
   
-  return request.ip || 'unknown';
+  return 'unknown';
 }
 
 /**
@@ -492,12 +521,5 @@ export function validateContentClient(content: string): {
 // ============================================================================
 // EXPORT API
 // ============================================================================
-
-export {
-  moderationMiddleware,
-  validateContentClient,
-  MIDDLEWARE_CONFIG,
-  ENDPOINT_CONTENT_MAP,
-};
 
 export type { UserContext };

@@ -3,8 +3,8 @@
  * Optimized queries for user safety, moderation, and security operations
  */
 
-import { prisma, safeTransaction, withRetry } from './client';
-import type { 
+import { prisma, safeTransaction } from '@/lib/database/client';
+import { 
   User, 
   UserViolation, 
   ModerationLog, 
@@ -13,7 +13,8 @@ import type {
   UserRole,
   UserStatus,
   ViolationType,
-  ModerationAction 
+  ModerationAction,
+  ModerationSource
 } from '@prisma/client';
 import type { SafeUser } from '@/types/auth';
 
@@ -96,14 +97,25 @@ export async function getUserSafetyProfile(userId: string): Promise<{
   const restrictions = determineUserRestrictions(user, violationCount, recentViolations);
 
   return {
-    user: {
-      ...user,
+    user: user ? {
+      id: user.id,
+      email: user.email,
+      name: user.name || 'Unknown',
+      ...(user.image && { image: user.image }),
+      role: user.role,
+      status: user.status,
+      reputationScore: user.reputationScore,
+      warningCount: user.warningCount,
+      trainerVerified: user.trainerVerified,
+      suspendedUntil: user.suspendedUntil || null,
       isSafe: riskLevel === 'LOW' && user.status === UserStatus.ACTIVE,
-    },
+      createdAt: user.createdAt,
+      lastLoginAt: user.lastLoginAt || null,
+    } : null,
     violationCount,
     recentViolations,
     suspensionHistory,
-    lastViolation: lastViolationResult?.createdAt,
+    ...(lastViolationResult?.createdAt && { lastViolation: lastViolationResult.createdAt }),
     riskLevel,
     restrictions,
   };
@@ -169,9 +181,9 @@ export async function getFlaggedUsers(params: {
     skip: params.offset || 0,
   });
 
-  return users.map(user => {
+  return users.map((user: any) => {
     const violationCount = user.violations.length;
-    const recentViolations = user.violations.filter(v => v.createdAt >= thirtyDaysAgo).length;
+    const recentViolations = user.violations.filter((v: any) => v.createdAt >= thirtyDaysAgo).length;
     const lastViolation = user.violations[0]?.createdAt;
     
     const riskLevel = calculateUserRiskLevel(
@@ -190,7 +202,7 @@ export async function getFlaggedUsers(params: {
       warningCount: user.warningCount,
       violationCount,
       recentViolations,
-      lastViolation,
+      ...(lastViolation && { lastViolation }),
       riskLevel,
     };
   });
@@ -240,10 +252,10 @@ export async function updateUserSafetyStatus(
 export async function createModerationLog(data: {
   userId?: string;
   contentType: string;
-  contentId?: string;
+  contentId: string;
   content: string;
   action: ModerationAction;
-  source: string;
+  source: ModerationSource;
   flaggedReason?: string;
   confidence?: number;
   openaiResponse?: any;
@@ -252,8 +264,6 @@ export async function createModerationLog(data: {
     data: {
       ...data,
       processedAt: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
     },
   });
 }
@@ -359,9 +369,15 @@ export async function getModerationStatistics(timeframe: 'day' | 'week' | 'month
     // User activity
     if (log.userId) {
       if (!userActivity[log.userId]) {
-        userActivity[log.userId] = { count: 0, name: log.user?.name };
+        const userData: { count: number; name?: string } = { count: 0 };
+        if (log.user?.name) {
+          userData.name = log.user.name;
+        }
+        userActivity[log.userId] = userData;
       }
-      userActivity[log.userId].count++;
+      if (userActivity[log.userId]) {
+        userActivity[log.userId]!.count++;
+      }
     }
     
     // Confidence calculation
@@ -374,7 +390,7 @@ export async function getModerationStatistics(timeframe: 'day' | 'week' | 'month
   const averageConfidence = confidenceCount > 0 ? totalConfidence / confidenceCount : 0;
   
   const topViolationReasons = reasonCounts.map(r => ({
-    reason: r.flaggedReason || 'Unknown',
+    reason: r.flaggedReason ?? 'Unknown',
     count: r._count.flaggedReason,
   }));
 
@@ -382,7 +398,7 @@ export async function getModerationStatistics(timeframe: 'day' | 'week' | 'month
     .map(([userId, data]) => ({
       userId,
       actionCount: data.count,
-      userName: data.name,
+      ...(data.name && { userName: data.name }),
     }))
     .sort((a, b) => b.actionCount - a.actionCount)
     .slice(0, 10);
@@ -407,7 +423,7 @@ export async function getModerationStatistics(timeframe: 'day' | 'week' | 'month
 export async function createSafetyReport(data: {
   reporterId: string;
   reportedUserId: string;
-  category: ViolationType;
+  violationType: ViolationType;
   description: string;
   evidence?: any;
   contentId?: string;
@@ -417,7 +433,7 @@ export async function createSafetyReport(data: {
     data: {
       ...data,
       status: 'PENDING',
-      priority: determinePriority(data.category, data.description),
+      priority: determinePriority(data.violationType, data.description),
       createdAt: new Date(),
     },
   });
@@ -431,8 +447,8 @@ export async function getPendingSafetyReports(params: {
   limit?: number;
   offset?: number;
 }): Promise<Array<SafetyReport & {
-  reporter: { name: string; role: UserRole };
-  reportedUser: { name: string; role: UserRole; reputationScore: number };
+  reporter: { name: string | null; role: UserRole };
+  reportedUser: { name: string | null; role: UserRole; reputationScore: number };
 }>> {
   return prisma.safetyReport.findMany({
     where: {
@@ -494,11 +510,10 @@ export async function createUserViolation(data: {
   description: string;
   contentId?: string;
   contentType?: string;
-  actionTaken: string;
   warningIssued: boolean;
   suspensionHours?: number;
-  reputationPenalty: number;
-  moderationLogId: string;
+  reputationHit: number;
+  moderationLogId?: string;
 }): Promise<UserViolation> {
   return safeTransaction(async (tx) => {
     // Create violation record
@@ -515,7 +530,7 @@ export async function createUserViolation(data: {
         where: { id: data.userId },
         data: {
           warningCount: { increment: 1 },
-          reputationScore: { decrement: data.reputationPenalty },
+          reputationScore: { decrement: data.reputationHit },
         },
       });
     }
@@ -534,14 +549,11 @@ export async function getUserViolationHistory(
     offset?: number;
     includeResolved?: boolean;
   }
-): Promise<Array<UserViolation & { moderationLog?: ModerationLog }>> {
+): Promise<UserViolation[]> {
   return prisma.userViolation.findMany({
     where: {
       userId,
       ...(params?.includeResolved === false && { resolved: false }),
-    },
-    include: {
-      moderationLog: true,
     },
     orderBy: { createdAt: 'desc' },
     take: params?.limit || 20,
@@ -598,7 +610,7 @@ export async function updateUserSafetySettings(
 /**
  * Get safety analytics for admin dashboard
  */
-export async function getSafetyAnalytics(timeframe: 'week' | 'month' | 'quarter' = 'month'): Promise<{
+export async function getSafetyAnalytics(_timeframe: 'week' | 'month' | 'quarter' = 'month'): Promise<{
   userGrowth: Array<{ date: string; newUsers: number; activeUsers: number }>;
   violationTrends: Array<{ date: string; violations: number; severity: number }>;
   moderationEfficiency: {
@@ -763,11 +775,11 @@ function determineUserRestrictions(
  */
 function determinePriority(category: ViolationType, description: string): 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT' {
   // High priority categories
-  if ([ViolationType.THREAT, ViolationType.HATE_SPEECH, ViolationType.PRIVACY_VIOLATION].includes(category)) {
+  if (category === ViolationType.THREAT || category === ViolationType.HATE_SPEECH || category === ViolationType.PRIVACY_VIOLATION) {
     return 'URGENT';
   }
   
-  if ([ViolationType.HARASSMENT, ViolationType.INAPPROPRIATE_CONTENT].includes(category)) {
+  if (category === ViolationType.HARASSMENT || category === ViolationType.INAPPROPRIATE_CONTENT) {
     return 'HIGH';
   }
   
@@ -785,37 +797,10 @@ function determinePriority(category: ViolationType, description: string): 'LOW' 
 }
 
 // ============================================================================
-// EXPORT ALL FUNCTIONS
+// EXPORT UTILITY FUNCTIONS
 // ============================================================================
 
 export {
-  // User safety
-  getUserSafetyProfile,
-  getFlaggedUsers,
-  updateUserSafetyStatus,
-  
-  // Moderation logs
-  createModerationLog,
-  getModerationLogs,
-  getModerationStatistics,
-  
-  // Safety reports
-  createSafetyReport,
-  getPendingSafetyReports,
-  updateSafetyReport,
-  
-  // User violations
-  createUserViolation,
-  getUserViolationHistory,
-  
-  // Safety settings
-  getUserSafetySettings,
-  updateUserSafetySettings,
-  
-  // Analytics
-  getSafetyAnalytics,
-  generateSafetyReport,
-  
   // Utilities
   calculateUserRiskLevel,
   determineUserRestrictions,

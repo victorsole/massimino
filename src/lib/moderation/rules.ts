@@ -44,9 +44,9 @@ import type {
         'attractive', 'cute', 'curves', 'butt', 'chest', 'legs'
       ],
       regexPatterns: [
-        /\b(nice|great|amazing|sexy|hot)\s+(body|figure|physique|curves|butt|chest|legs)\b/i,
-        /\b(you\s+look|looking)\s+(sexy|hot|amazing|gorgeous|stunning)\b/i,
-        /\b(beautiful|gorgeous|stunning)\s+(woman|girl|lady|man|guy)\b/i,
+        '\\b(nice|great|amazing|sexy|hot)\\s+(body|figure|physique|curves|butt|chest|legs)\\b',
+        '\\b(you\\s+look|looking)\\s+(sexy|hot|amazing|gorgeous|stunning)\\b',
+        '\\b(beautiful|gorgeous|stunning)\\s+(woman|girl|lady|man|guy)\\b',
       ],
       contexts: ['POST', 'COMMENT', 'MESSAGE'],
       userRoles: ['CLIENT', 'TRAINER'],
@@ -86,11 +86,11 @@ import type {
         'number', 'date', 'dinner', 'drinks', 'relationship'
       ],
       regexPatterns: [
-        /\b(want\s+to|let\'s)\s+(meet|hook\s+up|get\s+together)\b/i,
-        /\b(private|personal)\s+(session|training|meeting)\b/i,
-        /\b(dm|text|call)\s+me\b/i,
-        /\b\d{3}[-.]?\d{3}[-.]?\d{4}\b/, // Phone numbers
-        /\b[\w._%+-]+@[\w.-]+\.[A-Z]{2,}\b/i, // Email addresses
+        '\\b(want\\s+to|let\'s)\\s+(meet|hook\\s+up|get\\s+together)\\b',
+        '\\b(private|personal)\\s+(session|training|meeting)\\b',
+        '\\b(dm|text|call)\\s+me\\b',
+        '\\b\\d{3}[-.]?\\d{3}[-.]?\\d{4}\\b', // Phone numbers
+        '\\b[\\w._%+-]+@[\\w.-]+\\.[A-Z]{2,}\\b', // Email addresses
       ],
       contexts: ['COMMENT', 'MESSAGE', 'POST'],
       userRoles: ['CLIENT', 'TRAINER'],
@@ -126,9 +126,9 @@ import type {
         'NASM', 'ACE', 'ACSM', 'NSCA', 'RD', 'registered', 'dietitian'
       ],
       regexPatterns: [
-        /\b(certified|licensed)\s+(trainer|nutritionist|dietitian)\b/i,
-        /\b(NASM|ACE|ACSM|NSCA)\s+certified\b/i,
-        /\bregistered\s+dietitian\b/i,
+        '\\b(certified|licensed)\\s+(trainer|nutritionist|dietitian)\\b',
+        '\\b(NASM|ACE|ACSM|NSCA)\\s+certified\\b',
+        '\\bregistered\\s+dietitian\\b',
       ],
       contexts: ['PROFILE', 'POST', 'COMMENT'],
       userRoles: ['CLIENT'], // Only flag clients claiming credentials
@@ -165,10 +165,10 @@ import type {
         'no', 'rest', 'dangerous', 'extreme', 'hardcore'
       ],
       regexPatterns: [
-        /\b(no\s+pain\s+no\s+gain|push\s+through\s+the\s+pain)\b/i,
-        /\b(ignore\s+the\s+pain|pain\s+is\s+weakness)\b/i,
-        /\b(train|workout)\s+every\s+day\b/i,
-        /\bno\s+rest\s+days?\b/i,
+        '\\b(no\\s+pain\\s+no\\s+gain|push\\s+through\\s+the\\s+pain)\\b',
+        '\\b(ignore\\s+the\\s+pain|pain\\s+is\\s+weakness)\\b',
+        '\\b(train|workout)\\s+every\\s+day\\b',
+        '\\bno\\s+rest\\s+days?\\b',
       ],
       contexts: ['POST', 'COMMENT', 'MESSAGE'],
       userRoles: ['CLIENT', 'TRAINER'],
@@ -207,10 +207,10 @@ import type {
         'earn', 'money', 'team', 'business', 'opportunity', 'MLM'
       ],
       regexPatterns: [
-        /\b(buy\s+now|limited\s+time|special\s+offer)\b/i,
-        /\b(discount\s+code|promo\s+code)\b/i,
-        /\b(join\s+my\s+team|business\s+opportunity)\b/i,
-        /\b(work\s+from\s+home|earn\s+money)\b/i,
+        '\\b(buy\\s+now|limited\\s+time|special\\s+offer)\\b',
+        '\\b(discount\\s+code|promo\\s+code)\\b',
+        '\\b(join\\s+my\\s+team|business\\s+opportunity)\\b',
+        '\\b(work\\s+from\\s+home|earn\\s+money)\\b',
       ],
       contexts: ['POST', 'COMMENT', 'MESSAGE'],
       userRoles: ['CLIENT', 'TRAINER'],
@@ -250,9 +250,9 @@ import type {
         'weak', 'lazy', 'excuse', 'eat', 'less', 'harder'
       ],
       regexPatterns: [
-        /\b(too\s+(fat|skinny|weak)|gross|disgusting|ugly)\b/i,
-        /\b(just\s+(eat\s+less|try\s+harder)|no\s+excuse)\b/i,
-        /\b(lazy|pathetic|weak)\s+(person|people)\b/i,
+        '\\b(too\\s+(fat|skinny|weak)|gross|disgusting|ugly)\\b',
+        '\\b(just\\s+(eat\\s+less|try\\s+harder)|no\\s+excuse)\\b',
+        '\\b(lazy|pathetic|weak)\\s+(person|people)\\b',
       ],
       contexts: ['POST', 'COMMENT', 'MESSAGE'],
       userRoles: ['CLIENT', 'TRAINER'],
@@ -289,10 +289,10 @@ import type {
         'miracle', 'cure', 'secret', 'trick'
       ],
       regexPatterns: [
-        /\b(detox|cleanse|magic\s+pill)\b/i,
-        /\b(lose\s+weight\s+fast|burn\s+fat\s+instantly)\b/i,
-        /\b(no\s+exercise\s+needed|eat\s+whatever)\b/i,
-        /\b(miracle\s+cure|secret\s+trick)\b/i,
+        '\\b(detox|cleanse|magic\\s+pill)\\b',
+        '\\b(lose\\s+weight\\s+fast|burn\\s+fat\\s+instantly)\\b',
+        '\\b(no\\s+exercise\\s+needed|eat\\s+whatever)\\b',
+        '\\b(miracle\\s+cure|secret\\s+trick)\\b',
       ],
       contexts: ['POST', 'COMMENT'],
       userRoles: ['CLIENT', 'TRAINER'],
@@ -330,9 +330,9 @@ import type {
         'shame', 'failure', 'only', 'way', 'guaranteed'
       ],
       regexPatterns: [
-        /\b(pay\s+upfront|no\s+refunds)\b/i,
-        /\b(must\s+decide\s+now|limited\s+spots)\b/i,
-        /\b(guaranteed\s+results|only\s+way)\b/i,
+        '\\b(pay\\s+upfront|no\\s+refunds)\\b',
+        '\\b(must\\s+decide\\s+now|limited\\s+spots)\\b',
+        '\\b(guaranteed\\s+results|only\\s+way)\\b',
       ],
       contexts: ['MESSAGE', 'POST'],
       userRoles: ['TRAINER'],
@@ -370,9 +370,9 @@ import type {
         'relationship', 'celebrity', 'gossip'
       ],
       regexPatterns: [
-        /\b(politics|political|religion|religious)\b/i,
-        /\b(crypto|bitcoin|stock\s+market)\b/i,
-        /\b(real\s+estate|dating|relationship)\b/i,
+        '\\b(politics|political|religion|religious)\\b',
+        '\\b(crypto|bitcoin|stock\\s+market)\\b',
+        '\\b(real\\s+estate|dating|relationship)\\b',
       ],
       contexts: ['POST', 'COMMENT'],
       userRoles: ['CLIENT', 'TRAINER'],
@@ -407,9 +407,9 @@ import type {
         'gym', 'location', 'personal', 'private'
       ],
       regexPatterns: [
-        /\b(real\s+name|full\s+name)\s+is\b/i,
-        /\b(address|phone\s+number)\s+is\b/i,
-        /\b(works\s+at|lives\s+in|goes\s+to)\b/i,
+        '\\b(real\\s+name|full\\s+name)\\s+is\\b',
+        '\\b(address|phone\\s+number)\\s+is\\b',
+        '\\b(works\\s+at|lives\\s+in|goes\\s+to)\\b',
       ],
       contexts: ['POST', 'COMMENT', 'MESSAGE'],
       userRoles: ['CLIENT', 'TRAINER'],
@@ -536,22 +536,22 @@ import type {
    */
   function calculateRuleConfidence(
     rule: CustomModerationRule,
-    matches: string[],
-    content: string
+    _matches: string[],
+    _content: string
   ): number {
     let confidence = rule.confidence;
   
     // Increase confidence based on number of matches
-    const matchBonus = Math.min(matches.length * 0.1, 0.3);
+    const matchBonus = Math.min(_matches.length * 0.1, 0.3);
     confidence += matchBonus;
   
     // Decrease confidence for longer content (might be false positive)
-    if (content.length > 500) {
+    if (_content.length > 500) {
       confidence *= 0.9;
     }
   
     // Increase confidence for exact pattern matches
-    const exactMatches = matches.filter(match => 
+    const exactMatches = _matches.filter(match => 
       rule.patterns.some(pattern => 
         match.toLowerCase() === pattern.toLowerCase()
       )
@@ -570,9 +570,9 @@ import type {
   function createCustomRuleResult(
     primaryViolation: { rule: CustomModerationRule; matches: string[]; confidence: number },
     allViolations: Array<{ rule: CustomModerationRule; matches: string[]; confidence: number }>,
-    content: string
+    _content: string
   ): ModerationResult {
-    const { rule, matches, confidence } = primaryViolation;
+    const { rule, confidence } = primaryViolation;
   
     const categories = allViolations.map(v => ({
       category: v.rule.name,
@@ -714,16 +714,11 @@ import type {
   }
   
   // ============================================================================
-  // EXPORT API
-  // ============================================================================
-  
-  export {
-    applyCustomRules,
-    detectPositiveFitnessContent,
-    getActiveRules,
-    updateRule,
-    getRuleStats,
-    FITNESS_VIOLATION_PATTERNS,
-  };
-  
-  export type { FitnessViolationType, CustomModerationRule };
+// EXPORT UTILITIES
+// ============================================================================
+
+export {
+  FITNESS_VIOLATION_PATTERNS,
+};
+
+export type { FitnessViolationType, CustomModerationRule };

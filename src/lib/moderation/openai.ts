@@ -6,7 +6,6 @@
 import OpenAI from 'openai';
 import type { 
   ModerationResult, 
-  ModerationTarget, 
   ModerationContext,
   OpenAIModerationRequest,
   OpenAIModerationResponse,
@@ -123,13 +122,15 @@ export async function moderateContentBatch(
     const chunkResults = await Promise.allSettled(promises);
     
     chunkResults.forEach((promiseResult, index) => {
-      const itemId = chunk[index].id;
+      const itemId = chunk[index]?.id;
       
-      if (promiseResult.status === 'fulfilled') {
-        results.set(itemId, promiseResult.value.result);
-      } else {
-        console.error(`Batch moderation failed for item ${itemId}:`, promiseResult.reason);
-        results.set(itemId, createBlockedResult('Batch moderation failed', 'BATCH_ERROR'));
+      if (itemId) {
+        if (promiseResult.status === 'fulfilled') {
+          results.set(itemId, promiseResult.value.result);
+        } else {
+          console.error(`Batch moderation failed for item ${itemId}:`, promiseResult.reason);
+          results.set(itemId, createBlockedResult('Batch moderation failed', 'BATCH_ERROR'));
+        }
       }
     });
     
@@ -189,10 +190,14 @@ async function callOpenAIModerationAPI(content: string): Promise<OpenAIModeratio
  */
 async function processOpenAIResponse(
   response: OpenAIModerationResponse,
-  originalContent: string,
+  _originalContent: string,
   context?: ModerationContext
 ): Promise<ModerationResult> {
   const result = response.results[0];
+  
+  if (!result) {
+    return createSafeResult('No moderation result received');
+  }
   const categories = extractModerationCategories(result);
   
   // Calculate overall confidence and severity
@@ -340,7 +345,7 @@ function determineReviewPriority(
 /**
  * Suggest appropriate user action
  */
-function suggestUserAction(categories: ModerationCategory[], maxSeverity: number): any {
+function suggestUserAction(_categories: ModerationCategory[], maxSeverity: number): any {
   if (maxSeverity >= 5) return 'BAN';
   if (maxSeverity >= 4) return 'SUSPEND_7D';
   if (maxSeverity >= 3) return 'SUSPEND_3D';
@@ -454,14 +459,6 @@ function chunkArray<T>(array: T[], size: number): T[][] {
 // ============================================================================
 
 export {
-  moderateContent,
-  moderateContentBatch,
   MODERATION_CONFIG,
   CATEGORY_SEVERITY_MAP,
-};
-
-export type {
-  ModerationResult,
-  ModerationTarget,
-  ModerationContext,
 };

@@ -323,7 +323,7 @@ export function normalizeError(error: unknown, context?: ErrorContext): AppError
 /**
  * Handle Prisma database errors
  */
-function handlePrismaError(error: Prisma.PrismaClientKnownRequestError, context?: ErrorContext): AppError {
+function handlePrismaError(error: Prisma.PrismaClientKnownRequestError, _context?: ErrorContext): AppError {
   switch (error.code) {
     case 'P2002': // Unique constraint violation
       const field = (error.meta?.target as string[])?.join(', ') || 'field';
@@ -418,10 +418,16 @@ export function logError(error: AppError, context?: ErrorContext): void {
     message: error.message,
     code: error.code,
     statusCode: error.statusCode,
-    context,
-    stack: error.stack,
     details: error.details,
   };
+
+  if (context) {
+    logEntry.context = context;
+  }
+
+  if (error.stack) {
+    logEntry.stack = error.stack;
+  }
 
   // Log to console (in production, this would go to a logging service)
   switch (logEntry.level) {
@@ -577,7 +583,7 @@ export async function safeAsync<T>(
 /**
  * Get user-friendly error message for common scenarios
  */
-export function getFriendlyErrorMessage(code: ErrorCode, context?: any): string {
+export function getFriendlyErrorMessage(code: ErrorCode, _context?: any): string {
   const messages: Record<ErrorCode, string> = {
     [ErrorCode.UNAUTHORIZED]: 'Please sign in to continue.',
     [ErrorCode.FORBIDDEN]: 'You don\'t have permission to perform this action.',
@@ -623,25 +629,9 @@ export function getFriendlyErrorMessage(code: ErrorCode, context?: any): string 
 }
 
 // ============================================================================
-// EXPORT ALL ERROR UTILITIES
+// EXPORT UTILITIES
 // ============================================================================
 
 export {
   BaseAppError,
-  ValidationError,
-  AuthenticationError,
-  ModerationError,
-  SafetyViolationError,
-  NotFoundError,
-  RateLimitError,
-  ExternalServiceError,
-  normalizeError,
-  logError,
-  createErrorResponse,
-  createSuccessResponse,
-  withErrorHandling,
-  safeAsync,
-  getFriendlyErrorMessage,
 };
-
-export type { AppError, ErrorContext };
