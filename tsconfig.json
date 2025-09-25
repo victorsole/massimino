@@ -35,7 +35,10 @@
       "paths": {
         "@/*": ["./src/*"],
         "@/components/*": ["./src/components/*"],
-        "@/lib/*": ["./src/lib/*"],
+        "@/core": ["./src/core"],
+        "@/core/*": ["./src/core/*"],
+        "@/services": ["./src/services"],
+        "@/services/*": ["./src/services/*"],
         "@/types/*": ["./src/types/*"],
         "@/hooks/*": ["./src/hooks/*"],
         "@/app/*": ["./src/app/*"],
@@ -68,7 +71,8 @@
       "build",
       "coverage",
       "playwright-report",
-      "test-results"
+      "test-results",
+      "mobile/**/*"
     ],
     "ts-node": {
       "compilerOptions": {

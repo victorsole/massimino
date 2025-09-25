@@ -1,0 +1,27 @@
+src/app/profile/page.tsx:75:            <Button type="submit">Save</Button>
+src/app/profile/page.tsx:90:            <Button type="submit">Upload</Button>
+src/app/profile/page.tsx:112:                <Button type="submit">Save</Button>
+src/app/profile/page.tsx:180:                <Button type="submit">Submit for verification</Button>
+src/app/admin/exercises/page.tsx:80:          <Button type="submit" variant="secondary">Filter</Button>
+src/app/admin/exercises/page.tsx:99:            <Button type="submit">Create</Button>
+src/app/admin/exercises/page.tsx:113:          <Button type="submit" variant="secondary">Find</Button>
+src/app/admin/exercises/page.tsx:123:            <Button type="submit">Upload</Button>
+src/app/admin/exercises/page.tsx:128:          <Button type="submit" variant="outline">Import Pasted CSV</Button>
+src/app/admin/exercises/page.tsx:186:                      <Button type="submit" size="sm">Save</Button>
+src/app/admin/exercises/page.tsx:191:                    <Button type="submit" size="sm" variant="outline">Sync from Firestore</Button>
+src/app/admin/exercises/page.tsx:195:                    <Button type="submit" size="sm" variant="outline">Deactivate</Button>
+src/app/admin/exercises/page.tsx:204:            <Button type="submit" variant="secondary">Sync All to Firestore</Button>
+src/app/admin/exercises/ExercisesTableClient.tsx:89:                  <div className="col-span-full"><Button type="submit" size="sm">Save</Button></div>
+src/app/admin/exercises/ExercisesTableClient.tsx:93:                  <Button type="submit" size="sm" variant="outline">Sync from Firestore</Button>
+src/app/admin/exercises/ExercisesTableClient.tsx:97:                  <Button type="submit" size="sm" variant="outline">Deactivate</Button>
+src/app/admin/exercises/ExercisesTableClient.tsx:115:        <Button type="submit" variant="outline">Apply</Button>
+src/app/admin/exercises/ExercisesTableClient.tsx:117:          <Button type="submit" variant="secondary">Sync All to Firestore</Button>
+src/app/admin/moderation/page.tsx:54:                    <Button type="submit" size="sm">Update</Button>
+src/app/admin/users/page.tsx:36:          <Button type="submit" variant="secondary">Search</Button>
+src/app/admin/users/page.tsx:78:          <Button type="submit">Create</Button>
+src/app/admin/users/page.tsx:133:                    <Button type="submit" size="sm">Save</Button>
+src/app/admin/users/page.tsx:139:                    <Button type="submit" size="sm" variant="outline">Sync from Firestore</Button>
+src/app/admin/accredited/page.tsx:45:          <Button type="submit" variant="secondary">Filter</Button>
+src/app/admin/accredited/page.tsx:58:            <Button type="submit">Create</Button>
+src/app/admin/accredited/page.tsx:68:          <Button type="submit">Import</Button>
+src/app/admin/accredited/page.tsx:102:                    <Button type="submit" size="sm">Save</Button>

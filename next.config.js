@@ -1,10 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    // Enable experimental features for Next.js 15
     experimental: {
-      // Enable React Server Components
-      serverComponentsExternalPackages: ['@prisma/client'],
+      serverActions: {
+        bodySizeLimit: '12mb',
+      },
     },
+    // Fix workspace root issue
+    outputFileTracingRoot: __dirname,
+    
+    // External packages for server components
+    serverExternalPackages: ['@prisma/client'],
   
     // Security headers for safety-first approach
     async headers() {
@@ -52,28 +57,39 @@ const nextConfig = {
   
     // Image optimization
     images: {
-      domains: [
-        'lh3.googleusercontent.com', // Google OAuth profile images
-        'avatars.githubusercontent.com', // GitHub profile images (backup auth)
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'lh3.googleusercontent.com', // Google OAuth profile images
+        },
+        {
+          protocol: 'https',
+          hostname: 'avatars.githubusercontent.com', // GitHub profile images (backup auth)
+        },
       ],
       formats: ['image/webp', 'image/avif'],
     },
   
     // Webpack configuration
     webpack: (config, { dev, isServer }) => {
-      // Optimize for safety and performance
-      if (!dev && !isServer) {
-        config.resolve.alias = {
-          ...config.resolve.alias,
-          '@': require('path').resolve(__dirname, 'src'),
-        };
-      }
+      // Add path aliases for both dev and production
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        '@': require('path').resolve(__dirname, 'src'),
+        '@/core': require('path').resolve(__dirname, 'src/core'),
+        '@/services': require('path').resolve(__dirname, 'src/services'),
+        '@/components': require('path').resolve(__dirname, 'src/components'),
+        '@/types': require('path').resolve(__dirname, 'src/types'),
+        '@/hooks': require('path').resolve(__dirname, 'src/hooks'),
+        '@/app': require('path').resolve(__dirname, 'src/app'),
+      };
       return config;
     },
   
     // Environment variables validation
     env: {
       CUSTOM_KEY: process.env.NODE_ENV,
+      NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     },
   
     // Redirects for safety
@@ -112,8 +128,7 @@ const nextConfig = {
     // Enable strict mode
     reactStrictMode: true,
   
-    // Enable SWC minifier for better performance
-    swcMinify: true,
+    // SWC minifier is enabled by default in Next.js 15
   
     // TypeScript configuration
     typescript: {

@@ -1,0 +1,167 @@
+{
+  "NSPrivacyTracking": false,
+  "NSPrivacyTrackingDomains": [],
+  "NSPrivacyCollectedDataTypes": [
+    {
+      "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeUserID",
+      "NSPrivacyCollectedDataTypeLinked": true,
+      "NSPrivacyCollectedDataTypeTracking": false,
+      "NSPrivacyCollectedDataTypePurposes": [
+        "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+      ],
+      "NSPrivacyCollectedDataTypeUsedForTracking": false
+    },
+    {
+      "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeEmailAddress",
+      "NSPrivacyCollectedDataTypeLinked": true,
+      "NSPrivacyCollectedDataTypeTracking": false,
+      "NSPrivacyCollectedDataTypePurposes": [
+        "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+      ],
+      "NSPrivacyCollectedDataTypeUsedForTracking": false
+    },
+    {
+      "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeName",
+      "NSPrivacyCollectedDataTypeLinked": true,
+      "NSPrivacyCollectedDataTypeTracking": false,
+      "NSPrivacyCollectedDataTypePurposes": [
+        "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+      ],
+      "NSPrivacyCollectedDataTypeUsedForTracking": false
+    },
+    {
+      "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypePhotosOrVideos",
+      "NSPrivacyCollectedDataTypeLinked": true,
+      "NSPrivacyCollectedDataTypeTracking": false,
+      "NSPrivacyCollectedDataTypePurposes": [
+        "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+      ],
+      "NSPrivacyCollectedDataTypeUsedForTracking": false
+    },
+    {
+      "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeLocation",
+      "NSPrivacyCollectedDataTypeLinked": true,
+      "NSPrivacyCollectedDataTypeTracking": false,
+      "NSPrivacyCollectedDataTypePurposes": [
+        "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+      ],
+      "NSPrivacyCollectedDataTypeUsedForTracking": false
+    }
+  ],
+  "NSPrivacyAccessedAPITypes": [
+    {
+      "NSPrivacyAccessedAPICategoryDiskSpace": true,
+      "NSPrivacyAccessedAPICategoryDiskSpaceReasons": ["85F4.1"],
+      "NSPrivacyAccessedAPICategoryDiskSpaceReason": "The app uses @capacitor/device plugin to get device information including available disk space for displaying to the user"
+    },
+    {
+      "NSPrivacyAccessedAPICategoryFileTimestamp": true,
+      "NSPrivacyAccessedAPICategoryFileTimestampReasons": ["C617.1"]
+    },
+    {
+      "NSPrivacyAccessedAPIContactUser": false,
+      "NSPrivacyAccessedAPIContactUserReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPICamera": true,
+      "NSPrivacyAccessedAPICameraReason": "The app needs camera access to allow users to take profile pictures and hosts to add images to their galleries"
+    },
+    {
+      "NSPrivacyAccessedAPILocationWhenInUse": true,
+      "NSPrivacyAccessedAPILocationWhenInUseReason": "The app needs location access to show nearby hosts and activities"
+    },
+    {
+      "NSPrivacyAccessedAPILocationAlways": false,
+      "NSPrivacyAccessedAPILocationAlwaysReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPILocationTemporary": false,
+      "NSPrivacyAccessedAPILocationTemporaryReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPILocationAfterUse": false,
+      "NSPrivacyAccessedAPILocationAfterUseReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPIPhotoLibrary": true,
+      "NSPrivacyAccessedAPIPhotoLibraryReason": "The app needs access to the photo library to allow users to upload profile pictures and hosts to add images to their galleries"
+    },
+    {
+      "NSPrivacyAccessedAPIPhotoLibraryAddOnly": false,
+      "NSPrivacyAccessedAPIPhotoLibraryAddOnlyReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPIMicrophone": false,
+      "NSPrivacyAccessedAPIMicrophoneReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPINFC": false,
+      "NSPrivacyAccessedAPINFCReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPIBluetoothAlways": false,
+      "NSPrivacyAccessedAPIBluetoothAlwaysReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPIBluetoothPeripheral": false,
+      "NSPrivacyAccessedAPIBluetoothPeripheralReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPICalendars": false,
+      "NSPrivacyAccessedAPICalendarsReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPIReminders": false,
+      "NSPrivacyAccessedAPIRemindersReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPIMotion": false,
+      "NSPrivacyAccessedAPIMotionReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPIHealthShare": false,
+      "NSPrivacyAccessedAPIHealthShareReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPIHealthUpdate": false,
+      "NSPrivacyAccessedAPIHealthUpdateReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPIHomeKit": false,
+      "NSPrivacyAccessedAPIHomeKitReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPILocalNetwork": true,
+      "NSPrivacyAccessedAPILocalNetworkReason": "The app needs local network access to connect with required services"
+    },
+    {
+      "NSPrivacyAccessedAPINetworkBasic": true,
+      "NSPrivacyAccessedAPINetworkBasicReason": "The app needs internet access to function properly"
+    },
+    {
+      "NSPrivacyAccessedAPINetworkCustom": false,
+      "NSPrivacyAccessedAPINetworkCustomReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPINetworkGameCenter": false,
+      "NSPrivacyAccessedAPINetworkGameCenterReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPINetworkMulticast": false,
+      "NSPrivacyAccessedAPINetworkMulticastReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPINetworkPeerToPeer": false,
+      "NSPrivacyAccessedAPINetworkPeerToPeerReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPINetworkVPN": false,
+      "NSPrivacyAccessedAPINetworkVPNReason": ""
+    },
+    {
+      "NSPrivacyAccessedAPIUserDefaults": true,
+      "NSPrivacyAccessedAPIUserDefaultsReasons": ["CA92.1"],
+      "NSPrivacyAccessedAPIUserDefaultsReason": "The app needs access to user preferences to save settings"
+    }
+  ]
+}

@@ -18,7 +18,7 @@ declare module 'next-auth' {
     id: string;
     email: string;
     name: string;
-    image?: string;
+    image?: string | null;
     role: UserRole;
     status: UserStatus;
     reputationScore: number;
@@ -34,16 +34,16 @@ declare module 'next-auth' {
   interface Session extends DefaultSession {
     user: {
       id: string;
-      email: string;
-      name: string;
-      image?: string;
+      email: string | null;
+      name: string | null;
+      image?: string | null;
       role: UserRole;
       status: UserStatus;
       reputationScore: number;
       warningCount: number;
       trainerVerified: boolean;
       suspendedUntil?: Date | null;
-      isSafe: boolean; // Computed safety flag
+      isSafe: boolean;
     };
   }
 }
