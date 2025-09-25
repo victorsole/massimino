@@ -72,6 +72,14 @@ module.exports = {
             trainer: '#2563eb',
             admin: '#7c3aed',
           },
+          // Massimino brand colors from logo
+          brand: {
+            primary: '#254967',    // Deep blue from logo
+            secondary: '#fcf8f2',  // Warm cream from logo
+            'primary-light': '#3a5a7a',  // Lighter variant of primary
+            'primary-dark': '#1a3a52',  // Darker variant of primary
+            'secondary-dark': '#f5f0e8', // Slightly darker cream
+          },
         },
         borderRadius: {
           lg: 'var(--radius)',

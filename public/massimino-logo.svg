@@ -1,0 +1,23 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="50" cy="50" r="50" fill="#3B82F6"/>
+  
+  <!-- Dumbbell Icon -->
+  <g transform="translate(25, 35)">
+    <!-- Left Weight -->
+    <rect x="0" y="15" width="8" height="20" rx="4" fill="white"/>
+    <!-- Bar -->
+    <rect x="8" y="22" width="34" height="6" rx="3" fill="white"/>
+    <!-- Right Weight -->
+    <rect x="42" y="15" width="8" height="20" rx="4" fill="white"/>
+  </g>
+  
+  <!-- Shield Icon (Safety) -->
+  <g transform="translate(35, 60)">
+    <path d="M15 5L25 5L30 10L30 20L25 25L15 25L10 20L10 10L15 5Z" fill="white" opacity="0.8"/>
+    <path d="M20 12L22 14L26 10" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="50" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">M</text>
+</svg>

@@ -1,6 +1,3 @@
-// Prisma schema for Massimino - Safety-first fitness platform
-// This schema prioritizes user safety, content moderation, and role-based access
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,91 +7,127 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ============================================================================
-// USER MANAGEMENT & AUTHENTICATION
-// ============================================================================
-
-enum UserRole {
-  CLIENT     // Regular gym-goers and fitness enthusiasts
-  TRAINER    // Personal trainers and fitness professionals
-  ADMIN      // Platform administrators
-}
-
-enum UserStatus {
-  ACTIVE     // Normal active user
-  SUSPENDED  // Temporarily suspended
-  BANNED     // Permanently banned
-  PENDING    // Awaiting verification (trainers)
-}
-
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  name          String?
-  image         String?   // Profile picture URL
-  role          UserRole  @default(CLIENT)
-  status        UserStatus @default(ACTIVE)
-  
-  // OAuth fields
-  googleId      String?   @unique
-  emailVerified DateTime?
-  
-  // Safety & Privacy settings
-  acceptDMs           Boolean   @default(false)  // Allow direct messages
-  onlyTrainerDMs      Boolean   @default(true)   // Only trainers can DM
-  profileVisibility   String    @default("PUBLIC") // PUBLIC, PRIVATE, TRAINERS_ONLY
-  showRealName        Boolean   @default(false)  // Show real name vs username
-  
-  // Trainer-specific fields
-  trainerVerified     Boolean   @default(false)
-  trainerBio          String?
-  trainerCredentials  String?   // JSON string for certifications
-  trainerRating       Float?    @default(0.0)
-  
-  // Reputation & Safety scoring
-  reputationScore     Int       @default(100)    // Starts at 100, decreases with violations
-  warningCount        Int       @default(0)      // Number of warnings received
-  
-  // Timestamps
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  lastLoginAt   DateTime?
-  suspendedUntil DateTime? // When suspension expires
-  
-  // Relationships
-  accounts            Account[]
-  sessions            Session[]
-  moderationLogs      ModerationLog[]
-  violations          UserViolation[]
-  reportsSubmitted    SafetyReport[]    @relation("ReportSubmitter")
-  reportsReceived     SafetyReport[]    @relation("ReportedUser")
-  safetySettings      SafetySettings?
-  
-  // Community relationships
-  communitiesOwned    Community[]       @relation("CommunityOwner")
-  communityMemberships CommunityMember[]
-  posts               Post[]
-  comments            Comment[]
-  
+  id                       String            @id @default(cuid())
+  email                    String            @unique
+  name                     String?
+  image                    String?
+  password                 String?
+  role                     UserRole          @default(CLIENT)
+  status                   UserStatus        @default(ACTIVE)
+  googleId                 String?           @unique
+  linkedinId               String?           @unique
+  facebookId               String?           @unique
+  emailVerified            DateTime?
+  acceptDMs                Boolean           @default(false)
+  onlyTrainerDMs           Boolean           @default(true)
+  profileVisibility        String            @default("PUBLIC")
+  showRealName             Boolean           @default(false)
+  instagramUrl             String?
+  tiktokUrl                String?
+  facebookUrl              String?
+  youtubeUrl               String?
+  linkedinUrl              String?
+  showSocialMedia          Boolean           @default(true)
+  fitnessGoals             String[]          @default([])
+  experienceLevel          String            @default("BEGINNER")
+  preferredWorkoutTypes    String[]          @default([])
+  availableWorkoutDays     String[]          @default([])
+  preferredWorkoutDuration String?           @default("30-60")
+  city                     String?
+  state                    String?
+  country                  String?
+  latitude                 Float?
+  longitude                Float?
+  showLocation             Boolean           @default(false)
+  locationVisibility       String            @default("NONE")
+  enableDiscovery          Boolean           @default(false)
+  trainerVerified          Boolean           @default(false)
+  trainerBio               String?
+  trainerCredentials       String?
+  trainerRating            Float?            @default(0.0)
+  reputationScore          Int               @default(100)
+  warningCount             Int               @default(0)
+  createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
+  lastLoginAt              DateTime?
+  suspendedUntil           DateTime?
+  accounts                 Account[]
+  comments                 Comment[]
+  communitiesOwned         Community[]       @relation("CommunityOwner")
+  communityMemberships     CommunityMember[]
+  moderationLogs           ModerationLog[]
+  posts                    Post[]
+  reportsReceived          SafetyReport[]    @relation("ReportedUser")
+  reportsSubmitted         SafetyReport[]    @relation("ReportSubmitter")
+  safetySettings           SafetySettings?
+  sessions                 Session[]
+  violations               UserViolation[]
+  coachWorkoutLogs         WorkoutLogEntry[] @relation("CoachWorkoutLogs")
+  workoutLogs              WorkoutLogEntry[] @relation("UserWorkoutLogs")
+  coachWorkoutSessions     WorkoutSession[]  @relation("CoachWorkoutSessions")
+  workoutSessions          WorkoutSession[]  @relation("UserWorkoutSessions")
+  createdTemplates         WorkoutTemplate[] @relation("CreatedTemplates")
+  createdPrograms          ProgramTemplate[] @relation("CreatedPrograms")
+  programSubscriptions     ProgramSubscription[] @relation("ProgramSubscriptions")
+  templatePurchases        TemplatePurchase[] @relation("TemplatePurchases")
+  programPurchases         ProgramPurchase[] @relation("ProgramPurchases")
+  templateRatings          TemplateRating[] @relation("TemplateRatings")
+  programRatings           ProgramRating[] @relation("ProgramRatings")
+  progressMetrics          ProgressMetric[] @relation("ProgressMetrics")
+  personalRecords          PersonalRecord[] @relation("PersonalRecords")
+  workoutAnalytics         WorkoutAnalytics[] @relation("WorkoutAnalytics")
+  chatParticipants         ChatRoomParticipant[] @relation("ChatParticipants")
+  sentMessages             ChatMessage[] @relation("SentMessages")
+  trainerSessions          LiveWorkoutSession[] @relation("TrainerSessions")
+  sessionParticipants      LiveSessionParticipant[] @relation("SessionParticipants")
+  workoutProgress          WorkoutProgress[] @relation("WorkoutProgress")
+  notifications            PushNotification[] @relation("Notifications")
+  deviceTokens             DeviceToken[] @relation("DeviceTokens")
+  healthData               HealthData[] @relation("HealthData")
+
+  // Phase 5 Relations
+  trainerProfile          TrainerProfile?         @relation("TrainerProfile")
+  clientRelationships     TrainerClient[]         @relation("ClientRelationships")
+  clientAppointments      Appointment[]           @relation("ClientAppointments")
+  userPayments            Payment[]               @relation("UserPayments")
+  clientReports           ProgressReport[]        @relation("ClientReports")
+  trainerReviews          TrainerReview[]         @relation("TrainerReviews")
+  ownedPremiumCommunities PremiumCommunity[]      @relation("OwnedPremiumCommunities")
+  premiumMemberships      PremiumMembership[]     @relation("PremiumMemberships")
+  classParticipations     ClassParticipant[]      @relation("ClassParticipations")
+  classReviews            ClassReview[]           @relation("ClassReviews")
+  createdChallenges       Challenge[]             @relation("CreatedChallenges")
+  challengeParticipations ChallengeParticipant[]  @relation("ChallengeParticipations")
+  leaderboardPositions    ChallengeLeaderboard[]  @relation("LeaderboardPositions")
+  challengePostsAuthored  ChallengePost[]         @relation("ChallengePostsAuthored")
+  challengeCommentsAuthored ChallengePostComment[] @relation("ChallengeCommentsAuthored")
+  challengePostLikes      ChallengePostLike[]     @relation("ChallengePostLikes")
+  userSubscriptions       Subscription[]          @relation("UserSubscriptions")
+  equipmentReviews        EquipmentReview[]       @relation("EquipmentReviews")
+  userEquipmentRecs       UserEquipmentRecommendation[] @relation("UserEquipmentRecs")
+  userNutritionPlans      NutritionPlan[]         @relation("UserNutritionPlans")
+  createdNutritionPlans   NutritionPlan[]         @relation("CreatedNutritionPlans")
+  nutritionLogs           NutritionLog[]          @relation("NutritionLogs")
+  communityPostsAuthored  CommunityPost[]         @relation("CommunityPostsAuthored")
+
   @@map("users")
 }
 
-// NextAuth.js required models
 model Account {
   id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
@@ -119,63 +152,24 @@ model VerificationToken {
   @@map("verificationtokens")
 }
 
-// ============================================================================
-// SAFETY & MODERATION SYSTEM
-// ============================================================================
-
-enum ModerationAction {
-  APPROVED    // Content passed moderation
-  FLAGGED     // Flagged for human review
-  BLOCKED     // Automatically blocked
-  EDITED      // Auto-edited (profanity filter)
-}
-
-enum ModerationSource {
-  OPENAI_API     // OpenAI moderation API
-  CUSTOM_RULES   // Custom fitness-specific rules
-  USER_REPORT    // User-submitted report
-  ADMIN_ACTION   // Manual admin action
-}
-
-enum ViolationType {
-  INAPPROPRIATE_CONTENT  // Sexual, suggestive content
-  HARASSMENT            // Bullying, harassment
-  SPAM                  // Spam or promotional content
-  IMPERSONATION        // Fake trainer credentials
-  OFF_TOPIC            // Non-fitness related content
-  PRIVACY_VIOLATION    // Sharing personal info without consent
-  HATE_SPEECH          // Discriminatory language
-  THREAT               // Threats or violence
-}
-
 model ModerationLog {
-  id          String            @id @default(cuid())
-  userId      String?           // User who created the content
-  contentType String            // 'POST', 'COMMENT', 'MESSAGE', 'PROFILE'
-  contentId   String            // ID of the moderated content
-  content     String            @db.Text // Original content
-  
-  // Moderation results
+  id             String           @id @default(cuid())
+  userId         String?
+  contentType    String
+  contentId      String
+  content        String
   action         ModerationAction
   source         ModerationSource
-  flaggedReason  String?          // Why it was flagged
-  confidence     Float?           // AI confidence score (0-1)
-  
-  // OpenAI API response
-  openaiResponse Json?            // Full OpenAI response
-  
-  // Processing details
+  flaggedReason  String?
+  confidence     Float?
+  openaiResponse Json?
   processedAt    DateTime         @default(now())
-  reviewedAt     DateTime?        // When human reviewed (if needed)
-  reviewedBy     String?          // Admin who reviewed
-  
-  // Timestamps
+  reviewedAt     DateTime?
+  reviewedBy     String?
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
-  
-  // Relationships
   user           User?            @relation(fields: [userId], references: [id])
-  
+
   @@index([userId, createdAt])
   @@index([action, source])
   @@map("moderation_logs")
@@ -185,132 +179,86 @@ model UserViolation {
   id              String        @id @default(cuid())
   userId          String
   violationType   ViolationType
-  description     String        @db.Text
-  severity        Int           @default(1) // 1-5 scale
-  
-  // Actions taken
+  description     String
+  severity        Int           @default(1)
   warningIssued   Boolean       @default(false)
-  suspensionHours Int?          // Hours of suspension (null = no suspension)
-  reputationHit   Int           @default(0) // Points deducted from reputation
-  
-  // Context
-  contentType     String?       // What content caused violation
-  contentId       String?       // ID of violating content
-  moderationLogId String?       // Related moderation log
-  
-  // Resolution
+  suspensionHours Int?
+  reputationHit   Int           @default(0)
+  contentType     String?
+  contentId       String?
+  moderationLogId String?
   resolved        Boolean       @default(false)
   resolvedAt      DateTime?
-  resolvedBy      String?       // Admin who resolved
-  
+  resolvedBy      String?
   createdAt       DateTime      @default(now())
-  
-  // Relationships
   user            User          @relation(fields: [userId], references: [id])
-  
+
   @@index([userId, createdAt])
   @@index([violationType, severity])
   @@map("user_violations")
 }
 
 model SafetyReport {
-  id              String        @id @default(cuid())
-  reporterId      String        // User making the report
-  reportedUserId  String        // User being reported
-  violationType   ViolationType
-  description     String        @db.Text
-  evidence        Json?         // Screenshots, message IDs, etc.
-  
-  // Context
-  contentType     String?       // POST, COMMENT, MESSAGE, PROFILE
-  contentId       String?       // ID of reported content
-  
-  // Status
-  status          String        @default("PENDING") // PENDING, INVESTIGATING, RESOLVED, DISMISSED
-  priority        String        @default("NORMAL")  // LOW, NORMAL, HIGH, URGENT
-  
-  // Resolution
-  resolvedAt      DateTime?
-  resolvedBy      String?       // Admin who handled it
-  resolution      String?       @db.Text // What action was taken
-  
-  createdAt       DateTime      @default(now())
-  
-  // Relationships
-  reporter        User          @relation("ReportSubmitter", fields: [reporterId], references: [id])
-  reportedUser    User          @relation("ReportedUser", fields: [reportedUserId], references: [id])
-  
+  id             String        @id @default(cuid())
+  reporterId     String
+  reportedUserId String
+  violationType  ViolationType
+  description    String
+  evidence       Json?
+  contentType    String?
+  contentId      String?
+  status         String        @default("PENDING")
+  priority       String        @default("NORMAL")
+  resolvedAt     DateTime?
+  resolvedBy     String?
+  resolution     String?
+  createdAt      DateTime      @default(now())
+  reportedUser   User          @relation("ReportedUser", fields: [reportedUserId], references: [id])
+  reporter       User          @relation("ReportSubmitter", fields: [reporterId], references: [id])
+
   @@index([reportedUserId, createdAt])
   @@index([status, priority])
   @@map("safety_reports")
 }
 
 model SafetySettings {
-  id                    String  @id @default(cuid())
-  userId                String  @unique
-  
-  // Message settings
-  allowDirectMessages   Boolean @default(false)
-  allowTrainerMessages  Boolean @default(true)
-  allowGroupMessages    Boolean @default(true)
-  
-  // Visibility settings
-  profileVisibility     String  @default("PUBLIC")    // PUBLIC, PRIVATE, TRAINERS_ONLY
-  showOnlineStatus      Boolean @default(false)
-  showLastSeen          Boolean @default(false)
-  
-  // Safety preferences
-  autoBlockFlaggedUsers Boolean @default(true)
-  requireVerifiedTrainers Boolean @default(false)
-  contentFilterStrength String  @default("MEDIUM")    // LOW, MEDIUM, HIGH, STRICT
-  
-  // Notification preferences
-  safetyAlerts          Boolean @default(true)
-  moderationNotifications Boolean @default(true)
-  
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
-  
-  // Relationships
-  user                  User    @relation(fields: [userId], references: [id])
-  
+  id                      String   @id @default(cuid())
+  userId                  String   @unique
+  allowDirectMessages     Boolean  @default(false)
+  allowTrainerMessages    Boolean  @default(true)
+  allowGroupMessages      Boolean  @default(true)
+  profileVisibility       String   @default("PUBLIC")
+  showOnlineStatus        Boolean  @default(false)
+  showLastSeen            Boolean  @default(false)
+  autoBlockFlaggedUsers   Boolean  @default(true)
+  requireVerifiedTrainers Boolean  @default(false)
+  contentFilterStrength   String   @default("MEDIUM")
+  safetyAlerts            Boolean  @default(true)
+  moderationNotifications Boolean  @default(true)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  user                    User     @relation(fields: [userId], references: [id])
+
   @@map("safety_settings")
 }
 
-// ============================================================================
-// COMMUNITY & CONTENT SYSTEM
-// ============================================================================
-
-enum CommunityType {
-  PUBLIC     // Open to all users
-  PRIVATE    // Invite-only
-  TRAINER    // Only for specific trainer's clients
-}
-
 model Community {
-  id              String        @id @default(cuid())
-  name            String
-  description     String?       @db.Text
-  type            CommunityType @default(PUBLIC)
-  ownerId         String        // Trainer who owns this community
-  
-  // Safety settings
-  moderationEnabled Boolean     @default(true)
-  requireApproval   Boolean     @default(false)  // Posts need approval
-  
-  // Metadata
-  memberCount     Int           @default(0)
-  postCount       Int           @default(0)
-  isActive        Boolean       @default(true)
-  
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  
-  // Relationships
-  owner           User          @relation("CommunityOwner", fields: [ownerId], references: [id])
-  members         CommunityMember[]
-  posts           Post[]
-  
+  id                String            @id @default(cuid())
+  name              String
+  description       String?
+  type              CommunityType     @default(PUBLIC)
+  ownerId           String
+  moderationEnabled Boolean           @default(true)
+  requireApproval   Boolean           @default(false)
+  memberCount       Int               @default(0)
+  postCount         Int               @default(0)
+  isActive          Boolean           @default(true)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  owner             User              @relation("CommunityOwner", fields: [ownerId], references: [id])
+  members           CommunityMember[]
+  posts             Post[]
+
   @@index([ownerId, type])
   @@map("communities")
 }
@@ -319,85 +267,1606 @@ model CommunityMember {
   id          String    @id @default(cuid())
   userId      String
   communityId String
-  role        String    @default("MEMBER") // MEMBER, MODERATOR
+  role        String    @default("MEMBER")
   joinedAt    DateTime  @default(now())
   isActive    Boolean   @default(true)
-  
-  // Relationships
-  user        User      @relation(fields: [userId], references: [id])
   community   Community @relation(fields: [communityId], references: [id])
-  
+  user        User      @relation(fields: [userId], references: [id])
+
   @@unique([userId, communityId])
   @@map("community_members")
 }
 
-enum PostStatus {
-  PUBLISHED  // Live and visible
-  PENDING    // Awaiting moderation approval
-  FLAGGED    // Flagged by moderation system
-  REMOVED    // Removed by moderator
-  DRAFT      // Not yet published
-}
-
 model Post {
-  id            String      @id @default(cuid())
+  id            String     @id @default(cuid())
   title         String?
-  content       String      @db.Text
+  content       String
   authorId      String
-  communityId   String?     // Optional - can be general posts
-  
-  // Content metadata
-  contentType   String      @default("TEXT") // TEXT, IMAGE, VIDEO
-  attachments   Json?       // File URLs, metadata
-  
-  // Moderation status
-  status        PostStatus  @default(PUBLISHED)
+  communityId   String?
+  contentType   String     @default("TEXT")
+  attachments   Json?
+  status        PostStatus @default(PUBLISHED)
   moderatedAt   DateTime?
   moderatedBy   String?
-  
-  // Engagement
-  likesCount    Int         @default(0)
-  commentsCount Int         @default(0)
-  reportsCount  Int         @default(0)
-  
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  
-  // Relationships
-  author        User        @relation(fields: [authorId], references: [id])
-  community     Community?  @relation(fields: [communityId], references: [id])
+  likesCount    Int        @default(0)
+  commentsCount Int        @default(0)
+  reportsCount  Int        @default(0)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
   comments      Comment[]
-  
+  author        User       @relation(fields: [authorId], references: [id])
+  community     Community? @relation(fields: [communityId], references: [id])
+
   @@index([authorId, createdAt])
   @@index([communityId, status, createdAt])
   @@map("posts")
 }
 
 model Comment {
-  id          String      @id @default(cuid())
-  content     String      @db.Text
-  authorId    String
-  postId      String
-  parentId    String?     // For nested comments
-  
-  // Moderation
-  status      PostStatus  @default(PUBLISHED)
-  moderatedAt DateTime?
-  
-  // Engagement
-  likesCount  Int         @default(0)
-  reportsCount Int        @default(0)
-  
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  
-  // Relationships
-  author      User        @relation(fields: [authorId], references: [id])
-  post        Post        @relation(fields: [postId], references: [id])
-  parent      Comment?    @relation("CommentReplies", fields: [parentId], references: [id])
-  replies     Comment[]   @relation("CommentReplies")
-  
+  id              String            @id @default(cuid())
+  content         String
+  authorId        String
+  postId          String?
+  workoutLogId    String?
+  parentId        String?
+  status          PostStatus        @default(PUBLISHED)
+  moderatedAt     DateTime?
+  likesCount      Int               @default(0)
+  reportsCount    Int               @default(0)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  author          User              @relation(fields: [authorId], references: [id])
+  parent          Comment?          @relation("CommentReplies", fields: [parentId], references: [id])
+  replies         Comment[]         @relation("CommentReplies")
+  post            Post?             @relation(fields: [postId], references: [id])
+  workoutLog      WorkoutLogEntry?  @relation(fields: [workoutLogId], references: [id])
+
   @@index([postId, createdAt])
+  @@index([workoutLogId, createdAt])
   @@index([authorId, status])
   @@map("comments")
+}
+
+model WorkoutLogEntry {
+  id             String          @id @default(cuid())
+  userId         String
+  coachId        String?
+  sessionId      String?
+  date           DateTime        @db.Date
+  exerciseId     String
+  order          String
+  setNumber      Int
+  setType        SetType
+  reps           Int
+  weight         String
+  unit           WeightUnit
+  intensity      String?
+  intensityType  IntensityType?
+  tempo          String?
+  restSeconds    Int?
+  trainingVolume Float?
+  duration       String?
+  coachFeedback  String?
+  userComments   String?
+  allowComments  Boolean         @default(true)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  coach          User?           @relation("CoachWorkoutLogs", fields: [coachId], references: [id])
+  exercise       Exercise        @relation(fields: [exerciseId], references: [id])
+  session        WorkoutSession? @relation("SessionEntries", fields: [sessionId], references: [id])
+  user           User            @relation("UserWorkoutLogs", fields: [userId], references: [id])
+  comments       Comment[]
+
+  @@index([userId, date])
+  @@index([coachId, date])
+  @@index([exerciseId, date])
+  @@map("workout_log_entries")
+}
+
+model Exercise {
+  id           String              @id @default(cuid())
+  name         String              @unique
+  slug         String?             @unique
+  category     String
+  muscleGroups String[]
+  equipment    String[]
+  instructions String?
+  videoUrl     String?
+  imageUrl     String?
+  isActive     Boolean             @default(true)
+  difficulty   String              @default("BEGINNER")
+  safetyNotes  String?
+  usageCount   Int                 @default(0)
+  lastUsed     DateTime?
+  createdBy    String?
+  isCustom     Boolean             @default(false)
+  formCues     String[]            @default([])
+  commonMistakes String[]          @default([])
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  workoutLogs  WorkoutLogEntry[]
+  variations   ExerciseVariation[]
+  templateExercises WorkoutTemplateExercise[]
+  personalRecords PersonalRecord[] @relation("PersonalRecords")
+
+  @@index([name])
+  @@index([category])
+  @@index([category, muscleGroups])
+  @@index([isActive, difficulty])
+  @@index([createdBy, isCustom])
+  @@map("exercises")
+}
+
+model ExerciseVariation {
+  id           String   @id @default(cuid())
+  exerciseId   String
+  name         String
+  description  String?
+  difficulty   String   @default("BEGINNER")
+  videoUrl     String?
+  imageUrl     String?
+  instructions String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  exercise     Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+
+  @@index([exerciseId, difficulty])
+  @@map("exercise_variations")
+}
+
+model WorkoutTemplate {
+  id               String                    @id @default(cuid())
+  name             String
+  description      String?
+  createdBy        String
+  category         String?
+  difficulty       String                    @default("BEGINNER")
+  duration         String?
+  equipment        String[]                  @default([])
+  isPublic         Boolean                   @default(false)
+  price            Float?
+  currency         String                    @default("USD")
+  purchaseCount    Int                       @default(0)
+  rating           Float?                    @default(0.0)
+  ratingCount      Int                       @default(0)
+  isActive         Boolean                   @default(true)
+  tags             String[]                  @default([])
+  createdAt        DateTime                  @default(now())
+  updatedAt        DateTime                  @updatedAt
+  exercises        WorkoutTemplateExercise[]
+  programs         ProgramTemplate[]
+  purchases        TemplatePurchase[]
+  ratings          TemplateRating[]
+  creator          User                      @relation("CreatedTemplates", fields: [createdBy], references: [id])
+
+  @@index([createdBy, isActive])
+  @@index([category, difficulty])
+  @@index([isPublic, isActive])
+  @@map("workout_templates")
+}
+
+model WorkoutTemplateExercise {
+  id         String          @id @default(cuid())
+  templateId String
+  exerciseId String
+  order      Int
+  sets       Int
+  reps       String
+  weight     String?
+  restTime   String?
+  notes      String?
+  isSuperset Boolean         @default(false)
+  supersetGroup String?
+  createdAt  DateTime        @default(now())
+  template   WorkoutTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  exercise   Exercise        @relation(fields: [exerciseId], references: [id])
+
+  @@unique([templateId, order])
+  @@index([templateId, order])
+  @@map("workout_template_exercises")
+}
+
+model ProgramTemplate {
+  id              String                 @id @default(cuid())
+  name            String
+  description     String?
+  createdBy       String
+  duration        String
+  difficulty      String                 @default("BEGINNER")
+  category        String?
+  isPublic        Boolean                @default(false)
+  price           Float?
+  currency        String                 @default("USD")
+  purchaseCount   Int                    @default(0)
+  rating          Float?                 @default(0.0)
+  ratingCount     Int                    @default(0)
+  isActive        Boolean                @default(true)
+  tags            String[]               @default([])
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+  weeks           ProgramWeek[]
+  workouts        WorkoutTemplate[]
+  purchases       ProgramPurchase[]
+  ratings         ProgramRating[]
+  subscriptions   ProgramSubscription[]
+  creator         User                   @relation("CreatedPrograms", fields: [createdBy], references: [id])
+
+  @@index([createdBy, isActive])
+  @@index([category, difficulty])
+  @@index([isPublic, isActive])
+  @@map("program_templates")
+}
+
+model ProgramWeek {
+  id        String          @id @default(cuid())
+  programId String
+  weekNumber Int
+  title     String?
+  description String?
+  workouts  Json
+  createdAt DateTime        @default(now())
+  program   ProgramTemplate @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@unique([programId, weekNumber])
+  @@index([programId, weekNumber])
+  @@map("program_weeks")
+}
+
+model ProgramSubscription {
+  id             String          @id @default(cuid())
+  userId         String
+  programId      String
+  currentWeek    Int             @default(1)
+  currentDay     Int             @default(1)
+  startDate      DateTime        @default(now())
+  endDate        DateTime?
+  isActive       Boolean         @default(true)
+  progressData   Json?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  user           User            @relation("ProgramSubscriptions", fields: [userId], references: [id])
+  program        ProgramTemplate @relation(fields: [programId], references: [id])
+
+  @@unique([userId, programId])
+  @@index([userId, isActive])
+  @@map("program_subscriptions")
+}
+
+model TemplatePurchase {
+  id         String          @id @default(cuid())
+  userId     String
+  templateId String
+  price      Float
+  currency   String          @default("USD")
+  purchasedAt DateTime       @default(now())
+  user       User            @relation("TemplatePurchases", fields: [userId], references: [id])
+  template   WorkoutTemplate @relation(fields: [templateId], references: [id])
+
+  @@unique([userId, templateId])
+  @@index([userId, purchasedAt])
+  @@map("template_purchases")
+}
+
+model ProgramPurchase {
+  id         String          @id @default(cuid())
+  userId     String
+  programId  String
+  price      Float
+  currency   String          @default("USD")
+  purchasedAt DateTime       @default(now())
+  user       User            @relation("ProgramPurchases", fields: [userId], references: [id])
+  program    ProgramTemplate @relation(fields: [programId], references: [id])
+
+  @@unique([userId, programId])
+  @@index([userId, purchasedAt])
+  @@map("program_purchases")
+}
+
+model TemplateRating {
+  id         String          @id @default(cuid())
+  userId     String
+  templateId String
+  rating     Int
+  review     String?
+  createdAt  DateTime        @default(now())
+  user       User            @relation("TemplateRatings", fields: [userId], references: [id])
+  template   WorkoutTemplate @relation(fields: [templateId], references: [id])
+
+  @@unique([userId, templateId])
+  @@index([templateId, rating])
+  @@map("template_ratings")
+}
+
+model ProgramRating {
+  id        String          @id @default(cuid())
+  userId    String
+  programId String
+  rating    Int
+  review    String?
+  createdAt DateTime        @default(now())
+  user      User            @relation("ProgramRatings", fields: [userId], references: [id])
+  program   ProgramTemplate @relation(fields: [programId], references: [id])
+
+  @@unique([userId, programId])
+  @@index([programId, rating])
+  @@map("program_ratings")
+}
+
+model ProgressMetric {
+  id         String   @id @default(cuid())
+  userId     String
+  metricType String
+  value      Float
+  unit       String?
+  bodyPart   String?
+  notes      String?
+  imageUrl   String?
+  recordedAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+  user       User     @relation("ProgressMetrics", fields: [userId], references: [id])
+
+  @@index([userId, metricType, recordedAt])
+  @@index([userId, recordedAt])
+  @@map("progress_metrics")
+}
+
+model PersonalRecord {
+  id         String   @id @default(cuid())
+  userId     String
+  exerciseId String
+  recordType String
+  value      Float
+  unit       String
+  reps       Int?
+  notes      String?
+  achievedAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+  user       User     @relation("PersonalRecords", fields: [userId], references: [id])
+  exercise   Exercise @relation("PersonalRecords", fields: [exerciseId], references: [id])
+
+  @@index([userId, exerciseId, recordType])
+  @@index([userId, achievedAt])
+  @@map("personal_records")
+}
+
+model WorkoutAnalytics {
+  id             String   @id @default(cuid())
+  userId         String
+  date           DateTime @db.Date
+  totalWorkouts  Int      @default(0)
+  totalVolume    Float    @default(0)
+  totalSets      Int      @default(0)
+  totalReps      Int      @default(0)
+  averageRating  Float?
+  topMuscleGroup String?
+  workoutTime    Int?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user           User     @relation("WorkoutAnalytics", fields: [userId], references: [id])
+
+  @@unique([userId, date])
+  @@index([userId, date])
+  @@map("workout_analytics")
+}
+
+model AccreditedProvider {
+  id             String   @id @default(cuid())
+  name           String
+  country        String
+  qualifications String[]
+  profilePath    String?
+  profileUrl     String?
+  slug           String?  @unique
+  source         String   @default("EREPS")
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([name, country])
+  @@index([country])
+  @@map("accredited_providers")
+}
+
+model WorkoutSession {
+  id          String            @id @default(cuid())
+  userId      String
+  coachId     String?
+  date        DateTime          @db.Date
+  startTime   DateTime
+  endTime     DateTime?
+  duration    Int?
+  title       String?
+  notes       String?
+  location    String?
+  totalVolume Float?
+  totalSets   Int               @default(0)
+  totalReps   Int               @default(0)
+  isComplete  Boolean           @default(false)
+  isTemplate  Boolean           @default(false)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  entries     WorkoutLogEntry[] @relation("SessionEntries")
+  coach       User?             @relation("CoachWorkoutSessions", fields: [coachId], references: [id])
+  user        User              @relation("UserWorkoutSessions", fields: [userId], references: [id])
+  appointment Appointment?      @relation("AppointmentWorkout")
+
+  @@index([userId, date])
+  @@index([coachId, date])
+  @@map("workout_sessions")
+}
+
+enum UserRole {
+  CLIENT
+  TRAINER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+  PENDING
+}
+
+enum ModerationAction {
+  APPROVED
+  FLAGGED
+  BLOCKED
+  EDITED
+}
+
+enum ModerationSource {
+  OPENAI_API
+  CUSTOM_RULES
+  USER_REPORT
+  ADMIN_ACTION
+}
+
+enum ViolationType {
+  INAPPROPRIATE_CONTENT
+  HARASSMENT
+  SPAM
+  IMPERSONATION
+  OFF_TOPIC
+  PRIVACY_VIOLATION
+  HATE_SPEECH
+  THREAT
+}
+
+enum CommunityType {
+  PUBLIC
+  PRIVATE
+  TRAINER
+}
+
+enum PostStatus {
+  PUBLISHED
+  PENDING
+  FLAGGED
+  REMOVED
+  DRAFT
+}
+
+enum SetType {
+  STRAIGHT
+  SUPERSET
+  TRISET
+  GIANT_SET
+  PYRAMID
+  REVERSE_PYRAMID
+  DROP_SET
+  REST_PAUSE
+  CLUSTER
+  EMOM
+  AMRAP
+}
+
+enum WeightUnit {
+  KG
+  LB
+}
+
+enum IntensityType {
+  PERCENTAGE_1RM
+  RPE
+  RIR
+}
+
+// ============================================================================
+// REAL-TIME & MOBILE FEATURES (Phase 4)
+// ============================================================================
+
+model ChatRoom {
+  id          String               @id @default(cuid())
+  name        String?
+  type        ChatRoomType         @default(DIRECT)
+  isActive    Boolean              @default(true)
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  messages    ChatMessage[]
+  participants ChatRoomParticipant[]
+
+  @@map("chat_rooms")
+}
+
+model ChatRoomParticipant {
+  id        String   @id @default(cuid())
+  roomId    String
+  userId    String
+  role      String   @default("MEMBER")
+  joinedAt  DateTime @default(now())
+  leftAt    DateTime?
+  isActive  Boolean  @default(true)
+  room      ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user      User     @relation("ChatParticipants", fields: [userId], references: [id])
+
+  @@unique([roomId, userId])
+  @@map("chat_room_participants")
+}
+
+model ChatMessage {
+  id        String      @id @default(cuid())
+  roomId    String
+  senderId  String
+  content   String
+  type      MessageType @default(TEXT)
+  metadata  Json?
+  editedAt  DateTime?
+  deletedAt DateTime?
+  createdAt DateTime    @default(now())
+  room      ChatRoom    @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  sender    User        @relation("SentMessages", fields: [senderId], references: [id])
+
+  @@index([roomId, createdAt])
+  @@map("chat_messages")
+}
+
+model LiveWorkoutSession {
+  id              String                     @id @default(cuid())
+  trainerId       String
+  name            String
+  description     String?
+  scheduledAt     DateTime
+  startedAt       DateTime?
+  endedAt         DateTime?
+  duration        Int?
+  maxParticipants Int                        @default(10)
+  isActive        Boolean                    @default(true)
+  sessionData     Json?
+  createdAt       DateTime                   @default(now())
+  updatedAt       DateTime                   @updatedAt
+  trainer         User                       @relation("TrainerSessions", fields: [trainerId], references: [id])
+  participants    LiveSessionParticipant[]
+  progress        WorkoutProgress[]
+
+  @@index([trainerId, scheduledAt])
+  @@map("live_workout_sessions")
+}
+
+model LiveSessionParticipant {
+  id        String              @id @default(cuid())
+  sessionId String
+  userId    String
+  joinedAt  DateTime            @default(now())
+  leftAt    DateTime?
+  isActive  Boolean             @default(true)
+  session   LiveWorkoutSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user      User                @relation("SessionParticipants", fields: [userId], references: [id])
+
+  @@unique([sessionId, userId])
+  @@map("live_session_participants")
+}
+
+model WorkoutProgress {
+  id        String              @id @default(cuid())
+  userId    String
+  sessionId String?
+  progress  Json
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+  user      User                @relation("WorkoutProgress", fields: [userId], references: [id])
+  session   LiveWorkoutSession? @relation(fields: [sessionId], references: [id])
+
+  @@unique([userId, sessionId])
+  @@index([userId, createdAt])
+  @@map("workout_progress")
+}
+
+model PushNotification {
+  id         String              @id @default(cuid())
+  userId     String
+  title      String
+  body       String
+  data       Json?
+  type       NotificationType    @default(GENERAL)
+  status     NotificationStatus  @default(PENDING)
+  scheduledAt DateTime?
+  sentAt     DateTime?
+  readAt     DateTime?
+  createdAt  DateTime            @default(now())
+  user       User                @relation("Notifications", fields: [userId], references: [id])
+
+  @@index([userId, status])
+  @@index([scheduledAt, status])
+  @@map("push_notifications")
+}
+
+model DeviceToken {
+  id        String       @id @default(cuid())
+  userId    String
+  token     String       @unique
+  platform  DevicePlatform
+  isActive  Boolean      @default(true)
+  lastUsed  DateTime     @default(now())
+  createdAt DateTime     @default(now())
+  user      User         @relation("DeviceTokens", fields: [userId], references: [id])
+
+  @@index([userId, isActive])
+  @@map("device_tokens")
+}
+
+model HealthData {
+  id         String           @id @default(cuid())
+  userId     String
+  dataType   HealthDataType
+  value      Float
+  unit       String
+  source     String           @default("MANUAL")
+  metadata   Json?
+  recordedAt DateTime
+  syncedAt   DateTime?
+  createdAt  DateTime         @default(now())
+  user       User             @relation("HealthData", fields: [userId], references: [id])
+
+  @@index([userId, dataType, recordedAt])
+  @@map("health_data")
+}
+
+// ============================================================================
+// PHASE 4 ENUMS
+// ============================================================================
+
+enum ChatRoomType {
+  DIRECT
+  GROUP
+  TRAINER_CLIENT
+  LIVE_SESSION
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+  WORKOUT
+  SYSTEM
+  FILE
+}
+
+enum NotificationType {
+  GENERAL
+  WORKOUT_REMINDER
+  MESSAGE
+  SESSION_INVITE
+  PROGRESS_UPDATE
+  ACHIEVEMENT
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  DELIVERED
+  READ
+  FAILED
+}
+
+enum DevicePlatform {
+  IOS
+  ANDROID
+  WEB
+}
+
+enum HealthDataType {
+  HEART_RATE
+  STEPS
+  CALORIES
+  WEIGHT
+  BODY_FAT
+  SLEEP
+  DISTANCE
+  WORKOUT_DURATION
+}
+
+// ============================================================================
+// PHASE 5: BUSINESS FEATURES & MONETIZATION (NEW)
+// ============================================================================
+
+// 5.1 TRAINER BUSINESS TOOLS
+// ============================================================================
+
+model TrainerProfile {
+  id                  String              @id @default(cuid())
+  userId              String              @unique
+  businessName        String?
+  businessDescription String?
+  hourlyRate          Float?
+  currency            String              @default("USD")
+  taxId               String?
+  businessAddress     Json?
+  certifications      Json?               @default("[]")
+  specializations     String[]            @default([])
+  experienceYears     Int                 @default(0)
+  languages           String[]            @default(["English"])
+  availableHours      Json?               // Weekly availability schedule
+  timezone            String              @default("UTC")
+  isVerified          Boolean             @default(false)
+  verificationLevel   String              @default("BASIC") // BASIC, PROFESSIONAL, PREMIUM
+  trainerRating       Float               @default(0.0)
+  totalClients        Int                 @default(0)
+  activeClients       Int                 @default(0)
+  totalEarnings       Float               @default(0.0)
+  monthlyEarnings     Float               @default(0.0)
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  user                User                @relation("TrainerProfile", fields: [userId], references: [id], onDelete: Cascade)
+  clients             TrainerClient[]
+  appointments        Appointment[]
+  payments            Payment[]           @relation("TrainerPayments")
+  reviews             TrainerReview[]
+  packages            TrainerPackage[]
+  groupClasses        GroupClass[]        @relation("TrainerGroupClasses")
+  progressReports     ProgressReport[]
+
+  @@map("trainer_profiles")
+}
+
+model TrainerClient {
+  id                  String              @id @default(cuid())
+  trainerId           String
+  clientId            String
+  status              ClientStatus        @default(ACTIVE)
+  startDate           DateTime            @default(now())
+  endDate             DateTime?
+  packageId           String?
+  sessionsRemaining   Int                 @default(0)
+  totalSessions       Int                 @default(0)
+  monthlyRate         Float?
+  billingCycle        String              @default("MONTHLY") // WEEKLY, MONTHLY, QUARTERLY
+  lastSessionDate     DateTime?
+  nextSessionDate     DateTime?
+  notes               String?
+  goals               String[]            @default([])
+  emergencyContact    Json?
+  medicalConditions   String[]            @default([])
+  preferences         Json?               @default("{}")
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  trainer             TrainerProfile      @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  client              User                @relation("ClientRelationships", fields: [clientId], references: [id], onDelete: Cascade)
+  package             TrainerPackage?     @relation(fields: [packageId], references: [id])
+  appointments        Appointment[]
+  progressReports     ProgressReport[]
+  payments            Payment[]           @relation("ClientPayments")
+
+  @@unique([trainerId, clientId])
+  @@map("trainer_clients")
+}
+
+model Appointment {
+  id                  String              @id @default(cuid())
+  trainerId           String
+  clientId            String
+  trainerClientId     String?
+  title               String
+  description         String?
+  scheduledAt         DateTime
+  duration            Int                 @default(60) // minutes
+  status              AppointmentStatus   @default(SCHEDULED)
+  type                AppointmentType     @default(PERSONAL_TRAINING)
+  location            String?
+  isVirtual           Boolean             @default(false)
+  meetingLink         String?
+  price               Float?
+  currency            String              @default("USD")
+  isPaid              Boolean             @default(false)
+  paymentId           String?
+  cancellationReason  String?
+  cancelledAt         DateTime?
+  cancelledBy         String?
+  completedAt         DateTime?
+  trainerNotes        String?
+  clientNotes         String?
+  rating              Int?                // 1-5 rating from client
+  feedback            String?
+  noShowFee           Float?
+  reminderSent        Boolean             @default(false)
+  workoutSessionId    String?             @unique
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  trainer             TrainerProfile      @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  client              User                @relation("ClientAppointments", fields: [clientId], references: [id], onDelete: Cascade)
+  trainerClient       TrainerClient?      @relation(fields: [trainerClientId], references: [id])
+  payment             Payment?            @relation(fields: [paymentId], references: [id])
+  workoutSession      WorkoutSession?     @relation("AppointmentWorkout", fields: [workoutSessionId], references: [id])
+
+  @@index([trainerId, scheduledAt])
+  @@index([clientId, scheduledAt])
+  @@map("appointments")
+}
+
+model Payment {
+  id                  String              @id @default(cuid())
+  trainerId           String
+  clientId            String
+  trainerClientId     String?
+  amount              Float
+  currency            String              @default("USD")
+  type                PaymentType         @default(SESSION)
+  status              PaymentStatus       @default(PENDING)
+  method              PaymentMethod       @default(MOLLIE)
+  molliePaymentId     String?
+  mollieCustomerId    String?
+  description         String
+  sessionDate         DateTime?
+  packageId           String?
+  subscriptionId      String?
+  refundAmount        Float?              @default(0.0)
+  platformFee         Float?              @default(0.0)
+  trainerEarnings     Float?
+  paymentDate         DateTime?
+  refundDate          DateTime?
+  failureReason       String?
+  metadata            Json?               @default("{}")
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  trainer             TrainerProfile      @relation("TrainerPayments", fields: [trainerId], references: [id], onDelete: Cascade)
+  client              User                @relation("UserPayments", fields: [clientId], references: [id], onDelete: Cascade)
+  trainerClient       TrainerClient?      @relation("ClientPayments", fields: [trainerClientId], references: [id])
+  package             TrainerPackage?     @relation(fields: [packageId], references: [id])
+  subscription        Subscription?       @relation(fields: [subscriptionId], references: [id])
+  appointments        Appointment[]
+
+  @@index([trainerId, paymentDate])
+  @@index([clientId, paymentDate])
+  @@index([status, paymentDate])
+  @@map("payments")
+}
+
+model TrainerPackage {
+  id                  String              @id @default(cuid())
+  trainerId           String
+  name                String
+  description         String?
+  price               Float
+  currency            String              @default("USD")
+  sessionCount        Int
+  duration            Int                 // days validity
+  isActive            Boolean             @default(true)
+  features            String[]            @default([])
+  terms               String?
+  cancellationPolicy  String?
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  trainer             TrainerProfile      @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  clients             TrainerClient[]
+  payments            Payment[]
+
+  @@index([trainerId, isActive])
+  @@map("trainer_packages")
+}
+
+model ProgressReport {
+  id                  String              @id @default(cuid())
+  trainerId           String
+  clientId            String
+  trainerClientId     String
+  reportDate          DateTime            @default(now())
+  period              String              @default("MONTHLY") // WEEKLY, MONTHLY, QUARTERLY
+  title               String
+  summary             String
+  goals               Json?               @default("[]")
+  achievements        Json?               @default("[]")
+  metrics             Json?               @default("{}")
+  workoutStats        Json?               @default("{}")
+  progressPhotos      String[]            @default([])
+  recommendations     String?
+  nextGoals           Json?               @default("[]")
+  isShared            Boolean             @default(false)
+  clientViewed        Boolean             @default(false)
+  clientViewedAt      DateTime?
+  feedbackFromClient  String?
+  rating              Int?                // 1-5 rating from client
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  trainer             TrainerProfile      @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  client              User                @relation("ClientReports", fields: [clientId], references: [id], onDelete: Cascade)
+  trainerClient       TrainerClient       @relation(fields: [trainerClientId], references: [id], onDelete: Cascade)
+
+  @@index([trainerId, reportDate])
+  @@index([clientId, reportDate])
+  @@map("progress_reports")
+}
+
+model TrainerReview {
+  id                  String              @id @default(cuid())
+  trainerId           String
+  clientId            String
+  rating              Int                 // 1-5 stars
+  title               String?
+  review              String
+  pros                String[]            @default([])
+  cons                String[]            @default([])
+  wouldRecommend      Boolean             @default(true)
+  sessionType         String?             // PERSONAL, GROUP, ONLINE
+  responseFromTrainer String?
+  isVerified          Boolean             @default(false)
+  isPublic            Boolean             @default(true)
+  helpfulVotes        Int                 @default(0)
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  trainer             TrainerProfile      @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  client              User                @relation("TrainerReviews", fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@unique([trainerId, clientId])
+  @@index([trainerId, rating, createdAt])
+  @@map("trainer_reviews")
+}
+
+// 5.2 ADVANCED COMMUNITY FEATURES
+// ============================================================================
+
+model PremiumCommunity {
+  id                  String              @id @default(cuid())
+  name                String
+  description         String
+  ownerId             String
+  price               Float
+  currency            String              @default("USD")
+  billingCycle        String              @default("MONTHLY") // MONTHLY, YEARLY
+  maxMembers          Int?
+  currentMembers      Int                 @default(0)
+  category            String
+  tags                String[]            @default([])
+  features            String[]            @default([])
+  rules               String?
+  isActive            Boolean             @default(true)
+  isPublic            Boolean             @default(false)
+  requireApproval     Boolean             @default(true)
+  trialPeriodDays     Int                 @default(0)
+  coverImage          String?
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  owner               User                @relation("OwnedPremiumCommunities", fields: [ownerId], references: [id], onDelete: Cascade)
+  memberships         PremiumMembership[]
+  posts               CommunityPost[]
+  groupClasses        GroupClass[]        @relation("CommunityGroupClasses")
+
+  @@index([ownerId, isActive])
+  @@index([category, isActive])
+  @@map("premium_communities")
+}
+
+model PremiumMembership {
+  id                  String              @id @default(cuid())
+  communityId         String
+  userId              String
+  status              MembershipStatus    @default(ACTIVE)
+  startDate           DateTime            @default(now())
+  endDate             DateTime?
+  autoRenew           Boolean             @default(true)
+  paymentId           String?
+  trialEndsAt         DateTime?
+  isTrialActive       Boolean             @default(false)
+  cancelledAt         DateTime?
+  cancellationReason  String?
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  community           PremiumCommunity    @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  user                User                @relation("PremiumMemberships", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([communityId, userId])
+  @@index([userId, status])
+  @@map("premium_memberships")
+}
+
+model GroupClass {
+  id                  String              @id @default(cuid())
+  trainerId           String
+  communityId         String?
+  title               String
+  description         String
+  category            String
+  difficulty          String              @default("BEGINNER")
+  duration            Int                 @default(60) // minutes
+  maxParticipants     Int                 @default(20)
+  currentParticipants Int                 @default(0)
+  price               Float?
+  currency            String              @default("USD")
+  scheduledAt         DateTime
+  endTime             DateTime
+  timezone            String              @default("UTC")
+  isRecurring         Boolean             @default(false)
+  recurrencePattern   String?             // WEEKLY, DAILY, etc.
+  location            String?
+  isVirtual           Boolean             @default(true)
+  meetingLink         String?
+  equipment           String[]            @default([])
+  tags                String[]            @default([])
+  status              ClassStatus         @default(SCHEDULED)
+  cancelReason        String?
+  recordingUrl        String?
+  isRecorded          Boolean             @default(false)
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  trainer             TrainerProfile      @relation("TrainerGroupClasses", fields: [trainerId], references: [id], onDelete: Cascade)
+  community           PremiumCommunity?   @relation("CommunityGroupClasses", fields: [communityId], references: [id])
+  participants        ClassParticipant[]
+  reviews             ClassReview[]
+
+  @@index([trainerId, scheduledAt])
+  @@index([category, scheduledAt])
+  @@map("group_classes")
+}
+
+model ClassParticipant {
+  id                  String              @id @default(cuid())
+  classId             String
+  userId              String
+  status              ParticipantStatus   @default(REGISTERED)
+  paymentStatus       PaymentStatus       @default(PENDING)
+  paymentId           String?
+  joinedAt            DateTime?
+  leftAt              DateTime?
+  attendanceDuration  Int?                // minutes actually attended
+  rating              Int?                // 1-5 rating
+  feedback            String?
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  class               GroupClass          @relation(fields: [classId], references: [id], onDelete: Cascade)
+  user                User                @relation("ClassParticipations", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([classId, userId])
+  @@index([userId, status])
+  @@map("class_participants")
+}
+
+model ClassReview {
+  id                  String              @id @default(cuid())
+  classId             String
+  userId              String
+  rating              Int                 // 1-5 stars
+  review              String?
+  wouldRecommend      Boolean             @default(true)
+  difficultyRating    Int?                // 1-5 (1=too easy, 5=too hard)
+  instructorRating    Int?                // 1-5 stars for instructor
+  isPublic            Boolean             @default(true)
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  class               GroupClass          @relation(fields: [classId], references: [id], onDelete: Cascade)
+  user                User                @relation("ClassReviews", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([classId, userId])
+  @@index([classId, rating])
+  @@map("class_reviews")
+}
+
+model Challenge {
+  id                  String              @id @default(cuid())
+  title               String
+  description         String
+  creatorId           String
+  type                ChallengeType       @default(WORKOUT_GOAL)
+  category            String
+  difficulty          String              @default("BEGINNER")
+  startDate           DateTime
+  endDate             DateTime
+  isPublic            Boolean             @default(true)
+  maxParticipants     Int?
+  currentParticipants Int                 @default(0)
+  entryFee            Float?              @default(0.0)
+  currency            String              @default("USD")
+  prizePool           Float?              @default(0.0)
+  rules               String
+  metrics             Json                @default("{}") // What to track/measure
+  rewards             Json?               @default("[]") // Prize structure
+  status              ChallengeStatus     @default(UPCOMING)
+  coverImage          String?
+  tags                String[]            @default([])
+  isVerified          Boolean             @default(false)
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  creator             User                @relation("CreatedChallenges", fields: [creatorId], references: [id], onDelete: Cascade)
+  participants        ChallengeParticipant[]
+  leaderboard         ChallengeLeaderboard[]
+  posts               ChallengePost[]
+
+  @@index([creatorId, status])
+  @@index([startDate, endDate])
+  @@index([category, status])
+  @@map("challenges")
+}
+
+model ChallengeParticipant {
+  id                  String              @id @default(cuid())
+  challengeId         String
+  userId              String
+  status              ParticipantStatus   @default(REGISTERED)
+  joinedAt            DateTime            @default(now())
+  completedAt         DateTime?
+  currentProgress     Json?               @default("{}")
+  finalResults        Json?               @default("{}")
+  rank                Int?
+  isVerified          Boolean             @default(false)
+  paymentId           String?
+  notes               String?
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  challenge           Challenge           @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  user                User                @relation("ChallengeParticipations", fields: [userId], references: [id], onDelete: Cascade)
+  progressUpdates     ChallengeProgress[]
+
+  @@unique([challengeId, userId])
+  @@index([challengeId, rank])
+  @@map("challenge_participants")
+}
+
+model ChallengeProgress {
+  id                  String              @id @default(cuid())
+  participantId       String
+  date                DateTime            @db.Date
+  metrics             Json                @default("{}")
+  notes               String?
+  proofImages         String[]            @default([])
+  isVerified          Boolean             @default(false)
+  verifiedBy          String?
+  createdAt           DateTime            @default(now())
+
+  // Relations
+  participant         ChallengeParticipant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+
+  @@index([participantId, date])
+  @@map("challenge_progress")
+}
+
+model ChallengeLeaderboard {
+  id                  String              @id @default(cuid())
+  challengeId         String
+  userId              String
+  rank                Int
+  score               Float
+  metrics             Json                @default("{}")
+  lastUpdated         DateTime            @default(now())
+
+  // Relations
+  challenge           Challenge           @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  user                User                @relation("LeaderboardPositions", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([challengeId, userId])
+  @@unique([challengeId, rank])
+  @@index([challengeId, rank])
+  @@map("challenge_leaderboard")
+}
+
+model ChallengePost {
+  id                  String              @id @default(cuid())
+  challengeId         String
+  authorId            String
+  content             String
+  images              String[]            @default([])
+  metrics             Json?               @default("{}")
+  likesCount          Int                 @default(0)
+  commentsCount       Int                 @default(0)
+  isHighlighted       Boolean             @default(false)
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  challenge           Challenge           @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  author              User                @relation("ChallengePostsAuthored", fields: [authorId], references: [id], onDelete: Cascade)
+  comments            ChallengePostComment[]
+  likes               ChallengePostLike[]
+
+  @@index([challengeId, createdAt])
+  @@map("challenge_posts")
+}
+
+model ChallengePostComment {
+  id                  String              @id @default(cuid())
+  postId              String
+  authorId            String
+  content             String
+  createdAt           DateTime            @default(now())
+
+  // Relations
+  post                ChallengePost       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author              User                @relation("ChallengeCommentsAuthored", fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([postId, createdAt])
+  @@map("challenge_post_comments")
+}
+
+model ChallengePostLike {
+  id                  String              @id @default(cuid())
+  postId              String
+  userId              String
+  createdAt           DateTime            @default(now())
+
+  // Relations
+  post                ChallengePost       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user                User                @relation("ChallengePostLikes", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+  @@map("challenge_post_likes")
+}
+
+// 5.3 MARKETPLACE & MONETIZATION
+// ============================================================================
+
+model Subscription {
+  id                  String              @id @default(cuid())
+  userId              String
+  type                SubscriptionType    @default(BASIC)
+  status              SubscriptionStatus  @default(ACTIVE)
+  mollieSubscriptionId String?            @unique
+  mollieCustomerId    String?
+  currentPeriodStart  DateTime
+  currentPeriodEnd    DateTime
+  cancelAtPeriodEnd   Boolean             @default(false)
+  cancelledAt         DateTime?
+  trialEnd            DateTime?
+  price               Float
+  currency            String              @default("USD")
+  features            Json                @default("[]")
+  usageStats          Json?               @default("{}")
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  user                User                @relation("UserSubscriptions", fields: [userId], references: [id], onDelete: Cascade)
+  payments            Payment[]
+
+  @@index([userId, status])
+  @@index([mollieSubscriptionId])
+  @@map("subscriptions")
+}
+
+model EquipmentRecommendation {
+  id                  String              @id @default(cuid())
+  name                String
+  description         String
+  category            String
+  brand               String?
+  price               Float?
+  currency            String              @default("USD")
+  affiliateUrl        String
+  affiliateCode       String?
+  imageUrl            String?
+  rating              Float?              @default(0.0)
+  reviewCount         Int                 @default(0)
+  features            String[]            @default([])
+  specifications      Json?               @default("{}")
+  exerciseTypes       String[]            @default([])
+  isActive            Boolean             @default(true)
+  isPremium           Boolean             @default(false)
+  clickCount          Int                 @default(0)
+  conversionCount     Int                 @default(0)
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  reviews             EquipmentReview[]
+  recommendations     UserEquipmentRecommendation[]
+
+  @@index([category, isActive])
+  @@index([rating, reviewCount])
+  @@map("equipment_recommendations")
+}
+
+model EquipmentReview {
+  id                  String              @id @default(cuid())
+  equipmentId         String
+  userId              String
+  rating              Int                 // 1-5 stars
+  title               String?
+  review              String
+  pros                String[]            @default([])
+  cons                String[]            @default([])
+  wouldRecommend      Boolean             @default(true)
+  purchaseVerified    Boolean             @default(false)
+  helpfulVotes        Int                 @default(0)
+  images              String[]            @default([])
+  usageMonths         Int?                // How long they've used it
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  equipment           EquipmentRecommendation @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  user                User                @relation("EquipmentReviews", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([equipmentId, userId])
+  @@index([equipmentId, rating])
+  @@map("equipment_reviews")
+}
+
+model UserEquipmentRecommendation {
+  id                  String              @id @default(cuid())
+  userId              String
+  equipmentId         String
+  reason              String              // Why recommended
+  priority            Int                 @default(1) // 1-5 priority
+  isPersonalized      Boolean             @default(false)
+  clickedAt           DateTime?
+  purchasedAt         DateTime?
+  createdAt           DateTime            @default(now())
+
+  // Relations
+  user                User                @relation("UserEquipmentRecs", fields: [userId], references: [id], onDelete: Cascade)
+  equipment           EquipmentRecommendation @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, equipmentId])
+  @@index([userId, priority])
+  @@map("user_equipment_recommendations")
+}
+
+model NutritionPlan {
+  id                  String              @id @default(cuid())
+  userId              String
+  createdBy           String?             // Trainer who created it
+  name                String
+  description         String?
+  type                String              @default("CUSTOM") // WEIGHT_LOSS, MUSCLE_GAIN, MAINTENANCE, CUSTOM
+  targetCalories      Int?
+  targetProtein       Int?                // grams
+  targetCarbs         Int?                // grams
+  targetFat           Int?                // grams
+  targetFiber         Int?                // grams
+  startDate           DateTime
+  endDate             DateTime?
+  isActive            Boolean             @default(true)
+  notes               String?
+  restrictions        String[]            @default([]) // VEGETARIAN, VEGAN, GLUTEN_FREE, etc.
+  preferences         Json?               @default("{}")
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  user                User                @relation("UserNutritionPlans", fields: [userId], references: [id], onDelete: Cascade)
+  creator             User?               @relation("CreatedNutritionPlans", fields: [createdBy], references: [id])
+  meals               MealPlan[]
+  logs                NutritionLog[]
+
+  @@index([userId, isActive])
+  @@index([createdBy, createdAt])
+  @@map("nutrition_plans")
+}
+
+model MealPlan {
+  id                  String              @id @default(cuid())
+  nutritionPlanId     String
+  dayOfWeek           Int                 // 0-6 (Sunday-Saturday)
+  mealType            String              // BREAKFAST, LUNCH, DINNER, SNACK
+  mealOrder           Int                 @default(1)
+  name                String
+  description         String?
+  calories            Int?
+  protein             Float?              // grams
+  carbs               Float?              // grams
+  fat                 Float?              // grams
+  fiber               Float?              // grams
+  ingredients         Json                @default("[]")
+  instructions        String?
+  prepTime            Int?                // minutes
+  cookTime            Int?                // minutes
+  servings            Int                 @default(1)
+  imageUrl            String?
+  isOptional          Boolean             @default(false)
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  nutritionPlan       NutritionPlan       @relation(fields: [nutritionPlanId], references: [id], onDelete: Cascade)
+
+  @@index([nutritionPlanId, dayOfWeek, mealType])
+  @@map("meal_plans")
+}
+
+model NutritionLog {
+  id                  String              @id @default(cuid())
+  userId              String
+  nutritionPlanId     String?
+  date                DateTime            @db.Date
+  mealType            String              // BREAKFAST, LUNCH, DINNER, SNACK
+  foodName            String
+  quantity            Float               // amount consumed
+  unit                String              // cups, grams, ounces, etc.
+  calories            Int
+  protein             Float               // grams
+  carbs               Float               // grams
+  fat                 Float               // grams
+  fiber               Float?              // grams
+  sodium              Float?              // mg
+  sugar               Float?              // grams
+  notes               String?
+  imageUrl            String?
+  isManual            Boolean             @default(true)
+  source              String?             // MANUAL, BARCODE, API
+  createdAt           DateTime            @default(now())
+
+  // Relations
+  user                User                @relation("NutritionLogs", fields: [userId], references: [id], onDelete: Cascade)
+  nutritionPlan       NutritionPlan?      @relation(fields: [nutritionPlanId], references: [id])
+
+  @@index([userId, date])
+  @@index([nutritionPlanId, date])
+  @@map("nutrition_logs")
+}
+
+
+// Additional CommunityPost model for premium communities
+model CommunityPost {
+  id                  String              @id @default(cuid())
+  communityId         String
+  authorId            String
+  title               String?
+  content             String
+  images              String[]            @default([])
+  isPinned            Boolean             @default(false)
+  likesCount          Int                 @default(0)
+  commentsCount       Int                 @default(0)
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  community           PremiumCommunity    @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  author              User                @relation("CommunityPostsAuthored", fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([communityId, createdAt])
+  @@map("community_posts")
+}
+
+// ============================================================================
+// PHASE 5 ENUMS
+// ============================================================================
+
+enum ClientStatus {
+  ACTIVE
+  INACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+  RESCHEDULED
+}
+
+enum AppointmentType {
+  PERSONAL_TRAINING
+  CONSULTATION
+  ASSESSMENT
+  FOLLOW_UP
+  GROUP_SESSION
+  VIRTUAL_TRAINING
+}
+
+enum PaymentType {
+  SESSION
+  PACKAGE
+  SUBSCRIPTION
+  CONSULTATION
+  LATE_FEE
+  CANCELLATION_FEE
+  EQUIPMENT
+  CHALLENGE_ENTRY
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  MOLLIE
+  PAYPAL
+  CASH
+  BANK_TRANSFER
+  CRYPTO
+}
+
+enum MembershipStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+  SUSPENDED
+  TRIAL
+}
+
+enum ClassStatus {
+  SCHEDULED
+  LIVE
+  COMPLETED
+  CANCELLED
+  POSTPONED
+}
+
+enum ParticipantStatus {
+  REGISTERED
+  CONFIRMED
+  ATTENDED
+  NO_SHOW
+  CANCELLED
+  WAITLISTED
+}
+
+enum ChallengeType {
+  WORKOUT_GOAL
+  WEIGHT_LOSS
+  STRENGTH_GAIN
+  ENDURANCE
+  STEPS
+  CONSISTENCY
+  CUSTOM
+}
+
+enum ChallengeStatus {
+  UPCOMING
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum SubscriptionType {
+  BASIC
+  PREMIUM
+  PROFESSIONAL
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+  PAST_DUE
+  UNPAID
+  TRIAL
 }
