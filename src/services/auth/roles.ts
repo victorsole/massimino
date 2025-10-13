@@ -1,60 +1,10 @@
-// src/lib/auth/roles.ts
-
 /**
  * Role Definitions and Permissions for Massimino
  * Implements comprehensive role-based access control (RBAC) with safety-first approach
  */
 
-// Define enums as const values since Prisma client may not be available
-export const UserRole = {
-  CLIENT: 'CLIENT',
-  TRAINER: 'TRAINER',
-  ADMIN: 'ADMIN',
-} as const;
-
-export const UserStatus = {
-  ACTIVE: 'ACTIVE',
-  SUSPENDED: 'SUSPENDED',
-  BANNED: 'BANNED',
-} as const;
-
-export type UserRoleType = typeof UserRole[keyof typeof UserRole];
-export type UserStatusType = typeof UserStatus[keyof typeof UserStatus];
-
-// Define types locally to avoid circular imports
-export interface RolePermissions {
-  canCreatePosts: boolean;
-  canComment: boolean;
-  canDirectMessage: boolean;
-  canCreateCommunities: boolean;
-  canModerateContent: boolean;
-  canReportUsers: boolean;
-  canViewModerationLogs: boolean;
-  canBanUsers: boolean;
-  canVerifyTrainers: boolean;
-  canUploadMedia: boolean;
-  canGoLive: boolean;
-  canCreateCourses: boolean;
-  canReceivePayments: boolean;
-}
-
-export interface SafeUser {
-  id: string;
-  name: string | null;
-  email: string;
-  role: UserRoleType;
-  image?: string | null;
-  status: UserStatusType;
-  reputationScore: number;
-  warningCount: number;
-  trainerVerified: boolean;
-  suspendedUntil?: Date | null;
-  isSafe?: boolean;
-  createdAt: Date;
-  lastLoginAt?: Date | null;
-}
-
-export type PermissionLevel = 'read' | 'write' | 'moderate' | 'admin';
+import { UserRole, UserStatus } from '@prisma/client';
+import type { RolePermissions, SafeUser, PermissionLevel } from '@/types/auth';
 
 // ============================================================================
 // ROLE DEFINITIONS
@@ -101,7 +51,7 @@ export const ROLES = {
  * Base permissions for each role
  * Permissions are additive - higher roles inherit lower role permissions
  */
-export const BASE_PERMISSIONS: Record<UserRoleType, RolePermissions> = {
+export const BASE_PERMISSIONS: Record<UserRole, RolePermissions> = {
   [UserRole.CLIENT]: {
     // Content permissions
     canCreatePosts: true,
@@ -287,7 +237,7 @@ export function getTrainerPermissions(user: SafeUser): RolePermissions {
     return {
       ...basePermissions,
       ...VERIFIED_TRAINER_BONUSES,
-    } as RolePermissions;
+    };
   }
   
   return basePermissions;
@@ -305,7 +255,7 @@ export function getUserPermissions(
   safetyChecks?: SafetyChecks
 ): RolePermissions {
   // Start with base role permissions
-  let permissions: RolePermissions = BASE_PERMISSIONS[user.role];
+  let permissions = BASE_PERMISSIONS[user.role];
   
   // Add trainer-specific bonuses if applicable
   if (user.role === UserRole.TRAINER) {
@@ -314,7 +264,7 @@ export function getUserPermissions(
   
   // Add reputation-based permissions
   const reputationBonus = getReputationPermissions(user.reputationScore);
-  permissions = { ...permissions, ...reputationBonus } as RolePermissions;
+  permissions = { ...permissions, ...reputationBonus };
   
   // Apply safety restrictions if provided
   if (safetyChecks) {
@@ -515,3 +465,14 @@ export function isFeatureEnabled(
 // ============================================================================
 // EXPORT UTILITIES
 // ============================================================================
+
+export {
+  UserRole,
+  UserStatus,
+};
+
+export type {
+  RolePermissions,
+  SafeUser,
+  PermissionLevel,
+};
