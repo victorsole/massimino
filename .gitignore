@@ -9,3 +9,20 @@ node_modules
 .env
 .env.*
 *.env
+
+# Next.js build output
+.next
+.next-dev.log
+.next-dev.pid
+
+# TypeScript build info
+tsconfig.tsbuildinfo
+tsconfig 2.tsbuildinfo
+
+# OS/editor junk
+.DS_Store
+*.swp
+*.log
+
+# Uploads (credentials are user content; don’t track)
+public/uploads/credentials/
