@@ -3,7 +3,7 @@
  * Tracks all moderation activities for audit trails and analytics
  */
 
-import { prisma } from '@/core/database';
+import { prisma } from '@/lib/database/client';
 import type { 
   ModerationResult,
   EnforcementResult,
@@ -134,7 +134,7 @@ class ModerationLogger {
     
     try {
       // Batch insert to database
-      await prisma.moderation_logs.createMany({
+      await prisma.moderationLog.createMany({
         data: logsToFlush.map(({ entry, timestamp, id }) => {
           const contentId = this.extractContentId(entry.content);
           const data: any = {
@@ -366,7 +366,7 @@ export async function getUserModerationLogs(
   confidence: number | null;
   createdAt: Date;
 }>> {
-  return prisma.moderation_logs.findMany({
+  return prisma.moderationLog.findMany({
     where: { userId },
     select: {
       id: true,
@@ -379,7 +379,7 @@ export async function getUserModerationLogs(
     orderBy: { createdAt: 'desc' },
     take: limit,
     skip: offset,
-  }).then((logs: Array<{ id: string; action: ModerationAction; contentType: string; flaggedReason: string | null; confidence: number | null; createdAt: Date }>) => logs.map((log) => ({
+  }).then(logs => logs.map(log => ({
     id: log.id,
     action: log.action,
     contentType: log.contentType,
@@ -405,7 +405,7 @@ export async function getModerationStats(
   const windowHours = { day: 24, week: 168, month: 720 }[timeWindow];
   const since = new Date(Date.now() - windowHours * 60 * 60 * 1000);
 
-  const logs = await prisma.moderation_logs.findMany({
+  const logs = await prisma.moderationLog.findMany({
     where: {
       createdAt: { gte: since },
     },
@@ -423,7 +423,7 @@ export async function getModerationStats(
   let blockedContent = 0;
   const categoryCount: Record<string, number> = {};
 
-  logs.forEach((log: { action: ModerationAction; confidence: number | null; flaggedReason: string | null }) => {
+  logs.forEach(log => {
     actionsByType[log.action] = (actionsByType[log.action] || 0) + 1;
     
     if (log.confidence !== null) {
@@ -469,7 +469,7 @@ export async function getRecentModerationActivity(limit: number = 20): Promise<A
     role: string;
   };
 }>> {
-  const logs = await prisma.moderation_logs.findMany({
+  const logs = await prisma.moderationLog.findMany({
     take: limit,
     orderBy: { createdAt: 'desc' },
     include: {
@@ -482,7 +482,7 @@ export async function getRecentModerationActivity(limit: number = 20): Promise<A
     },
   });
 
-  return logs.map((log: any) => ({
+  return logs.map(log => ({
     id: log.id,
     userId: log.userId,
     action: log.action,
@@ -525,7 +525,7 @@ export async function searchModerationLogs(params: {
     if (params.dateTo) where.createdAt.lte = params.dateTo;
   }
 
-  return prisma.moderation_logs.findMany({
+  return prisma.moderationLog.findMany({
     where,
     select: {
       id: true,
@@ -549,7 +549,7 @@ export async function searchModerationLogs(params: {
 export async function cleanupOldLogs(): Promise<number> {
   const cutoffDate = new Date(Date.now() - LOGGING_CONFIG.retentionDays * 24 * 60 * 60 * 1000);
   
-  const result = await prisma.moderation_logs.deleteMany({
+  const result = await prisma.moderationLog.deleteMany({
     where: {
       createdAt: { lt: cutoffDate },
     },
