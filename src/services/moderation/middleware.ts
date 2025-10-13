@@ -1,109 +1,19 @@
-// src/lib/moderation/middleware.ts
-
 /**
  * Moderation Middleware for Massimino
  * Real-time content filtering for all text inputs with fitness-specific rules
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-
-// Define types locally since Prisma client may not be available
-export const ModerationAction = {
-  APPROVED: 'APPROVED',
-  FLAGGED: 'FLAGGED',
-  BLOCKED: 'BLOCKED',
-  DELETED: 'DELETED',
-} as const;
-
-export const ModerationSource = {
-  OPENAI: 'OPENAI',
-  CUSTOM_RULES: 'CUSTOM_RULES',
-  MANUAL: 'MANUAL',
-} as const;
-
-export const ContentType = {
-  POST: 'POST',
-  COMMENT: 'COMMENT',
-  MESSAGE: 'MESSAGE',
-  COMMUNITY: 'COMMUNITY',
-  PROFILE: 'PROFILE',
-} as const;
-
-export type ModerationActionType = typeof ModerationAction[keyof typeof ModerationAction];
-export type ModerationSourceType = typeof ModerationSource[keyof typeof ModerationSource];
-export type ContentTypeType = typeof ContentType[keyof typeof ContentType];
-
-// Define interfaces locally
-export interface ModerationResult {
-  action: ModerationActionType;
-  blocked: boolean;
-  flagged: boolean;
-  categories: Array<{ category: string; confidence: number }>;
-  confidence: number;
-  reason?: string;
-  moderatedAt: Date;
-  appealable: boolean;
-  source: ModerationSourceType;
-  requiresHumanReview: boolean;
-  reviewPriority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
-}
-
-export interface ModerationContext {
-  isTrainerToClient: boolean;
-  isInPrivateMessage: boolean;
-  communityType: string;
-  authorReputation: number;
-  authorWarnings: number;
-  isFirstOffense: boolean;
-  isReply: boolean;
-  hasImages: boolean;
-  mentionsUsers: string[];
-  timeOfDay: string;
-  dayOfWeek: string;
-}
-
-// Placeholder functions - would be implemented in actual files
-async function moderateContent(_content: string, _context: ModerationContext): Promise<ModerationResult> {
-  // Placeholder implementation
-  return {
-    action: 'APPROVED',
-    blocked: false,
-    flagged: false,
-    categories: [],
-    confidence: 0,
-    moderatedAt: new Date(),
-    appealable: false,
-    source: 'CUSTOM_RULES',
-    requiresHumanReview: false,
-    reviewPriority: 'LOW',
-  };
-}
-
-async function applyCustomRules(_content: string, _context: ModerationContext): Promise<ModerationResult> {
-  // Placeholder implementation
-  return {
-    action: 'APPROVED',
-    blocked: false,
-    flagged: false,
-    categories: [],
-    confidence: 0,
-    moderatedAt: new Date(),
-    appealable: false,
-    source: 'CUSTOM_RULES',
-    requiresHumanReview: false,
-    reviewPriority: 'LOW',
-  };
-}
-
-async function logModerationAction(logEntry: any): Promise<void> {
-  // Placeholder implementation
-  console.log('Moderation action logged:', logEntry);
-}
-
-async function getEnforcementAction(userId: string, result: ModerationResult): Promise<void> {
-  // Placeholder implementation
-  console.log('Enforcement action for user:', userId, result);
-}
+import { moderateContent } from './openai';
+import { applyCustomRules } from '@/lib/moderation/rules';
+import { logModerationAction } from '@/lib/moderation/loggers';
+import { getEnforcementAction } from '@/lib/moderation/enforcement';
+import type { 
+  ModerationResult, 
+  ModerationContext,
+  ContentType 
+} from '@/types/moderation';
+import { ModerationAction, ModerationSource } from '@prisma/client';
 
 // ============================================================================
 // MIDDLEWARE CONFIGURATION
@@ -119,7 +29,7 @@ const MIDDLEWARE_CONFIG = {
 } as const;
 
 // Content type mappings for different endpoints
-const ENDPOINT_CONTENT_MAP: Record<string, ContentTypeType> = {
+const ENDPOINT_CONTENT_MAP: Record<string, ContentType> = {
   '/api/posts': 'POST',
   '/api/comments': 'COMMENT',
   '/api/messages': 'MESSAGE',
@@ -446,7 +356,7 @@ function createBlockedResponse(result: ModerationResult): NextResponse {
 /**
  * Get content type from request URL
  */
-function getContentType(url?: string): ContentTypeType {
+function getContentType(url?: string): ContentType {
   if (!url) return 'POST';
   
   for (const [endpoint, type] of Object.entries(ENDPOINT_CONTENT_MAP)) {
@@ -546,11 +456,11 @@ function setCachedResult(key: string, result: ModerationResult): void {
   // Clean up old cache entries periodically
   if (moderationCache.size > 1000) {
     const cutoff = Date.now() - MIDDLEWARE_CONFIG.cacheTTL;
-    Array.from(moderationCache.entries()).forEach(([k, v]) => {
+    for (const [k, v] of moderationCache.entries()) {
       if (v.timestamp < cutoff) {
         moderationCache.delete(k);
       }
-    });
+    }
   }
 }
 
