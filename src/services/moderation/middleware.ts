@@ -5,9 +5,9 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { moderateContent } from './openai';
-import { applyCustomRules } from '@/lib/moderation/rules';
-import { logModerationAction } from '@/lib/moderation/loggers';
-import { getEnforcementAction } from '@/lib/moderation/enforcement';
+import { applyCustomRules } from '@/services/moderation/rules';
+import { logModerationAction } from '@/services/moderation/loggers';
+import { getEnforcementAction } from '@/services/moderation/enforcement';
 import type { 
   ModerationResult, 
   ModerationContext,
