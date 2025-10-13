@@ -4,6 +4,9 @@
   "description": "The safety-first fitness community platform for trainers and enthusiasts",
   "private": true,
   "scripts": {
+    "clean": "bash -c 'rm -rf .next .next-dev.log .next-dev.pid tsconfig.tsbuildinfo'",
+    "predev": "npm run clean",
+    "prebuild": "npm run clean",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
