@@ -17,9 +17,11 @@ import CameraCapture from '@/components/ui/camera_capture';
 import SocialMediaIntegration from '@/components/ui/social_media_integration';
 import { Plus } from 'lucide-react';
 import { useFormStatus } from 'react-dom';
+import { useUserProfile } from '@/hooks/useUserProfile';
 
 export default function ProfilePage() {
   const { data: session } = useSession();
+  const { profile, loading: profileLoading, error: profileError, refreshProfile } = useUserProfile();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [nickname, setNickname] = useState('');
@@ -52,12 +54,27 @@ export default function ProfilePage() {
 
   const user = session?.user;
 
+  // Initialize form state from profile data (not session)
   useEffect(() => {
-    // initialize from session if present
-    if (user?.name) {
-      setNickname(user.name)
+    if (profile) {
+      // Initialize basic profile fields
+      if (profile.name) {
+        setFirstName(profile.name);
+      }
+      if (profile.surname) {
+        setLastName(profile.surname);
+      }
+      if (profile.nickname) {
+        setNickname(profile.nickname);
+      }
+      if (profile.trainerBio) {
+        setBio(profile.trainerBio);
+      }
+      if (profile.email) {
+        setEmail(profile.email);
+      }
     }
-  }, [user?.name])
+  }, [profile])
 
   useEffect(() => {
     // Load last stored provider selection from server and user credentials
@@ -272,6 +289,42 @@ export default function ProfilePage() {
   // Check if user has admin access
   const isAdmin = user?.email === 'helloberesol@gmail.com' || user?.email === 'vsoleferioli@gmail.com';
 
+  // Show loading state while fetching profile
+  if (profileLoading) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading your profile...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state if profile failed to load
+  if (profileError) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <Card className="border-red-200 bg-red-50">
+          <CardContent className="pt-6">
+            <div className="text-center">
+              <svg className="h-12 w-12 text-red-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+              <h3 className="text-lg font-semibold text-red-900 mb-2">Failed to Load Profile</h3>
+              <p className="text-red-700 mb-4">{profileError}</p>
+              <Button onClick={refreshProfile} variant="outline">
+                Try Again
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       {/* Notification Overlay */}
@@ -371,7 +424,13 @@ export default function ProfilePage() {
           <CardDescription>Use nickname or full name; we’ll display nickname if provided</CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={updateProfileBasicsAction} className="space-y-4">
+          <form action={updateProfileBasicsAction} className="space-y-4" onSubmit={async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.currentTarget);
+            await updateProfileBasicsAction(formData);
+            await refreshProfile(); // Refresh profile data after save
+            showNotification('success', 'Profile updated successfully');
+          }}>
             <input type="hidden" name="userId" value={user?.id || ''} />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div>
@@ -399,11 +458,11 @@ export default function ProfilePage() {
               />
               <p className="text-xs text-gray-500">{bio.length}/500 characters</p>
             </div>
-            <SubmitButton label="Save" pendingLabel="Saving..." />
+            <Button type="submit">Save</Button>
           </form>
         </CardContent>
       </Card>
-      )
+      
 
       <Card>
         <CardHeader>
@@ -443,7 +502,13 @@ export default function ProfilePage() {
 
             {/* Upload Area */}
             <div className="flex-1">
-              <form action={uploadAvatarAction} className="space-y-4">
+              <form action={uploadAvatarAction} className="space-y-4" onSubmit={async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                await uploadAvatarAction(formData);
+                await refreshProfile(); // Refresh profile data after save
+                showNotification('success', 'Avatar uploaded successfully');
+              }}>
                 <input type="hidden" name="userId" value={user?.id || ''} />
                 <div
                   className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
@@ -518,7 +583,13 @@ export default function ProfilePage() {
               <Button variant="outline" size="sm" onClick={() => { setEmail(user?.email || ''); setIsEditingEmail(true); setFormErrors({}); }}>Edit</Button>
             </div>
           ) : (
-            <form action={updateEmailAction} className="space-y-4">
+            <form action={updateEmailAction} className="space-y-4" onSubmit={async (e) => {
+              e.preventDefault();
+              const formData = new FormData(e.currentTarget);
+              await updateEmailAction(formData);
+              await refreshProfile(); // Refresh profile data after save
+              showNotification('success', 'Email updated successfully');
+            }}>
               <input type="hidden" name="userId" value={user?.id || ''} />
               <div className="space-y-2">
                 <Input
@@ -575,7 +646,13 @@ export default function ProfilePage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={updateSocialMediaAction} className="space-y-4">
+          <form action={updateSocialMediaAction} className="space-y-4" onSubmit={async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.currentTarget);
+            await updateSocialMediaAction(formData);
+            await refreshProfile(); // Refresh profile data after save
+            showNotification('success', 'Social media links updated successfully');
+          }}>
             <input type="hidden" name="userId" value={user?.id || ''} />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -592,7 +669,7 @@ export default function ProfilePage() {
                   name="instagramUrl"
                   type="url"
                   placeholder="https://instagram.com/yourusername"
-                  defaultValue=""
+                  defaultValue={profile?.instagramUrl || ""}
                 />
               </div>
 
@@ -626,7 +703,7 @@ export default function ProfilePage() {
                   name="tiktokUrl"
                   type="url"
                   placeholder="https://tiktok.com/@yourusername"
-                  defaultValue=""
+                  defaultValue={profile?.tiktokUrl || ""}
                 />
               </div>
 
@@ -643,7 +720,7 @@ export default function ProfilePage() {
                   name="youtubeUrl"
                   type="url"
                   placeholder="https://youtube.com/@yourchannel"
-                  defaultValue=""
+                  defaultValue={profile?.youtubeUrl || ""}
                 />
               </div>
 
@@ -660,7 +737,7 @@ export default function ProfilePage() {
                   name="facebookUrl"
                   type="url"
                   placeholder="https://facebook.com/yourprofile"
-                  defaultValue=""
+                  defaultValue={profile?.facebookUrl || ""}
                 />
               </div>
 
@@ -677,7 +754,7 @@ export default function ProfilePage() {
                   name="linkedinUrl"
                   type="url"
                   placeholder="https://linkedin.com/in/yourprofile"
-                  defaultValue=""
+                  defaultValue={profile?.linkedinUrl || ""}
                 />
               </div>
             </div>
@@ -688,7 +765,7 @@ export default function ProfilePage() {
                 type="checkbox"
                 id="showSocialMedia"
                 name="showSocialMedia"
-                defaultChecked={true}
+                defaultChecked={profile?.showSocialMedia ?? true}
                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
               <Label htmlFor="showSocialMedia" className="text-sm font-medium text-blue-900">
@@ -715,7 +792,13 @@ export default function ProfilePage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={updateFitnessPreferencesAction} className="space-y-6">
+          <form action={updateFitnessPreferencesAction} className="space-y-6" onSubmit={async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.currentTarget);
+            await updateFitnessPreferencesAction(formData);
+            await refreshProfile(); // Refresh profile data after save
+            showNotification('success', 'Fitness preferences updated successfully');
+          }}>
             <input type="hidden" name="userId" value={user?.id || ''} />
 
             {/* Fitness Goals */}
@@ -871,7 +954,13 @@ export default function ProfilePage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={updateLocationAction} className="space-y-6">
+          <form action={updateLocationAction} className="space-y-6" onSubmit={async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.currentTarget);
+            await updateLocationAction(formData);
+            await refreshProfile(); // Refresh profile data after save
+            showNotification('success', 'Location settings updated successfully');
+          }}>
             <input type="hidden" name="userId" value={user?.id || ''} />
 
             {/* Privacy Notice */}
@@ -899,7 +988,7 @@ export default function ProfilePage() {
                     id="city"
                     name="city"
                     placeholder="e.g., Barcelona"
-                    defaultValue=""
+                    defaultValue={profile?.city || ""}
                   />
                 </div>
                 <div className="space-y-2">
@@ -908,7 +997,7 @@ export default function ProfilePage() {
                     id="state"
                     name="state"
                     placeholder="e.g., Catalonia"
-                    defaultValue=""
+                    defaultValue={profile?.state || ""}
                   />
                 </div>
                 <div className="space-y-2">
@@ -917,7 +1006,7 @@ export default function ProfilePage() {
                     id="country"
                     name="country"
                     placeholder="e.g., Spain"
-                    defaultValue=""
+                    defaultValue={profile?.country || ""}
                   />
                 </div>
               </div>
@@ -939,7 +1028,7 @@ export default function ProfilePage() {
                   type="checkbox"
                   id="showLocation"
                   name="showLocation"
-                  defaultChecked={false}
+                  defaultChecked={profile?.showLocation ?? false}
                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
               </div>
@@ -958,7 +1047,7 @@ export default function ProfilePage() {
                         type="radio"
                         name="locationVisibility"
                         value={option.value}
-                        defaultChecked={option.value === 'NONE'}
+                        defaultChecked={option.value === (profile?.locationVisibility || 'NONE')}
                         className="mt-1 text-blue-600 focus:ring-blue-500"
                       />
                       <div className="flex-1">
@@ -982,7 +1071,7 @@ export default function ProfilePage() {
                   type="checkbox"
                   id="enableDiscovery"
                   name="enableDiscovery"
-                  defaultChecked={false}
+                  defaultChecked={profile?.enableDiscovery ?? false}
                   className="rounded border-green-300 text-green-600 focus:ring-green-500"
                 />
               </div>
@@ -1016,7 +1105,13 @@ export default function ProfilePage() {
             />
 
             {/* Media Privacy Settings */}
-            <form action={updateMediaSettingsAction} className="space-y-4 p-4 bg-gray-50 rounded-lg">
+            <form action={updateMediaSettingsAction} className="space-y-4 p-4 bg-gray-50 rounded-lg" onSubmit={async (e) => {
+              e.preventDefault();
+              const formData = new FormData(e.currentTarget);
+              await updateMediaSettingsAction(formData);
+              await refreshProfile(); // Refresh profile data after save
+              showNotification('success', 'Media settings updated successfully');
+            }}>
               <input type="hidden" name="userId" value={session?.user?.id || ''} />
               <h4 className="font-medium text-gray-900">Media Sharing Settings</h4>
 
@@ -1187,7 +1282,13 @@ export default function ProfilePage() {
                 <h3 className="font-medium">Trainer Verification Application</h3>
               </div>
 
-              <form action={submitTrainerAccreditationAction} className="space-y-6">
+              <form action={submitTrainerAccreditationAction} className="space-y-6" onSubmit={async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                await submitTrainerAccreditationAction(formData);
+                await refreshProfile(); // Refresh profile data after save
+                showNotification('success', 'Trainer verification application submitted successfully');
+              }}>
                 <input type="hidden" name="userId" value={user?.id || ''} />
 
                 {/* Provider Selection */}
@@ -1324,7 +1425,13 @@ export default function ProfilePage() {
             {/* Upload Credential / Certificate */}
             <div className="space-y-3">
               <h4 className="font-medium text-gray-900">Upload New Credential</h4>
-              <form action={uploadTrainerCertificateAction} className="space-y-4">
+              <form action={uploadTrainerCertificateAction} className="space-y-4" onSubmit={async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                await uploadTrainerCertificateAction(formData);
+                await refreshProfile(); // Refresh profile data after save
+                showNotification('success', 'Credential uploaded successfully');
+              }}>
                 <input type="hidden" name="userId" value={user?.id || ''} />
                 <div className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${dragActive ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:border-gray-400'}`}
                   onDragOver={handleDragOver}
@@ -1397,7 +1504,17 @@ export default function ProfilePage() {
                 {userCredentials.map((credential, index) => (
                   <div key={index} className="relative border rounded-lg p-4 bg-gray-50">
                     {/* Delete credential button */}
-                    <form action={deleteTrainerCredentialAction} className="absolute top-2 right-2">
+                    <form action={deleteTrainerCredentialAction} className="absolute top-2 right-2" onSubmit={async (e) => {
+                      e.preventDefault();
+                      if (!confirm('Delete this credential?')) {
+                        return;
+                      }
+                      const formData = new FormData(e.currentTarget);
+                      await deleteTrainerCredentialAction(formData);
+                      await refreshProfile(); // Refresh profile data after save
+                      setUserCredentials(prev => prev.filter((_, i) => i !== index));
+                      showNotification('success', 'Credential deleted');
+                    }}>
                       <input type="hidden" name="userId" value={user?.id || ''} />
                       <input type="hidden" name="index" value={String(index)} />
                       <Button
@@ -1405,15 +1522,6 @@ export default function ProfilePage() {
                         variant="ghost"
                         size="icon"
                         className="text-red-600 hover:text-red-700"
-                        onClick={(e) => {
-                          // Confirm and optimistically update UI
-                          if (!confirm('Delete this credential?')) {
-                            e.preventDefault();
-                            return;
-                          }
-                          setUserCredentials(prev => prev.filter((_, i) => i !== index));
-                          showNotification('success', 'Credential deleted');
-                        }}
                         aria-label="Delete credential"
                         title="Delete credential"
                       >
@@ -1734,6 +1842,56 @@ export default function ProfilePage() {
           }}
         />
       )}
+
+      {/* Save All Button */}
+      <Card className="border-2 border-blue-200 bg-blue-50">
+        <CardContent className="pt-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="font-semibold text-lg text-blue-900">Save All Changes</h3>
+              <p className="text-sm text-blue-700">Submit all your profile updates at once</p>
+            </div>
+            <svg className="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <Button
+            size="lg"
+            className="w-full bg-blue-600 hover:bg-blue-700"
+            onClick={async () => {
+              const forms = document.querySelectorAll('form');
+              let successCount = 0;
+              let errorCount = 0;
+
+              for (const form of forms) {
+                try {
+                  // Trigger the form's onSubmit handler
+                  const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+                  const result = form.dispatchEvent(submitEvent);
+                  if (result) {
+                    successCount++;
+                  }
+                } catch (error) {
+                  console.error('Form submission error:', error);
+                  errorCount++;
+                }
+              }
+
+              if (successCount > 0) {
+                showNotification('success', `Successfully saved ${successCount} section${successCount > 1 ? 's' : ''}!`);
+              }
+              if (errorCount > 0) {
+                showNotification('error', `Failed to save ${errorCount} section${errorCount > 1 ? 's' : ''}`);
+              }
+            }}
+          >
+            <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            Save All Changes
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 }

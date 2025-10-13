@@ -7,6 +7,7 @@ import { Server as HTTPServer } from 'http';
 import { Server as SocketIOServer, Socket } from 'socket.io';
 import { prisma } from '../database';
 import { moderateContent } from '@/services/moderation';
+import { randomUUID } from 'crypto';
 
 interface AuthenticatedSocket extends Socket {
   userId?: string;
@@ -45,7 +46,7 @@ export class SocketServer {
         }
 
         // Verify user exists in database
-        const user = await prisma.user.findUnique({
+        const user = await prisma.users.findUnique({
           where: { id: userId },
           select: { id: true, name: true, status: true },
         });
@@ -145,8 +146,9 @@ export class SocketServer {
         }
 
         // Save message to database
-        const message = await prisma.chatMessage.create({
+        const message = await prisma.chat_messages.create({
           data: {
+            id: randomUUID(),
             roomId,
             senderId: socket.userId!,
             content: content,
@@ -154,7 +156,7 @@ export class SocketServer {
             metadata,
           },
           include: {
-            sender: {
+            users: {
               select: { id: true, name: true },
             },
           },
@@ -166,7 +168,7 @@ export class SocketServer {
           roomId,
           content: message.content,
           senderId: message.senderId,
-          senderName: message.sender.name,
+          senderName: message.users?.name,
           timestamp: message.createdAt.getTime(),
           type: message.type,
           metadata: message.metadata,
@@ -260,7 +262,7 @@ export class SocketServer {
     socket.on('workout_progress', async ({ sessionId, progress }) => {
       try {
         // Save progress to database
-        await prisma.workoutProgress.upsert({
+        await prisma.workout_progress.upsert({
           where: {
             userId_sessionId: {
               userId: socket.userId!,
@@ -272,9 +274,11 @@ export class SocketServer {
             updatedAt: new Date(),
           },
           create: {
+            id: randomUUID(),
             userId: socket.userId!,
             sessionId,
             progress,
+            updatedAt: new Date(),
           },
         });
 
@@ -307,15 +311,14 @@ export class SocketServer {
 
   private async verifyRoomAccess(userId: string, roomId: string): Promise<boolean> {
     try {
-      const room = await prisma.chatRoom.findFirst({
+      const participant = await prisma.chat_room_participants.findFirst({
         where: {
-          id: roomId,
-          participants: {
-            some: { userId },
-          },
+          roomId,
+          userId,
+          isActive: true,
         },
       });
-      return !!room;
+      return !!participant;
     } catch (error) {
       console.error('Error verifying room access:', error);
       return false;
@@ -324,12 +327,12 @@ export class SocketServer {
 
   private async verifySessionAccess(userId: string, sessionId: string): Promise<boolean> {
     try {
-      const session = await prisma.liveWorkoutSession.findFirst({
+      const session = await prisma.live_workout_sessions.findFirst({
         where: {
           id: sessionId,
           OR: [
             { trainerId: userId },
-            { participants: { some: { userId } } },
+            { live_session_participants: { some: { userId } } },
           ],
         },
       });
@@ -342,14 +345,14 @@ export class SocketServer {
 
   private async getSessionParticipants(sessionId: string, room?: Set<string>) {
     // Get participants from database and merge with online users
-    const dbParticipants = await prisma.liveSessionParticipant.findMany({
+    const dbParticipants = await prisma.live_session_participants.findMany({
       where: { sessionId },
-      include: { user: { select: { id: true, name: true } } },
+      include: { users: { select: { id: true, name: true } } },
     });
 
-    return dbParticipants.map(p => ({
+    return dbParticipants.map((p: { userId: string; users: { name: string | null } }) => ({
       userId: p.userId,
-      userName: p.user.name,
+      userName: p.users?.name || 'Unknown',
       isOnline: room ? this.connectedUsers.has(p.userId) : false,
     }));
   }
@@ -357,15 +360,15 @@ export class SocketServer {
   private async sendMessageNotifications(roomId: string, message: any, senderId: string) {
     try {
       // Get room participants excluding the sender
-      const roomParticipants = await prisma.chatRoomParticipant.findMany({
+      const roomParticipants = await prisma.chat_room_participants.findMany({
         where: {
           roomId,
           userId: { not: senderId },
         },
         include: {
-          user: {
+          users: {
             include: {
-              deviceTokens: {
+              device_tokens: {
                 where: { isActive: true },
               },
             },
@@ -377,12 +380,12 @@ export class SocketServer {
       for (const participant of roomParticipants) {
         const isOnline = this.connectedUsers.has(participant.userId);
 
-        if (!isOnline && participant.user.deviceTokens.length > 0) {
+        if (!isOnline && participant.users.device_tokens.length > 0) {
           // Send push notification to each device
-          for (const deviceToken of participant.user.deviceTokens) {
+          for (const deviceToken of participant.users.device_tokens) {
             try {
               await this.sendPushNotification(deviceToken.token, {
-                title: `Message from ${message.sender.name}`,
+                title: `Message from ${message.users?.name}`,
                 body: message.content.length > 100
                   ? message.content.substring(0, 100) + '...'
                   : message.content,
@@ -550,23 +553,23 @@ export class SocketServer {
   private async getCallParticipants(sessionId: string, room?: Set<string>) {
     try {
       // Get session participants who are currently in the call
-      const sessionParticipants = await prisma.liveSessionParticipant.findMany({
+      const sessionParticipants = await prisma.live_session_participants.findMany({
         where: {
           sessionId,
           // no status field in LiveSessionParticipant
         },
         include: {
-          user: {
+          users: {
             select: { id: true, name: true, image: true },
           },
         },
       });
 
       // Also include trainer
-      const session = await prisma.liveWorkoutSession.findUnique({
+      const session = await prisma.live_workout_sessions.findUnique({
         where: { id: sessionId },
         include: {
-          trainer: {
+          users: {
             select: { id: true, name: true, image: true },
           },
         },
@@ -575,7 +578,7 @@ export class SocketServer {
       const allParticipants = [...sessionParticipants];
       if (session) {
         allParticipants.push({
-          user: session.trainer,
+          users: session.users,
           userId: session.trainerId,
           sessionId,
           joinedAt: new Date(),
@@ -587,11 +590,11 @@ export class SocketServer {
 
       // Filter to only those currently in the call room
       return allParticipants
-        .filter(p => room ? this.connectedUsers.has(p.userId) : false)
-        .map(p => ({
+        .filter((p: { userId: string }) => (room ? this.connectedUsers.has(p.userId) : false))
+        .map((p: { userId: string; users?: { name?: string | null; image?: string | null } }) => ({
           userId: p.userId,
-          userName: p.user?.name || 'Unknown',
-          image: p.user?.image,
+          userName: p.users?.name || 'Unknown',
+          image: p.users?.image,
           isTrainer: p.userId === session?.trainerId,
           isOnline: true,
         }));

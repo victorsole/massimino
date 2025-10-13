@@ -89,3 +89,40 @@ export async function createProviderAction(formData: FormData) {
   try { await publishAccreditedProvider(created) } catch {}
   revalidatePath('/admin/accredited')
 }
+
+export async function saveAllProvidersAction() {
+  const session = await getServerSession(authOptions)
+  if (!session?.user || session.user.role !== 'ADMIN') throw new Error('Unauthorized')
+
+  const repo = getAccreditedRepository()
+
+  // Get all providers
+  const { items } = await repo.list({ pageSize: 10000 }) // Large number to get all
+
+  // Republish all providers to Firebase
+  let saved = 0
+  let failed = 0
+
+  for (const provider of items) {
+    try {
+      await publishAccreditedProvider({
+        id: provider.id,
+        name: provider.name,
+        country: provider.country,
+        qualifications: provider.qualifications,
+        profileUrl: provider.profileUrl ?? null,
+        profilePath: provider.profilePath ?? null,
+        slug: provider.slug ?? null,
+        source: provider.source,
+        isActive: provider.isActive
+      })
+      saved++
+    } catch (error) {
+      console.error(`Failed to save provider ${provider.name}:`, error)
+      failed++
+    }
+  }
+
+  revalidatePath('/admin/accredited')
+  console.log(`Save All completed: ${saved} saved, ${failed} failed`)
+}

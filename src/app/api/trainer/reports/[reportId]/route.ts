@@ -26,7 +26,7 @@ export async function GET(
 
     const { reportId } = params;
 
-    const report = await prisma.progressReport.findUnique({
+    const report = await prisma.progress_reports.findUnique({
       where: { id: reportId },
       include: {
         trainer: {
@@ -77,7 +77,7 @@ export async function GET(
 
     // Mark as viewed by client
     if (isClient && !report.clientViewed) {
-      await prisma.progressReport.update({
+      await prisma.progress_reports.update({
         where: { id: reportId },
         data: {
           clientViewed: true,
@@ -118,7 +118,7 @@ export async function PUT(
     const { reportId } = params;
     const body = await request.json();
 
-    const report = await prisma.progressReport.findUnique({
+    const report = await prisma.progress_reports.findUnique({
       where: { id: reportId },
       include: {
         trainer: {
@@ -253,7 +253,7 @@ export async function DELETE(
       }, { status: 400 });
     }
 
-    await prisma.progressReport.delete({
+    await prisma.progress_reports.delete({
       where: { id: reportId }
     });
 
@@ -296,7 +296,7 @@ export async function PATCH(
     const body = await request.json();
     const { feedbackFromClient, rating } = body;
 
-    const report = await prisma.progressReport.findUnique({
+    const report = await prisma.progress_reports.findUnique({
       where: { id: reportId },
       select: {
         id: true,
@@ -321,7 +321,7 @@ export async function PATCH(
       }, { status: 400 });
     }
 
-    const updatedReport = await prisma.progressReport.update({
+    const updatedReport = await prisma.progress_reports.update({
       where: { id: reportId },
       data: {
         feedbackFromClient,

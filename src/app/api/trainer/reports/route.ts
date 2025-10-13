@@ -37,7 +37,7 @@ export async function GET(request: Request) {
     const limit = parseInt(searchParams.get('limit') || '20');
 
     // Get trainer profile
-    const trainerProfile = await prisma.trainerProfile.findUnique({
+    const trainerProfile = await prisma.trainer_profiles.findUnique({
       where: { userId: session.user.id }
     });
 
@@ -109,7 +109,7 @@ export async function POST(request: Request) {
     }
 
     // Get trainer profile
-    const trainerProfile = await prisma.trainerProfile.findUnique({
+    const trainerProfile = await prisma.trainer_profiles.findUnique({
       where: { userId: session.user.id }
     });
 
@@ -118,7 +118,7 @@ export async function POST(request: Request) {
     }
 
     // Verify trainer-client relationship
-    const trainerClient = await prisma.trainerClient.findUnique({
+    const trainerClient = await prisma.trainer_clients.findUnique({
       where: {
         trainerId_clientId: {
           trainerId: trainerProfile.id,
@@ -206,7 +206,7 @@ async function generateProgressReportData(trainerId: string, clientId: string, p
     }
 
     // Get workout sessions for the period
-    const workoutSessions = await prisma.workoutSession.findMany({
+    const workoutSessions = await prisma.workout_sessions.findMany({
       where: {
         userId: clientId,
         coachId: trainerId,
@@ -360,7 +360,7 @@ function generateProgressionTrends(sessions: any[]) {
  * Get personal records for the period
  */
 async function getPersonalRecords(clientId: string, startDate: Date) {
-  const personalRecords = await prisma.personalRecord.findMany({
+  const personalRecords = await prisma.personal_records.findMany({
     where: {
       userId: clientId,
       achievedAt: { gte: startDate }

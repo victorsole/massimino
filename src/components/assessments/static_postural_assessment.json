@@ -1,0 +1,65 @@
+{
+    "id": "static_postural_assessment",
+    "title": "Static Postural Assessment",
+    "version": "1.0",
+    "sections": [
+      {
+        "id": "client_info",
+        "title": "Client Information",
+        "fields": [
+          {"id": "name", "type": "text", "label": "Name", "required": true},
+          {"id": "date", "type": "date", "label": "Date", "required": true}
+        ]
+      },
+      {
+        "id": "anterior_view",
+        "title": "Anterior View",
+        "fields": [
+          {"id": "anterior_foot_ankle", "type": "textarea", "label": "Foot and Ankle", "placeholder": "Observations..."},
+          {"id": "anterior_knee", "type": "textarea", "label": "Knee", "placeholder": "Observations..."},
+          {"id": "anterior_lphc", "type": "textarea", "label": "LPHC", "placeholder": "Observations..."},
+          {"id": "anterior_shoulders", "type": "textarea", "label": "Shoulders", "placeholder": "Observations..."},
+          {"id": "anterior_head_neck", "type": "textarea", "label": "Head and Neck", "placeholder": "Observations..."}
+        ]
+      },
+      {
+        "id": "posterior_view",
+        "title": "Posterior View",
+        "fields": [
+          {"id": "posterior_foot_ankle", "type": "textarea", "label": "Foot and Ankle", "placeholder": "Observations..."},
+          {"id": "posterior_knee", "type": "textarea", "label": "Knee", "placeholder": "Observations..."},
+          {"id": "posterior_lphc", "type": "textarea", "label": "LPHC", "placeholder": "Observations..."},
+          {"id": "posterior_shoulders", "type": "textarea", "label": "Shoulders", "placeholder": "Observations..."},
+          {"id": "posterior_head_neck", "type": "textarea", "label": "Head and Neck", "placeholder": "Observations..."}
+        ]
+      },
+      {
+        "id": "lateral_view",
+        "title": "Lateral View",
+        "fields": [
+          {"id": "lateral_foot_ankle", "type": "textarea", "label": "Foot and Ankle", "placeholder": "Observations..."},
+          {"id": "lateral_knee", "type": "textarea", "label": "Knee", "placeholder": "Observations..."},
+          {"id": "lateral_lphc", "type": "textarea", "label": "LPHC", "placeholder": "Observations..."},
+          {"id": "lateral_shoulders", "type": "textarea", "label": "Shoulders", "placeholder": "Observations..."},
+          {"id": "lateral_head_neck", "type": "textarea", "label": "Head and Neck", "placeholder": "Observations..."}
+        ]
+      },
+      {
+        "id": "distortion_syndromes",
+        "title": "Postural Distortion Syndromes",
+        "fields": [
+          {"id": "lower_crossed", "type": "checkbox", "label": "Lower Crossed Syndrome"},
+          {"id": "upper_crossed", "type": "checkbox", "label": "Upper Crossed Syndrome"},
+          {"id": "pes_planus", "type": "checkbox", "label": "Pes Planus Distortion"}
+        ]
+      },
+      {
+        "id": "muscle_imbalances",
+        "title": "Muscle Imbalances",
+        "fields": [
+          {"id": "overactive_muscles", "type": "textarea", "label": "Potentially overactive muscles", "rows": 4},
+          {"id": "underactive_muscles", "type": "textarea", "label": "Potentially underactive muscles", "rows": 4}
+        ]
+      }
+    ]
+  }

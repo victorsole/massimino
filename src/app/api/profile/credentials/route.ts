@@ -9,7 +9,7 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) return NextResponse.json({ credentials: [] })
-    const user = await prisma.user.findUnique({ where: { id: session.user.id }, select: { trainerCredentials: true } })
+    const user = await prisma.users.findUnique({ where: { id: session.user.id }, select: { trainerCredentials: true } })
     let credentials: any[] = []
     try { if (user?.trainerCredentials) credentials = JSON.parse(user.trainerCredentials); if (!Array.isArray(credentials)) credentials = [] } catch {}
     return NextResponse.json({ credentials })

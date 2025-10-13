@@ -89,6 +89,7 @@ export const intensityTypeSchema = z.nativeEnum(IntensityType);
  * Base workout log entry schema
  */
 export const workoutLogEntryBaseSchema = z.object({
+  sessionId: z.string().uuid().optional(),
   date: dateStringSchema,
   exerciseId: z.string().min(1, 'Exercise is required'),
   setNumber: z.number().int().positive('Set number must be a positive integer'),
@@ -96,6 +97,7 @@ export const workoutLogEntryBaseSchema = z.object({
   reps: z.number().int().positive('Reps must be a positive integer'),
   weight: weightStringSchema,
   unit: weightUnitSchema,
+  subOrder: z.string().regex(/^[A-Z]$/).optional(),
   intensity: intensityStringSchema.optional(),
   intensityType: intensityTypeSchema.optional(),
   tempo: tempoStringSchema.optional(),
@@ -260,7 +262,7 @@ export const paginationSchema = z.object({
  * Create multiple workout entries request
  */
 export const createWorkoutEntriesRequestSchema = z.object({
-  sessionId: z.string().cuid().optional(),
+  sessionId: z.string().uuid().optional(),
   entries: z.array(createWorkoutLogEntrySchema).min(1, 'At least one entry is required'),
 });
 

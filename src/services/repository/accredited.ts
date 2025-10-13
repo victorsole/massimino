@@ -1,4 +1,5 @@
 import { prisma } from '@/core/database'
+import { randomUUID } from 'crypto'
 
 export type AccreditedProviderDTO = {
   id: string
@@ -45,9 +46,9 @@ export interface AccreditedRepository {
 
 class PrismaAccreditedRepository implements AccreditedRepository {
   async list(params: ListAccreditedParams = {}): Promise<ListAccreditedResult> {
-    const ap = (prisma as any).accreditedProvider
+    const ap = (prisma as any).accredited_providers
     if (!ap) {
-      throw new Error('Prisma model AccreditedProvider not found. Run `npx prisma db push` and `npx prisma generate`, then restart the server.')
+      throw new Error('Prisma model accredited_providers not found. Run `npx prisma db push` and `npx prisma generate`, then restart the server.')
     }
     const page = Math.max(params.page ?? 1, 1)
     const pageSize = Math.min(Math.max(params.pageSize ?? 20, 1), 100)
@@ -65,12 +66,13 @@ class PrismaAccreditedRepository implements AccreditedRepository {
   }
 
   async create(data: any): Promise<AccreditedProviderDTO> {
-    const ap = (prisma as any).accreditedProvider
+    const ap = (prisma as any).accredited_providers
     if (!ap) {
-      throw new Error('Prisma model AccreditedProvider not found. Run `npx prisma db push` and `npx prisma generate`, then restart the server.')
+      throw new Error('Prisma model accredited_providers not found. Run `npx prisma db push` and `npx prisma generate`, then restart the server.')
     }
     const created = await ap.create({
       data: {
+        id: randomUUID(),
         name: data.name,
         country: data.country,
         qualifications: data.qualifications ?? [],
@@ -79,36 +81,38 @@ class PrismaAccreditedRepository implements AccreditedRepository {
         slug: data.slug ?? slugify(`${data.name}-${data.country}`),
         source: data.source ?? 'EREPS',
         isActive: data.isActive ?? true,
+        updatedAt: new Date(),
       }
     })
     return created as any
   }
 
   async update(id: string, data: any): Promise<AccreditedProviderDTO> {
-    const ap = (prisma as any).accreditedProvider
+    const ap = (prisma as any).accredited_providers
     if (!ap) {
-      throw new Error('Prisma model AccreditedProvider not found. Run `npx prisma db push` and `npx prisma generate`, then restart the server.')
+      throw new Error('Prisma model accredited_providers not found. Run `npx prisma db push` and `npx prisma generate`, then restart the server.')
     }
     const updated = await ap.update({ where: { id }, data })
     return updated as any
   }
 
   async softDelete(id: string): Promise<void> {
-    const ap = (prisma as any).accreditedProvider
+    const ap = (prisma as any).accredited_providers
     if (!ap) {
-      throw new Error('Prisma model AccreditedProvider not found. Run `npx prisma db push` and `npx prisma generate`, then restart the server.')
+      throw new Error('Prisma model accredited_providers not found. Run `npx prisma db push` and `npx prisma generate`, then restart the server.')
     }
     await ap.update({ where: { id }, data: { isActive: false } })
   }
 
   async upsertByNameCountry(data: any): Promise<AccreditedProviderDTO> {
-    const ap = (prisma as any).accreditedProvider
+    const ap = (prisma as any).accredited_providers
     if (!ap) {
-      throw new Error('Prisma model AccreditedProvider not found. Run `npx prisma db push` and `npx prisma generate`, then restart the server.')
+      throw new Error('Prisma model accredited_providers not found. Run `npx prisma db push` and `npx prisma generate`, then restart the server.')
     }
     const up = await ap.upsert({
       where: { name_country: { name: data.name, country: data.country } as any },
       create: {
+        id: randomUUID(),
         name: data.name,
         country: data.country,
         qualifications: data.qualifications ?? [],
@@ -117,12 +121,14 @@ class PrismaAccreditedRepository implements AccreditedRepository {
         slug: data.slug ?? slugify(`${data.name}-${data.country}`),
         source: data.source ?? 'EREPS',
         isActive: data.isActive ?? true,
+        updatedAt: new Date(),
       },
       update: {
         qualifications: data.qualifications ?? [],
         profilePath: data.profilePath ?? null,
         profileUrl: data.profileUrl ?? null,
         isActive: data.isActive ?? true,
+        updatedAt: new Date(),
       }
     } as any)
     return up as any

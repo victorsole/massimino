@@ -1,0 +1,69 @@
+{
+    "id": "cardio_assessment",
+    "title": "Cardiorespiratory Assessment",
+    "version": "1.0",
+    "sections": [
+      {
+        "id": "client_info",
+        "title": "Client Information",
+        "fields": [
+          {"id": "name", "type": "text", "label": "Name", "required": true},
+          {"id": "date", "type": "date", "label": "Date", "required": true}
+        ]
+      },
+      {
+        "id": "baseline_measurements",
+        "title": "Baseline Measurements",
+        "fields": [
+          {"id": "resting_heart_rate", "type": "number", "label": "Resting Heart Rate (bpm)", "min": 30, "max": 150},
+          {"id": "hr_max_estimate", "type": "calculated", "label": "HRmax Estimate", "formula": "220 - age"},
+          {"id": "blood_pressure_systolic", "type": "number", "label": "Blood Pressure - Systolic", "help_text": "If indicated by PAR-Q"},
+          {"id": "blood_pressure_diastolic", "type": "number", "label": "Blood Pressure - Diastolic", "help_text": "If indicated by PAR-Q"}
+        ]
+      },
+      {
+        "id": "ymca_step_test",
+        "title": "YMCA 3-Minute Step Test",
+        "description": "Compare recovery heart rate to Table 11.11 in NASM textbook",
+        "fields": [
+          {"id": "ymca_recovery_hr", "type": "number", "label": "Recovery Heart Rate (bpm)", "min": 50, "max": 200},
+          {"id": "ymca_fitness_rating", "type": "select", "label": "Fitness Rating", "options": ["Excellent", "Good", "Above Average", "Average", "Below Average", "Poor", "Very Poor"]}
+        ]
+      },
+      {
+        "id": "rockport_walk",
+        "title": "Rockport Walk Test",
+        "description": "Compare completion time to Table 11.12 in NASM textbook",
+        "fields": [
+          {"id": "rockport_time_minutes", "type": "number", "label": "Time - Minutes", "min": 0, "max": 30},
+          {"id": "rockport_time_seconds", "type": "number", "label": "Time - Seconds", "min": 0, "max": 59},
+          {"id": "rockport_heart_rate", "type": "number", "label": "Heart Rate (bpm)", "min": 50, "max": 200},
+          {"id": "rockport_fitness_rating", "type": "select", "label": "Fitness Rating", "options": ["Excellent", "Good", "Above Average", "Average", "Below Average", "Poor", "Very Poor"]}
+        ]
+      },
+      {
+        "id": "mile_run",
+        "title": "1.5 Mile Run Test",
+        "description": "Compare completion time to Table 11.13 in NASM textbook",
+        "fields": [
+          {"id": "mile_time_minutes", "type": "number", "label": "Time - Minutes", "min": 0, "max": 30},
+          {"id": "mile_time_seconds", "type": "number", "label": "Time - Seconds", "min": 0, "max": 59},
+          {"id": "mile_heart_rate", "type": "number", "label": "Heart Rate (bpm)", "min": 50, "max": 200},
+          {"id": "mile_fitness_rating", "type": "select", "label": "Fitness Rating", "options": ["Superior", "Excellent", "Good", "Fair", "Poor", "Very Poor"]}
+        ]
+      },
+      {
+        "id": "vt_talk_test",
+        "title": "VT1/VT2 Talk Test",
+        "description": "Ventilatory threshold assessment",
+        "fields": [
+          {"id": "vt1_time_minutes", "type": "number", "label": "Time to VT1 - Minutes", "min": 0},
+          {"id": "vt1_time_seconds", "type": "number", "label": "Time to VT1 - Seconds", "min": 0, "max": 59},
+          {"id": "vt1_heart_rate", "type": "number", "label": "VT1 Heart Rate (bpm)", "min": 50, "max": 200},
+          {"id": "vt2_time_minutes", "type": "number", "label": "Time to VT2 - Minutes", "min": 0},
+          {"id": "vt2_time_seconds", "type": "number", "label": "Time to VT2 - Seconds", "min": 0, "max": 59},
+          {"id": "vt2_heart_rate", "type": "number", "label": "VT2 Heart Rate (bpm)", "min": 50, "max": 200}
+        ]
+      }
+    ]
+  }

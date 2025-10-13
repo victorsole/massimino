@@ -1,3 +1,4 @@
+// src/services/repository/exercises.ts
 import { prisma } from '@/core/database'
 
 export type ExerciseDTO = {
@@ -67,8 +68,8 @@ class PrismaExerciseRepository implements ExerciseRepository {
 
     const orderBy = params.orderBy ? [{ [params.orderBy.field]: params.orderBy.direction }] as any : [{ isActive: 'desc' }, { name: 'asc' }]
     const [total, items] = await Promise.all([
-      prisma.exercise.count({ where }),
-      prisma.exercise.findMany({
+      prisma.exercises.count({ where }),
+      prisma.exercises.findMany({
         where,
         orderBy,
         skip: (page - 1) * pageSize,
@@ -79,26 +80,30 @@ class PrismaExerciseRepository implements ExerciseRepository {
   }
 
   async create(data: any): Promise<ExerciseDTO> {
-    const created = await prisma.exercise.create({
-      data: {
-        name: data.name,
-        slug: data.slug ?? this.slugify(data.name),
-        category: data.category,
-        muscleGroups: data.muscleGroups ?? [],
-        equipment: data.equipment ?? [],
-        instructions: data.instructions ?? null,
-        videoUrl: data.videoUrl ?? null,
-        imageUrl: data.imageUrl ?? null,
-        difficulty: data.difficulty ?? 'BEGINNER',
-        safetyNotes: data.safetyNotes ?? null,
-        isActive: data.isActive ?? true,
-      },
+    const exerciseData = {
+      id: crypto.randomUUID(),
+      name: data.name,
+      slug: data.slug ?? this.slugify(data.name),
+      category: data.category,
+      muscleGroups: data.muscleGroups ?? [],
+      equipment: data.equipment ?? [],
+      instructions: data.instructions ?? null,
+      videoUrl: data.videoUrl ?? null,
+      imageUrl: data.imageUrl ?? null,
+      difficulty: data.difficulty ?? 'BEGINNER',
+      safetyNotes: data.safetyNotes ?? null,
+      isActive: data.isActive ?? true,
+      updatedAt: new Date(),
+    }
+
+    const created = await prisma.exercises.create({
+      data: exerciseData,
     })
     return created as ExerciseDTO
   }
 
   async update(id: string, data: any): Promise<ExerciseDTO> {
-    const updated = await prisma.exercise.update({
+    const updated = await prisma.exercises.update({
       where: { id },
       data,
     })
@@ -106,7 +111,7 @@ class PrismaExerciseRepository implements ExerciseRepository {
     if (data.name && !data.slug) {
       try {
         const slug = this.slugify(data.name)
-        await prisma.exercise.update({ where: { id }, data: { slug } })
+        await prisma.exercises.update({ where: { id }, data: { slug } })
         ;(updated as any).slug = slug
       } catch {}
     }
@@ -114,16 +119,16 @@ class PrismaExerciseRepository implements ExerciseRepository {
   }
 
   async softDelete(id: string): Promise<void> {
-    await prisma.exercise.update({ where: { id }, data: { isActive: false } })
+    await prisma.exercises.update({ where: { id }, data: { isActive: false } })
   }
 
   async bulkUpdate(ids: string[], data: any): Promise<number> {
-    const res = await prisma.exercise.updateMany({ where: { id: { in: ids } }, data })
+    const res = await prisma.exercises.updateMany({ where: { id: { in: ids } }, data })
     return res.count
   }
 
   async bulkSoftDelete(ids: string[]): Promise<number> {
-    const res = await prisma.exercise.updateMany({ where: { id: { in: ids } }, data: { isActive: false } })
+    const res = await prisma.exercises.updateMany({ where: { id: { in: ids } }, data: { isActive: false } })
     return res.count
   }
 }

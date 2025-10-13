@@ -1,17 +1,19 @@
+// src/core/database/workout-queries.ts
 /**
  * Workout Log Database Queries for Massimino
  * Comprehensive query functions for workout tracking and management
  */
 
+import crypto from 'crypto';
 import { prisma } from './client';
-import { 
-  type WorkoutLogEntry,
-  type Exercise,
-  type WorkoutSession 
+import type {
+  workout_log_entries as WorkoutLogEntry,
+  exercises as Exercise,
+  workout_sessions as WorkoutSession,
 } from '@prisma/client';
-import { 
-  WorkoutFilterOptions, 
-  WorkoutSortOptions, 
+import {
+  WorkoutFilterOptions,
+  WorkoutSortOptions,
   WorkoutPagination,
   WorkoutLogEntryFormData,
   WorkoutSessionFormData,
@@ -20,10 +22,116 @@ import {
   generateOrder,
   OrderGenerationContext
 } from '@/types/workout';
+import { get_exercise_recommendations } from '@/services/ai/workout-suggestions';
 
 // ============================================================================
 // WORKOUT LOG ENTRY QUERIES
 // ============================================================================
+
+/**
+ * Get unified workout entries (personal + team workouts) with filtering, sorting, and pagination
+ */
+export async function getUserWorkoutsUnified(
+  userId: string,
+  options: {
+    filters?: WorkoutFilterOptions;
+    sort?: WorkoutSortOptions;
+    pagination?: Partial<WorkoutPagination>;
+    includeTeamWorkouts?: boolean;
+  } = {}
+): Promise<{
+  entries: (WorkoutLogEntry & {
+    exercise: Exercise;
+    user: { id: string; name: string | null; role: string };
+    coach: { id: string; name: string | null; role: string } | null;
+  })[];
+  pagination: WorkoutPagination;
+}> {
+  const { filters = {}, sort = { field: 'date', direction: 'desc' }, pagination = {}, includeTeamWorkouts = true } = options;
+  const page = pagination.page || 1;
+  const limit = pagination.limit || 50;
+  const offset = (page - 1) * limit;
+
+  // Build where clause
+  const where: any = {
+    userId,
+  };
+
+  if (filters.dateRange) {
+    where.date = {
+      gte: filters.dateRange.start,
+      lte: filters.dateRange.end,
+    };
+  }
+
+  if (filters.exercises && filters.exercises.length > 0) {
+    where.exerciseId = { in: filters.exercises };
+  }
+
+  if (filters.setTypes && filters.setTypes.length > 0) {
+    where.setType = { in: filters.setTypes };
+  }
+
+  if (filters.coachId) {
+    where.coachId = filters.coachId;
+  }
+
+  // Filter by team workout status if specified
+  if (!includeTeamWorkouts) {
+    where.isTeamWorkout = false;
+  }
+
+  // Get total count
+  const total = await prisma.workout_log_entries.count({ where });
+
+  // Get entries with relationships
+  const entries = await prisma.workout_log_entries.findMany({
+    where,
+    include: {
+      exercises: true,
+      users_workout_log_entries_userIdTousers: {
+        select: {
+          id: true,
+          name: true,
+          role: true,
+        },
+      },
+      users_workout_log_entries_coachIdTousers: {
+        select: {
+          id: true,
+          name: true,
+          role: true,
+        },
+      },
+    },
+    orderBy: {
+      [sort.field]: sort.direction,
+    },
+    skip: offset,
+    take: limit,
+  });
+
+  const totalPages = Math.ceil(total / limit);
+
+  // Map the Prisma relation names to the expected format
+  const mappedEntries = entries.map((entry) => ({
+    ...entry,
+    exercise: entry.exercises,
+    user: entry.users_workout_log_entries_userIdTousers,
+    coach: entry.users_workout_log_entries_coachIdTousers,
+  }));
+
+  return {
+    entries: mappedEntries,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages,
+      hasMore: page < totalPages,
+    },
+  };
+}
 
 /**
  * Get workout log entries with filtering, sorting, and pagination
@@ -73,21 +181,21 @@ export async function getWorkoutLogEntries(
   }
 
   // Get total count
-  const total = await prisma.workoutLogEntry.count({ where });
+  const total = await prisma.workout_log_entries.count({ where });
 
   // Get entries with relationships
-  const entries = await prisma.workoutLogEntry.findMany({
+  const entries = await prisma.workout_log_entries.findMany({
     where,
     include: {
-      exercise: true,
-      user: {
+      exercises: true,
+      users_workout_log_entries_userIdTousers: {
         select: {
           id: true,
           name: true,
           role: true,
         },
       },
-      coach: {
+      users_workout_log_entries_coachIdTousers: {
         select: {
           id: true,
           name: true,
@@ -102,13 +210,24 @@ export async function getWorkoutLogEntries(
     take: limit,
   });
 
+  const totalPages = Math.ceil(total / limit);
+
+  // Map the Prisma relation names to the expected format
+  const mappedEntries = entries.map((entry) => ({
+    ...entry,
+    exercise: entry.exercises,
+    user: entry.users_workout_log_entries_userIdTousers,
+    coach: entry.users_workout_log_entries_coachIdTousers,
+  }));
+
   return {
-    entries,
+    entries: mappedEntries,
     pagination: {
       page,
       limit,
       total,
-      totalPages: Math.ceil(total / limit),
+      totalPages,
+      hasMore: page < totalPages,
     },
   };
 }
@@ -124,21 +243,21 @@ export async function getWorkoutLogEntry(
   user: { id: string; name: string | null; role: string };
   coach: { id: string; name: string | null; role: string } | null;
 }) | null> {
-  return prisma.workoutLogEntry.findFirst({
+  const entry = await prisma.workout_log_entries.findFirst({
     where: {
       id,
       userId,
     },
     include: {
-      exercise: true,
-      user: {
+      exercises: true,
+      users_workout_log_entries_userIdTousers: {
         select: {
           id: true,
           name: true,
           role: true,
         },
       },
-      coach: {
+      users_workout_log_entries_coachIdTousers: {
         select: {
           id: true,
           name: true,
@@ -147,6 +266,16 @@ export async function getWorkoutLogEntry(
       },
     },
   });
+
+  if (!entry) return null;
+
+  // Map the Prisma relation names to the expected format
+  return {
+    ...entry,
+    exercise: entry.exercises,
+    user: entry.users_workout_log_entries_userIdTousers,
+    coach: entry.users_workout_log_entries_coachIdTousers,
+  };
 }
 
 /**
@@ -166,6 +295,23 @@ export async function createWorkoutLogEntry(
     data.unit
   );
 
+  // Check for personal records
+  const is_weight_pr = await check_personal_record(
+    userId,
+    data.exerciseId,
+    averageWeight,
+    data.reps
+  );
+
+  const is_volume_pr = await check_volume_record(
+    userId,
+    data.exerciseId,
+    trainingVolume
+  );
+
+  // Entry is a PR if it's either a weight PR or volume PR
+  const is_personal_record = is_weight_pr || is_volume_pr;
+
   // Generate order based on set type
   const context: OrderGenerationContext = {
     currentSetType: data.setType,
@@ -178,8 +324,9 @@ export async function createWorkoutLogEntry(
 
   // Create entry and update exercise usage metrics in a transaction
   return prisma.$transaction(async (tx) => {
-    const entry = await tx.workoutLogEntry.create({
+    const entry = await tx.workout_log_entries.create({
       data: {
+        id: crypto.randomUUID(),
         userId,
         coachId: coachId ?? null,
         date: new Date(data.date),
@@ -195,12 +342,14 @@ export async function createWorkoutLogEntry(
         ...(data.tempo !== undefined && { tempo: data.tempo }),
         ...(data.restSeconds !== undefined && { restSeconds: data.restSeconds }),
         trainingVolume,
+        personalRecord: is_personal_record,
         ...(data.userComments !== undefined && { userComments: data.userComments }),
         ...(data.coachFeedback !== undefined && { coachFeedback: data.coachFeedback }),
+        updatedAt: new Date(),
       },
     });
 
-    await tx.exercise.update({
+    await tx.exercises.update({
       where: { id: data.exerciseId },
       data: {
         usageCount: { increment: 1 },
@@ -221,7 +370,7 @@ export async function updateWorkoutLogEntry(
   data: Partial<WorkoutLogEntryFormData>
 ): Promise<WorkoutLogEntry | null> {
   // Get existing entry
-  const existing = await prisma.workoutLogEntry.findFirst({
+  const existing = await prisma.workout_log_entries.findFirst({
     where: { id, userId },
   });
 
@@ -243,7 +392,7 @@ export async function updateWorkoutLogEntry(
     );
   }
 
-  const updated = await prisma.workoutLogEntry.update({
+  const updated = await prisma.workout_log_entries.update({
     where: { id },
     data: {
       ...(data.date && { date: new Date(data.date) }),
@@ -265,7 +414,7 @@ export async function updateWorkoutLogEntry(
 
   // If exercise changed, update usage metrics for the new exercise
   if (data.exerciseId && data.exerciseId !== existing.exerciseId) {
-    await prisma.exercise.update({
+    await prisma.exercises.update({
       where: { id: data.exerciseId },
       data: { usageCount: { increment: 1 }, lastUsed: new Date() },
     });
@@ -281,7 +430,7 @@ export async function deleteWorkoutLogEntry(
   id: string,
   userId: string
 ): Promise<boolean> {
-  const result = await prisma.workoutLogEntry.deleteMany({
+  const result = await prisma.workout_log_entries.deleteMany({
     where: { id, userId },
   });
 
@@ -312,10 +461,10 @@ export async function getWorkoutStats(
     };
   }
 
-  const entries = await prisma.workoutLogEntry.findMany({
+  const entries = await prisma.workout_log_entries.findMany({
     where,
     include: {
-      exercise: true,
+      exercises: true,
     },
   });
 
@@ -325,7 +474,7 @@ export async function getWorkoutStats(
   const totalReps = entries.reduce((sum, e) => sum + e.reps, 0);
 
   // Calculate average workout duration
-  const sessions = await prisma.workoutSession.findMany({
+  const sessions = await prisma.workout_sessions.findMany({
     where,
     select: { duration: true },
   });
@@ -344,14 +493,14 @@ export async function getWorkoutStats(
     .map(([exerciseId, count]) => ({
       exerciseId,
       count,
-      name: entries.find(e => e.exerciseId === exerciseId)?.exercise.name || '',
+      name: entries.find(e => e.exerciseId === exerciseId)?.exercises.name || '',
     }))
     .sort((a, b) => b.count - a.count)
     .slice(0, 10);
 
   // Volume by muscle group
   const volumeByMuscleGroup = entries.reduce((acc, entry) => {
-    entry.exercise.muscleGroups.forEach(muscleGroup => {
+    entry.exercises.muscleGroups.forEach(muscleGroup => {
       acc[muscleGroup] = (acc[muscleGroup] || 0) + (entry.trainingVolume || 0);
     });
     return acc;
@@ -419,7 +568,7 @@ export async function getExercises(options: {
     };
   }
 
-  return prisma.exercise.findMany({
+  return prisma.exercises.findMany({
     where,
     orderBy: { name: 'asc' },
   });
@@ -429,7 +578,7 @@ export async function getExercises(options: {
  * Get exercise by ID
  */
 export async function getExercise(id: string): Promise<Exercise | null> {
-  return prisma.exercise.findUnique({
+  return prisma.exercises.findUnique({
     where: { id },
   });
 }
@@ -451,9 +600,10 @@ export async function createExercise(data: {
   commonMistakes?: string[];
   createdBy?: string;
   isCustom?: boolean;
-}): Promise<Exercise> {
-  return prisma.exercise.create({
+}) {
+  return prisma.exercises.create({
     data: {
+      id: crypto.randomUUID(),
       name: data.name,
       category: data.category,
       muscleGroups: data.muscleGroups,
@@ -466,7 +616,8 @@ export async function createExercise(data: {
       formCues: data.formCues || [],
       commonMistakes: data.commonMistakes || [],
       createdBy: data.createdBy ?? null,
-      isCustom: data.isCustom || false
+      isCustom: data.isCustom || false,
+      updatedAt: new Date()
     },
   });
 }
@@ -489,7 +640,7 @@ export async function updateExercise(
     isActive: boolean;
   }>
 ): Promise<Exercise | null> {
-  return prisma.exercise.update({
+  return prisma.exercises.update({
     where: { id },
     data,
   });
@@ -499,7 +650,7 @@ export async function updateExercise(
  * Delete an exercise (soft delete by setting isActive to false)
  */
 export async function deleteExercise(id: string): Promise<boolean> {
-  const result = await prisma.exercise.update({
+  const result = await prisma.exercises.update({
     where: { id },
     data: { isActive: false },
   });
@@ -526,10 +677,10 @@ export async function getExerciseVariations(exerciseId: string, options: {
     where.difficulty = options.difficulty;
   }
 
-  return prisma.exerciseVariation.findMany({
+  return prisma.exercise_variations.findMany({
     where,
     include: {
-      exercise: {
+      exercises: {
         select: { id: true, name: true, category: true }
       }
     },
@@ -541,10 +692,10 @@ export async function getExerciseVariations(exerciseId: string, options: {
  * Get exercise variation by ID
  */
 export async function getExerciseVariationById(id: string) {
-  return prisma.exerciseVariation.findUnique({
+  return prisma.exercise_variations.findUnique({
     where: { id },
     include: {
-      exercise: {
+      exercises: {
         select: { id: true, name: true, category: true }
       }
     }
@@ -563,18 +714,20 @@ export async function createExerciseVariation(data: {
   imageUrl?: string;
   instructions?: string;
 }) {
-  return prisma.exerciseVariation.create({
+  return prisma.exercise_variations.create({
     data: {
+      id: crypto.randomUUID(),
       exerciseId: data.exerciseId,
       name: data.name,
       description: data.description ?? null,
       difficulty: data.difficulty || 'BEGINNER',
       videoUrl: data.videoUrl ?? null,
       imageUrl: data.imageUrl ?? null,
-      instructions: data.instructions ?? null
+      instructions: data.instructions ?? null,
+      updatedAt: new Date()
     },
     include: {
-      exercise: {
+      exercises: {
         select: { id: true, name: true, category: true }
       }
     }
@@ -585,7 +738,7 @@ export async function createExerciseVariation(data: {
  * Update exercise variation
  */
 export async function updateExerciseVariation(id: string, data: any) {
-  return prisma.exerciseVariation.update({
+  return prisma.exercise_variations.update({
     where: { id },
     data: {
       ...(data.name && { name: data.name }),
@@ -597,7 +750,7 @@ export async function updateExerciseVariation(id: string, data: any) {
       ...(data.isActive !== undefined && { isActive: data.isActive })
     },
     include: {
-      exercise: {
+      exercises: {
         select: { id: true, name: true, category: true }
       }
     }
@@ -608,7 +761,7 @@ export async function updateExerciseVariation(id: string, data: any) {
  * Delete exercise variation
  */
 export async function deleteExerciseVariation(id: string) {
-  const result = await prisma.exerciseVariation.update({
+  const result = await prisma.exercise_variations.update({
     where: { id },
     data: { isActive: false }
   });
@@ -661,28 +814,28 @@ export async function getWorkoutSessions(
     where.isTemplate = isTemplate;
   }
 
-  const total = await prisma.workoutSession.count({ where });
+  const total = await prisma.workout_sessions.count({ where });
 
-  const sessions = await prisma.workoutSession.findMany({
+  const sessions = await prisma.workout_sessions.findMany({
     where,
     include: {
-      user: {
+      users_workout_sessions_userIdTousers: {
         select: {
           id: true,
           name: true,
           role: true,
         },
       },
-      coach: {
+      users_workout_sessions_coachIdTousers: {
         select: {
           id: true,
           name: true,
           role: true,
         },
       },
-      entries: {
+      workout_log_entries: {
         include: {
-          exercise: true,
+          exercises: true,
         },
         orderBy: { order: 'asc' },
       },
@@ -692,13 +845,25 @@ export async function getWorkoutSessions(
     take: limit,
   });
 
+  // Map the Prisma relation names to the expected format
+  const mappedSessions = sessions.map((session) => ({
+    ...session,
+    user: session.users_workout_sessions_userIdTousers,
+    coach: session.users_workout_sessions_coachIdTousers,
+    entries: session.workout_log_entries.map((entry) => ({
+      ...entry,
+      exercise: entry.exercises,
+    })),
+  }));
+
   return {
-    sessions,
+    sessions: mappedSessions,
     pagination: {
       page,
       limit,
       total,
       totalPages: Math.ceil(total / limit),
+      hasMore: page < Math.ceil(total / limit),
     },
   };
 }
@@ -714,31 +879,44 @@ export async function getWorkoutSession(
   coach: { id: string; name: string | null; role: string } | null;
   entries: (WorkoutLogEntry & { exercise: Exercise })[];
 }) | null> {
-  return prisma.workoutSession.findFirst({
+  const session = await prisma.workout_sessions.findFirst({
     where: { id, userId },
     include: {
-      user: {
+      users_workout_sessions_userIdTousers: {
         select: {
           id: true,
           name: true,
           role: true,
         },
       },
-      coach: {
+      users_workout_sessions_coachIdTousers: {
         select: {
           id: true,
           name: true,
           role: true,
         },
       },
-      entries: {
+      workout_log_entries: {
         include: {
-          exercise: true,
+          exercises: true,
         },
         orderBy: { order: 'asc' },
       },
     },
   });
+
+  if (!session) return null;
+
+  // Map the Prisma relation names to the expected format
+  return {
+    ...session,
+    user: session.users_workout_sessions_userIdTousers,
+    coach: session.users_workout_sessions_coachIdTousers,
+    entries: session.workout_log_entries.map((entry) => ({
+      ...entry,
+      exercise: entry.exercises,
+    })),
+  };
 }
 
 /**
@@ -757,8 +935,9 @@ export async function createWorkoutSession(
     duration = Math.floor((endTime.getTime() - startTime.getTime()) / 1000);
   }
 
-  return prisma.workoutSession.create({
+  return prisma.workout_sessions.create({
     data: {
+      id: crypto.randomUUID(),
       userId,
       coachId: coachId ?? null,
       date: new Date(data.date),
@@ -769,6 +948,7 @@ export async function createWorkoutSession(
       ...(data.notes !== undefined && { notes: data.notes }),
       ...(data.location !== undefined && { location: data.location }),
       isTemplate: data.isTemplate || false,
+      updatedAt: new Date(),
     },
   });
 }
@@ -781,7 +961,7 @@ export async function updateWorkoutSession(
   userId: string,
   data: Partial<WorkoutSessionFormData>
 ): Promise<WorkoutSession | null> {
-  const existing = await prisma.workoutSession.findFirst({
+  const existing = await prisma.workout_sessions.findFirst({
     where: { id, userId },
   });
 
@@ -805,7 +985,7 @@ export async function updateWorkoutSession(
     duration = Math.floor((endTime.getTime() - startTime.getTime()) / 1000);
   }
 
-  return prisma.workoutSession.update({
+  return prisma.workout_sessions.update({
     where: { id },
     data: {
       ...(data.date && { date: new Date(data.date) }),
@@ -828,7 +1008,7 @@ export async function completeWorkoutSession(
   userId: string,
   endTime?: Date
 ): Promise<WorkoutSession | null> {
-  const session = await prisma.workoutSession.findFirst({
+  const session = await prisma.workout_sessions.findFirst({
     where: { id, userId },
   });
 
@@ -840,7 +1020,7 @@ export async function completeWorkoutSession(
   const duration = Math.floor((endTimeToUse.getTime() - session.startTime.getTime()) / 1000);
 
   // Calculate total volume and stats
-  const entries = await prisma.workoutLogEntry.findMany({
+  const entries = await prisma.workout_log_entries.findMany({
     where: { userId, date: session.date },
   });
 
@@ -848,7 +1028,7 @@ export async function completeWorkoutSession(
   const totalSets = entries.length;
   const totalReps = entries.reduce((sum, entry) => sum + entry.reps, 0);
 
-  return prisma.workoutSession.update({
+  return prisma.workout_sessions.update({
     where: { id },
     data: {
       endTime: endTimeToUse,
@@ -868,7 +1048,7 @@ export async function deleteWorkoutSession(
   id: string,
   userId: string
 ): Promise<boolean> {
-  const result = await prisma.workoutSession.deleteMany({
+  const result = await prisma.workout_sessions.deleteMany({
     where: { id, userId },
   });
 
@@ -914,13 +1094,13 @@ export async function getClientWorkoutLogs(
     };
   }
 
-  const total = await prisma.workoutLogEntry.count({ where });
+  const total = await prisma.workout_log_entries.count({ where });
 
-  const entries = await prisma.workoutLogEntry.findMany({
+  const entries = await prisma.workout_log_entries.findMany({
     where,
     include: {
-      exercise: true,
-      user: {
+      exercises: true,
+      users_workout_log_entries_userIdTousers: {
         select: {
           id: true,
           name: true,
@@ -933,13 +1113,23 @@ export async function getClientWorkoutLogs(
     take: limit,
   });
 
+  const totalPages = Math.ceil(total / limit);
+
+  // Map the Prisma relation names to the expected format
+  const mappedEntries = entries.map((entry) => ({
+    ...entry,
+    exercise: entry.exercises,
+    user: entry.users_workout_log_entries_userIdTousers,
+  }));
+
   return {
-    entries,
+    entries: mappedEntries,
     pagination: {
       page,
       limit,
       total,
-      totalPages: Math.ceil(total / limit),
+      totalPages,
+      hasMore: page < totalPages,
     },
   };
 }
@@ -952,7 +1142,7 @@ export async function addCoachFeedback(
   coachId: string,
   feedback: string
 ): Promise<WorkoutLogEntry | null> {
-  return prisma.workoutLogEntry.update({
+  return prisma.workout_log_entries.update({
     where: {
       id: entryId,
       coachId, // Ensure coach owns this entry
@@ -971,7 +1161,7 @@ export async function addCoachFeedback(
  * Get exercise categories for filtering
  */
 export async function getExerciseCategories(): Promise<string[]> {
-  const exercises = await prisma.exercise.findMany({
+  const exercises = await prisma.exercises.findMany({
     select: { category: true },
     where: { isActive: true },
   });
@@ -983,7 +1173,7 @@ export async function getExerciseCategories(): Promise<string[]> {
  * Get muscle groups for filtering
  */
 export async function getMuscleGroups(): Promise<string[]> {
-  const exercises = await prisma.exercise.findMany({
+  const exercises = await prisma.exercises.findMany({
     select: { muscleGroups: true },
     where: { isActive: true },
   });
@@ -996,7 +1186,7 @@ export async function getMuscleGroups(): Promise<string[]> {
  * Get equipment types for filtering
  */
 export async function getEquipmentTypes(): Promise<string[]> {
-  const exercises = await prisma.exercise.findMany({
+  const exercises = await prisma.exercises.findMany({
     select: { equipment: true },
     where: { isActive: true },
   });
@@ -1012,7 +1202,7 @@ export async function searchExercises(
   query: string,
   limit: number = 10
 ): Promise<Exercise[]> {
-  return prisma.exercise.findMany({
+  return prisma.exercises.findMany({
     where: {
       name: {
         contains: query,
@@ -1065,18 +1255,18 @@ export async function getWorkoutTemplates(filters: {
     where.price = { gte: min, lte: max };
   }
 
-  return prisma.workoutTemplate.findMany({
+  return prisma.workout_templates.findMany({
     where,
     include: {
-      creator: {
+      users: {
         select: { id: true, name: true, trainerVerified: true }
       },
-      exercises: {
-        include: { exercise: true },
+      workout_template_exercises: {
+        include: { exercises: true },
         orderBy: { order: 'asc' }
       },
       _count: {
-        select: { purchases: true, ratings: true }
+        select: { template_ratings: true }
       }
     },
     orderBy: { rating: 'desc' },
@@ -1088,23 +1278,23 @@ export async function getWorkoutTemplates(filters: {
  * Get workout template by ID
  */
 export async function getWorkoutTemplateById(id: string) {
-  return prisma.workoutTemplate.findUnique({
+  return prisma.workout_templates.findUnique({
     where: { id },
     include: {
-      creator: {
+      users: {
         select: { id: true, name: true, trainerVerified: true }
       },
-      exercises: {
-        include: { exercise: true },
+      workout_template_exercises: {
+        include: { exercises: true },
         orderBy: { order: 'asc' }
       },
-      ratings: {
-        include: { user: { select: { id: true, name: true } } },
+      template_ratings: {
+        include: { users: { select: { id: true, name: true } } },
         orderBy: { createdAt: 'desc' },
         take: 10
       },
       _count: {
-        select: { purchases: true, ratings: true }
+        select: { template_ratings: true }
       }
     }
   });
@@ -1114,11 +1304,12 @@ export async function getWorkoutTemplateById(id: string) {
  * Create workout template
  */
 export async function createWorkoutTemplate(data: any) {
-  return prisma.workoutTemplate.create({
+  return prisma.workout_templates.create({
     data: {
+      id: crypto.randomUUID(), // Add this line to generate a unique ID
+      updatedAt: new Date(), // Add this line to set the updatedAt timestamp
       name: data.name,
       description: data.description,
-      createdBy: data.createdBy,
       category: data.category,
       difficulty: data.difficulty || 'BEGINNER',
       duration: data.duration,
@@ -1127,7 +1318,10 @@ export async function createWorkoutTemplate(data: any) {
       price: data.price,
       currency: data.currency || 'USD',
       tags: data.tags || [],
-      exercises: {
+      users: {
+        connect: { id: data.createdBy }
+      },
+      workout_template_exercises: {
         create: data.exercises?.map((exercise: any) => ({
           exerciseId: exercise.exerciseId,
           order: exercise.order,
@@ -1142,7 +1336,7 @@ export async function createWorkoutTemplate(data: any) {
       }
     },
     include: {
-      exercises: { include: { exercise: true } }
+      workout_template_exercises: { include: { exercises: true } }
     }
   });
 }
@@ -1151,7 +1345,7 @@ export async function createWorkoutTemplate(data: any) {
  * Update workout template
  */
 export async function updateWorkoutTemplate(id: string, data: any) {
-  return prisma.workoutTemplate.update({
+  return prisma.workout_templates.update({
     where: { id },
     data: {
       ...(data.name && { name: data.name }),
@@ -1171,7 +1365,7 @@ export async function updateWorkoutTemplate(id: string, data: any) {
  * Delete workout template
  */
 export async function deleteWorkoutTemplate(id: string) {
-  return prisma.workoutTemplate.update({
+  return prisma.workout_templates.update({
     where: { id },
     data: { isActive: false }
   });
@@ -1181,15 +1375,15 @@ export async function deleteWorkoutTemplate(id: string) {
  * Get user's templates
  */
 export async function getMyTemplates(userId: string) {
-  return prisma.workoutTemplate.findMany({
+  return prisma.workout_templates.findMany({
     where: { createdBy: userId, isActive: true },
     include: {
-      exercises: {
-        include: { exercise: true },
+      workout_template_exercises: {
+        include: { exercises: true },
         orderBy: { order: 'asc' }
       },
       _count: {
-        select: { purchases: true, ratings: true }
+        select: { template_ratings: true }
       }
     },
     orderBy: { createdAt: 'desc' }
@@ -1200,7 +1394,7 @@ export async function getMyTemplates(userId: string) {
  * Search workout templates
  */
 export async function searchWorkoutTemplates(query: string, options: any = {}) {
-  return prisma.workoutTemplate.findMany({
+  return prisma.workout_templates.findMany({
     where: {
       isActive: true,
       ...(options.publicOnly && { isPublic: true }),
@@ -1211,11 +1405,11 @@ export async function searchWorkoutTemplates(query: string, options: any = {}) {
       ]
     },
     include: {
-      creator: {
+      users: {
         select: { id: true, name: true, trainerVerified: true }
       },
       _count: {
-        select: { purchases: true, ratings: true }
+        select: { template_ratings: true }
       }
     },
     orderBy: { rating: 'desc' },
@@ -1227,7 +1421,7 @@ export async function searchWorkoutTemplates(query: string, options: any = {}) {
  * Purchase template
  */
 export async function purchaseTemplate(templateId: string, userId: string) {
-  const template = await prisma.workoutTemplate.findUnique({
+  const template = await prisma.workout_templates.findUnique({
     where: { id: templateId },
     select: { price: true, currency: true }
   });
@@ -1235,8 +1429,9 @@ export async function purchaseTemplate(templateId: string, userId: string) {
   if (!template) throw new Error('Template not found');
 
   return prisma.$transaction(async (tx) => {
-    const purchase = await tx.templatePurchase.create({
+    const purchase = await tx.template_purchases.create({
       data: {
+        id: crypto.randomUUID(),
         userId,
         templateId,
         price: template.price || 0,
@@ -1244,7 +1439,7 @@ export async function purchaseTemplate(templateId: string, userId: string) {
       }
     });
 
-    await tx.workoutTemplate.update({
+    await tx.workout_templates.update({
       where: { id: templateId },
       data: { purchaseCount: { increment: 1 } }
     });
@@ -1258,10 +1453,11 @@ export async function purchaseTemplate(templateId: string, userId: string) {
  */
 export async function rateTemplate(templateId: string, userId: string, data: any) {
   return prisma.$transaction(async (tx) => {
-    const rating = await tx.templateRating.upsert({
+    const rating = await tx.template_ratings.upsert({
       where: { userId_templateId: { userId, templateId } },
       update: { rating: data.rating, review: data.review },
       create: {
+        id: crypto.randomUUID(),
         userId,
         templateId,
         rating: data.rating,
@@ -1270,14 +1466,14 @@ export async function rateTemplate(templateId: string, userId: string, data: any
     });
 
     // Recalculate average rating
-    const ratings = await tx.templateRating.findMany({
+    const ratings = await tx.template_ratings.findMany({
       where: { templateId },
       select: { rating: true }
     });
 
     const avgRating = ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length;
 
-    await tx.workoutTemplate.update({
+    await tx.workout_templates.update({
       where: { id: templateId },
       data: {
         rating: avgRating,
@@ -1326,15 +1522,15 @@ export async function getTrainingPrograms(filters: any = {}) {
     where.price = { gte: min, lte: max };
   }
 
-  return prisma.programTemplate.findMany({
+  return prisma.program_templates.findMany({
     where,
     include: {
-      creator: {
+      users: {
         select: { id: true, name: true, trainerVerified: true }
       },
-      weeks: { orderBy: { weekNumber: 'asc' } },
+      program_weeks: { orderBy: { weekNumber: 'asc' } },
       _count: {
-        select: { purchases: true, ratings: true, subscriptions: true }
+        select: { program_ratings: true, program_subscriptions: true }
       }
     },
     orderBy: { rating: 'desc' },
@@ -1346,28 +1542,28 @@ export async function getTrainingPrograms(filters: any = {}) {
  * Get training program by ID
  */
 export async function getTrainingProgramById(id: string) {
-  return prisma.programTemplate.findUnique({
+  return prisma.program_templates.findUnique({
     where: { id },
     include: {
-      creator: {
+      users: {
         select: { id: true, name: true, trainerVerified: true }
       },
-      weeks: { orderBy: { weekNumber: 'asc' } },
-      workouts: {
+      program_weeks: { orderBy: { weekNumber: 'asc' } },
+      workout_templates: {
         include: {
-          exercises: {
-            include: { exercise: true },
+          workout_template_exercises: {
+            include: { exercises: true },
             orderBy: { order: 'asc' }
           }
         }
       },
-      ratings: {
-        include: { user: { select: { id: true, name: true } } },
+      program_ratings: {
+        include: { users: { select: { id: true, name: true } } },
         orderBy: { createdAt: 'desc' },
         take: 10
       },
       _count: {
-        select: { purchases: true, ratings: true, subscriptions: true }
+        select: { program_ratings: true, program_subscriptions: true }
       }
     }
   });
@@ -1377,11 +1573,12 @@ export async function getTrainingProgramById(id: string) {
  * Create training program
  */
 export async function createTrainingProgram(data: any) {
-  return prisma.programTemplate.create({
+  return prisma.program_templates.create({
     data: {
+      id: crypto.randomUUID(), // Add this line
+      updatedAt: new Date(),   // Add this line
       name: data.name,
       description: data.description,
-      createdBy: data.createdBy,
       duration: data.duration,
       difficulty: data.difficulty || 'BEGINNER',
       category: data.category,
@@ -1389,7 +1586,10 @@ export async function createTrainingProgram(data: any) {
       price: data.price,
       currency: data.currency || 'USD',
       tags: data.tags || [],
-      weeks: {
+      users: {
+        connect: { id: data.createdBy }
+      },
+      program_weeks: {
         create: data.weeks?.map((week: any) => ({
           weekNumber: week.weekNumber,
           title: week.title,
@@ -1399,7 +1599,7 @@ export async function createTrainingProgram(data: any) {
       }
     },
     include: {
-      weeks: { orderBy: { weekNumber: 'asc' } }
+      program_weeks: { orderBy: { weekNumber: 'asc' } }
     }
   });
 }
@@ -1408,7 +1608,7 @@ export async function createTrainingProgram(data: any) {
  * Update training program
  */
 export async function updateTrainingProgram(id: string, data: any) {
-  return prisma.programTemplate.update({
+  return prisma.program_templates.update({
     where: { id },
     data: {
       ...(data.name && { name: data.name }),
@@ -1427,7 +1627,7 @@ export async function updateTrainingProgram(id: string, data: any) {
  * Delete training program
  */
 export async function deleteTrainingProgram(id: string) {
-  return prisma.programTemplate.update({
+  return prisma.program_templates.update({
     where: { id },
     data: { isActive: false }
   });
@@ -1437,12 +1637,12 @@ export async function deleteTrainingProgram(id: string) {
  * Get user's programs
  */
 export async function getMyPrograms(userId: string) {
-  return prisma.programTemplate.findMany({
+  return prisma.program_templates.findMany({
     where: { createdBy: userId, isActive: true },
     include: {
-      weeks: { orderBy: { weekNumber: 'asc' } },
+      program_weeks: { orderBy: { weekNumber: 'asc' } },
       _count: {
-        select: { purchases: true, ratings: true, subscriptions: true }
+        select: { program_ratings: true, program_subscriptions: true }
       }
     },
     orderBy: { createdAt: 'desc' }
@@ -1453,7 +1653,7 @@ export async function getMyPrograms(userId: string) {
  * Search training programs
  */
 export async function searchTrainingPrograms(query: string, options: any = {}) {
-  return prisma.programTemplate.findMany({
+  return prisma.program_templates.findMany({
     where: {
       isActive: true,
       ...(options.publicOnly && { isPublic: true }),
@@ -1464,11 +1664,11 @@ export async function searchTrainingPrograms(query: string, options: any = {}) {
       ]
     },
     include: {
-      creator: {
+      users: {
         select: { id: true, name: true, trainerVerified: true }
       },
       _count: {
-        select: { purchases: true, ratings: true, subscriptions: true }
+        select: { program_ratings: true, program_subscriptions: true }
       }
     },
     orderBy: { rating: 'desc' },
@@ -1480,15 +1680,15 @@ export async function searchTrainingPrograms(query: string, options: any = {}) {
  * Get user program subscriptions
  */
 export async function getUserProgramSubscriptions(userId: string) {
-  return prisma.programSubscription.findMany({
+  return prisma.program_subscriptions.findMany({
     where: { userId, isActive: true },
     include: {
-      program: {
+      program_templates: {
         include: {
-          creator: {
+          users: {
             select: { id: true, name: true, trainerVerified: true }
           },
-          weeks: { orderBy: { weekNumber: 'asc' } }
+          program_weeks: { orderBy: { weekNumber: 'asc' } }
         }
       }
     },
@@ -1500,7 +1700,7 @@ export async function getUserProgramSubscriptions(userId: string) {
  * Purchase program
  */
 export async function purchaseProgram(programId: string, userId: string) {
-  const program = await prisma.programTemplate.findUnique({
+  const program = await prisma.program_templates.findUnique({
     where: { id: programId },
     select: { price: true, currency: true }
   });
@@ -1508,8 +1708,9 @@ export async function purchaseProgram(programId: string, userId: string) {
   if (!program) throw new Error('Program not found');
 
   return prisma.$transaction(async (tx) => {
-    const purchase = await tx.programPurchase.create({
+    const purchase = await tx.program_purchases.create({
       data: {
+        id: crypto.randomUUID(),
         userId,
         programId,
         price: program.price || 0,
@@ -1517,7 +1718,7 @@ export async function purchaseProgram(programId: string, userId: string) {
       }
     });
 
-    await tx.programTemplate.update({
+    await tx.program_templates.update({
       where: { id: programId },
       data: { purchaseCount: { increment: 1 } }
     });
@@ -1530,12 +1731,14 @@ export async function purchaseProgram(programId: string, userId: string) {
  * Subscribe to program
  */
 export async function subscribeToProgram(programId: string, userId: string) {
-  return prisma.programSubscription.create({
+  return prisma.program_subscriptions.create({
     data: {
+      id: crypto.randomUUID(),
       userId,
       programId,
       currentWeek: 1,
-      currentDay: 1
+      currentDay: 1,
+      updatedAt: new Date()
     }
   });
 }
@@ -1545,10 +1748,11 @@ export async function subscribeToProgram(programId: string, userId: string) {
  */
 export async function rateProgram(programId: string, userId: string, data: any) {
   return prisma.$transaction(async (tx) => {
-    const rating = await tx.programRating.upsert({
+    const rating = await tx.program_ratings.upsert({
       where: { userId_programId: { userId, programId } },
       update: { rating: data.rating, review: data.review },
       create: {
+        id: crypto.randomUUID(),
         userId,
         programId,
         rating: data.rating,
@@ -1557,14 +1761,14 @@ export async function rateProgram(programId: string, userId: string, data: any) 
     });
 
     // Recalculate average rating
-    const ratings = await tx.programRating.findMany({
+    const ratings = await tx.program_ratings.findMany({
       where: { programId },
       select: { rating: true }
     });
 
     const avgRating = ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length;
 
-    await tx.programTemplate.update({
+    await tx.program_templates.update({
       where: { id: programId },
       data: {
         rating: avgRating,
@@ -1580,7 +1784,7 @@ export async function rateProgram(programId: string, userId: string, data: any) 
  * Update program progress
  */
 export async function updateProgramProgress(programId: string, userId: string, data: any) {
-  return prisma.programSubscription.update({
+  return prisma.program_subscriptions.update({
     where: { userId_programId: { userId, programId } },
     data: {
       currentWeek: data.currentWeek,
@@ -1609,7 +1813,7 @@ export async function getWorkoutAnalytics(userId: string, options: {
     if (options.endDate) where.date.lte = options.endDate;
   }
 
-  return prisma.workoutAnalytics.findMany({
+  return prisma.workout_analytics.findMany({
     where,
     orderBy: { date: 'desc' }
   });
@@ -1635,7 +1839,7 @@ export async function getProgressMetrics(userId: string, options: {
     if (options.endDate) where.recordedAt.lte = options.endDate;
   }
 
-  return prisma.progressMetric.findMany({
+  return prisma.progress_metrics.findMany({
     where,
     orderBy: { recordedAt: 'desc' }
   });
@@ -1653,10 +1857,10 @@ export async function getPersonalRecords(userId: string, options: {
     where.exerciseId = options.exerciseId;
   }
 
-  return prisma.personalRecord.findMany({
+  return prisma.personal_records.findMany({
     where,
     include: {
-      exercise: {
+      exercises: {
         select: { id: true, name: true, category: true }
       }
     },
@@ -1677,8 +1881,9 @@ export async function addProgressMetric(data: {
   imageUrl?: string;
   recordedAt?: Date;
 }) {
-  return prisma.progressMetric.create({
+  return prisma.progress_metrics.create({
     data: {
+      id: crypto.randomUUID(),
       userId: data.userId,
       metricType: data.metricType,
       value: data.value,
@@ -1704,8 +1909,9 @@ export async function addPersonalRecord(data: {
   notes?: string;
   achievedAt?: Date;
 }) {
-  return prisma.personalRecord.create({
+  return prisma.personal_records.create({
     data: {
+      id: crypto.randomUUID(),
       userId: data.userId,
       exerciseId: data.exerciseId,
       recordType: data.recordType,
@@ -1727,13 +1933,13 @@ export async function generateWorkoutAnalytics(userId: string) {
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - 30);
 
-  const workoutLogs = await prisma.workoutLogEntry.findMany({
+  const workoutLogs = await prisma.workout_log_entries.findMany({
     where: {
       userId,
       date: { gte: startDate, lte: endDate }
     },
     include: {
-      exercise: true
+      exercises: true
     }
   });
 
@@ -1756,7 +1962,7 @@ export async function generateWorkoutAnalytics(userId: string) {
     acc[dateKey].totalVolume += log.trainingVolume || 0;
     acc[dateKey].totalSets += 1;
     acc[dateKey].totalReps += log.reps;
-    log.exercise.muscleGroups.forEach(mg => acc[dateKey]?.muscleGroups.add(mg));
+    log.exercises.muscleGroups.forEach((mg: string) => acc[dateKey]?.muscleGroups.add(mg));
 
     return acc;
   }, {} as any);
@@ -1767,23 +1973,26 @@ export async function generateWorkoutAnalytics(userId: string) {
       ? Array.from(stats.muscleGroups)[0] as string
       : null;
 
-    return prisma.workoutAnalytics.upsert({
+    return prisma.workout_analytics.upsert({
       where: { userId_date: { userId, date: new Date(dateKey) } },
       update: {
         totalWorkouts: 1,
         totalVolume: stats.totalVolume,
         totalSets: stats.totalSets,
         totalReps: stats.totalReps,
-        topMuscleGroup
+        topMuscleGroup,
+        updatedAt: new Date()
       },
       create: {
+        id: crypto.randomUUID(),
         userId,
         date: new Date(dateKey),
         totalWorkouts: 1,
         totalVolume: stats.totalVolume,
         totalSets: stats.totalSets,
         totalReps: stats.totalReps,
-        topMuscleGroup
+        topMuscleGroup,
+        updatedAt: new Date()
       }
     });
   });
@@ -1814,27 +2023,27 @@ export async function getMarketplacePrograms(filters: any = {}) {
  */
 export async function getFeaturedContent() {
   const [templates, programs] = await Promise.all([
-    prisma.workoutTemplate.findMany({
+    prisma.workout_templates.findMany({
       where: { isPublic: true, isActive: true, rating: { gte: 4.5 } },
       include: {
-        creator: {
+        users: {
           select: { id: true, name: true, trainerVerified: true }
         },
         _count: {
-          select: { purchases: true, ratings: true }
+          select: { template_ratings: true }
         }
       },
       orderBy: { rating: 'desc' },
       take: 6
     }),
-    prisma.programTemplate.findMany({
+    prisma.program_templates.findMany({
       where: { isPublic: true, isActive: true, rating: { gte: 4.5 } },
       include: {
-        creator: {
+        users: {
           select: { id: true, name: true, trainerVerified: true }
         },
         _count: {
-          select: { purchases: true, ratings: true, subscriptions: true }
+          select: { program_ratings: true, program_subscriptions: true }
         }
       },
       orderBy: { rating: 'desc' },
@@ -1850,27 +2059,27 @@ export async function getFeaturedContent() {
  */
 export async function getTopRatedContent() {
   const [templates, programs] = await Promise.all([
-    prisma.workoutTemplate.findMany({
+    prisma.workout_templates.findMany({
       where: { isPublic: true, isActive: true, ratingCount: { gte: 5 } },
       include: {
-        creator: {
+        users: {
           select: { id: true, name: true, trainerVerified: true }
         },
         _count: {
-          select: { purchases: true, ratings: true }
+          select: { template_ratings: true }
         }
       },
       orderBy: [{ rating: 'desc' }, { ratingCount: 'desc' }],
       take: 10
     }),
-    prisma.programTemplate.findMany({
+    prisma.program_templates.findMany({
       where: { isPublic: true, isActive: true, ratingCount: { gte: 5 } },
       include: {
-        creator: {
+        users: {
           select: { id: true, name: true, trainerVerified: true }
         },
         _count: {
-          select: { purchases: true, ratings: true, subscriptions: true }
+          select: { program_ratings: true, program_subscriptions: true }
         }
       },
       orderBy: [{ rating: 'desc' }, { ratingCount: 'desc' }],
@@ -1886,27 +2095,27 @@ export async function getTopRatedContent() {
  */
 export async function getPopularContent() {
   const [templates, programs] = await Promise.all([
-    prisma.workoutTemplate.findMany({
+    prisma.workout_templates.findMany({
       where: { isPublic: true, isActive: true },
       include: {
-        creator: {
+        users: {
           select: { id: true, name: true, trainerVerified: true }
         },
         _count: {
-          select: { purchases: true, ratings: true }
+          select: { template_ratings: true }
         }
       },
       orderBy: { purchaseCount: 'desc' },
       take: 10
     }),
-    prisma.programTemplate.findMany({
+    prisma.program_templates.findMany({
       where: { isPublic: true, isActive: true },
       include: {
-        creator: {
+        users: {
           select: { id: true, name: true, trainerVerified: true }
         },
         _count: {
-          select: { purchases: true, ratings: true, subscriptions: true }
+          select: { program_ratings: true, program_subscriptions: true }
         }
       },
       orderBy: { purchaseCount: 'desc' },
@@ -1927,22 +2136,22 @@ export async function getRecommendedContent(userId?: string) {
   }
 
   // Get user's preferences and past purchases
-  const user = await prisma.user.findUnique({
+  const user = await prisma.users.findUnique({
     where: { id: userId },
     select: {
       fitnessGoals: true,
       experienceLevel: true,
       preferredWorkoutTypes: true,
-      templatePurchases: {
+      template_purchases: {
         include: {
-          template: {
+          workout_templates: {
             select: { category: true, difficulty: true, tags: true }
           }
         }
       },
-      programPurchases: {
+      program_purchases: {
         include: {
-          program: {
+          program_templates: {
             select: { category: true, difficulty: true, tags: true }
           }
         }
@@ -1956,19 +2165,19 @@ export async function getRecommendedContent(userId?: string) {
 
   // Extract user preferences for recommendations
   const userCategories = [
-    ...user.templatePurchases.map(p => p.template.category),
-    ...user.programPurchases.map(p => p.program.category)
+    ...user.template_purchases.map((p: any) => p.workout_templates.category),
+    ...user.program_purchases.map((p: any) => p.program_templates.category)
   ].filter(Boolean) as string[];
 
   const userTags = [
-    ...user.templatePurchases.flatMap(p => p.template.tags),
-    ...user.programPurchases.flatMap(p => p.program.tags),
+    ...user.template_purchases.flatMap((p: any) => p.workout_templates.tags),
+    ...user.program_purchases.flatMap((p: any) => p.program_templates.tags),
     ...user.fitnessGoals,
     ...user.preferredWorkoutTypes
   ].filter(Boolean) as string[];
 
   const [templates, programs] = await Promise.all([
-    prisma.workoutTemplate.findMany({
+    prisma.workout_templates.findMany({
       where: {
         isPublic: true,
         isActive: true,
@@ -1979,17 +2188,17 @@ export async function getRecommendedContent(userId?: string) {
         ]
       },
       include: {
-        creator: {
+        users: {
           select: { id: true, name: true, trainerVerified: true }
         },
         _count: {
-          select: { purchases: true, ratings: true }
+          select: { template_ratings: true }
         }
       },
       orderBy: { rating: 'desc' },
       take: 10
     }),
-    prisma.programTemplate.findMany({
+    prisma.program_templates.findMany({
       where: {
         isPublic: true,
         isActive: true,
@@ -2000,11 +2209,11 @@ export async function getRecommendedContent(userId?: string) {
         ]
       },
       include: {
-        creator: {
+        users: {
           select: { id: true, name: true, trainerVerified: true }
         },
         _count: {
-          select: { purchases: true, ratings: true, subscriptions: true }
+          select: { program_ratings: true, program_subscriptions: true }
         }
       },
       orderBy: { rating: 'desc' },
@@ -2013,4 +2222,640 @@ export async function getRecommendedContent(userId?: string) {
   ]);
 
   return { templates, programs };
+}
+
+// ============================================================================
+// ASSESSMENT INTEGRATION QUERIES
+// ============================================================================
+
+interface AssessmentData {
+  fitness_level: string;
+  primary_goal: string;
+  movement_limitations: string[];
+  experience_years: number;
+}
+
+// Link workout session to assessment
+export async function link_session_to_assessment(
+  session_id: string,
+  assessment_id: string
+) {
+  const assessment = await prisma.assessments.findUnique({
+    where: { id: assessment_id }
+  });
+
+  if (!assessment) {
+    throw new Error('Assessment not found');
+  }
+
+  // Extract fitness level and goals from assessment
+  const assessment_data: AssessmentData = {
+    fitness_level: determine_fitness_level(assessment),
+    primary_goal: assessment.primaryGoal || 'GENERAL_FITNESS',
+    movement_limitations: assessment.limitations || [],
+    experience_years: assessment.experienceYears || 0
+  };
+
+  return prisma.workout_sessions.update({
+    where: { id: session_id },
+    data: {
+      assessmentId: assessment_id,
+      fitnessLevel: assessment_data.fitness_level,
+      primaryGoal: assessment_data.primary_goal,
+      updatedAt: new Date()
+    }
+  });
+}
+
+// Determine fitness level from assessment scores
+function determine_fitness_level(assessment: any): string {
+  // Analyse assessment metrics
+  const squat_score = assessment.squatScore || 0;
+  const push_score = assessment.pushScore || 0;
+  const pull_score = assessment.pullScore || 0;
+
+  const average_score = (squat_score + push_score + pull_score) / 3;
+
+  if (average_score >= 8) return 'ADVANCED';
+  if (average_score >= 5) return 'INTERMEDIATE';
+  return 'BEGINNER';
+}
+
+// Get workout recommendations based on assessment
+export async function get_assessment_based_recommendations(
+  user_id: string
+) {
+  // Get most recent assessment
+  const latest_assessment = await prisma.assessments.findFirst({
+    where: { clientId: user_id },
+    orderBy: { createdAt: 'desc' }
+  });
+
+  if (!latest_assessment) {
+    return null;
+  }
+
+  const fitness_level = determine_fitness_level(latest_assessment);
+
+  // Get exercise recommendations
+  const exercise_recommendations = get_exercise_recommendations(
+    fitness_level,
+    latest_assessment.primaryGoal || 'GENERAL_FITNESS',
+    'SQUAT' // Example pattern
+  );
+
+  return {
+    fitness_level,
+    recommended_volume: calculate_recommended_volume(fitness_level),
+    recommended_frequency: calculate_recommended_frequency(fitness_level),
+    training_phase: exercise_recommendations.progression_level,
+    coaching_cues: exercise_recommendations.coaching_cues
+  };
+}
+
+function calculate_recommended_volume(fitness_level: string): number {
+  const volume_map = {
+    BEGINNER: 10, // 10 sets per session
+    INTERMEDIATE: 15,
+    ADVANCED: 20
+  };
+  return volume_map[fitness_level as keyof typeof volume_map] || 12;
+}
+
+function calculate_recommended_frequency(fitness_level: string): number {
+  const frequency_map = {
+    BEGINNER: 3, // 3 sessions per week
+    INTERMEDIATE: 4,
+    ADVANCED: 5
+  };
+  return frequency_map[fitness_level as keyof typeof frequency_map] || 3;
+}
+
+// ============================================================================
+// AI DATA PIPELINE QUERIES
+// ============================================================================
+
+interface AITrainingData {
+  user_profile: {
+    fitness_level: string;
+    primary_goal: string;
+    experience_years: number;
+  };
+  workout_history: {
+    total_sessions: number;
+    average_volume: number;
+    favourite_exercises: string[];
+    consistency_score: number;
+  };
+  performance_metrics: {
+    strength_progression: number;
+    volume_progression: number;
+    technique_scores: number[];
+  };
+  preferences: {
+    preferred_set_types: string[];
+    preferred_rep_ranges: [number, number];
+    preferred_rest_durations: number[];
+  };
+}
+
+// Prepare workout data for AI analysis
+export async function prepare_ai_training_data(
+  user_id: string
+): Promise<AITrainingData> {
+  // Get all user sessions from last 90 days
+  const ninety_days_ago = new Date();
+  ninety_days_ago.setDate(ninety_days_ago.getDate() - 90);
+
+  const sessions = await prisma.workout_sessions.findMany({
+    where: {
+      userId: user_id,
+      date: { gte: ninety_days_ago },
+      isComplete: true
+    },
+    include: {
+      workout_log_entries: {
+        include: {
+          exercises: true
+        }
+      }
+    },
+    orderBy: { date: 'asc' }
+  });
+
+  const entries = sessions.flatMap(s => s.workout_log_entries);
+
+  // Calculate metrics
+  const total_volume = entries.reduce((sum, e) => sum + (e.trainingVolume || 0), 0);
+  const average_volume = sessions.length > 0 ? total_volume / sessions.length : 0;
+
+  // Find favourite exercises (most frequently used)
+  const exercise_frequency = new Map<string, number>();
+  entries.forEach(e => {
+    exercise_frequency.set(
+      e.exerciseId,
+      (exercise_frequency.get(e.exerciseId) || 0) + 1
+    );
+  });
+
+  const favourite_exercises = Array.from(exercise_frequency.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([id]) => id);
+
+  // Calculate consistency score (sessions per week)
+  const weeks_in_period = 13; // ~90 days
+  const consistency_score = (sessions.length / weeks_in_period) / 4; // Normalised to 0-1
+
+  // Get latest assessment
+  const latest_assessment = await prisma.assessments.findFirst({
+    where: { clientId: user_id },
+    orderBy: { createdAt: 'desc' }
+  });
+
+  return {
+    user_profile: {
+      fitness_level: 'INTERMEDIATE', // Default since assessments doesn't have fitnessLevel field
+      primary_goal: latest_assessment?.primaryGoal || 'GENERAL_FITNESS',
+      experience_years: latest_assessment?.experienceYears || 1
+    },
+    workout_history: {
+      total_sessions: sessions.length,
+      average_volume,
+      favourite_exercises,
+      consistency_score: Math.min(consistency_score, 1)
+    },
+    performance_metrics: {
+      strength_progression: calculate_strength_progression(entries),
+      volume_progression: calculate_volume_progression(sessions),
+      technique_scores: entries
+        .filter(e => e.formQuality !== null)
+        .map(e => e.formQuality!)
+    },
+    preferences: {
+      preferred_set_types: calculate_preferred_set_types(entries),
+      preferred_rep_ranges: calculate_preferred_rep_range(entries),
+      preferred_rest_durations: calculate_preferred_rest_durations(entries)
+    }
+  };
+}
+
+function calculate_strength_progression(entries: any[]): number {
+  // Compare first 20% of entries with last 20%
+  const total = entries.length;
+  if (total < 10) return 0; // Need minimum data
+
+  const early_entries = entries.slice(0, Math.floor(total * 0.2));
+  const recent_entries = entries.slice(Math.floor(total * 0.8));
+
+  const early_avg_volume = early_entries.reduce((sum, e) => sum + (e.trainingVolume || 0), 0) / early_entries.length;
+  const recent_avg_volume = recent_entries.reduce((sum, e) => sum + (e.trainingVolume || 0), 0) / recent_entries.length;
+
+  return early_avg_volume > 0 ? ((recent_avg_volume - early_avg_volume) / early_avg_volume) * 100 : 0;
+}
+
+function calculate_volume_progression(sessions: any[]): number {
+  if (sessions.length < 2) return 0;
+
+  const first_session = sessions[0];
+  const last_session = sessions[sessions.length - 1];
+
+  const first_volume = first_session.totalVolume || 0;
+  const last_volume = last_session.totalVolume || 0;
+
+  return first_volume > 0 ? ((last_volume - first_volume) / first_volume) * 100 : 0;
+}
+
+function calculate_preferred_set_types(entries: any[]): string[] {
+  const set_type_counts = new Map<string, number>();
+  entries.forEach(e => {
+    set_type_counts.set(e.setType, (set_type_counts.get(e.setType) || 0) + 1);
+  });
+
+  return Array.from(set_type_counts.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+    .map(([type]) => type);
+}
+
+function calculate_preferred_rep_range(entries: any[]): [number, number] {
+  const reps = entries.map(e => e.reps).filter(r => r > 0);
+  if (reps.length === 0) return [8, 12];
+
+  reps.sort((a, b) => a - b);
+  const percentile_25 = reps[Math.floor(reps.length * 0.25)];
+  const percentile_75 = reps[Math.floor(reps.length * 0.75)];
+
+  return [percentile_25, percentile_75];
+}
+
+function calculate_preferred_rest_durations(entries: any[]): number[] {
+  const rest_durations = entries
+    .map(e => e.restSeconds)
+    .filter(r => r !== null && r !== undefined) as number[];
+
+  if (rest_durations.length === 0) return [60, 90, 120];
+
+  const avg = rest_durations.reduce((sum, r) => sum + r, 0) / rest_durations.length;
+  return [Math.floor(avg * 0.8), Math.floor(avg), Math.floor(avg * 1.2)];
+}
+
+// ============================================================================
+// GAMIFICATION SYSTEM QUERIES
+// ============================================================================
+
+interface AchievementCriteria {
+  type: 'VOLUME' | 'CONSISTENCY' | 'STRENGTH' | 'TECHNIQUE' | 'MILESTONE';
+  threshold: number;
+  comparison: 'GREATER_THAN' | 'EQUALS' | 'STREAK';
+  metric: string;
+}
+
+interface ExperiencePointsBreakdown {
+  base_points: number;
+  volume_bonus: number;
+  technique_bonus: number;
+  consistency_bonus: number;
+  achievement_bonus: number;
+  total: number;
+}
+
+// Calculate experience points for a session
+export async function calculate_session_experience_points(
+  session_id: string
+): Promise<ExperiencePointsBreakdown> {
+  const session = await prisma.workout_sessions.findUnique({
+    where: { id: session_id },
+    include: {
+      workout_log_entries: true
+    }
+  });
+
+  if (!session) {
+    throw new Error('Session not found');
+  }
+
+  const breakdown: ExperiencePointsBreakdown = {
+    base_points: 100, // Base points for completing session
+    volume_bonus: 0,
+    technique_bonus: 0,
+    consistency_bonus: 0,
+    achievement_bonus: 0,
+    total: 0
+  };
+
+  // Volume bonus (1 point per 100kg total volume)
+  const total_volume = session.totalVolume || 0;
+  breakdown.volume_bonus = Math.floor(total_volume / 100);
+
+  // Technique bonus (average form quality)
+  const entries_with_form = session.workout_log_entries.filter(e => e.formQuality !== null);
+  if (entries_with_form.length > 0) {
+    const avg_form = entries_with_form.reduce((sum, e) => sum + (e.formQuality || 0), 0) / entries_with_form.length;
+    breakdown.technique_bonus = Math.floor(avg_form * 20); // Max 100 bonus for perfect form
+  }
+
+  // Consistency bonus (check if session continues a streak)
+  const streak_bonus = await calculate_consistency_streak_bonus(session.userId, session.date);
+  breakdown.consistency_bonus = streak_bonus;
+
+  // Achievement bonus (any personal records)
+  const pr_count = session.workout_log_entries.filter(e => e.personalRecord || e.volumeRecord).length;
+  breakdown.achievement_bonus = pr_count * 50; // 50 points per PR
+
+  breakdown.total = breakdown.base_points + breakdown.volume_bonus + breakdown.technique_bonus + breakdown.consistency_bonus + breakdown.achievement_bonus;
+
+  return breakdown;
+}
+
+async function calculate_consistency_streak_bonus(user_id: string, session_date: Date): Promise<number> {
+  // Get recent sessions to calculate streak
+  const seven_days_ago = new Date(session_date);
+  seven_days_ago.setDate(seven_days_ago.getDate() - 7);
+
+  const recent_sessions = await prisma.workout_sessions.findMany({
+    where: {
+      userId: user_id,
+      date: {
+        gte: seven_days_ago,
+        lte: session_date
+      },
+      isComplete: true
+    },
+    orderBy: { date: 'desc' }
+  });
+
+  // Award bonus for 3+ sessions in 7 days
+  if (recent_sessions.length >= 3) {
+    return 50 * recent_sessions.length; // Escalating bonus
+  }
+
+  return 0;
+}
+
+// Check and award achievements after session
+export async function check_and_award_achievements(
+  user_id: string,
+  session_id: string
+): Promise<string[]> {
+  const awarded_achievement_ids: string[] = [];
+
+  // Get all achievements
+  const all_achievements = await prisma.achievements.findMany();
+
+  // Get user's existing achievements
+  const existing_achievements = await prisma.user_achievements.findMany({
+    where: { userId: user_id },
+    select: { achievementId: true }
+  });
+
+  const existing_ids = new Set(existing_achievements.map(a => a.achievementId));
+
+  // Check each achievement
+  for (const achievement of all_achievements) {
+    if (existing_ids.has(achievement.id)) continue; // Already earned
+
+    const criteria = achievement.criteria as unknown as AchievementCriteria;
+    const meets_criteria = await check_achievement_criteria(user_id, session_id, criteria);
+
+    if (meets_criteria) {
+      // Award achievement
+      await prisma.user_achievements.create({
+        data: {
+          id: crypto.randomUUID(),
+          userId: user_id,
+          achievementId: achievement.id,
+          sessionId: session_id
+        }
+      });
+
+      awarded_achievement_ids.push(achievement.id);
+    }
+  }
+
+  return awarded_achievement_ids;
+}
+
+async function check_achievement_criteria(
+  user_id: string,
+  session_id: string,
+  criteria: AchievementCriteria
+): Promise<boolean> {
+  switch (criteria.type) {
+    case 'VOLUME':
+      return check_volume_achievement(user_id, session_id, criteria);
+    case 'CONSISTENCY':
+      return check_consistency_achievement(user_id, criteria);
+    case 'STRENGTH':
+      return check_strength_achievement(user_id, criteria);
+    case 'TECHNIQUE':
+      return check_technique_achievement(user_id, session_id, criteria);
+    case 'MILESTONE':
+      return check_milestone_achievement(user_id, criteria);
+    default:
+      return false;
+  }
+}
+
+async function check_volume_achievement(
+  _user_id: string,
+  session_id: string,
+  criteria: AchievementCriteria
+): Promise<boolean> {
+  const session = await prisma.workout_sessions.findUnique({
+    where: { id: session_id }
+  });
+
+  if (!session) return false;
+
+  const total_volume = session.totalVolume || 0;
+  return total_volume >= criteria.threshold;
+}
+
+async function check_consistency_achievement(
+  user_id: string,
+  criteria: AchievementCriteria
+): Promise<boolean> {
+  const thirty_days_ago = new Date();
+  thirty_days_ago.setDate(thirty_days_ago.getDate() - 30);
+
+  const session_count = await prisma.workout_sessions.count({
+    where: {
+      userId: user_id,
+      date: { gte: thirty_days_ago },
+      isComplete: true
+    }
+  });
+
+  return session_count >= criteria.threshold;
+}
+
+async function check_strength_achievement(
+  user_id: string,
+  criteria: AchievementCriteria
+): Promise<boolean> {
+  // Check for personal records
+  const pr_count = await prisma.workout_log_entries.count({
+    where: {
+      userId: user_id,
+      personalRecord: true
+    }
+  });
+
+  return pr_count >= criteria.threshold;
+}
+
+async function check_technique_achievement(
+  _user_id: string,
+  session_id: string,
+  criteria: AchievementCriteria
+): Promise<boolean> {
+  const session = await prisma.workout_sessions.findUnique({
+    where: { id: session_id },
+    include: {
+      workout_log_entries: true
+    }
+  });
+
+  if (!session) return false;
+
+  const entries_with_form = session.workout_log_entries.filter(e => e.formQuality !== null);
+  if (entries_with_form.length === 0) return false;
+
+  const avg_form = entries_with_form.reduce((sum, e) => sum + (e.formQuality || 0), 0) / entries_with_form.length;
+  return avg_form >= criteria.threshold;
+}
+
+async function check_milestone_achievement(
+  user_id: string,
+  criteria: AchievementCriteria
+): Promise<boolean> {
+  const total_sessions = await prisma.workout_sessions.count({
+    where: {
+      userId: user_id,
+      isComplete: true
+    }
+  });
+
+  return total_sessions === criteria.threshold; // Exact milestone
+}
+
+// Update session with XP and achievements
+export async function finalise_session_with_gamification(
+  session_id: string
+) {
+  const session = await prisma.workout_sessions.findUnique({
+    where: { id: session_id }
+  });
+
+  if (!session) {
+    throw new Error('Session not found');
+  }
+
+  // Calculate XP
+  const xp_breakdown = await calculate_session_experience_points(session_id);
+
+  // Check achievements
+  const new_achievements = await check_and_award_achievements(session.userId, session_id);
+
+  // Add achievement bonus to XP
+  const achievement_xp = new_achievements.length * 100;
+  xp_breakdown.achievement_bonus = achievement_xp;
+  xp_breakdown.total += achievement_xp;
+
+  // Update session
+  await prisma.workout_sessions.update({
+    where: { id: session_id },
+    data: {
+      experiencePoints: xp_breakdown.total,
+      achievementsEarned: new_achievements,
+      updatedAt: new Date()
+    }
+  });
+
+  return {
+    experience_points: xp_breakdown,
+    achievements_earned: new_achievements
+  };
+}
+
+// ============================================================================
+// PERSONAL RECORDS DETECTION
+// ============================================================================
+
+/**
+ * Check if a workout entry is a personal record for weight
+ * @param userId - User ID
+ * @param exerciseId - Exercise ID
+ * @param weight - Weight lifted (numeric value)
+ * @param reps - Number of reps
+ * @returns true if this is a PR, false otherwise
+ */
+async function check_personal_record(
+  userId: string,
+  exerciseId: string,
+  weight: number,
+  reps: number
+): Promise<boolean> {
+  // Find the highest weight for this exercise with the same or more reps
+  const previous_best = await prisma.workout_log_entries.findFirst({
+    where: {
+      userId,
+      exerciseId,
+      reps: { gte: reps }
+    },
+    orderBy: {
+      trainingVolume: 'desc'
+    },
+    select: {
+      weight: true,
+      trainingVolume: true
+    }
+  });
+
+  if (!previous_best) {
+    // First time doing this exercise - it's a PR!
+    return true;
+  }
+
+  // Extract numeric weight from previous best (handles "135 lbs" format)
+  const previous_weight = parseFloat(previous_best.weight.replace(/[^\d.,]/g, ''));
+
+  // Is current weight higher than previous best?
+  return weight > previous_weight;
+}
+
+/**
+ * Check if a workout entry is a volume record
+ * @param userId - User ID
+ * @param exerciseId - Exercise ID
+ * @param volume - Training volume (weight × reps)
+ * @returns true if this is a volume PR, false otherwise
+ */
+async function check_volume_record(
+  userId: string,
+  exerciseId: string,
+  volume: number
+): Promise<boolean> {
+  // Find the highest training volume for this exercise
+  const previous_best = await prisma.workout_log_entries.findFirst({
+    where: {
+      userId,
+      exerciseId
+    },
+    orderBy: {
+      trainingVolume: 'desc'
+    },
+    select: {
+      trainingVolume: true
+    }
+  });
+
+  if (!previous_best || !previous_best.trainingVolume) {
+    // First time doing this exercise - it's a volume PR!
+    return true;
+  }
+
+  // Is current volume higher than previous best?
+  return volume > previous_best.trainingVolume;
 }

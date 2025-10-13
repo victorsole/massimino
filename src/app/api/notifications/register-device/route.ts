@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import authOptions from '@/core';
+import { authOptions } from '@/core';
 import { DevicePlatform } from '@prisma/client';
 import { prisma } from '@/core/database';
 import { z } from 'zod';
