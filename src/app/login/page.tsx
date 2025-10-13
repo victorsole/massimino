@@ -245,13 +245,10 @@ export default function LoginPage() {
             {/* Sign Up Link */}
             <div className="text-center pt-4">
               <p className="text-sm text-brand-primary-light">
-                Don't have an account?{' '}
-                <Link 
-                  href="/signup" 
-                  className="text-brand-primary hover:text-brand-primary-dark font-medium"
-                >
-                  Sign up for free
-                </Link>
+                New to Massimino? Join our community by signing up with Google, LinkedIn, or Facebook above.
+              </p>
+              <p className="text-xs text-brand-primary-light mt-2">
+                Have an invitation code? Just use your invited email to sign up with any social provider.
               </p>
             </div>
           </CardContent>

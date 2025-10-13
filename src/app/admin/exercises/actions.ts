@@ -133,7 +133,7 @@ export async function syncAllExercisesToFirestoreAction() {
   // Note: This will run within a single request; for very large datasets consider background jobs.
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const items = await prisma.exercise.findMany({
+    const items = await prisma.exercises.findMany({
       orderBy: { id: 'asc' },
       ...(cursor ? { where: { id: { gt: cursor } } } : {}),
       take: batchSize,
@@ -226,7 +226,7 @@ export async function importExercisesCsvAction(formData: FormData) {
       const safetyNotes = (row.safetyNotes || row['Posture'] || '').trim() || null
 
       const data: any = { name, category, muscleGroups, equipment, instructions, videoUrl, imageUrl, difficulty, safetyNotes, isActive: true }
-      const upserted = await prisma.exercise.upsert({
+      const upserted = await prisma.exercises.upsert({
         where: { name },
         create: data,
         update: data,
@@ -256,5 +256,4 @@ export async function importExercisesCsvAction(formData: FormData) {
     }
   }
   revalidatePath('/admin/exercises')
-  return { imported, updated, failed }
 }

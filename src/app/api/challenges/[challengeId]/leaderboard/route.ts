@@ -28,7 +28,7 @@ export async function GET(
     const skip = (page - 1) * limit;
 
     // Get challenge details
-    const challenge = await prisma.challenge.findUnique({
+    const challenge = await prisma.challenges.findUnique({
       where: { id: challengeId },
       select: {
         id: true,
@@ -47,7 +47,7 @@ export async function GET(
     // Check access permissions for private challenges
     let userParticipation = null;
     if (session?.user?.id) {
-      userParticipation = await prisma.challengeParticipant.findUnique({
+      userParticipation = await prisma.challenge_participants.findUnique({
         where: {
           challengeId_userId: {
             challengeId,
@@ -69,7 +69,7 @@ export async function GET(
 
     // Get leaderboard data
     const [leaderboard, total] = await Promise.all([
-      prisma.challengeLeaderboard.findMany({
+      prisma.challenge_leaderboard.findMany({
         where: { challengeId },
         include: {
           user: {
@@ -84,7 +84,7 @@ export async function GET(
         take: limit
       }),
 
-      prisma.challengeLeaderboard.count({
+      prisma.challenge_leaderboard.count({
         where: { challengeId }
       })
     ]);
@@ -166,7 +166,7 @@ export async function POST(
     const { userId, score, metrics, verified = false } = body;
 
     // Check if user is challenge creator or admin
-    const challenge = await prisma.challenge.findUnique({
+    const challenge = await prisma.challenges.findUnique({
       where: { id: challengeId },
       select: { creatorId: true }
     });
@@ -183,7 +183,7 @@ export async function POST(
     }
 
     // Validate target user is participating
-    const participation = await prisma.challengeParticipant.findUnique({
+    const participation = await prisma.challenge_participants.findUnique({
       where: {
         challengeId_userId: {
           challengeId,
@@ -197,7 +197,7 @@ export async function POST(
     }
 
     // Update leaderboard entry
-    const leaderboardEntry = await prisma.challengeLeaderboard.upsert({
+    const leaderboardEntry = await prisma.challenge_leaderboard.upsert({
       where: {
         challengeId_userId: {
           challengeId,
@@ -220,7 +220,7 @@ export async function POST(
 
     // Update participant progress if verified
     if (verified) {
-      await prisma.challengeParticipant.update({
+      await prisma.challenge_participants.update({
         where: { id: participation.id },
         data: {
           currentProgress: metrics,
@@ -324,7 +324,7 @@ function maskName(name: string): string {
  */
 async function recalculateLeaderboardRanks(challengeId: string) {
   try {
-    const leaderboard = await prisma.challengeLeaderboard.findMany({
+    const leaderboard = await prisma.challenge_leaderboard.findMany({
       where: { challengeId },
       orderBy: [
         { score: 'desc' },
@@ -334,7 +334,7 @@ async function recalculateLeaderboardRanks(challengeId: string) {
 
     // Update ranks in batch
     const updatePromises = leaderboard.map((entry, index) =>
-      prisma.challengeLeaderboard.update({
+      prisma.challenge_leaderboard.update({
         where: { id: entry.id },
         data: { rank: index + 1 }
       })
@@ -344,7 +344,7 @@ async function recalculateLeaderboardRanks(challengeId: string) {
 
     // Also update participant ranks
     const participantUpdatePromises = leaderboard.map((entry, index) =>
-      prisma.challengeParticipant.updateMany({
+      prisma.challenge_participants.updateMany({
         where: {
           challengeId,
           userId: entry.userId

@@ -1,3 +1,4 @@
+// src/core/integrations/firebase.ts
 // Firebase Admin integration (optional)
 // Initializes Firestore when env vars are present. Safe no-op otherwise.
 

@@ -1,0 +1,111 @@
+{
+    "id": "dynamic_postural_assessment",
+    "title": "Dynamic Postural Assessment",
+    "version": "1.0",
+    "sections": [
+      {
+        "id": "client_info",
+        "title": "Client Information",
+        "fields": [
+          {"id": "name", "type": "text", "label": "Name", "required": true},
+          {"id": "date", "type": "date", "label": "Date", "required": true}
+        ]
+      },
+      {
+        "id": "static_assessment_summary",
+        "title": "Static Postural Assessment Summary",
+        "fields": [
+          {"id": "pes_planus_syndrome", "type": "radio", "label": "Pes Planus Syndrome", "options": ["Yes", "No"]},
+          {"id": "lower_crossed_syndrome", "type": "radio", "label": "Lower Crossed Syndrome", "options": ["Yes", "No"]},
+          {"id": "upper_crossed_syndrome", "type": "radio", "label": "Upper Crossed Syndrome", "options": ["Yes", "No"]}
+        ]
+      },
+      {
+        "id": "overhead_squat",
+        "title": "Overhead Squat Assessment (OHSA)",
+        "subsections": [
+          {
+            "id": "ohsa_anterior",
+            "title": "Anterior View",
+            "fields": [
+              {"id": "feet_turn_out_left", "type": "radio", "label": "Feet turn out - Left", "options": ["Yes", "No"]},
+              {"id": "feet_turn_out_right", "type": "radio", "label": "Feet turn out - Right", "options": ["Yes", "No"]},
+              {"id": "knees_move_in_left", "type": "radio", "label": "Knees move in - Left", "options": ["Yes", "No"]},
+              {"id": "knees_move_in_right", "type": "radio", "label": "Knees move in - Right", "options": ["Yes", "No"]}
+            ]
+          },
+          {
+            "id": "ohsa_lateral",
+            "title": "Lateral View",
+            "fields": [
+              {"id": "excessive_forward_lean", "type": "radio", "label": "Excessive forward lean", "options": ["Yes", "No"]},
+              {"id": "low_back_arches", "type": "radio", "label": "Low back arches", "options": ["Yes", "No"]},
+              {"id": "arms_fall_forward", "type": "radio", "label": "Arms fall forward", "options": ["Yes", "No"]}
+            ]
+          }
+        ]
+      },
+      {
+        "id": "single_leg_squat",
+        "title": "Single-Leg Squat Assessment",
+        "fields": [
+          {"id": "sl_knees_move_in_left", "type": "radio", "label": "Knees move in - Left", "options": ["Yes", "No"]},
+          {"id": "sl_knees_move_in_right", "type": "radio", "label": "Knees move in - Right", "options": ["Yes", "No"]}
+        ]
+      },
+      {
+        "id": "pushing_pulling",
+        "title": "Pushing/Pulling Assessments",
+        "subsections": [
+          {
+            "id": "pushing",
+            "title": "Pushing",
+            "fields": [
+              {"id": "push_low_back_arches", "type": "radio", "label": "Low back arches", "options": ["Yes", "No"]},
+              {"id": "push_shoulders_elevate", "type": "radio", "label": "Shoulders elevate", "options": ["Yes", "No"]},
+              {"id": "push_head_juts", "type": "radio", "label": "Head juts forward", "options": ["Yes", "No"]}
+            ]
+          },
+          {
+            "id": "pulling",
+            "title": "Pulling",
+            "fields": [
+              {"id": "pull_low_back_arches", "type": "radio", "label": "Low back arches", "options": ["Yes", "No"]},
+              {"id": "pull_shoulders_elevate", "type": "radio", "label": "Shoulders elevate", "options": ["Yes", "No"]},
+              {"id": "pull_head_juts", "type": "radio", "label": "Head juts forward", "options": ["Yes", "No"]}
+            ]
+          }
+        ]
+      },
+      {
+        "id": "muscle_imbalances_summary",
+        "title": "Identified Muscle Imbalances",
+        "fields": [
+          {"id": "overactive_muscles", "type": "textarea", "label": "Overactive Muscles", "rows": 5, "placeholder": "List identified overactive muscles based on observations..."},
+          {"id": "underactive_muscles", "type": "textarea", "label": "Underactive Muscles", "rows": 5, "placeholder": "List identified underactive muscles based on observations..."}
+        ]
+      }
+    ],
+    "muscle_imbalance_reference": {
+      "feet_turn_out": {
+        "overactive": ["Soleus", "Gastrocnemius", "Hamstrings complex"],
+        "underactive": ["Anterior tibialis", "Posterior tibialis", "Gluteus maximus", "Gluteus medius"]
+      },
+      "knees_valgus": {
+        "overactive": ["Tensor fascia latae", "Adductor complex"],
+        "underactive": ["Gluteus maximus", "Gluteus medius", "Anterior tibialis", "Posterior tibialis"]
+      },
+      "excessive_forward_lean": {
+        "overactive": ["Soleus", "Gastrocnemius", "Hip flexors", "Rectus abdominis", "External obliques"],
+        "underactive": ["Hamstrings complex", "Gluteus maximus", "Lumbar extensors"]
+      },
+      "low_back_arches": {
+        "overactive": ["Hip flexors", "Lumbar extensors", "Latissimus dorsi"],
+        "underactive": ["Gluteus maximus", "Hamstrings complex", "Abdominals"]
+      },
+      "arms_fall_forward": {
+        "overactive": ["Latissimus dorsi", "Teres major", "Pectoralis major", "Pectoralis minor"],
+        "underactive": ["Middle trapezius", "Lower trapezius", "Rhomboids", "Posterior deltoids", "Rotator cuff"]
+      }
+    }
+  }

@@ -31,7 +31,7 @@ export async function GET(
     // Check if user has access to view members
     if (session?.user?.id) {
       const userAccess = await checkTeamAccess(teamId, session.user.id);
-      const team = await prisma.premiumCommunity.findUnique({
+      const team = await prisma.premium_communities.findUnique({
         where: { id: teamId },
         select: { ownerId: true, isPublic: true }
       });
@@ -42,7 +42,7 @@ export async function GET(
     }
 
     const [members, total] = await Promise.all([
-      prisma.premiumMembership.findMany({
+      prisma.premium_memberships.findMany({
         where: {
           communityId: teamId,
           status: status as any
@@ -62,7 +62,7 @@ export async function GET(
         take: limit
       }),
 
-      prisma.premiumMembership.count({
+      prisma.premium_memberships.count({
         where: {
           communityId: teamId,
           status: status as any
@@ -112,7 +112,7 @@ export async function POST(
     const { paymentMethod: _paymentMethod = 'MOLLIE', couponCode } = body;
 
     // Get team details
-    const team = await prisma.premiumCommunity.findUnique({
+    const team = await prisma.premium_communities.findUnique({
       where: { id: teamId },
       include: {
         owner: {
@@ -130,7 +130,7 @@ export async function POST(
     }
 
     // Check if user is already a member
-    const existingMembership = await prisma.premiumMembership.findUnique({
+    const existingMembership = await prisma.premium_memberships.findUnique({
       where: {
         communityId_userId: {
           communityId: teamId,
@@ -163,7 +163,7 @@ export async function POST(
         ? new Date(Date.now() + trialDays * 24 * 60 * 60 * 1000)
         : undefined;
 
-      const membership = await prisma.premiumMembership.create({
+      const membership = await prisma.premium_memberships.create({
         data: {
           communityId: teamId,
           userId: session.user.id,
@@ -176,7 +176,7 @@ export async function POST(
       });
 
       // Update team member count
-      await prisma.premiumCommunity.update({
+      await prisma.premium_communities.update({
         where: { id: teamId },
         data: { currentMembers: { increment: 1 } }
       });
@@ -211,7 +211,7 @@ export async function POST(
     });
 
     // Create pending membership
-    const membership = await prisma.premiumMembership.create({
+    const membership = await prisma.premium_memberships.create({
       data: {
         communityId: teamId,
         userId: session.user.id,
@@ -263,7 +263,7 @@ export async function DELETE(
     const { teamId } = params;
 
     // Get membership
-    const membership = await prisma.premiumMembership.findUnique({
+    const membership = await prisma.premium_memberships.findUnique({
       where: {
         communityId_userId: {
           communityId: teamId,
@@ -281,7 +281,7 @@ export async function DELETE(
     }
 
     // Cancel membership
-    await prisma.premiumMembership.update({
+    await prisma.premium_memberships.update({
       where: { id: membership.id },
       data: {
         status: 'CANCELLED',
@@ -291,7 +291,7 @@ export async function DELETE(
     });
 
     // Update team member count
-    await prisma.premiumCommunity.update({
+    await prisma.premium_communities.update({
       where: { id: teamId },
       data: { currentMembers: { decrement: 1 } }
     });
@@ -321,7 +321,7 @@ export async function DELETE(
 // ============================================================================
 
 async function checkTeamAccess(teamId: string, userId: string): Promise<boolean> {
-  const membership = await prisma.premiumMembership.findUnique({
+  const membership = await prisma.premium_memberships.findUnique({
     where: {
       communityId_userId: {
         communityId: teamId,

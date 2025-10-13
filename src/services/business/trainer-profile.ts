@@ -5,10 +5,10 @@
 
 import { prisma } from '@/core/database';
 import {
-  TrainerProfile,
-  User,
+  trainer_profiles,
+  users,
   UserRole,
-  TrainerClient,
+  trainer_clients,
   ClientStatus
 } from '@prisma/client';
 
@@ -37,12 +37,12 @@ export interface UpdateTrainerProfileData extends Partial<CreateTrainerProfileDa
   verificationLevel?: string;
 }
 
-export interface TrainerProfileWithStats extends TrainerProfile {
-  user: Pick<User, 'id' | 'name' | 'email' | 'image' | 'role'>;
+export interface TrainerProfileWithStats extends trainer_profiles {
+  user: Pick<users, 'id' | 'name' | 'email' | 'image' | 'role'>;
   _count: {
-    clients: number;
+    trainer_clients: number;
     appointments: number;
-    reviews: number;
+    trainer_reviews: number;
   };
   averageRating: number;
   monthlyEarnings: number;
@@ -67,10 +67,10 @@ export interface ClientManagementData {
 /**
  * Create a new trainer profile
  */
-export async function createTrainerProfile(data: CreateTrainerProfileData): Promise<TrainerProfile> {
+export async function createTrainerProfile(data: CreateTrainerProfileData): Promise<trainer_profiles> {
   try {
     // Validate user exists and is a trainer
-    const user = await prisma.user.findUnique({
+    const user = await prisma.users.findUnique({
       where: { id: data.userId },
       select: { id: true, role: true, email: true }
     });
@@ -84,7 +84,7 @@ export async function createTrainerProfile(data: CreateTrainerProfileData): Prom
     }
 
     // Check if profile already exists
-    const existingProfile = await prisma.trainerProfile.findUnique({
+    const existingProfile = await prisma.trainer_profiles.findUnique({
       where: { userId: data.userId }
     });
 
@@ -93,8 +93,9 @@ export async function createTrainerProfile(data: CreateTrainerProfileData): Prom
     }
 
     // Create trainer profile
-    const trainerProfile = await prisma.trainerProfile.create({
+    const trainerProfile = await prisma.trainer_profiles.create({
       data: {
+        id: crypto.randomUUID(),
         userId: data.userId,
         businessName: data.businessName ?? null,
         businessDescription: data.businessDescription ?? null,
@@ -108,6 +109,7 @@ export async function createTrainerProfile(data: CreateTrainerProfileData): Prom
         languages: data.languages || ['English'],
         availableHours: data.availableHours ?? {},
         timezone: data.timezone || 'UTC',
+        updatedAt: new Date(),
       }
     });
 
@@ -130,7 +132,7 @@ export async function createTrainerProfile(data: CreateTrainerProfileData): Prom
  */
 export async function getTrainerProfileWithStats(userId: string): Promise<TrainerProfileWithStats | null> {
   try {
-    const profile = await prisma.trainerProfile.findUnique({
+    const profile = await prisma.trainer_profiles.findUnique({
       where: { userId },
       include: {
         user: {
@@ -144,11 +146,11 @@ export async function getTrainerProfileWithStats(userId: string): Promise<Traine
         },
         _count: {
           select: {
-            clients: {
+            trainer_clients: {
               where: { status: ClientStatus.ACTIVE }
             },
             appointments: true,
-            reviews: true
+            trainer_reviews: true
           }
         }
       }
@@ -161,13 +163,13 @@ export async function getTrainerProfileWithStats(userId: string): Promise<Traine
     // Calculate additional stats
     const [ratingStats, earningsStats, activeClients] = await Promise.all([
       // Average rating
-      prisma.trainerReview.aggregate({
+      prisma.trainer_reviews.aggregate({
         where: { trainerId: profile.id },
         _avg: { rating: true }
       }),
 
       // Monthly earnings
-      prisma.payment.aggregate({
+      prisma.paymentss.aggregate({
         where: {
           trainerId: profile.id,
           status: 'COMPLETED',
@@ -179,7 +181,7 @@ export async function getTrainerProfileWithStats(userId: string): Promise<Traine
       }),
 
       // Active clients count
-      prisma.trainerClient.count({
+      prisma.trainer_clients.count({
         where: {
           trainerId: profile.id,
           status: ClientStatus.ACTIVE
@@ -206,9 +208,9 @@ export async function getTrainerProfileWithStats(userId: string): Promise<Traine
 export async function updateTrainerProfile(
   userId: string,
   data: UpdateTrainerProfileData
-): Promise<TrainerProfile> {
+): Promise<trainer_profiles> {
   try {
-    const profile = await prisma.trainerProfile.findUnique({
+    const profile = await prisma.trainer_profiles.findUnique({
       where: { userId }
     });
 
@@ -216,7 +218,7 @@ export async function updateTrainerProfile(
       throw new Error('Trainer profile not found');
     }
 
-    const updatedProfile = await prisma.trainerProfile.update({
+    const updatedProfile = await prisma.trainer_profiles.update({
       where: { userId },
       data: {
         ...data,
@@ -248,10 +250,10 @@ export async function updateTrainerProfile(
 export async function addClientToTrainer(
   trainerId: string,
   data: ClientManagementData
-): Promise<TrainerClient> {
+): Promise<trainer_clients> {
   try {
     // Validate trainer profile exists
-    const trainerProfile = await prisma.trainerProfile.findUnique({
+    const trainerProfile = await prisma.trainer_profiles.findUnique({
       where: { id: trainerId }
     });
 
@@ -260,7 +262,7 @@ export async function addClientToTrainer(
     }
 
     // Validate client exists
-    const client = await prisma.user.findUnique({
+    const client = await prisma.users.findUnique({
       where: { id: data.clientId },
       select: { id: true, role: true, email: true }
     });
@@ -270,7 +272,7 @@ export async function addClientToTrainer(
     }
 
     // Check if relationship already exists
-    const existingRelationship = await prisma.trainerClient.findUnique({
+    const existingRelationship = await prisma.trainer_clients.findUnique({
       where: {
         trainerId_clientId: {
           trainerId,
@@ -284,8 +286,9 @@ export async function addClientToTrainer(
     }
 
     // Create trainer-client relationship
-    const trainerClient = await prisma.trainerClient.create({
+    const trainerClient = await prisma.trainer_clients.create({
       data: {
+        id: crypto.randomUUID(),
         trainerId,
         clientId: data.clientId,
         packageId: data.packageId ?? null,
@@ -295,12 +298,13 @@ export async function addClientToTrainer(
         emergencyContact: data.emergencyContact ?? null,
         medicalConditions: data.medicalConditions || [],
         preferences: data.preferences || {},
-        status: ClientStatus.ACTIVE
+        status: ClientStatus.ACTIVE,
+        updatedAt: new Date(),
       }
     });
 
     // Update trainer's active client count
-    await prisma.trainerProfile.update({
+    await prisma.trainer_profiles.update({
       where: { id: trainerId },
       data: {
         activeClients: {
@@ -338,11 +342,11 @@ export async function getTrainerClients(
     limit?: number;
   } = {}
 ): Promise<{
-  clients: (TrainerClient & {
-    client: Pick<User, 'id' | 'name' | 'email' | 'image'>;
+  clients: (trainer_clients & {
+    client: Pick<users, 'id' | 'name' | 'email' | 'image'>;
     _count: {
       appointments: number;
-      progressReports: number;
+      progress_reports: number;
     };
   })[];
   total: number;
@@ -369,7 +373,7 @@ export async function getTrainerClients(
 
     // Get clients with counts
     const [clients, total] = await Promise.all([
-      prisma.trainerClient.findMany({
+      prisma.trainer_clients.findMany({
         where,
         include: {
           client: {
@@ -383,7 +387,7 @@ export async function getTrainerClients(
           _count: {
             select: {
               appointments: true,
-              progressReports: true
+              progress_reports: true
             }
           }
         },
@@ -392,7 +396,7 @@ export async function getTrainerClients(
         take: limit
       }),
 
-      prisma.trainerClient.count({ where })
+      prisma.trainer_clients.count({ where })
     ]);
 
     return {
@@ -414,9 +418,9 @@ export async function getTrainerClients(
 export async function updateTrainerClient(
   relationshipId: string,
   data: Partial<ClientManagementData & { status: ClientStatus }>
-): Promise<TrainerClient> {
+): Promise<trainer_clients> {
   try {
-    const relationship = await prisma.trainerClient.findUnique({
+    const relationship = await prisma.trainer_clients.findUnique({
       where: { id: relationshipId }
     });
 
@@ -424,7 +428,7 @@ export async function updateTrainerClient(
       throw new Error('Trainer-client relationship not found');
     }
 
-    const updatedRelationship = await prisma.trainerClient.update({
+    const updatedRelationship = await prisma.trainer_clients.update({
       where: { id: relationshipId },
       data: {
         ...data,
@@ -434,7 +438,7 @@ export async function updateTrainerClient(
 
     // If status changed to inactive, update trainer's active client count
     if (data.status && data.status !== ClientStatus.ACTIVE && relationship.status === ClientStatus.ACTIVE) {
-      await prisma.trainerProfile.update({
+      await prisma.trainer_profiles.update({
         where: { id: relationship.trainerId },
         data: {
           activeClients: {
@@ -446,7 +450,7 @@ export async function updateTrainerClient(
 
     // If status changed to active, update trainer's active client count
     if (data.status === ClientStatus.ACTIVE && relationship.status !== ClientStatus.ACTIVE) {
-      await prisma.trainerProfile.update({
+      await prisma.trainer_profiles.update({
         where: { id: relationship.trainerId },
         data: {
           activeClients: {
@@ -510,7 +514,7 @@ export async function getTrainerDashboardStats(trainerId: string): Promise<{
       sessionStats
     ] = await Promise.all([
       // Basic trainer profile
-      prisma.trainerProfile.findUnique({
+      prisma.trainer_profiles.findUnique({
         where: { id: trainerId },
         select: {
           totalClients: true,
@@ -522,12 +526,12 @@ export async function getTrainerDashboardStats(trainerId: string): Promise<{
       }),
 
       // Active clients
-      prisma.trainerClient.count({
+      prisma.trainer_clients.count({
         where: { trainerId, status: ClientStatus.ACTIVE }
       }),
 
       // Upcoming appointments (next 7 days)
-      prisma.appointment.count({
+      prisma.appointmentss.count({
         where: {
           trainerId,
           scheduledAt: {
@@ -539,7 +543,7 @@ export async function getTrainerDashboardStats(trainerId: string): Promise<{
       }),
 
       // Pending progress reports
-      prisma.progressReport.count({
+      prisma.progress_reports.count({
         where: {
           trainerId,
           isShared: false
@@ -547,7 +551,7 @@ export async function getTrainerDashboardStats(trainerId: string): Promise<{
       }),
 
       // New clients this month
-      prisma.trainerClient.count({
+      prisma.trainer_clients.count({
         where: {
           trainerId,
           createdAt: {
@@ -557,7 +561,7 @@ export async function getTrainerDashboardStats(trainerId: string): Promise<{
       }),
 
       // Completed sessions this month
-      prisma.appointment.count({
+      prisma.appointmentss.count({
         where: {
           trainerId,
           status: 'COMPLETED',
@@ -568,7 +572,7 @@ export async function getTrainerDashboardStats(trainerId: string): Promise<{
       }),
 
       // Last month's earnings for comparison
-      prisma.payment.aggregate({
+      prisma.paymentss.aggregate({
         where: {
           trainerId,
           status: 'COMPLETED',
@@ -581,7 +585,7 @@ export async function getTrainerDashboardStats(trainerId: string): Promise<{
       }),
 
       // Last month's client count
-      prisma.trainerClient.count({
+      prisma.trainer_clients.count({
         where: {
           trainerId,
           createdAt: {
@@ -591,7 +595,7 @@ export async function getTrainerDashboardStats(trainerId: string): Promise<{
       }),
 
       // Session completion stats
-      prisma.appointment.groupBy({
+      prisma.appointmentss.groupBy({
         by: ['status'],
         where: {
           trainerId,
@@ -608,7 +612,7 @@ export async function getTrainerDashboardStats(trainerId: string): Promise<{
     }
 
     // Calculate review stats
-    const reviewStats = await prisma.trainerReview.aggregate({
+    const reviewStats = await prisma.trainer_reviews.aggregate({
       where: { trainerId },
       _avg: { rating: true },
       _count: true
@@ -623,8 +627,8 @@ export async function getTrainerDashboardStats(trainerId: string): Promise<{
       ? ((trainerProfile.monthlyEarnings - (lastMonthEarnings._sum.trainerEarnings || 0)) / (lastMonthEarnings._sum.trainerEarnings || 1)) * 100
       : 100;
 
-    const totalSessions = sessionStats.reduce((sum, stat) => sum + stat._count, 0);
-    const completedSessions = sessionStats.find(stat => stat.status === 'COMPLETED')?._count || 0;
+    const totalSessions = sessionStats.reduce((sum: number, stat: { _count: number }) => sum + stat._count, 0);
+    const completedSessions = sessionStats.find((stat: { status: string; _count: number }) => stat.status === 'COMPLETED')?._count || 0;
     const sessionCompletion = totalSessions > 0 ? (completedSessions / totalSessions) * 100 : 0;
 
     return {
@@ -660,7 +664,7 @@ export async function getTrainerDashboardStats(trainerId: string): Promise<{
 // ============================================================================
 
 export type {
-  TrainerProfile,
-  TrainerClient,
+  trainer_profiles as TrainerProfile,
+  trainer_clients as TrainerClient,
   ClientStatus
 };

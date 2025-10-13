@@ -201,7 +201,7 @@ async function handleGetReports(session: any, searchParams: URLSearchParams) {
   const limit = parseInt(searchParams.get('limit') || '20');
 
   // Get trainer profile
-  const trainerProfile = await prisma.trainerProfile.findUnique({
+  const trainerProfile = await prisma.trainer_profiles.findUnique({
     where: { userId: session.user.id }
   });
 
@@ -321,7 +321,7 @@ async function handleSearchAccredited(searchParams: URLSearchParams) {
  * Handle getting trainer statistics
  */
 async function handleGetTrainerStats(userId: string) {
-  const trainerProfile = await prisma.trainerProfile.findUnique({
+  const trainerProfile = await prisma.trainer_profiles.findUnique({
     where: { userId },
     include: {
       _count: {
@@ -386,7 +386,7 @@ async function handleCreateReport(userId: string, body: any) {
   }
 
   // Get trainer profile
-  const trainerProfile = await prisma.trainerProfile.findUnique({
+  const trainerProfile = await prisma.trainer_profiles.findUnique({
     where: { userId }
   });
 
@@ -395,7 +395,7 @@ async function handleCreateReport(userId: string, body: any) {
   }
 
   // Verify trainer-client relationship
-  const trainerClient = await prisma.trainerClient.findUnique({
+  const trainerClient = await prisma.trainer_clients.findUnique({
     where: {
       trainerId_clientId: {
         trainerId: trainerProfile.id,
@@ -421,7 +421,7 @@ async function handleCreateReport(userId: string, body: any) {
     achievements: validatedData.achievements,
     metrics: validatedData.metrics,
     workoutStats: validatedData.workoutStats,
-    recommendations: validatedData.recommendations,
+    recommendations: validatedData.recommendations || '',
     nextGoals: validatedData.nextGoals
   };
 
@@ -550,7 +550,7 @@ async function handleClientFeedback(userId: string, body: any) {
   const updatedReport = await prisma.progressReport.update({
     where: { id: reportId },
     data: {
-      feedbackFromClient,
+      feedbackFromClient: feedbackFromClient || null,
       rating: rating ? Math.min(Math.max(rating, 1), 5) : null,
       updatedAt: new Date()
     }

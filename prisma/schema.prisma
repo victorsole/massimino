@@ -7,115 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id                       String            @id @default(cuid())
-  email                    String            @unique
-  name                     String?
-  image                    String?
-  password                 String?
-  role                     UserRole          @default(CLIENT)
-  status                   UserStatus        @default(ACTIVE)
-  googleId                 String?           @unique
-  linkedinId               String?           @unique
-  facebookId               String?           @unique
-  emailVerified            DateTime?
-  acceptDMs                Boolean           @default(false)
-  onlyTrainerDMs           Boolean           @default(true)
-  profileVisibility        String            @default("PUBLIC")
-  showRealName             Boolean           @default(false)
-  instagramUrl             String?
-  tiktokUrl                String?
-  facebookUrl              String?
-  youtubeUrl               String?
-  linkedinUrl              String?
-  showSocialMedia          Boolean           @default(true)
-  fitnessGoals             String[]          @default([])
-  experienceLevel          String            @default("BEGINNER")
-  preferredWorkoutTypes    String[]          @default([])
-  availableWorkoutDays     String[]          @default([])
-  preferredWorkoutDuration String?           @default("30-60")
-  city                     String?
-  state                    String?
-  country                  String?
-  latitude                 Float?
-  longitude                Float?
-  showLocation             Boolean           @default(false)
-  locationVisibility       String            @default("NONE")
-  enableDiscovery          Boolean           @default(false)
-  trainerVerified          Boolean           @default(false)
-  trainerBio               String?
-  trainerCredentials       String?
-  trainerRating            Float?            @default(0.0)
-  reputationScore          Int               @default(100)
-  warningCount             Int               @default(0)
-  createdAt                DateTime          @default(now())
-  updatedAt                DateTime          @updatedAt
-  lastLoginAt              DateTime?
-  suspendedUntil           DateTime?
-  accounts                 Account[]
-  comments                 Comment[]
-  communitiesOwned         Community[]       @relation("CommunityOwner")
-  communityMemberships     CommunityMember[]
-  moderationLogs           ModerationLog[]
-  posts                    Post[]
-  reportsReceived          SafetyReport[]    @relation("ReportedUser")
-  reportsSubmitted         SafetyReport[]    @relation("ReportSubmitter")
-  safetySettings           SafetySettings?
-  sessions                 Session[]
-  violations               UserViolation[]
-  coachWorkoutLogs         WorkoutLogEntry[] @relation("CoachWorkoutLogs")
-  workoutLogs              WorkoutLogEntry[] @relation("UserWorkoutLogs")
-  coachWorkoutSessions     WorkoutSession[]  @relation("CoachWorkoutSessions")
-  workoutSessions          WorkoutSession[]  @relation("UserWorkoutSessions")
-  createdTemplates         WorkoutTemplate[] @relation("CreatedTemplates")
-  createdPrograms          ProgramTemplate[] @relation("CreatedPrograms")
-  programSubscriptions     ProgramSubscription[] @relation("ProgramSubscriptions")
-  templatePurchases        TemplatePurchase[] @relation("TemplatePurchases")
-  programPurchases         ProgramPurchase[] @relation("ProgramPurchases")
-  templateRatings          TemplateRating[] @relation("TemplateRatings")
-  programRatings           ProgramRating[] @relation("ProgramRatings")
-  progressMetrics          ProgressMetric[] @relation("ProgressMetrics")
-  personalRecords          PersonalRecord[] @relation("PersonalRecords")
-  workoutAnalytics         WorkoutAnalytics[] @relation("WorkoutAnalytics")
-  chatParticipants         ChatRoomParticipant[] @relation("ChatParticipants")
-  sentMessages             ChatMessage[] @relation("SentMessages")
-  trainerSessions          LiveWorkoutSession[] @relation("TrainerSessions")
-  sessionParticipants      LiveSessionParticipant[] @relation("SessionParticipants")
-  workoutProgress          WorkoutProgress[] @relation("WorkoutProgress")
-  notifications            PushNotification[] @relation("Notifications")
-  deviceTokens             DeviceToken[] @relation("DeviceTokens")
-  healthData               HealthData[] @relation("HealthData")
-
-  // Phase 5 Relations
-  trainerProfile          TrainerProfile?         @relation("TrainerProfile")
-  clientRelationships     TrainerClient[]         @relation("ClientRelationships")
-  clientAppointments      Appointment[]           @relation("ClientAppointments")
-  userPayments            Payment[]               @relation("UserPayments")
-  clientReports           ProgressReport[]        @relation("ClientReports")
-  trainerReviews          TrainerReview[]         @relation("TrainerReviews")
-  ownedPremiumCommunities PremiumCommunity[]      @relation("OwnedPremiumCommunities")
-  premiumMemberships      PremiumMembership[]     @relation("PremiumMemberships")
-  classParticipations     ClassParticipant[]      @relation("ClassParticipations")
-  classReviews            ClassReview[]           @relation("ClassReviews")
-  createdChallenges       Challenge[]             @relation("CreatedChallenges")
-  challengeParticipations ChallengeParticipant[]  @relation("ChallengeParticipations")
-  leaderboardPositions    ChallengeLeaderboard[]  @relation("LeaderboardPositions")
-  challengePostsAuthored  ChallengePost[]         @relation("ChallengePostsAuthored")
-  challengeCommentsAuthored ChallengePostComment[] @relation("ChallengeCommentsAuthored")
-  challengePostLikes      ChallengePostLike[]     @relation("ChallengePostLikes")
-  userSubscriptions       Subscription[]          @relation("UserSubscriptions")
-  equipmentReviews        EquipmentReview[]       @relation("EquipmentReviews")
-  userEquipmentRecs       UserEquipmentRecommendation[] @relation("UserEquipmentRecs")
-  userNutritionPlans      NutritionPlan[]         @relation("UserNutritionPlans")
-  createdNutritionPlans   NutritionPlan[]         @relation("CreatedNutritionPlans")
-  nutritionLogs           NutritionLog[]          @relation("NutritionLogs")
-  communityPostsAuthored  CommunityPost[]         @relation("CommunityPostsAuthored")
-
-  @@map("users")
-}
-
-model Account {
-  id                String  @id @default(cuid())
+model accounts {
+  id                String  @id
   userId            String
   type              String
   provider          String
@@ -127,33 +20,800 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  users             users   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-  @@map("accounts")
 }
 
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
+model accredited_providers {
+  id             String   @id @default(uuid())
+  name           String
+  country        String
+  qualifications String[]
+  profilePath    String?
+  profileUrl     String?
+  slug           String?  @unique
+  source         String   @default("EREPS")
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([name, country])
+  @@index([country])
+}
+
+model appointments {
+  id                 String            @id
+  trainerId          String
+  clientId           String
+  trainerClientId    String?
+  title              String
+  description        String?
+  scheduledAt        DateTime
+  duration           Int               @default(60)
+  status             AppointmentStatus @default(SCHEDULED)
+  type               AppointmentType   @default(PERSONAL_TRAINING)
+  location           String?
+  isVirtual          Boolean           @default(false)
+  meetingLink        String?
+  price              Float?
+  currency           String            @default("USD")
+  isPaid             Boolean           @default(false)
+  paymentId          String?
+  cancellationReason String?
+  cancelledAt        DateTime?
+  cancelledBy        String?
+  completedAt        DateTime?
+  trainerNotes       String?
+  clientNotes        String?
+  rating             Int?
+  feedback           String?
+  noShowFee          Float?
+  reminderSent       Boolean           @default(false)
+  workoutSessionId   String?           @unique
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime
+  users              users             @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  payments           payments?         @relation(fields: [paymentId], references: [id])
+  trainer_clients    trainer_clients?  @relation(fields: [trainerClientId], references: [id])
+  trainer_profiles   trainer_profiles  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  workout_sessions   workout_sessions? @relation(fields: [workoutSessionId], references: [id])
+
+  @@index([clientId, scheduledAt])
+  @@index([trainerId, scheduledAt])
+}
+
+model assessments {
+  id                                 String             @id
+  trainerId                          String
+  clientId                           String
+  type                               String
+  status                             String             @default("draft")
+  data                               Json
+  primaryGoal                        String?
+  experienceYears                    Int?
+  limitations                        String[]           @default([])
+  squatScore                         Int?
+  pushScore                          Int?
+  pullScore                          Int?
+  createdAt                          DateTime           @default(now())
+  updatedAt                          DateTime
+  users_assessments_clientIdTousers  users              @relation("assessments_clientIdTousers", fields: [clientId], references: [id], onDelete: Cascade)
+  users_assessments_trainerIdTousers users              @relation("assessments_trainerIdTousers", fields: [trainerId], references: [id], onDelete: Cascade)
+  workout_sessions                   workout_sessions[]
+
+  @@index([trainerId, clientId])
+  @@index([type, status])
+}
+
+// ============================================================================
+// AI Chat (Massichat)
+// ============================================================================
+
+model ai_chat_sessions {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String?
+  status    String   @default("active") // active, completed, archived
+  context   Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users             users             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ai_chat_messages  ai_chat_messages[]
+  ai_workout_proposals ai_workout_proposals[]
+
+  @@index([userId, status])
+  @@index([createdAt])
+}
+
+model ai_chat_messages {
+  id        String   @id @default(uuid())
+  sessionId String
+  role      String   // user, assistant, system
+  content   String   @db.Text
+  metadata  Json?
+  aiProvider String?
+  createdAt DateTime @default(now())
+
+  ai_chat_sessions ai_chat_sessions @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, createdAt])
+}
+
+model ai_workout_proposals {
+  id           String   @id @default(uuid())
+  sessionId    String
   userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status       String   @default("pending") // pending, accepted, rejected, modified
+  workoutData  Json
+  aiReasoning  String?  @db.Text
+  createdAt    DateTime @default(now())
+  acceptedAt   DateTime?
+  workoutLogId String?
 
-  @@map("sessions")
+  users            users            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ai_chat_sessions ai_chat_sessions @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@index([sessionId])
 }
 
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
+model fitness_knowledge_base {
+  id           String   @id @default(uuid())
+  documentName String
+  content      String   @db.Text
+  embedding    Float[]
+  metadata     Json?
+  createdAt    DateTime @default(now())
 
-  @@unique([identifier, token])
-  @@map("verificationtokens")
+  @@index([documentName])
 }
 
-model ModerationLog {
-  id             String           @id @default(cuid())
+model challenge_leaderboard {
+  id          String     @id
+  challengeId String
+  userId      String
+  rank        Int
+  score       Float
+  metrics     Json       @default("{}")
+  lastUpdated DateTime   @default(now())
+  challenges  challenges @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  users       users      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([challengeId, rank])
+  @@unique([challengeId, userId])
+  @@index([challengeId, rank])
+}
+
+model challenge_participants {
+  id                 String               @id
+  challengeId        String
+  userId             String
+  status             ParticipantStatus    @default(REGISTERED)
+  joinedAt           DateTime             @default(now())
+  completedAt        DateTime?
+  currentProgress    Json?                @default("{}")
+  finalResults       Json?                @default("{}")
+  rank               Int?
+  isVerified         Boolean              @default(false)
+  paymentId          String?
+  notes              String?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime
+  challenges         challenges           @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  users              users                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  challenge_progress challenge_progress[]
+
+  @@unique([challengeId, userId])
+  @@index([challengeId, rank])
+}
+
+model challenge_participations {
+  id              String            @id
+  challengeId     String
+  userId          String
+  status          ParticipantStatus @default(REGISTERED)
+  joinedAt        DateTime          @default(now())
+  completedAt     DateTime?
+  currentProgress Json?             @default("{}")
+  finalResults    Json?             @default("{}")
+  rank            Int?
+  paymentStatus   PaymentStatus     @default(PENDING)
+  paymentId       String?
+  isVerified      Boolean           @default(false)
+  verifiedBy      String?
+  notes           String?           @db.VarChar(500)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime
+  team_challenges team_challenges   @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  users           users             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([challengeId, userId])
+  @@index([challengeId, status])
+  @@index([userId, status])
+}
+
+model challenge_post_comments {
+  id              String          @id
+  postId          String
+  authorId        String
+  content         String
+  createdAt       DateTime        @default(now())
+  users           users           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  challenge_posts challenge_posts @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId, createdAt])
+}
+
+model challenge_post_likes {
+  id              String          @id
+  postId          String
+  userId          String
+  createdAt       DateTime        @default(now())
+  challenge_posts challenge_posts @relation(fields: [postId], references: [id], onDelete: Cascade)
+  users           users           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+}
+
+model challenge_posts {
+  id                      String                    @id
+  challengeId             String
+  authorId                String
+  content                 String
+  images                  String[]                  @default([])
+  metrics                 Json?                     @default("{}")
+  likesCount              Int                       @default(0)
+  commentsCount           Int                       @default(0)
+  isHighlighted           Boolean                   @default(false)
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime
+  challenge_post_comments challenge_post_comments[]
+  challenge_post_likes    challenge_post_likes[]
+  users                   users                     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  challenges              challenges                @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+
+  @@index([challengeId, createdAt])
+}
+
+model challenge_progress {
+  id                     String                 @id
+  participantId          String
+  date                   DateTime               @db.Date
+  metrics                Json                   @default("{}")
+  notes                  String?
+  proofImages            String[]               @default([])
+  isVerified             Boolean                @default(false)
+  verifiedBy             String?
+  createdAt              DateTime               @default(now())
+  challenge_participants challenge_participants @relation(fields: [participantId], references: [id], onDelete: Cascade)
+
+  @@index([participantId, date])
+}
+
+model challenges {
+  id                     String                   @id
+  title                  String
+  description            String
+  creatorId              String
+  type                   ChallengeType            @default(WORKOUT_GOAL)
+  category               String
+  difficulty             String                   @default("BEGINNER")
+  startDate              DateTime
+  endDate                DateTime
+  isPublic               Boolean                  @default(true)
+  maxParticipants        Int?
+  currentParticipants    Int                      @default(0)
+  entryFee               Float?                   @default(0.0)
+  currency               String                   @default("USD")
+  prizePool              Float?                   @default(0.0)
+  rules                  String
+  metrics                Json                     @default("{}")
+  rewards                Json?                    @default("[]")
+  status                 ChallengeStatus          @default(UPCOMING)
+  coverImage             String?
+  tags                   String[]                 @default([])
+  isVerified             Boolean                  @default(false)
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime
+  challenge_leaderboard  challenge_leaderboard[]
+  challenge_participants challenge_participants[]
+  challenge_posts        challenge_posts[]
+  users                  users                    @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@index([category, status])
+  @@index([creatorId, status])
+  @@index([startDate, endDate])
+}
+
+model chat_messages {
+  id         String      @id
+  roomId     String
+  senderId   String
+  content    String
+  type       MessageType @default(TEXT)
+  metadata   Json?
+  editedAt   DateTime?
+  deletedAt  DateTime?
+  createdAt  DateTime    @default(now())
+  chat_rooms chat_rooms  @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  users      users       @relation(fields: [senderId], references: [id])
+
+  @@index([roomId, createdAt])
+}
+
+model chat_room_participants {
+  id         String     @id
+  roomId     String
+  userId     String
+  role       String     @default("MEMBER")
+  joinedAt   DateTime   @default(now())
+  leftAt     DateTime?
+  isActive   Boolean    @default(true)
+  chat_rooms chat_rooms @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  users      users      @relation(fields: [userId], references: [id])
+
+  @@unique([roomId, userId])
+}
+
+model chat_rooms {
+  id                     String                   @id
+  name                   String?
+  type                   ChatRoomType             @default(DIRECT)
+  isActive               Boolean                  @default(true)
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime
+  chat_messages          chat_messages[]
+  chat_room_participants chat_room_participants[]
+}
+
+model class_participants {
+  id                 String            @id
+  classId            String
+  userId             String
+  status             ParticipantStatus @default(REGISTERED)
+  paymentStatus      PaymentStatus     @default(PENDING)
+  paymentId          String?
+  joinedAt           DateTime?
+  leftAt             DateTime?
+  attendanceDuration Int?
+  rating             Int?
+  feedback           String?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime
+  group_classes      group_classes     @relation(fields: [classId], references: [id], onDelete: Cascade)
+  users              users             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([classId, userId])
+  @@index([userId, status])
+}
+
+model class_reviews {
+  id               String        @id
+  classId          String
+  userId           String
+  rating           Int
+  review           String?
+  wouldRecommend   Boolean       @default(true)
+  difficultyRating Int?
+  instructorRating Int?
+  isPublic         Boolean       @default(true)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime
+  group_classes    group_classes @relation(fields: [classId], references: [id], onDelete: Cascade)
+  users            users         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([classId, userId])
+  @@index([classId, rating])
+}
+
+model client_payments {
+  id                                     String            @id
+  trainerId                              String
+  clientId                               String
+  amount                                 Int
+  description                            String            @db.VarChar(200)
+  type                                   ClientPaymentType
+  relatedId                              String?
+  status                                 PaymentStatus     @default(PENDING)
+  dueDate                                DateTime?
+  paidAt                                 DateTime?
+  molliePaymentId                        String?
+  mollieCustomerId                       String?
+  paymentUrl                             String?           @db.VarChar(500)
+  refundAmount                           Int               @default(0)
+  refundReason                           String?           @db.VarChar(200)
+  refundedAt                             DateTime?
+  metadata                               Json?             @default("{}")
+  reminderSentAt                         DateTime?
+  createdAt                              DateTime          @default(now())
+  updatedAt                              DateTime
+  users_client_payments_clientIdTousers  users             @relation("client_payments_clientIdTousers", fields: [clientId], references: [id], onDelete: Cascade)
+  users_client_payments_trainerIdTousers users             @relation("client_payments_trainerIdTousers", fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@index([clientId, status])
+  @@index([status, dueDate])
+  @@index([trainerId, status])
+}
+
+model comments {
+  id                  String               @id
+  content             String
+  authorId            String
+  postId              String?
+  parentId            String?
+  status              PostStatus           @default(PUBLISHED)
+  moderatedAt         DateTime?
+  likesCount          Int                  @default(0)
+  reportsCount        Int                  @default(0)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime
+  workoutLogId        String?
+  users               users                @relation(fields: [authorId], references: [id])
+  comments            comments?            @relation("commentsTocomments", fields: [parentId], references: [id])
+  other_comments      comments[]           @relation("commentsTocomments")
+  posts               posts?               @relation(fields: [postId], references: [id])
+  workout_log_entries workout_log_entries? @relation(fields: [workoutLogId], references: [id])
+
+  @@index([authorId, status])
+  @@index([postId, createdAt])
+  @@index([workoutLogId, createdAt])
+}
+
+model communities {
+  id                String              @id
+  name              String
+  description       String?
+  type              CommunityType       @default(PUBLIC)
+  ownerId           String
+  moderationEnabled Boolean             @default(true)
+  requireApproval   Boolean             @default(false)
+  memberCount       Int                 @default(0)
+  postCount         Int                 @default(0)
+  isActive          Boolean             @default(true)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime
+  users             users               @relation(fields: [ownerId], references: [id])
+  community_members community_members[]
+  posts             posts[]
+
+  @@index([ownerId, type])
+}
+
+model community_members {
+  id          String      @id
+  userId      String
+  communityId String
+  role        String      @default("MEMBER")
+  joinedAt    DateTime    @default(now())
+  isActive    Boolean     @default(true)
+  communities communities @relation(fields: [communityId], references: [id])
+  users       users       @relation(fields: [userId], references: [id])
+
+  @@unique([userId, communityId])
+}
+
+model community_posts {
+  id                  String              @id
+  communityId         String
+  authorId            String
+  title               String?
+  content             String
+  images              String[]            @default([])
+  isPinned            Boolean             @default(false)
+  likesCount          Int                 @default(0)
+  commentsCount       Int                 @default(0)
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime
+  users               users               @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  premium_communities premium_communities @relation(fields: [communityId], references: [id], onDelete: Cascade)
+
+  @@index([communityId, createdAt])
+}
+
+model device_tokens {
+  id        String         @id
+  userId    String
+  token     String         @unique
+  platform  DevicePlatform
+  isActive  Boolean        @default(true)
+  lastUsed  DateTime       @default(now())
+  createdAt DateTime       @default(now())
+  users     users          @relation(fields: [userId], references: [id])
+
+  @@index([userId, isActive])
+}
+
+model equipment_recommendations {
+  id                             String                           @id
+  name                           String
+  description                    String
+  category                       String
+  brand                          String?
+  price                          Float?
+  currency                       String                           @default("USD")
+  affiliateUrl                   String
+  affiliateCode                  String?
+  imageUrl                       String?
+  rating                         Float?                           @default(0.0)
+  reviewCount                    Int                              @default(0)
+  features                       String[]                         @default([])
+  specifications                 Json?                            @default("{}")
+  exerciseTypes                  String[]                         @default([])
+  isActive                       Boolean                          @default(true)
+  isPremium                      Boolean                          @default(false)
+  clickCount                     Int                              @default(0)
+  conversionCount                Int                              @default(0)
+  createdAt                      DateTime                         @default(now())
+  updatedAt                      DateTime
+  equipment_reviews              equipment_reviews[]
+  user_equipment_recommendations user_equipment_recommendations[]
+
+  @@index([category, isActive])
+  @@index([rating, reviewCount])
+}
+
+model equipment_reviews {
+  id                        String                    @id
+  equipmentId               String
+  userId                    String
+  rating                    Int
+  title                     String?
+  review                    String
+  pros                      String[]                  @default([])
+  cons                      String[]                  @default([])
+  wouldRecommend            Boolean                   @default(true)
+  purchaseVerified          Boolean                   @default(false)
+  helpfulVotes              Int                       @default(0)
+  images                    String[]                  @default([])
+  usageMonths               Int?
+  createdAt                 DateTime                  @default(now())
+  updatedAt                 DateTime
+  equipment_recommendations equipment_recommendations @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  users                     users                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([equipmentId, userId])
+  @@index([equipmentId, rating])
+}
+
+model exercise_variations {
+  id           String    @id
+  exerciseId   String
+  name         String
+  description  String?
+  difficulty   String    @default("BEGINNER")
+  videoUrl     String?
+  imageUrl     String?
+  instructions String?
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime
+  exercises    exercises @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+
+  @@index([exerciseId, difficulty])
+}
+
+model exercises {
+  id                         String                       @id
+  name                       String                       @unique
+  slug                       String?                      @unique
+  category                   String
+  muscleGroups               String[]
+  equipment                  String[]
+  instructions               String?
+  videoUrl                   String?
+  imageUrl                   String?
+  isActive                   Boolean                      @default(true)
+  difficulty                 String                       @default("BEGINNER")
+  safetyNotes                String?
+  usageCount                 Int                          @default(0)
+  lastUsed                   DateTime?
+  createdAt                  DateTime                     @default(now())
+  updatedAt                  DateTime
+  commonMistakes             String[]                     @default([])
+  createdBy                  String?
+  formCues                   String[]                     @default([])
+  isCustom                   Boolean                      @default(false)
+  exercise_variations        exercise_variations[]
+  personal_records           personal_records[]
+  team_workout_exercises     team_workout_exercises[]
+  workout_log_entries        workout_log_entries[]
+  workout_template_exercises workout_template_exercises[]
+
+  @@index([category])
+  @@index([category, muscleGroups])
+  @@index([createdBy, isCustom])
+  @@index([isActive, difficulty])
+  @@index([name])
+}
+
+model group_classes {
+  id                  String               @id
+  trainerId           String
+  communityId         String?
+  title               String
+  description         String
+  category            String
+  difficulty          String               @default("BEGINNER")
+  duration            Int                  @default(60)
+  maxParticipants     Int                  @default(20)
+  currentParticipants Int                  @default(0)
+  price               Float?
+  currency            String               @default("USD")
+  scheduledAt         DateTime
+  endTime             DateTime
+  timezone            String               @default("UTC")
+  isRecurring         Boolean              @default(false)
+  recurrencePattern   String?
+  location            String?
+  isVirtual           Boolean              @default(true)
+  meetingLink         String?
+  equipment           String[]             @default([])
+  tags                String[]             @default([])
+  status              ClassStatus          @default(SCHEDULED)
+  cancelReason        String?
+  recordingUrl        String?
+  isRecorded          Boolean              @default(false)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime
+  class_participants  class_participants[]
+  class_reviews       class_reviews[]
+  premium_communities premium_communities? @relation(fields: [communityId], references: [id])
+  trainer_profiles    trainer_profiles     @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@index([category, scheduledAt])
+  @@index([trainerId, scheduledAt])
+}
+
+model health_data {
+  id         String         @id
+  userId     String
+  dataType   HealthDataType
+  value      Float
+  unit       String
+  source     String         @default("MANUAL")
+  metadata   Json?
+  recordedAt DateTime
+  syncedAt   DateTime?
+  createdAt  DateTime       @default(now())
+  users      users          @relation(fields: [userId], references: [id])
+
+  @@index([userId, dataType, recordedAt])
+}
+
+model invitations {
+  id                                  String           @id @default(uuid())
+  code                                String           @unique @default(uuid())
+  email                               String
+  role                                UserRole         @default(CLIENT)
+  status                              InvitationStatus @default(PENDING)
+  message                             String?
+  expiresAt                           DateTime
+  acceptedAt                          DateTime?
+  createdAt                           DateTime         @default(now())
+  updatedAt                           DateTime         @updatedAt
+  senderId                            String
+  receiverId                          String?
+  users_invitations_receiverIdTousers users?           @relation("invitations_receiverIdTousers", fields: [receiverId], references: [id])
+  users_invitations_senderIdTousers   users            @relation("invitations_senderIdTousers", fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([email])
+  @@index([expiresAt])
+  @@index([status])
+}
+
+model live_session_participants {
+  id                    String                @id
+  sessionId             String
+  userId                String
+  joinedAt              DateTime              @default(now())
+  leftAt                DateTime?
+  isActive              Boolean               @default(true)
+  live_workout_sessions live_workout_sessions @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  users                 users                 @relation(fields: [userId], references: [id])
+
+  @@unique([sessionId, userId])
+}
+
+model live_workout_sessions {
+  id                        String                      @id
+  trainerId                 String
+  name                      String
+  description               String?
+  scheduledAt               DateTime
+  startedAt                 DateTime?
+  endedAt                   DateTime?
+  duration                  Int?
+  maxParticipants           Int                         @default(10)
+  isActive                  Boolean                     @default(true)
+  sessionData               Json?
+  createdAt                 DateTime                    @default(now())
+  updatedAt                 DateTime
+  live_session_participants live_session_participants[]
+  users                     users                       @relation(fields: [trainerId], references: [id])
+  workout_progress          workout_progress[]
+
+  @@index([trainerId, scheduledAt])
+}
+
+model meal_plans {
+  id              String          @id
+  nutritionPlanId String
+  dayOfWeek       Int
+  mealType        String
+  mealOrder       Int             @default(1)
+  name            String
+  description     String?
+  calories        Int?
+  protein         Float?
+  carbs           Float?
+  fat             Float?
+  fiber           Float?
+  ingredients     Json            @default("[]")
+  instructions    String?
+  prepTime        Int?
+  cookTime        Int?
+  servings        Int             @default(1)
+  imageUrl        String?
+  isOptional      Boolean         @default(false)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime
+  nutrition_plans nutrition_plans @relation(fields: [nutritionPlanId], references: [id], onDelete: Cascade)
+
+  @@index([nutritionPlanId, dayOfWeek, mealType])
+}
+
+model mentor_relationships {
+  id                                         String            @id
+  mentorId                                   String
+  menteeId                                   String
+  status                                     MentorshipStatus  @default(PENDING)
+  reason                                     String            @db.VarChar(500)
+  expectedDuration                           Int?
+  goals                                      String[]          @default([])
+  startDate                                  DateTime?
+  endDate                                    DateTime?
+  endReason                                  String?           @db.VarChar(200)
+  sessionsCompleted                          Int               @default(0)
+  sessionsPlanned                            Int?
+  lastContactAt                              DateTime?
+  nextSessionAt                              DateTime?
+  createdAt                                  DateTime          @default(now())
+  updatedAt                                  DateTime
+  users_mentor_relationships_menteeIdTousers users             @relation("mentor_relationships_menteeIdTousers", fields: [menteeId], references: [id], onDelete: Cascade)
+  users_mentor_relationships_mentorIdTousers users             @relation("mentor_relationships_mentorIdTousers", fields: [mentorId], references: [id], onDelete: Cascade)
+  mentor_sessions                            mentor_sessions[]
+
+  @@unique([mentorId, menteeId])
+  @@index([menteeId, status])
+  @@index([mentorId, status])
+}
+
+model mentor_sessions {
+  id                   String               @id
+  relationshipId       String
+  title                String               @db.VarChar(100)
+  description          String?              @db.VarChar(500)
+  scheduledAt          DateTime
+  duration             Int                  @default(60)
+  isVirtual            Boolean              @default(true)
+  meetingLink          String?              @db.VarChar(500)
+  status               SessionStatus        @default(SCHEDULED)
+  completedAt          DateTime?
+  notes                String?
+  mentorRating         Int?
+  menteeRating         Int?
+  feedback             String?              @db.VarChar(1000)
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime
+  mentor_relationships mentor_relationships @relation(fields: [relationshipId], references: [id], onDelete: Cascade)
+
+  @@index([relationshipId, scheduledAt])
+}
+
+model moderation_logs {
+  id             String           @id
   userId         String?
   contentType    String
   contentId      String
@@ -167,16 +827,1046 @@ model ModerationLog {
   reviewedAt     DateTime?
   reviewedBy     String?
   createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  user           User?            @relation(fields: [userId], references: [id])
+  updatedAt      DateTime
+  users          users?           @relation(fields: [userId], references: [id])
 
-  @@index([userId, createdAt])
   @@index([action, source])
-  @@map("moderation_logs")
+  @@index([userId, createdAt])
 }
 
-model UserViolation {
-  id              String        @id @default(cuid())
+model network_messages {
+  id                  String              @id
+  connectionId        String
+  senderId            String
+  subject             String              @db.VarChar(200)
+  content             String
+  isRead              Boolean             @default(false)
+  readAt              DateTime?
+  isDeleted           Boolean             @default(false)
+  createdAt           DateTime            @default(now())
+  trainer_connections trainer_connections @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+
+  @@index([connectionId, createdAt])
+  @@index([senderId, createdAt])
+}
+
+model nutrition_logs {
+  id              String           @id
+  userId          String
+  nutritionPlanId String?
+  date            DateTime         @db.Date
+  mealType        String
+  foodName        String
+  quantity        Float
+  unit            String
+  calories        Int
+  protein         Float
+  carbs           Float
+  fat             Float
+  fiber           Float?
+  sodium          Float?
+  sugar           Float?
+  notes           String?
+  imageUrl        String?
+  isManual        Boolean          @default(true)
+  source          String?
+  createdAt       DateTime         @default(now())
+  nutrition_plans nutrition_plans? @relation(fields: [nutritionPlanId], references: [id])
+  users           users            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([nutritionPlanId, date])
+  @@index([userId, date])
+}
+
+model nutrition_plans {
+  id                                     String           @id
+  userId                                 String
+  createdBy                              String?
+  name                                   String
+  description                            String?
+  type                                   String           @default("CUSTOM")
+  targetCalories                         Int?
+  targetProtein                          Int?
+  targetCarbs                            Int?
+  targetFat                              Int?
+  targetFiber                            Int?
+  startDate                              DateTime
+  endDate                                DateTime?
+  isActive                               Boolean          @default(true)
+  notes                                  String?
+  restrictions                           String[]         @default([])
+  preferences                            Json?            @default("{}")
+  createdAt                              DateTime         @default(now())
+  updatedAt                              DateTime
+  meal_plans                             meal_plans[]
+  nutrition_logs                         nutrition_logs[]
+  users_nutrition_plans_createdByTousers users?           @relation("nutrition_plans_createdByTousers", fields: [createdBy], references: [id])
+  users_nutrition_plans_userIdTousers    users            @relation("nutrition_plans_userIdTousers", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([createdBy, createdAt])
+  @@index([userId, isActive])
+}
+
+model package_deals {
+  id                String              @id
+  trainerId         String
+  name              String              @db.VarChar(100)
+  description       String?             @db.VarChar(500)
+  price             Int
+  sessionsIncluded  Int
+  validityDays      Int                 @default(90)
+  features          String[]            @default([])
+  status            PackageStatus       @default(ACTIVE)
+  totalSold         Int                 @default(0)
+  totalRevenue      Int                 @default(0)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime
+  users             users               @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  package_purchases package_purchases[]
+
+  @@index([trainerId, status])
+}
+
+model package_purchases {
+  id                String         @id
+  packageId         String
+  clientId          String
+  pricePaid         Int
+  sessionsRemaining Int
+  expiresAt         DateTime
+  status            PurchaseStatus @default(ACTIVE)
+  paymentId         String?
+  molliePaymentId   String?
+  purchasedAt       DateTime       @default(now())
+  updatedAt         DateTime
+  users             users          @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  package_deals     package_deals  @relation(fields: [packageId], references: [id], onDelete: Cascade)
+
+  @@unique([packageId, clientId])
+  @@index([clientId, status])
+}
+
+model payments {
+  id               String            @id
+  trainerId        String
+  clientId         String
+  trainerClientId  String?
+  amount           Float
+  currency         String            @default("USD")
+  type             PaymentType       @default(SESSION)
+  status           PaymentStatus     @default(PENDING)
+  method           PaymentMethod     @default(MOLLIE)
+  description      String
+  sessionDate      DateTime?
+  packageId        String?
+  subscriptionId   String?
+  refundAmount     Float?            @default(0.0)
+  platformFee      Float?            @default(0.0)
+  trainerEarnings  Float?
+  paymentDate      DateTime?
+  refundDate       DateTime?
+  failureReason    String?
+  metadata         Json?             @default("{}")
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime
+  mollieCustomerId String?
+  molliePaymentId  String?
+  appointments     appointments[]
+  users            users             @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  trainer_packages trainer_packages? @relation(fields: [packageId], references: [id])
+  subscriptions    subscriptions?    @relation(fields: [subscriptionId], references: [id])
+  trainer_clients  trainer_clients?  @relation(fields: [trainerClientId], references: [id])
+  trainer_profiles trainer_profiles  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@index([clientId, paymentDate])
+  @@index([status, paymentDate])
+  @@index([trainerId, paymentDate])
+}
+
+model personal_records {
+  id         String    @id
+  userId     String
+  exerciseId String
+  recordType String
+  value      Float
+  unit       String
+  reps       Int?
+  notes      String?
+  achievedAt DateTime  @default(now())
+  createdAt  DateTime  @default(now())
+  exercises  exercises @relation(fields: [exerciseId], references: [id])
+  users      users     @relation(fields: [userId], references: [id])
+
+  @@index([userId, achievedAt])
+  @@index([userId, exerciseId, recordType])
+}
+
+model points_redemptions {
+  id          String           @id
+  trainerId   String
+  rewardType  RewardType
+  rewardTitle String
+  pointsCost  Int
+  status      RedemptionStatus @default(PENDING)
+  description String?
+  adminNotes  String?
+  redeemedAt  DateTime         @default(now())
+  fulfilledAt DateTime?
+  metadata    Json?
+  users       users            @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([trainerId, status])
+}
+
+model posts {
+  id            String       @id
+  title         String?
+  content       String
+  authorId      String
+  communityId   String?
+  contentType   String       @default("TEXT")
+  attachments   Json?
+  status        PostStatus   @default(PUBLISHED)
+  moderatedAt   DateTime?
+  moderatedBy   String?
+  likesCount    Int          @default(0)
+  commentsCount Int          @default(0)
+  reportsCount  Int          @default(0)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime
+  comments      comments[]
+  users         users        @relation(fields: [authorId], references: [id])
+  communities   communities? @relation(fields: [communityId], references: [id])
+
+  @@index([authorId, createdAt])
+  @@index([communityId, status, createdAt])
+}
+
+model premium_communities {
+  id                  String                @id
+  name                String
+  description         String
+  ownerId             String
+  price               Float
+  currency            String                @default("USD")
+  billingCycle        String                @default("MONTHLY")
+  maxMembers          Int?
+  currentMembers      Int                   @default(0)
+  category            String
+  tags                String[]              @default([])
+  features            String[]              @default([])
+  rules               String?
+  isActive            Boolean               @default(true)
+  isPublic            Boolean               @default(false)
+  requireApproval     Boolean               @default(true)
+  trialPeriodDays     Int                   @default(0)
+  coverImage          String?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime
+  community_posts     community_posts[]
+  group_classes       group_classes[]
+  users               users                 @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  premium_memberships premium_memberships[]
+
+  @@index([category, isActive])
+  @@index([ownerId, isActive])
+}
+
+model premium_memberships {
+  id                  String              @id
+  communityId         String
+  userId              String
+  status              MembershipStatus    @default(ACTIVE)
+  startDate           DateTime            @default(now())
+  endDate             DateTime?
+  autoRenew           Boolean             @default(true)
+  paymentId           String?
+  trialEndsAt         DateTime?
+  isTrialActive       Boolean             @default(false)
+  cancelledAt         DateTime?
+  cancellationReason  String?
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime
+  premium_communities premium_communities @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  users               users               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([communityId, userId])
+  @@index([userId, status])
+}
+
+model professional_reviews {
+  id                                           String    @id
+  reviewerId                                   String
+  revieweeId                                   String
+  rating                                       Int
+  category                                     String    @db.VarChar(50)
+  title                                        String?   @db.VarChar(100)
+  review                                       String
+  skills                                       String[]  @default([])
+  wouldRecommend                               Boolean   @default(true)
+  isAnonymous                                  Boolean   @default(false)
+  isPublic                                     Boolean   @default(true)
+  isVerified                                   Boolean   @default(false)
+  helpfulVotes                                 Int       @default(0)
+  responseFromReviewee                         String?   @db.VarChar(1000)
+  responseAt                                   DateTime?
+  isFlagged                                    Boolean   @default(false)
+  flagReason                                   String?   @db.VarChar(200)
+  flaggedAt                                    DateTime?
+  createdAt                                    DateTime  @default(now())
+  updatedAt                                    DateTime
+  users_professional_reviews_revieweeIdTousers users     @relation("professional_reviews_revieweeIdTousers", fields: [revieweeId], references: [id], onDelete: Cascade)
+  users_professional_reviews_reviewerIdTousers users     @relation("professional_reviews_reviewerIdTousers", fields: [reviewerId], references: [id], onDelete: Cascade)
+
+  @@unique([reviewerId, revieweeId, category])
+  @@index([revieweeId, rating, createdAt])
+  @@index([reviewerId, createdAt])
+}
+
+model program_purchases {
+  id                String            @id
+  userId            String
+  programId         String
+  price             Float
+  currency          String            @default("USD")
+  purchasedAt       DateTime          @default(now())
+  program_templates program_templates @relation(fields: [programId], references: [id])
+  users             users             @relation(fields: [userId], references: [id])
+
+  @@unique([userId, programId])
+  @@index([userId, purchasedAt])
+}
+
+model program_ratings {
+  id                String            @id
+  userId            String
+  programId         String
+  rating            Int
+  review            String?
+  createdAt         DateTime          @default(now())
+  program_templates program_templates @relation(fields: [programId], references: [id])
+  users             users             @relation(fields: [userId], references: [id])
+
+  @@unique([userId, programId])
+  @@index([programId, rating])
+}
+
+model program_subscriptions {
+  id                String            @id
+  userId            String
+  programId         String
+  currentWeek       Int               @default(1)
+  currentDay        Int               @default(1)
+  startDate         DateTime          @default(now())
+  endDate           DateTime?
+  isActive          Boolean           @default(true)
+  progressData      Json?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime
+  program_templates program_templates @relation(fields: [programId], references: [id])
+  users             users             @relation(fields: [userId], references: [id])
+
+  @@unique([userId, programId])
+  @@index([userId, isActive])
+}
+
+model program_templates {
+  id                    String                  @id
+  name                  String
+  description           String?
+  createdBy             String
+  duration              String
+  difficulty            String                  @default("BEGINNER")
+  category              String?
+  isPublic              Boolean                 @default(false)
+  price                 Float?
+  currency              String                  @default("USD")
+  purchaseCount         Int                     @default(0)
+  rating                Float?                  @default(0.0)
+  ratingCount           Int                     @default(0)
+  isActive              Boolean                 @default(true)
+  tags                  String[]                @default([])
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime
+  program_purchases     program_purchases[]
+  program_ratings       program_ratings[]
+  program_subscriptions program_subscriptions[]
+  users                 users                   @relation(fields: [createdBy], references: [id])
+  program_weeks         program_weeks[]
+  workout_templates     workout_templates[]     @relation("ProgramTemplateToWorkoutTemplate")
+
+  @@index([category, difficulty])
+  @@index([createdBy, isActive])
+  @@index([isPublic, isActive])
+}
+
+model program_weeks {
+  id                String            @id
+  programId         String
+  weekNumber        Int
+  title             String?
+  description       String?
+  workouts          Json
+  createdAt         DateTime          @default(now())
+  program_templates program_templates @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@unique([programId, weekNumber])
+  @@index([programId, weekNumber])
+}
+
+model progress_metrics {
+  id         String   @id
+  userId     String
+  metricType String
+  value      Float
+  unit       String?
+  bodyPart   String?
+  notes      String?
+  imageUrl   String?
+  recordedAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+  users      users    @relation(fields: [userId], references: [id])
+
+  @@index([userId, metricType, recordedAt])
+  @@index([userId, recordedAt])
+}
+
+model progress_reports {
+  id                 String           @id
+  trainerId          String
+  clientId           String
+  trainerClientId    String
+  reportDate         DateTime         @default(now())
+  period             String           @default("MONTHLY")
+  title              String
+  summary            String
+  goals              Json?            @default("[]")
+  achievements       Json?            @default("[]")
+  metrics            Json?            @default("{}")
+  workoutStats       Json?            @default("{}")
+  progressPhotos     String[]         @default([])
+  recommendations    String?
+  nextGoals          Json?            @default("[]")
+  isShared           Boolean          @default(false)
+  clientViewed       Boolean          @default(false)
+  clientViewedAt     DateTime?
+  feedbackFromClient String?
+  rating             Int?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime
+  users              users            @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  trainer_clients    trainer_clients  @relation(fields: [trainerClientId], references: [id], onDelete: Cascade)
+  trainer_profiles   trainer_profiles @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@index([clientId, reportDate])
+  @@index([trainerId, reportDate])
+}
+
+model push_notifications {
+  id          String             @id
+  userId      String
+  title       String
+  body        String
+  data        Json?
+  type        NotificationType   @default(GENERAL)
+  status      NotificationStatus @default(PENDING)
+  scheduledAt DateTime?
+  sentAt      DateTime?
+  readAt      DateTime?
+  createdAt   DateTime           @default(now())
+  users       users              @relation(fields: [userId], references: [id])
+
+  @@index([scheduledAt, status])
+  @@index([userId, status])
+}
+
+model safety_reports {
+  id                                         String        @id
+  reporterId                                 String
+  reportedUserId                             String
+  violationType                              ViolationType
+  description                                String
+  evidence                                   Json?
+  contentType                                String?
+  contentId                                  String?
+  status                                     String        @default("PENDING")
+  priority                                   String        @default("NORMAL")
+  resolvedAt                                 DateTime?
+  resolvedBy                                 String?
+  resolution                                 String?
+  createdAt                                  DateTime      @default(now())
+  users_safety_reports_reportedUserIdTousers users         @relation("safety_reports_reportedUserIdTousers", fields: [reportedUserId], references: [id])
+  users_safety_reports_reporterIdTousers     users         @relation("safety_reports_reporterIdTousers", fields: [reporterId], references: [id])
+
+  @@index([reportedUserId, createdAt])
+  @@index([status, priority])
+}
+
+model safety_settings {
+  id                      String   @id
+  userId                  String   @unique
+  allowDirectMessages     Boolean  @default(false)
+  allowTrainerMessages    Boolean  @default(true)
+  allowGroupMessages      Boolean  @default(true)
+  profileVisibility       String   @default("PUBLIC")
+  showOnlineStatus        Boolean  @default(false)
+  showLastSeen            Boolean  @default(false)
+  autoBlockFlaggedUsers   Boolean  @default(true)
+  requireVerifiedTrainers Boolean  @default(false)
+  contentFilterStrength   String   @default("MEDIUM")
+  safetyAlerts            Boolean  @default(true)
+  moderationNotifications Boolean  @default(true)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime
+  users                   users    @relation(fields: [userId], references: [id])
+}
+
+model sessions {
+  id           String   @id
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  users        users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model subscriptions {
+  id                   String             @id
+  userId               String
+  type                 SubscriptionType   @default(BASIC)
+  status               SubscriptionStatus @default(ACTIVE)
+  currentPeriodStart   DateTime
+  currentPeriodEnd     DateTime
+  cancelAtPeriodEnd    Boolean            @default(false)
+  cancelledAt          DateTime?
+  trialEnd             DateTime?
+  price                Float
+  currency             String             @default("USD")
+  features             Json               @default("[]")
+  usageStats           Json?              @default("{}")
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime
+  mollieCustomerId     String?
+  mollieSubscriptionId String?            @unique
+  payments             payments[]
+  users                users              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([mollieSubscriptionId])
+  @@index([userId, status])
+}
+
+model team_applications {
+  id                                        String            @id
+  teamId                                    String
+  userId                                    String
+  message                                   String?           @db.VarChar(500)
+  status                                    ApplicationStatus @default(PENDING)
+  appliedAt                                 DateTime          @default(now())
+  reviewedAt                                DateTime?
+  reviewedBy                                String?
+  rejectionReason                           String?           @db.VarChar(200)
+  users_team_applications_reviewedByTousers users?            @relation("team_applications_reviewedByTousers", fields: [reviewedBy], references: [id])
+  teams                                     teams             @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  users_team_applications_userIdTousers     users             @relation("team_applications_userIdTousers", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+  @@index([teamId, status])
+}
+
+model team_challenges {
+  id                       String                     @id
+  creatorId                String
+  title                    String                     @db.VarChar(100)
+  description              String?                    @db.VarChar(1000)
+  type                     ChallengeType
+  status                   ChallengeStatus            @default(UPCOMING)
+  startDate                DateTime
+  endDate                  DateTime
+  maxParticipants          Int?
+  isPublic                 Boolean                    @default(true)
+  entryFee                 Int                        @default(0)
+  prizePool                Int                        @default(0)
+  currency                 String                     @default("EUR")
+  rules                    String
+  metrics                  Json                       @default("{}")
+  rewards                  Json                       @default("[]")
+  currentParticipants      Int                        @default(0)
+  completionRate           Float?                     @default(0.0)
+  coverImage               String?                    @db.VarChar(500)
+  tags                     String[]                   @default([])
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime
+  challenge_participations challenge_participations[]
+  users                    users                      @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@index([creatorId, status])
+  @@index([startDate, endDate])
+  @@index([type, status])
+}
+
+model team_members {
+  id                                  String               @id
+  teamId                              String
+  userId                              String
+  status                              TeamMembershipStatus @default(PENDING)
+  joinedAt                            DateTime             @default(now())
+  leftAt                              DateTime?
+  invitedBy                           String?
+  canInviteOthers                     Boolean              @default(false)
+  canComment                          Boolean              @default(true)
+  canViewAllWorkouts                  Boolean              @default(true)
+  users_team_members_invitedByTousers users?               @relation("team_members_invitedByTousers", fields: [invitedBy], references: [id])
+  teams                               teams                @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  users_team_members_userIdTousers    users                @relation("team_members_userIdTousers", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+  @@index([userId, status])
+}
+
+model team_message_replies {
+  id            String        @id
+  messageId     String
+  userId        String
+  content       String        @db.VarChar(1000)
+  createdAt     DateTime      @default(now())
+  team_messages team_messages @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  users         users         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([messageId, createdAt])
+}
+
+model team_messages {
+  id                   String                 @id
+  teamId               String
+  userId               String
+  content              String
+  type                 TeamMessageType        @default(TEXT)
+  mediaUrl             String?                @db.VarChar(500)
+  thumbnailUrl         String?                @db.VarChar(500)
+  linkedExerciseId     String?
+  linkedWorkoutLogId   String?
+  linkedSocialMediaUrl String?                @db.VarChar(500)
+  editedAt             DateTime?
+  isDeleted            Boolean                @default(false)
+  createdAt            DateTime               @default(now())
+  team_message_replies team_message_replies[]
+  teams                teams                  @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  users                users                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([teamId, createdAt])
+  @@index([userId, createdAt])
+}
+
+model team_workout_comments {
+  id                String            @id
+  workoutLogId      String
+  userId            String
+  content           String            @db.VarChar(1000)
+  createdAt         DateTime          @default(now())
+  users             users             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team_workout_logs team_workout_logs @relation(fields: [workoutLogId], references: [id], onDelete: Cascade)
+
+  @@index([workoutLogId, createdAt])
+}
+
+model team_workout_completions {
+  id                String            @id
+  workoutLogId      String
+  userId            String
+  completedAt       DateTime          @default(now())
+  duration          Int?
+  notes             String?           @db.VarChar(500)
+  users             users             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team_workout_logs team_workout_logs @relation(fields: [workoutLogId], references: [id], onDelete: Cascade)
+
+  @@unique([workoutLogId, userId])
+  @@index([userId, completedAt])
+}
+
+model team_workout_exercises {
+  id                    String            @id
+  workoutLogId          String
+  exerciseId            String
+  order                 Int
+  sets                  Int
+  reps                  String            @db.VarChar(20)
+  weight                String?           @db.VarChar(20)
+  restSeconds           Int?
+  notes                 String?           @db.VarChar(500)
+  instructionalVideoUrl String?           @db.VarChar(500)
+  instagramUrl          String?           @db.VarChar(500)
+  tiktokUrl             String?           @db.VarChar(500)
+  exercises             exercises         @relation(fields: [exerciseId], references: [id])
+  team_workout_logs     team_workout_logs @relation(fields: [workoutLogId], references: [id], onDelete: Cascade)
+
+  @@index([workoutLogId, order])
+}
+
+model team_workout_logs {
+  id                       String                     @id
+  teamId                   String
+  createdBy                String
+  title                    String                     @db.VarChar(100)
+  description              String?                    @db.VarChar(1000)
+  date                     DateTime
+  duration                 Int?
+  allowComments            Boolean                    @default(true)
+  isTemplate               Boolean                    @default(false)
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime
+  team_workout_comments    team_workout_comments[]
+  team_workout_completions team_workout_completions[]
+  team_workout_exercises   team_workout_exercises[]
+  workout_log_entries      workout_log_entries[]
+  users                    users                      @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  teams                    teams                      @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@index([createdBy, createdAt])
+  @@index([teamId, date])
+}
+
+model teams {
+  id                    String              @id
+  name                  String              @db.VarChar(50)
+  description           String?             @db.VarChar(500)
+  type                  TeamType
+  customTypeDescription String?             @db.VarChar(100)
+  trainerId             String
+  visibility            TeamVisibility      @default(PUBLIC)
+  maxMembers            Int                 @default(20)
+  isActive              Boolean             @default(true)
+  aestheticSettings     Json                @default("{\"theme\": \"auto\", \"fontStyle\": \"modern\", \"primaryColor\": \"#3B82F6\", \"secondaryColor\": \"#10B981\", \"backgroundColor\": \"#F9FAFB\"}")
+  spotifyPlaylistUrl    String?             @db.VarChar(255)
+  allowComments         Boolean             @default(true)
+  allowMemberInvites    Boolean             @default(true)
+  memberCount           Int                 @default(1)
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime
+  team_applications     team_applications[]
+  team_invites          team_invites[]
+  team_members          team_members[]
+  team_messages         team_messages[]
+  team_workout_logs     team_workout_logs[]
+  users                 users               @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@index([trainerId, isActive])
+  @@index([type, visibility, isActive])
+}
+
+model team_invites {
+  id         String       @id
+  token      String       @unique @default(uuid())
+  teamId     String
+  email      String
+  invitedBy  String
+  status     InviteStatus @default(PENDING)
+  message    String?      @db.VarChar(500)
+  expiresAt  DateTime
+  acceptedAt DateTime?
+  createdAt  DateTime     @default(now())
+  viewedAt   DateTime?
+  teams      teams        @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  inviter    users        @relation("TeamInviter", fields: [invitedBy], references: [id])
+
+  @@unique([teamId, email])
+  @@index([token])
+  @@index([teamId, status])
+  @@index([email, status])
+}
+
+model template_purchases {
+  id                String            @id
+  userId            String
+  templateId        String
+  price             Float
+  currency          String            @default("USD")
+  purchasedAt       DateTime          @default(now())
+  workout_templates workout_templates @relation(fields: [templateId], references: [id])
+  users             users             @relation(fields: [userId], references: [id])
+
+  @@unique([userId, templateId])
+  @@index([userId, purchasedAt])
+}
+
+model template_ratings {
+  id                String            @id
+  userId            String
+  templateId        String
+  rating            Int
+  review            String?
+  createdAt         DateTime          @default(now())
+  workout_templates workout_templates @relation(fields: [templateId], references: [id])
+  users             users             @relation(fields: [userId], references: [id])
+
+  @@unique([userId, templateId])
+  @@index([templateId, rating])
+}
+
+model trainer_achievements {
+  id              String          @id @default(uuid())
+  trainerId       String
+  achievementType AchievementType
+  unlockedAt      DateTime        @default(now())
+  pointsAwarded   Int
+  metadata        Json?
+  users           users           @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@unique([trainerId, achievementType])
+  @@index([trainerId])
+}
+
+model trainer_clients {
+  id                String             @id
+  trainerId         String
+  clientId          String
+  status            ClientStatus       @default(ACTIVE)
+  startDate         DateTime           @default(now())
+  endDate           DateTime?
+  packageId         String?
+  sessionsRemaining Int                @default(0)
+  totalSessions     Int                @default(0)
+  monthlyRate       Float?
+  billingCycle      String             @default("MONTHLY")
+  lastSessionDate   DateTime?
+  nextSessionDate   DateTime?
+  notes             String?
+  goals             String[]           @default([])
+  emergencyContact  Json?
+  medicalConditions String[]           @default([])
+  preferences       Json?              @default("{}")
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime
+  appointments      appointments[]
+  payments          payments[]
+  progress_reports  progress_reports[]
+  users             users              @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  trainer_packages  trainer_packages?  @relation(fields: [packageId], references: [id])
+  trainer_profiles  trainer_profiles   @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@unique([trainerId, clientId])
+}
+
+model trainer_connections {
+  id                                          String             @id
+  senderId                                    String
+  receiverId                                  String
+  status                                      ConnectionStatus   @default(PENDING)
+  message                                     String?            @db.VarChar(500)
+  connectedAt                                 DateTime?
+  lastMessageAt                               DateTime?
+  messageCount                                Int                @default(0)
+  createdAt                                   DateTime           @default(now())
+  updatedAt                                   DateTime
+  network_messages                            network_messages[]
+  users_trainer_connections_receiverIdTousers users              @relation("trainer_connections_receiverIdTousers", fields: [receiverId], references: [id], onDelete: Cascade)
+  users_trainer_connections_senderIdTousers   users              @relation("trainer_connections_senderIdTousers", fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, receiverId])
+  @@index([receiverId, status])
+  @@index([senderId, status])
+}
+
+model trainer_earnings {
+  id          String        @id
+  trainerId   String
+  amount      Int
+  type        EarningType
+  sourceId    String
+  clientId    String
+  platformFee Int           @default(0)
+  netEarnings Int
+  status      EarningStatus @default(PENDING)
+  payoutDate  DateTime?
+  payoutId    String?
+  description String?       @db.VarChar(200)
+  earnedAt    DateTime      @default(now())
+  createdAt   DateTime      @default(now())
+  users       users         @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@index([status, payoutDate])
+  @@index([trainerId, earnedAt])
+}
+
+model trainer_packages {
+  id                 String            @id
+  trainerId          String
+  name               String
+  description        String?
+  price              Float
+  currency           String            @default("USD")
+  sessionCount       Int
+  duration           Int
+  isActive           Boolean           @default(true)
+  features           String[]          @default([])
+  terms              String?
+  cancellationPolicy String?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime
+  payments           payments[]
+  trainer_clients    trainer_clients[]
+  trainer_profiles   trainer_profiles  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@index([trainerId, isActive])
+}
+
+model trainer_partnerships {
+  id                                          String            @id
+  ownerId                                     String
+  partnerId                                   String
+  type                                        PartnershipType
+  status                                      PartnershipStatus @default(PENDING)
+  revenueShare                                Int               @default(50)
+  description                                 String?           @db.VarChar(500)
+  terms                                       String?
+  totalRevenue                                Int               @default(0)
+  partnerRevenue                              Int               @default(0)
+  startDate                                   DateTime?
+  endDate                                     DateTime?
+  endReason                                   String?           @db.VarChar(200)
+  createdAt                                   DateTime          @default(now())
+  updatedAt                                   DateTime
+  users_trainer_partnerships_ownerIdTousers   users             @relation("trainer_partnerships_ownerIdTousers", fields: [ownerId], references: [id], onDelete: Cascade)
+  users_trainer_partnerships_partnerIdTousers users             @relation("trainer_partnerships_partnerIdTousers", fields: [partnerId], references: [id], onDelete: Cascade)
+
+  @@unique([ownerId, partnerId])
+  @@index([ownerId, status])
+  @@index([partnerId, status])
+}
+
+model trainer_points {
+  id          String    @id @default(uuid())
+  trainerId   String
+  pointType   PointType
+  points      Int
+  description String
+  sourceId    String?
+  metadata    Json?
+  createdAt   DateTime  @default(now())
+  users       users     @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@index([pointType])
+  @@index([trainerId, createdAt])
+}
+
+model trainer_profiles {
+  id                  String             @id
+  userId              String             @unique
+  businessName        String?
+  businessDescription String?
+  hourlyRate          Float?
+  currency            String             @default("USD")
+  taxId               String?
+  businessAddress     Json?
+  certifications      Json?              @default("[]")
+  specializations     String[]           @default([])
+  experienceYears     Int                @default(0)
+  languages           String[]           @default(["English"])
+  availableHours      Json?
+  timezone            String             @default("UTC")
+  isVerified          Boolean            @default(false)
+  verificationLevel   String             @default("BASIC")
+  trainerRating       Float              @default(0.0)
+  totalClients        Int                @default(0)
+  activeClients       Int                @default(0)
+  totalEarnings       Float              @default(0.0)
+  monthlyEarnings     Float              @default(0.0)
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime
+  availability        Json?
+  appointments        appointments[]
+  group_classes       group_classes[]
+  payments            payments[]
+  progress_reports    progress_reports[]
+  trainer_clients     trainer_clients[]
+  trainer_packages    trainer_packages[]
+  users               users              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trainer_reviews     trainer_reviews[]
+}
+
+model trainer_reviews {
+  id                  String           @id
+  trainerId           String
+  clientId            String
+  rating              Int
+  title               String?
+  review              String
+  pros                String[]         @default([])
+  cons                String[]         @default([])
+  wouldRecommend      Boolean          @default(true)
+  sessionType         String?
+  responseFromTrainer String?
+  isVerified          Boolean          @default(false)
+  isPublic            Boolean          @default(true)
+  helpfulVotes        Int              @default(0)
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime
+  users               users            @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  trainer_profiles    trainer_profiles @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@unique([trainerId, clientId])
+  @@index([trainerId, rating, createdAt])
+}
+
+model trainer_subscription_active {
+  id                    String                @id
+  subscriptionId        String
+  clientId              String
+  status                SubscriptionStatus    @default(ACTIVE)
+  startDate             DateTime              @default(now())
+  endDate               DateTime?
+  nextBillingDate       DateTime?
+  lastBillingDate       DateTime?
+  mollieSubscriptionId  String?
+  mollieCustomerId      String?
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime
+  users                 users                 @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  trainer_subscriptions trainer_subscriptions @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@unique([subscriptionId, clientId])
+  @@index([clientId, status])
+}
+
+model trainer_subscriptions {
+  id                          String                        @id
+  trainerId                   String
+  name                        String                        @db.VarChar(100)
+  description                 String?                       @db.VarChar(500)
+  price                       Int
+  interval                    String
+  features                    String[]                      @default([])
+  status                      TrainerSubscriptionStatus     @default(ACTIVE)
+  activeSubscribers           Int                           @default(0)
+  totalRevenue                Int                           @default(0)
+  mollieProductId             String?
+  molliePriceId               String?
+  createdAt                   DateTime                      @default(now())
+  updatedAt                   DateTime
+  trainer_subscription_active trainer_subscription_active[]
+  users                       users                         @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@index([trainerId, status])
+}
+
+model user_equipment_recommendations {
+  id                        String                    @id
+  userId                    String
+  equipmentId               String
+  reason                    String
+  priority                  Int                       @default(1)
+  isPersonalized            Boolean                   @default(false)
+  clickedAt                 DateTime?
+  purchasedAt               DateTime?
+  createdAt                 DateTime                  @default(now())
+  equipment_recommendations equipment_recommendations @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  users                     users                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, equipmentId])
+  @@index([userId, priority])
+}
+
+model user_violations {
+  id              String        @id
   userId          String
   violationType   ViolationType
   description     String
@@ -191,447 +1881,170 @@ model UserViolation {
   resolvedAt      DateTime?
   resolvedBy      String?
   createdAt       DateTime      @default(now())
-  user            User          @relation(fields: [userId], references: [id])
+  users           users         @relation(fields: [userId], references: [id])
 
   @@index([userId, createdAt])
   @@index([violationType, severity])
-  @@map("user_violations")
 }
 
-model SafetyReport {
-  id             String        @id @default(cuid())
-  reporterId     String
-  reportedUserId String
-  violationType  ViolationType
-  description    String
-  evidence       Json?
-  contentType    String?
-  contentId      String?
-  status         String        @default("PENDING")
-  priority       String        @default("NORMAL")
-  resolvedAt     DateTime?
-  resolvedBy     String?
-  resolution     String?
-  createdAt      DateTime      @default(now())
-  reportedUser   User          @relation("ReportedUser", fields: [reportedUserId], references: [id])
-  reporter       User          @relation("ReportSubmitter", fields: [reporterId], references: [id])
-
-  @@index([reportedUserId, createdAt])
-  @@index([status, priority])
-  @@map("safety_reports")
+model users {
+  id                                                          String                           @id
+  email                                                       String                           @unique
+  name                                                        String?
+  image                                                       String?
+  password                                                    String?
+  role                                                        UserRole                         @default(CLIENT)
+  status                                                      UserStatus                       @default(ACTIVE)
+  googleId                                                    String?                          @unique
+  linkedinId                                                  String?                          @unique
+  facebookId                                                  String?                          @unique
+  emailVerified                                               DateTime?
+  acceptDMs                                                   Boolean                          @default(false)
+  onlyTrainerDMs                                              Boolean                          @default(true)
+  profileVisibility                                           String                           @default("PUBLIC")
+  showRealName                                                Boolean                          @default(false)
+  instagramUrl                                                String?
+  tiktokUrl                                                   String?
+  facebookUrl                                                 String?
+  youtubeUrl                                                  String?
+  linkedinUrl                                                 String?
+  showSocialMedia                                             Boolean                          @default(true)
+  fitnessGoals                                                String[]                         @default([])
+  experienceLevel                                             String                           @default("BEGINNER")
+  preferredWorkoutTypes                                       String[]                         @default([])
+  availableWorkoutDays                                        String[]                         @default([])
+  preferredWorkoutDuration                                    String?                          @default("30-60")
+  trainerVerified                                             Boolean                          @default(false)
+  trainerBio                                                  String?
+  trainerCredentials                                          String?
+  trainerRating                                               Float?                           @default(0.0)
+  reputationScore                                             Int                              @default(100)
+  warningCount                                                Int                              @default(0)
+  createdAt                                                   DateTime                         @default(now())
+  updatedAt                                                   DateTime
+  lastLoginAt                                                 DateTime?
+  suspendedUntil                                              DateTime?
+  city                                                        String?
+  country                                                     String?
+  enableDiscovery                                             Boolean                          @default(false)
+  latitude                                                    Float?
+  locationVisibility                                          String                           @default("NONE")
+  longitude                                                   Float?
+  showLocation                                                Boolean                          @default(false)
+  state                                                       String?
+  massiminoUsername                                           String?                          @unique
+  surname                                                     String?
+  nickname                                                    String?
+  spotifyUrl                                                  String?
+  accounts                                                    accounts[]
+  appointments                                                appointments[]
+  assessments_assessments_clientIdTousers                     assessments[]                    @relation("assessments_clientIdTousers")
+  assessments_assessments_trainerIdTousers                    assessments[]                    @relation("assessments_trainerIdTousers")
+  challenge_leaderboard                                       challenge_leaderboard[]
+  challenge_participants                                      challenge_participants[]
+  challenge_participations                                    challenge_participations[]
+  challenge_post_comments                                     challenge_post_comments[]
+  challenge_post_likes                                        challenge_post_likes[]
+  challenge_posts                                             challenge_posts[]
+  challenges                                                  challenges[]
+  chat_messages                                               chat_messages[]
+  chat_room_participants                                      chat_room_participants[]
+  class_participants                                          class_participants[]
+  class_reviews                                               class_reviews[]
+  client_payments_client_payments_clientIdTousers             client_payments[]                @relation("client_payments_clientIdTousers")
+  client_payments_client_payments_trainerIdTousers            client_payments[]                @relation("client_payments_trainerIdTousers")
+  comments                                                    comments[]
+  communities                                                 communities[]
+  community_members                                           community_members[]
+  community_posts                                             community_posts[]
+  device_tokens                                               device_tokens[]
+  equipment_reviews                                           equipment_reviews[]
+  health_data                                                 health_data[]
+  invitations_invitations_receiverIdTousers                   invitations[]                    @relation("invitations_receiverIdTousers")
+  invitations_invitations_senderIdTousers                     invitations[]                    @relation("invitations_senderIdTousers")
+  live_session_participants                                   live_session_participants[]
+  live_workout_sessions                                       live_workout_sessions[]
+  mentor_relationships_mentor_relationships_menteeIdTousers   mentor_relationships[]           @relation("mentor_relationships_menteeIdTousers")
+  mentor_relationships_mentor_relationships_mentorIdTousers   mentor_relationships[]           @relation("mentor_relationships_mentorIdTousers")
+  moderation_logs                                             moderation_logs[]
+  nutrition_logs                                              nutrition_logs[]
+  nutrition_plans_nutrition_plans_createdByTousers            nutrition_plans[]                @relation("nutrition_plans_createdByTousers")
+  nutrition_plans_nutrition_plans_userIdTousers               nutrition_plans[]                @relation("nutrition_plans_userIdTousers")
+  package_deals                                               package_deals[]
+  package_purchases                                           package_purchases[]
+  payments                                                    payments[]
+  personal_records                                            personal_records[]
+  points_redemptions                                          points_redemptions[]
+  posts                                                       posts[]
+  premium_communities                                         premium_communities[]
+  premium_memberships                                         premium_memberships[]
+  professional_reviews_professional_reviews_revieweeIdTousers professional_reviews[]           @relation("professional_reviews_revieweeIdTousers")
+  professional_reviews_professional_reviews_reviewerIdTousers professional_reviews[]           @relation("professional_reviews_reviewerIdTousers")
+  program_purchases                                           program_purchases[]
+  program_ratings                                             program_ratings[]
+  program_subscriptions                                       program_subscriptions[]
+  program_templates                                           program_templates[]
+  progress_metrics                                            progress_metrics[]
+  progress_reports                                            progress_reports[]
+  push_notifications                                          push_notifications[]
+  safety_reports_safety_reports_reportedUserIdTousers         safety_reports[]                 @relation("safety_reports_reportedUserIdTousers")
+  safety_reports_safety_reports_reporterIdTousers             safety_reports[]                 @relation("safety_reports_reporterIdTousers")
+  safety_settings                                             safety_settings?
+  sessions                                                    sessions[]
+  subscriptions                                               subscriptions[]
+  team_applications_team_applications_reviewedByTousers       team_applications[]              @relation("team_applications_reviewedByTousers")
+  team_applications_team_applications_userIdTousers           team_applications[]              @relation("team_applications_userIdTousers")
+  team_challenges                                             team_challenges[]
+  team_members_team_members_invitedByTousers                  team_members[]                   @relation("team_members_invitedByTousers")
+  team_members_team_members_userIdTousers                     team_members[]                   @relation("team_members_userIdTousers")
+  team_message_replies                                        team_message_replies[]
+  team_messages                                               team_messages[]
+  team_workout_comments                                       team_workout_comments[]
+  team_workout_completions                                    team_workout_completions[]
+  team_workout_logs                                           team_workout_logs[]
+  teams                                                       teams[]
+  team_invites_sent                                           team_invites[]                   @relation("TeamInviter")
+  template_purchases                                          template_purchases[]
+  template_ratings                                            template_ratings[]
+  trainer_achievements                                        trainer_achievements[]
+  trainer_clients                                             trainer_clients[]
+  trainer_connections_trainer_connections_receiverIdTousers   trainer_connections[]            @relation("trainer_connections_receiverIdTousers")
+  trainer_connections_trainer_connections_senderIdTousers     trainer_connections[]            @relation("trainer_connections_senderIdTousers")
+  trainer_earnings                                            trainer_earnings[]
+  trainer_partnerships_trainer_partnerships_ownerIdTousers    trainer_partnerships[]           @relation("trainer_partnerships_ownerIdTousers")
+  trainer_partnerships_trainer_partnerships_partnerIdTousers  trainer_partnerships[]           @relation("trainer_partnerships_partnerIdTousers")
+  trainer_points                                              trainer_points[]
+  trainer_profiles                                            trainer_profiles?
+  trainer_reviews                                             trainer_reviews[]
+  trainer_subscription_active                                 trainer_subscription_active[]
+  trainer_subscriptions                                       trainer_subscriptions[]
+  user_equipment_recommendations                              user_equipment_recommendations[]
+  user_violations                                             user_violations[]
+  workout_analytics                                           workout_analytics[]
+  workout_log_entries_workout_log_entries_coachIdTousers      workout_log_entries[]            @relation("workout_log_entries_coachIdTousers")
+  workout_log_entries_workout_log_entries_userIdTousers       workout_log_entries[]            @relation("workout_log_entries_userIdTousers")
+  workout_progress                                            workout_progress[]
+  workout_sessions_workout_sessions_coachIdTousers            workout_sessions[]               @relation("workout_sessions_coachIdTousers")
+  workout_sessions_workout_sessions_userIdTousers             workout_sessions[]               @relation("workout_sessions_userIdTousers")
+  workout_templates                                           workout_templates[]
+  // AI Chat (Massichat) back-relations
+  ai_chat_sessions                                            ai_chat_sessions[]
+  ai_workout_proposals                                        ai_workout_proposals[]
+  workout_entry_comments                                      workout_entry_comments[]
+  workout_session_comments                                    workout_session_comments[]
+  user_achievements                                           user_achievements[]
 }
 
-model SafetySettings {
-  id                      String   @id @default(cuid())
-  userId                  String   @unique
-  allowDirectMessages     Boolean  @default(false)
-  allowTrainerMessages    Boolean  @default(true)
-  allowGroupMessages      Boolean  @default(true)
-  profileVisibility       String   @default("PUBLIC")
-  showOnlineStatus        Boolean  @default(false)
-  showLastSeen            Boolean  @default(false)
-  autoBlockFlaggedUsers   Boolean  @default(true)
-  requireVerifiedTrainers Boolean  @default(false)
-  contentFilterStrength   String   @default("MEDIUM")
-  safetyAlerts            Boolean  @default(true)
-  moderationNotifications Boolean  @default(true)
-  createdAt               DateTime @default(now())
-  updatedAt               DateTime @updatedAt
-  user                    User     @relation(fields: [userId], references: [id])
+model verificationtokens {
+  identifier String
+  token      String   @unique
+  expires    DateTime
 
-  @@map("safety_settings")
+  @@unique([identifier, token])
 }
 
-model Community {
-  id                String            @id @default(cuid())
-  name              String
-  description       String?
-  type              CommunityType     @default(PUBLIC)
-  ownerId           String
-  moderationEnabled Boolean           @default(true)
-  requireApproval   Boolean           @default(false)
-  memberCount       Int               @default(0)
-  postCount         Int               @default(0)
-  isActive          Boolean           @default(true)
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
-  owner             User              @relation("CommunityOwner", fields: [ownerId], references: [id])
-  members           CommunityMember[]
-  posts             Post[]
-
-  @@index([ownerId, type])
-  @@map("communities")
-}
-
-model CommunityMember {
-  id          String    @id @default(cuid())
-  userId      String
-  communityId String
-  role        String    @default("MEMBER")
-  joinedAt    DateTime  @default(now())
-  isActive    Boolean   @default(true)
-  community   Community @relation(fields: [communityId], references: [id])
-  user        User      @relation(fields: [userId], references: [id])
-
-  @@unique([userId, communityId])
-  @@map("community_members")
-}
-
-model Post {
-  id            String     @id @default(cuid())
-  title         String?
-  content       String
-  authorId      String
-  communityId   String?
-  contentType   String     @default("TEXT")
-  attachments   Json?
-  status        PostStatus @default(PUBLISHED)
-  moderatedAt   DateTime?
-  moderatedBy   String?
-  likesCount    Int        @default(0)
-  commentsCount Int        @default(0)
-  reportsCount  Int        @default(0)
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  comments      Comment[]
-  author        User       @relation(fields: [authorId], references: [id])
-  community     Community? @relation(fields: [communityId], references: [id])
-
-  @@index([authorId, createdAt])
-  @@index([communityId, status, createdAt])
-  @@map("posts")
-}
-
-model Comment {
-  id              String            @id @default(cuid())
-  content         String
-  authorId        String
-  postId          String?
-  workoutLogId    String?
-  parentId        String?
-  status          PostStatus        @default(PUBLISHED)
-  moderatedAt     DateTime?
-  likesCount      Int               @default(0)
-  reportsCount    Int               @default(0)
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  author          User              @relation(fields: [authorId], references: [id])
-  parent          Comment?          @relation("CommentReplies", fields: [parentId], references: [id])
-  replies         Comment[]         @relation("CommentReplies")
-  post            Post?             @relation(fields: [postId], references: [id])
-  workoutLog      WorkoutLogEntry?  @relation(fields: [workoutLogId], references: [id])
-
-  @@index([postId, createdAt])
-  @@index([workoutLogId, createdAt])
-  @@index([authorId, status])
-  @@map("comments")
-}
-
-model WorkoutLogEntry {
-  id             String          @id @default(cuid())
-  userId         String
-  coachId        String?
-  sessionId      String?
-  date           DateTime        @db.Date
-  exerciseId     String
-  order          String
-  setNumber      Int
-  setType        SetType
-  reps           Int
-  weight         String
-  unit           WeightUnit
-  intensity      String?
-  intensityType  IntensityType?
-  tempo          String?
-  restSeconds    Int?
-  trainingVolume Float?
-  duration       String?
-  coachFeedback  String?
-  userComments   String?
-  allowComments  Boolean         @default(true)
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  coach          User?           @relation("CoachWorkoutLogs", fields: [coachId], references: [id])
-  exercise       Exercise        @relation(fields: [exerciseId], references: [id])
-  session        WorkoutSession? @relation("SessionEntries", fields: [sessionId], references: [id])
-  user           User            @relation("UserWorkoutLogs", fields: [userId], references: [id])
-  comments       Comment[]
-
-  @@index([userId, date])
-  @@index([coachId, date])
-  @@index([exerciseId, date])
-  @@map("workout_log_entries")
-}
-
-model Exercise {
-  id           String              @id @default(cuid())
-  name         String              @unique
-  slug         String?             @unique
-  category     String
-  muscleGroups String[]
-  equipment    String[]
-  instructions String?
-  videoUrl     String?
-  imageUrl     String?
-  isActive     Boolean             @default(true)
-  difficulty   String              @default("BEGINNER")
-  safetyNotes  String?
-  usageCount   Int                 @default(0)
-  lastUsed     DateTime?
-  createdBy    String?
-  isCustom     Boolean             @default(false)
-  formCues     String[]            @default([])
-  commonMistakes String[]          @default([])
-  createdAt    DateTime            @default(now())
-  updatedAt    DateTime            @updatedAt
-  workoutLogs  WorkoutLogEntry[]
-  variations   ExerciseVariation[]
-  templateExercises WorkoutTemplateExercise[]
-  personalRecords PersonalRecord[] @relation("PersonalRecords")
-
-  @@index([name])
-  @@index([category])
-  @@index([category, muscleGroups])
-  @@index([isActive, difficulty])
-  @@index([createdBy, isCustom])
-  @@map("exercises")
-}
-
-model ExerciseVariation {
-  id           String   @id @default(cuid())
-  exerciseId   String
-  name         String
-  description  String?
-  difficulty   String   @default("BEGINNER")
-  videoUrl     String?
-  imageUrl     String?
-  instructions String?
-  isActive     Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  exercise     Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
-
-  @@index([exerciseId, difficulty])
-  @@map("exercise_variations")
-}
-
-model WorkoutTemplate {
-  id               String                    @id @default(cuid())
-  name             String
-  description      String?
-  createdBy        String
-  category         String?
-  difficulty       String                    @default("BEGINNER")
-  duration         String?
-  equipment        String[]                  @default([])
-  isPublic         Boolean                   @default(false)
-  price            Float?
-  currency         String                    @default("USD")
-  purchaseCount    Int                       @default(0)
-  rating           Float?                    @default(0.0)
-  ratingCount      Int                       @default(0)
-  isActive         Boolean                   @default(true)
-  tags             String[]                  @default([])
-  createdAt        DateTime                  @default(now())
-  updatedAt        DateTime                  @updatedAt
-  exercises        WorkoutTemplateExercise[]
-  programs         ProgramTemplate[]
-  purchases        TemplatePurchase[]
-  ratings          TemplateRating[]
-  creator          User                      @relation("CreatedTemplates", fields: [createdBy], references: [id])
-
-  @@index([createdBy, isActive])
-  @@index([category, difficulty])
-  @@index([isPublic, isActive])
-  @@map("workout_templates")
-}
-
-model WorkoutTemplateExercise {
-  id         String          @id @default(cuid())
-  templateId String
-  exerciseId String
-  order      Int
-  sets       Int
-  reps       String
-  weight     String?
-  restTime   String?
-  notes      String?
-  isSuperset Boolean         @default(false)
-  supersetGroup String?
-  createdAt  DateTime        @default(now())
-  template   WorkoutTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
-  exercise   Exercise        @relation(fields: [exerciseId], references: [id])
-
-  @@unique([templateId, order])
-  @@index([templateId, order])
-  @@map("workout_template_exercises")
-}
-
-model ProgramTemplate {
-  id              String                 @id @default(cuid())
-  name            String
-  description     String?
-  createdBy       String
-  duration        String
-  difficulty      String                 @default("BEGINNER")
-  category        String?
-  isPublic        Boolean                @default(false)
-  price           Float?
-  currency        String                 @default("USD")
-  purchaseCount   Int                    @default(0)
-  rating          Float?                 @default(0.0)
-  ratingCount     Int                    @default(0)
-  isActive        Boolean                @default(true)
-  tags            String[]               @default([])
-  createdAt       DateTime               @default(now())
-  updatedAt       DateTime               @updatedAt
-  weeks           ProgramWeek[]
-  workouts        WorkoutTemplate[]
-  purchases       ProgramPurchase[]
-  ratings         ProgramRating[]
-  subscriptions   ProgramSubscription[]
-  creator         User                   @relation("CreatedPrograms", fields: [createdBy], references: [id])
-
-  @@index([createdBy, isActive])
-  @@index([category, difficulty])
-  @@index([isPublic, isActive])
-  @@map("program_templates")
-}
-
-model ProgramWeek {
-  id        String          @id @default(cuid())
-  programId String
-  weekNumber Int
-  title     String?
-  description String?
-  workouts  Json
-  createdAt DateTime        @default(now())
-  program   ProgramTemplate @relation(fields: [programId], references: [id], onDelete: Cascade)
-
-  @@unique([programId, weekNumber])
-  @@index([programId, weekNumber])
-  @@map("program_weeks")
-}
-
-model ProgramSubscription {
-  id             String          @id @default(cuid())
-  userId         String
-  programId      String
-  currentWeek    Int             @default(1)
-  currentDay     Int             @default(1)
-  startDate      DateTime        @default(now())
-  endDate        DateTime?
-  isActive       Boolean         @default(true)
-  progressData   Json?
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  user           User            @relation("ProgramSubscriptions", fields: [userId], references: [id])
-  program        ProgramTemplate @relation(fields: [programId], references: [id])
-
-  @@unique([userId, programId])
-  @@index([userId, isActive])
-  @@map("program_subscriptions")
-}
-
-model TemplatePurchase {
-  id         String          @id @default(cuid())
-  userId     String
-  templateId String
-  price      Float
-  currency   String          @default("USD")
-  purchasedAt DateTime       @default(now())
-  user       User            @relation("TemplatePurchases", fields: [userId], references: [id])
-  template   WorkoutTemplate @relation(fields: [templateId], references: [id])
-
-  @@unique([userId, templateId])
-  @@index([userId, purchasedAt])
-  @@map("template_purchases")
-}
-
-model ProgramPurchase {
-  id         String          @id @default(cuid())
-  userId     String
-  programId  String
-  price      Float
-  currency   String          @default("USD")
-  purchasedAt DateTime       @default(now())
-  user       User            @relation("ProgramPurchases", fields: [userId], references: [id])
-  program    ProgramTemplate @relation(fields: [programId], references: [id])
-
-  @@unique([userId, programId])
-  @@index([userId, purchasedAt])
-  @@map("program_purchases")
-}
-
-model TemplateRating {
-  id         String          @id @default(cuid())
-  userId     String
-  templateId String
-  rating     Int
-  review     String?
-  createdAt  DateTime        @default(now())
-  user       User            @relation("TemplateRatings", fields: [userId], references: [id])
-  template   WorkoutTemplate @relation(fields: [templateId], references: [id])
-
-  @@unique([userId, templateId])
-  @@index([templateId, rating])
-  @@map("template_ratings")
-}
-
-model ProgramRating {
-  id        String          @id @default(cuid())
-  userId    String
-  programId String
-  rating    Int
-  review    String?
-  createdAt DateTime        @default(now())
-  user      User            @relation("ProgramRatings", fields: [userId], references: [id])
-  program   ProgramTemplate @relation(fields: [programId], references: [id])
-
-  @@unique([userId, programId])
-  @@index([programId, rating])
-  @@map("program_ratings")
-}
-
-model ProgressMetric {
-  id         String   @id @default(cuid())
-  userId     String
-  metricType String
-  value      Float
-  unit       String?
-  bodyPart   String?
-  notes      String?
-  imageUrl   String?
-  recordedAt DateTime @default(now())
-  createdAt  DateTime @default(now())
-  user       User     @relation("ProgressMetrics", fields: [userId], references: [id])
-
-  @@index([userId, metricType, recordedAt])
-  @@index([userId, recordedAt])
-  @@map("progress_metrics")
-}
-
-model PersonalRecord {
-  id         String   @id @default(cuid())
-  userId     String
-  exerciseId String
-  recordType String
-  value      Float
-  unit       String
-  reps       Int?
-  notes      String?
-  achievedAt DateTime @default(now())
-  createdAt  DateTime @default(now())
-  user       User     @relation("PersonalRecords", fields: [userId], references: [id])
-  exercise   Exercise @relation("PersonalRecords", fields: [exerciseId], references: [id])
-
-  @@index([userId, exerciseId, recordType])
-  @@index([userId, achievedAt])
-  @@map("personal_records")
-}
-
-model WorkoutAnalytics {
-  id             String   @id @default(cuid())
+model workout_analytics {
+  id             String   @id
   userId         String
   date           DateTime @db.Date
   totalWorkouts  Int      @default(0)
@@ -642,1127 +2055,245 @@ model WorkoutAnalytics {
   topMuscleGroup String?
   workoutTime    Int?
   createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  user           User     @relation("WorkoutAnalytics", fields: [userId], references: [id])
+  updatedAt      DateTime
+  users          users    @relation(fields: [userId], references: [id])
 
   @@unique([userId, date])
   @@index([userId, date])
-  @@map("workout_analytics")
 }
 
-model AccreditedProvider {
-  id             String   @id @default(cuid())
-  name           String
-  country        String
-  qualifications String[]
-  profilePath    String?
-  profileUrl     String?
-  slug           String?  @unique
-  source         String   @default("EREPS")
-  isActive       Boolean  @default(true)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+model workout_log_entries {
+  id                                       String                  @id
+  userId                                   String
+  coachId                                  String?
+  sessionId                                String?
+  date                                     DateTime                @db.Date
+  exerciseId                               String
+  order                                    String
+  setNumber                                Int
+  setType                                  SetType
+  reps                                     Int
+  weight                                   String
+  unit                                     WeightUnit
+  intensity                                String?
+  intensityType                            IntensityType?
+  tempo                                    String?
+  restSeconds                              Int?
+  trainingVolume                           Float?
+  duration                                 String?
+  coachFeedback                            String?
+  userComments                             String?
+  actualRPE                                Int?
+  targetRPE                                Int?
+  restDuration                             Int?
+  formQuality                              Int?
+  nasmPrinciple                            String?
+  movementPattern                          String?
+  personalRecord                           Boolean                 @default(false)
+  volumeRecord                             Boolean                 @default(false)
+  createdAt                                DateTime                @default(now())
+  updatedAt                                DateTime
+  allowComments                            Boolean                 @default(true)
+  teamWorkoutId                            String?
+  isTeamWorkout                            Boolean                 @default(false)
+  workoutTitle                             String?
+  workoutDescription                       String?
+  instructionalVideoUrl                    String?
+  instagramUrl                             String?
+  tiktokUrl                                String?
+  comments                                 comments[]
+  users_workout_log_entries_coachIdTousers users?                  @relation("workout_log_entries_coachIdTousers", fields: [coachId], references: [id])
+  exercises                                exercises               @relation(fields: [exerciseId], references: [id])
+  workout_sessions                         workout_sessions?       @relation(fields: [sessionId], references: [id])
+  users_workout_log_entries_userIdTousers  users                   @relation("workout_log_entries_userIdTousers", fields: [userId], references: [id])
+  team_workout_logs                        team_workout_logs?      @relation(fields: [teamWorkoutId], references: [id])
+  entry_comments                           workout_entry_comments[]
 
-  @@unique([name, country])
-  @@index([country])
-  @@map("accredited_providers")
-}
-
-model WorkoutSession {
-  id          String            @id @default(cuid())
-  userId      String
-  coachId     String?
-  date        DateTime          @db.Date
-  startTime   DateTime
-  endTime     DateTime?
-  duration    Int?
-  title       String?
-  notes       String?
-  location    String?
-  totalVolume Float?
-  totalSets   Int               @default(0)
-  totalReps   Int               @default(0)
-  isComplete  Boolean           @default(false)
-  isTemplate  Boolean           @default(false)
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-  entries     WorkoutLogEntry[] @relation("SessionEntries")
-  coach       User?             @relation("CoachWorkoutSessions", fields: [coachId], references: [id])
-  user        User              @relation("UserWorkoutSessions", fields: [userId], references: [id])
-  appointment Appointment?      @relation("AppointmentWorkout")
-
-  @@index([userId, date])
   @@index([coachId, date])
-  @@map("workout_sessions")
+  @@index([exerciseId, date])
+  @@index([userId, date])
+  @@index([teamWorkoutId])
+  @@index([isTeamWorkout])
+  @@index([userId, isTeamWorkout])
 }
 
-enum UserRole {
-  CLIENT
-  TRAINER
-  ADMIN
-}
-
-enum UserStatus {
-  ACTIVE
-  SUSPENDED
-  BANNED
-  PENDING
-}
-
-enum ModerationAction {
-  APPROVED
-  FLAGGED
-  BLOCKED
-  EDITED
-}
-
-enum ModerationSource {
-  OPENAI_API
-  CUSTOM_RULES
-  USER_REPORT
-  ADMIN_ACTION
-}
-
-enum ViolationType {
-  INAPPROPRIATE_CONTENT
-  HARASSMENT
-  SPAM
-  IMPERSONATION
-  OFF_TOPIC
-  PRIVACY_VIOLATION
-  HATE_SPEECH
-  THREAT
-}
-
-enum CommunityType {
-  PUBLIC
-  PRIVATE
-  TRAINER
-}
-
-enum PostStatus {
-  PUBLISHED
-  PENDING
-  FLAGGED
-  REMOVED
-  DRAFT
-}
-
-enum SetType {
-  STRAIGHT
-  SUPERSET
-  TRISET
-  GIANT_SET
-  PYRAMID
-  REVERSE_PYRAMID
-  DROP_SET
-  REST_PAUSE
-  CLUSTER
-  EMOM
-  AMRAP
-}
-
-enum WeightUnit {
-  KG
-  LB
-}
-
-enum IntensityType {
-  PERCENTAGE_1RM
-  RPE
-  RIR
-}
-
-// ============================================================================
-// REAL-TIME & MOBILE FEATURES (Phase 4)
-// ============================================================================
-
-model ChatRoom {
-  id          String               @id @default(cuid())
-  name        String?
-  type        ChatRoomType         @default(DIRECT)
-  isActive    Boolean              @default(true)
-  createdAt   DateTime             @default(now())
-  updatedAt   DateTime             @updatedAt
-  messages    ChatMessage[]
-  participants ChatRoomParticipant[]
-
-  @@map("chat_rooms")
-}
-
-model ChatRoomParticipant {
-  id        String   @id @default(cuid())
-  roomId    String
-  userId    String
-  role      String   @default("MEMBER")
-  joinedAt  DateTime @default(now())
-  leftAt    DateTime?
-  isActive  Boolean  @default(true)
-  room      ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  user      User     @relation("ChatParticipants", fields: [userId], references: [id])
-
-  @@unique([roomId, userId])
-  @@map("chat_room_participants")
-}
-
-model ChatMessage {
-  id        String      @id @default(cuid())
-  roomId    String
-  senderId  String
-  content   String
-  type      MessageType @default(TEXT)
-  metadata  Json?
-  editedAt  DateTime?
-  deletedAt DateTime?
-  createdAt DateTime    @default(now())
-  room      ChatRoom    @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  sender    User        @relation("SentMessages", fields: [senderId], references: [id])
-
-  @@index([roomId, createdAt])
-  @@map("chat_messages")
-}
-
-model LiveWorkoutSession {
-  id              String                     @id @default(cuid())
-  trainerId       String
-  name            String
-  description     String?
-  scheduledAt     DateTime
-  startedAt       DateTime?
-  endedAt         DateTime?
-  duration        Int?
-  maxParticipants Int                        @default(10)
-  isActive        Boolean                    @default(true)
-  sessionData     Json?
-  createdAt       DateTime                   @default(now())
-  updatedAt       DateTime                   @updatedAt
-  trainer         User                       @relation("TrainerSessions", fields: [trainerId], references: [id])
-  participants    LiveSessionParticipant[]
-  progress        WorkoutProgress[]
-
-  @@index([trainerId, scheduledAt])
-  @@map("live_workout_sessions")
-}
-
-model LiveSessionParticipant {
-  id        String              @id @default(cuid())
-  sessionId String
-  userId    String
-  joinedAt  DateTime            @default(now())
-  leftAt    DateTime?
-  isActive  Boolean             @default(true)
-  session   LiveWorkoutSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  user      User                @relation("SessionParticipants", fields: [userId], references: [id])
-
-  @@unique([sessionId, userId])
-  @@map("live_session_participants")
-}
-
-model WorkoutProgress {
-  id        String              @id @default(cuid())
-  userId    String
-  sessionId String?
-  progress  Json
-  createdAt DateTime            @default(now())
-  updatedAt DateTime            @updatedAt
-  user      User                @relation("WorkoutProgress", fields: [userId], references: [id])
-  session   LiveWorkoutSession? @relation(fields: [sessionId], references: [id])
+model workout_progress {
+  id                    String                 @id
+  userId                String
+  sessionId             String?
+  progress              Json
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime
+  live_workout_sessions live_workout_sessions? @relation(fields: [sessionId], references: [id])
+  users                 users                  @relation(fields: [userId], references: [id])
 
   @@unique([userId, sessionId])
   @@index([userId, createdAt])
-  @@map("workout_progress")
 }
 
-model PushNotification {
-  id         String              @id @default(cuid())
-  userId     String
-  title      String
-  body       String
-  data       Json?
-  type       NotificationType    @default(GENERAL)
-  status     NotificationStatus  @default(PENDING)
-  scheduledAt DateTime?
-  sentAt     DateTime?
-  readAt     DateTime?
-  createdAt  DateTime            @default(now())
-  user       User                @relation("Notifications", fields: [userId], references: [id])
-
-  @@index([userId, status])
-  @@index([scheduledAt, status])
-  @@map("push_notifications")
-}
-
-model DeviceToken {
-  id        String       @id @default(cuid())
-  userId    String
-  token     String       @unique
-  platform  DevicePlatform
-  isActive  Boolean      @default(true)
-  lastUsed  DateTime     @default(now())
-  createdAt DateTime     @default(now())
-  user      User         @relation("DeviceTokens", fields: [userId], references: [id])
-
-  @@index([userId, isActive])
-  @@map("device_tokens")
-}
-
-model HealthData {
-  id         String           @id @default(cuid())
-  userId     String
-  dataType   HealthDataType
-  value      Float
-  unit       String
-  source     String           @default("MANUAL")
-  metadata   Json?
-  recordedAt DateTime
-  syncedAt   DateTime?
-  createdAt  DateTime         @default(now())
-  user       User             @relation("HealthData", fields: [userId], references: [id])
-
-  @@index([userId, dataType, recordedAt])
-  @@map("health_data")
-}
-
-// ============================================================================
-// PHASE 4 ENUMS
-// ============================================================================
-
-enum ChatRoomType {
-  DIRECT
-  GROUP
-  TRAINER_CLIENT
-  LIVE_SESSION
-}
-
-enum MessageType {
-  TEXT
-  IMAGE
-  VIDEO
-  AUDIO
-  WORKOUT
-  SYSTEM
-  FILE
-}
-
-enum NotificationType {
-  GENERAL
-  WORKOUT_REMINDER
-  MESSAGE
-  SESSION_INVITE
-  PROGRESS_UPDATE
-  ACHIEVEMENT
-}
-
-enum NotificationStatus {
-  PENDING
-  SENT
-  DELIVERED
-  READ
-  FAILED
-}
-
-enum DevicePlatform {
-  IOS
-  ANDROID
-  WEB
-}
-
-enum HealthDataType {
-  HEART_RATE
-  STEPS
-  CALORIES
-  WEIGHT
-  BODY_FAT
-  SLEEP
-  DISTANCE
-  WORKOUT_DURATION
-}
-
-// ============================================================================
-// PHASE 5: BUSINESS FEATURES & MONETIZATION (NEW)
-// ============================================================================
-
-// 5.1 TRAINER BUSINESS TOOLS
-// ============================================================================
-
-model TrainerProfile {
-  id                  String              @id @default(cuid())
-  userId              String              @unique
-  businessName        String?
-  businessDescription String?
-  hourlyRate          Float?
-  currency            String              @default("USD")
-  taxId               String?
-  businessAddress     Json?
-  certifications      Json?               @default("[]")
-  specializations     String[]            @default([])
-  experienceYears     Int                 @default(0)
-  languages           String[]            @default(["English"])
-  availableHours      Json?               // Weekly availability schedule
-  timezone            String              @default("UTC")
-  isVerified          Boolean             @default(false)
-  verificationLevel   String              @default("BASIC") // BASIC, PROFESSIONAL, PREMIUM
-  trainerRating       Float               @default(0.0)
-  totalClients        Int                 @default(0)
-  activeClients       Int                 @default(0)
-  totalEarnings       Float               @default(0.0)
-  monthlyEarnings     Float               @default(0.0)
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  user                User                @relation("TrainerProfile", fields: [userId], references: [id], onDelete: Cascade)
-  clients             TrainerClient[]
-  appointments        Appointment[]
-  payments            Payment[]           @relation("TrainerPayments")
-  reviews             TrainerReview[]
-  packages            TrainerPackage[]
-  groupClasses        GroupClass[]        @relation("TrainerGroupClasses")
-  progressReports     ProgressReport[]
-
-  @@map("trainer_profiles")
-}
-
-model TrainerClient {
-  id                  String              @id @default(cuid())
-  trainerId           String
-  clientId            String
-  status              ClientStatus        @default(ACTIVE)
-  startDate           DateTime            @default(now())
-  endDate             DateTime?
-  packageId           String?
-  sessionsRemaining   Int                 @default(0)
-  totalSessions       Int                 @default(0)
-  monthlyRate         Float?
-  billingCycle        String              @default("MONTHLY") // WEEKLY, MONTHLY, QUARTERLY
-  lastSessionDate     DateTime?
-  nextSessionDate     DateTime?
-  notes               String?
-  goals               String[]            @default([])
-  emergencyContact    Json?
-  medicalConditions   String[]            @default([])
-  preferences         Json?               @default("{}")
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  trainer             TrainerProfile      @relation(fields: [trainerId], references: [id], onDelete: Cascade)
-  client              User                @relation("ClientRelationships", fields: [clientId], references: [id], onDelete: Cascade)
-  package             TrainerPackage?     @relation(fields: [packageId], references: [id])
-  appointments        Appointment[]
-  progressReports     ProgressReport[]
-  payments            Payment[]           @relation("ClientPayments")
-
-  @@unique([trainerId, clientId])
-  @@map("trainer_clients")
-}
-
-model Appointment {
-  id                  String              @id @default(cuid())
-  trainerId           String
-  clientId            String
-  trainerClientId     String?
-  title               String
-  description         String?
-  scheduledAt         DateTime
-  duration            Int                 @default(60) // minutes
-  status              AppointmentStatus   @default(SCHEDULED)
-  type                AppointmentType     @default(PERSONAL_TRAINING)
-  location            String?
-  isVirtual           Boolean             @default(false)
-  meetingLink         String?
-  price               Float?
-  currency            String              @default("USD")
-  isPaid              Boolean             @default(false)
-  paymentId           String?
-  cancellationReason  String?
-  cancelledAt         DateTime?
-  cancelledBy         String?
-  completedAt         DateTime?
-  trainerNotes        String?
-  clientNotes         String?
-  rating              Int?                // 1-5 rating from client
-  feedback            String?
-  noShowFee           Float?
-  reminderSent        Boolean             @default(false)
-  workoutSessionId    String?             @unique
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  trainer             TrainerProfile      @relation(fields: [trainerId], references: [id], onDelete: Cascade)
-  client              User                @relation("ClientAppointments", fields: [clientId], references: [id], onDelete: Cascade)
-  trainerClient       TrainerClient?      @relation(fields: [trainerClientId], references: [id])
-  payment             Payment?            @relation(fields: [paymentId], references: [id])
-  workoutSession      WorkoutSession?     @relation("AppointmentWorkout", fields: [workoutSessionId], references: [id])
-
-  @@index([trainerId, scheduledAt])
-  @@index([clientId, scheduledAt])
-  @@map("appointments")
-}
-
-model Payment {
-  id                  String              @id @default(cuid())
-  trainerId           String
-  clientId            String
-  trainerClientId     String?
-  amount              Float
-  currency            String              @default("USD")
-  type                PaymentType         @default(SESSION)
-  status              PaymentStatus       @default(PENDING)
-  method              PaymentMethod       @default(MOLLIE)
-  molliePaymentId     String?
-  mollieCustomerId    String?
-  description         String
-  sessionDate         DateTime?
-  packageId           String?
-  subscriptionId      String?
-  refundAmount        Float?              @default(0.0)
-  platformFee         Float?              @default(0.0)
-  trainerEarnings     Float?
-  paymentDate         DateTime?
-  refundDate          DateTime?
-  failureReason       String?
-  metadata            Json?               @default("{}")
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  trainer             TrainerProfile      @relation("TrainerPayments", fields: [trainerId], references: [id], onDelete: Cascade)
-  client              User                @relation("UserPayments", fields: [clientId], references: [id], onDelete: Cascade)
-  trainerClient       TrainerClient?      @relation("ClientPayments", fields: [trainerClientId], references: [id])
-  package             TrainerPackage?     @relation(fields: [packageId], references: [id])
-  subscription        Subscription?       @relation(fields: [subscriptionId], references: [id])
-  appointments        Appointment[]
-
-  @@index([trainerId, paymentDate])
-  @@index([clientId, paymentDate])
-  @@index([status, paymentDate])
-  @@map("payments")
-}
-
-model TrainerPackage {
-  id                  String              @id @default(cuid())
-  trainerId           String
-  name                String
-  description         String?
-  price               Float
-  currency            String              @default("USD")
-  sessionCount        Int
-  duration            Int                 // days validity
-  isActive            Boolean             @default(true)
-  features            String[]            @default([])
-  terms               String?
-  cancellationPolicy  String?
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  trainer             TrainerProfile      @relation(fields: [trainerId], references: [id], onDelete: Cascade)
-  clients             TrainerClient[]
-  payments            Payment[]
-
-  @@index([trainerId, isActive])
-  @@map("trainer_packages")
-}
-
-model ProgressReport {
-  id                  String              @id @default(cuid())
-  trainerId           String
-  clientId            String
-  trainerClientId     String
-  reportDate          DateTime            @default(now())
-  period              String              @default("MONTHLY") // WEEKLY, MONTHLY, QUARTERLY
-  title               String
-  summary             String
-  goals               Json?               @default("[]")
-  achievements        Json?               @default("[]")
-  metrics             Json?               @default("{}")
-  workoutStats        Json?               @default("{}")
-  progressPhotos      String[]            @default([])
-  recommendations     String?
-  nextGoals           Json?               @default("[]")
-  isShared            Boolean             @default(false)
-  clientViewed        Boolean             @default(false)
-  clientViewedAt      DateTime?
-  feedbackFromClient  String?
-  rating              Int?                // 1-5 rating from client
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  trainer             TrainerProfile      @relation(fields: [trainerId], references: [id], onDelete: Cascade)
-  client              User                @relation("ClientReports", fields: [clientId], references: [id], onDelete: Cascade)
-  trainerClient       TrainerClient       @relation(fields: [trainerClientId], references: [id], onDelete: Cascade)
-
-  @@index([trainerId, reportDate])
-  @@index([clientId, reportDate])
-  @@map("progress_reports")
-}
-
-model TrainerReview {
-  id                  String              @id @default(cuid())
-  trainerId           String
-  clientId            String
-  rating              Int                 // 1-5 stars
-  title               String?
-  review              String
-  pros                String[]            @default([])
-  cons                String[]            @default([])
-  wouldRecommend      Boolean             @default(true)
-  sessionType         String?             // PERSONAL, GROUP, ONLINE
-  responseFromTrainer String?
-  isVerified          Boolean             @default(false)
-  isPublic            Boolean             @default(true)
-  helpfulVotes        Int                 @default(0)
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  trainer             TrainerProfile      @relation(fields: [trainerId], references: [id], onDelete: Cascade)
-  client              User                @relation("TrainerReviews", fields: [clientId], references: [id], onDelete: Cascade)
-
-  @@unique([trainerId, clientId])
-  @@index([trainerId, rating, createdAt])
-  @@map("trainer_reviews")
-}
-
-// 5.2 ADVANCED COMMUNITY FEATURES
-// ============================================================================
-
-model PremiumCommunity {
-  id                  String              @id @default(cuid())
-  name                String
-  description         String
-  ownerId             String
-  price               Float
-  currency            String              @default("USD")
-  billingCycle        String              @default("MONTHLY") // MONTHLY, YEARLY
-  maxMembers          Int?
-  currentMembers      Int                 @default(0)
-  category            String
-  tags                String[]            @default([])
-  features            String[]            @default([])
-  rules               String?
-  isActive            Boolean             @default(true)
-  isPublic            Boolean             @default(false)
-  requireApproval     Boolean             @default(true)
-  trialPeriodDays     Int                 @default(0)
-  coverImage          String?
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  owner               User                @relation("OwnedPremiumCommunities", fields: [ownerId], references: [id], onDelete: Cascade)
-  memberships         PremiumMembership[]
-  posts               CommunityPost[]
-  groupClasses        GroupClass[]        @relation("CommunityGroupClasses")
-
-  @@index([ownerId, isActive])
-  @@index([category, isActive])
-  @@map("premium_communities")
-}
-
-model PremiumMembership {
-  id                  String              @id @default(cuid())
-  communityId         String
-  userId              String
-  status              MembershipStatus    @default(ACTIVE)
-  startDate           DateTime            @default(now())
-  endDate             DateTime?
-  autoRenew           Boolean             @default(true)
-  paymentId           String?
-  trialEndsAt         DateTime?
-  isTrialActive       Boolean             @default(false)
-  cancelledAt         DateTime?
-  cancellationReason  String?
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  community           PremiumCommunity    @relation(fields: [communityId], references: [id], onDelete: Cascade)
-  user                User                @relation("PremiumMemberships", fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([communityId, userId])
-  @@index([userId, status])
-  @@map("premium_memberships")
-}
-
-model GroupClass {
-  id                  String              @id @default(cuid())
-  trainerId           String
-  communityId         String?
-  title               String
-  description         String
-  category            String
-  difficulty          String              @default("BEGINNER")
-  duration            Int                 @default(60) // minutes
-  maxParticipants     Int                 @default(20)
-  currentParticipants Int                 @default(0)
-  price               Float?
-  currency            String              @default("USD")
-  scheduledAt         DateTime
-  endTime             DateTime
-  timezone            String              @default("UTC")
-  isRecurring         Boolean             @default(false)
-  recurrencePattern   String?             // WEEKLY, DAILY, etc.
-  location            String?
-  isVirtual           Boolean             @default(true)
-  meetingLink         String?
-  equipment           String[]            @default([])
-  tags                String[]            @default([])
-  status              ClassStatus         @default(SCHEDULED)
-  cancelReason        String?
-  recordingUrl        String?
-  isRecorded          Boolean             @default(false)
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  trainer             TrainerProfile      @relation("TrainerGroupClasses", fields: [trainerId], references: [id], onDelete: Cascade)
-  community           PremiumCommunity?   @relation("CommunityGroupClasses", fields: [communityId], references: [id])
-  participants        ClassParticipant[]
-  reviews             ClassReview[]
-
-  @@index([trainerId, scheduledAt])
-  @@index([category, scheduledAt])
-  @@map("group_classes")
-}
-
-model ClassParticipant {
-  id                  String              @id @default(cuid())
-  classId             String
-  userId              String
-  status              ParticipantStatus   @default(REGISTERED)
-  paymentStatus       PaymentStatus       @default(PENDING)
-  paymentId           String?
-  joinedAt            DateTime?
-  leftAt              DateTime?
-  attendanceDuration  Int?                // minutes actually attended
-  rating              Int?                // 1-5 rating
-  feedback            String?
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  class               GroupClass          @relation(fields: [classId], references: [id], onDelete: Cascade)
-  user                User                @relation("ClassParticipations", fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([classId, userId])
-  @@index([userId, status])
-  @@map("class_participants")
-}
-
-model ClassReview {
-  id                  String              @id @default(cuid())
-  classId             String
-  userId              String
-  rating              Int                 // 1-5 stars
-  review              String?
-  wouldRecommend      Boolean             @default(true)
-  difficultyRating    Int?                // 1-5 (1=too easy, 5=too hard)
-  instructorRating    Int?                // 1-5 stars for instructor
-  isPublic            Boolean             @default(true)
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  class               GroupClass          @relation(fields: [classId], references: [id], onDelete: Cascade)
-  user                User                @relation("ClassReviews", fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([classId, userId])
-  @@index([classId, rating])
-  @@map("class_reviews")
-}
-
-model Challenge {
-  id                  String              @id @default(cuid())
-  title               String
-  description         String
-  creatorId           String
-  type                ChallengeType       @default(WORKOUT_GOAL)
-  category            String
-  difficulty          String              @default("BEGINNER")
-  startDate           DateTime
-  endDate             DateTime
-  isPublic            Boolean             @default(true)
-  maxParticipants     Int?
-  currentParticipants Int                 @default(0)
-  entryFee            Float?              @default(0.0)
-  currency            String              @default("USD")
-  prizePool           Float?              @default(0.0)
-  rules               String
-  metrics             Json                @default("{}") // What to track/measure
-  rewards             Json?               @default("[]") // Prize structure
-  status              ChallengeStatus     @default(UPCOMING)
-  coverImage          String?
-  tags                String[]            @default([])
-  isVerified          Boolean             @default(false)
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  creator             User                @relation("CreatedChallenges", fields: [creatorId], references: [id], onDelete: Cascade)
-  participants        ChallengeParticipant[]
-  leaderboard         ChallengeLeaderboard[]
-  posts               ChallengePost[]
-
-  @@index([creatorId, status])
-  @@index([startDate, endDate])
-  @@index([category, status])
-  @@map("challenges")
-}
-
-model ChallengeParticipant {
-  id                  String              @id @default(cuid())
-  challengeId         String
-  userId              String
-  status              ParticipantStatus   @default(REGISTERED)
-  joinedAt            DateTime            @default(now())
-  completedAt         DateTime?
-  currentProgress     Json?               @default("{}")
-  finalResults        Json?               @default("{}")
-  rank                Int?
-  isVerified          Boolean             @default(false)
-  paymentId           String?
-  notes               String?
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  challenge           Challenge           @relation(fields: [challengeId], references: [id], onDelete: Cascade)
-  user                User                @relation("ChallengeParticipations", fields: [userId], references: [id], onDelete: Cascade)
-  progressUpdates     ChallengeProgress[]
-
-  @@unique([challengeId, userId])
-  @@index([challengeId, rank])
-  @@map("challenge_participants")
-}
-
-model ChallengeProgress {
-  id                  String              @id @default(cuid())
-  participantId       String
-  date                DateTime            @db.Date
-  metrics             Json                @default("{}")
-  notes               String?
-  proofImages         String[]            @default([])
-  isVerified          Boolean             @default(false)
-  verifiedBy          String?
-  createdAt           DateTime            @default(now())
-
-  // Relations
-  participant         ChallengeParticipant @relation(fields: [participantId], references: [id], onDelete: Cascade)
-
-  @@index([participantId, date])
-  @@map("challenge_progress")
-}
-
-model ChallengeLeaderboard {
-  id                  String              @id @default(cuid())
-  challengeId         String
-  userId              String
-  rank                Int
-  score               Float
-  metrics             Json                @default("{}")
-  lastUpdated         DateTime            @default(now())
-
-  // Relations
-  challenge           Challenge           @relation(fields: [challengeId], references: [id], onDelete: Cascade)
-  user                User                @relation("LeaderboardPositions", fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([challengeId, userId])
-  @@unique([challengeId, rank])
-  @@index([challengeId, rank])
-  @@map("challenge_leaderboard")
-}
-
-model ChallengePost {
-  id                  String              @id @default(cuid())
-  challengeId         String
-  authorId            String
-  content             String
-  images              String[]            @default([])
-  metrics             Json?               @default("{}")
-  likesCount          Int                 @default(0)
-  commentsCount       Int                 @default(0)
-  isHighlighted       Boolean             @default(false)
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  challenge           Challenge           @relation(fields: [challengeId], references: [id], onDelete: Cascade)
-  author              User                @relation("ChallengePostsAuthored", fields: [authorId], references: [id], onDelete: Cascade)
-  comments            ChallengePostComment[]
-  likes               ChallengePostLike[]
-
-  @@index([challengeId, createdAt])
-  @@map("challenge_posts")
-}
-
-model ChallengePostComment {
-  id                  String              @id @default(cuid())
-  postId              String
-  authorId            String
-  content             String
-  createdAt           DateTime            @default(now())
-
-  // Relations
-  post                ChallengePost       @relation(fields: [postId], references: [id], onDelete: Cascade)
-  author              User                @relation("ChallengeCommentsAuthored", fields: [authorId], references: [id], onDelete: Cascade)
-
-  @@index([postId, createdAt])
-  @@map("challenge_post_comments")
-}
-
-model ChallengePostLike {
-  id                  String              @id @default(cuid())
-  postId              String
-  userId              String
-  createdAt           DateTime            @default(now())
-
-  // Relations
-  post                ChallengePost       @relation(fields: [postId], references: [id], onDelete: Cascade)
-  user                User                @relation("ChallengePostLikes", fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([postId, userId])
-  @@map("challenge_post_likes")
-}
-
-// 5.3 MARKETPLACE & MONETIZATION
-// ============================================================================
-
-model Subscription {
-  id                  String              @id @default(cuid())
-  userId              String
-  type                SubscriptionType    @default(BASIC)
-  status              SubscriptionStatus  @default(ACTIVE)
-  mollieSubscriptionId String?            @unique
-  mollieCustomerId    String?
-  currentPeriodStart  DateTime
-  currentPeriodEnd    DateTime
-  cancelAtPeriodEnd   Boolean             @default(false)
-  cancelledAt         DateTime?
-  trialEnd            DateTime?
-  price               Float
-  currency            String              @default("USD")
-  features            Json                @default("[]")
-  usageStats          Json?               @default("{}")
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  user                User                @relation("UserSubscriptions", fields: [userId], references: [id], onDelete: Cascade)
-  payments            Payment[]
-
-  @@index([userId, status])
-  @@index([mollieSubscriptionId])
-  @@map("subscriptions")
-}
-
-model EquipmentRecommendation {
-  id                  String              @id @default(cuid())
-  name                String
-  description         String
-  category            String
-  brand               String?
-  price               Float?
-  currency            String              @default("USD")
-  affiliateUrl        String
-  affiliateCode       String?
-  imageUrl            String?
-  rating              Float?              @default(0.0)
-  reviewCount         Int                 @default(0)
-  features            String[]            @default([])
-  specifications      Json?               @default("{}")
-  exerciseTypes       String[]            @default([])
-  isActive            Boolean             @default(true)
-  isPremium           Boolean             @default(false)
-  clickCount          Int                 @default(0)
-  conversionCount     Int                 @default(0)
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  reviews             EquipmentReview[]
-  recommendations     UserEquipmentRecommendation[]
-
-  @@index([category, isActive])
-  @@index([rating, reviewCount])
-  @@map("equipment_recommendations")
-}
-
-model EquipmentReview {
-  id                  String              @id @default(cuid())
-  equipmentId         String
-  userId              String
-  rating              Int                 // 1-5 stars
-  title               String?
-  review              String
-  pros                String[]            @default([])
-  cons                String[]            @default([])
-  wouldRecommend      Boolean             @default(true)
-  purchaseVerified    Boolean             @default(false)
-  helpfulVotes        Int                 @default(0)
-  images              String[]            @default([])
-  usageMonths         Int?                // How long they've used it
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  equipment           EquipmentRecommendation @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
-  user                User                @relation("EquipmentReviews", fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([equipmentId, userId])
-  @@index([equipmentId, rating])
-  @@map("equipment_reviews")
-}
-
-model UserEquipmentRecommendation {
-  id                  String              @id @default(cuid())
-  userId              String
-  equipmentId         String
-  reason              String              // Why recommended
-  priority            Int                 @default(1) // 1-5 priority
-  isPersonalized      Boolean             @default(false)
-  clickedAt           DateTime?
-  purchasedAt         DateTime?
-  createdAt           DateTime            @default(now())
-
-  // Relations
-  user                User                @relation("UserEquipmentRecs", fields: [userId], references: [id], onDelete: Cascade)
-  equipment           EquipmentRecommendation @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, equipmentId])
-  @@index([userId, priority])
-  @@map("user_equipment_recommendations")
-}
-
-model NutritionPlan {
-  id                  String              @id @default(cuid())
-  userId              String
-  createdBy           String?             // Trainer who created it
-  name                String
-  description         String?
-  type                String              @default("CUSTOM") // WEIGHT_LOSS, MUSCLE_GAIN, MAINTENANCE, CUSTOM
-  targetCalories      Int?
-  targetProtein       Int?                // grams
-  targetCarbs         Int?                // grams
-  targetFat           Int?                // grams
-  targetFiber         Int?                // grams
-  startDate           DateTime
-  endDate             DateTime?
-  isActive            Boolean             @default(true)
-  notes               String?
-  restrictions        String[]            @default([]) // VEGETARIAN, VEGAN, GLUTEN_FREE, etc.
-  preferences         Json?               @default("{}")
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  user                User                @relation("UserNutritionPlans", fields: [userId], references: [id], onDelete: Cascade)
-  creator             User?               @relation("CreatedNutritionPlans", fields: [createdBy], references: [id])
-  meals               MealPlan[]
-  logs                NutritionLog[]
-
-  @@index([userId, isActive])
-  @@index([createdBy, createdAt])
-  @@map("nutrition_plans")
-}
-
-model MealPlan {
-  id                  String              @id @default(cuid())
-  nutritionPlanId     String
-  dayOfWeek           Int                 // 0-6 (Sunday-Saturday)
-  mealType            String              // BREAKFAST, LUNCH, DINNER, SNACK
-  mealOrder           Int                 @default(1)
-  name                String
-  description         String?
-  calories            Int?
-  protein             Float?              // grams
-  carbs               Float?              // grams
-  fat                 Float?              // grams
-  fiber               Float?              // grams
-  ingredients         Json                @default("[]")
-  instructions        String?
-  prepTime            Int?                // minutes
-  cookTime            Int?                // minutes
-  servings            Int                 @default(1)
-  imageUrl            String?
-  isOptional          Boolean             @default(false)
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  nutritionPlan       NutritionPlan       @relation(fields: [nutritionPlanId], references: [id], onDelete: Cascade)
-
-  @@index([nutritionPlanId, dayOfWeek, mealType])
-  @@map("meal_plans")
-}
-
-model NutritionLog {
-  id                  String              @id @default(cuid())
-  userId              String
-  nutritionPlanId     String?
-  date                DateTime            @db.Date
-  mealType            String              // BREAKFAST, LUNCH, DINNER, SNACK
-  foodName            String
-  quantity            Float               // amount consumed
-  unit                String              // cups, grams, ounces, etc.
-  calories            Int
-  protein             Float               // grams
-  carbs               Float               // grams
-  fat                 Float               // grams
-  fiber               Float?              // grams
-  sodium              Float?              // mg
-  sugar               Float?              // grams
-  notes               String?
-  imageUrl            String?
-  isManual            Boolean             @default(true)
-  source              String?             // MANUAL, BARCODE, API
-  createdAt           DateTime            @default(now())
-
-  // Relations
-  user                User                @relation("NutritionLogs", fields: [userId], references: [id], onDelete: Cascade)
-  nutritionPlan       NutritionPlan?      @relation(fields: [nutritionPlanId], references: [id])
-
+model workout_sessions {
+  id                                    String                   @id
+  userId                                String
+  coachId                               String?
+  date                                  DateTime                 @db.Date
+  startTime                             DateTime
+  endTime                               DateTime?
+  duration                              Int?
+  title                                 String?
+  notes                                 String?
+  location                              String?
+  totalVolume                           Float?
+  totalSets                             Int                      @default(0)
+  totalReps                             Int                      @default(0)
+  isComplete                            Boolean                  @default(false)
+  isTemplate                            Boolean                  @default(false)
+  assessmentId                          String?
+  fitnessLevel                          String?
+  primaryGoal                           String?
+  aiGenerated                           Boolean                  @default(false)
+  aiRecommendations                     Json?
+  aiConfidenceScore                     Float?
+  experiencePoints                      Int                      @default(0)
+  achievementsEarned                    String[]                 @default([])
+  performanceRating                     Int?
+  sessionBehaviour                      String?
+  effortLevel                           Int?
+  sessionNotes                          String?
+  createdAt                             DateTime                 @default(now())
+  updatedAt                             DateTime
+  appointments                          appointments?
+  workout_log_entries                   workout_log_entries[]
+  users_workout_sessions_coachIdTousers users?                   @relation("workout_sessions_coachIdTousers", fields: [coachId], references: [id])
+  users_workout_sessions_userIdTousers  users                    @relation("workout_sessions_userIdTousers", fields: [userId], references: [id])
+  assessments                           assessments?             @relation(fields: [assessmentId], references: [id])
+  session_comments                      workout_session_comments[]
+
+  @@index([coachId, date])
   @@index([userId, date])
-  @@index([nutritionPlanId, date])
-  @@map("nutrition_logs")
+  @@index([assessmentId])
 }
 
+model workout_template_exercises {
+  id                String            @id
+  templateId        String
+  exerciseId        String
+  order             Int
+  sets              Int
+  reps              String
+  weight            String?
+  restTime          String?
+  notes             String?
+  isSuperset        Boolean           @default(false)
+  supersetGroup     String?
+  createdAt         DateTime          @default(now())
+  exercises         exercises         @relation(fields: [exerciseId], references: [id])
+  workout_templates workout_templates @relation(fields: [templateId], references: [id], onDelete: Cascade)
 
-// Additional CommunityPost model for premium communities
-model CommunityPost {
-  id                  String              @id @default(cuid())
-  communityId         String
-  authorId            String
-  title               String?
-  content             String
-  images              String[]            @default([])
-  isPinned            Boolean             @default(false)
-  likesCount          Int                 @default(0)
-  commentsCount       Int                 @default(0)
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-
-  // Relations
-  community           PremiumCommunity    @relation(fields: [communityId], references: [id], onDelete: Cascade)
-  author              User                @relation("CommunityPostsAuthored", fields: [authorId], references: [id], onDelete: Cascade)
-
-  @@index([communityId, createdAt])
-  @@map("community_posts")
+  @@unique([templateId, order])
+  @@index([templateId, order])
 }
 
-// ============================================================================
-// PHASE 5 ENUMS
-// ============================================================================
+model workout_templates {
+  id                         String                       @id
+  name                       String
+  description                String?
+  createdBy                  String
+  category                   String?
+  difficulty                 String                       @default("BEGINNER")
+  duration                   String?
+  equipment                  String[]                     @default([])
+  isPublic                   Boolean                      @default(false)
+  price                      Float?
+  currency                   String                       @default("USD")
+  purchaseCount              Int                          @default(0)
+  rating                     Float?                       @default(0.0)
+  ratingCount                Int                          @default(0)
+  isActive                   Boolean                      @default(true)
+  tags                       String[]                     @default([])
+  createdAt                  DateTime                     @default(now())
+  updatedAt                  DateTime
+  template_purchases         template_purchases[]
+  template_ratings           template_ratings[]
+  workout_template_exercises workout_template_exercises[]
+  users                      users                        @relation(fields: [createdBy], references: [id])
+  program_templates          program_templates[]          @relation("ProgramTemplateToWorkoutTemplate")
 
-enum ClientStatus {
-  ACTIVE
-  INACTIVE
-  PAUSED
-  COMPLETED
-  CANCELLED
+  @@index([category, difficulty])
+  @@index([createdBy, isActive])
+  @@index([isPublic, isActive])
+}
+
+model workout_entry_comments {
+  id              String              @id
+  userId          String
+  entryId         String
+  content         String              @db.Text
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  users           users               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workout_entry   workout_log_entries @relation(fields: [entryId], references: [id], onDelete: Cascade)
+
+  @@index([entryId, createdAt])
+  @@index([userId])
+}
+
+model workout_session_comments {
+  id              String           @id
+  userId          String
+  sessionId       String
+  content         String           @db.Text
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  users           users            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workout_session workout_sessions @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, createdAt])
+  @@index([userId])
+}
+
+model achievements {
+  id                  String                @id
+  code                String                @unique
+  name                String
+  description         String
+  category            String
+  tier                String
+  experiencePoints    Int
+  criteria            Json
+  iconColour          String
+  createdAt           DateTime              @default(now())
+  user_achievements   user_achievements[]
+}
+
+model user_achievements {
+  id            String       @id
+  userId        String
+  achievementId String
+  unlockedAt    DateTime     @default(now())
+  sessionId     String?
+  users         users        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievements  achievements @relation(fields: [achievementId], references: [id])
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+  @@index([achievementId])
+}
+
+enum AchievementType {
+  ROOKIE_RECRUITER
+  TALENT_SCOUT
+  COMMUNITY_BUILDER
+  GROWTH_CHAMPION
+  TRAINER_MAGNET
+  CLIENT_CONNECTOR
+  RETENTION_MASTER
+  VERIFICATION_HELPER
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
 
 enum AppointmentStatus {
@@ -1784,58 +2315,11 @@ enum AppointmentType {
   VIRTUAL_TRAINING
 }
 
-enum PaymentType {
-  SESSION
-  PACKAGE
-  SUBSCRIPTION
-  CONSULTATION
-  LATE_FEE
-  CANCELLATION_FEE
-  EQUIPMENT
-  CHALLENGE_ENTRY
-}
-
-enum PaymentStatus {
-  PENDING
-  PROCESSING
-  COMPLETED
-  FAILED
-  REFUNDED
-  PARTIALLY_REFUNDED
-  CANCELLED
-}
-
-enum PaymentMethod {
-  MOLLIE
-  PAYPAL
-  CASH
-  BANK_TRANSFER
-  CRYPTO
-}
-
-enum MembershipStatus {
+enum ChallengeStatus {
+  UPCOMING
   ACTIVE
-  EXPIRED
-  CANCELLED
-  SUSPENDED
-  TRIAL
-}
-
-enum ClassStatus {
-  SCHEDULED
-  LIVE
   COMPLETED
   CANCELLED
-  POSTPONED
-}
-
-enum ParticipantStatus {
-  REGISTERED
-  CONFIRMED
-  ATTENDED
-  NO_SHOW
-  CANCELLED
-  WAITLISTED
 }
 
 enum ChallengeType {
@@ -1848,18 +2332,281 @@ enum ChallengeType {
   CUSTOM
 }
 
-enum ChallengeStatus {
-  UPCOMING
+enum ChatRoomType {
+  DIRECT
+  GROUP
+  TRAINER_CLIENT
+  LIVE_SESSION
+}
+
+enum ClassStatus {
+  SCHEDULED
+  LIVE
+  COMPLETED
+  CANCELLED
+  POSTPONED
+}
+
+enum ClientPaymentType {
+  SESSION
+  PACKAGE
+  SUBSCRIPTION
+  CUSTOM
+  LATE_FEE
+  CANCELLATION_FEE
+}
+
+enum ClientStatus {
   ACTIVE
+  INACTIVE
+  PAUSED
   COMPLETED
   CANCELLED
 }
 
-enum SubscriptionType {
-  BASIC
-  PREMIUM
-  PROFESSIONAL
-  ENTERPRISE
+enum CommunityType {
+  PUBLIC
+  PRIVATE
+  TRAINER
+}
+
+enum ConnectionStatus {
+  PENDING
+  CONNECTED
+  DECLINED
+  BLOCKED
+}
+
+enum DevicePlatform {
+  IOS
+  ANDROID
+  WEB
+}
+
+enum EarningStatus {
+  PENDING
+  APPROVED
+  PAID
+  DISPUTED
+  CANCELLED
+}
+
+enum EarningType {
+  SESSION
+  PACKAGE
+  SUBSCRIPTION
+  BONUS
+  REFERRAL
+}
+
+enum HealthDataType {
+  HEART_RATE
+  STEPS
+  CALORIES
+  WEIGHT
+  BODY_FAT
+  SLEEP
+  DISTANCE
+  WORKOUT_DURATION
+}
+
+enum IntensityType {
+  PERCENTAGE_1RM
+  RPE
+  RIR
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+  REVOKED
+}
+
+enum MembershipStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+  SUSPENDED
+  TRIAL
+}
+
+enum MentorshipStatus {
+  PENDING
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  PAUSED
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+  WORKOUT
+  SYSTEM
+  FILE
+}
+
+enum ModerationAction {
+  APPROVED
+  FLAGGED
+  BLOCKED
+  EDITED
+}
+
+enum ModerationSource {
+  OPENAI_API
+  CUSTOM_RULES
+  USER_REPORT
+  ADMIN_ACTION
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  DELIVERED
+  READ
+  FAILED
+}
+
+enum NotificationType {
+  GENERAL
+  WORKOUT_REMINDER
+  MESSAGE
+  SESSION_INVITE
+  PROGRESS_UPDATE
+  ACHIEVEMENT
+}
+
+enum PackageStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+enum ParticipantStatus {
+  REGISTERED
+  CONFIRMED
+  ATTENDED
+  NO_SHOW
+  CANCELLED
+  WAITLISTED
+}
+
+enum PartnershipStatus {
+  PENDING
+  ACTIVE
+  PAUSED
+  ENDED
+  REJECTED
+}
+
+enum PartnershipType {
+  JOINT_TRAINING
+  REVENUE_SHARING
+  REFERRAL
+  MENTORSHIP
+  CONTENT
+  CROSS_PROMOTION
+}
+
+enum PaymentMethod {
+  MOLLIE
+  PAYPAL
+  CASH
+  BANK_TRANSFER
+  CRYPTO
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+  CANCELLED
+}
+
+enum PaymentType {
+  SESSION
+  PACKAGE
+  SUBSCRIPTION
+  CONSULTATION
+  LATE_FEE
+  CANCELLATION_FEE
+  EQUIPMENT
+  CHALLENGE_ENTRY
+}
+
+enum PointType {
+  INVITATION_ACCEPTED
+  BONUS_FIRST_WORKOUT
+  BONUS_RETENTION
+  BONUS_TRAINER_VERIFICATION
+  ACHIEVEMENT_UNLOCK
+  MANUAL_ADJUSTMENT
+  PENALTY
+  REFUND
+}
+
+enum PostStatus {
+  PUBLISHED
+  PENDING
+  FLAGGED
+  REMOVED
+  DRAFT
+}
+
+enum PurchaseStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+  REFUNDED
+}
+
+enum RedemptionStatus {
+  PENDING
+  APPROVED
+  FULFILLED
+  REJECTED
+  CANCELLED
+}
+
+enum RewardType {
+  PREMIUM_MONTH
+  PREMIUM_QUARTER
+  PREMIUM_YEAR
+  MERCHANDISE
+  CASH_OUT
+  CERTIFICATION_COURSE
+  CONFERENCE_TICKET
+  CUSTOM
+}
+
+enum SessionStatus {
+  SCHEDULED
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum SetType {
+  STRAIGHT
+  SUPERSET
+  TRISET
+  GIANT_SET
+  PYRAMID
+  REVERSE_PYRAMID
+  DROP_SET
+  REST_PAUSE
+  CLUSTER
+  EMOM
+  AMRAP
 }
 
 enum SubscriptionStatus {
@@ -1869,4 +2616,86 @@ enum SubscriptionStatus {
   PAST_DUE
   UNPAID
   TRIAL
+}
+
+enum SubscriptionType {
+  BASIC
+  PREMIUM
+  PROFESSIONAL
+  ENTERPRISE
+}
+
+enum TeamMembershipStatus {
+  ACTIVE
+  PENDING
+  REJECTED
+  LEFT
+  KICKED
+}
+
+enum TeamMessageType {
+  TEXT
+  IMAGE
+  VIDEO
+  WORKOUT_LINK
+  EXERCISE_MEDIA
+}
+
+enum TeamType {
+  RESISTANCE
+  CIRCUITS
+  YOGA
+  CARDIO
+  ZUMBA
+  CUSTOM
+}
+
+enum TeamVisibility {
+  PUBLIC
+  PRIVATE
+  INVITE_ONLY
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  EXPIRED
+  CANCELLED
+}
+
+enum TrainerSubscriptionStatus {
+  ACTIVE
+  PAUSED
+  CANCELLED
+  DRAFT
+}
+
+enum UserRole {
+  CLIENT
+  TRAINER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+  PENDING
+}
+
+enum ViolationType {
+  INAPPROPRIATE_CONTENT
+  HARASSMENT
+  SPAM
+  IMPERSONATION
+  OFF_TOPIC
+  PRIVACY_VIOLATION
+  HATE_SPEECH
+  THREAT
+}
+
+enum WeightUnit {
+  KG
+  LB
 }

@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import authOptions from '@/core';
+import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
 import { z } from 'zod';
 
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const targetUsers = await prisma.user.findMany({
+    const targetUsers = await prisma.users.findMany({
       where: {
         id: { in: userIds },
         status: 'ACTIVE',

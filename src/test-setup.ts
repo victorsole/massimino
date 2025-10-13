@@ -1,3 +1,4 @@
+// src/test-setup.ts
 /**
  * Jest Test Setup
  * Global test configuration and mocks
@@ -6,7 +7,7 @@
 import '@testing-library/jest-dom';
 
 // Mock environment variables
-process.env.NODE_ENV = 'test';
+(process.env as any).NODE_ENV = 'test';
 process.env.NEXTAUTH_SECRET = 'test-secret';
 process.env.NEXTAUTH_URL = 'http://localhost:3000';
 

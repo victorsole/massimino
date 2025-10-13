@@ -29,7 +29,7 @@ export async function GET(
     const skip = (page - 1) * limit;
 
     // Check if user has access to view participants
-    const challenge = await prisma.challenge.findUnique({
+    const challenge = await prisma.challenges.findUnique({
       where: { id: challengeId },
       select: {
         isPublic: true,
@@ -43,7 +43,7 @@ export async function GET(
 
     // Check access for private challenges
     if (!challenge.isPublic && session?.user?.id) {
-      const userParticipation = await prisma.challengeParticipant.findUnique({
+      const userParticipation = await prisma.challenge_participants.findUnique({
         where: {
           challengeId_userId: {
             challengeId,
@@ -58,7 +58,7 @@ export async function GET(
     }
 
     const [participants, total] = await Promise.all([
-      prisma.challengeParticipant.findMany({
+      prisma.challenge_participants.findMany({
         where: {
           challengeId,
           status: status as any
@@ -80,7 +80,7 @@ export async function GET(
         take: limit
       }),
 
-      prisma.challengeParticipant.count({
+      prisma.challenge_participants.count({
         where: {
           challengeId,
           status: status as any
@@ -130,7 +130,7 @@ export async function POST(
     const { notes } = body;
 
     // Get challenge details
-    const challenge = await prisma.challenge.findUnique({
+    const challenge = await prisma.challenges.findUnique({
       where: { id: challengeId },
       include: {
         creator: {
@@ -153,7 +153,7 @@ export async function POST(
     }
 
     // Check if user is already participating
-    const existingParticipation = await prisma.challengeParticipant.findUnique({
+    const existingParticipation = await prisma.challenge_participants.findUnique({
       where: {
         challengeId_userId: {
           challengeId,
@@ -193,7 +193,7 @@ export async function POST(
     }
 
     // Create participation record
-    const participation = await prisma.challengeParticipant.create({
+    const participation = await prisma.challenge_participants.create({
       data: {
         challengeId,
         userId: session.user.id,
@@ -221,7 +221,7 @@ export async function POST(
 
     // Update challenge participant count if registered
     if (participantStatus === 'REGISTERED') {
-      await prisma.challenge.update({
+      await prisma.challenges.update({
         where: { id: challengeId },
         data: { currentParticipants: { increment: 1 } }
       });
@@ -279,7 +279,7 @@ export async function DELETE(
     const { challengeId } = params;
 
     // Get participation record
-    const participation = await prisma.challengeParticipant.findUnique({
+    const participation = await prisma.challenge_participants.findUnique({
       where: {
         challengeId_userId: {
           challengeId,
@@ -315,13 +315,13 @@ export async function DELETE(
     }
 
     // Remove participation
-    await prisma.challengeParticipant.delete({
+    await prisma.challenge_participants.delete({
       where: { id: participation.id }
     });
 
     // Update challenge participant count if was registered
     if (participation.status === 'REGISTERED') {
-      await prisma.challenge.update({
+      await prisma.challenges.update({
         where: { id: challengeId },
         data: { currentParticipants: { decrement: 1 } }
       });

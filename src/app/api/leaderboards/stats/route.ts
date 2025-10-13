@@ -156,7 +156,7 @@ async function getLeaderboardSummary(timeframe: any) {
     }),
 
     // User engagement in leaderboards
-    prisma.user.count({
+    prisma.users.count({
       where: {
         status: 'ACTIVE'
       }

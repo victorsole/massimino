@@ -45,7 +45,7 @@ export default async function CredentialsPage({ searchParams }: PageProps) {
 
   // Get users with credentials
   const [users, total] = await Promise.all([
-    prisma.user.findMany({
+    prisma.users.findMany({
       where,
       skip: (page - 1) * pageSize,
       take: pageSize,
@@ -60,7 +60,7 @@ export default async function CredentialsPage({ searchParams }: PageProps) {
         updatedAt: true
       }
     }),
-    prisma.user.count({ where })
+    prisma.users.count({ where })
   ])
 
   const hasPrev = page > 1
@@ -84,7 +84,7 @@ export default async function CredentialsPage({ searchParams }: PageProps) {
     }
   })
 
-  const pendingCount = await prisma.user.count({
+  const pendingCount = await prisma.users.count({
     where: { trainerCredentials: { not: null }, trainerVerified: false }
   })
 
@@ -167,14 +167,14 @@ export default async function CredentialsPage({ searchParams }: PageProps) {
                 <div className="flex gap-2">
                   {!user.trainerVerified && (
                     <>
-                      <form action={async (formData) => { await updateUserVerificationAction(formData); }}>
+                      <form action={updateUserVerificationAction}>
                         <input type="hidden" name="userId" value={user.id} />
                         <input type="hidden" name="trainerVerified" value="true" />
                         <Button size="sm" variant="default">
                           Approve
                         </Button>
                       </form>
-                      <form action={async (formData) => { await updateUserVerificationAction(formData); }}>
+                      <form action={updateUserVerificationAction}>
                         <input type="hidden" name="userId" value={user.id} />
                         <input type="hidden" name="trainerVerified" value="false" />
                         <Button size="sm" variant="destructive">
@@ -239,9 +239,11 @@ export default async function CredentialsPage({ searchParams }: PageProps) {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => window.open(user.latestCredential.credentialPath, '_blank')}
+                          asChild
                         >
-                          View Document
+                          <a href={user.latestCredential.credentialPath} target="_blank" rel="noopener noreferrer">
+                            View Document
+                          </a>
                         </Button>
                       </div>
                     </div>

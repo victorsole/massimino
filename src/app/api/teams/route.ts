@@ -1,298 +1,283 @@
 /**
- * Premium Teams API
- * Manage paid access fitness teams with subscriptions
+ * Teams API - Phase 2 Implementation
+ * Main API route for team operations: create, list, discovery
  */
 
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core';
-import { prisma } from '@/core/database';
-import { moderateContent } from '@/services/moderation/openai';
+import { TeamService } from '@/services/teams/team_service';
+import { CreateTeamRequest, TeamDiscoveryFilters } from '@/types/teams';
+import { isTrainer, isActiveUser, isAdmin } from '@/types/auth';
 
 // ============================================================================
-// GET - Fetch teams (public/user-specific)
+// GET - Team Discovery and List Operations
 // ============================================================================
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     const { searchParams } = new URL(request.url);
 
-    const category = searchParams.get('category');
-    const isPublic = searchParams.get('public') === 'true';
-    const myMemberships = searchParams.get('memberships') === 'true';
+    // Parse query parameters
+    const action = searchParams.get('action') || 'list';
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
-    const search = searchParams.get('search');
 
-    const skip = (page - 1) * limit;
-
-    // Build query conditions
-    const where: any = {
-      isActive: true,
-      ...(category && { category }),
-      ...(isPublic && { isPublic: true }),
-      ...(search && {
-        OR: [
-          { name: { contains: search, mode: 'insensitive' } },
-          { description: { contains: search, mode: 'insensitive' } },
-          { tags: { has: search } }
-        ]
-      })
-    };
-
-    // If fetching user memberships, add membership filter
-    if (myMemberships && session?.user?.id) {
-      where.memberships = {
-        some: {
-          userId: session.user.id,
-          status: 'ACTIVE'
-        }
+    if (action === 'discovery') {
+      // Public team discovery - no authentication required
+      const filters: TeamDiscoveryFilters = {
+        type: searchParams.get('type')?.split(',') as any,
+        trainerVerified: searchParams.get('trainerVerified') === 'true',
+        hasSpots: searchParams.get('hasSpots') === 'true'
       };
+
+      const searchQuery = searchParams.get('search');
+      if (searchQuery) filters.searchQuery = searchQuery;
+
+      const city = searchParams.get('city');
+      if (city) {
+        filters.location = { city };
+        const state = searchParams.get('state');
+        const radiusStr = searchParams.get('radius');
+        if (state) filters.location.state = state;
+        if (radiusStr) filters.location.radius = parseInt(radiusStr);
+      }
+
+      const { teams, total } = await TeamService.discover(filters, page, limit);
+
+      return NextResponse.json({
+        success: true,
+        data: {
+          teams,
+          pagination: {
+            currentPage: page,
+            totalPages: Math.ceil(total / limit),
+            totalItems: total,
+            hasNextPage: page < Math.ceil(total / limit),
+            hasPreviousPage: page > 1
+          }
+        }
+      });
     }
 
-    const [teams, total] = await Promise.all([
-      prisma.premiumCommunity.findMany({
-        where,
-        include: {
-          owner: {
-            select: {
-              id: true,
-              name: true,
-              image: true,
-              trainerVerified: true
-            }
-          },
-          _count: {
-            select: {
-              memberships: {
-                where: { status: 'ACTIVE' }
-              },
-              posts: true
-            }
-          },
-          ...(session?.user?.id && {
-            memberships: {
-              where: { userId: session.user.id },
-              select: {
-                status: true,
-                startDate: true,
-                endDate: true,
-                isTrialActive: true
-              }
-            }
-          })
-        },
-        orderBy: [
-          { currentMembers: 'desc' },
-          { createdAt: 'desc' }
-        ],
-        skip,
-        take: limit
-      }),
+    // Authentication required for other operations
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { success: false, error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
 
-      prisma.premiumCommunity.count({ where })
-    ]);
+    if (!isActiveUser(session.user as any)) {
+      return NextResponse.json(
+        { success: false, error: 'Account not in good standing' },
+        { status: 403 }
+      );
+    }
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        teams: teams.map(team => ({
-          ...team,
-          userMembership: team.memberships?.[0] || null
-        })),
-        pagination: {
-          page,
-          limit,
-          total,
-          totalPages: Math.ceil(total / limit)
-        }
+    if (action === 'my-teams') {
+      // Get trainer's or admin's teams
+      const user = session.user as any;
+      if (!isTrainer(user) && !isAdmin(user)) {
+        return NextResponse.json(
+          { success: false, error: 'Only trainers and administrators can view their teams' },
+          { status: 403 }
+        );
       }
-    });
+
+      const teams = await TeamService.getTrainerTeams(session.user.id);
+
+      return NextResponse.json({
+        success: true,
+        data: {
+          teams,
+          total: teams.length
+        }
+      });
+    }
+
+    return NextResponse.json(
+      { success: false, error: 'Invalid action parameter' },
+      { status: 400 }
+    );
 
   } catch (error) {
-    console.error('Teams fetch error:', error);
+    console.error('Teams GET API error:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch teams' },
+      { success: false, error: 'Internal server error' },
       { status: 500 }
     );
   }
 }
 
 // ============================================================================
-// POST - Create new premium community
+// POST - Team Creation and Actions
 // ============================================================================
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, error: 'Authentication required' },
+        { status: 401 }
+      );
     }
 
-    // Only trainers can create premium teams
-    if (session.user.role !== 'TRAINER') {
-      return NextResponse.json({
-        error: 'Access denied - only trainers can create premium teams'
-      }, { status: 403 });
+    if (!isActiveUser(session.user as any)) {
+      return NextResponse.json(
+        { success: false, error: 'Account not in good standing' },
+        { status: 403 }
+      );
     }
+
+    const user = session.user as any;
+      if (!isTrainer(user) && !isAdmin(user)) {
+        return NextResponse.json(
+          { success: false, error: 'Only verified trainers and administrators can create teams' },
+          { status: 403 }
+        );
+      }
 
     const body = await request.json();
-    const {
-      name,
-      description,
-      price,
-      currency = 'EUR',
-      billingCycle = 'MONTHLY',
-      maxMembers,
-      category,
-      tags = [],
-      features = [],
-      rules,
-      isPublic = false,
-      requireApproval = true,
-      trialPeriodDays = 0,
-      coverImage
-    } = body;
+    const { action } = body;
 
-    // Validate required fields
-    if (!name || !description || !price || !category) {
-      return NextResponse.json({
-        error: 'Missing required fields: name, description, price, category'
-      }, { status: 400 });
-    }
+    if (action === 'create' || !action) {
+      // Create new team
+      // Normalise snake_case inputs
+      const name = body.name;
+      const description = body.description;
+      const type = body.type;
+      const customTypeDescription = body.custom_type_description ?? body.customTypeDescription;
+      const visibility = body.visibility ?? body.team_visibility;
+      const maxMembers = body.max_members ?? body.maxMembers;
+      const spotifyPlaylistUrl = body.spotify_playlist_url ?? body.spotifyPlaylistUrl;
+      const allowComments = body.allow_comments ?? body.allowComments;
+      const allowMemberInvites = body.allow_member_invites ?? body.allowMemberInvites;
+      const aesthetic_settings_in = body.aesthetic_settings ?? body.aestheticSettings;
+      const aestheticSettings = aesthetic_settings_in ? {
+        primaryColor: aesthetic_settings_in.primary_colour ?? aesthetic_settings_in.primaryColor,
+        secondaryColor: aesthetic_settings_in.secondary_colour ?? aesthetic_settings_in.secondaryColor,
+        backgroundColor: aesthetic_settings_in.background_colour ?? aesthetic_settings_in.backgroundColor,
+        fontStyle: aesthetic_settings_in.font_style ?? aesthetic_settings_in.fontStyle,
+        theme: aesthetic_settings_in.theme,
+        logoUrl: aesthetic_settings_in.logo_url ?? aesthetic_settings_in.logoUrl,
+        bannerUrl: aesthetic_settings_in.banner_url ?? aesthetic_settings_in.bannerUrl,
+        customClasses: aesthetic_settings_in.custom_classes ?? aesthetic_settings_in.customClasses,
+        animations: aesthetic_settings_in.animations ? {
+          enableCardHover: aesthetic_settings_in.animations.enable_card_hover ?? aesthetic_settings_in.animations.enableCardHover,
+          enableBannerWave: aesthetic_settings_in.animations.enable_banner_wave ?? aesthetic_settings_in.animations.enableBannerWave,
+          enableSectionFade: aesthetic_settings_in.animations.enable_section_fade ?? aesthetic_settings_in.animations.enableSectionFade,
+        } : undefined,
+      } : undefined;
 
-    // Moderate team content
-    const contentToModerate = `${name}\n${description}\n${rules || ''}`;
-    const moderationResult = await moderateContent(contentToModerate);
+      // Validate required fields
+      if (!name || !type) {
+        return NextResponse.json(
+          { success: false, error: 'Team name and type are required' },
+          { status: 400 }
+        );
+      }
 
-    if (moderationResult.flagged) {
-      return NextResponse.json({
-        error: 'Team content violates platform guidelines',
-        details: moderationResult.reason || 'Content flagged by moderation'
-      }, { status: 400 });
-    }
+      // Check if trainer can create more teams
+      const canCreate = await TeamService.canTrainerCreate(session.user.id);
+      if (!canCreate.canCreate) {
+        return NextResponse.json(
+          { success: false, error: canCreate.reason },
+          { status: 400 }
+        );
+      }
 
-    // Create the premium team
-    const team = await prisma.premiumCommunity.create({
-      data: {
+      // Validate team data
+      const createRequest: CreateTeamRequest = {
         name,
         description,
-        ownerId: session.user.id,
-        price,
-        currency,
-        billingCycle,
-        maxMembers,
-        category,
-        tags,
-        features,
-        rules,
-        isPublic,
-        requireApproval,
-        trialPeriodDays,
-        coverImage,
-        currentMembers: 0
-      },
-      include: {
-        owner: {
-          select: {
-            id: true,
-            name: true,
-            image: true,
-            trainerVerified: true
-          }
-        }
+        type,
+        customTypeDescription,
+        visibility: visibility || 'PUBLIC',
+        maxMembers: maxMembers || 20,
+        aestheticSettings: aestheticSettings || {},
+        spotifyPlaylistUrl,
+        allowComments: allowComments !== false,
+        allowMemberInvites: allowMemberInvites !== false
+      };
+
+      const validation = TeamService.validateCreation(createRequest);
+      if (!validation.isValid) {
+        return NextResponse.json(
+          { success: false, error: validation.errors.join(', ') },
+          { status: 400 }
+        );
       }
-    });
 
-    console.log('Premium team created:', {
-      teamId: team.id,
-      name: team.name,
-      ownerId: session.user.id,
-      price: team.price,
-      currency: team.currency
-    });
+      // Create the team
+      const team = await TeamService.create(session.user.id, createRequest);
 
-    return NextResponse.json({
-      success: true,
-      data: team,
-      message: 'Premium team created successfully'
-    });
+      return NextResponse.json({
+        success: true,
+        data: team,
+        message: 'Team created successfully'
+      }, { status: 201 });
+    }
+
+    if (action === 'apply') {
+      // Apply to join a team
+      const { teamId, message } = body;
+
+      if (!teamId) {
+        return NextResponse.json(
+          { success: false, error: 'Team ID is required' },
+          { status: 400 }
+        );
+      }
+
+      // Check if user can join team
+      const canJoin = await TeamService.canUserJoin(teamId, session.user.id);
+      if (!canJoin.canJoin) {
+        return NextResponse.json(
+          { success: false, error: canJoin.reason },
+          { status: 400 }
+        );
+      }
+
+      const application = await TeamService.applyToJoin(teamId, session.user.id, message);
+
+      return NextResponse.json({
+        success: true,
+        data: application,
+        message: 'Application submitted successfully'
+      });
+    }
+
+    return NextResponse.json(
+      { success: false, error: 'Invalid action' },
+      { status: 400 }
+    );
 
   } catch (error) {
-    console.error('Team creation error:', error);
+    console.error('Teams POST API error:', error);
+
+    // Handle specific error types
+    if (error instanceof Error) {
+      if (error.message.includes('already a member')) {
+        return NextResponse.json(
+          { success: false, error: error.message },
+          { status: 409 }
+        );
+      }
+      if (error.message.includes('not found')) {
+        return NextResponse.json(
+          { success: false, error: error.message },
+          { status: 404 }
+        );
+      }
+    }
+
     return NextResponse.json(
-      { error: 'Failed to create team' },
+      { success: false, error: 'Internal server error' },
       { status: 500 }
     );
   }
-}
-
-// ============================================================================
-// HELPER FUNCTIONS
-// ============================================================================
-
-/**
- * Check if user can access team content
- */
-export async function checkTeamAccess(teamId: string, userId: string): Promise<boolean> {
-  const membership = await prisma.premiumMembership.findUnique({
-    where: {
-      communityId_userId: {
-        communityId: teamId,
-        userId
-      }
-    }
-  });
-
-  if (!membership) return false;
-
-  // Check if membership is active
-  if (membership.status !== 'ACTIVE') return false;
-
-  // Check if not expired
-  if (membership.endDate && membership.endDate < new Date()) return false;
-
-  return true;
-}
-
-/**
- * Get team subscription stats
- */
-export async function getTeamStats(teamId: string) {
-  const [activeMembers, totalRevenue, recentJoins] = await Promise.all([
-    // Active members count
-    prisma.premiumMembership.count({
-      where: {
-        communityId: teamId,
-        status: 'ACTIVE'
-      }
-    }),
-
-    // Total revenue (would need payment integration)
-    prisma.premiumMembership.count({
-      where: {
-        communityId: teamId,
-        status: { in: ['ACTIVE', 'EXPIRED'] }
-      }
-    }),
-
-    // Recent joins (last 30 days)
-    prisma.premiumMembership.count({
-      where: {
-        communityId: teamId,
-        startDate: {
-          gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-        }
-      }
-    })
-  ]);
-
-  return {
-    activeMembers,
-    totalRevenue, // Placeholder - would calculate from payments
-    recentJoins,
-    growthRate: recentJoins // Simplified growth calculation
-  };
 }

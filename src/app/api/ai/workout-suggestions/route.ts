@@ -15,7 +15,7 @@ export async function GET() {
     const userId = session.user.id
 
     // Get user's fitness preferences
-    const user = await prisma.user.findUnique({
+    const user = await prisma.users.findUnique({
       where: { id: userId },
       select: {
         fitnessGoals: true,

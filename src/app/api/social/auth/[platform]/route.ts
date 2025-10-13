@@ -51,7 +51,7 @@ export async function GET(request: NextRequest, { params }: RouteContext) {
 
     if (action === 'status') {
       // Check if user has connected this platform
-      const connection = await prisma.user.findUnique({
+      const connection = await prisma.users.findUnique({
         where: { id: session.user.id },
         select: { trainerCredentials: true }
       })
@@ -136,7 +136,7 @@ export async function POST(request: NextRequest, { params }: RouteContext) {
       }
 
       // Store tokens in user profile
-      const user = await prisma.user.findUnique({
+      const user = await prisma.users.findUnique({
         where: { id: session.user.id },
         select: { trainerCredentials: true }
       })
@@ -162,7 +162,7 @@ export async function POST(request: NextRequest, { params }: RouteContext) {
 
       ;(userData as any).socialConnections = socialConnections
 
-      await prisma.user.update({
+      await prisma.users.update({
         where: { id: session.user.id },
         data: {
           trainerCredentials: JSON.stringify(userData)
@@ -178,7 +178,7 @@ export async function POST(request: NextRequest, { params }: RouteContext) {
 
     if (action === 'disconnect') {
       // Disconnect platform
-      const user = await prisma.user.findUnique({
+      const user = await prisma.users.findUnique({
         where: { id: session.user.id },
         select: { trainerCredentials: true }
       })
@@ -197,7 +197,7 @@ export async function POST(request: NextRequest, { params }: RouteContext) {
       delete socialConnections[platform]
       ;(userData as any).socialConnections = socialConnections
 
-      await prisma.user.update({
+      await prisma.users.update({
         where: { id: session.user.id },
         data: {
           trainerCredentials: JSON.stringify(userData)
@@ -231,7 +231,7 @@ export async function DELETE(_request: NextRequest, { params }: RouteContext) {
 
     const { platform } = params
 
-    const user = await prisma.user.findUnique({
+    const user = await prisma.users.findUnique({
       where: { id: session.user.id },
       select: { trainerCredentials: true }
     })
@@ -251,7 +251,7 @@ export async function DELETE(_request: NextRequest, { params }: RouteContext) {
     delete socialConnections[platform]
     ;(userData as any).socialConnections = socialConnections
 
-    await prisma.user.update({
+    await prisma.users.update({
       where: { id: session.user.id },
       data: {
         trainerCredentials: JSON.stringify(userData)

@@ -21,7 +21,7 @@ export async function GET() {
     }
 
     // Get user's current privacy settings
-    const user = await prisma.user.findUnique({
+    const user = await prisma.users.findUnique({
       where: { id: session.user.id },
       select: {
         id: true
@@ -142,7 +142,7 @@ export async function PUT(request: Request) {
     if (allowDirectMessages !== undefined) privacySettings.allowDirectMessages = allowDirectMessages;
 
     // Get current settings and merge
-    const currentUser = await prisma.user.findUnique({
+    await prisma.users.findUnique({
       where: { id: session.user.id },
       select: { id: true }
     });
@@ -155,7 +155,7 @@ export async function PUT(request: Request) {
 
     // Note: Privacy settings would be updated in storage
     // For now, simulating the update response
-    const updatedUser = await prisma.user.findUnique({
+    const updatedUser = await prisma.users.findUnique({
       where: { id: session.user.id },
       select: {
         id: true
@@ -217,7 +217,7 @@ export async function POST() {
 
     // Note: Privacy settings would be reset in storage
     // For now, simulating the reset response
-    const updatedUser = await prisma.user.findUnique({
+    const updatedUser = await prisma.users.findUnique({
       where: { id: session.user.id },
       select: {
         id: true

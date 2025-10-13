@@ -30,7 +30,7 @@ export async function GET(
     // Check if user can view this progress
     if (userId !== session.user.id) {
       // Check if user is challenge creator or has permission
-      const challenge = await prisma.challenge.findUnique({
+      const challenge = await prisma.challenges.findUnique({
         where: { id: challengeId },
         select: { creatorId: true }
       });
@@ -41,7 +41,7 @@ export async function GET(
     }
 
     // Get participation record
-    const participation = await prisma.challengeParticipant.findUnique({
+    const participation = await prisma.challenge_participants.findUnique({
       where: {
         challengeId_userId: {
           challengeId,
@@ -178,7 +178,7 @@ export async function POST(
     }
 
     // Check if progress already exists for this date
-    const existingProgress = await prisma.challengeProgress.findFirst({
+    const existingProgress = await prisma.challenge_progress.findFirst({
       where: {
         participantId: participation.id,
         date: progressDate
@@ -192,7 +192,7 @@ export async function POST(
     }
 
     // Create progress entry
-    const progressEntry = await prisma.challengeProgress.create({
+    const progressEntry = await prisma.challenge_progress.create({
       data: {
         participantId: participation.id,
         date: progressDate,
@@ -204,7 +204,7 @@ export async function POST(
     });
 
     // Update participant's current progress (aggregate)
-    const allProgress = await prisma.challengeProgress.findMany({
+    const allProgress = await prisma.challenge_progress.findMany({
       where: { participantId: participation.id },
       orderBy: { date: 'asc' }
     });
@@ -216,7 +216,7 @@ export async function POST(
     );
 
     // Update participant record
-    await prisma.challengeParticipant.update({
+    await prisma.challenge_participants.update({
       where: { id: participation.id },
       data: {
         currentProgress: aggregatedProgress,
@@ -355,7 +355,7 @@ async function updateChallengeLeaderboard(challengeId: string, userId: string, p
 async function recalculateChallengeRanks(challengeId: string) {
   try {
     // Get all leaderboard entries sorted by score
-    const leaderboard = await prisma.challengeLeaderboard.findMany({
+    const leaderboard = await prisma.challenge_leaderboard.findMany({
       where: { challengeId },
       orderBy: { score: 'desc' }
     });
@@ -363,13 +363,13 @@ async function recalculateChallengeRanks(challengeId: string) {
     // Update ranks
     for (let i = 0; i < leaderboard.length; i++) {
       const item = leaderboard[i]!;
-      await prisma.challengeLeaderboard.update({
+      await prisma.challenge_leaderboard.update({
         where: { id: item.id },
         data: { rank: i + 1 }
       });
 
       // Also update participant rank
-      await prisma.challengeParticipant.updateMany({
+      await prisma.challenge_participants.updateMany({
         where: {
           challengeId,
           userId: item.userId

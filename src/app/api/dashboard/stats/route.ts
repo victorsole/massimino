@@ -4,6 +4,87 @@ import { authOptions } from '@/core'
 import { prisma } from '@/core/database'
 import { UserRole } from '@prisma/client'
 
+// Helper function to get achievement titles
+function getAchievementTitle(achievementType: string): string {
+  const titles: Record<string, string> = {
+    ROOKIE_RECRUITER: 'Rookie Recruiter',
+    TALENT_SCOUT: 'Talent Scout',
+    COMMUNITY_BUILDER: 'Community Builder',
+    GROWTH_CHAMPION: 'Growth Champion',
+    TRAINER_MAGNET: 'Trainer Magnet',
+    CLIENT_CONNECTOR: 'Client Connector',
+    RETENTION_MASTER: 'Retention Master',
+    VERIFICATION_HELPER: 'Verification Helper'
+  };
+  return titles[achievementType] || achievementType.replace(/_/g, ' ').toLowerCase();
+}
+
+// Rewards catalog - available rewards and their costs
+function getAvailableRewards() {
+  return [
+    {
+      id: 'premium_month',
+      type: 'PREMIUM_MONTH',
+      title: 'Premium Subscription (1 Month)',
+      description: 'Access to premium features for one month',
+      pointsCost: 500,
+      category: 'Digital',
+      icon: '⭐',
+      available: true
+    },
+    {
+      id: 'premium_quarter',
+      type: 'PREMIUM_QUARTER',
+      title: 'Premium Subscription (3 Months)',
+      description: 'Access to premium features for three months',
+      pointsCost: 1200,
+      category: 'Digital',
+      icon: '🌟',
+      available: true
+    },
+    {
+      id: 'merchandise_shirt',
+      type: 'MERCHANDISE',
+      title: 'Massimino T-Shirt',
+      description: 'Official Massimino branded t-shirt',
+      pointsCost: 800,
+      category: 'Physical',
+      icon: '👕',
+      available: true
+    },
+    {
+      id: 'cash_out_25',
+      type: 'CASH_OUT',
+      title: 'PayPal Cash Out ($25)',
+      description: 'Direct PayPal payment of $25',
+      pointsCost: 2500,
+      category: 'Cash',
+      icon: '💰',
+      available: true
+    },
+    {
+      id: 'certification_course',
+      type: 'CERTIFICATION_COURSE',
+      title: 'Fitness Certification Course',
+      description: 'Sponsored enrollment in a professional fitness certification',
+      pointsCost: 5000,
+      category: 'Education',
+      icon: '🎓',
+      available: true
+    },
+    {
+      id: 'conference_ticket',
+      type: 'CONFERENCE_TICKET',
+      title: 'Fitness Industry Conference Ticket',
+      description: 'Free ticket to major fitness industry conference',
+      pointsCost: 3000,
+      category: 'Experience',
+      icon: '🎫',
+      available: true
+    }
+  ];
+}
+
 export async function GET() {
   try {
     const session = await getServerSession(authOptions)
@@ -15,10 +96,12 @@ export async function GET() {
     const userId = session.user.id
 
     // Get user info for role-based dashboard
-    const user = await prisma.user.findUnique({
+    const user = await prisma.users.findUnique({
       where: { id: userId },
       select: { role: true, trainerVerified: true }
     })
+
+    console.log('[Dashboard Stats API] User role:', user?.role, 'for userId:', userId)
 
     // Get current date and week boundaries
     const now = new Date()
@@ -32,7 +115,11 @@ export async function GET() {
     const thirtyDaysAgo = new Date()
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
 
-    const recentWorkouts = await prisma.workoutLogEntry.findMany({
+    // Get previous 30 days for trend comparison
+    const sixtyDaysAgo = new Date()
+    sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60)
+
+    const recentWorkouts = await prisma.workout_log_entries.findMany({
       where: {
         userId,
         date: {
@@ -40,7 +127,7 @@ export async function GET() {
         }
       },
       include: {
-        exercise: {
+        exercises: {
           select: {
             name: true,
             category: true
@@ -54,7 +141,7 @@ export async function GET() {
     })
 
     // Get workouts this week count
-    const workoutsThisWeek = await prisma.workoutLogEntry.count({
+    const workoutsThisWeek = await prisma.workout_log_entries.count({
       where: {
         userId,
         date: {
@@ -65,7 +152,7 @@ export async function GET() {
     })
 
     // Get total workout sessions
-    const totalSessions = await prisma.workoutSession.count({
+    const totalSessions = await prisma.workout_sessions.count({
       where: {
         userId,
         isComplete: true
@@ -73,7 +160,7 @@ export async function GET() {
     })
 
     // Get favorite exercise (most used)
-    const exerciseUsage = await prisma.workoutLogEntry.groupBy({
+    const exerciseUsage = await prisma.workout_log_entries.groupBy({
       by: ['exerciseId'],
       where: {
         userId
@@ -91,7 +178,7 @@ export async function GET() {
 
     let favoriteExercise = null
     if (exerciseUsage.length > 0) {
-      const exercise = await prisma.exercise.findUnique({
+      const exercise = await prisma.exercises.findUnique({
         where: { id: exerciseUsage[0]!.exerciseId },
         select: { name: true }
       })
@@ -102,7 +189,7 @@ export async function GET() {
     }
 
     // Calculate total volume (sum of all training volumes)
-    const volumeData = await prisma.workoutLogEntry.aggregate({
+    const volumeData = await prisma.workout_log_entries.aggregate({
       where: {
         userId,
         trainingVolume: {
@@ -117,7 +204,7 @@ export async function GET() {
     const totalVolume = volumeData._sum.trainingVolume || 0
 
     // Get workout streak (consecutive days with workouts)
-    const workoutDates = await prisma.workoutLogEntry.findMany({
+    const workoutDates = await prisma.workout_log_entries.findMany({
       where: { userId },
       select: { date: true },
       distinct: ['date'],
@@ -150,7 +237,7 @@ export async function GET() {
       const weekEnd = new Date(weekStart)
       weekEnd.setDate(weekStart.getDate() + 6)
 
-      const count = await prisma.workoutLogEntry.count({
+      const count = await prisma.workout_log_entries.count({
         where: {
           userId,
           date: {
@@ -166,11 +253,108 @@ export async function GET() {
       })
     }
 
-    // If user is a trainer, get business stats
+    // Calculate 30-day workout stats with trends
+    const last30DaysSessions = await prisma.workout_sessions.count({
+      where: {
+        userId,
+        isComplete: true,
+        createdAt: { gte: thirtyDaysAgo }
+      }
+    })
+
+    const previous30DaysSessions = await prisma.workout_sessions.count({
+      where: {
+        userId,
+        isComplete: true,
+        createdAt: {
+          gte: sixtyDaysAgo,
+          lt: thirtyDaysAgo
+        }
+      }
+    })
+
+    // Calculate volume for last 30 days
+    const last30DaysVolume = await prisma.workout_log_entries.aggregate({
+      where: {
+        userId,
+        date: { gte: thirtyDaysAgo },
+        trainingVolume: { not: null }
+      },
+      _sum: { trainingVolume: true }
+    })
+
+    const previous30DaysVolume = await prisma.workout_log_entries.aggregate({
+      where: {
+        userId,
+        date: {
+          gte: sixtyDaysAgo,
+          lt: thirtyDaysAgo
+        },
+        trainingVolume: { not: null }
+      },
+      _sum: { trainingVolume: true }
+    })
+
+    // Calculate average session duration (last 30 days)
+    const last30DaysSessionsWithDuration = await prisma.workout_sessions.findMany({
+      where: {
+        userId,
+        isComplete: true,
+        createdAt: { gte: thirtyDaysAgo },
+        duration: { not: null }
+      },
+      select: { duration: true }
+    })
+
+    const previous30DaysSessionsWithDuration = await prisma.workout_sessions.findMany({
+      where: {
+        userId,
+        isComplete: true,
+        createdAt: {
+          gte: sixtyDaysAgo,
+          lt: thirtyDaysAgo
+        },
+        duration: { not: null }
+      },
+      select: { duration: true }
+    })
+
+    const avgSessionDuration = last30DaysSessionsWithDuration.length > 0
+      ? last30DaysSessionsWithDuration.reduce((sum, s) => sum + (s.duration || 0), 0) / last30DaysSessionsWithDuration.length
+      : 0
+
+    const prevAvgSessionDuration = previous30DaysSessionsWithDuration.length > 0
+      ? previous30DaysSessionsWithDuration.reduce((sum, s) => sum + (s.duration || 0), 0) / previous30DaysSessionsWithDuration.length
+      : 0
+
+    // Calculate trend indicators
+    const sessionsTrend = previous30DaysSessions === 0
+      ? (last30DaysSessions > 0 ? 100 : 0)
+      : Math.round(((last30DaysSessions - previous30DaysSessions) / previous30DaysSessions) * 100)
+
+    const volumeTrend = (previous30DaysVolume._sum.trainingVolume || 0) === 0
+      ? ((last30DaysVolume._sum.trainingVolume || 0) > 0 ? 100 : 0)
+      : Math.round((((last30DaysVolume._sum.trainingVolume || 0) - (previous30DaysVolume._sum.trainingVolume || 0)) / (previous30DaysVolume._sum.trainingVolume || 0)) * 100)
+
+    const durationTrend = prevAvgSessionDuration === 0
+      ? (avgSessionDuration > 0 ? 100 : 0)
+      : Math.round(((avgSessionDuration - prevAvgSessionDuration) / prevAvgSessionDuration) * 100)
+
+    const thirtyDayStats = {
+      totalSessions: last30DaysSessions,
+      sessionsTrend,
+      totalVolume: Math.round(last30DaysVolume._sum.trainingVolume || 0),
+      volumeTrend,
+      avgSessionDuration: Math.round(avgSessionDuration),
+      durationTrend
+    }
+
+    // If user is a trainer, get business stats and points data
     let trainerStats = null;
+    let trainerPointsStats = null;
     if (user?.role === UserRole.TRAINER) {
       // Get trainer profile
-      const trainerProfile = await prisma.trainerProfile.findUnique({
+      const trainerProfile = await prisma.trainer_profiles.findUnique({
         where: { userId },
         select: {
           id: true,
@@ -184,7 +368,7 @@ export async function GET() {
 
       if (trainerProfile) {
         // Get upcoming appointments
-        const upcomingAppointments = await prisma.appointment.count({
+        const upcomingAppointments = await prisma.appointments.count({
           where: {
             trainerId: trainerProfile.id,
             scheduledAt: {
@@ -197,7 +381,7 @@ export async function GET() {
 
         // Get new clients this month
         const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-        const newClientsThisMonth = await prisma.trainerClient.count({
+        const newClientsThisMonth = await prisma.trainer_clients.count({
           where: {
             trainerId: trainerProfile.id,
             createdAt: { gte: startOfMonth },
@@ -206,7 +390,7 @@ export async function GET() {
         });
 
         // Get monthly earnings
-        const monthlyPayments = await prisma.payment.aggregate({
+        const monthlyPayments = await prisma.payments.aggregate({
           where: {
             trainerId: trainerProfile.id,
             status: 'COMPLETED',
@@ -216,7 +400,7 @@ export async function GET() {
         });
 
         // Get pending reports
-        const pendingReports = await prisma.progressReport.count({
+        const pendingReports = await prisma.progress_reports.count({
           where: {
             trainerId: trainerProfile.id,
             isShared: false
@@ -224,7 +408,7 @@ export async function GET() {
         });
 
         // Get trainer reviews
-        const reviewStats = await prisma.trainerReview.aggregate({
+        const reviewStats = await prisma.trainer_reviews.aggregate({
           where: { trainerId: trainerProfile.id },
           _avg: { rating: true },
           _count: true
@@ -242,15 +426,130 @@ export async function GET() {
           pendingReports
         };
       }
+
+      // Get trainer points stats
+      const pointsBalance = await prisma.trainer_points.aggregate({
+        where: { trainerId: userId },
+        _sum: { points: true }
+      });
+
+      // Get recent points transactions
+      const recentTransactions = await prisma.trainer_points.findMany({
+        where: { trainerId: userId },
+        orderBy: { createdAt: 'desc' },
+        take: 5,
+        select: {
+          id: true,
+          pointType: true,
+          points: true,
+          description: true,
+          createdAt: true
+        }
+      });
+
+      // Get achievements
+      const achievements = await prisma.trainer_achievements.findMany({
+        where: { trainerId: userId },
+        orderBy: { unlockedAt: 'desc' },
+        select: {
+          achievementType: true,
+          unlockedAt: true,
+          pointsAwarded: true
+        }
+      });
+
+      // Get invitation stats
+      const sentInvitations = await prisma.invitations.findMany({
+        where: { senderId: userId },
+        select: {
+          status: true,
+          role: true,
+          acceptedAt: true
+        }
+      });
+
+      const acceptedInvitations = sentInvitations.filter(inv => inv.status === 'ACCEPTED').length;
+      const pendingInvitations = sentInvitations.filter(inv => inv.status === 'PENDING').length;
+      const totalInvitations = sentInvitations.length;
+      const successRate = totalInvitations > 0 ? Math.round((acceptedInvitations / totalInvitations) * 100) : 0;
+
+      // Get redemption history
+      const redemptionHistory = await prisma.points_redemptions.findMany({
+        where: { trainerId: userId },
+        orderBy: { redeemedAt: 'desc' },
+        take: 10,
+        select: {
+          id: true,
+          rewardType: true,
+          rewardTitle: true,
+          pointsCost: true,
+          status: true,
+          redeemedAt: true,
+          fulfilledAt: true,
+          description: true
+        }
+      });
+
+      // Get available rewards
+      const availableRewards = getAvailableRewards();
+
+      trainerPointsStats = {
+        currentBalance: pointsBalance._sum.points || 0,
+        totalEarned: await prisma.trainer_points.aggregate({
+          where: {
+            trainerId: userId,
+            points: { gt: 0 } // Only positive points (earned)
+          },
+          _sum: { points: true }
+        }).then((result: any) => result._sum.points || 0),
+        totalRedeemed: await prisma.points_redemptions.aggregate({
+          where: {
+            trainerId: userId,
+            status: { in: ['FULFILLED', 'APPROVED'] }
+          },
+          _sum: { pointsCost: true }
+        }).then((result: any) => result._sum.pointsCost || 0),
+        pendingInvitations,
+        acceptedInvitations,
+        successRate,
+        achievements: achievements.map((achievement: any) => ({
+          type: achievement.achievementType,
+          title: getAchievementTitle(achievement.achievementType),
+          unlockedAt: achievement.unlockedAt.toISOString(),
+          pointsAwarded: achievement.pointsAwarded
+        })),
+        recentTransactions: recentTransactions.map((transaction: any) => ({
+          id: transaction.id,
+          pointType: transaction.pointType,
+          points: transaction.points,
+          description: transaction.description,
+          createdAt: transaction.createdAt.toISOString()
+        })),
+        availableRewards,
+        redemptionHistory: redemptionHistory.map((redemption: any) => ({
+          id: redemption.id,
+          rewardType: redemption.rewardType,
+          rewardTitle: redemption.rewardTitle,
+          pointsCost: redemption.pointsCost,
+          status: redemption.status,
+          redeemedAt: redemption.redeemedAt.toISOString(),
+          fulfilledAt: redemption.fulfilledAt?.toISOString(),
+          description: redemption.description
+        })),
+        canRedeem: (pointsBalance._sum.points || 0) >= Math.min(...availableRewards.map((r: any) => r.pointsCost)),
+        pendingRedemptions: redemptionHistory.filter((r: any) => r.status === 'PENDING').length
+      };
     }
+
+    console.log('[Dashboard Stats API] Returning userRole:', user?.role)
 
     const response: any = {
       userRole: user?.role,
       recentWorkouts: recentWorkouts.map(workout => ({
         id: workout.id,
         date: workout.date,
-        exercise: workout.exercise.name,
-        category: workout.exercise.category,
+        exercise: workout.exercises.name,
+        category: workout.exercises.category,
         sets: workout.setNumber,
         reps: workout.reps,
         weight: workout.weight,
@@ -263,12 +562,18 @@ export async function GET() {
         totalVolume: Math.round(totalVolume),
         currentStreak,
         weeklyStats
-      }
+      },
+      thirtyDayStats
     };
 
     // Add trainer stats if available
     if (trainerStats) {
       response.trainerStats = trainerStats;
+    }
+
+    // Add trainer points stats if available
+    if (trainerPointsStats) {
+      response.trainerPointsStats = trainerPointsStats;
     }
 
     return NextResponse.json(response)

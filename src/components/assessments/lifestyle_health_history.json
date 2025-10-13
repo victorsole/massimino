@@ -1,0 +1,89 @@
+{
+    "id": "lifestyle_health_history",
+    "title": "Lifestyle and Health History",
+    "version": "1.0",
+    "sections": [
+      {
+        "id": "personal_info",
+        "title": "Client Personal Information",
+        "fields": [
+          {"id": "name", "type": "text", "label": "Name", "required": true},
+          {"id": "date", "type": "date", "label": "Date", "required": true},
+          {"id": "age", "type": "number", "label": "Age", "required": true, "min": 1, "max": 120},
+          {"id": "gender", "type": "select", "label": "Gender", "options": ["Male", "Female", "Other", "Prefer not to say"], "required": true},
+          {"id": "height", "type": "number", "label": "Height (cm)", "required": true},
+          {"id": "weight", "type": "number", "label": "Weight (kg)", "required": true},
+          {"id": "physician_name", "type": "text", "label": "Physician Name"},
+          {"id": "physician_phone", "type": "tel", "label": "Physician Phone"},
+          {"id": "emergency_contact_name", "type": "text", "label": "Emergency Contact Name", "required": true},
+          {"id": "emergency_contact_phone", "type": "tel", "label": "Emergency Contact Phone", "required": true}
+        ]
+      },
+      {
+        "id": "exercise",
+        "title": "Exercise",
+        "fields": [
+          {"id": "current_activities", "type": "textarea", "label": "What exercise activities do you currently take part in?", "placeholder": "e.g., running, weightlifting, group exercise, etc."},
+          {"id": "weekly_exercise_days", "type": "number", "label": "Days per week with 60+ minutes of moderate exercise", "min": 0, "max": 7},
+          {"id": "goal_weight_loss", "type": "scale", "label": "Weight loss importance", "min": 0, "max": 10},
+          {"id": "goal_muscle_gain", "type": "scale", "label": "Muscle gain importance", "min": 0, "max": 10},
+          {"id": "goal_sports_performance", "type": "scale", "label": "Sports performance importance", "min": 0, "max": 10},
+          {"id": "goal_health_improvement", "type": "scale", "label": "Health improvement importance", "min": 0, "max": 10}
+        ]
+      },
+      {
+        "id": "diet",
+        "title": "Diet",
+        "fields": [
+          {"id": "diet_healthy_scale", "type": "scale", "label": "How healthy is your overall diet?", "min": 0, "max": 10},
+          {"id": "current_diet", "type": "textarea", "label": "Are you following any diet? If so, which and why?"},
+          {"id": "salt_intake", "type": "radio", "label": "Daily salt intake", "options": ["Low", "Medium", "High"]},
+          {"id": "sugar_intake", "type": "radio", "label": "Daily sugar intake", "options": ["Low", "Medium", "High"]},
+          {"id": "fat_intake", "type": "radio", "label": "Daily fat intake", "options": ["Low", "Medium", "High"]},
+          {"id": "junk_food_control", "type": "scale", "label": "How well do you control junk food temptations?", "min": 0, "max": 10},
+          {"id": "alcohol_per_week", "type": "number", "label": "Alcoholic drinks per week", "min": 0},
+          {"id": "caffeine_per_week", "type": "number", "label": "Caffeinated beverages per week", "min": 0}
+        ]
+      },
+      {
+        "id": "lifestyle",
+        "title": "Lifestyle",
+        "fields": [
+          {"id": "adequate_sleep", "type": "radio", "label": "Do you get enough sleep and wake feeling rested?", "options": ["Yes", "No"]},
+          {"id": "stress_level", "type": "scale", "label": "Average stress level", "min": 0, "max": 10},
+          {"id": "stress_management", "type": "textarea", "label": "What techniques do you use to manage stress?"},
+          {"id": "tobacco_use", "type": "radio", "label": "Do you smoke tobacco or use vaporizers?", "options": ["Yes", "No"]}
+        ]
+      },
+      {
+        "id": "occupation",
+        "title": "Occupation",
+        "fields": [
+          {"id": "occupation", "type": "text", "label": "What is your occupation?"},
+          {"id": "extended_sitting", "type": "radio", "label": "Does your job require extended sitting?", "options": ["Yes", "No"]},
+          {"id": "extended_sitting_details", "type": "textarea", "label": "If yes, please explain", "conditional": {"field": "extended_sitting", "value": "Yes"}},
+          {"id": "repetitive_movements", "type": "radio", "label": "Does your job require repetitive movements?", "options": ["Yes", "No"]},
+          {"id": "repetitive_movements_details", "type": "textarea", "label": "If yes, please explain", "conditional": {"field": "repetitive_movements", "value": "Yes"}},
+          {"id": "heeled_shoes", "type": "radio", "label": "Do you wear shoes with heels at work?", "options": ["Yes", "No"]}
+        ]
+      },
+      {
+        "id": "recreation",
+        "title": "Recreation",
+        "fields": [
+          {"id": "recreational_activities", "type": "textarea", "label": "Recreational physical activities (golf, skiing, etc.)"},
+          {"id": "hobbies", "type": "textarea", "label": "Other hobbies (gardening, fishing, music, etc.)"}
+        ]
+      },
+      {
+        "id": "medical",
+        "title": "Medical",
+        "fields": [
+          {"id": "past_injuries", "type": "textarea", "label": "Past musculoskeletal injuries", "rows": 3},
+          {"id": "past_surgeries", "type": "textarea", "label": "Past surgeries", "rows": 3},
+          {"id": "proper_rehabilitation", "type": "radio", "label": "Were injuries/surgeries properly rehabilitated with doctor clearance?", "options": ["Yes", "No", "N/A"]},
+          {"id": "additional_notes", "type": "textarea", "label": "Additional notes", "rows": 4}
+        ]
+      }
+    ]
+  }
