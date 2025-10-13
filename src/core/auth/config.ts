@@ -66,16 +66,22 @@ declare module "next-auth/jwt" {
   }
 }
 
-// Environment variable validation
-// Require NEXTAUTH_SECRET always; allow NEXTAUTH_URL to default in development
+// Environment variable handling (be resilient in development)
 const devDefaultNextAuthUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : undefined;
-const requiredEnvVars = {
-  NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
-} as const;
-
-// Ensure NEXTAUTH_URL is defined at runtime for libraries that read it
+// Ensure NEXTAUTH_URL is defined for local development builds
 if (!process.env.NEXTAUTH_URL && devDefaultNextAuthUrl) {
   process.env.NEXTAUTH_URL = devDefaultNextAuthUrl;
+}
+// Ensure NEXTAUTH_SECRET exists; generate a dev fallback if missing
+if (!process.env.NEXTAUTH_SECRET) {
+  if (process.env.NODE_ENV !== 'production') {
+    process.env.NEXTAUTH_SECRET = 'dev-insecure-secret';
+    // eslint-disable-next-line no-console
+    console.warn('[auth] NEXTAUTH_SECRET not set. Using development fallback.');
+  } else {
+    // In production, do not crash the app on import; NextAuth will error on usage.
+    console.error('[auth] NEXTAUTH_SECRET is missing. Authentication will fail until it is set.');
+  }
 }
 
 // Google OAuth configuration (optional)
@@ -96,12 +102,7 @@ const facebookConfig = {
   FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET,
 } as const;
 
-// Validate required environment variables
-for (const [key, value] of Object.entries(requiredEnvVars)) {
-  if (!value) {
-    throw new Error(`Missing required environment variable: ${key}`);
-  }
-}
+// No hard throw on missing envs to keep non-auth pages working.
 
 // Admin bootstrap via environment variable list (comma-separated emails)
 const ADMIN_EMAILS: string[] = (process.env.ADMIN_EMAILS || '')
