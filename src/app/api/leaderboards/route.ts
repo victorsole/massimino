@@ -209,7 +209,7 @@ async function getWorkoutLeaderboard(params: any) {
 
   // Get user details for the paginated results
   const userIds = paginatedStats.map(stat => stat.userId);
-  const users = await prisma.user.findMany({
+  const users = await prisma.users.findMany({
     where: { id: { in: userIds } },
     select: {
       id: true,
@@ -277,7 +277,7 @@ async function getChallengeLeaderboard(params: any) {
   const paginatedStats = sortedStats.slice(skip, skip + limit);
 
   const userIds = paginatedStats.map(stat => stat.userId);
-  const users = await prisma.user.findMany({
+  const users = await prisma.users.findMany({
     where: { id: { in: userIds } },
     select: {
       id: true,
@@ -351,7 +351,7 @@ async function getTeamLeaderboard(params: any) {
   const paginatedStats = sortedStats.slice(skip, skip + limit);
 
   const userIds = paginatedStats.map((stat: any) => stat.userId);
-  const users = await prisma.user.findMany({
+  const users = await prisma.users.findMany({
     where: { id: { in: userIds } },
     select: {
       id: true,
@@ -442,7 +442,6 @@ function getMetricValue(stat: any, metric: string): number {
  */
 function applyPrivacyControls(entry: any, currentUserId?: string, position?: number, includeAnonymous?: boolean) {
   const isOwnEntry = entry.userId === currentUserId;
-  const user = entry.user;
 
   // Since privacySettings field doesn't exist in the schema, we'll default to showing all entries
   // In the future, if privacy settings are added to the User model, this logic can be updated

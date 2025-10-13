@@ -21,13 +21,13 @@ export async function updateUserVerificationAction(formData: FormData) {
 
   try {
     // Update user verification status
-    await prisma.user.update({
+    await prisma.users.update({
       where: { id: userId },
       data: { trainerVerified }
     })
 
     // Update credentials with verification notes
-    const user = await prisma.user.findUnique({
+    const user = await prisma.users.findUnique({
       where: { id: userId },
       select: { trainerCredentials: true }
     })
@@ -44,7 +44,7 @@ export async function updateUserVerificationAction(formData: FormData) {
           latest.verificationNotes = notes
           latest.status = trainerVerified ? 'approved' : 'rejected'
 
-          await prisma.user.update({
+          await prisma.users.update({
             where: { id: userId },
             data: { trainerCredentials: JSON.stringify(credentials) }
           })
@@ -55,7 +55,6 @@ export async function updateUserVerificationAction(formData: FormData) {
     }
 
     revalidatePath('/admin/credentials')
-    return { success: true }
   } catch (error) {
     console.error('Error updating verification:', error)
     throw new Error('Failed to update verification status')
@@ -78,7 +77,7 @@ export async function bulkUpdateVerificationAction(formData: FormData) {
   const trainerVerified = action === 'approve'
 
   try {
-    await prisma.user.updateMany({
+    await prisma.users.updateMany({
       where: { id: { in: userIds } },
       data: { trainerVerified }
     })

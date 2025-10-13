@@ -42,11 +42,11 @@ const nextConfig = {
               key: 'Content-Security-Policy',
               value: [
                 "default-src 'self'",
-                "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
+                "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://connect.facebook.net",
                 "style-src 'self' 'unsafe-inline'",
                 "img-src 'self' data: https:",
                 "font-src 'self'",
-                "connect-src 'self' https://api.openai.com https://accounts.google.com",
+                "connect-src 'self' https://api.openai.com https://accounts.google.com https://www.facebook.com",
                 "frame-src 'none'",
               ].join('; '),
             },

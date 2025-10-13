@@ -33,6 +33,11 @@ const sendNotificationSchema = z.object({
   scheduledTime: z.string().datetime().optional(),
 });
 
+const markReadSchema = z.object({
+  action: z.literal('mark_read'),
+  notificationId: z.string().min(1, 'Notification ID is required'),
+});
+
 const unregisterDeviceSchema = z.object({
   action: z.literal('unregister'),
   token: z.string().min(1, 'Device token is required'),
@@ -77,6 +82,92 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
           success: true,
           devices,
+        });
+      }
+
+      case 'conversations': {
+        // Get user's chat conversations
+        const limit = parseInt(searchParams.get('limit') || '20');
+
+        const chatRooms = await prisma.chatRoom.findMany({
+          where: {
+            participants: {
+              some: {
+                userId: session.user.id,
+                isActive: true,
+              },
+            },
+            isActive: true,
+          },
+          include: {
+            participants: {
+              where: { isActive: true },
+              include: {
+                user: {
+                  select: {
+                    id: true,
+                    name: true,
+                    image: true,
+                  },
+                },
+              },
+            },
+            messages: {
+              orderBy: { createdAt: 'desc' },
+              take: 1,
+              include: {
+                sender: {
+                  select: {
+                    id: true,
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+          orderBy: { updatedAt: 'desc' },
+          take: limit,
+        });
+
+        // Calculate unread counts and format response
+        const conversations = await Promise.all(
+          chatRooms.map(async (room) => {
+            const unreadCount = await prisma.chatMessage.count({
+              where: {
+                roomId: room.id,
+                senderId: { not: session.user.id },
+                deletedAt: null,
+                createdAt: {
+                  gt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+                },
+              },
+            });
+
+            return {
+              id: room.id,
+              name: room.name,
+              type: room.type,
+              lastMessage: room.messages[0] ? {
+                id: room.messages[0].id,
+                content: room.messages[0].content,
+                createdAt: room.messages[0].createdAt.toISOString(),
+                senderId: room.messages[0].senderId,
+                senderName: room.messages[0].sender.name,
+              } : undefined,
+              participants: room.participants.map(p => ({
+                userId: p.user.id,
+                userName: p.user.name,
+                userImage: p.user.image,
+              })),
+              unreadCount,
+              updatedAt: room.updatedAt.toISOString(),
+            };
+          })
+        );
+
+        return NextResponse.json({
+          success: true,
+          conversations,
         });
       }
 
@@ -153,7 +244,7 @@ export async function POST(request: NextRequest) {
 
     switch (action) {
       case 'register': {
-        const { token, platform, deviceInfo } = registerDeviceSchema.parse(body);
+        const { token, platform } = registerDeviceSchema.parse(body);
 
         const mapPlatform = (p: 'ios'|'android'|'web'): DevicePlatform =>
           p === 'ios' ? 'IOS' : p === 'android' ? 'ANDROID' : 'WEB';
@@ -225,7 +316,7 @@ export async function POST(request: NextRequest) {
           );
         }
 
-        const targetUsers = await prisma.user.findMany({
+        const targetUsers = await prisma.users.findMany({
           where: {
             id: { in: userIds },
             status: 'ACTIVE',
@@ -310,6 +401,41 @@ export async function POST(request: NextRequest) {
         });
       }
 
+      case 'mark_read': {
+        const { notificationId } = markReadSchema.parse(body);
+
+        const notification = await prisma.pushNotification.findFirst({
+          where: {
+            id: notificationId,
+            userId: session.user.id,
+          },
+        });
+
+        if (!notification) {
+          return NextResponse.json(
+            { error: 'Notification not found' },
+            { status: 404 }
+          );
+        }
+
+        if (notification.readAt) {
+          return NextResponse.json({
+            success: true,
+            message: 'Notification already marked as read',
+          });
+        }
+
+        await prisma.pushNotification.update({
+          where: { id: notificationId },
+          data: { readAt: new Date() },
+        });
+
+        return NextResponse.json({
+          success: true,
+          message: 'Notification marked as read',
+        });
+      }
+
       case 'unregister': {
         const { token } = unregisterDeviceSchema.parse(body);
 
@@ -332,7 +458,7 @@ export async function POST(request: NextRequest) {
 
       default:
         return NextResponse.json(
-          { error: 'Invalid action. Use "register", "send", or "unregister"' },
+          { error: 'Invalid action. Use "register", "send", "mark_read", or "unregister"' },
           { status: 400 }
         );
     }

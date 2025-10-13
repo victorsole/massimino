@@ -31,14 +31,14 @@ export interface WorkoutLogEntry {
   id: string;
   userId: string;
   coachId?: string;
-  
+
   // Basic workout info
   date: Date;
   exerciseId: string;
   order: string;
   setNumber: number;
   setType: SetType;
-  
+
   // Performance data
   reps: number;
   weight: string;
@@ -47,19 +47,23 @@ export interface WorkoutLogEntry {
   intensityType?: IntensityType;
   tempo?: string;
   restSeconds?: number;
-  
+
   // Calculated fields
   trainingVolume?: number;
   duration?: string;
-  
+
+  // Records
+  personalRecord?: boolean;
+  volumeRecord?: boolean;
+
   // Feedback and notes
   coachFeedback?: string;
   userComments?: string;
-  
+
   // Metadata
   createdAt: Date;
   updatedAt: Date;
-  
+
   // Relationships
   user?: User;
   coach?: User;
@@ -132,6 +136,7 @@ export interface WorkoutSession {
  * Form data for creating/editing workout entries
  */
 export interface WorkoutLogEntryFormData {
+  sessionId?: string;
   date: string; // YYYY-MM-DD format
   exerciseId: string;
   setNumber: number;
@@ -139,6 +144,7 @@ export interface WorkoutLogEntryFormData {
   reps: number;
   weight: string;
   unit: WeightUnit;
+  subOrder?: string; // 'A', 'B', 'C' for grouped sets
   intensity?: string;
   intensityType?: IntensityType;
   tempo?: string;
@@ -250,6 +256,7 @@ export interface WorkoutPagination {
   limit: number;
   total: number;
   totalPages: number;
+  hasMore: boolean;
 }
 
 // ============================================================================

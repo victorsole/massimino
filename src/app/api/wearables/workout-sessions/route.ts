@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import authOptions from '@/core';
+import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
 import { z } from 'zod';
 
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     const sessionData = workoutSessionSchema.parse(body);
 
     // Create workout log entry from wearable data
-    const workoutLogEntry = await prisma.workoutLogEntry.create({
+    const workoutLogEntry = await prisma.workout_log_entries.create({
       data: {
         userId: session.user.id,
         exerciseId: 'wearable-workout', // Default exercise ID for wearable workouts
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
 
     // Bulk create health data entries
     if (healthDataEntries.length > 0) {
-      await prisma.healthData.createMany({
+      await prisma.health_data.createMany({
         data: healthDataEntries,
         skipDuplicates: true,
       });
@@ -186,7 +186,7 @@ export async function GET(request: NextRequest) {
     };
 
     // Get workout sessions
-    const workoutSessions = await prisma.workoutLogEntry.findMany({
+    const workoutSessions = await prisma.workout_log_entries.findMany({
       where,
       orderBy: {
         date: 'desc',

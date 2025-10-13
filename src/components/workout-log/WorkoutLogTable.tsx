@@ -1,3 +1,4 @@
+// src/components/workout-log/WorkoutLogTable.tsx
 /**
  * Workout Log Table Component
  * Interactive table for viewing and editing workout log entries
@@ -7,7 +8,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { format } from 'date-fns';
+import { format, formatDuration, intervalToDuration, eachDayOfInterval, startOfMonth, endOfMonth, getDay, isSameDay, formatDistanceToNow } from 'date-fns';
 import { 
   Table, 
   TableBody, 
@@ -20,12 +21,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon, Plus, Edit, Trash2, Filter, SortAsc, SortDesc } from 'lucide-react';
+import { CalendarIcon, Plus, Edit, Trash2, Filter, SortAsc, SortDesc, Activity, Star, Eye, MessageCircle } from 'lucide-react';
 import { cn } from '@/core/utils';
 import { 
   WorkoutLogEntry, 
@@ -92,14 +93,29 @@ export function WorkoutLogTable({
   // Handle inline editing
   const handleEdit = (entry: WorkoutLogEntry) => {
     setEditingEntry(entry.id);
+    // Convert to KG in edit form if the stored unit is LB
+    const parts = String(entry.weight)
+      .split(',')
+      .map((w) => w.trim())
+      .filter((w) => w.length > 0);
+    const nums = parts.map((p) => parseFloat(p)).filter((n) => !isNaN(n));
+    const toKg = (n: number, unit: string) => (unit === 'LB' ? n * 0.453592 : n);
+    const kgWeights = nums.map((n) => toKg(n, entry.unit));
+    const kgWeightString = kgWeights
+      .map((n) => {
+        const v = Math.round(n * 10) / 10;
+        return Number.isInteger(v) ? `${v.toFixed(0)}` : `${v.toFixed(1)}`;
+      })
+      .join(',');
+
     setEditForm({
       date: format(typeof entry.date === 'string' ? new Date(entry.date) : entry.date, 'yyyy-MM-dd'),
       exerciseId: entry.exerciseId,
       setNumber: entry.setNumber,
       setType: entry.setType,
       reps: entry.reps,
-      weight: entry.weight,
-      unit: entry.unit,
+      weight: kgWeightString,
+      unit: 'KG',
       intensity: entry.intensity,
       intensityType: entry.intensityType,
       tempo: entry.tempo,
@@ -202,7 +218,21 @@ export function WorkoutLogTable({
   };
 
   const formatWeight = (weight: string, unit: string) => {
-    return `${weight} ${unit}`;
+    // Always display in kg for European platform policy
+    const parts = String(weight)
+      .split(',')
+      .map((w) => w.trim())
+      .filter((w) => w.length > 0);
+    const nums = parts.map((p) => parseFloat(p)).filter((n) => !isNaN(n));
+    if (nums.length === 0) return '--';
+    const toKg = (n: number) => (unit === 'LB' ? n * 0.453592 : n);
+    const converted = nums.map((n) => toKg(n));
+    const formatted = converted.map((n) => {
+      // Show up to 1 decimal place for readability
+      const v = Math.round(n * 10) / 10;
+      return Number.isInteger(v) ? `${v.toFixed(0)}` : `${v.toFixed(1)}`;
+    });
+    return `${formatted.join(', ')} KG`;
   };
 
   const formatDate = (date: string | Date) => {
@@ -496,18 +526,14 @@ export function WorkoutLogTable({
                           placeholder="40,45,50"
                         />
                         <Select
-                          value={editForm.unit || ''}
+                          value={editForm.unit || 'KG'}
                           onValueChange={(value) => setEditForm({ ...editForm, unit: value as any })}
                         >
                           <SelectTrigger className="w-16">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {(['KG','LB'] as const).map((unit) => (
-                              <SelectItem key={unit} value={unit}>
-                                {unit}
-                              </SelectItem>
-                            ))}
+                            <SelectItem value="KG">KG</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -698,11 +724,11 @@ function CoachFeedbackCell({
 }
 
 // Workout Entry Form Component (simplified for now)
-function WorkoutEntryForm({ 
-  _exercises, 
-  onSave 
-}: { 
-  _exercises: ExerciseRef[]; 
+function WorkoutEntryForm({
+  _exercises,
+  onSave
+}: {
+  _exercises: ExerciseRef[];
   onSave: () => void;
 }) {
   void _exercises;
@@ -714,6 +740,460 @@ function WorkoutEntryForm({
       <Button onClick={onSave}>
         Save Entry
       </Button>
+    </div>
+  );
+}
+
+// Session History Table Component
+export function SessionHistoryTable() {
+  const [sessions, set_sessions] = useState<any[]>([]);
+  const [loading, set_loading] = useState(true);
+  const [selected_session, set_selected_session] = useState<string | null>(null);
+
+  useEffect(() => {
+    load_sessions();
+  }, []);
+
+  async function load_sessions() {
+    try {
+      const response = await fetch('/api/workout/sessions');
+      const data = await response.json();
+      set_sessions(data.sessions || []);
+    } catch (error) {
+      console.error('Failed to load sessions:', error);
+    } finally {
+      set_loading(false);
+    }
+  }
+
+  async function handle_delete_session(session_id: string) {
+    if (!confirm('Are you sure you want to delete this workout session?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/workout/sessions?id=${session_id}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        alert('Session deleted successfully');
+        load_sessions();
+      }
+    } catch (error) {
+      console.error('Failed to delete session:', error);
+      alert('Failed to delete session');
+    }
+  }
+
+  if (loading) {
+    return <div className="text-center py-8">Loading sessions...</div>;
+  }
+
+  return (
+    <div className="space-y-4">
+      {sessions.length === 0 ? (
+        <div className="text-center py-12 bg-gray-50 rounded-lg">
+          <Activity className="mx-auto h-12 w-12 text-gray-400" />
+          <h3 className="mt-2 text-sm font-medium text-gray-900">No sessions yet</h3>
+          <p className="mt-1 text-sm text-gray-500">
+            Start a new workout session to begin tracking your progress
+          </p>
+        </div>
+      ) : (
+        <div className="grid gap-4">
+          {sessions.map(session => (
+            <Card
+              key={session.id}
+              className="hover:shadow-lg transition-shadow cursor-pointer"
+              onClick={() => set_selected_session(session.id)}
+            >
+              <CardHeader>
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <CardTitle className="text-lg">
+                      {format(new Date(session.date), 'EEEE, d MMMM yyyy')}
+                    </CardTitle>
+                    <CardDescription>
+                      {format(new Date(session.startTime), 'HH:mm')}
+                      {session.endTime && ` - ${format(new Date(session.endTime), 'HH:mm')}`}
+                      {session.endTime && (
+                        <span className="ml-2 text-gray-500">
+                          ({formatDuration(
+                            intervalToDuration({
+                              start: new Date(session.startTime),
+                              end: new Date(session.endTime)
+                            })
+                          )})
+                        </span>
+                      )}
+                    </CardDescription>
+                  </div>
+
+                  {session.isComplete && (
+                    <Badge variant="default">Complete</Badge>
+                  )}
+                  {!session.isComplete && (
+                    <Badge variant="secondary">In Progress</Badge>
+                  )}
+                </div>
+              </CardHeader>
+
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-500">Total Sets</p>
+                    <p className="text-2xl font-bold">{session.totalSets}</p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm text-gray-500">Total Volume</p>
+                    <p className="text-2xl font-bold">
+                      {session.totalVolume?.toFixed(0) || 0}
+                      <span className="text-sm text-gray-500 ml-1">kg</span>
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm text-gray-500">XP Earned</p>
+                    <p className="text-2xl font-bold text-blue-600">
+                      {session.experiencePoints || 0}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm text-gray-500">Performance</p>
+                    <div className="flex gap-1 mt-1">
+                      {[1, 2, 3, 4, 5].map(star => (
+                        <Star
+                          key={star}
+                          className={`h-5 w-5 ${
+                            star <= (session.performanceRating || 0)
+                              ? 'text-yellow-400 fill-yellow-400'
+                              : 'text-gray-300'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {session.achievementsEarned?.length > 0 && (
+                  <div className="mt-4 pt-4 border-t">
+                    <p className="text-sm font-medium mb-2">🏆 Achievements Unlocked</p>
+                    <div className="flex flex-wrap gap-2">
+                      {session.achievementsEarned.map((achievement_id: string) => (
+                        <Badge key={achievement_id} variant="secondary">
+                          Achievement
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {session.sessionNotes && (
+                  <div className="mt-4 pt-4 border-t">
+                    <p className="text-sm text-gray-700">{session.sessionNotes}</p>
+                  </div>
+                )}
+
+                {/* Comments section in session card */}
+                {selected_session === session.id && (
+                  <div className="mt-4 pt-4 border-t">
+                    <h4 className="font-semibold mb-3 flex items-center gap-2">
+                      <MessageCircle className="h-4 w-4" />
+                      Session Comments
+                    </h4>
+                    <CommentsPanel
+                      commentable_type="SESSION"
+                      commentable_id={session.id}
+                    />
+                  </div>
+                )}
+              </CardContent>
+
+              <CardFooter className="flex justify-between">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Navigate to session detail view
+                  }}
+                >
+                  <Eye className="h-4 w-4 mr-2" />
+                  View Details
+                </Button>
+
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handle_delete_session(session.id);
+                  }}
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Workout Calendar Component
+interface WorkoutCalendarProps {
+  month: Date;
+  sessions: any[];
+}
+
+export function WorkoutCalendar({ month, sessions }: WorkoutCalendarProps) {
+  const days_in_month = eachDayOfInterval({
+    start: startOfMonth(month),
+    end: endOfMonth(month)
+  });
+
+  const start_day = getDay(startOfMonth(month));
+  const empty_days = Array(start_day).fill(null);
+
+  // Group sessions by date
+  const sessions_by_date = new Map<string, any[]>();
+  sessions.forEach(session => {
+    const date_key = format(new Date(session.date), 'yyyy-MM-dd');
+    if (!sessions_by_date.has(date_key)) {
+      sessions_by_date.set(date_key, []);
+    }
+    sessions_by_date.get(date_key)!.push(session);
+  });
+
+  return (
+    <div className="bg-white rounded-lg shadow overflow-hidden">
+      {/* Day headers */}
+      <div className="grid grid-cols-7 gap-px bg-gray-200">
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+          <div
+            key={day}
+            className="bg-gray-50 py-2 text-center text-sm font-semibold text-gray-700"
+          >
+            {day}
+          </div>
+        ))}
+      </div>
+
+      {/* Calendar days */}
+      <div className="grid grid-cols-7 gap-px bg-gray-200">
+        {/* Empty days before month starts */}
+        {empty_days.map((_, index) => (
+          <div key={`empty-${index}`} className="bg-gray-50 h-24" />
+        ))}
+
+        {/* Days of the month */}
+        {days_in_month.map(day => {
+          const date_key = format(day, 'yyyy-MM-dd');
+          const day_sessions = sessions_by_date.get(date_key) || [];
+          const is_today = isSameDay(day, new Date());
+
+          return (
+            <div
+              key={date_key}
+              className={`bg-white h-24 p-2 ${
+                is_today ? 'ring-2 ring-blue-500 ring-inset' : ''
+              }`}
+            >
+              <div className="flex justify-between items-start mb-1">
+                <span className={`text-sm font-medium ${
+                  is_today ? 'text-blue-600' : 'text-gray-900'
+                }`}>
+                  {format(day, 'd')}
+                </span>
+
+                {day_sessions.length > 0 && (
+                  <Badge variant="default" className="text-xs">
+                    {day_sessions.length}
+                  </Badge>
+                )}
+              </div>
+
+              {day_sessions.length > 0 && (
+                <div className="space-y-1">
+                  {day_sessions.slice(0, 2).map(session => (
+                    <div
+                      key={session.id}
+                      className="text-xs bg-blue-100 text-blue-800 rounded px-1 py-0.5 truncate"
+                      title={`${session.totalSets} sets, ${session.totalVolume}kg`}
+                    >
+                      {session.totalSets} sets
+                    </div>
+                  ))}
+
+                  {day_sessions.length > 2 && (
+                    <div className="text-xs text-gray-500">
+                      +{day_sessions.length - 2} more
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// CommentsPanel Component
+interface CommentsPanelProps {
+  commentable_type: 'ENTRY' | 'SESSION';
+  commentable_id: string;
+}
+
+export function CommentsPanel({ commentable_type, commentable_id }: CommentsPanelProps) {
+  const [comments, set_comments] = useState<any[]>([]);
+  const [new_comment, set_new_comment] = useState('');
+  const [loading, set_loading] = useState(true);
+  const [submitting, set_submitting] = useState(false);
+
+  useEffect(() => {
+    load_comments();
+  }, [commentable_type, commentable_id]);
+
+  async function load_comments() {
+    try {
+      const response = await fetch(
+        `/api/workout/comments?type=${commentable_type}&id=${commentable_id}`
+      );
+      const data = await response.json();
+      set_comments(data.comments || []);
+    } catch (error) {
+      console.error('Failed to load comments:', error);
+    } finally {
+      set_loading(false);
+    }
+  }
+
+  async function handle_submit_comment() {
+    if (!new_comment.trim()) return;
+
+    set_submitting(true);
+    try {
+      const response = await fetch('/api/workout/comments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          commentable_type,
+          commentable_id,
+          content: new_comment
+        })
+      });
+
+      if (response.ok) {
+        set_new_comment('');
+        load_comments();
+        alert('Comment added');
+      }
+    } catch (error) {
+      console.error('Failed to add comment:', error);
+      alert('Failed to add comment');
+    } finally {
+      set_submitting(false);
+    }
+  }
+
+  async function handle_delete_comment(comment_id: string) {
+    if (!confirm('Delete this comment?')) return;
+
+    try {
+      const response = await fetch(`/api/workout/comments?id=${comment_id}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        load_comments();
+        alert('Comment deleted');
+      }
+    } catch (error) {
+      console.error('Failed to delete comment:', error);
+      alert('Failed to delete comment');
+    }
+  }
+
+  if (loading) {
+    return <div className="text-sm text-gray-500">Loading comments...</div>;
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* Comment input */}
+      <div className="flex gap-2">
+        <input
+          type="text"
+          value={new_comment}
+          onChange={(e) => set_new_comment(e.target.value)}
+          placeholder="Add a comment..."
+          className="flex-1 border rounded-md px-3 py-2 text-sm"
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') handle_submit_comment();
+          }}
+        />
+        <Button
+          onClick={handle_submit_comment}
+          disabled={submitting || !new_comment.trim()}
+          size="sm"
+        >
+          <MessageCircle className="h-4 w-4 mr-2" />
+          Post
+        </Button>
+      </div>
+
+      {/* Comments list */}
+      {comments.length === 0 ? (
+        <p className="text-sm text-gray-500 italic">No comments yet</p>
+      ) : (
+        <div className="space-y-3">
+          {comments.map(comment => (
+            <div
+              key={comment.id}
+              className="bg-gray-50 rounded-md p-3"
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    {comment.users.image && (
+                      <img
+                        src={comment.users.image}
+                        alt={comment.users.name}
+                        className="h-6 w-6 rounded-full"
+                      />
+                    )}
+                    <span className="text-sm font-medium">
+                      {comment.users.name}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      {formatDistanceToNow(new Date(comment.createdAt), {
+                        addSuffix: true
+                      })}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-700">{comment.content}</p>
+                </div>
+
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handle_delete_comment(comment.id)}
+                  className="ml-2"
+                >
+                  <Trash2 className="h-3 w-3" />
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

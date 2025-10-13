@@ -1,0 +1,65 @@
+{
+    "id": "body_composition",
+    "title": "Body Composition Assessment",
+    "version": "1.0",
+    "sections": [
+      {
+        "id": "basic_measurements",
+        "title": "Basic Measurements",
+        "fields": [
+          {"id": "name", "type": "text", "label": "Name", "required": true},
+          {"id": "date", "type": "date", "label": "Date", "required": true},
+          {"id": "height", "type": "number", "label": "Height (cm)", "required": true, "decimal": true},
+          {"id": "weight", "type": "number", "label": "Weight (kg)", "required": true, "decimal": true},
+          {"id": "bmi", "type": "calculated", "label": "Body Mass Index (BMI)", "formula": "weight / (height/100)^2", "decimal": 1}
+        ]
+      },
+      {
+        "id": "circumference",
+        "title": "Circumference Measurements",
+        "description": "All measurements in centimeters",
+        "fields": [
+          {"id": "waist_1", "type": "number", "label": "Waist - Measurement 1", "decimal": true},
+          {"id": "waist_2", "type": "number", "label": "Waist - Measurement 2", "decimal": true},
+          {"id": "hips_1", "type": "number", "label": "Hips - Measurement 1", "decimal": true},
+          {"id": "hips_2", "type": "number", "label": "Hips - Measurement 2", "decimal": true},
+          {"id": "neck_1", "type": "number", "label": "Neck - Measurement 1", "decimal": true},
+          {"id": "neck_2", "type": "number", "label": "Neck - Measurement 2", "decimal": true},
+          {"id": "chest_1", "type": "number", "label": "Chest - Measurement 1", "decimal": true},
+          {"id": "chest_2", "type": "number", "label": "Chest - Measurement 2", "decimal": true},
+          {"id": "thighs_1", "type": "number", "label": "Thighs - Measurement 1", "decimal": true},
+          {"id": "thighs_2", "type": "number", "label": "Thighs - Measurement 2", "decimal": true},
+          {"id": "calves_1", "type": "number", "label": "Calves - Measurement 1", "decimal": true},
+          {"id": "calves_2", "type": "number", "label": "Calves - Measurement 2", "decimal": true},
+          {"id": "biceps_1", "type": "number", "label": "Biceps - Measurement 1", "decimal": true},
+          {"id": "biceps_2", "type": "number", "label": "Biceps - Measurement 2", "decimal": true},
+          {"id": "waist_hip_ratio", "type": "calculated", "label": "Waist-to-Hip Ratio", "formula": "avg(waist) / avg(hips)", "decimal": 2}
+        ]
+      },
+      {
+        "id": "skinfold",
+        "title": "Skinfold Measurements",
+        "description": "All measurements in millimeters",
+        "fields": [
+          {"id": "triceps_1", "type": "number", "label": "Triceps - Measurement 1", "decimal": true},
+          {"id": "triceps_2", "type": "number", "label": "Triceps - Measurement 2", "decimal": true},
+          {"id": "biceps_sf_1", "type": "number", "label": "Biceps - Measurement 1", "decimal": true},
+          {"id": "biceps_sf_2", "type": "number", "label": "Biceps - Measurement 2", "decimal": true},
+          {"id": "chest_sf_1", "type": "number", "label": "Chest - Measurement 1", "decimal": true},
+          {"id": "chest_sf_2", "type": "number", "label": "Chest - Measurement 2", "decimal": true},
+          {"id": "abdominal_1", "type": "number", "label": "Abdominal - Measurement 1", "decimal": true},
+          {"id": "abdominal_2", "type": "number", "label": "Abdominal - Measurement 2", "decimal": true},
+          {"id": "midaxillary_1", "type": "number", "label": "Mid-axillary - Measurement 1", "decimal": true},
+          {"id": "midaxillary_2", "type": "number", "label": "Mid-axillary - Measurement 2", "decimal": true},
+          {"id": "subscapular_1", "type": "number", "label": "Subscapular - Measurement 1", "decimal": true},
+          {"id": "subscapular_2", "type": "number", "label": "Subscapular - Measurement 2", "decimal": true},
+          {"id": "suprailiac_1", "type": "number", "label": "Suprailiac - Measurement 1", "decimal": true},
+          {"id": "suprailiac_2", "type": "number", "label": "Suprailiac - Measurement 2", "decimal": true},
+          {"id": "thigh_sf_1", "type": "number", "label": "Thigh - Measurement 1", "decimal": true},
+          {"id": "thigh_sf_2", "type": "number", "label": "Thigh - Measurement 2", "decimal": true},
+          {"id": "skinfold_total", "type": "calculated", "label": "Total", "formula": "sum(all_skinfolds)", "decimal": true},
+          {"id": "body_fat_percentage", "type": "number", "label": "Body Fat %", "decimal": true}
+        ]
+      }
+    ]
+  }

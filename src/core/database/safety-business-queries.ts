@@ -148,7 +148,7 @@ export async function getUserSafetyProfile(userId: string): Promise<{
   riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   restrictions: string[];
 }> {
-  const user = await prisma.user.findUnique({
+  const user = await prisma.users.findUnique({
     where: { id: userId },
     select: {
       id: true,
@@ -179,20 +179,20 @@ export async function getUserSafetyProfile(userId: string): Promise<{
 
   // Get violation statistics
   const [violationCount, recentViolations, suspensionHistory, lastViolationResult] = await Promise.all([
-    prisma.userViolation.count({ where: { userId } }),
-    prisma.userViolation.count({
+    prisma.user_violations.count({ where: { userId } }),
+    prisma.user_violations.count({
       where: {
         userId,
         createdAt: { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) }, // Last 30 days
       },
     }),
-    prisma.userViolation.count({
+    prisma.user_violations.count({
       where: {
         userId,
         suspensionHours: { gt: 0 },
       },
     }),
-    prisma.userViolation.findFirst({
+    prisma.user_violations.findFirst({
       where: { userId },
       orderBy: { createdAt: 'desc' },
       select: { createdAt: true },
@@ -258,7 +258,7 @@ export async function getFlaggedUsers(params: {
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
   
   // Get users with safety concerns
-  const users = await prisma.user.findMany({
+  const users = await prisma.users.findMany({
     where: {
       OR: [
         { reputationScore: { lt: 50 } },
@@ -280,7 +280,7 @@ export async function getFlaggedUsers(params: {
       role: true,
       reputationScore: true,
       warningCount: true,
-      violations: {
+      user_violations: {
         select: {
           createdAt: true,
         },
@@ -336,7 +336,7 @@ export async function updateUserSafetyStatus(
 ): Promise<User> {
   // Use regular prisma transaction instead of safeTransaction for now
   return prisma.$transaction(async (tx) => {
-    const currentUser = await tx.user.findUniqueOrThrow({
+    const currentUser = await tx.users.findUniqueOrThrow({
       where: { id: userId },
       select: { reputationScore: true },
     });
@@ -345,7 +345,7 @@ export async function updateUserSafetyStatus(
       ? Math.max(0, currentUser.reputationScore + updates.reputationChange)
       : undefined;
 
-    return tx.user.update({
+    return tx.users.update({
       where: { id: userId },
       data: {
         ...(newReputationScore !== undefined && { reputationScore: newReputationScore }),
@@ -375,7 +375,7 @@ export async function createModerationLog(data: {
   confidence?: number;
   openaiResponse?: any;
 }): Promise<ModerationLog> {
-  return prisma.moderationLog.create({
+  return prisma.moderation_logs.create({
     data: {
       ...data,
       processedAt: new Date(),
@@ -396,7 +396,7 @@ export async function getModerationLogs(params: {
   offset?: number;
   includeUser?: boolean;
 }): Promise<Array<ModerationLog & { user?: { name: string; role: UserRoleType } }>> {
-  return prisma.moderationLog.findMany({
+  return prisma.moderation_logs.findMany({
     where: {
       ...(params.userId && { userId: params.userId }),
       ...(params.action && { action: params.action as any }),
@@ -410,7 +410,7 @@ export async function getModerationLogs(params: {
     },
     ...(params.includeUser && {
       include: {
-        user: {
+        users: {
           select: {
             name: true,
             role: true,
@@ -439,7 +439,7 @@ export async function getModerationStatistics(timeframe: 'day' | 'week' | 'month
   const since = new Date(Date.now() - hoursMap[timeframe] * 60 * 60 * 1000);
 
   const [logs, reasonCounts] = await Promise.all([
-    prisma.moderationLog.findMany({
+    prisma.moderation_logs.findMany({
       where: { createdAt: { gte: since } },
       select: {
         action: true,
@@ -447,12 +447,12 @@ export async function getModerationStatistics(timeframe: 'day' | 'week' | 'month
         confidence: true,
         userId: true,
         flaggedReason: true,
-        user: {
+        users: {
           select: { name: true },
         },
       },
     }),
-    prisma.moderationLog.groupBy({
+    prisma.moderation_logs.groupBy({
       by: ['flaggedReason'],
       where: {
         createdAt: { gte: since },
@@ -485,8 +485,8 @@ export async function getModerationStatistics(timeframe: 'day' | 'week' | 'month
     if (log.userId) {
       if (!userActivity[log.userId]) {
         const userData: { count: number; name?: string } = { count: 0 };
-        if (log.user?.name) {
-          userData.name = log.user.name;
+        if (log.users?.name) {
+          userData.name = log.users.name;
         }
         userActivity[log.userId] = userData;
       }
@@ -544,8 +544,9 @@ export async function createSafetyReport(data: {
   contentId?: string;
   contentType?: string;
 }): Promise<SafetyReport> {
-  return prisma.safetyReport.create({
+  return prisma.safety_reports.create({
     data: {
+      id: crypto.randomUUID(),
       ...data,
       status: 'PENDING',
       priority: determinePriority(data.violationType, data.description),
@@ -566,16 +567,16 @@ export async function getPendingSafetyReports(params: {
   reportedUser: { name: string | null; role: UserRoleType; reputationScore: number };
 }>> {
   // @ts-expect-error Prisma type mismatch with local types
-  return prisma.safetyReport.findMany({
+  return prisma.safety_reports.findMany({
     where: {
       status: { in: ['PENDING', 'INVESTIGATING'] },
       ...(params.priority && { priority: params.priority }),
     },
     include: {
-      reporter: {
+      users_safety_reports_reporterIdTousers: {
         select: { name: true, role: true },
       },
-      reportedUser: {
+      users_safety_reports_reportedUserIdTousers: {
         select: { name: true, role: true, reputationScore: true },
       },
     },
@@ -600,7 +601,7 @@ export async function updateSafetyReport(
     actionTaken?: string;
   }
 ): Promise<SafetyReport> {
-  return prisma.safetyReport.update({
+  return prisma.safety_reports.update({
     where: { id: reportId },
     data: {
       ...updates,
@@ -635,8 +636,9 @@ export async function createUserViolation(data: {
   // @ts-expect-error Prisma type mismatch with local types
   return prisma.$transaction(async (tx) => {
     // Create violation record
-    const violation = await tx.userViolation.create({
+    const violation = await tx.user_violations.create({
       data: {
+        id: crypto.randomUUID(),
         ...data,
         createdAt: new Date(),
       },
@@ -644,7 +646,7 @@ export async function createUserViolation(data: {
 
     // Update user statistics
     if (data.warningIssued) {
-      await tx.user.update({
+      await tx.users.update({
         where: { id: data.userId },
         data: {
           warningCount: { increment: 1 },
@@ -669,7 +671,7 @@ export async function getUserViolationHistory(
   }
 ): Promise<UserViolation[]> {
   // @ts-expect-error Prisma type mismatch with local types
-  return prisma.userViolation.findMany({
+  return prisma.user_violations.findMany({
     where: {
       userId,
       ...(params?.includeResolved === false && { resolved: false }),
@@ -792,11 +794,11 @@ export async function generateSafetyReport(params: {
   details: any[];
 }> {
   const summary = await Promise.all([
-    prisma.user.count(),
-    prisma.user.count({ where: { status: UserStatus.ACTIVE } }),
-    prisma.user.count({ where: { status: UserStatus.SUSPENDED } }),
-    prisma.user.count({ where: { status: UserStatus.BANNED } }),
-    prisma.userViolation.count({
+    prisma.users.count(),
+    prisma.users.count({ where: { status: UserStatus.ACTIVE } }),
+    prisma.users.count({ where: { status: UserStatus.SUSPENDED } }),
+    prisma.users.count({ where: { status: UserStatus.BANNED } }),
+    prisma.user_violations.count({
       where: {
         createdAt: {
           gte: params.startDate,
@@ -804,7 +806,7 @@ export async function generateSafetyReport(params: {
         },
       },
     }),
-    prisma.safetyReport.count({
+    prisma.safety_reports.count({
       where: {
         status: 'RESOLVED',
         createdAt: {
@@ -934,18 +936,19 @@ export async function createOrUpdateTrainerProfile(userId: string, data: {
   availableHours?: any;
   timezone?: string;
 }) {
-  const existingProfile = await prisma.trainerProfile.findUnique({
+  const existingProfile = await prisma.trainer_profiles.findUnique({
     where: { userId }
   });
 
   if (existingProfile) {
-    return prisma.trainerProfile.update({
+    return prisma.trainer_profiles.update({
       where: { userId },
       data
     });
   } else {
-    return prisma.trainerProfile.create({
+    return prisma.trainer_profiles.create({
       data: {
+        id: crypto.randomUUID(),
         userId,
         ...data
       }
@@ -957,7 +960,7 @@ export async function createOrUpdateTrainerProfile(userId: string, data: {
  * Get trainer profile with business stats
  */
 export async function getTrainerProfileWithStats(trainerId: string) {
-  return prisma.trainerProfile.findUnique({
+  return prisma.trainer_profiles.findUnique({
     where: { id: trainerId },
     include: {
       user: {
@@ -971,9 +974,9 @@ export async function getTrainerProfileWithStats(trainerId: string) {
       },
       _count: {
         select: {
-          clients: { where: { status: 'ACTIVE' } },
+          trainer_clients: { where: { status: 'ACTIVE' } },
           appointments: true,
-          reviews: true
+          trainer_reviews: true
         }
       }
     }
@@ -1009,10 +1012,10 @@ export async function getTrainerClients(
   };
 
   const [clients, total] = await Promise.all([
-    prisma.trainerClient.findMany({
+    prisma.trainer_clients.findMany({
       where,
       include: {
-        client: {
+        users: {
           select: {
             id: true,
             name: true,
@@ -1023,7 +1026,7 @@ export async function getTrainerClients(
         _count: {
           select: {
             appointments: true,
-            progressReports: true
+            progress_reports: true
           }
         }
       },
@@ -1031,7 +1034,7 @@ export async function getTrainerClients(
       skip,
       take: limit
     }),
-    prisma.trainerClient.count({ where })
+    prisma.trainer_clients.count({ where })
   ]);
 
   return {
@@ -1053,7 +1056,7 @@ export async function addClientToTrainer(trainerId: string, clientId: string, da
   preferences?: any;
 }) {
   // Check if relationship already exists
-  const existing = await prisma.trainerClient.findUnique({
+  const existing = await prisma.trainer_clients.findUnique({
     where: {
       trainerId_clientId: { trainerId, clientId }
     }
@@ -1063,8 +1066,9 @@ export async function addClientToTrainer(trainerId: string, clientId: string, da
     throw new Error('Client is already associated with this trainer');
   }
 
-  const relationship = await prisma.trainerClient.create({
+  const relationship = await prisma.trainer_clients.create({
     data: {
+      id: crypto.randomUUID(),
       trainerId,
       clientId,
       status: 'ACTIVE',
@@ -1073,7 +1077,7 @@ export async function addClientToTrainer(trainerId: string, clientId: string, da
   });
 
   // Update trainer's client counts
-  await prisma.trainerProfile.update({
+  await prisma.trainer_profiles.update({
     where: { id: trainerId },
     data: {
       activeClients: { increment: 1 },
@@ -1100,8 +1104,9 @@ export async function createAppointment(data: {
   price?: number;
   currency?: string;
 }) {
-  return prisma.appointment.create({
+  return prisma.appointments.create({
     data: {
+      id: crypto.randomUUID(),
       trainerId: data.trainerId,
       clientId: data.clientId,
       title: data.title,
@@ -1147,10 +1152,10 @@ export async function getTrainerAppointments(
   };
 
   const [appointments, total] = await Promise.all([
-    prisma.appointment.findMany({
+    prisma.appointments.findMany({
       where,
       include: {
-        client: {
+        users: {
           select: {
             id: true,
             name: true,
@@ -1158,7 +1163,7 @@ export async function getTrainerAppointments(
             image: true
           }
         },
-        workoutSession: {
+        workout_sessions: {
           select: {
             id: true,
             title: true,
@@ -1170,7 +1175,7 @@ export async function getTrainerAppointments(
       skip,
       take: limit
     }),
-    prisma.appointment.count({ where })
+    prisma.appointments.count({ where })
   ]);
 
   return {
@@ -1204,7 +1209,7 @@ export async function updateAppointmentStatus(
     updateData.completedAt = new Date();
   }
 
-  return prisma.appointment.update({
+  return prisma.appointments.update({
     where: { id: appointmentId },
     data: updateData
   });
@@ -1227,8 +1232,9 @@ export async function createProgressReport(data: {
   recommendations?: string;
   nextGoals?: any[];
 }) {
-  return prisma.progressReport.create({
+  return prisma.progress_reports.create({
     data: {
+      id: crypto.randomUUID(),
       ...data,
       reportDate: new Date(),
       period: data.period || 'MONTHLY'
@@ -1260,10 +1266,10 @@ export async function getTrainerProgressReports(
   };
 
   const [reports, total] = await Promise.all([
-    prisma.progressReport.findMany({
+    prisma.progress_reports.findMany({
       where,
       include: {
-        client: {
+        users: {
           select: {
             id: true,
             name: true,
@@ -1276,7 +1282,7 @@ export async function getTrainerProgressReports(
       skip,
       take: limit
     }),
-    prisma.progressReport.count({ where })
+    prisma.progress_reports.count({ where })
   ]);
 
   return {
@@ -1291,7 +1297,7 @@ export async function getTrainerProgressReports(
  * Share progress report with client
  */
 export async function shareProgressReport(reportId: string) {
-  return prisma.progressReport.update({
+  return prisma.progress_reports.update({
     where: { id: reportId },
     data: { isShared: true }
   });
@@ -1318,7 +1324,7 @@ export async function getTrainerEarnings(
       startDate = new Date(now.getFullYear(), now.getMonth(), 1);
   }
 
-  const earnings = await prisma.payment.aggregate({
+  const earnings = await prisma.payments.aggregate({
     where: {
       trainerId,
       status: 'COMPLETED',
@@ -1352,7 +1358,7 @@ export async function checkAppointmentConflict(
 ) {
   const endTime = new Date(scheduledAt.getTime() + (duration * 60 * 1000));
 
-  return prisma.appointment.findFirst({
+  return prisma.appointments.findFirst({
     where: {
       trainerId,
       ...(excludeAppointmentId && { id: { not: excludeAppointmentId } }),
@@ -1386,13 +1392,13 @@ export async function getTrainerAvailability(
   endDate: Date
 ) {
   // Get trainer's available hours
-  const trainerProfile = await prisma.trainerProfile.findUnique({
+  const trainerProfile = await prisma.trainer_profiles.findUnique({
     where: { id: trainerId },
     select: { availableHours: true, timezone: true }
   });
 
   // Get existing appointments
-  const appointments = await prisma.appointment.findMany({
+  const appointments = await prisma.appointments.findMany({
     where: {
       trainerId,
       scheduledAt: { gte: startDate, lte: endDate },
@@ -1422,7 +1428,7 @@ export async function rescheduleAppointment(
   newScheduledAt: Date,
   reason?: string
 ) {
-  const appointment = await prisma.appointment.findUnique({
+  const appointment = await prisma.appointments.findUnique({
     where: { id: appointmentId }
   });
 
@@ -1442,7 +1448,7 @@ export async function rescheduleAppointment(
     throw new Error('New time conflicts with existing appointment');
   }
 
-  return prisma.appointment.update({
+  return prisma.appointments.update({
     where: { id: appointmentId },
     data: {
       scheduledAt: newScheduledAt,
@@ -1473,8 +1479,9 @@ export async function createMolliePayment(data: {
   packageId?: string;
   metadata?: any;
 }) {
-  const payment = await prisma.payment.create({
+  const payment = await prisma.payments.create({
     data: {
+      id: crypto.randomUUID(),
       trainerId: data.trainerId,
       clientId: data.clientId,
       trainerClientId: data.trainerClientId ?? null,
@@ -1512,7 +1519,7 @@ export async function updatePaymentFromMollie(molliePaymentId: string, updates: 
   trainerEarnings?: number;
   platformFee?: number;
 }) {
-  const payment = await prisma.payment.findFirst({
+  const payment = await prisma.payments.findFirst({
     where: { molliePaymentId }
   });
 
@@ -1520,7 +1527,7 @@ export async function updatePaymentFromMollie(molliePaymentId: string, updates: 
     throw new Error(`Payment not found for Mollie ID: ${molliePaymentId}`);
   }
 
-  const updatedPayment = await prisma.payment.update({
+  const updatedPayment = await prisma.payments.update({
     where: { id: payment.id },
     data: {
       status: updates.status as any,
@@ -1533,7 +1540,7 @@ export async function updatePaymentFromMollie(molliePaymentId: string, updates: 
 
   // Update trainer earnings if payment completed
   if (updates.status === 'COMPLETED' && updates.trainerEarnings) {
-    await prisma.trainerProfile.update({
+    await prisma.trainer_profiles.update({
       where: { id: payment.trainerId },
       data: {
         totalEarnings: { increment: updates.trainerEarnings },
@@ -1556,7 +1563,7 @@ export async function updatePaymentFromMollie(molliePaymentId: string, updates: 
  */
 export async function createMollieCustomer(userId: string, mollieCustomerId: string) {
   // Update user record with Mollie customer ID
-  const user = await prisma.user.findUnique({
+  const user = await prisma.users.findUnique({
     where: { id: userId }
   });
 
@@ -1575,10 +1582,10 @@ export async function createMollieCustomer(userId: string, mollieCustomerId: str
  * Get payment by Mollie payment ID
  */
 export async function getPaymentByMollieId(molliePaymentId: string) {
-  return prisma.payment.findFirst({
+  return prisma.payments.findFirst({
     where: { molliePaymentId },
     include: {
-      trainer: {
+      trainer_profiles: {
         include: {
           user: {
             select: {
@@ -1589,7 +1596,7 @@ export async function getPaymentByMollieId(molliePaymentId: string) {
           }
         }
       },
-      client: {
+      users: {
         select: {
           id: true,
           name: true,
@@ -1604,7 +1611,7 @@ export async function getPaymentByMollieId(molliePaymentId: string) {
  * Process refund through Mollie
  */
 export async function processRefund(paymentId: string, refundAmount: number, reason?: string) {
-  const payment = await prisma.payment.findUnique({
+  const payment = await prisma.payments.findUnique({
     where: { id: paymentId }
   });
 
@@ -1617,7 +1624,7 @@ export async function processRefund(paymentId: string, refundAmount: number, rea
   }
 
   // Update payment record with refund
-  const updatedPayment = await prisma.payment.update({
+  const updatedPayment = await prisma.payments.update({
     where: { id: paymentId },
     data: {
       refundAmount,
@@ -1633,7 +1640,7 @@ export async function processRefund(paymentId: string, refundAmount: number, rea
   // Update trainer earnings
   if (payment.trainerEarnings && refundAmount > 0) {
     const refundFromEarnings = Math.min(refundAmount, payment.trainerEarnings);
-    await prisma.trainerProfile.update({
+    await prisma.trainer_profiles.update({
       where: { id: payment.trainerId },
       data: {
         totalEarnings: { decrement: refundFromEarnings },
@@ -1674,7 +1681,7 @@ export async function getTrainerPaymentAnalytics(
 
   const [payments, paymentsByType, paymentsByStatus] = await Promise.all([
     // Total earnings
-    prisma.payment.aggregate({
+    prisma.payments.aggregate({
       where: {
         trainerId,
         paymentDate: { gte: startDate },
@@ -1689,7 +1696,7 @@ export async function getTrainerPaymentAnalytics(
     }),
 
     // Payments by type
-    prisma.payment.groupBy({
+    prisma.payments.groupBy({
       by: ['type'],
       where: {
         trainerId,
@@ -1700,7 +1707,7 @@ export async function getTrainerPaymentAnalytics(
     }),
 
     // Payments by status
-    prisma.payment.groupBy({
+    prisma.payments.groupBy({
       by: ['status'],
       where: {
         trainerId,
@@ -1746,7 +1753,7 @@ export async function createPremiumTeam(data: {
   coverImage?: string;
 }) {
   // Validate owner is a trainer
-  const owner = await prisma.user.findUnique({
+  const owner = await prisma.users.findUnique({
     where: { id: data.ownerId },
     select: { role: true }
   });
@@ -1755,8 +1762,9 @@ export async function createPremiumTeam(data: {
     throw new Error('Only trainers can create premium teams');
   }
 
-  const team = await prisma.premiumCommunity.create({
+  const team = await prisma.premium_communities.create({
     data: {
+      id: crypto.randomUUID(),
       name: data.name,
       description: data.description,
       ownerId: data.ownerId,
@@ -1775,7 +1783,7 @@ export async function createPremiumTeam(data: {
       currentMembers: 0
     },
     include: {
-      owner: {
+      users: {
         select: {
           id: true,
           name: true,
@@ -1826,10 +1834,10 @@ export async function getTeams(params: {
   };
 
   const [teams, total] = await Promise.all([
-    prisma.premiumCommunity.findMany({
+    prisma.premium_communities.findMany({
       where,
       include: {
-        owner: {
+        users: {
           select: {
             id: true,
             name: true,
@@ -1839,13 +1847,13 @@ export async function getTeams(params: {
         },
         _count: {
           select: {
-            memberships: {
+            premium_memberships: {
               where: { status: 'ACTIVE' }
             }
           }
         },
         ...(params.userId && {
-          memberships: {
+          premium_memberships: {
             where: { userId: params.userId },
             select: {
               status: true,
@@ -1864,13 +1872,13 @@ export async function getTeams(params: {
       take: limit
     }),
 
-    prisma.premiumCommunity.count({ where })
+    prisma.premium_communities.count({ where })
   ]);
 
   return {
     teams: teams.map(team => ({
       ...team,
-      userMembership: team.memberships?.[0] || null
+      userMembership: team.premium_memberships?.[0] || null
     })),
     pagination: {
       page,
@@ -1886,7 +1894,7 @@ export async function getTeams(params: {
  */
 export async function joinPremiumTeam(teamId: string, userId: string, paymentId?: string) {
   // Get team details
-  const team = await prisma.premiumCommunity.findUnique({
+  const team = await prisma.premium_communities.findUnique({
     where: { id: teamId },
     select: {
       id: true,
@@ -1913,7 +1921,7 @@ export async function joinPremiumTeam(teamId: string, userId: string, paymentId?
   }
 
   // Check existing membership
-  const existingMembership = await prisma.premiumMembership.findUnique({
+  const existingMembership = await prisma.premium_memberships.findUnique({
     where: {
       communityId_userId: {
         communityId: teamId,
@@ -1945,7 +1953,7 @@ export async function joinPremiumTeam(teamId: string, userId: string, paymentId?
   }
 
   // Create or update membership
-  const membership = await prisma.premiumMembership.upsert({
+  const membership = await prisma.premium_memberships.upsert({
     where: {
       communityId_userId: {
         communityId: teamId,
@@ -1976,7 +1984,7 @@ export async function joinPremiumTeam(teamId: string, userId: string, paymentId?
 
   // Update team member count if membership is active
   if (status === 'ACTIVE') {
-    await prisma.premiumCommunity.update({
+    await prisma.premium_communities.update({
       where: { id: teamId },
       data: { currentMembers: { increment: 1 } }
     });
@@ -1996,7 +2004,7 @@ export async function joinPremiumTeam(teamId: string, userId: string, paymentId?
  * Leave premium team
  */
 export async function leavePremiumTeam(teamId: string, userId: string, reason?: string) {
-  const membership = await prisma.premiumMembership.findUnique({
+  const membership = await prisma.premium_memberships.findUnique({
     where: {
       communityId_userId: {
         communityId: teamId,
@@ -2014,7 +2022,7 @@ export async function leavePremiumTeam(teamId: string, userId: string, reason?: 
   }
 
   // Cancel membership
-  const updatedMembership = await prisma.premiumMembership.update({
+  const updatedMembership = await prisma.premium_memberships.update({
     where: { id: membership.id },
     data: {
       status: 'CANCELLED',
@@ -2024,7 +2032,7 @@ export async function leavePremiumTeam(teamId: string, userId: string, reason?: 
   });
 
   // Update team member count
-  await prisma.premiumCommunity.update({
+  await prisma.premium_communities.update({
     where: { id: teamId },
     data: { currentMembers: { decrement: 1 } }
   });
@@ -2042,7 +2050,7 @@ export async function leavePremiumTeam(teamId: string, userId: string, reason?: 
  * Get team membership details
  */
 export async function getTeamMembership(teamId: string, userId: string) {
-  return prisma.premiumMembership.findUnique({
+  return prisma.premium_memberships.findUnique({
     where: {
       communityId_userId: {
         communityId: teamId,
@@ -2050,14 +2058,14 @@ export async function getTeamMembership(teamId: string, userId: string) {
       }
     },
     include: {
-      community: {
+      premium_communities: {
         select: {
           id: true,
           name: true,
           ownerId: true
         }
       },
-      user: {
+      users: {
         select: {
           id: true,
           name: true,
@@ -2086,10 +2094,10 @@ export async function getTeamMembers(teamId: string, params: {
   };
 
   const [members, total] = await Promise.all([
-    prisma.premiumMembership.findMany({
+    prisma.premium_memberships.findMany({
       where,
       include: {
-        user: {
+        users: {
           select: {
             id: true,
             name: true,
@@ -2103,7 +2111,7 @@ export async function getTeamMembers(teamId: string, params: {
       take: limit
     }),
 
-    prisma.premiumMembership.count({ where })
+    prisma.premium_memberships.count({ where })
   ]);
 
   return {
@@ -2121,10 +2129,10 @@ export async function getTeamMembers(teamId: string, params: {
  * Approve team membership
  */
 export async function approveTeamMembership(membershipId: string, approverId: string) {
-  const membership = await prisma.premiumMembership.findUnique({
+  const membership = await prisma.premium_memberships.findUnique({
     where: { id: membershipId },
     include: {
-      community: {
+      premium_communities: {
         select: { ownerId: true, maxMembers: true, currentMembers: true }
       }
     }
@@ -2134,7 +2142,7 @@ export async function approveTeamMembership(membershipId: string, approverId: st
     throw new Error('Membership not found');
   }
 
-  if (membership.community.ownerId !== approverId) {
+  if (membership.premium_communities.ownerId !== approverId) {
     throw new Error('Only team owner can approve memberships');
   }
 
@@ -2143,13 +2151,13 @@ export async function approveTeamMembership(membershipId: string, approverId: st
   }
 
   // Check member limits
-  if (membership.community.maxMembers &&
-      membership.community.currentMembers >= membership.community.maxMembers) {
+  if (membership.premium_communities.maxMembers &&
+      membership.premium_communities.currentMembers >= membership.premium_communities.maxMembers) {
     throw new Error('Team is full');
   }
 
   // Approve membership
-  const updatedMembership = await prisma.premiumMembership.update({
+  const updatedMembership = await prisma.premium_memberships.update({
     where: { id: membershipId },
     data: {
       status: 'ACTIVE',
@@ -2158,7 +2166,7 @@ export async function approveTeamMembership(membershipId: string, approverId: st
   });
 
   // Update team member count
-  await prisma.premiumCommunity.update({
+  await prisma.premium_communities.update({
     where: { id: membership.communityId },
     data: { currentMembers: { increment: 1 } }
   });
@@ -2178,7 +2186,7 @@ export async function approveTeamMembership(membershipId: string, approverId: st
  */
 export async function getTeamAnalytics(teamId: string, ownerId: string) {
   // Verify ownership
-  const team = await prisma.premiumCommunity.findUnique({
+  const team = await prisma.premium_communities.findUnique({
     where: { id: teamId },
     select: { ownerId: true }
   });
@@ -2193,14 +2201,14 @@ export async function getTeamAnalytics(teamId: string, ownerId: string) {
     membershipTrends
   ] = await Promise.all([
     // Member statistics
-    prisma.premiumMembership.groupBy({
+    prisma.premium_memberships.groupBy({
       by: ['status'],
       where: { communityId: teamId },
       _count: true
     }),
 
     // Revenue statistics (simplified)
-    prisma.payment.aggregate({
+    prisma.payments.aggregate({
       where: {
         metadata: {
           path: ['teamId'],
@@ -2213,7 +2221,7 @@ export async function getTeamAnalytics(teamId: string, ownerId: string) {
     }),
 
     // Membership trends (last 30 days)
-    prisma.premiumMembership.findMany({
+    prisma.premium_memberships.findMany({
       where: {
         communityId: teamId,
         startDate: {
@@ -2276,8 +2284,9 @@ export async function createChallenge(data: {
   coverImage?: string;
   tags?: string[];
 }) {
-  const challenge = await prisma.challenge.create({
+  const challenge = await prisma.challenges.create({
     data: {
+      id: crypto.randomUUID(),
       title: data.title,
       description: data.description,
       creatorId: data.creatorId,
@@ -2299,7 +2308,7 @@ export async function createChallenge(data: {
       status: 'UPCOMING'
     },
     include: {
-      creator: {
+      users: {
         select: {
           id: true,
           name: true,
@@ -2355,10 +2364,10 @@ export async function getChallenges(params: {
   };
 
   const [challenges, total] = await Promise.all([
-    prisma.challenge.findMany({
+    prisma.challenges.findMany({
       where,
       include: {
-        creator: {
+        users: {
           select: {
             id: true,
             name: true,
@@ -2368,13 +2377,13 @@ export async function getChallenges(params: {
         },
         _count: {
           select: {
-            participants: {
+            challenge_participants: {
               where: { status: 'REGISTERED' }
             }
           }
         },
         ...(params.userId && {
-          participants: {
+          challenge_participants: {
             where: { userId: params.userId },
             select: {
               status: true,
@@ -2393,7 +2402,7 @@ export async function getChallenges(params: {
       take: limit
     }),
 
-    prisma.challenge.count({ where })
+    prisma.challenges.count({ where })
   ]);
 
   return {
@@ -2415,7 +2424,7 @@ export async function getChallenges(params: {
  */
 export async function joinChallenge(challengeId: string, userId: string, paymentId?: string) {
   // Get challenge details
-  const challenge = await prisma.challenge.findUnique({
+  const challenge = await prisma.challenges.findUnique({
     where: { id: challengeId },
     select: {
       id: true,
@@ -2440,7 +2449,7 @@ export async function joinChallenge(challengeId: string, userId: string, payment
   }
 
   // Check existing participation
-  const existingParticipation = await prisma.challengeParticipant.findUnique({
+  const existingParticipation = await prisma.challenge_participants.findUnique({
     where: {
       challengeId_userId: {
         challengeId,
@@ -2459,8 +2468,9 @@ export async function joinChallenge(challengeId: string, userId: string, payment
     : 'REGISTERED';
 
   // Create participation
-  const participation = await prisma.challengeParticipant.create({
+  const participation = await prisma.challenge_participants.create({
     data: {
+      id: crypto.randomUUID(),
       challengeId,
       userId,
       status: status as any,
@@ -2471,7 +2481,7 @@ export async function joinChallenge(challengeId: string, userId: string, payment
 
   // Update challenge participant count if registered
   if (status === 'REGISTERED') {
-    await prisma.challenge.update({
+    await prisma.challenges.update({
       where: { id: challengeId },
       data: { currentParticipants: { increment: 1 } }
     });
@@ -2491,7 +2501,7 @@ export async function joinChallenge(challengeId: string, userId: string, payment
  * Leave challenge
  */
 export async function leaveChallenge(challengeId: string, userId: string) {
-  const participation = await prisma.challengeParticipant.findUnique({
+  const participation = await prisma.challenge_participants.findUnique({
     where: {
       challengeId_userId: {
         challengeId,
@@ -2499,7 +2509,7 @@ export async function leaveChallenge(challengeId: string, userId: string) {
       }
     },
     include: {
-      challenge: {
+      challenges: {
         select: { status: true }
       }
     }
@@ -2509,22 +2519,22 @@ export async function leaveChallenge(challengeId: string, userId: string) {
     throw new Error('Not participating in this challenge');
   }
 
-  if (participation.challenge.status === 'ACTIVE') {
+  if (participation.challenges.status === 'ACTIVE') {
     throw new Error('Cannot leave active challenge');
   }
 
-  if (participation.challenge.status === 'COMPLETED') {
+  if (participation.challenges.status === 'COMPLETED') {
     throw new Error('Cannot leave completed challenge');
   }
 
   // Remove participation
-  await prisma.challengeParticipant.delete({
+  await prisma.challenge_participants.delete({
     where: { id: participation.id }
   });
 
   // Update challenge participant count
   if (participation.status === 'REGISTERED') {
-    await prisma.challenge.update({
+    await prisma.challenges.update({
       where: { id: challengeId },
       data: { currentParticipants: { decrement: 1 } }
     });
@@ -2553,7 +2563,7 @@ export async function updateChallengeProgress(
   }
 ) {
   // Get participation
-  const participation = await prisma.challengeParticipant.findUnique({
+  const participation = await prisma.challenge_participants.findUnique({
     where: {
       challengeId_userId: {
         challengeId,
@@ -2571,8 +2581,9 @@ export async function updateChallengeProgress(
   }
 
   // Create progress entry
-  const progressEntry = await prisma.challengeProgress.create({
+  const progressEntry = await prisma.challenge_progress.create({
     data: {
+      id: crypto.randomUUID(),
       participantId: participation.id,
       date: data.date,
       metrics: data.metrics,
@@ -2583,14 +2594,14 @@ export async function updateChallengeProgress(
   });
 
   // Update aggregated progress
-  const allProgress = await prisma.challengeProgress.findMany({
+  const allProgress = await prisma.challenge_progress.findMany({
     where: { participantId: participation.id },
     orderBy: { date: 'asc' }
   });
 
   const aggregatedProgress = calculateProgressAggregation(allProgress);
 
-  await prisma.challengeParticipant.update({
+  await prisma.challenge_participants.update({
     where: { id: participation.id },
     data: {
       currentProgress: aggregatedProgress,
@@ -2620,10 +2631,10 @@ export async function getChallengeLeaderboard(challengeId: string, params: {
   const skip = (page - 1) * limit;
 
   const [leaderboard, total] = await Promise.all([
-    prisma.challengeLeaderboard.findMany({
+    prisma.challenge_leaderboard.findMany({
       where: { challengeId },
       include: {
-        user: {
+        users: {
           select: {
             id: true,
             name: true,
@@ -2636,7 +2647,7 @@ export async function getChallengeLeaderboard(challengeId: string, params: {
       take: limit
     }),
 
-    prisma.challengeLeaderboard.count({
+    prisma.challenge_leaderboard.count({
       where: { challengeId }
     })
   ]);
@@ -2777,7 +2788,7 @@ export async function getPrivacyControlledLeaderboard(params: {
  */
 export async function updateUserPrivacySettings(userId: string, settings: any) {
   // Model no longer stores privacy settings on User. Simulate update by returning merged object.
-  const updatedUser = await prisma.user.findUnique({ where: { id: userId }, select: { id: true } });
+  const updatedUser = await prisma.users.findUnique({ where: { id: userId }, select: { id: true } });
   const updatedSettings = {
     ...settings,
     lastUpdated: new Date().toISOString(),
@@ -2789,7 +2800,7 @@ export async function updateUserPrivacySettings(userId: string, settings: any) {
  * Get user's privacy settings
  */
 export async function getUserPrivacySettings(userId: string) {
-  const user = await prisma.user.findUnique({ where: { id: userId }, select: { id: true } });
+  const user = await prisma.users.findUnique({ where: { id: userId }, select: { id: true } });
 
   if (!user) {
     throw new Error('User not found');
@@ -2840,7 +2851,7 @@ async function buildWorkoutLeaderboard(params: any) {
     })
   };
 
-  const workoutStats = await prisma.workoutSession.groupBy({
+  const workoutStats = await prisma.workout_sessions.groupBy({
     by: ['userId'],
     where: whereClause,
     _sum: {
@@ -2868,7 +2879,7 @@ async function buildWorkoutLeaderboard(params: any) {
 
   // Get user details
   const userIds = paginatedStats.map(stat => stat.userId);
-  const users = await prisma.user.findMany({
+  const users = await prisma.users.findMany({
     where: { id: { in: userIds } },
     select: {
       id: true,
@@ -2915,7 +2926,7 @@ async function buildChallengeLeaderboard(params: any) {
     })
   };
 
-  const challengeStats = await prisma.challengeLeaderboard.groupBy({
+  const challengeStats = await prisma.challenge_leaderboard.groupBy({
     by: ['userId'],
     where: whereClause,
     _sum: {
@@ -2935,7 +2946,7 @@ async function buildChallengeLeaderboard(params: any) {
   const paginatedStats = sortedStats.slice(skip, skip + limit);
 
   const userIds = paginatedStats.map(stat => stat.userId);
-  const users = await prisma.user.findMany({
+  const users = await prisma.users.findMany({
     where: { id: { in: userIds } },
     select: {
       id: true,
@@ -2972,7 +2983,7 @@ async function buildChallengeLeaderboard(params: any) {
 async function buildTeamLeaderboard(params: any) {
   const { timeframe, skip, limit } = params;
 
-  const teamStats = await prisma.premiumCommunity.findMany({
+  const teamStats = await prisma.premium_communities.findMany({
     where: {
       isActive: true,
       ...(timeframe.start && {
@@ -3008,7 +3019,7 @@ async function buildTeamLeaderboard(params: any) {
   const paginatedStats = sortedStats.slice(skip, skip + limit);
 
   const userIds = paginatedStats.map((stat: any) => stat.userId);
-  const users = await prisma.user.findMany({
+  const users = await prisma.users.findMany({
     where: { id: { in: userIds } },
     select: {
       id: true,

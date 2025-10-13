@@ -5,13 +5,14 @@
 
 import { prisma } from '@/core/database';
 import {
-  Appointment,
+  appointments,
   AppointmentStatus,
   AppointmentType,
-  User,
-  TrainerClient,
-  WorkoutSession
+  users,
+  trainer_clients,
+  workout_sessions,
 } from '@prisma/client';
+import { randomUUID } from 'crypto';
 
 // ============================================================================
 // TYPES
@@ -41,15 +42,15 @@ export interface UpdateAppointmentData extends Partial<CreateAppointmentData> {
   cancellationReason?: string;
 }
 
-export interface AppointmentWithDetails extends Appointment {
+export interface AppointmentWithDetails extends appointments {
   trainer: {
     id: string;
-    user: Pick<User, 'id' | 'name' | 'email' | 'image'>;
-    businessName?: string;
+    user: Pick<users, 'id' | 'name' | 'email' | 'image'>;
+    businessName?: string | null;
   };
-  client: Pick<User, 'id' | 'name' | 'email' | 'image'>;
-  trainerClient?: Pick<TrainerClient, 'id' | 'goals' | 'preferences'>;
-  workoutSession?: Pick<WorkoutSession, 'id' | 'title' | 'isComplete'>;
+  client: Pick<users, 'id' | 'name' | 'email' | 'image'>;
+  trainerClient?: Pick<trainer_clients, 'id' | 'goals' | 'preferences'>;
+  workoutSession?: Pick<workout_sessions, 'id' | 'title' | 'isComplete'>;
 }
 
 export interface ScheduleAvailability {
@@ -80,10 +81,10 @@ export interface AppointmentFilters {
 /**
  * Create a new appointment
  */
-export async function createAppointment(data: CreateAppointmentData): Promise<Appointment> {
+export async function createAppointment(data: CreateAppointmentData): Promise<appointments> {
   try {
     // Validate trainer profile exists
-    const trainerProfile = await prisma.trainerProfile.findUnique({
+    const trainerProfile = await prisma.trainer_profiles.findUnique({
       where: { id: data.trainerId },
       select: { id: true, userId: true, hourlyRate: true, currency: true }
     });
@@ -93,7 +94,7 @@ export async function createAppointment(data: CreateAppointmentData): Promise<Ap
     }
 
     // Validate client exists
-    const client = await prisma.user.findUnique({
+    const client = await prisma.users.findUnique({
       where: { id: data.clientId },
       select: { id: true, email: true }
     });
@@ -114,7 +115,7 @@ export async function createAppointment(data: CreateAppointmentData): Promise<Ap
     }
 
     // Get trainer-client relationship
-    const trainerClient = await prisma.trainerClient.findUnique({
+    const trainerClient = await prisma.trainer_clients.findUnique({
       where: {
         trainerId_clientId: {
           trainerId: data.trainerId,
@@ -128,8 +129,9 @@ export async function createAppointment(data: CreateAppointmentData): Promise<Ap
       (trainerProfile.hourlyRate ? (trainerProfile.hourlyRate * ((data.duration || 60) / 60)) : undefined);
 
     // Create appointment
-    const appointment = await prisma.appointment.create({
+    const appointment = await prisma.appointmentss.create({
       data: {
+        id: randomUUID(),
         trainerId: data.trainerId,
         clientId: data.clientId,
         trainerClientId: trainerClient?.id ?? null,
@@ -143,7 +145,8 @@ export async function createAppointment(data: CreateAppointmentData): Promise<Ap
         meetingLink: data.meetingLink ?? null,
         price: appointmentPrice ?? null,
         currency: data.currency || trainerProfile.currency || 'USD',
-        status: AppointmentStatus.SCHEDULED
+        status: AppointmentStatus.SCHEDULED,
+        updatedAt: new Date(),
       }
     });
 
@@ -200,50 +203,32 @@ export async function getAppointments(
         OR: [
           { title: { contains: filters.search, mode: 'insensitive' } },
           { description: { contains: filters.search, mode: 'insensitive' } },
-          { client: { name: { contains: filters.search, mode: 'insensitive' } } },
-          { client: { email: { contains: filters.search, mode: 'insensitive' } } }
+          { users: { name: { contains: filters.search, mode: 'insensitive' } } },
+          { users: { email: { contains: filters.search, mode: 'insensitive' } } }
         ]
       })
     };
 
     // Get appointments with details
-    const [appointments, total] = await Promise.all([
-      prisma.appointment.findMany({
+    const [rows, total] = await Promise.all([
+      prisma.appointmentss.findMany({
         where,
         include: {
-          trainer: {
+          trainer_profiles: {
             include: {
-              user: {
-                select: {
-                  id: true,
-                  name: true,
-                  email: true,
-                  image: true
-                }
+              users: {
+                select: { id: true, name: true, email: true, image: true }
               }
             }
           },
-          client: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              image: true
-            }
+          users: {
+            select: { id: true, name: true, email: true, image: true }
           },
-          trainerClient: {
-            select: {
-              id: true,
-              goals: true,
-              preferences: true
-            }
+          trainer_clients: {
+            select: { id: true, goals: true, preferences: true }
           },
-          workoutSession: {
-            select: {
-              id: true,
-              title: true,
-              isComplete: true
-            }
+          workout_sessions: {
+            select: { id: true, title: true, isComplete: true }
           }
         },
         orderBy: { [sortBy]: sortOrder },
@@ -251,11 +236,23 @@ export async function getAppointments(
         take: limit
       }),
 
-      prisma.appointment.count({ where })
+      prisma.appointmentss.count({ where })
     ]);
 
+    const appointments: AppointmentWithDetails[] = rows.map((row: any) => ({
+      ...row,
+      trainer: {
+        id: row.trainer_profiles?.id,
+        user: row.trainer_profiles?.users,
+        businessName: row.trainer_profiles?.businessName ?? null,
+      },
+      client: row.users,
+      trainerClient: row.trainer_clients ?? undefined,
+      workoutSession: row.workout_sessions ?? undefined,
+    }));
+
     return {
-      appointments: appointments as AppointmentWithDetails[],
+      appointments,
       total,
       page,
       totalPages: Math.ceil(total / limit)
@@ -274,12 +271,9 @@ export async function updateAppointment(
   appointmentId: string,
   data: UpdateAppointmentData,
   updatedBy: string
-): Promise<Appointment> {
+): Promise<appointments> {
   try {
-    const appointment = await prisma.appointment.findUnique({
-      where: { id: appointmentId },
-      include: { trainer: true, client: true }
-    });
+    const appointment = await prisma.appointmentss.findUnique({ where: { id: appointmentId } });
 
     if (!appointment) {
       throw new Error('Appointment not found');
@@ -305,15 +299,17 @@ export async function updateAppointment(
         case AppointmentStatus.IN_PROGRESS:
           // Create workout session if it doesn't exist
           if (!appointment.workoutSessionId) {
-            const workoutSession = await prisma.workoutSession.create({
+            const workoutSession = await prisma.workout_sessions.create({
               data: {
+                id: randomUUID(),
                 userId: appointment.clientId,
                 coachId: appointment.trainerId,
                 date: new Date(appointment.scheduledAt).toISOString().split('T')[0] as any,
                 startTime: appointment.scheduledAt,
                 title: appointment.title,
                 location: appointment.location,
-                isTemplate: false
+                isTemplate: false,
+                updatedAt: new Date(),
               }
             });
             updateData.workoutSessionId = workoutSession.id;
@@ -339,7 +335,7 @@ export async function updateAppointment(
       updateData.status = AppointmentStatus.RESCHEDULED;
     }
 
-    const updatedAppointment = await prisma.appointment.update({
+    const updatedAppointment = await prisma.appointmentss.update({
       where: { id: appointmentId },
       data: {
         ...updateData,
@@ -368,9 +364,9 @@ export async function cancelAppointment(
   appointmentId: string,
   reason: string,
   cancelledBy: string
-): Promise<Appointment> {
+): Promise<appointments> {
   try {
-    const appointment = await prisma.appointment.findUnique({
+    const appointment = await prisma.appointmentss.findUnique({
       where: { id: appointmentId }
     });
 
@@ -386,7 +382,7 @@ export async function cancelAppointment(
       throw new Error('Appointment is already cancelled');
     }
 
-    const updatedAppointment = await prisma.appointment.update({
+    const updatedAppointment = await prisma.appointmentss.update({
       where: { id: appointmentId },
       data: {
         status: AppointmentStatus.CANCELLED,
@@ -422,11 +418,11 @@ export async function checkSchedulingConflict(
   scheduledAt: Date,
   duration: number,
   excludeAppointmentId?: string
-): Promise<Appointment | null> {
+): Promise<appointments | null> {
   try {
     const endTime = new Date(scheduledAt.getTime() + (duration * 60 * 1000));
 
-    const conflictingAppointment = await prisma.appointment.findFirst({
+    const conflictingAppointment = await prisma.appointmentss.findFirst({
       where: {
         trainerId,
         ...(excludeAppointmentId && { id: { not: excludeAppointmentId } }),
@@ -486,7 +482,7 @@ export async function getTrainerAvailability(
 ): Promise<ScheduleAvailability[]> {
   try {
     // Get trainer's available hours
-    const trainerProfile = await prisma.trainerProfile.findUnique({
+    const trainerProfile = await prisma.trainer_profiles.findUnique({
       where: { id: trainerId },
       select: { availableHours: true, timezone: true }
     });
@@ -496,7 +492,7 @@ export async function getTrainerAvailability(
     }
 
     // Get existing appointments in the date range
-    const appointments = await prisma.appointment.findMany({
+    const appointments = await prisma.appointmentss.findMany({
       where: {
         trainerId,
         scheduledAt: {
@@ -573,7 +569,7 @@ export async function getUpcomingAppointments(
     const endDate = new Date();
     endDate.setDate(startDate.getDate() + days);
 
-    const appointments = await prisma.appointment.findMany({
+    const rows = await prisma.appointmentss.findMany({
       where: {
         trainerId,
         scheduledAt: {
@@ -588,38 +584,30 @@ export async function getUpcomingAppointments(
         }
       },
       include: {
-        trainer: {
+        trainer_profiles: {
           include: {
-            user: {
-              select: {
-                id: true,
-                name: true,
-                email: true,
-                image: true
-              }
-            }
+            users: { select: { id: true, name: true, email: true, image: true } }
           }
         },
-        client: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            image: true
-          }
-        },
-        trainerClient: {
-          select: {
-            id: true,
-            goals: true,
-            preferences: true
-          }
-        }
+        users: { select: { id: true, name: true, email: true, image: true } },
+        trainer_clients: { select: { id: true, goals: true, preferences: true } }
       },
       orderBy: { scheduledAt: 'asc' }
     });
 
-    return appointments as AppointmentWithDetails[];
+    const appointments: AppointmentWithDetails[] = rows.map((row: any) => ({
+      ...row,
+      trainer: {
+        id: row.trainer_profiles?.id,
+        user: row.trainer_profiles?.users,
+        businessName: row.trainer_profiles?.businessName ?? null,
+      },
+      client: row.users,
+      trainerClient: row.trainer_clients ?? undefined,
+      workoutSession: row.workout_sessions ?? undefined,
+    }));
+
+    return appointments;
 
   } catch (error) {
     console.error('Error getting upcoming appointments:', error);
@@ -704,8 +692,5 @@ function generateTimeSlots(
 // EXPORTS
 // ============================================================================
 
-export type {
-  Appointment,
-  AppointmentStatus,
-  AppointmentType
-};
+export type AppointmentModel = appointments;
+export type { AppointmentStatus, AppointmentType };

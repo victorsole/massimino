@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get user's social connections
-    const userWithConnections = await prisma.user.findUnique({
+    const userWithConnections = await prisma.users.findUnique({
       where: { id: session.user.id },
       select: { trainerCredentials: true }
     })
@@ -229,7 +229,7 @@ export async function GET(_request: NextRequest) {
     }
 
     // Get user's social connections
-    const user = await prisma.user.findUnique({
+    const user = await prisma.users.findUnique({
       where: { id: session.user.id },
       select: { trainerCredentials: true }
     })

@@ -22,7 +22,7 @@ export async function updateEmailAction(formData: FormData) {
     const emailRaw = String(formData.get('email') || '').trim().toLowerCase()
     if (!userId || !emailRaw) return
     if (userId !== session!.user!.id) return
-    await prisma.user.update({ where: { id: userId }, data: { email: emailRaw } })
+    await prisma.users.update({ where: { id: userId }, data: { email: emailRaw } })
     revalidatePath('/profile')
   } catch (e) {
     console.error('updateEmailAction error', e)
@@ -44,12 +44,12 @@ export async function submitTrainerAccreditationAction(formData: FormData) {
     if (!validTypes.includes((file as any).type)) return
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
-    if (buffer.byteLength > 10 * 1024 * 1024) return
+    if (buffer.byteLength > 100 * 1024 * 1024) return
     let provider = null as null | { id: string; name: string; country: string; qualifications: string[] }
     if (providerId) {
-      provider = await prisma.accreditedProvider.findFirst({ where: { id: providerId, isActive: true }, select: { id: true, name: true, country: true, qualifications: true } })
+      provider = await prisma.accredited_providers.findFirst({ where: { id: providerId, isActive: true }, select: { id: true, name: true, country: true, qualifications: true } })
     } else if (providerQuery) {
-      provider = await prisma.accreditedProvider.findFirst({ where: { name: { contains: providerQuery, mode: 'insensitive' }, isActive: true }, select: { id: true, name: true, country: true, qualifications: true } })
+      provider = await prisma.accredited_providers.findFirst({ where: { name: { contains: providerQuery, mode: 'insensitive' }, isActive: true }, select: { id: true, name: true, country: true, qualifications: true } })
     }
     if (!provider) return
     const uploadsDir = path.join(process.cwd(), 'public', 'uploads', 'credentials')
@@ -61,7 +61,7 @@ export async function submitTrainerAccreditationAction(formData: FormData) {
     const destPath = path.join(uploadsDir, fileName)
     await fs.writeFile(destPath, buffer)
     const publicUrl = `/uploads/credentials/${fileName}`
-    const current = await prisma.user.findUnique({ where: { id: userId }, select: { trainerCredentials: true } })
+    const current = await prisma.users.findUnique({ where: { id: userId }, select: { trainerCredentials: true } })
     let creds: any[] = []
     try { if (current?.trainerCredentials) creds = JSON.parse(current.trainerCredentials); if (!Array.isArray(creds)) creds = [] } catch { creds = [] }
     creds.push({
@@ -77,7 +77,7 @@ export async function submitTrainerAccreditationAction(formData: FormData) {
       verificationNotes: null
     })
     // Don't auto-verify - set to pending for admin review
-    await prisma.user.update({
+    await prisma.users.update({
       where: { id: userId },
       data: {
         role: 'TRAINER',
@@ -118,7 +118,7 @@ export async function uploadTrainerCertificateAction(formData: FormData): Promis
 
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
-    if (buffer.byteLength > 10 * 1024 * 1024) return
+    if (buffer.byteLength > 100 * 1024 * 1024) return
 
     const uploadsDir = path.join(process.cwd(), 'public', 'uploads', 'credentials')
     await fs.mkdir(uploadsDir, { recursive: true })
@@ -130,7 +130,7 @@ export async function uploadTrainerCertificateAction(formData: FormData): Promis
     await fs.writeFile(destPath, buffer)
     const publicUrl = `/uploads/credentials/${fileName}`
 
-    const current = await prisma.user.findUnique({ where: { id: userId }, select: { trainerCredentials: true } })
+    const current = await prisma.users.findUnique({ where: { id: userId }, select: { trainerCredentials: true } })
     let creds: any[] = []
     try {
       if (current?.trainerCredentials) creds = JSON.parse(current.trainerCredentials)
@@ -152,7 +152,7 @@ export async function uploadTrainerCertificateAction(formData: FormData): Promis
       verificationNotes: null,
     })
 
-    await prisma.user.update({
+    await prisma.users.update({
       where: { id: userId },
       data: {
         role: 'TRAINER',
@@ -178,8 +178,16 @@ export async function updateProfileBasicsAction(formData: FormData): Promise<voi
     const lastName = String(formData.get('lastName') || '').trim()
     const nickname = String(formData.get('nickname') || '').trim()
     const bio = String(formData.get('bio') || '').trim()
-    const displayName = nickname || [firstName, lastName].filter(Boolean).join(' ') || session!.user!.name || ''
-    await prisma.user.update({ where: { id: userId }, data: { name: displayName, ...(bio ? { trainerBio: bio } : { trainerBio: null }) } })
+
+    await prisma.users.update({
+      where: { id: userId },
+      data: {
+        name: firstName || null,
+        surname: lastName || null,
+        nickname: nickname || null,
+        trainerBio: bio || null
+      }
+    })
     revalidatePath('/profile')
   } catch (e) {
     console.error('updateProfileBasicsAction error', e)
@@ -206,37 +214,48 @@ export async function uploadAvatarAction(formData: FormData): Promise<void> {
     const dest = path.join(uploadsDir, fileName)
     await fs.writeFile(dest, buf)
     const publicUrl = `/uploads/avatars/${fileName}`
-    await prisma.user.update({ where: { id: userId }, data: { image: publicUrl } })
+    await prisma.users.update({ where: { id: userId }, data: { image: publicUrl } })
     revalidatePath('/profile')
   } catch (e) {
     console.error('uploadAvatarAction error', e)
   }
 }
 
-// Social Media URL validation helper
-function validateSocialMediaUrl(url: string, platform: string): boolean {
-  if (!url || url.trim() === '') return true // Allow empty URLs
+// Social Media URL validation and normalization helper
+function normalizeAndValidateSocialMediaUrl(url: string, platform: string): string | null {
+  if (!url || url.trim() === '') return null // Allow empty URLs
+
+  let normalizedUrl = url.trim()
+
+  // Auto-add https:// if no protocol is present
+  if (!normalizedUrl.match(/^https?:\/\//i)) {
+    normalizedUrl = `https://${normalizedUrl}`
+  }
 
   try {
-    const urlObj = new URL(url)
+    const urlObj = new URL(normalizedUrl)
     const hostname = urlObj.hostname.toLowerCase()
 
-    switch (platform) {
-      case 'instagram':
-        return hostname.includes('instagram.com')
-      case 'tiktok':
-        return hostname.includes('tiktok.com')
-      case 'youtube':
-        return hostname.includes('youtube.com') || hostname.includes('youtu.be')
-      case 'facebook':
-        return hostname.includes('facebook.com') || hostname.includes('fb.com')
-      case 'linkedin':
-        return hostname.includes('linkedin.com')
-      default:
-        return false
+    // Check if domain matches the platform (less strict - just check if domain contains platform name)
+    const domainChecks: Record<string, boolean> = {
+      'instagram': hostname.includes('instagram'),
+      'spotify': hostname.includes('spotify'),
+      'tiktok': hostname.includes('tiktok'),
+      'youtube': hostname.includes('youtube') || hostname.includes('youtu.be'),
+      'facebook': hostname.includes('facebook') || hostname.includes('fb'),
+      'linkedin': hostname.includes('linkedin')
     }
-  } catch {
-    return false
+
+    if (domainChecks[platform]) {
+      return normalizedUrl
+    }
+
+    // If domain doesn't match, return null (invalid)
+    console.warn(`Invalid ${platform} URL domain: ${hostname}`)
+    return null
+  } catch (error) {
+    console.warn(`Failed to parse ${platform} URL: ${url}`, error)
+    return null
   }
 }
 
@@ -248,38 +267,50 @@ export async function updateSocialMediaAction(formData: FormData): Promise<void>
     if (!userId || userId !== session!.user!.id) return
 
     // Get social media URLs from form
-    const instagramUrl = String(formData.get('instagramUrl') || '').trim()
-    const tiktokUrl = String(formData.get('tiktokUrl') || '').trim()
-    const youtubeUrl = String(formData.get('youtubeUrl') || '').trim()
-    const facebookUrl = String(formData.get('facebookUrl') || '').trim()
-    const linkedinUrl = String(formData.get('linkedinUrl') || '').trim()
+    const instagramUrlRaw = String(formData.get('instagramUrl') || '').trim()
+    const spotifyUrlRaw = String(formData.get('spotifyUrl') || '').trim()
+    const tiktokUrlRaw = String(formData.get('tiktokUrl') || '').trim()
+    const youtubeUrlRaw = String(formData.get('youtubeUrl') || '').trim()
+    const facebookUrlRaw = String(formData.get('facebookUrl') || '').trim()
+    const linkedinUrlRaw = String(formData.get('linkedinUrl') || '').trim()
     const showSocialMedia = formData.get('showSocialMedia') === 'on'
 
-    // Validate URLs
-    const validations = [
-      { url: instagramUrl, platform: 'instagram' },
-      { url: tiktokUrl, platform: 'tiktok' },
-      { url: youtubeUrl, platform: 'youtube' },
-      { url: facebookUrl, platform: 'facebook' },
-      { url: linkedinUrl, platform: 'linkedin' }
-    ]
+    console.log('Social Media Form Data:', {
+      instagramUrlRaw,
+      spotifyUrlRaw,
+      tiktokUrlRaw,
+      youtubeUrlRaw,
+      facebookUrlRaw,
+      linkedinUrlRaw
+    })
 
-    for (const { url, platform } of validations) {
-      if (!validateSocialMediaUrl(url, platform)) {
-        console.error(`Invalid ${platform} URL: ${url}`)
-        return // Reject if any URL is invalid
-      }
-    }
+    // Normalize and validate URLs (saves valid ones, skips invalid ones)
+    const instagramUrl = normalizeAndValidateSocialMediaUrl(instagramUrlRaw, 'instagram')
+    const spotifyUrl = normalizeAndValidateSocialMediaUrl(spotifyUrlRaw, 'spotify')
+    const tiktokUrl = normalizeAndValidateSocialMediaUrl(tiktokUrlRaw, 'tiktok')
+    const youtubeUrl = normalizeAndValidateSocialMediaUrl(youtubeUrlRaw, 'youtube')
+    const facebookUrl = normalizeAndValidateSocialMediaUrl(facebookUrlRaw, 'facebook')
+    const linkedinUrl = normalizeAndValidateSocialMediaUrl(linkedinUrlRaw, 'linkedin')
 
-    // Update user with social media data
-    await prisma.user.update({
+    console.log('Normalized URLs:', {
+      instagramUrl,
+      spotifyUrl,
+      tiktokUrl,
+      youtubeUrl,
+      facebookUrl,
+      linkedinUrl
+    })
+
+    // Update user with social media data (saves all valid URLs)
+    await prisma.users.update({
       where: { id: userId },
       data: {
-        instagramUrl: instagramUrl || null,
-        tiktokUrl: tiktokUrl || null,
-        youtubeUrl: youtubeUrl || null,
-        facebookUrl: facebookUrl || null,
-        linkedinUrl: linkedinUrl || null,
+        instagramUrl,
+        spotifyUrl,
+        tiktokUrl,
+        youtubeUrl,
+        facebookUrl,
+        linkedinUrl,
         showSocialMedia
       }
     })
@@ -319,7 +350,7 @@ export async function updateFitnessPreferencesAction(formData: FormData): Promis
     }
 
     // Update user with fitness preferences
-    await prisma.user.update({
+    await prisma.users.update({
       where: { id: userId },
       data: {
         fitnessGoals,
@@ -359,7 +390,7 @@ export async function updateLocationAction(formData: FormData): Promise<void> {
     }
 
     // Update user with location data
-    await prisma.user.update({
+    await prisma.users.update({
       where: { id: userId },
       data: {
         city: city || null,
@@ -386,10 +417,10 @@ export async function selectAccreditedProviderAction(formData: FormData): Promis
     if (!userId || userId !== session!.user!.id) return
     if (!providerId) return
 
-    const provider = await prisma.accreditedProvider.findFirst({ where: { id: providerId, isActive: true }, select: { id: true, name: true, country: true, qualifications: true } })
+    const provider = await prisma.accredited_providers.findFirst({ where: { id: providerId, isActive: true }, select: { id: true, name: true, country: true, qualifications: true } })
     if (!provider) return
 
-    const current = await prisma.user.findUnique({ where: { id: userId }, select: { trainerCredentials: true } })
+    const current = await prisma.users.findUnique({ where: { id: userId }, select: { trainerCredentials: true } })
     let creds: any[] = []
     try { if (current?.trainerCredentials) creds = JSON.parse(current.trainerCredentials); if (!Array.isArray(creds)) creds = [] } catch { creds = [] }
 
@@ -404,7 +435,7 @@ export async function selectAccreditedProviderAction(formData: FormData): Promis
       selectedAt: new Date().toISOString(),
     })
 
-    await prisma.user.update({ where: { id: userId }, data: { trainerCredentials: JSON.stringify(creds) } })
+    await prisma.users.update({ where: { id: userId }, data: { trainerCredentials: JSON.stringify(creds) } })
     revalidatePath('/profile')
   } catch (e) {
     console.error('selectAccreditedProviderAction error', e)
@@ -424,7 +455,7 @@ export async function deleteTrainerCredentialAction(formData: FormData): Promise
     const index = Number(indexRaw)
     if (!Number.isInteger(index) || index < 0) return
 
-    const current = await prisma.user.findUnique({ where: { id: userId }, select: { trainerCredentials: true } })
+    const current = await prisma.users.findUnique({ where: { id: userId }, select: { trainerCredentials: true } })
     let creds: any[] = []
     try {
       if (current?.trainerCredentials) creds = JSON.parse(current.trainerCredentials)
@@ -447,7 +478,7 @@ export async function deleteTrainerCredentialAction(formData: FormData): Promise
     // Remove the credential
     creds.splice(index, 1)
 
-    await prisma.user.update({ where: { id: userId }, data: { trainerCredentials: JSON.stringify(creds) } })
+    await prisma.users.update({ where: { id: userId }, data: { trainerCredentials: JSON.stringify(creds) } })
     revalidatePath('/profile')
   } catch (e) {
     console.error('deleteTrainerCredentialAction error', e)
@@ -554,7 +585,7 @@ export async function updateMediaSettingsAction(formData: FormData): Promise<voi
 
     // For now, store in user profile - in a real app you might want a separate media_settings table
     // We'll use JSON in an existing field or add new boolean fields to the user model
-    const current = await prisma.user.findUnique({ where: { id: userId }, select: { trainerCredentials: true } })
+    const current = await prisma.users.findUnique({ where: { id: userId }, select: { trainerCredentials: true } })
     let userData: any = {}
 
     try {
@@ -573,7 +604,7 @@ export async function updateMediaSettingsAction(formData: FormData): Promise<voi
       updatedAt: new Date().toISOString()
     }
 
-    await prisma.user.update({
+    await prisma.users.update({
       where: { id: userId },
       data: {
         trainerCredentials: JSON.stringify(userData)

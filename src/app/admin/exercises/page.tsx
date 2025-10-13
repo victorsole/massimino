@@ -117,7 +117,7 @@ export default async function AdminExercisesPage({ searchParams }: PageProps) {
 
       <div className="rounded-md border border-gray-200 bg-white p-4">
         <h2 className="text-lg font-semibold mb-3">Import CSV</h2>
-        <form action={async (formData) => { await importExercisesCsvAction(formData); }} className="space-y-3">
+        <form action={importExercisesCsvAction} className="space-y-3">
           <div className="text-sm text-gray-600">Upload a CSV file or paste CSV content. Accepted columns: name or Exercise; category or Primary Exercise Classification; muscleGroups or multiple muscle columns; equipment or equipment columns; instructions; Short YouTube Demonstration; Difficulty Level; Posture.</div>
           <div className="flex items-center gap-3 flex-wrap">
             <input type="file" name="csvFile" accept=".csv" className="border rounded px-2 py-2" />

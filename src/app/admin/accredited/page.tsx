@@ -3,7 +3,7 @@
 import { getAccreditedRepository } from '@/services/repository/accredited'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { importFromTbodyHtmlAction, updateProviderAction, createProviderAction } from './actions'
+import { importFromTbodyHtmlAction, updateProviderAction, createProviderAction, saveAllProvidersAction } from './actions'
 
 type PageProps = { searchParams?: { q?: string; page?: string; country?: string; qualification?: string; active?: string } }
 
@@ -114,6 +114,19 @@ export default async function AccreditedPage({ searchParams }: PageProps) {
           <a className={`btn-outline ${!hasPrev ? 'pointer-events-none opacity-50' : ''}`} href={`/admin/accredited?${new URLSearchParams({ q, page: String(page - 1) })}`}>Prev</a>
           <a className={`btn-outline ${!hasNext ? 'pointer-events-none opacity-50' : ''}`} href={`/admin/accredited?${new URLSearchParams({ q, page: String(page + 1) })}`}>Next</a>
         </div>
+      </div>
+
+      {/* Save All Button */}
+      <div className="rounded-md border border-green-200 bg-green-50 p-4">
+        <h2 className="text-lg font-semibold mb-3 text-green-800">Backup & Sync</h2>
+        <p className="text-sm text-green-700 mb-3">
+          Save all accredited providers to backup storage. This will republish all {total} providers to ensure data consistency.
+        </p>
+        <form action={saveAllProvidersAction}>
+          <Button type="submit" className="bg-green-600 hover:bg-green-700">
+            Save All Providers ({total})
+          </Button>
+        </form>
       </div>
     </div>
   )

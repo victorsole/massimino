@@ -16,10 +16,6 @@ import {
   generateWorkoutAnalytics,
   getExercise
 } from '@/core/database';
-import {
-  addProgressMetricSchema,
-  addPersonalRecordSchema
-} from '@/core/utils/workout-validation';
 import { analyzeExerciseForm } from '@/services/ai/form-analysis';
 import { generateWorkoutSuggestions } from '@/services/ai/workout-suggestions';
 import { moderateContent } from '@/services/moderation/openai';
@@ -67,9 +63,6 @@ const personalRecordActionSchema = z.object({
   achievedAt: z.string().optional(),
 });
 
-const generateAnalyticsSchema = z.object({
-  action: z.literal('generate-analytics'),
-});
 
 // ============================================================================
 // GET - Fetch analytics and AI data
@@ -128,7 +121,7 @@ export async function POST(request: NextRequest) {
 
     switch (action) {
       case 'form-analysis':
-        return handleFormAnalysis(session.user.id, body);
+        return handleFormAnalysis(body);
 
       case 'workout-suggestions':
         return handleGenerateWorkoutSuggestions(session.user.id, body);
@@ -207,7 +200,7 @@ async function handleGetPersonalRecords(userId: string, exerciseId?: string | nu
  */
 async function handleGetWorkoutSuggestions(userId: string) {
   // Get user's fitness preferences
-  const user = await prisma.user.findUnique({
+  const user = await prisma.users.findUnique({
     where: { id: userId },
     select: {
       fitnessGoals: true,
@@ -267,7 +260,7 @@ async function handleGetOverview(userId: string, startDate?: string | null, endD
 /**
  * Handle form analysis
  */
-async function handleFormAnalysis(userId: string, body: any) {
+async function handleFormAnalysis(body: any) {
   const { exerciseId, imageUrl, videoUrl, notes } = formAnalysisSchema.parse(body);
 
   if (!imageUrl && !videoUrl) {
@@ -334,7 +327,7 @@ async function handleGenerateWorkoutSuggestions(userId: string, body: any) {
     };
   } else {
     // Get user's stored preferences
-    const user = await prisma.user.findUnique({
+    const user = await prisma.users.findUnique({
       where: { id: userId },
       select: {
         fitnessGoals: true,

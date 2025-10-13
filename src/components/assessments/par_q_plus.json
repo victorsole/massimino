@@ -1,0 +1,192 @@
+{
+    "id": "par_q_plus",
+    "title": "Physical Activity Readiness Questionnaire (PAR-Q+)",
+    "version": "2020",
+    "sections": [
+      {
+        "id": "general_health",
+        "title": "General Health Questions",
+        "description": "Please read the 7 questions below carefully and answer each one honestly",
+        "fields": [
+          {
+            "id": "q1_heart_condition",
+            "type": "radio",
+            "label": "Has your doctor ever said that you have a heart condition OR high blood pressure?",
+            "options": ["Yes", "No"],
+            "required": true
+          },
+          {
+            "id": "q2_chest_pain",
+            "type": "radio",
+            "label": "Do you feel pain in your chest at rest, during daily activities, OR when you do physical activity?",
+            "options": ["Yes", "No"],
+            "required": true
+          },
+          {
+            "id": "q3_dizziness",
+            "type": "radio",
+            "label": "Do you lose balance because of dizziness OR have you lost consciousness in the last 12 months?",
+            "help_text": "Answer NO if your dizziness was associated with over-breathing",
+            "options": ["Yes", "No"],
+            "required": true
+          },
+          {
+            "id": "q4_other_conditions",
+            "type": "radio",
+            "label": "Have you ever been diagnosed with another chronic medical condition?",
+            "options": ["Yes", "No"],
+            "required": true
+          },
+          {
+            "id": "q4_conditions_list",
+            "type": "textarea",
+            "label": "Please list condition(s):",
+            "conditional": {"field": "q4_other_conditions", "value": "Yes"}
+          },
+          {
+            "id": "q5_medications",
+            "type": "radio",
+            "label": "Are you currently taking prescribed medications for a chronic medical condition?",
+            "options": ["Yes", "No"],
+            "required": true
+          },
+          {
+            "id": "q5_medications_list",
+            "type": "textarea",
+            "label": "Please list condition(s) and medications:",
+            "conditional": {"field": "q5_medications", "value": "Yes"}
+          },
+          {
+            "id": "q6_bone_joint",
+            "type": "radio",
+            "label": "Do you currently have a bone, joint, or soft tissue problem that could be made worse by physical activity?",
+            "help_text": "Answer NO if you had a problem in the past that doesn't limit current activity",
+            "options": ["Yes", "No"],
+            "required": true
+          },
+          {
+            "id": "q6_conditions_list",
+            "type": "textarea",
+            "label": "Please list condition(s):",
+            "conditional": {"field": "q6_bone_joint", "value": "Yes"}
+          },
+          {
+            "id": "q7_supervised_only",
+            "type": "radio",
+            "label": "Has your doctor ever said that you should only do medically supervised physical activity?",
+            "options": ["Yes", "No"],
+            "required": true
+          }
+        ]
+      },
+      {
+        "id": "follow_up_arthritis",
+        "title": "Follow-up: Arthritis, Osteoporosis, or Back Problems",
+        "conditional": {"any_of": ["q4_other_conditions", "q6_bone_joint"], "value": "Yes"},
+        "fields": [
+          {
+            "id": "arthritis_1a",
+            "type": "radio",
+            "label": "Do you have difficulty controlling your condition with medications or other therapies?",
+            "options": ["Yes", "No"]
+          },
+          {
+            "id": "arthritis_1b",
+            "type": "radio",
+            "label": "Do you have joint problems causing pain, recent fracture, or displaced vertebra?",
+            "options": ["Yes", "No"]
+          },
+          {
+            "id": "arthritis_1c",
+            "type": "radio",
+            "label": "Have you had steroid injections or taken steroid tablets regularly for more than 3 months?",
+            "options": ["Yes", "No"]
+          }
+        ]
+      },
+      {
+        "id": "follow_up_cancer",
+        "title": "Follow-up: Cancer",
+        "conditional": {"field": "q4_other_conditions", "value": "Yes"},
+        "fields": [
+          {
+            "id": "cancer_2a",
+            "type": "radio",
+            "label": "Does your cancer diagnosis include: lung/bronchogenic, multiple myeloma, head, or neck?",
+            "options": ["Yes", "No"]
+          },
+          {
+            "id": "cancer_2b",
+            "type": "radio",
+            "label": "Are you currently receiving cancer therapy?",
+            "options": ["Yes", "No"]
+          }
+        ]
+      },
+      {
+        "id": "follow_up_heart",
+        "title": "Follow-up: Heart or Cardiovascular Condition",
+        "conditional": {"field": "q1_heart_condition", "value": "Yes"},
+        "fields": [
+          {
+            "id": "heart_3a",
+            "type": "radio",
+            "label": "Do you have difficulty controlling your condition with medications or other therapies?",
+            "options": ["Yes", "No"]
+          },
+          {
+            "id": "heart_3b",
+            "type": "radio",
+            "label": "Do you have an irregular heartbeat that requires medical management?",
+            "options": ["Yes", "No"]
+          },
+          {
+            "id": "heart_3c",
+            "type": "radio",
+            "label": "Do you have chronic heart failure?",
+            "options": ["Yes", "No"]
+          },
+          {
+            "id": "heart_3d",
+            "type": "radio",
+            "label": "Do you have diagnosed coronary artery disease and haven't exercised regularly in 2 months?",
+            "options": ["Yes", "No"]
+          }
+        ]
+      },
+      {
+        "id": "participant_declaration",
+        "title": "Participant Declaration",
+        "fields": [
+          {
+            "id": "participant_name",
+            "type": "text",
+            "label": "Participant Name",
+            "required": true
+          },
+          {
+            "id": "participant_signature",
+            "type": "signature",
+            "label": "Participant Signature",
+            "required": true
+          },
+          {
+            "id": "declaration_date",
+            "type": "date",
+            "label": "Date",
+            "required": true
+          },
+          {
+            "id": "witness_name",
+            "type": "text",
+            "label": "Witness Name"
+          },
+          {
+            "id": "guardian_signature",
+            "type": "signature",
+            "label": "Parent/Guardian Signature (if applicable)"
+          }
+        ]
+      }
+    ]
+  }

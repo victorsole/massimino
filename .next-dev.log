@@ -1,0 +1,2884 @@
+   ▲ Next.js 15.5.0
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.36:3000
+   - Environments: .env
+   - Experiments (use with caution):
+     · serverActions
+
+ ✓ Starting...
+ ✓ Ready in 1579ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 865ms (854 modules)
+(node:43281) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ GET /api/auth/session 200 in 1211ms
+(node:43409) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ ○ Compiling / ...
+ ✓ Compiled / in 1428ms (1042 modules)
+ ✓ Compiled in 592ms (416 modules)
+ GET / 200 in 2078ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 557ms (1069 modules)
+ GET /login 200 in 837ms
+ ✓ Compiled /api/auth/[...nextauth] in 144ms (1148 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 701ms
+ ✓ Compiled /_not-found in 192ms (1574 modules)
+(node:46108) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ GET /api/profile/stats 404 in 381ms
+ ○ Compiling /workout-log ...
+ ✓ Compiled /workout-log in 592ms (2586 modules)
+ GET /workout-log 200 in 670ms
+ ○ Compiling /api/workout/sessions ...
+ ✓ Compiled /api/workout/sessions in 672ms (2592 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/recommendations 404 in 983ms
+ GET /api/assessments 404 in 984ms
+ GET /api/workout/sessions?status=active 200 in 1045ms
+ GET /api/workout/entries 200 in 1051ms
+ GET /api/workout/exercises 200 in 1102ms
+ ✓ Compiled /api/workout/comments in 519ms (2594 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/recommendations 404 in 778ms
+ GET /api/assessments 404 in 911ms
+ GET /api/workout/sessions?status=active 200 in 756ms
+ GET /api/workout/entries 200 in 753ms
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 709ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 19ms
+ GET /api/workout/exercises 200 in 749ms
+ ✓ Compiled /api/workout/coaching-cues in 342ms (2596 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/coaching-cues?exercise_id=cba2466c-9542-4c9f-9ce8-f78042b61e9d 200 in 427ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+Error checking first workout bonus: TypeError: Cannot read properties of undefined (reading 'count')
+    at checkFirstWorkoutBonus (src/app/api/workout/entries/route.ts:29:55)
+    at POST (src/app/api/workout/entries/route.ts:251:15)
+  27 |   try {
+  28 |     // Check if this is the user's first workout entry
+> 29 |     const workoutCount = await prisma.workoutLogEntry.count({
+     |                                                       ^
+  30 |       where: { userId }
+  31 |     });
+  32 |
+Error checking first workout bonus: TypeError: Cannot read properties of undefined (reading 'count')
+    at checkFirstWorkoutBonus (src/app/api/workout/entries/route.ts:29:55)
+    at POST (src/app/api/workout/entries/route.ts:251:15)
+  27 |   try {
+  28 |     // Check if this is the user's first workout entry
+> 29 |     const workoutCount = await prisma.workoutLogEntry.count({
+     |                                                       ^
+  30 |       where: { userId }
+  31 |     });
+  32 |
+Error checking first workout bonus: TypeError: Cannot read properties of undefined (reading 'count')
+    at checkFirstWorkoutBonus (src/app/api/workout/entries/route.ts:29:55)
+    at POST (src/app/api/workout/entries/route.ts:251:15)
+  27 |   try {
+  28 |     // Check if this is the user's first workout entry
+> 29 |     const workoutCount = await prisma.workoutLogEntry.count({
+     |                                                       ^
+  30 |       where: { userId }
+  31 |     });
+  32 |
+ POST /api/workout/entries 200 in 310ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/entries 200 in 17ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 33ms
+ GET /api/workout/comments?type=ENTRY&id=3ecb50db-d715-4338-8f69-d917c167b896 200 in 45ms
+ GET /api/workout/comments?type=ENTRY&id=91f2c2ec-e2b5-4963-8fec-4d424cfa65d5 200 in 44ms
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 43ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 42ms
+ GET /api/workout/comments?type=ENTRY&id=91f2c2ec-e2b5-4963-8fec-4d424cfa65d5 200 in 27ms
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 27ms
+ GET /api/workout/comments?type=ENTRY&id=3ecb50db-d715-4338-8f69-d917c167b896 200 in 27ms
+ ✓ Compiled /api/workout/entries/[id] in 396ms (2598 modules)
+(node:46792) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+Error: Route "/api/workout/entries/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at DELETE (src/app/api/workout/entries/[id]/route.ts:142:13)
+  140 |     }
+  141 |
+> 142 |     const { id } = params;
+      |             ^
+  143 |
+  144 |     // Delete workout entry
+  145 |     const success = await deleteWorkoutLogEntry(id, session.user.id);
+ DELETE /api/workout/entries/3ecb50db-d715-4338-8f69-d917c167b896 200 in 1098ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/entries 200 in 21ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 28ms
+ GET /api/workout/comments?type=ENTRY&id=91f2c2ec-e2b5-4963-8fec-4d424cfa65d5 200 in 29ms
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 29ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 23ms
+ GET /api/workout/comments?type=ENTRY&id=91f2c2ec-e2b5-4963-8fec-4d424cfa65d5 200 in 21ms
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 22ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+Error: Route "/api/workout/entries/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at DELETE (src/app/api/workout/entries/[id]/route.ts:142:13)
+  140 |     }
+  141 |
+> 142 |     const { id } = params;
+      |             ^
+  143 |
+  144 |     // Delete workout entry
+  145 |     const success = await deleteWorkoutLogEntry(id, session.user.id);
+ DELETE /api/workout/entries/91f2c2ec-e2b5-4963-8fec-4d424cfa65d5 200 in 110ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/entries 200 in 33ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 24ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 28ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 25ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 23ms
+(node:46800) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/coaching-cues?exercise_id=0781f3bd-6a7b-4ca9-a4f4-d1339b6a25dc 200 in 29ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+Error checking first workout bonus: TypeError: Cannot read properties of undefined (reading 'count')
+    at checkFirstWorkoutBonus (src/app/api/workout/entries/route.ts:29:55)
+    at POST (src/app/api/workout/entries/route.ts:251:15)
+  27 |   try {
+  28 |     // Check if this is the user's first workout entry
+> 29 |     const workoutCount = await prisma.workoutLogEntry.count({
+     |                                                       ^
+  30 |       where: { userId }
+  31 |     });
+  32 |
+Error checking first workout bonus: TypeError: Cannot read properties of undefined (reading 'count')
+    at checkFirstWorkoutBonus (src/app/api/workout/entries/route.ts:29:55)
+    at POST (src/app/api/workout/entries/route.ts:251:15)
+  27 |   try {
+  28 |     // Check if this is the user's first workout entry
+> 29 |     const workoutCount = await prisma.workoutLogEntry.count({
+     |                                                       ^
+  30 |       where: { userId }
+  31 |     });
+  32 |
+ POST /api/workout/entries 200 in 154ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/entries 200 in 14ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 32ms
+ GET /api/workout/comments?type=ENTRY&id=631d9640-0a3d-4eb3-8908-eabe9ff01280 200 in 38ms
+ GET /api/workout/comments?type=ENTRY&id=f9428790-fea4-458c-9c04-c76c210c13ab 200 in 38ms
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 43ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 27ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=f9428790-fea4-458c-9c04-c76c210c13ab 200 in 25ms
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 26ms
+ GET /api/workout/comments?type=ENTRY&id=631d9640-0a3d-4eb3-8908-eabe9ff01280 200 in 27ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 83ms
+ GET /api/profile/stats 404 in 212ms
+(node:47643) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/coaching-cues?exercise_id=2fab88c3-8953-4f20-a0fc-669f3770baa5 200 in 96ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+Error checking first workout bonus: TypeError: Cannot read properties of undefined (reading 'count')
+    at checkFirstWorkoutBonus (src/app/api/workout/entries/route.ts:29:55)
+    at POST (src/app/api/workout/entries/route.ts:251:15)
+  27 |   try {
+  28 |     // Check if this is the user's first workout entry
+> 29 |     const workoutCount = await prisma.workoutLogEntry.count({
+     |                                                       ^
+  30 |       where: { userId }
+  31 |     });
+  32 |
+ POST /api/workout/entries 200 in 107ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/entries 200 in 17ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 35ms
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 38ms
+ GET /api/workout/comments?type=ENTRY&id=631d9640-0a3d-4eb3-8908-eabe9ff01280 200 in 35ms
+ GET /api/workout/comments?type=ENTRY&id=f9428790-fea4-458c-9c04-c76c210c13ab 200 in 47ms
+ GET /api/workout/comments?type=ENTRY&id=faef6051-6856-45d9-bcc7-cd283574c3f4 200 in 47ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 41ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 45ms
+ GET /api/workout/comments?type=ENTRY&id=631d9640-0a3d-4eb3-8908-eabe9ff01280 200 in 46ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=f9428790-fea4-458c-9c04-c76c210c13ab 200 in 28ms
+ GET /api/workout/comments?type=ENTRY&id=faef6051-6856-45d9-bcc7-cd283574c3f4 200 in 28ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 86ms
+ GET /api/profile/stats 404 in 111ms
+(node:48781) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 351ms
+ GET /api/profile/stats 404 in 47ms
+(node:51984) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 73ms
+ GET /api/profile/stats 404 in 48ms
+(node:52391) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 51ms
+ GET /api/profile/stats 404 in 54ms
+(node:53509) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 47ms
+ GET /api/profile/stats 404 in 46ms
+(node:55595) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ○ Compiling /api/workout/sessions ...
+ ✓ Compiled /api/workout/sessions in 1805ms (2569 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/assessments 404 in 1364ms
+ GET /api/workout/recommendations 404 in 1361ms
+ GET /workout-log 200 in 850ms
+ GET /api/workout/sessions?status=active 200 in 1620ms
+ GET /api/workout/entries 200 in 1721ms
+ GET /api/workout/exercises 200 in 1836ms
+ ✓ Compiled /api/workout/comments in 233ms (1624 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=f9428790-fea4-458c-9c04-c76c210c13ab 200 in 370ms
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 373ms
+ GET /api/workout/comments?type=ENTRY&id=631d9640-0a3d-4eb3-8908-eabe9ff01280 200 in 379ms
+ GET /api/workout/comments?type=ENTRY&id=faef6051-6856-45d9-bcc7-cd283574c3f4 200 in 386ms
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 388ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=f9428790-fea4-458c-9c04-c76c210c13ab 200 in 25ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 51ms
+ GET /api/workout/comments?type=ENTRY&id=631d9640-0a3d-4eb3-8908-eabe9ff01280 200 in 50ms
+ GET /api/workout/comments?type=ENTRY&id=faef6051-6856-45d9-bcc7-cd283574c3f4 200 in 49ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 76ms
+ ✓ Compiled in 292ms (2557 modules)
+ GET /workout-log 200 in 48ms
+ ✓ Compiled in 501ms (2557 modules)
+ GET /workout-log 200 in 89ms
+ ✓ Compiled in 675ms (1624 modules)
+ GET /workout-log 200 in 40ms
+ ✓ Compiled in 652ms (2571 modules)
+ GET /workout-log 200 in 83ms
+ ✓ Compiled in 605ms (2571 modules)
+ GET /workout-log 200 in 50ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 671ms (1617 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 1317ms
+(node:61137) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 504ms (2565 modules)
+ GET /api/profile/stats 404 in 742ms
+ ✓ Compiled /api/workout/sessions in 146ms (1620 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ PATCH /api/workout/sessions 400 in 285ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ PATCH /api/workout/sessions 400 in 43ms
+ GET /workout-log 200 in 262ms
+ ○ Compiling /api/workout/entries ...
+ ✓ Compiled /api/workout/entries in 568ms (2557 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/recommendations 404 in 812ms
+ GET /api/assessments 404 in 814ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/sessions?status=active 200 in 861ms
+ GET /api/auth/session 200 in 856ms
+ GET /api/workout/exercises 200 in 949ms
+ GET /api/profile/stats 404 in 64ms
+ GET /api/workout/entries 200 in 998ms
+(node:61278) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ✓ Compiled /api/workout/comments in 429ms (1626 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=faef6051-6856-45d9-bcc7-cd283574c3f4 200 in 583ms
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 585ms
+ GET /api/workout/comments?type=ENTRY&id=631d9640-0a3d-4eb3-8908-eabe9ff01280 200 in 584ms
+ GET /api/workout/comments?type=ENTRY&id=f9428790-fea4-458c-9c04-c76c210c13ab 200 in 585ms
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 586ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 31ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=631d9640-0a3d-4eb3-8908-eabe9ff01280 200 in 41ms
+ GET /api/workout/comments?type=ENTRY&id=faef6051-6856-45d9-bcc7-cd283574c3f4 200 in 42ms
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 41ms
+ GET /api/workout/comments?type=ENTRY&id=f9428790-fea4-458c-9c04-c76c210c13ab 200 in 41ms
+(node:43281) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 beforeExit listeners added to [process]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ PATCH /api/workout/sessions 400 in 119ms
+ ○ Compiling / ...
+ ✓ Compiled / in 556ms (1661 modules)
+ GET / 200 in 748ms
+ GET / 200 in 30ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 789ms (2663 modules)
+ GET /dashboard 200 in 866ms
+ ✓ Compiled /api/dashboard/stats in 337ms (2665 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 469ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 26ms
+ ✓ Compiled /api/teams in 301ms (2745 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=my-teams 200 in 396ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=my-teams 200 in 30ms
+ GET /workout-log 200 in 73ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/exercises 200 in 447ms
+ GET /api/workout/sessions?status=active 200 in 440ms
+ GET /api/workout/recommendations 404 in 400ms
+ GET /api/assessments 404 in 402ms
+ GET /api/workout/entries 200 in 494ms
+ GET /api/assessments 404 in 149ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/recommendations 404 in 73ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/sessions?status=active 200 in 80ms
+ GET /api/workout/entries 200 in 48ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/exercises 200 in 145ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 71ms
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 72ms
+ GET /api/workout/comments?type=ENTRY&id=631d9640-0a3d-4eb3-8908-eabe9ff01280 200 in 73ms
+ GET /api/workout/comments?type=ENTRY&id=f9428790-fea4-458c-9c04-c76c210c13ab 200 in 73ms
+ GET /api/workout/comments?type=ENTRY&id=faef6051-6856-45d9-bcc7-cd283574c3f4 200 in 69ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 20ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 29ms
+ GET /api/workout/comments?type=ENTRY&id=631d9640-0a3d-4eb3-8908-eabe9ff01280 200 in 30ms
+ GET /api/workout/comments?type=ENTRY&id=f9428790-fea4-458c-9c04-c76c210c13ab 200 in 31ms
+ GET /api/workout/comments?type=ENTRY&id=faef6051-6856-45d9-bcc7-cd283574c3f4 200 in 32ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ PATCH /api/workout/sessions 400 in 30ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ PATCH /api/workout/sessions 400 in 63ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 87ms
+ GET /api/profile/stats 404 in 93ms
+(node:61983) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ PATCH /api/workout/sessions 400 in 41ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ PATCH /api/workout/sessions 400 in 46ms
+ ✓ Compiled in 1121ms (2105 modules)
+ GET /workout-log 200 in 148ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 636ms (1653 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 1500ms
+(node:65419) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 601ms (2634 modules)
+ GET /api/profile/stats 404 in 850ms
+ ✓ Compiled /api/workout/sessions in 377ms (1656 modules)
+ GET /workout-log 200 in 927ms
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /workout-log 200 in 18ms
+ PATCH /api/workout/sessions 200 in 933ms
+ ○ Compiling /api/workout/entries ...
+ ✓ Compiled /api/workout/entries in 631ms (1658 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/entries 200 in 774ms
+ ✓ Compiled /api/workout/comments in 167ms (1660 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 238ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 22ms
+ GET /api/workout/comments?type=ENTRY&id=631d9640-0a3d-4eb3-8908-eabe9ff01280 200 in 280ms
+ GET /api/workout/comments?type=ENTRY&id=f9428790-fea4-458c-9c04-c76c210c13ab 200 in 280ms
+ GET /api/workout/comments?type=ENTRY&id=faef6051-6856-45d9-bcc7-cd283574c3f4 200 in 281ms
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 284ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=631d9640-0a3d-4eb3-8908-eabe9ff01280 200 in 22ms
+ GET /api/workout/comments?type=ENTRY&id=f9428790-fea4-458c-9c04-c76c210c13ab 200 in 30ms
+ GET /api/workout/comments?type=ENTRY&id=faef6051-6856-45d9-bcc7-cd283574c3f4 200 in 32ms
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 34ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/sessions 200 in 216ms
+ ○ Compiling /api/workout/exercises ...
+ ✓ Compiled /api/workout/exercises in 560ms (1662 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/entries 200 in 825ms
+ GET /api/workout/sessions 200 in 617ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/sessions 200 in 19ms
+ GET /api/workout/exercises 200 in 874ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 63ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 75ms
+ GET /api/workout/comments?type=ENTRY&id=631d9640-0a3d-4eb3-8908-eabe9ff01280 200 in 72ms
+ GET /api/workout/comments?type=ENTRY&id=f9428790-fea4-458c-9c04-c76c210c13ab 200 in 69ms
+ GET /api/workout/comments?type=ENTRY&id=faef6051-6856-45d9-bcc7-cd283574c3f4 200 in 68ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 51ms
+ GET /api/workout/exercises 200 in 118ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/entries 200 in 79ms
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 63ms
+ GET /api/workout/comments?type=ENTRY&id=631d9640-0a3d-4eb3-8908-eabe9ff01280 200 in 65ms
+ GET /api/workout/comments?type=ENTRY&id=f9428790-fea4-458c-9c04-c76c210c13ab 200 in 65ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=faef6051-6856-45d9-bcc7-cd283574c3f4 200 in 30ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 20ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 28ms
+ GET /api/workout/comments?type=ENTRY&id=631d9640-0a3d-4eb3-8908-eabe9ff01280 200 in 29ms
+ GET /api/workout/comments?type=ENTRY&id=f9428790-fea4-458c-9c04-c76c210c13ab 200 in 30ms
+ GET /api/workout/comments?type=ENTRY&id=faef6051-6856-45d9-bcc7-cd283574c3f4 200 in 42ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 21ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 27ms
+ GET /api/workout/comments?type=ENTRY&id=631d9640-0a3d-4eb3-8908-eabe9ff01280 200 in 28ms
+ GET /api/workout/comments?type=ENTRY&id=f9428790-fea4-458c-9c04-c76c210c13ab 200 in 28ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=faef6051-6856-45d9-bcc7-cd283574c3f4 200 in 32ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 130ms
+ GET /api/profile/stats 404 in 171ms
+(node:66276) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ✓ Compiled in 876ms (2634 modules)
+ GET /workout-log 200 in 52ms
+ ○ Compiling /api/workout/sessions ...
+ ✓ Compiled /api/workout/sessions in 2.9s (2638 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/assessments 404 in 2841ms
+ GET /api/workout/recommendations 404 in 2839ms
+ GET /workout-log 200 in 835ms
+ GET /api/workout/sessions?status=active 200 in 3051ms
+ GET /api/workout/entries 200 in 3068ms
+ GET /api/workout/exercises 200 in 3122ms
+ ✓ Compiled /api/workout/comments in 259ms (1660 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 382ms
+ GET /api/workout/comments?type=ENTRY&id=631d9640-0a3d-4eb3-8908-eabe9ff01280 200 in 381ms
+ GET /api/workout/comments?type=ENTRY&id=f9428790-fea4-458c-9c04-c76c210c13ab 200 in 381ms
+ GET /api/workout/comments?type=ENTRY&id=faef6051-6856-45d9-bcc7-cd283574c3f4 200 in 382ms
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 383ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/workout/comments?type=ENTRY&id=631d9640-0a3d-4eb3-8908-eabe9ff01280 200 in 29ms
+ GET /api/workout/comments?type=ENTRY&id=faef6051-6856-45d9-bcc7-cd283574c3f4 200 in 29ms
+ GET /api/workout/comments?type=ENTRY&id=4bbdd6b4-c068-49d4-81cb-1462b5f9741b 200 in 36ms
+ GET /api/workout/comments?type=ENTRY&id=f9428790-fea4-458c-9c04-c76c210c13ab 200 in 30ms
+ GET /api/workout/comments?type=ENTRY&id=3a6d289d-e351-4ecc-bd0a-1b35a9f2ed76 200 in 31ms
+ ✓ Compiled in 698ms (2640 modules)
+ GET /workout-log 200 in 59ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 764ms (1662 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 900ms
+ GET /api/profile/stats 404 in 248ms
+(node:67754) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ GET /workout-log 200 in 117ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+Error fetching workout sessions: Error [PrismaClientValidationError]: 
+Invalid `prisma.trainer_clients.findMany()` invocation:
+
+{
+  where: {},
+  include: {
+    client: {
+    ~~~~~~
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        image: true
+      }
+    },
+?   appointments?: true,
+?   payments?: true,
+?   progress_reports?: true,
+?   users?: true,
+?   trainer_packages?: true,
+?   trainer_profiles?: true
+  },
+  orderBy: {
+    createdAt: "desc"
+  },
+  take: 200
+}
+
+Unknown field `client` for include statement on model `trainer_clients`. Available options are marked with ?.
+    at async GET (src/app/api/workout/sessions/route.ts:99:20)
+   97 |     // Trainer/Admin: support listing clients via action=clients
+   98 |     if (actionParam === 'clients' && (session.user.role === UserRole.TRAINER || session.user.role === UserRole.ADMIN)) {
+>  99 |       const list = await prisma.trainer_clients.findMany({
+      |                    ^
+  100 |         where: session.user.role === UserRole.TRAINER ? { trainerId: session.user.id } : {},
+  101 |         include: { client: { select: { id: true, name: true, email: true, image: true } } },
+  102 |         orderBy: { createdAt: 'desc' }, {
+  clientVersion: '6.16.0'
+}
+ GET /api/workout/sessions?action=clients 500 in 216ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 84ms
+ GET /api/profile/stats 404 in 92ms
+(node:68049) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 83ms
+ GET /api/profile/stats 404 in 85ms
+(node:68197) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ GET /dashboard 200 in 76ms
+ ○ Compiling /api/dashboard/stats ...
+ ✓ Compiled /api/dashboard/stats in 766ms (1664 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 979ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 22ms
+ ✓ Compiled /api/teams in 475ms (1744 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=my-teams 200 in 602ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=my-teams 200 in 17ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 209ms
+ GET /api/profile/stats 404 in 210ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 227ms
+(node:68473) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ✓ Compiled in 1161ms (2718 modules)
+ GET /dashboard 200 in 72ms
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 190ms
+ GET /api/profile/stats 404 in 160ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 176ms
+(node:69255) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ✓ Compiled in 589ms (2636 modules)
+ GET /dashboard 200 in 54ms
+ ✓ Compiled in 1248ms (976 modules)
+ GET /dashboard 200 in 28ms
+ ✓ Compiled in 306ms (976 modules)
+ GET /dashboard 200 in 26ms
+ ✓ Compiled in 1276ms (2105 modules)
+ GET /dashboard 200 in 305ms
+ ✓ Compiled in 463ms (2105 modules)
+ GET /dashboard 200 in 85ms
+ ✓ Compiled /api/auth/[...nextauth] in 327ms (1653 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 1455ms
+(node:80087) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ○ Compiling /api/dashboard/stats ...
+ ✓ Compiled /api/dashboard/stats in 829ms (2636 modules)
+ ✓ Compiled in 0ms (1656 modules)
+ ✓ Compiled in 308ms (2622 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+ GET /api/profile/stats 404 in 1708ms
+ GET /dashboard 200 in 936ms
+ GET /dashboard 200 in 119ms
+ GET /api/dashboard/stats 200 in 1808ms
+[Dashboard Stats API] Returning userRole: ADMIN
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 79ms
+ GET /api/profile/stats 404 in 62ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 87ms
+ ○ Compiling /api/teams ...
+(node:80103) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ✓ Compiled /api/teams in 1412ms (1736 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=my-teams 200 in 1623ms
+ GET /dashboard 200 in 205ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=my-teams 200 in 28ms
+ ○ Compiling /api/teams/[id] ...
+ ✓ Compiled /api/teams/[id] in 1108ms (2704 modules)
+(node:80223) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams/8473fee8-5669-4f29-8032-532fb094d5e0?action=applications 200 in 1683ms
+ GET /api/teams/8473fee8-5669-4f29-8032-532fb094d5e0?action=messages&limit=10 403 in 1704ms
+ GET /api/teams/8473fee8-5669-4f29-8032-532fb094d5e0 200 in 1706ms
+ GET /api/teams/8473fee8-5669-4f29-8032-532fb094d5e0?action=workout-logs&limit=5 403 in 1707ms
+ ✓ Compiled in 335ms (980 modules)
+ GET /dashboard 200 in 44ms
+ ✓ Compiled in 626ms (2718 modules)
+ GET /dashboard 200 in 49ms
+ ✓ Compiled in 611ms (2718 modules)
+ GET /dashboard 200 in 119ms
+ ✓ Compiled in 1366ms (2718 modules)
+ GET /dashboard 200 in 71ms
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 359ms
+ GET /api/profile/stats 404 in 300ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 348ms
+(node:81955) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ○ Compiling /teams/discover ...
+ ✓ Compiled /teams/discover in 872ms (2642 modules)
+ GET /teams/discover 200 in 938ms
+ GET /teams/discover 200 in 15ms
+ ✓ Compiled /api/teams in 204ms (1741 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=discovery&hasSpots=true 200 in 395ms
+ GET /api/teams?action=discovery&hasSpots=true 200 in 400ms
+ GET /default-avatar.png 404 in 141ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 107ms
+ GET /api/profile/stats 404 in 92ms
+(node:82521) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ✓ Compiled in 1239ms (2111 modules)
+ GET /teams/discover 200 in 328ms
+ ✓ Compiled in 696ms (2111 modules)
+ GET /teams/discover 200 in 65ms
+ GET /teams/discover 200 in 97ms
+ ✓ Compiled in 579ms (2111 modules)
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 753ms (1658 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 2122ms
+(node:86323) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1736ms (2640 modules)
+ GET /api/profile/stats 404 in 2160ms
+ ○ Compiling /api/teams/[id] ...
+ ✓ Compiled /api/teams/[id] in 918ms (1739 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ DELETE /api/teams/cmg7sl09e0001vrra50a97ygu 200 in 1293ms
+(node:86472) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ○ Compiling /api/teams ...
+ ✓ Compiled /api/teams in 576ms (1741 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=discovery&hasSpots=true 200 in 778ms
+ ○ Compiling /teams/[id] ...
+ ✓ Compiled /teams/[id] in 992ms (2714 modules)
+Error: Route "/teams/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at TeamPage (src/app/teams/[id]/page.tsx:18:46)
+  16 |
+  17 | export default async function TeamPage({ params }: { params: { id: string } }) {
+> 18 |   const team = await get_team_details(params.id);
+     |                                              ^
+  19 |
+  20 |   if (!team) {
+  21 |     return (
+ GET /teams/8473fee8-5669-4f29-8032-532fb094d5e0 200 in 1606ms
+Error: Route "/teams/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at TeamPage (src/app/teams/[id]/page.tsx:18:46)
+  16 |
+  17 | export default async function TeamPage({ params }: { params: { id: string } }) {
+> 18 |   const team = await get_team_details(params.id);
+     |                                              ^
+  19 |
+  20 |   if (!team) {
+  21 |     return (
+ GET /teams/8473fee8-5669-4f29-8032-532fb094d5e0 200 in 32ms
+Error: Route "/teams/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at TeamPage (src/app/teams/[id]/page.tsx:18:46)
+  16 |
+  17 | export default async function TeamPage({ params }: { params: { id: string } }) {
+> 18 |   const team = await get_team_details(params.id);
+     |                                              ^
+  19 |
+  20 |   if (!team) {
+  21 |     return (
+ GET /teams/8473fee8-5669-4f29-8032-532fb094d5e0 200 in 23ms
+ GET /teams/discover 200 in 88ms
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=discovery&hasSpots=true 200 in 180ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=discovery&hasSpots=true 200 in 20ms
+ ✓ Compiled in 298ms (982 modules)
+ GET /teams/discover 200 in 25ms
+ ✓ Compiled in 1041ms (2728 modules)
+ GET /teams/discover 200 in 52ms
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 746ms
+(node:88495) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ GET /api/profile/stats 404 in 467ms
+ GET /dashboard 200 in 157ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 43ms
+ ○ Compiling /api/dashboard/stats ...
+(node:88597) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ GET /api/profile/stats 404 in 1288ms
+ ✓ Compiled /api/dashboard/stats in 1611ms (1666 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 1881ms
+ ✓ Compiled /api/teams in 221ms (1746 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=my-teams 200 in 555ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=my-teams 200 in 923ms
+ ✓ Compiled in 1140ms (982 modules)
+ GET /dashboard 200 in 158ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 90ms
+ GET /api/profile/stats 404 in 256ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 276ms
+(node:88795) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ⨯ [Error [InvariantError]: Invariant: Expected clientReferenceManifest to be defined. This is a bug in Next.js.]
+ ⨯ [Error [InvariantError]: Invariant: Expected clientReferenceManifest to be defined. This is a bug in Next.js.] {
+  page: '/dashboard'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 4.1s (3068 modules)
+ GET /teams/discover 200 in 3185ms
+ GET /dashboard 500 in 4195ms
+ GET /teams/discover 200 in 59ms
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=discovery&hasSpots=true 200 in 195ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=discovery&hasSpots=true 200 in 39ms
+ ✓ Compiled in 828ms (1133 modules)
+ GET /teams/discover 200 in 26ms
+ ⨯ ./src/components/teams/team_members_logs.tsx
+Error:   [31mx[0m Expression expected
+    ,-[[36;1;4m/Users/victorsole/Documents/GitHub/massimino/massimino/src/components/teams/team_members_logs.tsx[0m:47:1]
+ [2m44[0m |     <div className="rounded-lg border p-4 bg-white" style={{ borderColor: colour + '33' }}>
+ [2m45[0m |       <h3 className="font-semibold" style={{ color: colour }}>Members’ Logs</h3>
+ [2m46[0m |       {members.length === 0 ? (
+ [2m47[0m |         <p className="text-sm text-gray-600 mt-2">No members to display.</n+p>
+    : [35;1m                                                                           ^[0m
+ [2m48[0m |       ) : (
+ [2m49[0m |         <>
+ [2m50[0m |           <div className="mt-3">
+    `----
+  [31mx[0m Expected '</', got ')'
+    ,-[[36;1;4m/Users/victorsole/Documents/GitHub/massimino/massimino/src/components/teams/team_members_logs.tsx[0m:48:1]
+ [2m45[0m |       <h3 className="font-semibold" style={{ color: colour }}>Members’ Logs</h3>
+ [2m46[0m |       {members.length === 0 ? (
+ [2m47[0m |         <p className="text-sm text-gray-600 mt-2">No members to display.</n+p>
+ [2m48[0m |       ) : (
+    : [35;1m      ^[0m
+ [2m49[0m |         <>
+ [2m50[0m |           <div className="mt-3">
+ [2m51[0m |             <select className="border rounded-md p-2 text-sm" value={selected} onChange={(e) => set_selected(e.target.value)}>
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/teams/team_members_logs.tsx
+./src/app/teams/[id]/page.tsx
+ GET /teams/discover 500 in 4757ms
+ GET /teams/discover 500 in 93ms
+ GET /dashboard 500 in 89ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /dashboard 500 in 1451ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ ./src/components/teams/team_members_logs.tsx
+Error:   [31mx[0m Expression expected
+    ,-[[36;1;4m/Users/victorsole/Documents/GitHub/massimino/massimino/src/components/teams/team_members_logs.tsx[0m:47:1]
+ [2m44[0m |     <div className="rounded-lg border p-4 bg-white" style={{ borderColor: colour + '33' }}>
+ [2m45[0m |       <h3 className="font-semibold" style={{ color: colour }}>Members’ Logs</h3>
+ [2m46[0m |       {members.length === 0 ? (
+ [2m47[0m |         <p className="text-sm text-gray-600 mt-2">No members to display.</n+p>
+    : [35;1m                                                                           ^[0m
+ [2m48[0m |       ) : (
+ [2m49[0m |         <>
+ [2m50[0m |           <div className="mt-3">
+    `----
+  [31mx[0m Expected '</', got ')'
+    ,-[[36;1;4m/Users/victorsole/Documents/GitHub/massimino/massimino/src/components/teams/team_members_logs.tsx[0m:48:1]
+ [2m45[0m |       <h3 className="font-semibold" style={{ color: colour }}>Members’ Logs</h3>
+ [2m46[0m |       {members.length === 0 ? (
+ [2m47[0m |         <p className="text-sm text-gray-600 mt-2">No members to display.</n+p>
+ [2m48[0m |       ) : (
+    : [35;1m      ^[0m
+ [2m49[0m |         <>
+ [2m50[0m |           <div className="mt-3">
+ [2m51[0m |             <select className="border rounded-md p-2 text-sm" value={selected} onChange={(e) => set_selected(e.target.value)}>
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/teams/team_members_logs.tsx
+./src/app/teams/[id]/page.tsx
+ GET /dashboard 200 in 487ms
+ GET /dashboard 500 in 30ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /dashboard 500 in 237ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ ./src/components/teams/team_members_logs.tsx
+Error:   [31mx[0m Expression expected
+    ,-[[36;1;4m/Users/victorsole/Documents/GitHub/massimino/massimino/src/components/teams/team_members_logs.tsx[0m:47:1]
+ [2m44[0m |     <div className="rounded-lg border p-4 bg-white" style={{ borderColor: colour + '33' }}>
+ [2m45[0m |       <h3 className="font-semibold" style={{ color: colour }}>Members’ Logs</h3>
+ [2m46[0m |       {members.length === 0 ? (
+ [2m47[0m |         <p className="text-sm text-gray-600 mt-2">No members to display.</n+p>
+    : [35;1m                                                                           ^[0m
+ [2m48[0m |       ) : (
+ [2m49[0m |         <>
+ [2m50[0m |           <div className="mt-3">
+    `----
+  [31mx[0m Expected '</', got ')'
+    ,-[[36;1;4m/Users/victorsole/Documents/GitHub/massimino/massimino/src/components/teams/team_members_logs.tsx[0m:48:1]
+ [2m45[0m |       <h3 className="font-semibold" style={{ color: colour }}>Members’ Logs</h3>
+ [2m46[0m |       {members.length === 0 ? (
+ [2m47[0m |         <p className="text-sm text-gray-600 mt-2">No members to display.</n+p>
+ [2m48[0m |       ) : (
+    : [35;1m      ^[0m
+ [2m49[0m |         <>
+ [2m50[0m |           <div className="mt-3">
+ [2m51[0m |             <select className="border rounded-md p-2 text-sm" value={selected} onChange={(e) => set_selected(e.target.value)}>
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/teams/team_members_logs.tsx
+./src/app/teams/[id]/page.tsx
+ GET /dashboard 200 in 284ms
+ GET /dashboard 500 in 18ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /dashboard 500 in 326ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ⨯ ./src/components/teams/team_members_logs.tsx
+Error:   [31mx[0m Expression expected
+    ,-[[36;1;4m/Users/victorsole/Documents/GitHub/massimino/massimino/src/components/teams/team_members_logs.tsx[0m:47:1]
+ [2m44[0m |     <div className="rounded-lg border p-4 bg-white" style={{ borderColor: colour + '33' }}>
+ [2m45[0m |       <h3 className="font-semibold" style={{ color: colour }}>Members’ Logs</h3>
+ [2m46[0m |       {members.length === 0 ? (
+ [2m47[0m |         <p className="text-sm text-gray-600 mt-2">No members to display.</n+p>
+    : [35;1m                                                                           ^[0m
+ [2m48[0m |       ) : (
+ [2m49[0m |         <>
+ [2m50[0m |           <div className="mt-3">
+    `----
+  [31mx[0m Expected '</', got ')'
+    ,-[[36;1;4m/Users/victorsole/Documents/GitHub/massimino/massimino/src/components/teams/team_members_logs.tsx[0m:48:1]
+ [2m45[0m |       <h3 className="font-semibold" style={{ color: colour }}>Members’ Logs</h3>
+ [2m46[0m |       {members.length === 0 ? (
+ [2m47[0m |         <p className="text-sm text-gray-600 mt-2">No members to display.</n+p>
+ [2m48[0m |       ) : (
+    : [35;1m      ^[0m
+ [2m49[0m |         <>
+ [2m50[0m |           <div className="mt-3">
+ [2m51[0m |             <select className="border rounded-md p-2 text-sm" value={selected} onChange={(e) => set_selected(e.target.value)}>
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/teams/team_members_logs.tsx
+./src/app/teams/[id]/page.tsx
+ GET /dashboard 200 in 2526ms
+ GET /dashboard 500 in 46ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /dashboard 500 in 276ms
+ ✓ Compiled in 1969ms (2460 modules)
+ GET /dashboard 200 in 1558ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /dashboard 200 in 521ms
+ ✓ Compiled (2446 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /dashboard 200 in 104ms
+ GET /dashboard 200 in 41ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 4.6s (1854 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /dashboard 200 in 60ms
+ GET /api/auth/session 200 in 5674ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 22ms
+(node:92825) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 4.8s (2991 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+ GET /api/profile/stats 404 in 5763ms
+ GET /api/profile/stats 404 in 86ms
+ GET /dashboard 200 in 773ms
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 5816ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 97ms
+ ○ Compiling /api/teams ...
+ ✓ Compiled /api/teams in 2.7s (1937 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=my-teams 200 in 2859ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=my-teams 200 in 14ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 725ms
+(node:93132) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ GET /api/profile/stats 404 in 718ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 765ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 64ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/profile/stats 404 in 153ms
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 190ms
+(node:93450) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 460ms
+ GET /api/profile/stats 404 in 101ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 162ms
+(node:95704) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ GET /teams/discover 200 in 105ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=discovery&hasSpots=true 200 in 62ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=discovery&hasSpots=true 200 in 36ms
+ GET /dashboard 200 in 212ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 34ms
+ GET /api/profile/stats 404 in 113ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 280ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=my-teams 200 in 56ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=my-teams 200 in 21ms
+(node:95739) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ○ Compiling /api/teams/[id] ...
+ ✓ Compiled /api/teams/[id] in 2.3s (1939 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams/8473fee8-5669-4f29-8032-532fb094d5e0?action=workout-logs&limit=5 403 in 2743ms
+ GET /dashboard 200 in 355ms
+ GET /api/teams/8473fee8-5669-4f29-8032-532fb094d5e0?action=messages&limit=10 403 in 2764ms
+ GET /api/teams/8473fee8-5669-4f29-8032-532fb094d5e0?action=applications 200 in 2781ms
+ GET /api/teams/8473fee8-5669-4f29-8032-532fb094d5e0 200 in 2783ms
+(node:95883) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ POST /api/teams/8473fee8-5669-4f29-8032-532fb094d5e0 403 in 49ms
+(node:96023) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ○ Compiling /assessments ...
+ ✓ Compiled /assessments in 8.4s (3347 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /teams/discover 200 in 4462ms
+ GET /assessments 200 in 8843ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=discovery&hasSpots=true 200 in 217ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=discovery&hasSpots=true 200 in 15ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 310ms
+ GET /api/profile/stats 404 in 272ms
+(node:96338) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ DELETE /api/teams/8473fee8-5669-4f29-8032-532fb094d5e0 200 in 82ms
+(node:96485) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=discovery&hasSpots=true 200 in 103ms
+ GET /dashboard 200 in 61ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 151ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 27ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=my-teams 200 in 23ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=my-teams 200 in 15ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ POST /api/teams 201 in 290ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=my-teams 200 in 77ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84 200 in 43ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=workout-logs&limit=5 403 in 54ms
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=messages&limit=10 403 in 58ms
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=applications 200 in 59ms
+(node:96936) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ POST /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84 200 in 128ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84 200 in 51ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=applications 200 in 47ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=messages&limit=10 403 in 50ms
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=workout-logs&limit=5 403 in 37ms
+(node:97120) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[TeamInvitationService] Error sending email invitation: Error: Missing API key. Pass it to the constructor `new Resend("re_123")`
+    at eval (src/services/email/email_service.ts:11:16)
+    at <unknown> (rsc)/./src/services/email/email_service.ts (/Users/victorsole/Documents/GitHub/massimino/massimino/.next/server/_rsc_src_services_email_email_service_ts.js:20:1)
+    at async TeamInvitationService.sendEmailInvitation (src/services/teams/team_service.ts:936:57)
+    at async POST (src/app/api/teams/[id]/route.ts:407:22)
+   9 |
+  10 | // Initialize Resend client
+> 11 | const resend = new Resend(process.env.RESEND_API_KEY);
+     |                ^
+  12 |
+  13 | /**
+  14 |  * Email configuration
+ POST /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84 400 in 214ms
+(node:97544) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ POST /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84 200 in 84ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84 200 in 82ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=applications 200 in 62ms
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=messages&limit=10 403 in 63ms
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=workout-logs&limit=5 403 in 142ms
+(node:98169) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 156ms
+ GET /api/profile/stats 404 in 123ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 161ms
+(node:98450) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 150ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/profile/stats 404 in 109ms
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 135ms
+(node:98763) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 131ms
+ GET /api/profile/stats 404 in 93ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 109ms
+(node:99186) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ POST /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84 200 in 90ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=applications 200 in 99ms
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84 200 in 96ms
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=messages&limit=10 403 in 96ms
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=workout-logs&limit=5 403 in 92ms
+(node:99468) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ POST /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84 403 in 83ms
+(node:99721) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 59ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/profile/stats 404 in 113ms
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 177ms
+(node:102) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 109ms
+ GET /api/profile/stats 404 in 91ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 131ms
+(node:931) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ✓ Compiled in 2s (1140 modules)
+ GET /dashboard 200 in 57ms
+ ✓ Compiled in 533ms (1140 modules)
+ GET /dashboard 200 in 42ms
+ ✓ Compiled in 473ms (1140 modules)
+ GET /dashboard 200 in 41ms
+ ✓ Compiled in 18.7s (2470 modules)
+ GET /dashboard 200 in 273ms
+ ✓ Compiled in 1958ms (1140 modules)
+ GET /dashboard 200 in 52ms
+ ✓ Compiled in 339ms (1140 modules)
+ GET /dashboard 200 in 33ms
+ ⨯ SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>) {
+  page: '/dashboard'
+}
+ ✓ Compiled in 4.9s (2470 modules)
+ GET /dashboard 500 in 4807ms
+ GET /dashboard 200 in 178ms
+ GET /dashboard 200 in 350ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 10.6s (1854 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 12027ms
+(node:5327) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ○ Compiling /api/dashboard/stats ...
+ ✓ Compiled /api/dashboard/stats in 1065ms (2998 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+ GET /api/profile/stats 200 in 1560ms
+ GET /dashboard 200 in 465ms
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 1606ms
+ ○ Compiling /api/teams ...
+ ✓ Compiled /api/teams in 5.6s (3078 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=my-teams 200 in 5751ms
+ GET /dashboard 200 in 176ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=my-teams 200 in 18ms
+ ✓ Compiled in 3.3s (1140 modules)
+ GET /dashboard 200 in 52ms
+ ✓ Compiled in 289ms (1140 modules)
+ GET /dashboard 200 in 26ms
+ ✓ Compiled in 358ms (1140 modules)
+ GET /dashboard 200 in 29ms
+ ✓ Compiled in 328ms (1140 modules)
+ GET /dashboard 200 in 34ms
+ ✓ Compiled in 347ms (1140 modules)
+ GET /dashboard 200 in 24ms
+ ✓ Compiled in 282ms (1140 modules)
+ GET /dashboard 200 in 36ms
+ ✓ Compiled in 329ms (1140 modules)
+ GET /dashboard 200 in 35ms
+ ✓ Compiled in 333ms (1140 modules)
+ GET /dashboard 200 in 29ms
+ ✓ Compiled in 1169ms (1140 modules)
+ GET /dashboard 200 in 20ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 565ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/profile/stats 200 in 275ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 311ms
+(node:9460) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ○ Compiling /api/teams/[id] ...
+ ✓ Compiled /api/teams/[id] in 1886ms (1938 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /dashboard 200 in 434ms
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=applications 200 in 2478ms
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84 200 in 2483ms
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=messages&limit=10 200 in 2483ms
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=workout-logs&limit=5 200 in 2483ms
+(node:9601) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 422ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/profile/stats 200 in 92ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+(node:11628) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 2181ms
+ ✓ Compiled in 2.1s (1140 modules)
+ GET /dashboard 200 in 25ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ POST /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84 200 in 60ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84 200 in 34ms
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=messages&limit=10 200 in 38ms
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=applications 200 in 106ms
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=workout-logs&limit=5 200 in 116ms
+(node:11692) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ✓ Compiled in 299ms (1140 modules)
+ GET /dashboard 200 in 45ms
+ ○ Compiling /api/ai/workout-suggestions ...
+ ✓ Compiled /api/ai/workout-suggestions in 5s (3080 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /dashboard 200 in 380ms
+Error generating AI workout suggestions: Error: 401 Incorrect API key provided: sk-proj-********************************************************************************************************************************************************9zIA. You can find your API key at https://platform.openai.com/account/api-keys.
+    at async generateWorkoutSuggestions (src/services/ai/workout-suggestions.ts:84:22)
+    at async GET (src/app/api/ai/workout-suggestions/route.ts:42:25)
+  82 |
+  83 |     // Generate suggestions using OpenAI
+> 84 |     const response = await openai.chat.completions.create({
+     |                      ^
+  85 |       model: 'gpt-3.5-turbo',
+  86 |       messages: [
+  87 |         { {
+  status: 401,
+  headers: [Object],
+  request_id: 'req_120e4e13c47d4a51824e2a8d2a316c61',
+  error: [Object],
+  code: 'invalid_api_key',
+  param: null,
+  type: 'invalid_request_error'
+}
+ GET /api/ai/workout-suggestions 200 in 4352ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+Error generating AI workout suggestions: Error: 401 Incorrect API key provided: sk-proj-********************************************************************************************************************************************************9zIA. You can find your API key at https://platform.openai.com/account/api-keys.
+    at async generateWorkoutSuggestions (src/services/ai/workout-suggestions.ts:84:22)
+    at async GET (src/app/api/ai/workout-suggestions/route.ts:42:25)
+  82 |
+  83 |     // Generate suggestions using OpenAI
+> 84 |     const response = await openai.chat.completions.create({
+     |                      ^
+  85 |       model: 'gpt-3.5-turbo',
+  86 |       messages: [
+  87 |         { {
+  status: 401,
+  headers: [Object],
+  request_id: 'req_21bce16eef384cf5835174cc7b4d0c1a',
+  error: [Object],
+  code: 'invalid_api_key',
+  param: null,
+  type: 'invalid_request_error'
+}
+ GET /api/ai/workout-suggestions 200 in 1400ms
+ ✓ Compiled in 4.1s (3080 modules)
+ GET /dashboard 200 in 152ms
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 390ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 147ms
+ GET /api/profile/stats 200 in 190ms
+(node:12477) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 468ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/profile/stats 200 in 144ms
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 184ms
+(node:15008) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ POST /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84 200 in 1269ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=applications 200 in 240ms
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84 200 in 243ms
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=workout-logs&limit=5 200 in 267ms
+ GET /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84?action=messages&limit=10 200 in 286ms
+(node:15035) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[TeamInvitationService] Error sending email invitation: Error: Missing API key. Pass it to the constructor `new Resend("re_123")`
+    at eval (src/services/email/email_service.ts:11:16)
+    at <unknown> (rsc)/./src/services/email/email_service.ts (/Users/victorsole/Documents/GitHub/massimino/massimino/.next/server/_rsc_src_services_email_email_service_ts.js:20:1)
+    at async TeamInvitationService.sendEmailInvitation (src/services/teams/team_service.ts:1003:57)
+    at async POST (src/app/api/teams/[id]/route.ts:407:22)
+   9 |
+  10 | // Initialize Resend client
+> 11 | const resend = new Resend(process.env.RESEND_API_KEY);
+     |                ^
+  12 |
+  13 | /**
+  14 |  * Email configuration
+ POST /api/teams/c2f5007e-bf7d-4230-83e4-972183589e84 400 in 824ms
+(node:15304) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 110ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/profile/stats 200 in 38ms
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 179ms
+(node:15459) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 141ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+ GET /api/profile/stats 200 in 100ms
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 95ms
+(node:15860) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 125ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/profile/stats 200 in 78ms
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 88ms
+(node:16004) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 186ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/profile/stats 200 in 132ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 187ms
+(node:16452) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 167ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 94ms
+ GET /api/profile/stats 200 in 136ms
+(node:16746) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ✓ Compiled in 8.7s (1858 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 707ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+ GET /api/profile/stats 200 in 691ms
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 696ms
+(node:17551) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 242ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/profile/stats 200 in 95ms
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 360ms
+(node:18724) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ✓ Compiled in 13s (2998 modules)
+ GET /dashboard 200 in 3629ms
+ GET /dashboard 200 in 18ms
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 1108ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+(node:19837) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/profile/stats 200 in 383ms
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 680ms
+ GET /dashboard 200 in 534ms
+ ✓ Compiled in 8.5s (2456 modules)
+ ✓ Compiled in 592ms (1140 modules)
+ ✓ Compiled in 5.7s (2472 modules)
+ ✓ Compiled in 11.3s (2472 modules)
+ ✓ Compiled in 1112ms (2472 modules)
+ ✓ Compiled in 456ms (1141 modules)
+ ✓ Compiled in 402ms (1141 modules)
+ ✓ Compiled in 378ms (1141 modules)
+ ✓ Compiled in 411ms (1141 modules)
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 15.1s (1855 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 21062ms
+(node:26646) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ○ Compiling /api/dashboard/stats ...
+ ✓ Compiled /api/dashboard/stats in 3.7s (1857 modules)
+ ✓ Compiled (1859 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+ GET /api/profile/stats 200 in 8467ms
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 6905ms
+ ✓ Compiled in 1741ms (1141 modules)
+ ✓ Compiled in 3.3s (2998 modules)
+ ✓ Compiled in 370ms (1141 modules)
+ ✓ Compiled in 1040ms (2472 modules)
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 1701ms (1855 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 5224ms
+ ✓ Compiled /api/dashboard/stats in 444ms (1857 modules)
+(node:28142) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ✓ Compiled (1859 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+ GET /api/profile/stats 200 in 1308ms
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 1339ms
+ ○ Compiling /api/massichat ...
+ ⨯ ./src/services/ai/massichat_service.ts
+Error:   [31mx[0m Expected a semicolon
+    ,-[[36;1;4m/Users/victorsole/Documents/GitHub/massimino/massimino/src/services/ai/massichat_service.ts[0m:60:1]
+ [2m57[0m | Always prioritize safety and progressive overload principles. Use concise, helpful answers.
+ [2m58[0m | When appropriate, you may propose a structured workout in JSON (marked as: WORKOUT_PROPOSAL_JSON) with fields: title, description, items[{ exerciseName, sets, reps, restSeconds, notes? }].`.
+ [2m59[0m | 
+ [2m60[0m |   const userContext = `User Profile:\n${context.userProfile}\n\nAssessments:\n${context.assessmentSummary}\n\nHistory:\n${context.workoutHistory}`
+    : [35;1m        ^^^^^^^^^^^[0m
+ [2m61[0m | 
+ [2m62[0m |   // 3.b) Knowledge snippets (top-3)
+ [2m63[0m |   let kbContext = ''
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/services/ai/massichat_service.ts
+./src/app/api/massichat/route.ts
+ ⨯ ./src/services/ai/massichat_service.ts
+Error:   [31mx[0m Expected a semicolon
+    ,-[[36;1;4m/Users/victorsole/Documents/GitHub/massimino/massimino/src/services/ai/massichat_service.ts[0m:60:1]
+ [2m57[0m | Always prioritize safety and progressive overload principles. Use concise, helpful answers.
+ [2m58[0m | When appropriate, you may propose a structured workout in JSON (marked as: WORKOUT_PROPOSAL_JSON) with fields: title, description, items[{ exerciseName, sets, reps, restSeconds, notes? }].`.
+ [2m59[0m | 
+ [2m60[0m |   const userContext = `User Profile:\n${context.userProfile}\n\nAssessments:\n${context.assessmentSummary}\n\nHistory:\n${context.workoutHistory}`
+    : [35;1m        ^^^^^^^^^^^[0m
+ [2m61[0m | 
+ [2m62[0m |   // 3.b) Knowledge snippets (top-3)
+ [2m63[0m |   let kbContext = ''
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/services/ai/massichat_service.ts
+./src/app/api/massichat/route.ts
+ POST /api/massichat 500 in 7777ms
+ GET /api/auth/session 500 in 174ms
+ POST /api/auth/_log 500 in 18ms
+ GET /login 500 in 89ms
+ GET /login 500 in 25ms
+ GET /login 500 in 52ms
+ GET /login 500 in 61ms
+ GET /login 500 in 58ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled /_not-found in 3.8s (1861 modules)
+ GET /login 200 in 9038ms
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 1011ms
+(node:29341) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ○ Compiling /api/profile/stats ...
+ ✓ Compiled /api/profile/stats in 507ms (1857 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/profile/stats 200 in 781ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 1303ms
+(node:33163) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/profile/stats 200 in 119ms
+ ✓ Compiled in 3.4s (1141 modules)
+ GET /login 200 in 211ms
+ ✓ Compiled in 353ms (1141 modules)
+ GET /login 200 in 31ms
+ ✓ Compiled in 425ms (1141 modules)
+ GET /login 200 in 27ms
+ ✓ Compiled in 385ms (1141 modules)
+ GET /login 200 in 33ms
+ ✓ Compiled in 3s (1331 modules)
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 3.8s (1855 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /dashboard 200 in 2948ms
+ GET /dashboard 200 in 35ms
+ ○ Compiling /api/dashboard/stats ...
+(node:35845) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ GET /api/auth/session 200 in 8237ms
+ ✓ Compiled /api/profile/stats in 4.9s (1857 modules)
+ ✓ Compiled in 1ms (1859 modules)
+ ✓ Compiled in 0ms (1859 modules)
+ ✓ Compiled in 0ms (1859 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 10432ms
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /dashboard 200 in 5555ms
+ GET /api/profile/stats 200 in 7762ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+ GET /dashboard 200 in 484ms
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 573ms
+ ○ Compiling /api/teams ...
+ ✓ Compiled /api/teams in 7.9s (3080 modules)
+ ✓ Compiled in 1ms (1939 modules)
+ ✓ Compiled /api/massichat in 483ms (3085 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ ⚠ Server is approaching the used memory threshold, restarting...
+   ▲ Next.js 15.5.0
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.36:3000
+   - Environments: .env
+   - Experiments (use with caution):
+     · serverActions
+
+ ✓ Starting...
+ ✓ Ready in 1640ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 2.3s (1209 modules)
+ GET /dashboard 200 in 2907ms
+ ✓ Compiled in 630ms (530 modules)
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 1241ms (1720 modules)
+(node:36242) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:36377) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/auth/session 200 in 2208ms
+ ○ Compiling /api/dashboard/stats ...
+ ✓ Compiled /api/dashboard/stats in 596ms (1724 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+[Dashboard Stats API] User role: ADMIN for userId: cmg69x38e0004vrt3jx8xfkh6
+ GET /api/profile/stats 200 in 832ms
+ GET /dashboard 200 in 214ms
+[Dashboard Stats API] Returning userRole: ADMIN
+ GET /api/dashboard/stats 200 in 840ms
+ ✓ Compiled /api/teams in 408ms (1818 modules)
+NextAuth Warning: DEBUG_ENABLED
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=my-teams 200 in 571ms
+ GET /dashboard 200 in 154ms
+NextAuth Debug: {
+  code: 'adapter_getSessionAndUser',
+  metadata: { args: [ '9724f51e-16d6-4b9f-8f7a-855440672469' ] }
+}
+ GET /api/teams?action=my-teams 200 in 16ms
+ ✓ Compiled in 198ms (531 modules)
+ GET /dashboard 200 in 23ms
+ ✓ Compiled in 241ms (1287 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/victorsole/Documents/GitHub/massimino/massimino/.next/server/app/dashboard/page.js'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/victorsole/Documents/GitHub/massimino/massimino/.next/server/app/dashboard/page.js',
+  page: '/dashboard'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 554ms (2158 modules)
+ GET /dashboard 500 in 985ms
+ ⨯ [Error [InvariantError]: Invariant: Expected clientReferenceManifest to be defined. This is a bug in Next.js.]
+ ⨯ [Error [InvariantError]: Invariant: Expected clientReferenceManifest to be defined. This is a bug in Next.js.] {
+  page: '/dashboard'
+}
+ GET /dashboard 500 in 745ms
+ ⨯ [Error [InvariantError]: Invariant: Expected clientReferenceManifest to be defined. This is a bug in Next.js.]
+ ⨯ [Error [InvariantError]: Invariant: Expected clientReferenceManifest to be defined. This is a bug in Next.js.] {
+  page: '/dashboard'
+}
+ GET /dashboard 500 in 653ms
+ ⨯ [Error [InvariantError]: Invariant: Expected clientReferenceManifest to be defined. This is a bug in Next.js.]
+ ⨯ [Error [InvariantError]: Invariant: Expected clientReferenceManifest to be defined. This is a bug in Next.js.] {
+  page: '/dashboard'
+}
+ GET /dashboard 500 in 681ms
+ ⨯ [Error [InvariantError]: Invariant: Expected clientReferenceManifest to be defined. This is a bug in Next.js.]
+ ⨯ [Error [InvariantError]: Invariant: Expected clientReferenceManifest to be defined. This is a bug in Next.js.] {
+  page: '/dashboard'
+}
+ GET /dashboard 500 in 656ms
+ ✓ Compiled in 242ms (682 modules)
+ ✓ Compiled in 214ms (682 modules)
+ ✓ Compiled in 198ms (682 modules)
+ ⨯ [Error [InvariantError]: Invariant: Expected clientReferenceManifest to be defined. This is a bug in Next.js.]
+ ⨯ [Error [InvariantError]: Invariant: Expected clientReferenceManifest to be defined. This is a bug in Next.js.] {
+  page: '/dashboard'
+}
+ GET /dashboard 500 in 710ms
+ ✓ Compiled in 324ms (776 modules)

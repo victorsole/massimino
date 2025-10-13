@@ -1,23 +1,71 @@
+// src/app/api/workout/entries/route.ts
 /**
  * Workout Log Entries API Route
  * Handles CRUD operations for workout log entries
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { ZodError } from 'zod';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core';
-import { 
-  getWorkoutLogEntries, 
+import {
+  getWorkoutLogEntries,
   createWorkoutLogEntry,
-  getWorkoutStats 
+  getWorkoutStats
 } from '@/core/database';
-import { 
+import {
   createWorkoutEntriesRequestSchema,
   workoutFilterOptionsSchema,
   workoutSortOptionsSchema,
   paginationSchema,
 } from '@/core/utils/workout-validation';
 import { UserRole } from '@prisma/client';
+import { prisma } from '@/core/database';
+
+// Helper function to check and award first workout bonus
+async function checkFirstWorkoutBonus(userId: string) {
+  try {
+    // Check if this is the user's first workout entry
+    const workoutCount = await prisma.workout_log_entries.count({
+      where: { userId }
+    });
+
+    // If this is their first workout, check if they were invited
+    if (workoutCount === 1) {
+      const invitation = await prisma.invitations.findFirst({
+        where: {
+          receiverId: userId,
+          status: 'ACCEPTED'
+        },
+        include: {
+          users_invitations_senderIdTousers: { select: { id: true, role: true } }
+        }
+      });
+
+      // Award bonus points to the trainer who invited them
+      if (invitation && (invitation as any).users_invitations_senderIdTousers?.role === 'TRAINER') {
+        await prisma.trainer_points.create({
+          data: {
+            trainerId: invitation.senderId,
+            pointType: 'BONUS_FIRST_WORKOUT',
+            points: 25,
+            description: `First workout completed by invited user: ${invitation.email}`,
+            sourceId: invitation.id
+          }
+        });
+
+        console.log('First workout bonus awarded:', {
+          trainerId: invitation.senderId,
+          invitedUserId: userId,
+          invitationId: invitation.id,
+          points: 25
+        });
+      }
+    }
+  } catch (error) {
+    console.error('Error checking first workout bonus:', error);
+  }
+}
 
 // ============================================================================
 // GET /api/workout/entries
@@ -35,6 +83,8 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
+    const teamIdParam = searchParams.get('team_id');
+    const userIdParam = searchParams.get('user_id') || searchParams.get('userId');
     
     // Parse query parameters
     const filtersParam = searchParams.get('filters');
@@ -112,12 +162,45 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // Determine target user (trainer/admin may request member logs within team scope)
+    let targetUserId = session.user.id;
+    if (userIdParam && userIdParam !== session.user.id) {
+      const role = (session.user as any).role;
+      if (role === 'ADMIN') {
+        targetUserId = userIdParam;
+      } else if (role === 'TRAINER' && teamIdParam) {
+        const { prisma } = await import('@/core/database');
+        const rel = await prisma.team_members.findFirst({
+          where: {
+            teamId: teamIdParam,
+            userId: userIdParam,
+            status: 'ACTIVE',
+            teams: { trainerId: session.user.id }
+          }
+        });
+        if (rel) {
+          targetUserId = userIdParam;
+        } else {
+          return NextResponse.json(
+            { error: 'Forbidden' },
+            { status: 403 }
+          );
+        }
+      }
+    }
+
     // Get workout log entries
-    const result = await getWorkoutLogEntries(session.user.id, {
+    const result = await getWorkoutLogEntries(targetUserId, {
       filters,
       sort,
       pagination,
     });
+
+    // Optional team filter (filter unified data by team flags if present)
+    if (teamIdParam) {
+      (result as any).entries = (result as any).entries.filter((e: any) => e.isTeamWorkout === true && (e.teamWorkoutId === teamIdParam));
+      // Note: if unified flags use different field names, adjust here accordingly.
+    }
 
     return NextResponse.json(result);
   } catch (error) {
@@ -157,18 +240,48 @@ export async function POST(request: NextRequest) {
 
     for (const entryData of entries) {
       try {
-        // Determine coach ID if user is a trainer
-        const coachId = session.user.role === UserRole.TRAINER ? session.user.id : undefined;
-        
+        const { prisma } = await import('@/core/database');
+        let targetUserId = session.user.id;
+        let coachId: string | undefined = session.user.role === UserRole.TRAINER ? session.user.id : undefined;
+
+        // Determine session and enforce RBAC
+        const sessionId = entryData.sessionId || _sessionId;
+        if (sessionId) {
+          const targetSession = await prisma.workout_sessions.findUnique({ where: { id: sessionId } });
+          if (!targetSession) {
+            throw new Error('Session not found');
+          }
+          if (session.user.role === UserRole.TRAINER) {
+            const rel = await prisma.trainer_clients.findUnique({
+              where: { trainerId_clientId: { trainerId: session.user.id, clientId: targetSession.userId } }
+            });
+            if (!rel) throw new Error('Forbidden');
+            coachId = session.user.id;
+          } else if (session.user.role === UserRole.CLIENT && targetSession.userId !== session.user.id) {
+            throw new Error('Forbidden');
+          }
+          // Admin allowed
+          targetUserId = targetSession.userId;
+        } else {
+          // No sessionId provided
+          if (session.user.role !== UserRole.CLIENT) {
+            throw new Error('Session is required for trainer/admin');
+          }
+        }
+
         const data = Object.fromEntries(
           Object.entries(entryData).filter(([, v]) => v !== undefined)
         ) as any;
+        if (sessionId) data.sessionId = sessionId;
+
         const entry = await createWorkoutLogEntry(
-          session.user.id,
+          targetUserId,
           data,
           coachId
         );
         createdEntries.push(entry);
+
+        await checkFirstWorkoutBonus(targetUserId);
       } catch (error) {
         console.error('Error creating workout entry:', error);
         errors.push({
@@ -186,9 +299,11 @@ export async function POST(request: NextRequest) {
         message: `Successfully created ${createdEntries.length} workout entries`,
       });
     } else if (createdEntries.length === 0) {
+      const firstError = errors[0]?.error || 'Failed to create any workout entries';
       return NextResponse.json(
         { 
           success: false,
+          error: firstError,
           errors,
           message: 'Failed to create any workout entries',
         },
@@ -204,14 +319,19 @@ export async function POST(request: NextRequest) {
     }
   } catch (error) {
     console.error('Error creating workout entries:', error);
-    
-    if (error instanceof Error && error.message.includes('validation')) {
+    // Return a 400 with details for validation issues instead of 500
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: 'Invalid request data', details: error.issues },
+        { status: 400 }
+      );
+    }
+    if (error instanceof Error && error.message.toLowerCase().includes('validation')) {
       return NextResponse.json(
         { error: 'Invalid request data', details: error.message },
         { status: 400 }
       );
     }
-
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

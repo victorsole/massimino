@@ -236,7 +236,8 @@ async function handleAuthCallback(userId: string, body: any) {
   }
 
   // Exchange code for access token
-  const tokenResult = await exchangeCodeForToken(platform, code, redirectUri);
+  const finalRedirectUri = redirectUri || `${process.env.NEXTAUTH_URL}/api/social/auth/${platform}/callback`;
+  const tokenResult = await exchangeCodeForToken(platform, code, finalRedirectUri);
 
   if (!tokenResult.success) {
     return NextResponse.json(
@@ -246,7 +247,7 @@ async function handleAuthCallback(userId: string, body: any) {
   }
 
   // Update user's social connections
-  const user = await prisma.user.findUnique({
+  const user = await prisma.users.findUnique({
     where: { id: userId },
     select: { trainerCredentials: true }
   });
@@ -271,7 +272,7 @@ async function handleAuthCallback(userId: string, body: any) {
 
   (userData as any).socialConnections = socialConnections;
 
-  await prisma.user.update({
+  await prisma.users.update({
     where: { id: userId },
     data: { trainerCredentials: JSON.stringify(userData) }
   });
@@ -289,7 +290,7 @@ async function handleAuthCallback(userId: string, body: any) {
 async function handleAuthDisconnect(userId: string, body: any) {
   const { platform } = authDisconnectSchema.parse(body);
 
-  const user = await prisma.user.findUnique({
+  const user = await prisma.users.findUnique({
     where: { id: userId },
     select: { trainerCredentials: true }
   });
@@ -308,7 +309,7 @@ async function handleAuthDisconnect(userId: string, body: any) {
   delete socialConnections[platform];
   (userData as any).socialConnections = socialConnections;
 
-  await prisma.user.update({
+  await prisma.users.update({
     where: { id: userId },
     data: { trainerCredentials: JSON.stringify(userData) }
   });
@@ -345,7 +346,7 @@ async function handleShare(userId: string, body: any) {
   }
 
   // Get user's social connections
-  const userWithConnections = await prisma.user.findUnique({
+  const userWithConnections = await prisma.users.findUnique({
     where: { id: userId },
     select: { trainerCredentials: true }
   });
@@ -361,13 +362,18 @@ async function handleShare(userId: string, body: any) {
   }
 
   // Prepare post data
+  const cleanedWorkoutData = workoutData ? {
+    ...workoutData,
+    duration: workoutData.duration || ''
+  } : undefined;
+
   const post: SocialMediaPost = {
     caption,
     mediaUrl,
     mediaType,
     platform: 'instagram',
     hashtags: hashtags ?? [],
-    ...(workoutData ? { workoutData } : {})
+    ...(cleanedWorkoutData ? { workoutData: cleanedWorkoutData } : {})
   };
 
   const results = [];
@@ -477,29 +483,28 @@ async function handleUpdatePrivacy(userId: string, body: any) {
   const validatedData = privacySettingsSchema.parse(body);
   const { action, ...privacySettings } = validatedData;
 
-  // Get current settings and merge
-  const currentUser = await prisma.user.findUnique({
+  // Verify user exists
+  await prisma.users.findUnique({
     where: { id: userId },
-    select: { privacySettings: true }
+    select: { id: true }
   });
 
-  const updatedSettings = {
-    ...(currentUser?.privacySettings || {}),
-    ...privacySettings,
-    lastUpdated: new Date().toISOString()
-  };
+  // Filter out undefined values for Prisma
+  const cleanedPrivacySettings = Object.fromEntries(
+    Object.entries(privacySettings).filter(([_, value]) => value !== undefined)
+  );
 
-  const updatedUser = await prisma.user.update({
-    where: { id: userId },
-    data: { privacySettings: updatedSettings },
-    select: { id: true, privacySettings: true }
+  const updatedSettings = await prisma.safetySettings.upsert({
+    where: { userId },
+    update: cleanedPrivacySettings,
+    create: { userId, ...cleanedPrivacySettings },
   });
 
   return NextResponse.json({
     success: true,
     data: {
-      userId: updatedUser.id,
-      privacySettings: updatedUser.privacySettings,
+      userId,
+      privacySettings: updatedSettings,
       message: 'Privacy settings updated successfully'
     }
   });
@@ -526,17 +531,17 @@ async function handleResetPrivacy(userId: string) {
     lastUpdated: new Date().toISOString()
   };
 
-  const updatedUser = await prisma.user.update({
-    where: { id: userId },
-    data: { privacySettings: defaultSettings },
-    select: { id: true, privacySettings: true }
+  const resetSettings = await prisma.safetySettings.upsert({
+    where: { userId },
+    update: defaultSettings,
+    create: { userId, ...defaultSettings },
   });
 
   return NextResponse.json({
     success: true,
     data: {
-      userId: updatedUser.id,
-      privacySettings: updatedUser.privacySettings,
+      userId,
+      privacySettings: resetSettings,
       message: 'Privacy settings reset to default'
     }
   });
@@ -546,7 +551,7 @@ async function handleResetPrivacy(userId: string) {
  * Get authentication status for a platform
  */
 async function handleGetAuthStatus(userId: string, platform: string) {
-  const connection = await prisma.user.findUnique({
+  const connection = await prisma.users.findUnique({
     where: { id: userId },
     select: { trainerCredentials: true }
   });
@@ -577,7 +582,7 @@ async function handleGetAuthStatus(userId: string, platform: string) {
  * Get sharing status for all platforms
  */
 async function handleGetShareStatus(userId: string) {
-  const user = await prisma.user.findUnique({
+  const user = await prisma.users.findUnique({
     where: { id: userId },
     select: { trainerCredentials: true }
   });
@@ -618,9 +623,9 @@ async function handleGetShareStatus(userId: string) {
  * Get privacy settings
  */
 async function handleGetPrivacySettings(userId: string) {
-  const user = await prisma.user.findUnique({
+  const user = await prisma.users.findUnique({
     where: { id: userId },
-    select: { id: true, privacySettings: true }
+    select: { id: true, safetySettings: true }
   });
 
   if (!user) {
@@ -646,7 +651,7 @@ async function handleGetPrivacySettings(userId: string) {
 
   const privacySettings = {
     ...defaultSettings,
-    ...(user.privacySettings || {})
+    ...(user.safetySettings || {})
   };
 
   return NextResponse.json({

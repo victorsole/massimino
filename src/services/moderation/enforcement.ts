@@ -156,7 +156,7 @@ interface UserSafetyInfo {
  * Get comprehensive user safety information
  */
 async function getUserSafetyInfo(userId: string): Promise<UserSafetyInfo | null> {
-  const user = await prisma.user.findUnique({
+  const user = await prisma.users.findUnique({
     where: { id: userId },
     select: {
       id: true,
@@ -170,25 +170,25 @@ async function getUserSafetyInfo(userId: string): Promise<UserSafetyInfo | null>
   if (!user) return null;
 
   // Get violation history
-  const violations = await prisma.userViolation.findMany({
+  const violations = await prisma.user_violations.findMany({
     where: { userId },
     orderBy: { createdAt: 'desc' },
   });
 
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-  const recentViolations = violations.filter(v => v.createdAt > thirtyDaysAgo);
+  const recentViolations = violations.filter((v: { createdAt: Date }) => v.createdAt > thirtyDaysAgo);
 
   // Group violations by severity and type
   const bySeverity: Record<number, number> = {};
   const byType: Record<string, number> = {};
 
-  violations.forEach(violation => {
+  violations.forEach((violation: { severity: number; violationType: string }) => {
     bySeverity[violation.severity] = (bySeverity[violation.severity] || 0) + 1;
     byType[violation.violationType] = (byType[violation.violationType] || 0) + 1;
   });
 
   // Count suspension history
-  const suspensionHistory = violations.filter(v => v.suspensionHours && v.suspensionHours > 0).length;
+  const suspensionHistory = violations.filter((v: { suspensionHours?: number | null }) => v.suspensionHours && v.suspensionHours > 0).length;
 
   return {
     ...user,
@@ -329,11 +329,11 @@ async function applyEnforcementAction(
   
       // Start database transaction
     const result = await prisma.$transaction(async (tx) => {
-    // Get current user state
-    const currentUser = await tx.user.findUniqueOrThrow({
-      where: { id: userId },
-      select: { reputationScore: true, warningCount: true, status: true },
-    });
+      // Get current user state
+    const currentUser = await tx.users.findUniqueOrThrow({
+        where: { id: userId },
+        select: { reputationScore: true, warningCount: true, status: true },
+      });
 
     // Calculate new values
     const newReputationScore = Math.max(0, currentUser.reputationScore - reputationPenalty);
@@ -341,7 +341,7 @@ async function applyEnforcementAction(
     const newStatus = actionDetails.newStatus || currentUser.status;
     
     // Update user record
-    await tx.user.update({
+    await tx.users.update({
       where: { id: userId },
       data: {
         reputationScore: newReputationScore,
@@ -352,7 +352,7 @@ async function applyEnforcementAction(
     });
 
     // Create violation record
-    await tx.userViolation.create({
+    await tx.user_violations.create({
       data: {
         userId,
         violationType: getViolationTypeFromResult(moderationResult),

@@ -5,13 +5,14 @@
  */
 
 import { NextAuthOptions } from 'next-auth';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
+// import { PrismaAdapter } from '@next-auth/prisma-adapter'; // Standard adapter doesn't work with lowercase table names
 import GoogleProvider from 'next-auth/providers/google';
 import LinkedInProvider from 'next-auth/providers/linkedin';
 import FacebookProvider from 'next-auth/providers/facebook';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { prisma } from '@/core/database';
 import bcrypt from 'bcryptjs';
+import { CustomPrismaAdapter } from './prisma-adapter-custom';
 
 // Define enums as const values since Prisma client may not be available
 const UserRole = {
@@ -124,7 +125,7 @@ const providers: any[] = [
 
       try {
         // Find user by email
-        const user = await prisma.user.findUnique({
+        const user = await prisma.users.findUnique({
           where: { email: credentials.email },
           select: {
             id: true,
@@ -156,7 +157,7 @@ const providers: any[] = [
         }
 
         // Update last login
-        await prisma.user.update({
+        await prisma.users.update({
           where: { id: user.id },
           data: { lastLoginAt: new Date() }
         });
@@ -267,9 +268,9 @@ if (facebookConfig.FACEBOOK_CLIENT_ID && facebookConfig.FACEBOOK_CLIENT_SECRET) 
 }
 
 export const authOptions: NextAuthOptions = {
-  // Use Prisma adapter for database sessions
-  adapter: PrismaAdapter(prisma),
-  
+  // Use custom Prisma adapter for lowercase model names (accounts, sessions, verificationtokens)
+  adapter: CustomPrismaAdapter(prisma),
+
   // Authentication providers
   providers,
 
@@ -307,7 +308,7 @@ export const authOptions: NextAuthOptions = {
         }
 
         // Check if user exists
-        const existingUser = await prisma.user.findUnique({
+        const existingUser = await prisma.users.findUnique({
           where: { email: user.email },
           select: { status: true, suspendedUntil: true },
         });
@@ -335,7 +336,7 @@ export const authOptions: NextAuthOptions = {
             existingUser.suspendedUntil &&
             existingUser.suspendedUntil <= new Date()
           ) {
-            await prisma.user.update({
+            await prisma.users.update({
               where: { email: user.email },
               data: {
                 status: UserStatus.ACTIVE,
@@ -345,7 +346,7 @@ export const authOptions: NextAuthOptions = {
           }
 
           // Update last login time for security tracking
-          await prisma.user.update({
+          await prisma.users.update({
             where: { email: user.email },
             data: { lastLoginAt: new Date() },
           });
@@ -353,7 +354,7 @@ export const authOptions: NextAuthOptions = {
           // Promote to ADMIN if email is defined in ADMIN_EMAILS list
           if (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) {
             try {
-              await prisma.user.update({
+              await prisma.users.update({
                 where: { email: user.email },
                 data: { role: UserRole.ADMIN, trainerVerified: true },
               });
@@ -384,7 +385,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, user }) {
       if (session.user && user) {
         // Add user role and safety info to session
-        const dbUser = await prisma.user.findUnique({
+        const dbUser = await prisma.users.findUnique({
           where: { id: user.id },
           select: {
             id: true,
