@@ -17,15 +17,14 @@ import { ModerationAction, ModerationSource } from '@prisma/client';
 // OPENAI CLIENT SETUP
 // ============================================================================
 
-// Validate environment variables
-if (!process.env.OPENAI_API_KEY) {
-  throw new Error('OPENAI_API_KEY environment variable is required');
-}
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  organization: process.env.OPENAI_ORG_ID, // Optional
-});
+// Initialize OpenAI client only if configured. Never throw on import.
+const OPENAI_ENABLED = Boolean(process.env.OPENAI_API_KEY);
+const openai = OPENAI_ENABLED
+  ? new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+      organization: process.env.OPENAI_ORG_ID, // Optional
+    })
+  : null;
 
 // Configuration
 const MODERATION_CONFIG = {
@@ -64,6 +63,13 @@ export async function moderateContent(
   context?: ModerationContext
 ): Promise<ModerationResult> {
   try {
+    // If OpenAI is not configured, return a permissive safe result with logging.
+    if (!OPENAI_ENABLED || !openai) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('[moderation] OPENAI_API_KEY not set; returning SAFE result.');
+      }
+      return createSafeResult('Moderation disabled (no API key)');
+    }
     // Pre-processing checks
     if (!content || content.trim().length === 0) {
       return createSafeResult('Empty content provided');
@@ -151,6 +157,7 @@ export async function moderateContentBatch(
  * Call OpenAI Moderation API with retry logic
  */
 async function callOpenAIModerationAPI(content: string): Promise<OpenAIModerationResponse> {
+  if (!openai) throw new Error('OpenAI client not initialized');
   const request: OpenAIModerationRequest = {
     input: content,
     model: MODERATION_CONFIG.model,
