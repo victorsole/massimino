@@ -29,12 +29,13 @@ export async function ensureDefaults() {
 export async function createPartner(formData: FormData) {
   const name = String(formData.get('name') || '');
   if (!name) return;
+  const logoUrlRaw = String(formData.get('logoUrl') || '');
   await prisma.partners.create({
     data: {
       name,
       country: String(formData.get('country') || '') || null,
       url: String(formData.get('url') || ''),
-      logoUrl: (String(formData.get('logoUrl') || '') || null)?.replace?.(/^\/assets\/images\//, '/images/'),
+      logoUrl: logoUrlRaw ? logoUrlRaw.replace(/^\/assets\/images\//, '/images/') : null,
       description: String(formData.get('description') || '') || null,
       tags: String(formData.get('tags') || '')?.split(',').map((s) => s.trim()).filter(Boolean) || [],
       isActive: true,
