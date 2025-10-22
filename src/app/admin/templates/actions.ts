@@ -23,7 +23,7 @@ export async function createWorkoutTemplateAction(formData: FormData) {
 
   if (!name) throw new Error('Name is required')
 
-  await prisma.workoutTemplate.create({
+  await prisma.workout_templates.create({
     data: {
       name,
       description,
@@ -60,7 +60,7 @@ export async function updateWorkoutTemplateAction(formData: FormData) {
 
   if (!id || !name) throw new Error('ID and name are required')
 
-  await prisma.workoutTemplate.update({
+  await prisma.workout_templates.update({
     where: { id },
     data: {
       name,
@@ -85,7 +85,7 @@ export async function deleteWorkoutTemplateAction(formData: FormData) {
   const id = String(formData.get('id') || '')
   if (!id) throw new Error('ID is required')
 
-  await prisma.workoutTemplate.update({
+  await prisma.workout_templates.update({
     where: { id },
     data: { isActive: false }
   })
@@ -107,7 +107,7 @@ export async function createProgramTemplateAction(formData: FormData) {
 
   if (!name || !duration) throw new Error('Name and duration are required')
 
-  await prisma.programTemplate.create({
+  await prisma.program_templates.create({
     data: {
       name,
       description,
@@ -139,7 +139,7 @@ export async function updateProgramTemplateAction(formData: FormData) {
 
   if (!id || !name || !duration) throw new Error('ID, name and duration are required')
 
-  await prisma.programTemplate.update({
+  await prisma.program_templates.update({
     where: { id },
     data: {
       name,
@@ -163,7 +163,7 @@ export async function deleteProgramTemplateAction(formData: FormData) {
   const id = String(formData.get('id') || '')
   if (!id) throw new Error('ID is required')
 
-  await prisma.programTemplate.update({
+  await prisma.program_templates.update({
     where: { id },
     data: { isActive: false }
   })
