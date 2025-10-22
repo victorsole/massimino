@@ -49,7 +49,7 @@ export async function GET(
         }
       },
       include: {
-        challenge: {
+        challenges: {
           select: {
             title: true,
             metrics: true,
@@ -58,7 +58,7 @@ export async function GET(
             status: true
           }
         },
-        user: {
+        users: {
           select: {
             id: true,
             name: true,
@@ -81,7 +81,7 @@ export async function GET(
       data: {
         participation,
         progressHistory: participation.progressUpdates,
-        challengeMetrics: participation.challenge.metrics
+        challengeMetrics: participation.challenges.metrics
       }
     });
 
@@ -134,7 +134,7 @@ export async function POST(
         }
       },
       include: {
-        challenge: {
+        challenges: {
           select: {
             status: true,
             startDate: true,
@@ -165,13 +165,13 @@ export async function POST(
       }, { status: 400 });
     }
 
-    if (progressDate < participation.challenge.startDate) {
+    if (progressDate < participation.challenges.startDate) {
       return NextResponse.json({
         error: 'Cannot log progress before challenge start date'
       }, { status: 400 });
     }
 
-    if (progressDate > participation.challenge.endDate) {
+    if (progressDate > participation.challenges.endDate) {
       return NextResponse.json({
         error: 'Cannot log progress after challenge end date'
       }, { status: 400 });
@@ -212,7 +212,7 @@ export async function POST(
     // Calculate aggregated progress based on challenge metrics
     const aggregatedProgress = calculateAggregatedProgress(
       allProgress,
-      participation.challenge.metrics
+      participation.challenges.metrics
     );
 
     // Update participant record
@@ -225,7 +225,7 @@ export async function POST(
     });
 
     // Update leaderboard if challenge is active
-    if (participation.challenge.status === 'ACTIVE') {
+    if (participation.challenges.status === 'ACTIVE') {
       await updateChallengeLeaderboard(challengeId, session.user.id, aggregatedProgress);
     }
 
