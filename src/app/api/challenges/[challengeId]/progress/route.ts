@@ -321,7 +321,7 @@ async function updateChallengeLeaderboard(challengeId: string, userId: string, p
     }
 
     // Update or create leaderboard entry
-    await prisma.challengeLeaderboard.upsert({
+    await prisma.challenge_leaderboard.upsert({
       where: {
         challengeId_userId: {
           challengeId,
@@ -334,6 +334,7 @@ async function updateChallengeLeaderboard(challengeId: string, userId: string, p
         lastUpdated: new Date()
       },
       create: {
+        id: crypto.randomUUID(),
         challengeId,
         userId,
         rank: 1, // Will be recalculated
