@@ -3,12 +3,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default async function AdsMetricsSection() {
   try {
-    const impressions = await prisma.ad_events.groupBy({
+    const impressions = await (prisma as any).ad_events.groupBy({
       by: ['placement'],
       where: { event: 'IMPRESSION' as any },
       _count: { _all: true },
     });
-    const clicks = await prisma.ad_events.groupBy({
+    const clicks = await (prisma as any).ad_events.groupBy({
       by: ['placement'],
       where: { event: 'CLICK' as any },
       _count: { _all: true },
