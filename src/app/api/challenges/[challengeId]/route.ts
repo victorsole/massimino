@@ -351,7 +351,7 @@ async function handleGetChallengeDetails(challengeId: string, session: any) {
       },
       leaderboard: {
         include: {
-          user: {
+          users: {
             select: {
               id: true,
               name: true,
@@ -486,7 +486,7 @@ async function handleGetProgress(challengeId: string, request: Request, session:
   const participation = await prisma.challenge_participants.findUnique({
     where: { challengeId_userId: { challengeId, userId } },
     include: {
-      challenge: {
+      challenges: {
         select: {
           title: true,
           metrics: true,
@@ -495,8 +495,8 @@ async function handleGetProgress(challengeId: string, request: Request, session:
           status: true
         }
       },
-      user: { select: { id: true, name: true, image: true } },
-      progressUpdates: {
+      users: { select: { id: true, name: true, image: true } },
+      challenge_progress: {
         orderBy: { date: 'desc' },
         take: 30
       }
@@ -512,7 +512,7 @@ async function handleGetProgress(challengeId: string, request: Request, session:
     data: {
       participation,
       progressHistory: participation.progressUpdates,
-      challengeMetrics: participation.challenge.metrics
+      challengeMetrics: participation.challenges.metrics
     }
   });
 }
@@ -667,8 +667,8 @@ async function handleJoinChallenge(challengeId: string, body: any, session: any)
       currentProgress: {}
     },
     include: {
-      user: { select: { id: true, name: true, image: true } },
-      challenge: { select: { title: true, entryFee: true } }
+      users: { select: { id: true, name: true, image: true } },
+      challenges: { select: { title: true, entryFee: true } }
     }
   });
 
@@ -702,7 +702,7 @@ async function handleLeaveChallenge(challengeId: string, session: any) {
   const participation = await prisma.challenge_participants.findUnique({
     where: { challengeId_userId: { challengeId, userId: session.user.id } },
     include: {
-      challenge: { select: { status: true, entryFee: true, startDate: true } }
+      challenges: { select: { status: true, entryFee: true, startDate: true } }
     }
   });
 
@@ -710,13 +710,13 @@ async function handleLeaveChallenge(challengeId: string, session: any) {
     return NextResponse.json({ error: 'Not participating in this challenge' }, { status: 404 });
   }
 
-  if (participation.challenge.status === 'ACTIVE') {
+  if (participation.challenges.status === 'ACTIVE') {
     return NextResponse.json({
       error: 'Cannot leave challenge after it has started'
     }, { status: 400 });
   }
 
-  if (participation.challenge.status === 'COMPLETED') {
+  if (participation.challenges.status === 'COMPLETED') {
     return NextResponse.json({
       error: 'Cannot leave completed challenge'
     }, { status: 400 });
@@ -778,11 +778,11 @@ async function handleUpdateProgress(challengeId: string, body: any, session: any
     return NextResponse.json({ error: 'Cannot log progress for future dates' }, { status: 400 });
   }
 
-  if (progressDate < participation.challenge.startDate) {
+  if (progressDate < participation.challenges.startDate) {
     return NextResponse.json({ error: 'Cannot log progress before challenge start date' }, { status: 400 });
   }
 
-  if (progressDate > participation.challenge.endDate) {
+  if (progressDate > participation.challenges.endDate) {
     return NextResponse.json({ error: 'Cannot log progress after challenge end date' }, { status: 400 });
   }
 
@@ -812,14 +812,14 @@ async function handleUpdateProgress(challengeId: string, body: any, session: any
     orderBy: { date: 'asc' }
   });
 
-  const aggregatedProgress = calculateAggregatedProgress(allProgress, participation.challenge.metrics);
+  const aggregatedProgress = calculateAggregatedProgress(allProgress, participation.challenges.metrics);
 
   await prisma.challenge_participants.update({
     where: { id: participation.id },
     data: { currentProgress: aggregatedProgress, updatedAt: new Date() }
   });
 
-  if (participation.challenge.status === 'ACTIVE') {
+  if (participation.challenges.status === 'ACTIVE') {
     await updateChallengeLeaderboard(challengeId, session.user.id, aggregatedProgress);
   }
 
