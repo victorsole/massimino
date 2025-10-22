@@ -64,7 +64,7 @@ export async function GET(
           status: status as any
         },
         include: {
-          user: {
+          users: {
             select: {
               id: true,
               name: true,
@@ -203,7 +203,7 @@ export async function POST(
         currentProgress: {}
       },
       include: {
-        user: {
+        users: {
           select: {
             id: true,
             name: true,
