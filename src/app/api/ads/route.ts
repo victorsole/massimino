@@ -16,7 +16,7 @@ function readFreqCookie() {
   } catch { return {}; }
 }
 
-function writeFreqCookie(freq: Record<string, number[]>) {
+function _writeFreqCookie(freq: Record<string, number[]>) {
   const store = cookies();
   store.set('ad_freq', JSON.stringify(freq), { httpOnly: false, sameSite: 'lax', maxAge: 60 * 60 * 24 });
 }
@@ -28,7 +28,7 @@ function readLastCookie() {
   } catch { return {}; }
 }
 
-function writeLastCookie(last: Record<string, string>) {
+function _writeLastCookie(last: Record<string, string>) {
   const store = cookies();
   store.set('ad_last', JSON.stringify(last), { httpOnly: false, sameSite: 'lax', maxAge: 60 * 60 * 24 });
 }
