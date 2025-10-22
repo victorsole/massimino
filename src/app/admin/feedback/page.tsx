@@ -250,7 +250,7 @@ export default async function AdminFeedbackPage() {
                             <span className="text-gray-800">{c.content}</span>
                           </div>
                         ))}
-                        {(!commentMap[r.id] || commentMap[r.id].length === 0) && (
+                        {(!commentMap[r.id] || commentMap[r.id]?.length === 0) && (
                           <div className="text-xs text-gray-400">No comments yet.</div>
                         )}
                       </div>
