@@ -70,7 +70,6 @@ async function addVictorGoogleUser() {
         token_type: 'Bearer',
         scope: 'openid email profile',
         id_token: 'dummy_id_token',
-        updatedAt: new Date(),
       }
     });
 
