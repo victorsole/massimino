@@ -440,7 +440,7 @@ async function handleGetParticipants(challengeId: string, request: Request, sess
     prisma.challenge_participants.findMany({
       where: { challengeId, status: status as any },
       include: {
-        user: { select: { id: true, name: true, image: true } }
+        users: { select: { id: true, name: true, image: true } }
       },
       orderBy: [{ rank: 'asc' }, { joinedAt: 'asc' }],
       skip,
@@ -564,7 +564,7 @@ async function handleGetLeaderboard(challengeId: string, request: Request, sessi
     prisma.challenge_leaderboard.findMany({
       where: { challengeId },
       include: {
-        user: { select: { id: true, name: true, image: true } }
+        users: { select: { id: true, name: true, image: true } }
       },
       orderBy: { rank: 'asc' },
       skip,
