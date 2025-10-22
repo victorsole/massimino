@@ -8,6 +8,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
 import { moderateContent } from '@/services/moderation/openai';
+import crypto from 'crypto';
 
 // ============================================================================
 // GET - Fetch challenges with filtering
@@ -62,10 +63,10 @@ export async function GET(request: Request) {
     }
 
     const [challenges, total] = await Promise.all([
-      prisma.challenge.findMany({
+      prisma.challenges.findMany({
         where,
         include: {
-          creator: {
+          users: { // creator
             select: {
               id: true,
               name: true,
@@ -75,13 +76,13 @@ export async function GET(request: Request) {
           },
           _count: {
             select: {
-              participants: {
+              challenge_participants: {
                 where: { status: 'REGISTERED' }
               }
             }
           },
           ...(session?.user?.id && {
-            participants: {
+            challenge_participants: {
               where: { userId: session.user.id },
               select: {
                 status: true,
@@ -101,7 +102,7 @@ export async function GET(request: Request) {
         take: limit
       }),
 
-      prisma.challenge.count({ where })
+      prisma.challenges.count({ where })
     ]);
 
     return NextResponse.json({
@@ -109,7 +110,7 @@ export async function GET(request: Request) {
       data: {
         challenges: challenges.map(challenge => ({
           ...challenge,
-          userParticipation: challenge.participants?.[0] || null
+          userParticipation: challenge.challenge_participants?.[0] || null
         })),
         pagination: {
           page,
@@ -197,8 +198,9 @@ export async function POST(request: Request) {
     }
 
     // Create the challenge
-    const challenge = await prisma.challenge.create({
+    const challenge = await prisma.challenges.create({
       data: {
+        id: crypto.randomUUID(),
         title,
         description,
         creatorId: session.user.id,
@@ -217,10 +219,11 @@ export async function POST(request: Request) {
         rewards,
         coverImage,
         tags,
-        status: 'UPCOMING'
+        status: 'UPCOMING',
+        updatedAt: new Date()
       },
       include: {
-        creator: {
+        users: { // creator
           select: {
             id: true,
             name: true,

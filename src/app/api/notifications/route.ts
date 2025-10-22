@@ -9,6 +9,7 @@ import { authOptions } from '@/core';
 import { DevicePlatform } from '@prisma/client';
 import { prisma } from '@/core/database';
 import { z } from 'zod';
+import crypto from 'crypto';
 
 // Validation schemas
 const registerDeviceSchema = z.object({
@@ -63,7 +64,7 @@ export async function GET(request: NextRequest) {
     switch (type) {
       case 'devices': {
         // Get user's registered devices
-        const devices = await prisma.deviceToken.findMany({
+        const devices = await prisma.device_tokens.findMany({
           where: {
             userId: session.user.id,
             isActive: true,
@@ -89,9 +90,9 @@ export async function GET(request: NextRequest) {
         // Get user's chat conversations
         const limit = parseInt(searchParams.get('limit') || '20');
 
-        const chatRooms = await prisma.chatRoom.findMany({
+        const chatRooms = await prisma.chat_rooms.findMany({
           where: {
-            participants: {
+            chat_room_participants: {
               some: {
                 userId: session.user.id,
                 isActive: true,
@@ -100,10 +101,10 @@ export async function GET(request: NextRequest) {
             isActive: true,
           },
           include: {
-            participants: {
+            chat_room_participants: {
               where: { isActive: true },
               include: {
-                user: {
+                users: {
                   select: {
                     id: true,
                     name: true,
@@ -112,11 +113,11 @@ export async function GET(request: NextRequest) {
                 },
               },
             },
-            messages: {
+            chat_messages: {
               orderBy: { createdAt: 'desc' },
               take: 1,
               include: {
-                sender: {
+                users: { // sender
                   select: {
                     id: true,
                     name: true,
@@ -132,7 +133,7 @@ export async function GET(request: NextRequest) {
         // Calculate unread counts and format response
         const conversations = await Promise.all(
           chatRooms.map(async (room) => {
-            const unreadCount = await prisma.chatMessage.count({
+            const unreadCount = await prisma.chat_messages.count({
               where: {
                 roomId: room.id,
                 senderId: { not: session.user.id },
@@ -147,17 +148,17 @@ export async function GET(request: NextRequest) {
               id: room.id,
               name: room.name,
               type: room.type,
-              lastMessage: room.messages[0] ? {
-                id: room.messages[0].id,
-                content: room.messages[0].content,
-                createdAt: room.messages[0].createdAt.toISOString(),
-                senderId: room.messages[0].senderId,
-                senderName: room.messages[0].sender.name,
+              lastMessage: room.chat_messages[0] ? {
+                id: room.chat_messages[0].id,
+                content: room.chat_messages[0].content,
+                createdAt: room.chat_messages[0].createdAt.toISOString(),
+                senderId: room.chat_messages[0].senderId,
+                senderName: room.chat_messages[0].users.name,
               } : undefined,
-              participants: room.participants.map(p => ({
-                userId: p.user.id,
-                userName: p.user.name,
-                userImage: p.user.image,
+              chat_room_participants: room.chat_room_participants.map(p => ({
+                userId: p.users.id,
+                userName: p.users.name,
+                userImage: p.users.image,
               })),
               unreadCount,
               updatedAt: room.updatedAt.toISOString(),
@@ -178,7 +179,7 @@ export async function GET(request: NextRequest) {
         const skip = (page - 1) * limit;
 
         const [notifications, total] = await Promise.all([
-          prisma.pushNotification.findMany({
+          prisma.push_notifications.findMany({
             where: { userId: session.user.id },
             orderBy: { createdAt: 'desc' },
             skip,
@@ -193,7 +194,7 @@ export async function GET(request: NextRequest) {
               scheduledAt: true,
             },
           }),
-          prisma.pushNotification.count({
+          prisma.push_notifications.count({
             where: { userId: session.user.id },
           }),
         ]);
@@ -250,7 +251,7 @@ export async function POST(request: NextRequest) {
           p === 'ios' ? 'IOS' : p === 'android' ? 'ANDROID' : 'WEB';
 
         // Check if device token already exists
-        const existingToken = await prisma.deviceToken.findFirst({
+        const existingToken = await prisma.device_tokens.findFirst({
           where: {
             token,
             userId: session.user.id,
@@ -259,7 +260,7 @@ export async function POST(request: NextRequest) {
 
         if (existingToken) {
           // Update existing token
-          const updatedToken = await prisma.deviceToken.update({
+          const updatedToken = await prisma.device_tokens.update({
             where: { id: existingToken.id },
             data: {
               platform: mapPlatform(platform),
@@ -276,8 +277,9 @@ export async function POST(request: NextRequest) {
         }
 
         // Create new device token
-        const newToken = await prisma.deviceToken.create({
+        const newToken = await prisma.device_tokens.create({
           data: {
+            id: crypto.randomUUID(),
             userId: session.user.id,
             token,
             platform: mapPlatform(platform),
@@ -322,7 +324,7 @@ export async function POST(request: NextRequest) {
             status: 'ACTIVE',
           },
           include: {
-            deviceTokens: {
+            device_tokens: {
               where: { isActive: true },
             },
           },
@@ -339,7 +341,7 @@ export async function POST(request: NextRequest) {
 
         // Send notifications to all target users
         for (const user of targetUsers) {
-          if (user.deviceTokens.length === 0) continue;
+          if (user.device_tokens.length === 0) continue;
 
           // Create notification record
           const createData: any = {
@@ -350,12 +352,12 @@ export async function POST(request: NextRequest) {
             scheduledAt: scheduledTime ? new Date(scheduledTime) : null,
           };
           if (data !== undefined) createData.data = data;
-          const notification = await prisma.pushNotification.create({ data: createData });
+          const notification = await prisma.push_notifications.create({ data: createData });
 
           notifications.push(notification);
 
           // Send to each device
-          for (const deviceToken of user.deviceTokens) {
+          for (const deviceToken of user.device_tokens) {
             try {
               if (scheduledTime) {
                 // Schedule notification for later
@@ -375,7 +377,7 @@ export async function POST(request: NextRequest) {
               }
 
               // Update notification status
-              await prisma.pushNotification.update({
+              await prisma.push_notifications.update({
                 where: { id: notification.id },
                 data: { status: 'SENT' },
               });
@@ -384,7 +386,7 @@ export async function POST(request: NextRequest) {
               console.error(`Failed to send notification to ${deviceToken.token}:`, error);
 
               // Update notification status to failed
-              await prisma.pushNotification.update({
+              await prisma.push_notifications.update({
                 where: { id: notification.id },
                 data: {
                   status: 'FAILED',
@@ -404,7 +406,7 @@ export async function POST(request: NextRequest) {
       case 'mark_read': {
         const { notificationId } = markReadSchema.parse(body);
 
-        const notification = await prisma.pushNotification.findFirst({
+        const notification = await prisma.push_notifications.findFirst({
           where: {
             id: notificationId,
             userId: session.user.id,
@@ -425,7 +427,7 @@ export async function POST(request: NextRequest) {
           });
         }
 
-        await prisma.pushNotification.update({
+        await prisma.push_notifications.update({
           where: { id: notificationId },
           data: { readAt: new Date() },
         });
@@ -440,7 +442,7 @@ export async function POST(request: NextRequest) {
         const { token } = unregisterDeviceSchema.parse(body);
 
         // Deactivate the device token
-        await prisma.deviceToken.updateMany({
+        await prisma.device_tokens.updateMany({
           where: {
             token,
             userId: session.user.id,
@@ -504,7 +506,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Deactivate the device token
-    await prisma.deviceToken.updateMany({
+    await prisma.device_tokens.updateMany({
       where: {
         token,
         userId: session.user.id,

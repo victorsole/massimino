@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
         status: 'ACTIVE',
       },
       include: {
-        deviceTokens: {
+        device_tokens: {
           where: { isActive: true },
         },
       },
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
 
     // Send notifications to all target users
     for (const user of targetUsers) {
-      if (user.deviceTokens.length === 0) continue;
+      if (user.device_tokens.length === 0) continue;
 
       // Create notification record
       const createData: any = {
@@ -85,12 +85,12 @@ export async function POST(request: NextRequest) {
         scheduledAt: scheduledTime ? new Date(scheduledTime) : null,
       };
       if (data !== undefined) createData.data = data;
-      const notification = await prisma.pushNotification.create({ data: createData });
+      const notification = await prisma.push_notifications.create({ data: createData });
 
       notifications.push(notification);
 
       // Send to each device
-      for (const deviceToken of user.deviceTokens) {
+      for (const deviceToken of user.device_tokens) {
         try {
           if (scheduledTime) {
             // Schedule notification for later
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
           }
 
           // Update notification status
-          await prisma.pushNotification.update({
+          await prisma.push_notifications.update({
             where: { id: notification.id },
             data: { status: 'SENT' },
           });
@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
           console.error(`Failed to send notification to ${deviceToken.token}:`, error);
 
           // Update notification status to failed
-          await prisma.pushNotification.update({
+          await prisma.push_notifications.update({
             where: { id: notification.id },
             data: {
               status: 'FAILED',

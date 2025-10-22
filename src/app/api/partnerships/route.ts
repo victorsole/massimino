@@ -63,6 +63,9 @@ export async function POST(req: Request) {
       const lead = await PartnershipsService.createLead({
         type,
         ...payload,
+        phone: payload.phone ?? null,
+        website: payload.website ?? null,
+        details: payload.details ?? null,
       });
 
       // Confirmation email to lead (optional)

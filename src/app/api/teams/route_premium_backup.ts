@@ -52,7 +52,7 @@ export async function GET(request: Request) {
     }
 
     const [teams, total] = await Promise.all([
-      prisma.premiumCommunity.findMany({
+      prisma.premium_communities.findMany({
         where,
         include: {
           owner: {
@@ -91,7 +91,7 @@ export async function GET(request: Request) {
         take: limit
       }),
 
-      prisma.premiumCommunity.count({ where })
+      prisma.premium_communities.count({ where })
     ]);
 
     return NextResponse.json({
@@ -175,7 +175,7 @@ export async function POST(request: Request) {
     }
 
     // Create the premium team
-    const team = await prisma.premiumCommunity.create({
+    const team = await prisma.premium_communities.create({
       data: {
         name,
         description,
@@ -237,7 +237,7 @@ export async function POST(request: Request) {
  * Check if user can access team content
  */
 export async function checkTeamAccess(teamId: string, userId: string): Promise<boolean> {
-  const membership = await prisma.premiumMembership.findUnique({
+  const membership = await prisma.premium_memberships.findUnique({
     where: {
       communityId_userId: {
         communityId: teamId,
@@ -263,7 +263,7 @@ export async function checkTeamAccess(teamId: string, userId: string): Promise<b
 export async function getTeamStats(teamId: string) {
   const [activeMembers, totalRevenue, recentJoins] = await Promise.all([
     // Active members count
-    prisma.premiumMembership.count({
+    prisma.premium_memberships.count({
       where: {
         communityId: teamId,
         status: 'ACTIVE'
@@ -271,7 +271,7 @@ export async function getTeamStats(teamId: string) {
     }),
 
     // Total revenue (would need payment integration)
-    prisma.premiumMembership.count({
+    prisma.premium_memberships.count({
       where: {
         communityId: teamId,
         status: { in: ['ACTIVE', 'EXPIRED'] }
@@ -279,7 +279,7 @@ export async function getTeamStats(teamId: string) {
     }),
 
     // Recent joins (last 30 days)
-    prisma.premiumMembership.count({
+    prisma.premium_memberships.count({
       where: {
         communityId: teamId,
         startDate: {
