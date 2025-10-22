@@ -1,10 +1,10 @@
 # 🛡️ Massimino - 
 
-**Massimino** is a professional-grade, anti-creep fitness platform built to protect personal trainers and clients while enabling evidence-based, NASM-aligned programming. Our mission is to foster a respectful, secure, and effective training environment for all.
+**Massimino** is a professional-grade, anti-creep fitness platform built to protect personal trainers and athletes while enabling evidence-based, NASM-aligned programming. Our mission is to foster a respectful, secure, and effective training environment for all.
 
 ## 🎯 Mission
 
-Massimino creates a zero-tolerance, anti-creep environment for fitness professionals and enthusiasts. We actively protect personal trainers and clients from inappropriate interactions while keeping the community focused on health, fitness, and respectful engagement.
+Massimino creates a zero-tolerance, anti-creep environment for fitness professionals and enthusiasts. We actively protect personal trainers and athletes from inappropriate interactions while keeping the community focused on health, fitness, and respectful engagement.
 
 ---
 
@@ -12,12 +12,20 @@ Massimino creates a zero-tolerance, anti-creep environment for fitness professio
 
 ### 🔐 Core Platform
 - **Certified Coach Profiles** — NASM/ACE/ACSM credential validation
-- **Team-Based Management** — Coach-led client communities
+- **Team-Based Management** — Coach-led athlete communities
 - **NASM-Based Assessments** — Static/dynamic posture, cardio, and mobility testing
 - **Professional Workout Programming** — OPT model-based, phase-driven templates
 - **Progress Tracking** — Strength, endurance, mobility, and wellness analytics
 - **Secure Messaging** — Real-time, moderated, professional communication
 - **Payments** — Mollie integration for seamless coaching transactions
+
+---
+
+## 📝 Language Style Guide (UI Copy)
+
+- Use “Athlete” in all user‑facing copy where traditional tools would say “Client”.
+- Keep “CLIENT” for technical contexts only (e.g., role values, database fields, API params), and for code terms like `use client`, “Prisma client”, or “HTTP client”.
+- When displaying a user’s role, map `CLIENT → Athlete`, `TRAINER → Trainer`, `ADMIN → Admin`.
 
 ### 🛡️ Safety Infrastructure
 - **AI Content Moderation** — Real-time message scanning (OpenAI Moderation API)

@@ -1,6 +1,58 @@
+"use client";
+
 import Link from 'next/link';
+import { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function Footer() {
+  const [open, setOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [type, setType] = useState<'BUG' | 'FEATURE' | 'GENERAL' | 'NPS'>('GENERAL');
+  const [title, setTitle] = useState('');
+  const [message, setMessage] = useState('');
+  const [email, setEmail] = useState('');
+  const [nps, setNps] = useState<string>('');
+  const [success, setSuccess] = useState<string | null>(null);
+
+  async function submitFeedback() {
+    try {
+      setSubmitting(true);
+      const payload: any = {
+        type,
+        title: title || undefined,
+        message: message || undefined,
+        email: email || undefined,
+        url: typeof window !== 'undefined' ? window.location.href : undefined,
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
+        platform: 'WEB',
+      };
+      if (type === 'NPS') {
+        const score = Number(nps);
+        if (Number.isFinite(score)) payload.nps_score = score;
+      }
+      const res = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error || 'Failed to submit');
+      setSuccess('Thanks for your feedback!');
+      setTitle('');
+      setMessage('');
+      setEmail('');
+      setNps('');
+      setType('GENERAL');
+    } catch (e: any) {
+      alert(e?.message || 'Failed to submit feedback');
+    } finally {
+      setSubmitting(false);
+    }
+  }
   return (
     <footer className="bg-brand-secondary-dark border-t border-brand-primary-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -68,9 +120,9 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-gray-600 hover:text-brand-primary transition-colors">
+                <button onClick={() => setOpen(true)} className="text-gray-600 hover:text-brand-primary transition-colors">
                   Contact Us
-                </Link>
+                </button>
               </li>
             </ul>
           </div>
@@ -95,6 +147,58 @@ export default function Footer() {
           </div>
         </div>
       </div>
+      {/* Feedback Dialog */}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Send Feedback</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div>
+              <label className="text-sm text-gray-600">Type</label>
+              <Select value={type} onValueChange={(v: any) => setType(v)}>
+                <SelectTrigger className="mt-1"><SelectValue placeholder="Select type" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="GENERAL">General</SelectItem>
+                  <SelectItem value="BUG">Bug</SelectItem>
+                  <SelectItem value="FEATURE">Feature Request</SelectItem>
+                  <SelectItem value="NPS">NPS</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {type !== 'NPS' && (
+              <div>
+                <label className="text-sm text-gray-600">Title (optional)</label>
+                <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Short summary" />
+              </div>
+            )}
+            {type === 'NPS' ? (
+              <div>
+                <label className="text-sm text-gray-600">NPS Score (0-10)</label>
+                <Input value={nps} onChange={(e) => setNps(e.target.value)} placeholder="e.g. 9" />
+              </div>
+            ) : (
+              <div>
+                <label className="text-sm text-gray-600">Message</label>
+                <Textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Tell us more..." rows={4} />
+              </div>
+            )}
+            <div>
+              <label className="text-sm text-gray-600">Email (optional, for follow-up)</label>
+              <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
+            </div>
+            {success && (
+              <div className="text-sm text-emerald-600">{success}</div>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpen(false)}>Close</Button>
+            <Button onClick={submitFeedback} disabled={submitting}>
+              {submitting ? 'Sending...' : 'Send'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </footer>
   );
 }

@@ -102,18 +102,29 @@ function determineCategory(row: CSVExercise): string {
 
 async function importExercises() {
   try {
-    console.log('Reading CSV file...');
-    const csvPath = path.join(process.cwd(), 'public', 'databases', 'exercises.csv');
-    const csvContent = fs.readFileSync(csvPath, 'utf-8');
+    console.log('Reading CSV files...');
+    const csvPath1 = path.join(process.cwd(), 'public', 'databases', 'exercises.csv');
+    const csvPath2 = path.join(process.cwd(), 'public', 'databases', 'megaGymDataset.csv');
+    const csvContent1 = fs.readFileSync(csvPath1, 'utf-8');
+    const csvContent2 = fs.existsSync(csvPath2) ? fs.readFileSync(csvPath2, 'utf-8') : '';
 
     console.log('Parsing CSV data...');
-    const records: CSVExercise[] = parse(csvContent, {
+    const records1: CSVExercise[] = parse(csvContent1, {
       columns: true,
       skip_empty_lines: true,
       trim: true
     });
 
-    console.log(`Found ${records.length} exercises in CSV`);
+    // Attempt to parse megaGymDataset with lenient mapping if present
+    let records2: any[] = []
+    if (csvContent2) {
+      try {
+        records2 = parse(csvContent2, { columns: true, skip_empty_lines: true, trim: true })
+      } catch {}
+    }
+
+    console.log(`Found ${records1.length} exercises in exercises.csv`);
+    console.log(`Found ${records2.length} exercises in megaGymDataset.csv`);
 
     // Check existing exercises
     const existingExercises = await prisma.exercises.findMany({
@@ -126,9 +137,41 @@ async function importExercises() {
     let skipped = 0;
     let errors = 0;
 
-    for (const row of records) {
+    // Merge both datasets; first primary, then megaGym
+    const merged = [
+      ...records1.map(r => ({ source: 'primary', row: r })),
+      ...records2.map(r => ({ source: 'mega', row: r }))
+    ]
+
+    for (const item of merged) {
       try {
-        const exerciseName = row['Exercise']?.trim();
+        let exerciseName = ''
+        let muscleGroups: string[] = []
+        let equipment: string[] = []
+        let category = 'Strength'
+        let difficulty = 'BEGINNER'
+        let slug = ''
+
+        if (item.source === 'primary') {
+          const row = item.row as CSVExercise
+          exerciseName = row['Exercise']?.trim() || ''
+          muscleGroups = extractMuscleGroups(row)
+          equipment = extractEquipment(row)
+          category = determineCategory(row)
+          difficulty = normalizeDifficulty(row['Difficulty Level'])
+          slug = createSlug(exerciseName)
+        } else {
+          const row = item.row as any
+          // Best-effort mapping for megaGymDataset
+          exerciseName = (row.name || row.Exercise || row.Title || '').trim()
+          const mgStr = row.muscle || row.muscle_group || row['Target Muscle Group'] || ''
+          muscleGroups = String(mgStr).split(',').map((s: string) => s.trim()).filter(Boolean)
+          const eqStr = row.equipment || row['Primary Equipment'] || ''
+          equipment = String(eqStr).split(',').map((s: string) => s.trim()).filter(Boolean)
+          category = (row.category || row.type || 'Strength').toString()
+          difficulty = normalizeDifficulty(row.difficulty || 'BEGINNER')
+          slug = createSlug(exerciseName)
+        }
 
         // Skip if no name or already exists
         if (!exerciseName) {
@@ -140,12 +183,6 @@ async function importExercises() {
           skipped++;
           continue;
         }
-
-        const muscleGroups = extractMuscleGroups(row);
-        const equipment = extractEquipment(row);
-        const category = determineCategory(row);
-        const difficulty = normalizeDifficulty(row['Difficulty Level']);
-        const slug = createSlug(exerciseName);
 
         // Create the exercise
         await prisma.exercises.create({

@@ -579,7 +579,7 @@ export default function ProfessionalInterface() {
               <DialogHeader>
                 <DialogTitle>Create Fitness Challenge</DialogTitle>
                 <DialogDescription>
-                  Create engaging fitness challenges for your clients and the community
+                  Create engaging fitness challenges for your athletes and the community
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4 max-h-96 overflow-y-auto">

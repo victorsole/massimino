@@ -39,6 +39,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                   Overview
                 </Link>
                 <Link
+                  href="/admin/feedback"
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:text-brand-primary hover:bg-brand-secondary/20 rounded-md transition-colors"
+                >
+                  <span className="w-2 h-2 bg-gray-400 rounded-full"></span>
+                  Feedback
+                </Link>
+                <Link
                   href="/admin/users"
                   className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:text-brand-primary hover:bg-brand-secondary/20 rounded-md transition-colors"
                 >
@@ -163,6 +170,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                 >
                   <span className="w-2 h-2 bg-green-400 rounded-full"></span>
                   Revenue Management
+                </Link>
+                <Link
+                  href="/admin/partnerships"
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:text-brand-primary hover:bg-brand-secondary/20 rounded-md transition-colors"
+                >
+                  <span className="w-2 h-2 bg-amber-400 rounded-full"></span>
+                  Partnerships
                 </Link>
                 {/* TODO: Create Subscriptions page
                 <Link

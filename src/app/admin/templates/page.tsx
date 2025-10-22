@@ -50,58 +50,59 @@ export default async function AdminTemplatesPage({ searchParams }: PageProps) {
   }
 
   // Get workout templates
-  const [workoutTemplates, workoutTotal] = await Promise.all([
-    prisma.workoutTemplate.findMany({
+  const [workoutTemplatesRaw, workoutTotal] = await Promise.all([
+    prisma.workout_templates.findMany({
       where: templateType === 'workout' ? whereCondition : { id: 'no-results' },
       include: {
-        creator: {
-          select: { id: true, name: true, email: true }
+        users: { select: { id: true, name: true, email: true } },
+        workout_template_exercises: {
+          include: { exercises: { select: { name: true } } }
         },
-        exercises: {
-          include: {
-            exercise: {
-              select: { name: true }
-            }
-          }
-        },
-        _count: {
-          select: {
-            purchases: true,
-            ratings: true
-          }
-        }
+        _count: { select: { template_purchases: true, template_ratings: true } }
       },
       skip: templateType === 'workout' ? (page - 1) * pageSize : 0,
       take: templateType === 'workout' ? pageSize : 0,
       orderBy: { updatedAt: 'desc' }
     }),
-    templateType === 'workout' ? prisma.workoutTemplate.count({ where: whereCondition }) : 0
+    templateType === 'workout' ? prisma.workout_templates.count({ where: whereCondition }) : 0
   ])
 
+  // Map to expected shape used by this page
+  const workoutTemplates = workoutTemplatesRaw.map((t: any) => ({
+    ...t,
+    creator: t.users,
+    exercises: t.workout_template_exercises,
+    _count: {
+      purchases: t._count?.template_purchases || 0,
+      ratings: t._count?.template_ratings || 0,
+    },
+  }))
+
   // Get program templates
-  const [programTemplates, programTotal] = await Promise.all([
-    prisma.programTemplate.findMany({
+  const [programTemplatesRaw, programTotal] = await Promise.all([
+    prisma.program_templates.findMany({
       where: templateType === 'program' ? whereCondition : { id: 'no-results' },
       include: {
-        creator: {
-          select: { id: true, name: true, email: true }
-        },
-        workouts: {
-          select: { name: true }
-        },
-        _count: {
-          select: {
-            subscriptions: true,
-            ratings: true
-          }
-        }
+        users: { select: { id: true, name: true, email: true } },
+        workout_templates: { select: { name: true } },
+        _count: { select: { program_subscriptions: true, program_ratings: true } }
       },
       skip: templateType === 'program' ? (page - 1) * pageSize : 0,
       take: templateType === 'program' ? pageSize : 0,
       orderBy: { updatedAt: 'desc' }
     }),
-    templateType === 'program' ? prisma.programTemplate.count({ where: whereCondition }) : 0
+    templateType === 'program' ? prisma.program_templates.count({ where: whereCondition }) : 0
   ])
+
+  const programTemplates = programTemplatesRaw.map((t: any) => ({
+    ...t,
+    creator: t.users,
+    workouts: t.workout_templates,
+    _count: {
+      subscriptions: t._count?.program_subscriptions || 0,
+      ratings: t._count?.program_ratings || 0,
+    },
+  }))
 
   const total = templateType === 'workout' ? workoutTotal : programTotal
   const hasPrev = page > 1

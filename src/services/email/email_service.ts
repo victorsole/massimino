@@ -147,3 +147,27 @@ export function isValidEmail(email: string): boolean {
 export function isEmailServiceConfigured(): boolean {
   return Boolean(process.env.RESEND_API_KEY);
 }
+
+/**
+ * Send a simple transactional email (generic helper)
+ */
+export async function sendEmail(params: { to: string; subject: string; text: string; replyTo?: string }): Promise<{ success: boolean; messageId?: string; error?: string }> {
+  try {
+    if (!resend) {
+      return { success: false, error: 'Email service not configured (missing RESEND_API_KEY)' };
+    }
+    const { data, error } = await resend.emails.send({
+      from: EMAIL_CONFIG.from,
+      to: params.to,
+      replyTo: params.replyTo || EMAIL_CONFIG.replyTo,
+      subject: params.subject,
+      text: params.text,
+    });
+    if (error) {
+      return { success: false, error: error.message || 'Failed to send email' };
+    }
+    return { success: true, messageId: data?.id };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Unknown error' };
+  }
+}

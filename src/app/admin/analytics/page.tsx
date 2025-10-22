@@ -140,6 +140,9 @@ export default async function AdminAnalyticsPage() {
     ]),
   ])
 
+  // Public content metrics (minimal linkage to public profile visibility)
+  const publicMediaCount = await prisma.exercise_media.count({ where: { visibility: 'public' } })
+
   // Calculate growth rates and percentages
   const [totalUsers, , newUsersThisMonth, clientCount] = userStats
   const [totalTrainers, verifiedTrainers, , trainerClients] = trainerStats
@@ -227,7 +230,7 @@ export default async function AdminAnalyticsPage() {
                 <Badge className="bg-brand-primary">{totalUsers.toLocaleString()}</Badge>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600">Clients</span>
+                <span className="text-sm text-gray-600">Athletes</span>
                 <Badge variant="outline">{clientCount.toLocaleString()}</Badge>
               </div>
               <div className="flex justify-between items-center">
@@ -282,6 +285,22 @@ export default async function AdminAnalyticsPage() {
                   )
                 })}
               </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* Public Content */}
+      <div className="bg-brand-secondary/20 p-6 rounded-lg border border-brand-primary/10">
+        <h2 className="text-xl font-semibold text-brand-primary mb-4">🌐 Public Content</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card className="border-brand-primary/20">
+            <CardHeader className="pb-2 bg-brand-secondary/30">
+              <CardTitle className="text-sm font-medium text-brand-primary">Public Media Items</CardTitle>
+            </CardHeader>
+            <CardContent className="pt-4">
+              <div className="text-3xl font-bold text-brand-primary">{publicMediaCount.toLocaleString()}</div>
+              <p className="text-xs text-gray-600 mt-1">Visible on public profiles</p>
             </CardContent>
           </Card>
         </div>
@@ -360,7 +379,7 @@ export default async function AdminAnalyticsPage() {
             </CardHeader>
             <CardContent className="pt-4">
               <div className="text-2xl font-bold text-green-700">€{(earningsData._sum.amount || 0).toLocaleString()}</div>
-              <p className="text-xs text-gray-600 mt-1">{trainerClients.toLocaleString()} trainer-client relationships</p>
+              <p className="text-xs text-gray-600 mt-1">{trainerClients.toLocaleString()} trainer-athlete relationships</p>
             </CardContent>
           </Card>
 

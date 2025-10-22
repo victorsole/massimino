@@ -1,3 +1,4 @@
+// src/app/partnerships/page.tsx
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -16,11 +17,101 @@ import {
   Mail,
   Phone
 } from 'lucide-react';
+import { LeadDialog, KitDownloadButton } from './lead_dialogs';
 
 export default function PartnershipsPage() {
   return (
     <>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Featured Partners */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold text-gray-900 text-center mb-6">Featured Partners</h2>
+          <div className="flex items-center justify-center gap-8 flex-wrap">
+            <a href="https://amix.com/?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=amix" target="_blank" rel="noopener" className="group">
+              <span className="sr-only">Amix</span>
+              <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
+                <img src="/images/amix-logo.png" alt="Amix" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
+              </span>
+            </a>
+            <a href="http://app.hellobo.eu?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=bo" target="_blank" rel="noopener" className="group">
+              <span className="sr-only">Bo</span>
+              <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
+                <img src="/images/Bo_logo.png" alt="Bo" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
+              </span>
+            </a>
+            <a href="https://www.jims.be/nl?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=jims" target="_blank" rel="noopener" className="group">
+              <span className="sr-only">Jims</span>
+              <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
+                <img src="/images/jims-logo.png" alt="Jims" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
+              </span>
+            </a>
+          </div>
+        </section>
+
+        {/* Partner Cards */}
+        <section className="mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3">
+                  <img src="/images/amix-logo.png" alt="Amix" className="h-8 w-auto rounded" />
+                  Amix • Spain
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="mb-3">
+                  Quality sports supplements — protein, pre‑workout, and recovery essentials.
+                </CardDescription>
+                <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
+                  <li>Wide range of evidence‑based products</li>
+                  <li>Supports training performance and recovery</li>
+                  <li>Trusted by athletes and coaches</li>
+                </ul>
+                <a href="https://amix.com/?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=amix" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit Amix →</a>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3">
+                  <img src="/images/Bo_logo.png" alt="Bo" className="h-8 w-auto rounded" />
+                  Bo • Europe
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="mb-3">
+                  Bo is a social network that links visitors to local producers from all over Europe, whom are called hosts in Bo. Local producers of any category (i.e., wine, beer, vegetables, fruit, fish, crafts, etc.). Bo also shows the geographical indications (GIs) of Europe.
+                </CardDescription>
+                <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
+                  <li>Connects visitors with local producer “hosts” across Europe</li>
+                  <li>Covers all categories: wine, beer, produce, fish, crafts</li>
+                  <li>Highlights Europe’s geographical indications (GIs)</li>
+                </ul>
+                <a href="http://app.hellobo.eu?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=bo" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit Bo →</a>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3">
+                  <img src="/images/jims-logo.png" alt="Jims" className="h-8 w-auto rounded" />
+                  Jims • Belgium
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="mb-3">
+                  Accessible gym network with multiple locations and flexible memberships.
+                </CardDescription>
+                <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
+                  <li>Convenient locations across Belgium</li>
+                  <li>Great value membership options</li>
+                  <li>Friendly, supportive environment</li>
+                </ul>
+                <a href="https://www.jims.be/nl?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=jims" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit Jims →</a>
+              </CardContent>
+            </Card>
+          </div>
+          <p className="text-xs text-gray-500 mt-3">Partnership details subject to change.</p>
+        </section>
+
         {/* Hero Section */}
         <section className="text-center mb-16">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
@@ -31,13 +122,47 @@ export default function PartnershipsPage() {
             millions of fitness enthusiasts and professionals worldwide.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg">
-              Become a Partner
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button variant="outline" size="lg">
-              Download Partnership Kit
-            </Button>
+            <LeadDialog variant="generic" size="lg" />
+            <KitDownloadButton variant="outline" size="lg" />
+          </div>
+        </section>
+
+        {/* Highlights */}
+        <section className="mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="text-center">
+              <CardHeader>
+                <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                  <CheckCircle className="h-6 w-6 text-green-600" />
+                </div>
+                <CardTitle>Easy Integration</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>SDK/API/white‑label options with branded experiences.</CardDescription>
+              </CardContent>
+            </Card>
+            <Card className="text-center">
+              <CardHeader>
+                <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                  <Target className="h-6 w-6 text-blue-600" />
+                </div>
+                <CardTitle>Targeted Reach</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>Contextual placements across feed, workouts, teams.</CardDescription>
+              </CardContent>
+            </Card>
+            <Card className="text-center">
+              <CardHeader>
+                <div className="mx-auto w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mb-4">
+                  <BarChart3 className="h-6 w-6 text-amber-600" />
+                </div>
+                <CardTitle>Clear Analytics</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>Impressions, clicks, CTR, and pacing transparency.</CardDescription>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
@@ -64,7 +189,7 @@ export default function PartnershipsPage() {
               <CardContent>
                 <CardDescription className="mb-4">
                   Integrate Massimino directly into your gym's mobile app or management system. 
-                  Your trainers and clients can seamlessly access Massimino's features.
+                  Your trainers and athletes can seamlessly access Massimino's features.
                 </CardDescription>
                 
                 <div className="space-y-3 mb-6">
@@ -86,9 +211,7 @@ export default function PartnershipsPage() {
                   </div>
                 </div>
 
-                <Button className="w-full">
-                  Learn More About Gym Integration
-                </Button>
+                <LeadDialog variant="gym" fullWidth />
               </CardContent>
             </Card>
 
@@ -130,9 +253,7 @@ export default function PartnershipsPage() {
                   </div>
                 </div>
 
-                <Button className="w-full">
-                  Start Advertising Campaign
-                </Button>
+                <LeadDialog variant="ad" fullWidth />
               </CardContent>
             </Card>
           </div>
@@ -203,7 +324,65 @@ export default function PartnershipsPage() {
           </div>
         </section>
 
-        {/* Integration Examples */}
+        {/* How It Works */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">How It Works</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="border-blue-200">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Building2 className="h-5 w-5 text-blue-600" /> Gyms
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <div className="flex items-center gap-2 text-sm font-medium"><Globe className="h-4 w-4 text-blue-600" />Explore</div>
+                    <CardDescription>Scoping call + sandbox access</CardDescription>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 text-sm font-medium"><Smartphone className="h-4 w-4 text-blue-600" />Integrate</div>
+                    <CardDescription>SDK/API with branding & features</CardDescription>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 text-sm font-medium"><CheckCircle className="h-4 w-4 text-blue-600" />Launch</div>
+                    <CardDescription>Pilot → rollout with analytics</CardDescription>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="border-amber-200">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="h-5 w-5 text-amber-600" /> Advertisers
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                  <div>
+                    <div className="flex items-center gap-2 text-sm font-medium"><Mail className="h-4 w-4 text-amber-600" />Brief</div>
+                    <CardDescription>Goals + placements + dates</CardDescription>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 text-sm font-medium"><Zap className="h-4 w-4 text-amber-600" />Submit</div>
+                    <CardDescription>Upload creatives with specs</CardDescription>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 text-sm font-medium"><Shield className="h-4 w-4 text-amber-600" />Approve</div>
+                    <CardDescription>Moderation + QA review</CardDescription>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 text-sm font-medium"><BarChart3 className="h-4 w-4 text-amber-600" />Measure</div>
+                    <CardDescription>Impressions, clicks, CTR</CardDescription>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Integration Examples — commented out for later */}
+        {/*
         <section className="mb-16">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
             Integration Examples
@@ -268,8 +447,10 @@ export default function PartnershipsPage() {
             </Card>
           </div>
         </section>
+        */}
 
-        {/* Success Stories */}
+        {/* Success Stories — commented out for later */}
+        {/*
         <section className="mb-16">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
             Success Stories
@@ -321,6 +502,7 @@ export default function PartnershipsPage() {
             </Card>
           </div>
         </section>
+        */}
 
         {/* Contact Section */}
         <section className="bg-gray-50 rounded-lg p-8">
@@ -336,11 +518,11 @@ export default function PartnershipsPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <Button size="lg">
                 <Mail className="h-5 w-5 mr-2" />
-                partnerships@massimino.com
+                helloberesol@gmail.com
               </Button>
               <Button variant="outline" size="lg">
                 <Phone className="h-5 w-5 mr-2" />
-                +1 (555) 123-4567
+                +32 493 36 5423
               </Button>
             </div>
 

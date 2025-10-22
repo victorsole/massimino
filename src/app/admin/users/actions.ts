@@ -131,6 +131,7 @@ export async function updateUserAction(formData: FormData) {
   const role = (formData.get('role') as string | null) ?? undefined
   const status = (formData.get('status') as string | null) ?? undefined
   const trainerVerified = formData.get('trainerVerified') === 'on'
+  const massiminoUsernameRaw = (formData.get('massiminoUsername') as string | null) || null
   const reputationScoreRaw = formData.get('reputationScore') as string | null
   const warningCountRaw = formData.get('warningCount') as string | null
 
@@ -146,6 +147,18 @@ export async function updateUserAction(formData: FormData) {
 
   const repo = getUserRepository()
   const updated = await repo.updateUser(id, data)
+
+  // Optional: update public username if provided
+  if (massiminoUsernameRaw != null) {
+    const normalized = normalizeUsername(massiminoUsernameRaw)
+    if (normalized) {
+      try {
+        await prisma.users.update({ where: { id }, data: { massiminoUsername: normalized } })
+      } catch (e) {
+        console.warn('Admin username update skipped (likely taken or invalid):', normalized)
+      }
+    }
+  }
 
   // Optionally mirror to Firestore if configured
   try {
@@ -164,6 +177,18 @@ export async function updateUserAction(formData: FormData) {
   }
 
   revalidatePath('/admin/users')
+}
+
+function normalizeUsername(input: string): string | null {
+  const raw = (input || '').trim().toLowerCase()
+  if (!raw) return null
+  let u = raw.replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')
+  if (!/^[a-z]/.test(u)) return null
+  if (u.length < 3 || u.length > 20) return null
+  if (/__/.test(u)) return null
+  const reserved = new Set(['admin','api','app','about','help','support','contact','terms','privacy','login','signup','register','massimino','massiminos','massitree','trainer','client','user'])
+  if (reserved.has(u)) return null
+  return u
 }
 
 export async function syncUserFromFirestoreAction(formData: FormData) {
@@ -297,17 +322,14 @@ export async function createInvitationAction(formData: FormData) {
   const existingUserEmails = new Set(existingUsers.map((u: { email: string }) => u.email))
   const existingInvitationEmails = new Set(existingInvitations.map((i: { email: string }) => i.email))
 
-  const validEmails = emails.filter(email =>
-    !existingUserEmails.has(email) && !existingInvitationEmails.has(email)
-  )
-
-  if (validEmails.length === 0) {
-    throw new Error('All emails are either registered users or have pending invitations')
-  }
+  // Categorize input emails
+  const newInviteEmails = emails.filter(email => !existingUserEmails.has(email) && !existingInvitationEmails.has(email))
+  const registeredOnlyEmails = emails.filter(email => existingUserEmails.has(email) && !existingInvitationEmails.has(email))
+  // Emails with pending invitations are intentionally skipped to avoid duplicates
 
   // Create invitations
-  await Promise.all(
-    validEmails.map(email =>
+  const createdInvites = await Promise.all(
+    newInviteEmails.map(email =>
       prisma.invitations.create({
         data: {
           id: crypto.randomUUID(),
@@ -323,6 +345,65 @@ export async function createInvitationAction(formData: FormData) {
       })
     )
   )
+
+  // Send invitation emails if email service is configured
+  try {
+    const { isEmailServiceConfigured, sendEmail } = await import('@/services/email/email_service')
+    if (isEmailServiceConfigured()) {
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+      await Promise.all([
+        // Emails for newly created invitations (non-registered addresses)
+        ...createdInvites.map(async (inv) => {
+          const subject = `You're invited to join Massimino${inv.role ? ` as ${String(inv.role).toLowerCase()}` : ''}`
+          const lines: string[] = []
+          lines.push('Hello,')
+          lines.push('')
+          lines.push(`You've been invited to join Massimino${inv.role ? ` as a ${String(inv.role).toLowerCase()}` : ''}.`)
+          if (inv.message) {
+            lines.push('')
+            lines.push('Message from the inviter:')
+            lines.push(`"${inv.message}"`)
+          }
+          lines.push('')
+          lines.push(`This invitation is valid until ${inv.expiresAt.toDateString()}.`)
+          lines.push('')
+          lines.push(`Get started here: ${appUrl}/login`)
+          lines.push('')
+          lines.push('If you already have an account, sign in with the invited email address.')
+
+          await sendEmail({
+            to: inv.email,
+            subject,
+            text: lines.join('\n')
+          })
+        }),
+        // Emails to existing registered users (no DB invitation is created)
+        ...registeredOnlyEmails.map(async (emailAddr) => {
+          const subject = `You're invited to join Massimino${role ? ` as ${String(role).toLowerCase()}` : ''}`
+          const lines: string[] = []
+          lines.push('Hello,')
+          lines.push('')
+          lines.push(`You've been invited to join Massimino${role ? ` as a ${String(role).toLowerCase()}` : ''}.`)
+          if (message) {
+            lines.push('')
+            lines.push('Message from the inviter:')
+            lines.push(`"${message}"`)
+          }
+          lines.push('')
+          lines.push('It looks like you already have an account with this email.')
+          lines.push(`Sign in to get started: ${appUrl}/login`)
+
+          await sendEmail({
+            to: emailAddr,
+            subject,
+            text: lines.join('\n')
+          })
+        })
+      ])
+    }
+  } catch (e) {
+    console.warn('[Admin Invitations] Email sending skipped or failed:', e)
+  }
 
   revalidatePath('/admin/users')
 }
@@ -368,6 +449,43 @@ export async function updateInvitationAction(formData: FormData) {
     where: { id },
     data: updateData
   })
+
+  // If action was resend, attempt to send the email again
+  if (action === 'resend') {
+    try {
+      const { isEmailServiceConfigured, sendEmail } = await import('@/services/email/email_service')
+      if (isEmailServiceConfigured()) {
+        const refreshed = await prisma.invitations.findUnique({ where: { id } })
+        if (refreshed) {
+          const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+          const subject = 'Reminder: Your Massimino invitation'
+          const lines: string[] = []
+          lines.push('Hello,')
+          lines.push('')
+          lines.push(`This is a reminder about your invitation to join Massimino${refreshed.role ? ` as a ${String(refreshed.role).toLowerCase()}` : ''}.`)
+          if (refreshed.message) {
+            lines.push('')
+            lines.push('Message from the inviter:')
+            lines.push(`"${refreshed.message}"`)
+          }
+          if (refreshed.expiresAt) {
+            lines.push('')
+            lines.push(`This invitation is valid until ${new Date(refreshed.expiresAt).toDateString()}.`)
+          }
+          lines.push('')
+          lines.push(`Get started here: ${appUrl}/login`)
+
+          await sendEmail({
+            to: refreshed.email,
+            subject,
+            text: lines.join('\n')
+          })
+        }
+      }
+    } catch (e) {
+      console.warn('[Admin Invitations] Resend email failed:', e)
+    }
+  }
 
   revalidatePath('/admin/users')
 }

@@ -5,14 +5,22 @@ const nextConfig = {
         bodySizeLimit: '12mb',
       },
     },
-    // Fix workspace root issue
-    outputFileTracingRoot: __dirname,
-    
-    // External packages for server components
-    serverExternalPackages: ['@prisma/client'],
+    // Note: outputFileTracingRoot and serverExternalPackages are not used on Next 14
   
     // Security headers for safety-first approach
     async headers() {
+      const isProd = process.env.NODE_ENV === 'production'
+      // Build a shared CSP value
+      const cspValue = [
+        "default-src 'self'",
+        "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://connect.facebook.net https://accounts.google.com https://apis.google.com",
+        "style-src 'self' 'unsafe-inline'",
+        "img-src 'self' data: https: https://i.ytimg.com",
+        "font-src 'self'",
+        "connect-src 'self' https://api.openai.com https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://www.facebook.com https://graph.facebook.com https://www.linkedin.com https://api.linkedin.com",
+        "frame-src 'self' https://accounts.google.com https://www.facebook.com https://staticxx.facebook.com https://www.linkedin.com",
+        "form-action 'self' https://accounts.google.com https://www.facebook.com https://www.linkedin.com",
+      ].join('; ')
       return [
         {
           source: '/(.*)',
@@ -38,18 +46,10 @@ const nextConfig = {
               value: 'strict-origin-when-cross-origin',
             },
             // Content Security Policy
-            {
-              key: 'Content-Security-Policy',
-              value: [
-                "default-src 'self'",
-                "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://connect.facebook.net",
-                "style-src 'self' 'unsafe-inline'",
-                "img-src 'self' data: https:",
-                "font-src 'self'",
-                "connect-src 'self' https://api.openai.com https://accounts.google.com https://www.facebook.com",
-                "frame-src 'none'",
-              ].join('; '),
-            },
+            // In production, enforce CSP; in development, use Report-Only for easier debugging
+            isProd
+              ? { key: 'Content-Security-Policy', value: cspValue }
+              : { key: 'Content-Security-Policy-Report-Only', value: cspValue },
           ],
         },
       ];
@@ -57,6 +57,8 @@ const nextConfig = {
   
     // Image optimization
     images: {
+      // Disable image optimization during development to avoid 400s when sharp is unavailable
+      unoptimized: process.env.NODE_ENV !== 'production',
       remotePatterns: [
         {
           protocol: 'https',
@@ -94,7 +96,7 @@ const nextConfig = {
   
     // Redirects for safety
     async redirects() {
-      return [
+      const redirects = [
         // Redirect HTTP to HTTPS in production
         ...(process.env.NODE_ENV === 'production'
           ? [
@@ -112,7 +114,15 @@ const nextConfig = {
               },
             ]
           : []),
+        // Redirect bare usernames to /bio/:username, excluding known top-level routes
+        {
+          source:
+            '/:username((?!api|admin|profile|dashboard|messages|teams|exercises|workout-log|terms|privacy|massiminos|login|register|unauthorized|partnerships|assessments|bio|static|uploads|public|images|_next|favicon\\.ico|.*\\..*).+)',
+          destination: '/bio/:username',
+          permanent: false,
+        },
       ];
+      return redirects;
     },
   
     // Logging configuration

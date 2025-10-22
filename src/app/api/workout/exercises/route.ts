@@ -30,6 +30,7 @@ export async function GET(request: NextRequest) {
     
     // Check for specific query types
     const searchQuery = searchParams.get('search');
+    const includeMediaCount = searchParams.get('include') === 'mediaCount'
     const categoriesParam = searchParams.get('categories');
     const muscleGroupsParam = searchParams.get('muscleGroups');
     const equipmentParam = searchParams.get('equipment');
@@ -87,7 +88,14 @@ export async function GET(request: NextRequest) {
 
     // Get exercises
     const exercises = await getExercises(searchOptions);
-    return NextResponse.json(exercises);
+    if (!includeMediaCount) return NextResponse.json(exercises)
+    // Optionally augment with media count without changing existing behavior
+    const { prisma } = await import('@/core/database')
+    const ids = exercises.map((e: any) => e.id)
+    const counts = await prisma.exercise_media.groupBy({ by: ['globalExerciseId'], where: { globalExerciseId: { in: ids } }, _count: { globalExerciseId: true } })
+    const map = new Map(counts.map(c => [c.globalExerciseId, c._count.globalExerciseId]))
+    const augmented = exercises.map((e: any) => ({ ...e, mediaCount: map.get(e.id) || 0 }))
+    return NextResponse.json(augmented)
   } catch (error) {
     console.error('Error fetching exercises:', error);
     return NextResponse.json(

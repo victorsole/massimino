@@ -4,7 +4,8 @@ import { getUserRepository } from '@/services/repository'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { updateUserAction, syncUserFromFirestoreAction, createUserAction, updateRedemptionStatusAction, adjustUserPointsAction, bulkAwardPointsAction, quickPointsAwardAction } from './actions'
+import { updateUserAction, syncUserFromFirestoreAction, createUserAction, updateRedemptionStatusAction, adjustUserPointsAction, bulkAwardPointsAction, quickPointsAwardAction, createInvitationAction } from './actions'
+import { Textarea } from '@/components/ui/textarea'
 import { prisma } from '@/core/database'
 
 type PageProps = { searchParams?: { q?: string; page?: string } }
@@ -184,11 +185,45 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
   if (q) params.search = q
   const { items: users, total } = await repo.listUsers(params)
 
+  // Invitations overview
+  let pendingInvites: any[] = []
+  let recentInvites: any[] = []
+  try {
+    pendingInvites = await prisma.invitations.findMany({
+      where: { status: 'PENDING' },
+      include: {
+        users_invitations_senderIdTousers: { select: { name: true, email: true } }
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 50
+    })
+  } catch {}
+  try {
+    recentInvites = await prisma.invitations.findMany({
+      where: { status: { in: ['ACCEPTED', 'REVOKED', 'EXPIRED'] } as any },
+      include: {
+        users_invitations_senderIdTousers: { select: { name: true, email: true } }
+      },
+      orderBy: { updatedAt: 'desc' },
+      take: 20
+    })
+  } catch {}
+
   // Get points data for each user (only for trainers)
   const usersWithPoints = await Promise.all(
     users.map(async (user) => {
+      // My Library gamification points (all users)
+      let myLibPointsAgg = { _sum: { points: null as number | null } }
+      let awardsCount = 0
+      try {
+        myLibPointsAgg = await prisma.user_points.aggregate({ where: { userId: user.id }, _sum: { points: true } })
+        awardsCount = await prisma.user_achievements.count({ where: { userId: user.id } })
+      } catch (e) {
+        // ignore
+      }
+
       if (user.role !== 'TRAINER') {
-        return { ...user, pointsBalance: 0, totalEarned: 0, totalRedeemed: 0 }
+        return { ...user, pointsBalance: 0, totalEarned: 0, totalRedeemed: 0, myLibPoints: myLibPointsAgg._sum.points || 0, awardsCount }
       }
 
       // Get points balance
@@ -235,7 +270,9 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
         ...user,
         pointsBalance: pointsBalance._sum.points || 0,
         totalEarned: totalEarned._sum.points || 0,
-        totalRedeemed: totalRedeemed._sum.pointsCost ?? 0
+        totalRedeemed: totalRedeemed._sum.pointsCost ?? 0,
+        myLibPoints: myLibPointsAgg._sum.points || 0,
+        awardsCount
       }
     })
   )
@@ -634,6 +671,145 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
         </div>
       </div>
 
+      <div className="rounded-lg border border-brand-primary/30 bg-gradient-to-br from-brand-secondary/30 to-white p-5">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-lg font-semibold text-brand-primary flex items-center gap-2">✉️ Send Invitations</h2>
+          <span className="text-xs text-gray-500">Pending: {pendingInvites.length}</span>
+        </div>
+        <form action={createInvitationAction} className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-700">Emails (one per line)</label>
+              <Textarea name="emails" placeholder={`user1@example.com\nuser2@example.com` } required rows={5} />
+              <div className="text-xs text-gray-500 mt-1">Tip: use plus aliases to test (e.g. you+test1@gmail.com)</div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700">Role</label>
+                <select name="role" defaultValue={'CLIENT'} className="border rounded px-2 py-2 bg-white">
+                  {ROLES.map(r => (
+                    <option key={r} value={r}>{r}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700">Expires (days)</label>
+                <Input type="number" name="expiresInDays" defaultValue={7} min={1} max={90} className="w-28" />
+              </div>
+              <div className="col-span-2 flex flex-col">
+                <label className="text-sm font-medium text-gray-700">Message (optional)</label>
+                <Textarea name="message" placeholder="Add a short note..." rows={3} />
+                <div className="text-xs text-gray-500 mt-1">• Existing users will receive a sign-in prompt email. • Emails with an already pending invite are skipped.</div>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button type="submit" className="bg-brand-primary hover:bg-brand-primary/90">Send Invitations</Button>
+          </div>
+        </form>
+      </div>
+
+      {/* Invitations Table */}
+      <div className="rounded-md border border-brand-primary/20 bg-white">
+        <div className="p-4 flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-brand-primary">Invitations</h2>
+          <span className="text-xs text-gray-500">Showing {pendingInvites.length} pending · {recentInvites.length} recent</span>
+        </div>
+        <div className="border-t">
+          {pendingInvites.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead className="bg-brand-secondary/30 text-brand-primary">
+                  <tr>
+                    <th className="px-4 py-2 text-left">Email</th>
+                    <th className="px-4 py-2 text-left">Role</th>
+                    <th className="px-4 py-2 text-left">Invited By</th>
+                    <th className="px-4 py-2 text-left">Created</th>
+                    <th className="px-4 py-2 text-left">Expires</th>
+                    <th className="px-4 py-2 text-left">Status</th>
+                    <th className="px-4 py-2 text-left">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pendingInvites.map((inv: any) => (
+                    <tr key={inv.id} className="border-t">
+                      <td className="px-4 py-2">{inv.email}</td>
+                      <td className="px-4 py-2">{inv.role}</td>
+                      <td className="px-4 py-2">
+                        <div className="text-gray-900">{inv.users_invitations_senderIdTousers?.name || '—'}</div>
+                        <div className="text-xs text-gray-500">{inv.users_invitations_senderIdTousers?.email}</div>
+                      </td>
+                      <td className="px-4 py-2">{new Date(inv.createdAt).toLocaleDateString()}</td>
+                      <td className="px-4 py-2">{new Date(inv.expiresAt).toLocaleDateString()}</td>
+                      <td className="px-4 py-2">
+                        <Badge className="bg-amber-100 text-amber-800 border-amber-200">{inv.status}</Badge>
+                      </td>
+                      <td className="px-4 py-2">
+                        <div className="flex items-center gap-2">
+                          <form action={updateInvitationAction}>
+                            <input type="hidden" name="id" value={inv.id} />
+                            <input type="hidden" name="action" value="resend" />
+                            <Button size="sm" variant="outline">Resend</Button>
+                          </form>
+                          <form action={updateInvitationAction}>
+                            <input type="hidden" name="id" value={inv.id} />
+                            <input type="hidden" name="action" value="extend" />
+                            <Button size="sm" variant="outline">Extend</Button>
+                          </form>
+                          <form action={updateInvitationAction}>
+                            <input type="hidden" name="id" value={inv.id} />
+                            <input type="hidden" name="action" value="revoke" />
+                            <Button size="sm" variant="destructive">Revoke</Button>
+                          </form>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="p-4 text-sm text-gray-600">No pending invitations.</div>
+          )}
+        </div>
+
+        {recentInvites.length > 0 && (
+          <div className="border-t p-4">
+            <h3 className="text-sm font-semibold mb-2 text-gray-700">Recent activity</h3>
+            <div className="overflow-x-auto rounded-md border border-gray-200">
+              <table className="min-w-full text-sm">
+                <thead className="bg-gray-50 text-gray-700">
+                  <tr>
+                    <th className="px-4 py-2 text-left">Email</th>
+                    <th className="px-4 py-2 text-left">Role</th>
+                    <th className="px-4 py-2 text-left">Status</th>
+                    <th className="px-4 py-2 text-left">Updated</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recentInvites.map((inv: any) => (
+                    <tr key={inv.id} className="border-t">
+                      <td className="px-4 py-2">{inv.email}</td>
+                      <td className="px-4 py-2">{inv.role}</td>
+                      <td className="px-4 py-2">
+                        <Badge variant="outline" className={
+                          inv.status === 'ACCEPTED' ? 'bg-green-50 text-green-700 border-green-200' :
+                          inv.status === 'REVOKED' ? 'bg-red-50 text-red-700 border-red-200' :
+                          'bg-gray-50 text-gray-700 border-gray-200'
+                        }>
+                          {inv.status}
+                        </Badge>
+                      </td>
+                      <td className="px-4 py-2">{new Date(inv.updatedAt).toLocaleDateString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
+
       <div className="rounded-md border border-brand-primary/20 bg-brand-secondary/10 p-4">
         <h2 className="text-lg font-semibold mb-3 text-brand-primary">👤 Create New User</h2>
         <form action={createUserAction} className="flex flex-wrap items-end gap-3">
@@ -685,6 +861,8 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
               <th className="px-4 py-2 text-left">Role</th>
               <th className="px-4 py-2 text-left">Status</th>
               <th className="px-4 py-2 text-left">Massimino Username</th>
+              <th className="px-4 py-2 text-left">MyLib Points</th>
+              <th className="px-4 py-2 text-left">Awards</th>
               <th className="px-4 py-2 text-left">Points Balance</th>
               <th className="px-4 py-2 text-left">Total Earned</th>
               <th className="px-4 py-2 text-left">Reputation</th>
@@ -732,6 +910,8 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                     <span className="text-gray-400 text-xs">-</span>
                   )}
                 </td>
+                <td className="px-4 py-2 font-mono">{(u as any).myLibPoints?.toLocaleString?.() || '0'}</td>
+                <td className="px-4 py-2">{(u as any).awardsCount || 0}</td>
                 <td className="px-4 py-2">
                   {u.role === 'TRAINER' ? (
                     <div className="flex items-center gap-2">
@@ -774,6 +954,13 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                       <input type="checkbox" name="trainerVerified" defaultChecked={u.trainerVerified} />
                       Trainer verified
                     </label>
+                    <input
+                      type="text"
+                      name="massiminoUsername"
+                      defaultValue={u.massiminoUsername || ''}
+                      placeholder="public-username"
+                      className="border rounded px-2 py-1 text-xs"
+                    />
                     <input type="number" name="reputationScore" defaultValue={u.reputationScore} min={0} max={100} className="w-20 border rounded px-2 py-1" />
                     <input type="number" name="warningCount" defaultValue={u.warningCount} min={0} className="w-16 border rounded px-2 py-1" />
                     <Button type="submit" size="sm" className="bg-brand-primary hover:bg-brand-primary/90">Save</Button>
@@ -818,6 +1005,23 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                       </Button>
                     </form>
                   )}
+
+                  {/* Quick Links */}
+                  <div className="flex items-center gap-2 pt-2 border-t">
+                    {u.massiminoUsername ? (
+                      <a
+                        href={`https://bio.massimino.fitness/${u.massiminoUsername}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs underline text-purple-700"
+                      >
+                        View Public Profile
+                      </a>
+                    ) : (
+                      <span className="text-xs text-gray-400">No public username</span>
+                    )}
+                    <a href="/admin/revenue" className="text-xs underline text-brand-primary">Revenue</a>
+                  </div>
                 </td>
               </tr>
               )

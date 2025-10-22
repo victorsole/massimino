@@ -1,7 +1,7 @@
 import * as React from "react"
 import * as PopoverPrimitive from "@radix-ui/react-popover"
 
-import { cn } from "@/core/utils"
+import { cn } from "@/core/utils/common"
 
 const Popover = PopoverPrimitive.Root
 

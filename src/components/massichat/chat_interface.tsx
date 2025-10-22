@@ -5,8 +5,9 @@ import { useEffect, useRef, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { mdiMedalOutline, mdiEmoticonConfusedOutline } from '@mdi/js'
 
-interface ChatMessage { role: 'user' | 'assistant'; content: string }
+interface ChatMessage { id?: string; role: 'user' | 'assistant'; content: string }
 interface WorkoutItemPreview { exerciseName: string; sets?: number; reps?: number; restSeconds?: number; notes?: string }
 interface WorkoutProposalPreview { id: string; summary?: string; workoutData?: { title?: string; description?: string; items?: WorkoutItemPreview[] } }
 
@@ -65,10 +66,18 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
 
   function cleanAssistantText(text: string): string {
     if (!text) return ''
-    let t = text.replace(/WORKOUT_PROPOSAL_JSON\s*/g, '')
-    t = t.replace(/```json[\s\S]*?```/gi, '').trim()
-    t = t.replace(/\{[\s\S]*\}$/m, (m) => (m.length > 50 ? '' : m)).trim()
-    return t
+    let t = text
+    // Remove explicit marker
+    t = t.replace(/WORKOUT_PROPOSAL_JSON\s*/g, '')
+    // Remove fenced JSON blocks
+    t = t.replace(/```json[\s\S]*?```/gi, '')
+    // Remove any remaining JSON-looking block at the end
+    t = t.replace(/\{[\s\S]*\}$/m, (m) => (m.length > 50 ? '' : m))
+    // Remove FOLLOW_UP_SUGGESTIONS line if present
+    t = t.replace(/FOLLOW_UP_SUGGESTIONS\s*:\s*\[[\s\S]*?\]\s*$/i, '')
+    // Remove stray backticks or code fence remnants
+    t = t.replace(/`{1,3}/g, '')
+    return t.trim()
   }
 
   const sendMessage = async () => {
@@ -186,12 +195,43 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
       const data = await res.json()
       if (res.ok) {
         setSessionId(id)
-        const msgs: ChatMessage[] = (data.messages || []).map((m: any) => ({ role: m.role, content: m.content })).filter((m: any) => (m.role === 'user' || m.role === 'assistant'))
+        const msgs: ChatMessage[] = (data.messages || [])
+          .map((m: any) => ({ id: m.id, role: m.role, content: m.role === 'assistant' ? cleanAssistantText(m.content) : m.content }))
+          .filter((m: any) => (m.role === 'user' || m.role === 'assistant'))
         setMessages(msgs)
         setWorkoutProposal(null)
         setEditable(null)
         setShowPreview(false)
         setEditMode(false)
+      }
+    } catch {}
+  }
+
+  async function rateAssistantMessage(msg: ChatMessage, rating: 'UP' | 'DOWN') {
+    try {
+      let messageId = msg.id
+      // If no id (fresh message), fetch latest assistant message in session
+      if (!messageId && sessionId) {
+        const res = await fetch(`/api/massichat?sessionId=${encodeURIComponent(sessionId)}`)
+        const data = await res.json()
+        if (res.ok && Array.isArray(data.messages)) {
+          const lastAssistant = [...data.messages].reverse().find((m: any) => m.role === 'assistant')
+          if (lastAssistant) messageId = lastAssistant.id
+        }
+      }
+      if (!messageId) return alert('Unable to identify message for feedback')
+      const payload = {
+        type: 'AI',
+        related_type: 'ai_chat_message',
+        related_id: messageId,
+        ai_rating: rating,
+        url: typeof window !== 'undefined' ? window.location.href : undefined,
+        platform: 'WEB',
+      }
+      const res = await fetch('/api/feedback', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        alert(data?.error || 'Failed to send feedback')
       }
     } catch {}
   }
@@ -311,9 +351,21 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
 
   function formatInline(text: string) {
     let safe = escapeHtml(text)
+    // Basic bold/italic/code
     safe = safe.replace(/`([^`]+)`/g, '<code class="px-1 py-0.5 bg-gray-100 rounded">$1</code>')
     safe = safe.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     safe = safe.replace(/\*([^*]+)\*/g, '<em>$1</em>')
+    // Markdown-style links: [text](url)
+    safe = safe.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener" class="text-brand-primary underline">$1</a>')
+    // Auto-link plain URLs
+    safe = safe.replace(/(?<!["'>])(https?:\/\/[^\s<]+)(?![^<]*>)/g, '<a href="$1" target="_blank" rel="noopener" class="text-brand-primary underline">$1</a>')
+    // Ensure partner names are clickable if mentioned without a link
+    if (!/amix\.com/i.test(safe)) {
+      safe = safe.replace(/\bAmix\b/g, '<a href="https://amix.com/?utm_source=massimino&utm_medium=massichat&utm_campaign=amix" target="_blank" rel="noopener" class="text-brand-primary underline">Amix</a>')
+    }
+    if (!/jims\.be/i.test(safe)) {
+      safe = safe.replace(/\bJims\b/g, '<a href="https://www.jims.be/nl?utm_source=massimino&utm_medium=massichat&utm_campaign=jims" target="_blank" rel="noopener" class="text-brand-primary underline">Jims</a>')
+    }
     return safe
   }
 
@@ -321,6 +373,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
     const lines = text.split(/\r?\n/)
     const elements: JSX.Element[] = []
     let list: string[] = []
+    let olist: string[] = []
     let para: string[] = []
 
     const flushPara = () => {
@@ -344,17 +397,30 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
         list = []
       }
     }
+    const flushOList = () => {
+      if (olist.length) {
+        elements.push(
+          <ol className="list-decimal pl-5 space-y-1">
+            {olist.map((item, i) => (
+              <li key={i} dangerouslySetInnerHTML={{ __html: formatInline(item) }} />
+            ))}
+          </ol>
+        )
+        olist = []
+      }
+    }
 
     for (const raw of lines) {
       const line = raw.trim()
-      if (!line) { flushPara(); flushList(); continue }
-      if (/^[-\*]\s+/.test(line)) { flushPara(); list.push(line.replace(/^[-\*]\s+/, '')); continue }
+      if (!line) { flushPara(); flushList(); flushOList(); continue }
+      if (/^[-\*]\s+/.test(line)) { flushPara(); flushOList(); list.push(line.replace(/^[-\*]\s+/, '')); continue }
+      if (/^\d+[\.)]\s+/.test(line)) { flushPara(); flushList(); olist.push(line.replace(/^\d+[\.)]\s+/, '')); continue }
       if (/^###\s+/.test(line)) { flushPara(); flushList(); elements.push(<div className="font-semibold" dangerouslySetInnerHTML={{ __html: formatInline(line.replace(/^###\s+/, '')) }} />); continue }
       if (/^##\s+/.test(line)) { flushPara(); flushList(); elements.push(<div className="font-semibold" dangerouslySetInnerHTML={{ __html: formatInline(line.replace(/^##\s+/, '')) }} />); continue }
       if (/^#\s+/.test(line)) { flushPara(); flushList(); elements.push(<div className="font-bold" dangerouslySetInnerHTML={{ __html: formatInline(line.replace(/^#\s+/, '')) }} />); continue }
       para.push(line)
     }
-    flushPara(); flushList()
+    flushPara(); flushList(); flushOList()
     return <>{elements.map((el, i) => <div key={i}>{el}</div>)}</>
   }
 
@@ -403,10 +469,24 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
         <div className="space-y-4">
           <div ref={scrollRef} className="h-80 overflow-y-auto space-y-3 rounded border p-3 bg-white">
             {messages.map((m, i) => (
-              <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'} items-start gap-2`}>
                 <div className={`max-w-[80%] p-3 rounded-lg ${m.role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-100'}`}>
                   {m.role === 'assistant' ? renderMarkdown(m.content) : m.content}
                 </div>
+                {m.role === 'assistant' && (
+                  <div className="flex gap-1 pt-1">
+                    <button aria-label="Helpful" className="p-1 rounded hover:bg-emerald-50" onClick={() => rateAssistantMessage(m, 'UP')}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="text-emerald-600">
+                        <path d={mdiMedalOutline} />
+                      </svg>
+                    </button>
+                    <button aria-label="Not helpful" className="p-1 rounded hover:bg-red-50" onClick={() => rateAssistantMessage(m, 'DOWN')}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="text-red-600">
+                        <path d={mdiEmoticonConfusedOutline} />
+                      </svg>
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
             {loading && (

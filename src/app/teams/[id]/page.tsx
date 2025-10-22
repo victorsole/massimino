@@ -5,7 +5,8 @@ import { TeamMembersLogs } from '@/components/teams/team_members_logs';
 
 async function get_team_details(team_id: string) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || ''}/api/teams/${team_id}?action=details`, { cache: 'no-store' });
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    const res = await fetch(`${baseUrl}/api/teams/${team_id}?action=details`, { cache: 'no-store' });
     if (!res.ok) return null;
     const data = await res.json();
     if (data?.success) return data.data;
@@ -47,7 +48,11 @@ export default async function TeamPage({ params }: { params: { id: string } }) {
               <h1 className="text-2xl font-bold" style={{ color: primary }}>{team.name}</h1>
               <p className="text-gray-600 mt-1">{team.description || 'No description provided.'}</p>
               <div className="mt-2 flex items-center gap-2 text-sm text-gray-600">
-                <img src={trainer.image || '/massimino-logo.svg'} alt={trainer.name || 'Trainer'} className="w-6 h-6 rounded-full border" onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/massimino-logo.svg'; }} />
+                <img
+                  src={trainer.image || '/massimino-logo.svg'}
+                  alt={trainer.name || 'Trainer'}
+                  className="w-6 h-6 rounded-full border"
+                />
                 <span>{trainer.name || 'Trainer'}</span>
                 <span>•</span>
                 <span className="uppercase">{team.visibility}</span>

@@ -7,7 +7,8 @@
 import { NextAuthOptions } from 'next-auth';
 // import { PrismaAdapter } from '@next-auth/prisma-adapter'; // Standard adapter doesn't work with lowercase table names
 import GoogleProvider from 'next-auth/providers/google';
-import LinkedInProvider from 'next-auth/providers/linkedin';
+// We will configure LinkedIn via OpenID Connect (OIDC)
+// import LinkedInProvider from 'next-auth/providers/linkedin';
 import FacebookProvider from 'next-auth/providers/facebook';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { prisma } from '@/core/database';
@@ -160,7 +161,8 @@ const providers: any[] = [
         // Update last login
         await prisma.users.update({
           where: { id: user.id },
-          data: { lastLoginAt: new Date() }
+          data: { lastLoginAt: new Date() },
+          select: { id: true },
         });
 
         return {
@@ -218,35 +220,41 @@ if (googleConfig.GOOGLE_CLIENT_ID && googleConfig.GOOGLE_CLIENT_SECRET) {
   console.warn('Google OAuth not configured (GOOGLE_CLIENT_ID/SECRET missing).');
 }
 
-// Add LinkedIn provider if configured
+// Add LinkedIn provider (OIDC) if configured
 if (linkedinConfig.LINKEDIN_CLIENT_ID && linkedinConfig.LINKEDIN_CLIENT_SECRET) {
-  providers.push(
-    LinkedInProvider({
-      clientId: linkedinConfig.LINKEDIN_CLIENT_ID,
-      clientSecret: linkedinConfig.LINKEDIN_CLIENT_SECRET,
-      authorization: {
-        params: {
-          scope: 'r_liteprofile r_emailaddress',
-          state: 'random_state_string',
-        },
+  providers.push({
+    id: 'linkedin',
+    name: 'LinkedIn',
+    type: 'oauth',
+    // Use LinkedIn's OIDC discovery to avoid classic scope approvals
+    wellKnown: 'https://www.linkedin.com/oauth/.well-known/openid-configuration',
+    clientId: linkedinConfig.LINKEDIN_CLIENT_ID,
+    clientSecret: linkedinConfig.LINKEDIN_CLIENT_SECRET,
+    authorization: {
+      params: {
+        scope: 'openid profile email',
       },
-      profile(profile) {
-        return {
-          id: profile.id,
-          name: `${profile.localizedFirstName} ${profile.localizedLastName}`,
-          email: profile.emailAddress,
-          image: profile.profilePicture?.['displayImage~']?.elements?.[0]?.identifiers?.[0]?.identifier || null,
-          role: UserRole.CLIENT,
-          status: UserStatus.ACTIVE,
-          emailVerified: new Date(),
-          linkedinId: profile.id,
-          reputationScore: 0,
-          warningCount: 0,
-          trainerVerified: false,
-        };
-      },
-    })
-  );
+    },
+    idToken: true,
+    checks: ['pkce', 'state', 'nonce'],
+    profile(profile: any) {
+      const name = profile.name || [profile.given_name, profile.family_name].filter(Boolean).join(' ') || null;
+      const email = profile.email || profile.email_verified ? profile.email : null;
+      return {
+        id: profile.sub,
+        name,
+        email,
+        image: profile.picture || null,
+        role: UserRole.CLIENT,
+        status: UserStatus.ACTIVE,
+        emailVerified: email ? new Date() : null,
+        linkedinId: profile.sub,
+        reputationScore: 0,
+        warningCount: 0,
+        trainerVerified: false,
+      };
+    },
+  } as any);
 } else if (process.env.NODE_ENV !== 'production') {
   console.warn('LinkedIn OAuth not configured (LINKEDIN_CLIENT_ID/SECRET missing).');
 }
@@ -304,8 +312,13 @@ export const authOptions: NextAuthOptions = {
       try {
         // Safety check: ensure user has a valid email
         if (!user.email) {
-          console.warn('Sign-in attempt without email:', { user, account });
-          return false;
+          if (account?.provider && account.provider !== 'credentials') {
+            // Allow OAuth sign-in to proceed; adapter will generate a safe placeholder email if missing
+            console.warn('OAuth sign-in without email; proceeding with placeholder email generation', { provider: account.provider });
+          } else {
+            console.warn('Sign-in attempt without email (credentials provider) - blocked');
+            return false;
+          }
         }
 
         // Check if user exists
@@ -343,6 +356,7 @@ export const authOptions: NextAuthOptions = {
                 status: UserStatus.ACTIVE,
                 suspendedUntil: null,
               },
+              select: { id: true },
             });
           }
 
@@ -350,6 +364,7 @@ export const authOptions: NextAuthOptions = {
           await prisma.users.update({
             where: { email: user.email },
             data: { lastLoginAt: new Date() },
+            select: { id: true },
           });
 
           // Promote to ADMIN if email is defined in ADMIN_EMAILS list
@@ -358,6 +373,7 @@ export const authOptions: NextAuthOptions = {
               await prisma.users.update({
                 where: { email: user.email },
                 data: { role: UserRole.ADMIN, trainerVerified: true },
+                select: { id: true },
               });
             } catch (e) {
               console.warn('Admin promotion skipped:', e);

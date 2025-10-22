@@ -175,7 +175,9 @@ export function TeamInviteCard({ invite, token }: TeamInviteCardProps) {
         {/* Trainer Info */}
         <div className="flex items-center gap-4 p-4 bg-white border border-gray-200 rounded-lg">
           <Avatar className="w-16 h-16 border-2 border-brand-primary">
-            <AvatarImage src={invite.trainerImage} alt={invite.trainerName} />
+            {invite.trainerImage ? (
+              <AvatarImage src={invite.trainerImage} alt={invite.trainerName} />
+            ) : null}
             <AvatarFallback className="bg-brand-primary text-brand-secondary font-bold">
               {invite.trainerName.substring(0, 2).toUpperCase()}
             </AvatarFallback>
