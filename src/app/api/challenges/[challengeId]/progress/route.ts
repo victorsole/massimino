@@ -65,7 +65,7 @@ export async function GET(
             image: true
           }
         },
-        progressUpdates: {
+        challenge_progress: {
           orderBy: { date: 'desc' },
           take: 30 // Last 30 progress entries
         }
@@ -80,7 +80,7 @@ export async function GET(
       success: true,
       data: {
         participation,
-        progressHistory: participation.progressUpdates,
+        progressHistory: participation.challenge_progress,
         challengeMetrics: participation.challenges.metrics
       }
     });
