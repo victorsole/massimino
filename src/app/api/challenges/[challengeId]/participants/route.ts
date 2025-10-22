@@ -305,13 +305,13 @@ export async function DELETE(
     }
 
     // Check if challenge has started
-    if (participation.challenge.status === 'ACTIVE') {
+    if (participation.challenges.status === 'ACTIVE') {
       return NextResponse.json({
         error: 'Cannot leave challenge after it has started'
       }, { status: 400 });
     }
 
-    if (participation.challenge.status === 'COMPLETED') {
+    if (participation.challenges.status === 'COMPLETED') {
       return NextResponse.json({
         error: 'Cannot leave completed challenge'
       }, { status: 400 });
@@ -331,11 +331,11 @@ export async function DELETE(
     }
 
     // TODO: Handle refund if user paid entry fee and challenge hasn't started
-    if (participation.paymentId && ((participation.challenge.entryFee ?? 0) > 0)) {
+    if (participation.paymentId && ((participation.challenges.entryFee ?? 0) > 0)) {
       console.log('TODO: Process refund for challenge exit:', {
         participationId: participation.id,
         paymentId: participation.paymentId,
-        entryFee: participation.challenge.entryFee ?? 0
+        entryFee: participation.challenges.entryFee ?? 0
       });
     }
 
