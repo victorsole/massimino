@@ -217,7 +217,7 @@ async function importExercises() {
         }
       } catch (error) {
         errors++;
-        console.error(`Error importing exercise "${row['Exercise']}":`, error);
+        console.error(`Error importing exercise "${exerciseName || 'unknown'}":`, error);
       }
     }
 
