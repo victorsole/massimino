@@ -13,7 +13,7 @@ async function addVictorGoogleUser() {
     console.log('🚀 Adding Victor\'s Google account to Massimino...');
 
     // Check if user already exists
-    const existingUser = await prisma.user.findUnique({
+    const existingUser = await prisma.users.findUnique({
       where: { email: 'vsoleferioli@gmail.com' }
     });
 
@@ -28,7 +28,7 @@ async function addVictorGoogleUser() {
     }
 
     // Create user account for Google OAuth
-    const user = await prisma.user.create({
+    const user = await prisma.users.create({
       data: {
         email: 'vsoleferioli@gmail.com',
         name: 'Victor Sole',
@@ -55,7 +55,7 @@ async function addVictorGoogleUser() {
     });
 
     // Also create an account record for OAuth linking
-    await prisma.account.create({
+    await prisma.accounts.create({
       data: {
         userId: user.id,
         type: 'oauth',
