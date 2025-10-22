@@ -201,8 +201,7 @@ export async function POST(
         metrics,
         notes,
         proofImages,
-        isVerified: false,
-        updatedAt: new Date()
+        isVerified: false
       }
     });
 
