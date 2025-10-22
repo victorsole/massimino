@@ -2672,6 +2672,188 @@ async function check_volume_achievement(
   return total_volume >= criteria.threshold;
 }
 
+// ============================================================================
+// USER EXERCISES (CUSTOM EXERCISES) QUERIES
+// ============================================================================
+
+/**
+ * List user's custom exercises
+ */
+export async function listUserExercisesDB(userId: string, filters: any = {}) {
+  const where: any = {
+    createdBy: userId,
+    isCustom: true,
+    isActive: true
+  };
+
+  if (filters.q) {
+    where.name = { contains: filters.q, mode: 'insensitive' };
+  }
+  if (filters.category) {
+    where.category = filters.category;
+  }
+  if (filters.muscle) {
+    where.muscleGroups = { has: filters.muscle };
+  }
+  if (filters.equipment) {
+    where.equipment = { has: filters.equipment };
+  }
+
+  return prisma.exercises.findMany({
+    where,
+    orderBy: { createdAt: 'desc' }
+  });
+}
+
+/**
+ * Create user's custom exercise
+ */
+export async function createUserExerciseDB(userId: string, data: any) {
+  return prisma.exercises.create({
+    data: {
+      id: crypto.randomUUID(),
+      name: data.name || 'Custom Exercise',
+      category: data.category || 'Custom',
+      muscleGroups: data.muscleGroups || [],
+      equipment: data.equipment || [],
+      instructions: data.instructions ?? null,
+      difficulty: data.difficulty || 'BEGINNER',
+      safetyNotes: data.safetyNotes ?? null,
+      tags: data.tags || [],
+      createdBy: userId,
+      isCustom: true,
+      updatedAt: new Date()
+    }
+  });
+}
+
+/**
+ * Get user's custom exercise by ID
+ */
+export async function getUserExerciseDB(userId: string, exerciseId: string) {
+  return prisma.exercises.findFirst({
+    where: {
+      id: exerciseId,
+      createdBy: userId,
+      isCustom: true
+    }
+  });
+}
+
+/**
+ * Update user's custom exercise
+ */
+export async function updateUserExerciseDB(userId: string, exerciseId: string, data: any) {
+  // First verify ownership
+  const exercise = await prisma.exercises.findFirst({
+    where: {
+      id: exerciseId,
+      createdBy: userId,
+      isCustom: true
+    }
+  });
+
+  if (!exercise) {
+    throw new Error('Exercise not found or not owned by user');
+  }
+
+  return prisma.exercises.update({
+    where: { id: exerciseId },
+    data: {
+      ...data,
+      updatedAt: new Date()
+    }
+  });
+}
+
+/**
+ * Delete user's custom exercise
+ */
+export async function deleteUserExerciseDB(userId: string, exerciseId: string) {
+  // First verify ownership
+  const exercise = await prisma.exercises.findFirst({
+    where: {
+      id: exerciseId,
+      createdBy: userId,
+      isCustom: true
+    }
+  });
+
+  if (!exercise) {
+    throw new Error('Exercise not found or not owned by user');
+  }
+
+  return prisma.exercises.update({
+    where: { id: exerciseId },
+    data: {
+      isActive: false,
+      updatedAt: new Date()
+    }
+  });
+}
+
+// ============================================================================
+// EXERCISE MEDIA QUERIES
+// ============================================================================
+
+/**
+ * List exercise media
+ */
+export async function listExerciseMediaDB(exerciseId: string) {
+  // Placeholder: Return empty array as media table may not exist
+  return [];
+}
+
+/**
+ * Add exercise media
+ */
+export async function addExerciseMediaDB(exerciseId: string, data: any) {
+  // Placeholder: Return mock media object
+  return {
+    id: crypto.randomUUID(),
+    exerciseId,
+    url: data.url,
+    type: data.type || 'image',
+    createdAt: new Date()
+  };
+}
+
+/**
+ * Update exercise media
+ */
+export async function updateExerciseMediaDB(mediaId: string, data: any) {
+  // Placeholder: Return mock updated media object
+  return {
+    id: mediaId,
+    ...data,
+    updatedAt: new Date()
+  };
+}
+
+/**
+ * Delete exercise media
+ */
+export async function deleteExerciseMediaDB(mediaId: string) {
+  // Placeholder: Return success
+  return { success: true, id: mediaId };
+}
+
+/**
+ * Attach media to workout entry
+ */
+export async function attachMediaToEntryDB(entryId: string, mediaId: string) {
+  // Placeholder: Return success
+  return { success: true, entryId, mediaId };
+}
+
+/**
+ * Detach media from workout entry
+ */
+export async function detachMediaFromEntryDB(entryId: string, mediaId: string) {
+  // Placeholder: Return success
+  return { success: true, entryId, mediaId };
+}
+
 async function check_consistency_achievement(
   user_id: string,
   criteria: AchievementCriteria
