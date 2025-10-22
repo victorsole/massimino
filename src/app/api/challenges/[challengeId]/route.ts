@@ -224,7 +224,7 @@ export async function PUT(
         },
         _count: {
           select: {
-            participants: {
+            challenge_participants: {
               where: { status: 'REGISTERED' }
             }
           }
