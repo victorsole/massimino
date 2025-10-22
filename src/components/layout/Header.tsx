@@ -20,15 +20,25 @@ import {
   Menu,
   X,
   LogOut,
-  Settings,
-  Users,
-  MapPin,
-  ClipboardList,
-  Home,
-  Dumbbell,
-  Users2,
-  Activity
+  Settings
 } from 'lucide-react';
+import {
+  mdiViewDashboardOutline,
+  mdiDumbbell,
+  mdiClipboardCheckOutline,
+  mdiAccountGroupOutline,
+  mdiCompassOutline,
+  mdiRunFast,
+  mdiHandshakeOutline
+} from '@mdi/js';
+
+function Icon({ path, size = 20, className = '' }: { path: string; size?: number; className?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d={path} />
+    </svg>
+  )
+}
 
 interface HeaderProps {
   user?: {
@@ -49,6 +59,7 @@ interface HeaderProps {
 export default function Header({ user }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [avatarError, setAvatarError] = useState(false);
   const [user_stats, set_user_stats] = useState<{
     total_xp: number;
     level: number;
@@ -108,7 +119,7 @@ export default function Header({ user }: HeaderProps) {
                     href="/dashboard"
                     className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
                   >
-                    <Home size={20} />
+                    <Icon path={mdiViewDashboardOutline} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -122,7 +133,7 @@ export default function Header({ user }: HeaderProps) {
                     href="/workout-log"
                     className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
                   >
-                    <Dumbbell size={20} />
+                    <Icon path={mdiDumbbell} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -138,7 +149,7 @@ export default function Header({ user }: HeaderProps) {
                       href="/assessments"
                       className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
                     >
-                      <ClipboardList size={20} />
+                      <Icon path={mdiClipboardCheckOutline} />
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -155,7 +166,7 @@ export default function Header({ user }: HeaderProps) {
                       href="/dashboard"
                       className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
                     >
-                      <Users size={20} />
+                      <Icon path={mdiAccountGroupOutline} />
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -169,7 +180,7 @@ export default function Header({ user }: HeaderProps) {
                       href="/teams/discover"
                       className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
                     >
-                      <Users size={20} />
+                      <Icon path={mdiAccountGroupOutline} />
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -184,7 +195,7 @@ export default function Header({ user }: HeaderProps) {
                     href="/massiminos"
                     className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
                   >
-                    <MapPin size={20} />
+                    <Icon path={mdiCompassOutline} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -198,7 +209,7 @@ export default function Header({ user }: HeaderProps) {
                     href="/exercises"
                     className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
                   >
-                    <Activity size={20} />
+                    <Icon path={mdiRunFast} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -212,7 +223,7 @@ export default function Header({ user }: HeaderProps) {
                     href="/partnerships"
                     className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
                   >
-                    <Users2 size={20} />
+                    <Icon path={mdiHandshakeOutline} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -259,13 +270,15 @@ export default function Header({ user }: HeaderProps) {
                     onClick={() => setIsProfileOpen(!isProfileOpen)}
                     className="flex items-center space-x-2"
                   >
-                    {user.image ? (
+                    {user.image && !avatarError ? (
                       <Image
                         src={user.image}
                         alt={user.name || 'User'}
                         width={32}
                         height={32}
                         className="rounded-full"
+                        referrerPolicy="no-referrer"
+                        onError={() => setAvatarError(true)}
                       />
                     ) : (
                       <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
@@ -347,7 +360,7 @@ export default function Header({ user }: HeaderProps) {
                 className="flex items-center gap-3 px-3 py-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 active:scale-95"
                 onClick={() => setIsMenuOpen(false)}
               >
-                <Home size={20} />
+                <Icon path={mdiViewDashboardOutline} />
                 <span>Dashboard</span>
               </Link>
               <Link
@@ -355,7 +368,7 @@ export default function Header({ user }: HeaderProps) {
                 className="flex items-center gap-3 px-3 py-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 active:scale-95"
                 onClick={() => setIsMenuOpen(false)}
               >
-                <Dumbbell size={20} />
+                <Icon path={mdiDumbbell} />
                 <span>Workout Log</span>
               </Link>
 
@@ -366,7 +379,7 @@ export default function Header({ user }: HeaderProps) {
                   className="flex items-center gap-3 px-3 py-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 active:scale-95"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <ClipboardList size={20} />
+                  <Icon path={mdiClipboardCheckOutline} />
                   <span>Assessments</span>
                 </Link>
               )}
@@ -378,7 +391,7 @@ export default function Header({ user }: HeaderProps) {
                   className="flex items-center gap-3 px-3 py-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 active:scale-95"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <Users size={20} />
+                  <Icon path={mdiAccountGroupOutline} />
                   <span>Manage Teams</span>
                 </Link>
               ) : (
@@ -387,7 +400,7 @@ export default function Header({ user }: HeaderProps) {
                   className="flex items-center gap-3 px-3 py-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 active:scale-95"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <Users size={20} />
+                  <Icon path={mdiAccountGroupOutline} />
                   <span>Join Teams</span>
                 </Link>
               )}
@@ -397,7 +410,7 @@ export default function Header({ user }: HeaderProps) {
                 className="flex items-center gap-3 px-3 py-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 active:scale-95"
                 onClick={() => setIsMenuOpen(false)}
               >
-                <MapPin size={20} />
+                <Icon path={mdiCompassOutline} />
                 <span>Discover</span>
               </Link>
 
@@ -406,7 +419,7 @@ export default function Header({ user }: HeaderProps) {
                 className="flex items-center gap-3 px-3 py-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 active:scale-95"
                 onClick={() => setIsMenuOpen(false)}
               >
-                <Activity size={20} />
+                <Icon path={mdiRunFast} />
                 <span>Exercises</span>
               </Link>
               <Link
@@ -414,7 +427,7 @@ export default function Header({ user }: HeaderProps) {
                 className="flex items-center gap-3 px-3 py-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 active:scale-95"
                 onClick={() => setIsMenuOpen(false)}
               >
-                <Users2 size={20} />
+                <Icon path={mdiHandshakeOutline} />
                 <span>Partnerships</span>
               </Link>
             </div>

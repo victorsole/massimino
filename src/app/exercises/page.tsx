@@ -39,6 +39,7 @@ interface ExerciseStats {
 
 export default function ExercisesPage() {
   const [exercises, setExercises] = useState<Exercise[]>([]);
+  const [myExercises, setMyExercises] = useState<any[]>([]);
   const [filteredExercises, setFilteredExercises] = useState<Exercise[]>([]);
   const [stats, setStats] = useState<ExerciseStats>({
     totalExercises: 0,
@@ -57,10 +58,39 @@ export default function ExercisesPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(20);
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
+  const [activeTab, setActiveTab] = useState<'all'|'mine'>(() => {
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href)
+      return url.searchParams.get('view') === 'my' ? 'mine' : 'all'
+    }
+    return 'all'
+  });
+  const [showMediaModal, setShowMediaModal] = useState(false);
+  const [mediaForm, setMediaForm] = useState<{ provider: string; url: string; title?: string }>({ provider: 'youtube', url: '' });
+  const [targetRef, setTargetRef] = useState<{ type: 'global'|'user'; id: string } | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [createForm, setCreateForm] = useState({
+    name: '',
+    category: '',
+    muscleGroups: '',
+    equipment: '',
+    difficulty: 'BEGINNER',
+    instructions: '',
+    safetyNotes: '',
+    visibility: 'private',
+  });
+  const [linkModal, setLinkModal] = useState<{ userExerciseId: string; name: string } | null>(null);
+  const [linkSearch, setLinkSearch] = useState('');
+  const [linkResults, setLinkResults] = useState<Exercise[]>([]);
 
   // Fetch exercises and stats
   useEffect(() => {
     fetchExercises();
+  }, []);
+
+  useEffect(() => {
+    // Load user's library if authenticated; ignore errors silently
+    fetch('/api/workout/my_exercises').then(r => r.ok ? r.json() : []).then(setMyExercises).catch(() => setMyExercises([]))
   }, []);
 
   // Fetch stats after exercises are loaded
@@ -115,7 +145,8 @@ export default function ExercisesPage() {
   };
 
   const filterExercises = () => {
-    let filtered = exercises;
+    const source = activeTab === 'mine' ? (myExercises as any[]) : (exercises as any[]);
+    let filtered = source;
 
     if (filters.search) {
       filtered = filtered.filter(exercise =>
@@ -146,7 +177,7 @@ export default function ExercisesPage() {
       filtered = filtered.filter(exercise => exercise.difficulty === filters.difficulty);
     }
 
-    setFilteredExercises(filtered);
+    setFilteredExercises(filtered as Exercise[]);
     setCurrentPage(1);
   };
 
@@ -197,6 +228,13 @@ export default function ExercisesPage() {
         <p className="text-gray-600">
           Browse and search through our comprehensive database of fitness exercises
         </p>
+        <div className="mt-4 flex gap-2">
+          <Button variant={activeTab==='all' ? 'default' : 'outline'} onClick={() => setActiveTab('all')}>All Exercises</Button>
+          <Button variant={activeTab==='mine' ? 'default' : 'outline'} onClick={() => setActiveTab('mine')}>My Exercise Library</Button>
+          {activeTab==='mine' && (
+            <Button onClick={() => setShowCreateModal(true)}>Create Exercise</Button>
+          )}
+        </div>
       </div>
 
       {/* Stats Cards */}
@@ -460,6 +498,21 @@ export default function ExercisesPage() {
                             >
                               <Eye className="h-4 w-4" />
                             </Button>
+                            {activeTab === 'all' && (
+                              <Button size="sm" onClick={async () => {
+                                await fetch('/api/workout/my_exercises', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ baseExerciseId: (exercise as any).id, name: exercise.name, category: exercise.category, muscleGroups: exercise.muscleGroups, equipment: exercise.equipment, difficulty: exercise.difficulty }) })
+                                const res = await fetch('/api/workout/my_exercises');
+                                if (res.ok) setMyExercises(await res.json())
+                              }}>Add to My Library</Button>
+                            )}
+                            <Button variant="outline" size="sm" onClick={() => { setTargetRef({ type: activeTab==='mine' ? 'user' : 'global', id: (exercise as any).id }); setShowMediaModal(true) }}>+ Media</Button>
+                            {activeTab === 'mine' && !(exercise as any).baseExerciseId && (
+                              <Button variant="outline" size="sm" onClick={() => {
+                                setLinkModal({ userExerciseId: (exercise as any).id, name: exercise.name });
+                                setLinkSearch(exercise.name);
+                                setLinkResults([]);
+                              }}>Link</Button>
+                            )}
                             {exercise.videoUrl && (
                               <Button variant="outline" size="sm" asChild>
                                 <a href={exercise.videoUrl} target="_blank" rel="noopener noreferrer">
@@ -679,6 +732,174 @@ export default function ExercisesPage() {
                     </a>
                   </Button>
                 )}
+                <Button variant="outline" onClick={() => { setTargetRef({ type: activeTab==='mine' ? 'user' : 'global', id: (selectedExercise as any).id }); setShowMediaModal(true) }}>Add Media</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Add Media Modal */}
+      {showMediaModal && targetRef && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <Card className="max-w-md w-full">
+            <CardHeader>
+              <CardTitle>Add Media</CardTitle>
+              <CardDescription>Link Instagram/TikTok/YouTube URLs to this exercise.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div>
+                <label className="text-sm block mb-1">Provider</label>
+                <Select value={mediaForm.provider} onValueChange={(v) => setMediaForm(prev => ({ ...prev, provider: v }))}>
+                  <SelectTrigger><SelectValue placeholder="Select provider" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="youtube">YouTube</SelectItem>
+                    <SelectItem value="instagram">Instagram</SelectItem>
+                    <SelectItem value="tiktok">TikTok</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="text-sm block mb-1">URL</label>
+                <Input placeholder="https://..." value={mediaForm.url} onChange={(e) => setMediaForm(prev => ({ ...prev, url: e.target.value }))} />
+              </div>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={() => setShowMediaModal(false)}>Cancel</Button>
+                <Button onClick={async () => {
+                  const endpoint = targetRef.type === 'global' ? `/api/workout/exercises/${targetRef.id}/media` : `/api/workout/my_exercises/${targetRef.id}/media`
+                  await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(mediaForm) })
+                  setShowMediaModal(false)
+                }}>Save</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Link to Global Exercise Modal */}
+      {linkModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <Card className="max-w-xl w-full">
+            <CardHeader>
+              <CardTitle>Link “{linkModal.name}” to a global exercise</CardTitle>
+              <CardDescription>Select the closest match from the global database.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input className="pl-10" placeholder="Search global exercises..." value={linkSearch} onChange={async (e)=>{
+                  const v = e.target.value; setLinkSearch(v);
+                  if (v.trim().length >= 2) {
+                    const r = await fetch(`/api/workout/exercises?search=${encodeURIComponent(v)}&limit=10`);
+                    const data = r.ok ? await r.json() : [];
+                    setLinkResults(Array.isArray(data) ? data : []);
+                  } else {
+                    setLinkResults([]);
+                  }
+                }} />
+              </div>
+              <div className="max-h-64 overflow-auto border rounded">
+                {linkResults.length === 0 ? (
+                  <div className="p-3 text-sm text-gray-500">No results. Try another search.</div>
+                ) : linkResults.map((ex: any) => (
+                  <div key={ex.id} className="p-3 hover:bg-gray-50 cursor-pointer border-b last:border-0" onClick={async ()=>{
+                    await fetch(`/api/workout/my_exercises/${linkModal.userExerciseId}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ baseExerciseId: ex.id }) });
+                    const res = await fetch('/api/workout/my_exercises'); if (res.ok) setMyExercises(await res.json());
+                    setLinkModal(null);
+                  }}>
+                    <div className="font-medium">{ex.name}</div>
+                    <div className="text-xs text-gray-500">{ex.category} • {(ex.muscleGroups||[]).slice(0,2).join(', ')}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={()=>setLinkModal(null)}>Cancel</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Create Exercise Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <Card className="max-w-2xl w-full">
+            <CardHeader>
+              <CardTitle>Create Exercise</CardTitle>
+              <CardDescription>Add a custom exercise to My Exercise Library.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-sm">Name</label>
+                  <Input value={createForm.name} onChange={(e)=>setCreateForm({...createForm, name: e.target.value})} />
+                </div>
+                <div>
+                  <label className="text-sm">Category</label>
+                  <Input value={createForm.category} onChange={(e)=>setCreateForm({...createForm, category: e.target.value})} />
+                </div>
+                <div>
+                  <label className="text-sm">Muscle Groups (comma)</label>
+                  <Input value={createForm.muscleGroups} onChange={(e)=>setCreateForm({...createForm, muscleGroups: e.target.value})} />
+                </div>
+                <div>
+                  <label className="text-sm">Equipment (comma)</label>
+                  <Input value={createForm.equipment} onChange={(e)=>setCreateForm({...createForm, equipment: e.target.value})} />
+                </div>
+                <div>
+                  <label className="text-sm">Difficulty</label>
+                  <Select value={createForm.difficulty} onValueChange={(v)=>setCreateForm({...createForm, difficulty: v})}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="BEGINNER">Beginner</SelectItem>
+                      <SelectItem value="INTERMEDIATE">Intermediate</SelectItem>
+                      <SelectItem value="ADVANCED">Advanced</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="text-sm">Visibility</label>
+                  <Select value={createForm.visibility} onValueChange={(v)=>setCreateForm({...createForm, visibility: v})}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="private">Private</SelectItem>
+                      <SelectItem value="followers">Followers</SelectItem>
+                      <SelectItem value="team">Team</SelectItem>
+                      <SelectItem value="public">Public</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="md:col-span-2">
+                  <label className="text-sm">Instructions</label>
+                  <Input value={createForm.instructions} onChange={(e)=>setCreateForm({...createForm, instructions: e.target.value})} />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="text-sm">Safety Notes</label>
+                  <Input value={createForm.safetyNotes} onChange={(e)=>setCreateForm({...createForm, safetyNotes: e.target.value})} />
+                </div>
+              </div>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={()=>setShowCreateModal(false)}>Cancel</Button>
+                <Button onClick={async ()=>{
+                  const payload = {
+                    name: createForm.name,
+                    category: createForm.category || 'Other',
+                    muscleGroups: createForm.muscleGroups.split(',').map(s=>s.trim()).filter(Boolean),
+                    equipment: createForm.equipment.split(',').map(s=>s.trim()).filter(Boolean),
+                    difficulty: createForm.difficulty,
+                    instructions: createForm.instructions || undefined,
+                    safetyNotes: createForm.safetyNotes || undefined,
+                    visibility: createForm.visibility,
+                  };
+                  const res = await fetch('/api/workout/my_exercises', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                  if (res.ok) {
+                    const list = await fetch('/api/workout/my_exercises');
+                    if (list.ok) setMyExercises(await list.json());
+                    setShowCreateModal(false);
+                    setCreateForm({ name:'', category:'', muscleGroups:'', equipment:'', difficulty:'BEGINNER', instructions:'', safetyNotes:'', visibility:'private' });
+                  }
+                }}>Create</Button>
               </div>
             </CardContent>
           </Card>

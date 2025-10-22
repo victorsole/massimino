@@ -7,6 +7,263 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ============================================================================
+// FEEDBACK SYSTEM
+// ============================================================================
+
+enum FeedbackType {
+  BUG
+  FEATURE
+  GENERAL
+  NPS
+  AI
+}
+
+enum FeedbackStatus {
+  OPEN
+  TRIAGED
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum FeedbackSeverity {
+  P0
+  P1
+  P2
+  P3
+}
+
+enum AiRating {
+  UP
+  DOWN
+}
+
+enum FeedbackCommentVisibility {
+  PUBLIC
+  INTERNAL
+}
+
+model feedback_entries {
+  id           String          @id @default(uuid())
+  userId       String?
+  email        String?
+  type         FeedbackType
+  status       FeedbackStatus   @default(OPEN)
+  severity     FeedbackSeverity?
+  title        String?
+  message      String           @db.Text
+  url          String?
+  appVersion   String?
+  platform     DevicePlatform?
+  userAgent    String?
+  context      Json?
+  labels       String[]         @default([])
+  assignedTo   String?
+  related_type String?
+  related_id   String?
+  ai_rating    AiRating?
+  ai_tags      String[]         @default([])
+  nps_score    Int?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  votes        feedback_votes[]
+  comments     feedback_comments[]
+
+  @@index([status, createdAt])
+  @@index([type, createdAt])
+  @@index([severity])
+  @@index([assignedTo, status])
+}
+
+model feedback_votes {
+  id        String  @id @default(uuid())
+  ticketId  String
+  userId    String
+  createdAt DateTime @default(now())
+
+  feedback_entries feedback_entries @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@unique([ticketId, userId])
+  @@index([ticketId, createdAt])
+}
+
+model feedback_comments {
+  id          String                     @id @default(uuid())
+  ticketId    String
+  authorId    String?
+  visibility  FeedbackCommentVisibility  @default(INTERNAL)
+  content     String                     @db.Text
+  createdAt   DateTime                   @default(now())
+
+  feedback_entries feedback_entries @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  users            users?            @relation("feedback_comment_author", fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([ticketId, createdAt])
+}
+
+// ============================================================================
+// PARTNERSHIPS
+// ============================================================================
+
+enum lead_type {
+  GYM
+  AD
+}
+
+enum lead_status {
+  NEW
+  REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum integration_status {
+  PENDING
+  ACTIVE
+  SUSPENDED
+}
+
+enum campaign_status {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+  ARCHIVED
+}
+
+enum creative_type {
+  IMAGE
+  VIDEO
+  NATIVE
+}
+
+enum creative_status {
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+  PAUSED
+}
+
+model partners {
+  id          String    @id @default(uuid())
+  name        String
+  country     String?
+  url         String
+  logoUrl     String?
+  description String?
+  tags        String[]  @default([])
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  gym_integrations gym_integrations[]
+  ad_campaigns     ad_campaigns[]
+
+  @@index([isActive, name])
+}
+
+model partner_leads {
+  id                 String       @id @default(uuid())
+  type               lead_type
+  orgName            String
+  contactName        String
+  email              String
+  phone              String?
+  website            String?
+  details            Json?
+  status             lead_status  @default(NEW)
+  convertedPartnerId String?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  @@index([status, createdAt])
+  @@index([email])
+}
+
+model gym_integrations {
+  id             String              @id @default(uuid())
+  partnerId      String
+  apiKeyHash     String
+  allowedFeatures Json?
+  webhookUrl     String?
+  branding       Json?
+  status         integration_status  @default(PENDING)
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+
+  partners partners @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+
+  @@index([partnerId])
+  @@index([status])
+}
+
+model ad_campaigns {
+  id          String          @id @default(uuid())
+  partnerId   String
+  name        String
+  objective   String?
+  budgetCents Int?
+  cpmCents    Int?
+  cpcCents    Int?
+  spendCents  Int             @default(0)
+  startAt     DateTime?
+  endAt       DateTime?
+  status      campaign_status @default(DRAFT)
+  targeting   Json?
+  placements  String[]        @default([])
+  impressions Int             @default(0)
+  clicks      Int             @default(0)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  partners     partners     @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  ad_creatives ad_creatives[]
+
+  @@index([partnerId, status])
+  @@index([startAt, endAt])
+}
+
+model ad_creatives {
+  id          String          @id @default(uuid())
+  campaignId  String
+  type        creative_type
+  assetUrl    String
+  title       String?
+  body        String?
+  cta         String?
+  clickUrl    String
+  status      creative_status @default(PENDING_REVIEW)
+  impressions Int             @default(0)
+  clicks      Int             @default(0)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  ad_campaigns ad_campaigns @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId, status])
+}
+
+enum ad_event_type {
+  IMPRESSION
+  CLICK
+}
+
+model ad_events {
+  id         String        @id @default(uuid())
+  campaignId String
+  creativeId String
+  placement  String
+  event      ad_event_type
+  userId     String?
+  createdAt  DateTime      @default(now())
+
+  ad_campaigns ad_campaigns @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  ad_creatives ad_creatives @relation(fields: [creativeId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId, placement, event, createdAt])
+  @@index([creativeId, event, createdAt])
+}
+
 model accounts {
   id                String  @id
   userId            String
@@ -620,6 +877,9 @@ model exercises {
   team_workout_exercises     team_workout_exercises[]
   workout_log_entries        workout_log_entries[]
   workout_template_exercises workout_template_exercises[]
+  // Back-relations
+  user_exercises             user_exercises[]
+  exercise_media             exercise_media[]
 
   @@index([category])
   @@index([category, muscleGroups])
@@ -1903,6 +2163,8 @@ model users {
   onlyTrainerDMs                                              Boolean                          @default(true)
   profileVisibility                                           String                           @default("PUBLIC")
   showRealName                                                Boolean                          @default(false)
+  allowWorkoutSharing                                         Boolean                          @default(false)
+  shareWeightsPublicly                                        Boolean                          @default(false)
   instagramUrl                                                String?
   tiktokUrl                                                   String?
   facebookUrl                                                 String?
@@ -2023,6 +2285,11 @@ model users {
   workout_analytics                                           workout_analytics[]
   workout_log_entries_workout_log_entries_coachIdTousers      workout_log_entries[]            @relation("workout_log_entries_coachIdTousers")
   workout_log_entries_workout_log_entries_userIdTousers       workout_log_entries[]            @relation("workout_log_entries_userIdTousers")
+  // Back-relations for user content
+  user_exercises                                             user_exercises[]
+  exercise_media                                             exercise_media[]
+  user_points                                                user_points[]
+  feedback_comment_author                                    feedback_comments[]              @relation("feedback_comment_author")
   workout_progress                                            workout_progress[]
   workout_sessions_workout_sessions_coachIdTousers            workout_sessions[]               @relation("workout_sessions_coachIdTousers")
   workout_sessions_workout_sessions_userIdTousers             workout_sessions[]               @relation("workout_sessions_userIdTousers")
@@ -2108,6 +2375,7 @@ model workout_log_entries {
   users_workout_log_entries_userIdTousers  users                   @relation("workout_log_entries_userIdTousers", fields: [userId], references: [id])
   team_workout_logs                        team_workout_logs?      @relation(fields: [teamWorkoutId], references: [id])
   entry_comments                           workout_entry_comments[]
+  workout_entry_media                      workout_entry_media[]
 
   @@index([coachId, date])
   @@index([exerciseId, date])
@@ -2115,6 +2383,99 @@ model workout_log_entries {
   @@index([teamWorkoutId])
   @@index([isTeamWorkout])
   @@index([userId, isTeamWorkout])
+}
+
+// ===========================
+// User Exercise Library
+// ===========================
+
+model user_exercises {
+  id            String   @id @default(uuid())
+  userId        String
+  baseExerciseId String? // references global exercises.id when forked
+  name          String
+  slug          String?
+  category      String
+  muscleGroups  String[] @default([])
+  equipment     String[] @default([])
+  instructions  String?
+  difficulty    String   @default("BEGINNER")
+  safetyNotes   String?
+  tags          String[] @default([])
+  visibility    String   @default("private") // private | followers | team | public
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime
+
+  users         users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercises     exercises? @relation(fields: [baseExerciseId], references: [id])
+  // Back-relations
+  exercise_media exercise_media[]
+
+  @@index([userId, createdAt])
+  @@index([baseExerciseId])
+  @@index([isActive])
+}
+
+// ===========================
+// Exercise Media & Attachments
+// ===========================
+
+model exercise_media {
+  id              String   @id @default(uuid())
+  userId          String
+  globalExerciseId String?
+  userExerciseId  String?
+  provider        String   // instagram | tiktok | youtube | upload | other
+  url             String
+  title           String?
+  thumbnailUrl    String?
+  durationSec     Int?
+  visibility      String   @default("private")
+  status          String   @default("pending") // pending | approved | rejected
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime
+
+  users           users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercises       exercises? @relation(fields: [globalExerciseId], references: [id])
+  user_exercises  user_exercises? @relation(fields: [userExerciseId], references: [id])
+  workout_entry_media workout_entry_media[]
+
+  @@index([userId, createdAt])
+  @@index([globalExerciseId])
+  @@index([userExerciseId])
+  @@index([visibility, createdAt])
+}
+
+model workout_entry_media {
+  id        String               @id @default(uuid())
+  entryId   String
+  mediaId   String
+  createdAt DateTime             @default(now())
+
+  workout_log_entries workout_log_entries @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  exercise_media      exercise_media      @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  @@unique([entryId, mediaId])
+  @@index([entryId])
+  @@index([mediaId])
+}
+
+// ===========================
+// Gamification Points (per user)
+// ===========================
+
+model user_points {
+  id          String   @id @default(uuid())
+  userId      String
+  source      String   // exercise_created | media_added | media_attached
+  points      Int      @default(1)
+  description String?
+  createdAt   DateTime @default(now())
+
+  users       users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
 }
 
 model workout_progress {
@@ -2535,6 +2896,7 @@ enum PaymentType {
   PACKAGE
   SUBSCRIPTION
   CONSULTATION
+  TIP
   LATE_FEE
   CANCELLATION_FEE
   EQUIPMENT

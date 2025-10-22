@@ -190,6 +190,8 @@ export async function GET(
         locationVisibility: true,
         acceptDMs: true,
         onlyTrainerDMs: true,
+        allowWorkoutSharing: true,
+        shareWeightsPublicly: true,
 
         // Social Media
         instagramUrl: true,
@@ -255,10 +257,144 @@ export async function GET(
     // 8. Filter user data based on privacy settings
     const publicProfile = filterUserData(user, viewerId)
 
-    // 9. Return filtered public profile
+    // 9. Optionally include public sections
+    const url = new URL(_request.url)
+    const includeParam = url.searchParams.get('include') || ''
+    const include = includeParam
+      .split(',')
+      .map(s => s.trim().toLowerCase())
+      .filter(Boolean)
+
+    const sections: any = {}
+
+    // Helper to parse integer limits
+    const parseLimit = (key: string, defaultValue: number) => {
+      const raw = url.searchParams.get(key)
+      const n = raw ? parseInt(raw, 10) : defaultValue
+      return Number.isFinite(n) && n > 0 ? Math.min(n, 20) : defaultValue
+    }
+
+    // Workouts (sanitized)
+    if (include.includes('workouts')) {
+      const allowWorkoutSharing = (user as any).allowWorkoutSharing === true
+      if (allowWorkoutSharing) {
+        const workoutsLimit = parseLimit('workouts_limit', 5)
+        const shareWeightsPublicly = (user as any).shareWeightsPublicly === true
+
+        const sessions = await prisma.workout_sessions.findMany({
+          where: { userId: user.id },
+          orderBy: { date: 'desc' },
+          take: workoutsLimit,
+          select: {
+            id: true,
+            date: true,
+            title: true,
+            workout_log_entries: {
+              select: {
+                exerciseId: true,
+                setNumber: true,
+                reps: true,
+                weight: true,
+                unit: true,
+                personalRecord: true,
+                exercises: { select: { id: true, name: true } }
+              }
+            }
+          }
+        })
+
+        sections.workouts = sessions.map(s => {
+          // Aggregate by exercise name
+          const byExercise = new Map<string, { name: string; sets: number; reps: number[]; pr?: boolean }>()
+          for (const e of s.workout_log_entries) {
+            const name = e.exercises?.name || 'Exercise'
+            const prev = byExercise.get(name) || { name, sets: 0, reps: [], pr: false }
+            prev.sets += 1
+            prev.reps.push(e.reps)
+            prev.pr = prev.pr || !!e.personalRecord
+            byExercise.set(name, prev)
+          }
+          const exercises = Array.from(byExercise.values()).map(x => ({
+            name: x.name,
+            sets: x.sets,
+            reps: `${Math.min(...x.reps)}-${Math.max(...x.reps)}`
+          }))
+
+          const data: any = {
+            sessionId: s.id,
+            date: s.date,
+            title: s.title || null,
+            exercises
+          }
+          if (shareWeightsPublicly) {
+            // Lightweight volume hint (count only)
+            data.volumeHint = s.workout_log_entries.length
+          }
+          if (s.workout_log_entries.some(e => e.personalRecord)) {
+            data.pr = true
+          }
+          return data
+        })
+      }
+    }
+
+    // Achievements
+    if (include.includes('achievements')) {
+      const limit = parseLimit('achievements_limit', 8)
+      const items = await prisma.user_achievements.findMany({
+        where: { userId: user.id },
+        orderBy: { unlockedAt: 'desc' },
+        take: limit,
+        select: {
+          id: true,
+          unlockedAt: true,
+          achievements: { select: { code: true, name: true, category: true } }
+        }
+      })
+      sections.achievements = items.map(i => ({
+        id: i.id,
+        code: i.achievements.code,
+        name: i.achievements.name,
+        category: i.achievements.category,
+        earnedAt: i.unlockedAt
+      }))
+    }
+
+    // Media (public)
+    if (include.includes('media')) {
+      const limit = parseLimit('media_limit', 6)
+      const media = await prisma.exercise_media.findMany({
+        where: { userId: user.id, visibility: 'public' },
+        orderBy: { createdAt: 'desc' },
+        take: limit,
+        select: { id: true, url: true, thumbnailUrl: true, provider: true, title: true }
+      })
+      sections.media = media
+    }
+
+    // Teams (public)
+    if (include.includes('teams')) {
+      const limit = parseLimit('teams_limit', 4)
+      const teams = await prisma.teams.findMany({
+        where: { trainerId: user.id, isActive: true, visibility: 'PUBLIC' },
+        orderBy: { createdAt: 'desc' },
+        take: limit,
+        select: {
+          id: true,
+          name: true,
+          _count: { select: { team_members: true } }
+        }
+      })
+      sections.teams = teams.map(t => ({ id: t.id, name: t.name, memberCount: t._count.team_members }))
+    }
+
+    // 10. Return filtered public profile with optional sections
     return NextResponse.json({
       success: true,
-      data: publicProfile
+      data: {
+        ...publicProfile,
+        ...(Object.keys(sections).length > 0 ? { sections } : {})
+      }
     })
 
   } catch (error) {

@@ -21,6 +21,7 @@ type ExerciseListItem = {
   equipment: string[];
   difficulty?: string;
   instructions?: string;
+  _userExerciseId?: string; // present if this originated from My Library custom (no baseExerciseId)
 };
 
 type WorkoutEntry = {
@@ -76,6 +77,9 @@ export default function WorkoutLogPage() {
     duration: '',
     isPublic: false
   });
+  const [linkMyExercise, setLinkMyExercise] = useState<{ id: string; name: string } | null>(null);
+  const [linkSearch, setLinkSearch] = useState('');
+  const [linkResults, setLinkResults] = useState<ExerciseListItem[]>([]);
   const [newEntry, setNewEntry] = useState({
     exercise: '',
     exerciseId: '',
@@ -314,12 +318,17 @@ export default function WorkoutLogPage() {
   const fetchExercises = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/workout/exercises');
-      if (response.ok) {
-        const text = await response.text();
+      const [resGlobal, resMine] = await Promise.all([
+        fetch('/api/workout/exercises'),
+        fetch('/api/workout/my_exercises')
+      ]);
+      // Global list
+      let globalList: ExerciseListItem[] = [];
+      if (resGlobal.ok) {
+        const text = await resGlobal.text();
         try {
           const data = JSON.parse(text);
-          const normalized: ExerciseListItem[] = Array.isArray(data)
+          globalList = Array.isArray(data)
             ? data.map((e: any) => ({
                 id: String(e.id),
                 name: String(e.name || e.title || 'Exercise'),
@@ -330,22 +339,58 @@ export default function WorkoutLogPage() {
                 ...(e.instructions ? { instructions: String(e.instructions) } : {}),
               }))
             : [];
-          setExercises(normalized);
-          setFilteredExercises(normalized.slice(0, 20));
         } catch (jsonError) {
           console.error('JSON parsing error:', jsonError);
-          console.error('Response text:', text);
-          // Fallback to basic exercises if JSON parsing fails
-          const fallbackExercises: ExerciseListItem[] = [
-            { id: 'fallback-1', name: 'Barbell Bench Press', category: 'Compound', muscleGroups: ['chest', 'triceps'], equipment: ['barbell', 'bench'] },
-            { id: 'fallback-2', name: 'Squats', category: 'Compound', muscleGroups: ['quadriceps', 'glutes'], equipment: ['barbell'] },
-            { id: 'fallback-3', name: 'Deadlift', category: 'Compound', muscleGroups: ['hamstrings', 'glutes', 'back'], equipment: ['barbell'] }
-          ];
-          setExercises(fallbackExercises);
-          setFilteredExercises(fallbackExercises);
         }
+      }
+      // My Library (forked only)
+      let minePreferred: ExerciseListItem[] = [];
+      let mineCustom: ExerciseListItem[] = [];
+      if (resMine.ok) {
+        try {
+          const my = await resMine.json();
+          const list = Array.isArray(my) ? my : [];
+          const forked = list.filter((m: any) => !!m.baseExerciseId);
+          const custom = list.filter((m: any) => !m.baseExerciseId);
+          minePreferred = forked.map((m: any) => ({
+            id: String(m.baseExerciseId),
+            name: String(m.name || 'Exercise'),
+            category: String(m.category || 'General'),
+            muscleGroups: Array.isArray(m.muscleGroups) ? m.muscleGroups.map(String) : [],
+            equipment: Array.isArray(m.equipment) ? m.equipment.map(String) : [],
+            ...(m.difficulty ? { difficulty: String(m.difficulty) } : {}),
+            ...(m.instructions ? { instructions: String(m.instructions) } : {}),
+          }));
+          mineCustom = custom.map((m: any) => ({
+            id: `user:${m.id}`,
+            name: String(m.name || 'Exercise'),
+            category: String(m.category || 'General'),
+            muscleGroups: Array.isArray(m.muscleGroups) ? m.muscleGroups.map(String) : [],
+            equipment: Array.isArray(m.equipment) ? m.equipment.map(String) : [],
+            ...(m.difficulty ? { difficulty: String(m.difficulty) } : {}),
+            ...(m.instructions ? { instructions: String(m.instructions) } : {}),
+            _userExerciseId: String(m.id),
+          }));
+        } catch {}
+      }
+      // Merge unique by id, prioritize mine
+      const seen = new Set<string>();
+      const merged: ExerciseListItem[] = [];
+      for (const ex of [...minePreferred, ...mineCustom, ...globalList]) {
+        if (!seen.has(ex.id)) { seen.add(ex.id); merged.push(ex); }
+      }
+      const list = merged.length ? merged : globalList;
+      if (!list.length) {
+        const fallbackExercises: ExerciseListItem[] = [
+          { id: 'fallback-1', name: 'Barbell Bench Press', category: 'Compound', muscleGroups: ['chest', 'triceps'], equipment: ['barbell', 'bench'] },
+          { id: 'fallback-2', name: 'Squats', category: 'Compound', muscleGroups: ['quadriceps', 'glutes'], equipment: ['barbell'] },
+          { id: 'fallback-3', name: 'Deadlift', category: 'Compound', muscleGroups: ['hamstrings', 'glutes', 'back'], equipment: ['barbell'] }
+        ];
+        setExercises(fallbackExercises);
+        setFilteredExercises(fallbackExercises);
       } else {
-        console.error('API response not ok:', response.status, response.statusText);
+        setExercises(list);
+        setFilteredExercises(list.slice(0, 20));
       }
     } catch (error) {
       console.error('Error fetching exercises:', error);
@@ -421,6 +466,13 @@ export default function WorkoutLogPage() {
   };
 
   const handleExerciseSelect = (exercise: ExerciseListItem) => {
+    if (exercise.id.startsWith('user:') && exercise._userExerciseId) {
+      // Prompt user to link this custom exercise to a global one
+      setLinkMyExercise({ id: exercise._userExerciseId, name: exercise.name });
+      setLinkSearch(exercise.name);
+      setLinkResults([]);
+      return;
+    }
     setSelectedExercise(exercise);
     setNewEntry({
       ...newEntry,
@@ -1003,7 +1055,7 @@ export default function WorkoutLogPage() {
             {isTrainerOrAdmin && (
               <Button variant="outline" onClick={() => setShowCreateForClient(true)}>
                 <Zap className="h-4 w-4 mr-2" />
-                Create Session for Client
+                Create Session for Athlete
               </Button>
             )}
           </div>
@@ -2108,6 +2160,53 @@ export default function WorkoutLogPage() {
         )}
       </div>
 
+      {/* Link My Exercise to Global Modal */}
+      {linkMyExercise && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow max-w-xl w-full p-4">
+            <h3 className="text-lg font-semibold mb-2">Link “{linkMyExercise.name}” to a global exercise</h3>
+            <p className="text-sm text-gray-600 mb-3">Select the closest match from the global database to use it in your workout logs.</p>
+            <div className="relative mb-3">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input className="pl-10" placeholder="Search global exercises..." value={linkSearch} onChange={async (e)=>{
+                const v = e.target.value; setLinkSearch(v);
+                if (v.trim().length >= 2) {
+                  const r = await fetch(`/api/workout/exercises?search=${encodeURIComponent(v)}&limit=10`);
+                  if (r.ok) {
+                    const data = await r.json();
+                    const list = Array.isArray(data) ? data.map((e:any)=>({ id:String(e.id), name:e.name, category:e.category, muscleGroups:e.muscleGroups||[], equipment:e.equipment||[] })) : [];
+                    setLinkResults(list);
+                  }
+                } else {
+                  setLinkResults([]);
+                }
+              }} />
+            </div>
+            <div className="max-h-60 overflow-auto border rounded">
+              {linkResults.length === 0 ? (
+                <div className="p-3 text-sm text-gray-500">No results. Try another search.</div>
+              ) : linkResults.map((ex)=> (
+                <div key={ex.id} className="p-3 hover:bg-gray-50 cursor-pointer border-b last:border-0" onClick={async ()=>{
+                  // Update my exercise to link to this global id
+                  await fetch(`/api/workout/my_exercises/${linkMyExercise.id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ baseExerciseId: ex.id }) });
+                  // Proceed with selection
+                  setSelectedExercise(ex);
+                  setNewEntry({ ...newEntry, exercise: ex.name, exerciseId: ex.id, setType:'STRAIGHT', sets:'1' });
+                  setExerciseSearch('');
+                  setLinkMyExercise(null);
+                }}>
+                  <div className="font-medium">{ex.name}</div>
+                  <div className="text-xs text-gray-500">{ex.category} • {ex.muscleGroups.slice(0,2).join(', ')}</div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 flex justify-end gap-2">
+              <Button variant="outline" onClick={()=>setLinkMyExercise(null)}>Cancel</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Save as Template Modal */}
       {showSaveTemplateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -2360,23 +2459,23 @@ export default function WorkoutLogPage() {
         </div>
       )}
 
-      {/* Trainer/Admin: Create Session for Client Modal */}
+      {/* Trainer/Admin: Create Session for Athlete Modal */}
       {showCreateForClient && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <Card className="max-w-md w-full">
             <CardHeader>
-              <CardTitle>Create Session for Client</CardTitle>
-              <CardDescription>Select a client and optional title to start a session on their behalf.</CardDescription>
+              <CardTitle>Create Session for Athlete</CardTitle>
+              <CardDescription>Select an athlete and optional title to start a session on their behalf.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2">Client</label>
+                <label className="block text-sm font-medium mb-2">Athlete</label>
                 <select
                   value={selectedClientId}
                   onChange={(e) => setSelectedClientId(e.target.value)}
                   className="w-full border rounded-md p-2"
                 >
-                  <option value="">Select a client</option>
+                  <option value="">Select an athlete</option>
                   {clients.map((c) => (
                     <option key={c.id} value={c.id}>{c.name || c.email || c.id}</option>
                   ))}
@@ -2419,16 +2518,16 @@ export default function WorkoutLogPage() {
                     });
                     const data = await res.json();
                     if (data.session) {
-                      alert('Client session started');
+                      alert('Athlete session started');
                       setShowCreateForClient(false);
                       setSelectedClientId('');
                       setSessionTitle('');
                     } else {
-                      alert(data.error || 'Failed to create client session');
+                      alert(data.error || 'Failed to create athlete session');
                     }
                   } catch (e) {
                     console.error(e);
-                    alert('Failed to create client session');
+                    alert('Failed to create athlete session');
                   }
                 }}
                 className="flex-1 bg-green-600 hover:bg-green-700"

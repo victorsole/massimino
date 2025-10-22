@@ -15,7 +15,7 @@ import type { RolePermissions, SafeUser, PermissionLevel } from '@/types/auth';
  */
 export const ROLES = {
   [UserRole.CLIENT]: {
-    name: 'Client',
+    name: 'Athlete',
     description: 'Regular fitness enthusiasts and gym-goers',
     level: 0,
     color: '#64748b',

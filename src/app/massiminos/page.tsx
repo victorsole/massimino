@@ -144,7 +144,7 @@ function FilterPanel({
                     size="sm"
                     onClick={() => onFiltersChange({ ...filters, role })}
                   >
-                    {role}
+                    {role === 'CLIENT' ? 'ATHLETE' : role}
                   </Button>
                 ))}
               </div>
@@ -234,7 +234,9 @@ function UserCard({
         <div className="flex gap-4">
           {/* Avatar */}
           <Avatar className="w-20 h-20 flex-shrink-0">
-            <AvatarImage src={user.image || ''} alt={user.name} />
+            {user.image ? (
+              <AvatarImage src={user.image} alt={user.name} />
+            ) : null}
             <AvatarFallback className="text-lg">{user.name.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
 

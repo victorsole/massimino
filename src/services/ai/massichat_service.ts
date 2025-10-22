@@ -89,6 +89,12 @@ Clarifications policy:
 - Even if you ask a question, you MUST still provide an initial recommendation or workout using safe, reasonable assumptions. Never reply with a question alone.
 - If assumptions are used, state them briefly in one line ("Assuming: ...").
 
+Partnerships policy (non‑invasive):
+- Mention a Massimino partner only when the user's request clearly relates (e.g., supplements, protein, pre‑workout, gym memberships).
+- At most one very short partner sentence, after your main answer. Keep it optional and user‑centric.
+- Prefer regionally relevant partners (e.g., Spain → Amix; Belgium → Jims) when known.
+- Never allow partner mentions to replace or block core guidance.
+
 When proposing a workout:
 1) First write a brief 1-2 sentence rationale (and assumptions if any).
 2) Then on a new line write exactly: WORKOUT_PROPOSAL_JSON
@@ -100,6 +106,30 @@ When proposing a workout:
 5) No other prose after the suggestions line.`;
 
   const userContext = `User Profile:\n${context.userProfile}\n\nAssessments:\n${context.assessmentSummary}\n\nHistory:\n${context.workoutHistory}`
+
+  // Build a brief partner context only if relevant to the user's query
+  let partnerContext = ''
+  try {
+    const msg = (req.message || '').toLowerCase()
+    const isSuppIntent = /(supplement|protein|pre[- ]?workout|creatine|bcaa|amino|whey)/i.test(msg)
+    const isGymIntent = /(\bgym\b|membership|join\s+gym|fitness\s+club)/i.test(msg)
+    if (isSuppIntent || isGymIntent) {
+      const u = await prisma.users.findUnique({ where: { id: req.userId }, select: { country: true } })
+      const country = (u?.country || '').toLowerCase()
+
+      if (isSuppIntent) {
+        // Supplements → Amix (regardless of country for now)
+        partnerContext = 'If helpful: Amix — quality sports supplements (protein, pre‑workout, recovery). Learn more: https://amix.com/?utm_source=massimino&utm_medium=massichat&utm_campaign=amix'
+      } else if (isGymIntent) {
+        // Gyms → Jims only for Belgium
+        if (country.includes('belgium')) {
+          partnerContext = 'If helpful: Jims (Belgium) — accessible gym network. Learn more: https://www.jims.be/nl?utm_source=massimino&utm_medium=massichat&utm_campaign=jims'
+        } else {
+          partnerContext = ''
+        }
+      }
+    }
+  } catch {}
 
   // 3.b) Knowledge snippets (top-3)
   let kbContext = ''
@@ -119,6 +149,7 @@ When proposing a workout:
       messages: [
         { role: 'system', content: system },
         { role: 'system', content: userContext + kbContext },
+        ...(partnerContext ? [{ role: 'system', content: `PartnerContext: ${partnerContext}` } as const] : []),
         { role: 'user', content: req.message },
       ],
       temperature: 0.4,
@@ -144,7 +175,7 @@ When proposing a workout:
           {
             role: 'user',
             content: [
-              { type: 'text', text: `${userContext}${kbContext}\n\n${req.message}` },
+              { type: 'text', text: `${userContext}${kbContext}${partnerContext ? `\n\nPartnerContext: ${partnerContext}` : ''}\n\n${req.message}` },
             ],
           },
         ],

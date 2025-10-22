@@ -303,7 +303,7 @@ export default function BusinessDashboard() {
               <DialogHeader>
                 <DialogTitle>Create Subscription Plan</DialogTitle>
                 <DialogDescription>
-                  Create a new recurring subscription plan for your clients
+                  Create a new recurring subscription plan for your athletes
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
@@ -534,7 +534,7 @@ export default function BusinessDashboard() {
                     className="col-span-3"
                     value={newPackage.description}
                     onChange={(e) => setNewPackage(prev => ({ ...prev, description: e.target.value }))}
-                    placeholder="Perfect for committed clients"
+                    placeholder="Perfect for committed athletes"
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
@@ -785,7 +785,7 @@ export default function BusinessDashboard() {
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Business Dashboard</h2>
           <p className="text-muted-foreground">
-            Manage your training business, track revenue, and grow your client base
+            Manage your training business, track revenue, and grow your athlete base
           </p>
         </div>
         <div className="flex items-center gap-2">

@@ -49,7 +49,7 @@ Fitness professionals must provide valid certification or credentials for verifi
 
 ### 4.1 Permitted Activities
 - Sharing fitness knowledge, techniques, and educational content
-- Professional coaching and client communication
+- Professional coaching and athlete communication
 - Respectful networking within the fitness community
 - Promoting legitimate fitness services, products, or events
 - Constructive feedback on form, technique, and performance
@@ -87,7 +87,7 @@ Users may appeal enforcement actions by contacting our moderation team within 30
 
 ### 6.1 Privacy Settings
 - Users control their profile visibility and message preferences
-- Fitness professionals can restrict communications to clients only
+- Fitness professionals can restrict communications to athletes only
 - Private communities and content sharing is protected by robust privacy controls
 
 ### 6.2 Safety Monitoring

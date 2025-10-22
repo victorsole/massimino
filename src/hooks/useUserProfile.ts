@@ -49,6 +49,8 @@ export type FullUserProfile = {
   acceptDMs: boolean;
   onlyTrainerDMs: boolean;
   showRealName: boolean;
+  allowWorkoutSharing: boolean;
+  shareWeightsPublicly: boolean;
 
   // Trainer Info
   trainerVerified: boolean;

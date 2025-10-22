@@ -548,20 +548,20 @@ export default function AssessmentClient({ trainerId, clients }: AssessmentClien
         <CardHeader>
           <CardTitle>Assessment Setup</CardTitle>
           <CardDescription>
-            Select the client and assessment type to begin
+            Select the athlete and assessment type to begin
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="client">Select Client</Label>
+              <Label htmlFor="client">Select Athlete</Label>
               <select
                 id="client"
                 value={selectedClient}
                 onChange={(e) => setSelectedClient(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md"
               >
-                <option value="">Choose a client...</option>
+                <option value="">Choose an athlete...</option>
                 {clients.map((client) => (
                   <option key={client.id} value={client.id}>
                     {client.name || client.email}

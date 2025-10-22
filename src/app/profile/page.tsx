@@ -12,12 +12,14 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { updateEmailAction, submitTrainerAccreditationAction, updateProfileBasicsAction, uploadAvatarAction, deleteTrainerCredentialAction, updateSocialMediaAction, updateFitnessPreferencesAction, updateLocationAction, uploadMediaAction, updateMediaSettingsAction, uploadTrainerCertificateAction } from './actions';
+import { updateEmailAction, submitTrainerAccreditationAction, updateProfileBasicsAction, uploadAvatarAction, deleteTrainerCredentialAction, updateSocialMediaAction, updateFitnessPreferencesAction, updateLocationAction, uploadMediaAction, updateMediaSettingsAction, uploadTrainerCertificateAction, updateWorkoutSharingAction } from './actions';
 import CameraCapture from '@/components/ui/camera_capture';
 import SocialMediaIntegration from '@/components/ui/social_media_integration';
 import { Plus } from 'lucide-react';
+import Image from 'next/image';
 import { useFormStatus } from 'react-dom';
 import { useUserProfile } from '@/hooks/useUserProfile';
+import { formatRole } from '@/core/utils';
 
 export default function ProfilePage() {
   const { data: session } = useSession();
@@ -32,6 +34,7 @@ export default function ProfilePage() {
   const [providerQuery, setProviderQuery] = useState('');
   const [credentialFileName, setCredentialFileName] = useState<string>('');
   const [avatarFileName, setAvatarFileName] = useState<string>('');
+  const [avatarLoadError, setAvatarLoadError] = useState<boolean>(false);
   const [selectedProvider, setSelectedProvider] = useState<null | { id: string; name: string; country: string; qualifications: string[] }>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
@@ -363,7 +366,7 @@ export default function ProfilePage() {
             <h1 className="text-3xl font-bold text-gray-900">Profile</h1>
             <p className="text-gray-600 mt-1">Manage your account and trainer status</p>
           </div>
-          <Badge variant="secondary" className="text-sm px-3 py-1">{user?.role || 'CLIENT'}</Badge>
+          <Badge variant="secondary" className="text-sm px-3 py-1">{formatRole(user?.role || 'CLIENT')}</Badge>
         </div>
 
         {/* Profile Completion Indicator */}
@@ -481,9 +484,24 @@ export default function ProfilePage() {
               <div className="relative">
                 <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden border-2 border-gray-300">
                   {avatarPreview ? (
-                    <img src={avatarPreview} alt="Avatar preview" className="w-full h-full object-cover" />
-                  ) : user?.image ? (
-                    <img src={user.image} alt="Current avatar" className="w-full h-full object-cover" />
+                    <Image
+                      src={avatarPreview}
+                      alt="Avatar preview"
+                      width={96}
+                      height={96}
+                      className="w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (user?.image && !avatarLoadError) ? (
+                    <Image
+                      src={user.image}
+                      alt="Current avatar"
+                      width={96}
+                      height={96}
+                      className="w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
+                      onError={() => setAvatarLoadError(true)}
+                    />
                   ) : (
                     <svg className="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
@@ -1104,6 +1122,50 @@ export default function ProfilePage() {
               userId={session?.user?.id || ''}
             />
 
+            {/* Workout Log Sharing Settings */}
+            <form action={async (e) => {
+              // client wrapper to call server action then refresh
+            }} onSubmit={async (e) => {
+              e.preventDefault();
+              const formData = new FormData(e.currentTarget);
+              await updateWorkoutSharingAction(formData as any);
+              await refreshProfile();
+              setNotifications(prev => [...prev, { id: String(Date.now()), type: 'success', message: 'Workout log sharing updated' }]);
+            }} className="space-y-4 p-4 bg-gray-50 rounded-lg">
+              <input type="hidden" name="userId" value={session?.user?.id || ''} />
+              <h4 className="font-medium text-gray-900">Workout Log Sharing</h4>
+
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="font-medium">Public workout logs</Label>
+                    <p className="text-sm text-gray-600">Show a synthesized summary of your recent workouts on your public profile and in Massiminos.</p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    name="allowWorkoutSharing"
+                    defaultChecked={Boolean(profile?.allowWorkoutSharing)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="font-medium">Show weights publicly</Label>
+                    <p className="text-sm text-gray-600">Include light weight hints in summaries (no raw set-by-set data).</p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    name="shareWeightsPublicly"
+                    defaultChecked={Boolean(profile?.shareWeightsPublicly)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+
+              <Button type="submit" className="w-full">Save Workout Log Settings</Button>
+            </form>
+
             {/* Media Privacy Settings */}
             <form action={updateMediaSettingsAction} className="space-y-4 p-4 bg-gray-50 rounded-lg" onSubmit={async (e) => {
               e.preventDefault();
@@ -1256,7 +1318,7 @@ export default function ProfilePage() {
                 </p>
                 <p className="text-sm text-gray-600">
                   {user?.trainerVerified
-                    ? 'You can create teams, manage clients, and receive payments'
+                    ? 'You can create teams, manage athletes, and receive payments'
                     : 'Complete verification to unlock trainer features'
                   }
                 </p>

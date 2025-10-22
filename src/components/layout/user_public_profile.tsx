@@ -2,9 +2,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { formatRole } from '@/core/utils'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import {
   CheckCircle, MapPin, MessageCircle, Award,
@@ -39,6 +41,19 @@ interface PublicUserProfile {
   acceptDMs: boolean
   onlyTrainerDMs: boolean
   createdAt: Date
+  sections?: {
+    workouts?: Array<{
+      sessionId: string
+      date: string | Date
+      title: string | null
+      exercises: Array<{ name: string; sets: number; reps: string }>
+      pr?: boolean
+      volumeHint?: number
+    }>
+    achievements?: Array<{ id: string; code: string; name: string; category: string; earnedAt: string | Date }>
+    media?: Array<{ id: string; url: string; thumbnailUrl?: string | null; provider: string; title?: string | null }>
+    teams?: Array<{ id: string; name: string; memberCount: number }>
+  }
 }
 
 interface UserPublicProfileProps {
@@ -60,7 +75,7 @@ function usePublicProfile(userId: string) {
         setIsLoading(true)
         setError(null)
 
-        const response = await fetch(`/api/users/${userId}/public`, {
+        const response = await fetch(`/api/users/${userId}/public?include=workouts,achievements,media,teams&workouts_limit=5&media_limit=6`, {
           cache: 'no-store'
         })
 
@@ -136,7 +151,8 @@ function RoleBadge({ role }: { role: string }) {
     CLIENT: 'bg-green-100 text-green-800',
     ADMIN: 'bg-red-100 text-red-800'
   }
-  return <Badge className={styles[role] || ''}>{role}</Badge>
+  const key = (role || '').toUpperCase()
+  return <Badge className={styles[key] || ''}>{formatRole(role)}</Badge>
 }
 
 function SocialLinks({ profile }: { profile: PublicUserProfile }) {
@@ -218,6 +234,9 @@ export function UserPublicProfile({
   compact = false
 }: UserPublicProfileProps) {
   const { data: profile, isLoading, error } = usePublicProfile(userId)
+  const { data: session } = useSession()
+  const [tipLoading, setTipLoading] = useState(false)
+  const [tipAmount, setTipAmount] = useState<number>(5)
 
   if (isLoading) return <LoadingSkeleton variant={variant} />
   if (error || !profile) {
@@ -240,7 +259,9 @@ export function UserPublicProfile({
         <div className={`flex ${isEmbed ? 'items-center gap-3' : 'flex-col gap-4'}`}>
           {/* Avatar */}
           <Avatar className={getAvatarSize(variant)}>
-            <AvatarImage src={profile.image || ''} alt={profile.name} />
+            {profile.image ? (
+              <AvatarImage src={profile.image} alt={profile.name} />
+            ) : null}
             <AvatarFallback>{profile.name.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
 
@@ -324,6 +345,120 @@ export function UserPublicProfile({
           {/* Social Links */}
           {!compact && <SocialLinks profile={profile} />}
 
+          {/* Recent Workouts */}
+          {!compact && profile.sections?.workouts && profile.sections.workouts.length > 0 && (
+            <div className="space-y-2">
+              <h4 className="font-semibold">Recent Workouts</h4>
+              <div className="space-y-3">
+                {profile.sections.workouts.map((w) => {
+                  const makeSummary = () => {
+                    const header = `${new Date(w.date).toLocaleDateString()}${w.title ? ' — ' + w.title : ''}`;
+                    const lines = w.exercises.map((ex: any) => `• ${ex.name}: ${ex.sets} sets (${ex.reps} reps)`);
+                    return [header, ...lines].join('\n');
+                  };
+                  const copySummary = async () => {
+                    try {
+                      await navigator.clipboard.writeText(makeSummary());
+                      alert('Workout summary copied');
+                    } catch (e) {
+                      console.error('Copy failed', e);
+                    }
+                  };
+                  return (
+                    <div key={w.sessionId} className="p-3 rounded border bg-gray-50">
+                      <div className="flex items-center justify-between">
+                        <div className="font-medium">{w.title || 'Workout'}</div>
+                        <div className="flex items-center gap-2">
+                          <div className="text-xs text-gray-500">{new Date(w.date).toLocaleDateString()}</div>
+                          <Button size="sm" variant="outline" onClick={copySummary}>
+                            Copy summary
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="mt-1 text-sm text-gray-700">
+                        {w.exercises.slice(0, 3).map((ex: any) => (
+                          <span key={ex.name} className="mr-3">{ex.name} ({ex.sets} x {ex.reps})</span>
+                        ))}
+                        {w.exercises.length > 3 && <span className="text-xs text-gray-500">+{w.exercises.length - 3} more</span>}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <p className="text-xs text-gray-500">Tip: Use “Copy summary” to save inspiration from this workout.</p>
+            </div>
+          )}
+
+          {/* When workouts are not publicly shared */}
+          {!compact && (!profile.sections?.workouts || profile.sections.workouts.length === 0) && (
+            <div className="p-4 rounded border bg-white">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <h4 className="font-semibold">Workouts not shared publicly</h4>
+                  <p className="text-sm text-gray-600">
+                    This athlete does not share workout logs publicly. You can request access or send a message for inspiration.
+                  </p>
+                </div>
+                {session?.user?.id !== profile.id && (
+                  <div className="flex gap-2">
+                    <Button size="sm" asChild>
+                      <a href={`/messages?userId=${profile.id}&prefill=${encodeURIComponent('Hi! Could I get access to view your workout logs for inspiration?')}`}>
+                        Request access
+                      </a>
+                    </Button>
+                    <Button size="sm" variant="outline" asChild>
+                      <a href={`/messages?userId=${profile.id}`}>
+                        Message
+                      </a>
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Achievements */}
+          {!compact && profile.sections?.achievements && profile.sections.achievements.length > 0 && (
+            <div className="space-y-2">
+              <h4 className="font-semibold">Achievements</h4>
+              <div className="flex flex-wrap gap-2">
+                {profile.sections.achievements.map(a => (
+                  <Badge key={a.id} variant="secondary" className="text-xs">{a.name}</Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Media Gallery */}
+          {!compact && profile.sections?.media && profile.sections.media.length > 0 && (
+            <div className="space-y-2">
+              <h4 className="font-semibold">Media</h4>
+              <div className="grid grid-cols-3 gap-2">
+                {profile.sections.media.map(m => (
+                  <a key={m.id} href={m.url} target="_blank" rel="noopener noreferrer" className="block">
+                    { (m.thumbnailUrl || m.url) ? (
+                      <img src={m.thumbnailUrl || m.url} alt={m.title || 'media'} className="w-full h-24 object-cover rounded" />
+                    ) : null }
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Public Teams */}
+          {!compact && profile.sections?.teams && profile.sections.teams.length > 0 && (
+            <div className="space-y-2">
+              <h4 className="font-semibold">Teams</h4>
+              <div className="flex flex-wrap gap-2">
+                {profile.sections.teams.map(t => (
+                  <Badge key={t.id} variant="outline" className="text-xs">
+                    <a href={`/teams/${t.id}`} className="hover:underline">{t.name}</a> · {t.memberCount}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Actions */}
           {showActions && (
             <div className="flex gap-2">
@@ -347,6 +482,61 @@ export function UserPublicProfile({
                   </Link>
                 </Button>
               )}
+            </div>
+          )}
+
+          {/* Services: Tip Jar (85/15 split) */}
+          {!compact && profile.role === 'TRAINER' && (
+            <div className="mt-2 p-3 rounded border bg-white">
+              <div className="flex items-center justify-between mb-2">
+                <div className="font-medium">Support this coach</div>
+                <div className="text-xs text-gray-500">85/15 coach/platform</div>
+              </div>
+              <div className="flex items-center gap-2">
+                <select
+                  className="border rounded px-2 py-1 text-sm"
+                  value={tipAmount}
+                  onChange={(e) => setTipAmount(parseInt(e.target.value, 10))}
+                >
+                  {[5, 10, 20].map(v => (
+                    <option key={v} value={v}>€{v}</option>
+                  ))}
+                </select>
+                <Button
+                  size="sm"
+                  disabled={tipLoading}
+                  onClick={async () => {
+                    try {
+                      setTipLoading(true)
+                      const res = await fetch('/api/payments', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          type: 'tip',
+                          trainerId: profile.id,
+                          clientId: session?.user?.id,
+                          amount: tipAmount,
+                          currency: 'EUR',
+                          description: `Tip for coach ${profile.name}`,
+                          redirectUrl: window.location.href
+                        })
+                      })
+                      const data = await res.json()
+                      if (res.ok && data?.data?.checkoutUrl) {
+                        window.location.href = data.data.checkoutUrl
+                      } else if (res.status === 401) {
+                        window.location.href = '/login'
+                      } else {
+                        alert(data?.error || 'Failed to start payment')
+                      }
+                    } finally {
+                      setTipLoading(false)
+                    }
+                  }}
+                >
+                  {tipLoading ? 'Processing…' : 'Send Tip'}
+                </Button>
+              </div>
             </div>
           )}
         </CardContent>
