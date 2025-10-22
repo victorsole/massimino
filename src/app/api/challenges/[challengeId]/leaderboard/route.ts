@@ -7,6 +7,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
+import crypto from 'crypto';
 
 // ============================================================================
 // GET - Fetch challenge leaderboard
@@ -210,6 +211,7 @@ export async function POST(
         lastUpdated: new Date()
       },
       create: {
+        id: crypto.randomUUID(),
         challengeId,
         userId,
         rank: 1, // Will be recalculated
