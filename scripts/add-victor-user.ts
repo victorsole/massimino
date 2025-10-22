@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 
 const prisma = new PrismaClient();
 
@@ -8,7 +9,7 @@ async function addVictorUser() {
     console.log('🚀 Adding Victor as Massimino user...');
 
     // Check if Victor already exists
-    const existingUser = await prisma.user.findUnique({
+    const existingUser = await prisma.users.findUnique({
       where: { email: 'victor@massimino.com' }
     });
 
@@ -23,8 +24,9 @@ async function addVictorUser() {
     // Create Victor's account
     const hashedPassword = await bcrypt.hash('massimino123', 12);
 
-    const victorUser = await prisma.user.create({
+    const victorUser = await prisma.users.create({
       data: {
+        id: crypto.randomUUID(),
         email: 'victor@massimino.com',
         name: 'Victor Sole',
         password: hashedPassword,

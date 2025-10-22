@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 
 const prisma = new PrismaClient();
 
@@ -8,7 +9,7 @@ async function createFirstUser() {
     console.log('🚀 Creating first Massimino user...');
 
     // Check if any users already exist
-    const existingUsers = await prisma.user.count();
+    const existingUsers = await prisma.users.count();
     if (existingUsers > 0) {
       console.log('⚠️ Users already exist in the database');
       return;
@@ -17,8 +18,9 @@ async function createFirstUser() {
     // Create the first user (you!)
     const hashedPassword = await bcrypt.hash('massimino123', 12);
 
-    const firstUser = await prisma.user.create({
+    const firstUser = await prisma.users.create({
       data: {
+        id: crypto.randomUUID(),
         email: 'victor@massimino.com',
         name: 'Victor Sole',
         password: hashedPassword,
@@ -45,25 +47,26 @@ async function createFirstUser() {
 
     // Create a sample workout session
     const now = new Date();
-    const workoutSession = await prisma.workoutSession.create({
+    const workoutSession = await prisma.workout_sessions.create({
       data: {
+        id: crypto.randomUUID(),
         userId: firstUser.id,
         date: now,
         startTime: now,
         endTime: new Date(now.getTime() + 60 * 60 * 1000), // 1 hour later
         duration: 3600, // 60 minutes in seconds
         notes: 'Welcome to Massimino! This is your first workout session.',
-        createdAt: new Date(),
         updatedAt: new Date(),
       },
     });
 
     // Get a sample exercise
-    const sampleExercise = await prisma.exercise.findFirst();
+    const sampleExercise = await prisma.exercises.findFirst();
     if (sampleExercise) {
       // Create a sample workout log entry
-      await prisma.workoutLogEntry.create({
+      await prisma.workout_log_entries.create({
         data: {
+          id: crypto.randomUUID(),
           userId: firstUser.id,
           sessionId: workoutSession.id,
           exerciseId: sampleExercise.id,
@@ -80,7 +83,6 @@ async function createFirstUser() {
           restSeconds: 120,
           userComments: 'Great first workout with Massimino!',
           coachFeedback: null,
-          createdAt: new Date(),
           updatedAt: new Date(),
         },
       });
