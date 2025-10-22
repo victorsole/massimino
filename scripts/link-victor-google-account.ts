@@ -13,7 +13,7 @@ async function linkVictorGoogleAccount() {
     console.log('🔗 Linking Victor\'s Google OAuth account...');
 
     // Find Victor's user record
-    const user = await prisma.user.findUnique({
+    const user = await prisma.users.findUnique({
       where: { email: 'vsoleferioli@gmail.com' }
     });
 
@@ -30,7 +30,7 @@ async function linkVictorGoogleAccount() {
     });
 
     // Check if account record already exists
-    const existingAccount = await prisma.account.findFirst({
+    const existingAccount = await prisma.accounts.findFirst({
       where: {
         userId: user.id,
         provider: 'google'
@@ -47,7 +47,7 @@ async function linkVictorGoogleAccount() {
     }
 
     // Create the OAuth account record
-    const account = await prisma.account.create({
+    const account = await prisma.accounts.create({
       data: {
         userId: user.id,
         type: 'oauth',
@@ -71,7 +71,7 @@ async function linkVictorGoogleAccount() {
 
     // Update user with Google ID if not set
     if (!user.googleId) {
-      await prisma.user.update({
+      await prisma.users.update({
         where: { id: user.id },
         data: {
           googleId: '116616534021350143793',
