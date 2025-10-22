@@ -214,7 +214,7 @@ export async function PUT(
       where: { id: challengeId },
       data: updateData,
       include: {
-        creator: {
+        users: { // creator
           select: {
             id: true,
             name: true,
@@ -333,7 +333,7 @@ async function handleGetChallengeDetails(challengeId: string, session: any) {
   const challenge = await prisma.challenges.findUnique({
     where: { id: challengeId },
     include: {
-      creator: {
+      users: { // creator
         select: {
           id: true,
           name: true,
@@ -612,7 +612,7 @@ async function handleJoinChallenge(challengeId: string, body: any, session: any)
 
   const challenge = await prisma.challenges.findUnique({
     where: { id: challengeId },
-    include: { creator: { select: { id: true } } }
+    include: { users: { // creator select: { id: true } } }
   });
 
   if (!challenge) {
