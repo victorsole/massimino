@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/core/auth/config'
 import { revalidatePath } from 'next/cache'
 import { prisma } from '@/core/database'
+import crypto from 'crypto'
 
 export async function createWorkoutTemplateAction(formData: FormData) {
   const session = await getServerSession(authOptions)
@@ -25,6 +26,7 @@ export async function createWorkoutTemplateAction(formData: FormData) {
 
   await prisma.workout_templates.create({
     data: {
+      id: crypto.randomUUID(),
       name,
       description,
       category,
@@ -34,6 +36,7 @@ export async function createWorkoutTemplateAction(formData: FormData) {
       isPublic,
       price,
       createdBy: session.user.id,
+      updatedAt: new Date(),
     }
   })
 
@@ -109,6 +112,7 @@ export async function createProgramTemplateAction(formData: FormData) {
 
   await prisma.program_templates.create({
     data: {
+      id: crypto.randomUUID(),
       name,
       description,
       category,
@@ -117,6 +121,7 @@ export async function createProgramTemplateAction(formData: FormData) {
       isPublic,
       price,
       createdBy: session.user.id,
+      updatedAt: new Date(),
     }
   })
 
