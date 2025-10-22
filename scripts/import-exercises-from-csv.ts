@@ -145,8 +145,8 @@ async function importExercises() {
     ]
 
     for (const item of merged) {
+      let exerciseName = ''
       try {
-        let exerciseName = ''
         let muscleGroups: string[] = []
         let equipment: string[] = []
         let category = 'Strength'
