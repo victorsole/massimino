@@ -8,6 +8,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
 import { z } from 'zod';
+import crypto from 'crypto';
 
 const healthMetricSchema = z.object({
   type: z.enum(['STEPS', 'HEART_RATE', 'CALORIES_BURNED', 'DISTANCE', 'SLEEP', 'WEIGHT', 'BODY_FAT', 'BLOOD_PRESSURE']),
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
     for (const metric of metrics) {
       try {
         // Check if metric already exists (prevent duplicates)
-        const existingMetric = await prisma.healthData.findFirst({
+        const existingMetric = await prisma.health_data.findFirst({
           where: {
             userId: session.user.id,
             dataType: metric.type as any,
@@ -52,8 +53,9 @@ export async function POST(request: NextRequest) {
 
         if (!existingMetric) {
           // Create new health data entry
-          const healthData = await prisma.healthData.create({
+          const healthData = await prisma.health_data.create({
             data: {
+              id: crypto.randomUUID(),
               userId: session.user.id,
               dataType: metric.type as any,
               value: metric.value,
@@ -143,7 +145,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get health data
-    const healthData = await prisma.healthData.findMany({
+    const healthData = await prisma.health_data.findMany({
       where,
       orderBy: {
         recordedAt: 'desc',

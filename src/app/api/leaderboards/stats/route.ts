@@ -86,7 +86,7 @@ async function getLeaderboardSummary(timeframe: any) {
     userEngagement
   ] = await Promise.all([
     // Workout leaderboard stats
-    prisma.workoutSession.aggregate({
+    prisma.workout_sessions.aggregate({
       where: {
         isComplete: true,
         ...(timeframe.start && {
@@ -111,7 +111,7 @@ async function getLeaderboardSummary(timeframe: any) {
     }),
 
     // Challenge leaderboard stats
-    prisma.challengeLeaderboard.aggregate({
+    prisma.challenge_leaderboard.aggregate({
       where: {
         ...(timeframe.start && {
           lastUpdated: {
@@ -134,7 +134,7 @@ async function getLeaderboardSummary(timeframe: any) {
     }),
 
     // Team stats
-    prisma.premiumCommunity.aggregate({
+    prisma.premium_communities.aggregate({
       where: {
         isActive: true,
         ...(timeframe.start && {
@@ -183,7 +183,7 @@ async function getLeaderboardSummary(timeframe: any) {
     },
     topPerformers: {
       workout: topWorkoutPerformers,
-      challenge: topChallengePerformers
+      challenges: topChallengePerformers
     },
     trends: await getLeaderboardTrends(timeframe)
   };
@@ -200,7 +200,7 @@ async function getPersonalLeaderboardStats(userId: string, timeframe: any) {
     personalRankings
   ] = await Promise.all([
     // Personal workout stats
-    prisma.workoutSession.aggregate({
+    prisma.workout_sessions.aggregate({
       where: {
         userId,
         isComplete: true,
@@ -225,7 +225,7 @@ async function getPersonalLeaderboardStats(userId: string, timeframe: any) {
     }),
 
     // Personal challenge participation
-    prisma.challengeParticipant.findMany({
+    prisma.challenge_participants.findMany({
       where: {
         userId,
         status: 'REGISTERED',
@@ -237,7 +237,7 @@ async function getPersonalLeaderboardStats(userId: string, timeframe: any) {
         })
       },
       include: {
-        challenge: {
+        challenges: {
           select: {
             title: true,
             category: true
@@ -247,7 +247,7 @@ async function getPersonalLeaderboardStats(userId: string, timeframe: any) {
     }),
 
     // Personal team memberships
-    prisma.premiumMembership.findMany({
+    prisma.premium_memberships.findMany({
       where: {
         userId,
         status: 'ACTIVE',
@@ -259,7 +259,7 @@ async function getPersonalLeaderboardStats(userId: string, timeframe: any) {
         })
       },
       include: {
-        community: {
+        premium_communities: {
           select: {
             name: true,
             category: true
@@ -304,7 +304,7 @@ async function getComparativeStats(userId: string, timeframe: any) {
 
   return {
     personal: personalStats,
-    community: avgStats,
+    premium_communities: avgStats,
     comparison: {
       workoutVolumePercentile: calculatePercentile(
         personalStats.workoutPerformance.totalVolume,
@@ -358,7 +358,7 @@ function getTimeframeRange(timeframe: string) {
 async function getTopPerformers(type: string, timeframe: any, limit = 5) {
   try {
     if (type === 'workout') {
-      const topPerformers = await prisma.workoutSession.groupBy({
+      const topPerformers = await prisma.workout_sessions.groupBy({
         by: ['userId'],
         where: {
           isComplete: true,
@@ -389,7 +389,7 @@ async function getTopPerformers(type: string, timeframe: any, limit = 5) {
     }
 
     if (type === 'challenge') {
-      const topPerformers = await prisma.challengeLeaderboard.groupBy({
+      const topPerformers = await prisma.challenge_leaderboard.groupBy({
         by: ['userId'],
         where: {
           ...(timeframe.start && {
@@ -444,7 +444,7 @@ async function getUserLeaderboardPositions(userId: string, timeframe: any) {
   try {
     const [workoutRank, challengeRank] = await Promise.all([
       // Get workout rank (simplified)
-      prisma.workoutSession.aggregate({
+      prisma.workout_sessions.aggregate({
         where: {
           userId,
           isComplete: true,
@@ -461,7 +461,7 @@ async function getUserLeaderboardPositions(userId: string, timeframe: any) {
       }),
 
       // Get challenge positions
-      prisma.challengeLeaderboard.findMany({
+      prisma.challenge_leaderboard.findMany({
         where: {
           userId,
           ...(timeframe.start && {
@@ -474,7 +474,7 @@ async function getUserLeaderboardPositions(userId: string, timeframe: any) {
         select: {
           rank: true,
           score: true,
-          challenge: {
+          challenges: {
             select: {
               title: true
             }
@@ -489,7 +489,7 @@ async function getUserLeaderboardPositions(userId: string, timeframe: any) {
         estimatedRank: null // Would need full calculation
       },
       challenges: challengeRank.map(pos => ({
-        challengeTitle: pos.challenge.title,
+        challengeTitle: pos.challenges.title,
         rank: pos.rank,
         score: pos.score
       }))
@@ -505,7 +505,7 @@ async function getUserLeaderboardPositions(userId: string, timeframe: any) {
  */
 async function getPersonalAchievements(userId: string, timeframe: any) {
   try {
-    const personalRecords = await prisma.personalRecord.findMany({
+    const personalRecords = await prisma.personal_records.findMany({
       where: {
         userId,
         ...(timeframe.start && {
@@ -516,7 +516,7 @@ async function getPersonalAchievements(userId: string, timeframe: any) {
         })
       },
       include: {
-        exercise: {
+        exercises: {
           select: {
             name: true
           }
@@ -531,7 +531,7 @@ async function getPersonalAchievements(userId: string, timeframe: any) {
     return {
       newPersonalRecords: personalRecords.length,
       recentRecords: personalRecords.map(record => ({
-        exercise: record.exercise.name,
+        exercises: record.exercises.name,
         type: record.recordType,
         value: record.value,
         unit: record.unit,

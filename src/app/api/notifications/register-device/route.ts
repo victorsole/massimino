@@ -9,6 +9,7 @@ import { authOptions } from '@/core';
 import { DevicePlatform } from '@prisma/client';
 import { prisma } from '@/core/database';
 import { z } from 'zod';
+import crypto from 'crypto';
 
 const registerDeviceSchema = z.object({
   token: z.string().min(1, 'Device token is required'),
@@ -38,7 +39,7 @@ export async function POST(_request: NextRequest) {
       p === 'ios' ? 'IOS' : p === 'android' ? 'ANDROID' : 'WEB';
 
     // Check if device token already exists
-    const existingToken = await prisma.deviceToken.findFirst({
+    const existingToken = await prisma.device_tokens.findFirst({
       where: {
         token,
         userId: session.user.id,
@@ -47,7 +48,7 @@ export async function POST(_request: NextRequest) {
 
     if (existingToken) {
       // Update existing token
-      const updatedToken = await prisma.deviceToken.update({
+      const updatedToken = await prisma.device_tokens.update({
         where: { id: existingToken.id },
         data: {
           platform: mapPlatform(platform),
@@ -64,8 +65,9 @@ export async function POST(_request: NextRequest) {
     }
 
     // Create new device token
-    const newToken = await prisma.deviceToken.create({
+    const newToken = await prisma.device_tokens.create({
       data: {
+        id: crypto.randomUUID(),
         userId: session.user.id,
         token,
         platform: mapPlatform(platform),
@@ -118,7 +120,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Deactivate the device token
-    await prisma.deviceToken.updateMany({
+    await prisma.device_tokens.updateMany({
       where: {
         token,
         userId: session.user.id,
@@ -153,7 +155,7 @@ export async function GET(_request: NextRequest) {
     }
 
     // Get user's registered devices
-    const devices = await prisma.deviceToken.findMany({
+    const devices = await prisma.device_tokens.findMany({
       where: {
         userId: session.user.id,
         isActive: true,
