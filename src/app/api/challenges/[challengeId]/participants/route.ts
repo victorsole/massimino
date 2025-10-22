@@ -290,7 +290,7 @@ export async function DELETE(
         }
       },
       include: {
-        challenge: {
+        challenges: {
           select: {
             status: true,
             entryFee: true,
