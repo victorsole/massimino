@@ -101,7 +101,7 @@ export default async function AdminFeedbackPage() {
       const rows = await (prisma as any).feedback_comments.findMany({ where: { ticketId: { in: ids } }, orderBy: { createdAt: 'desc' }, take: 200 })
       for (const c of rows) {
         if (!commentMap[c.ticketId]) commentMap[c.ticketId] = []
-        commentMap[c.ticketId].push({ id: c.id, content: c.content, visibility: c.visibility, createdAt: c.createdAt })
+        commentMap[c.ticketId]!.push({ id: c.id, content: c.content, visibility: c.visibility, createdAt: c.createdAt })
       }
     }
   } catch {}
