@@ -427,7 +427,7 @@ async function handleGetParticipants(challengeId: string, request: Request, sess
   }
 
   if (!challenge.isPublic && session?.user?.id) {
-    const userParticipation = await prisma.challengeParticipant.findUnique({
+    const userParticipation = await prisma.challenge_participants.findUnique({
       where: { challengeId_userId: { challengeId, userId: session.user.id } }
     });
 
@@ -437,7 +437,7 @@ async function handleGetParticipants(challengeId: string, request: Request, sess
   }
 
   const [participants, total] = await Promise.all([
-    prisma.challengeParticipant.findMany({
+    prisma.challenge_participants.findMany({
       where: { challengeId, status: status as any },
       include: {
         user: { select: { id: true, name: true, image: true } }
@@ -446,7 +446,7 @@ async function handleGetParticipants(challengeId: string, request: Request, sess
       skip,
       take: limit
     }),
-    prisma.challengeParticipant.count({
+    prisma.challenge_participants.count({
       where: { challengeId, status: status as any }
     })
   ]);
@@ -483,7 +483,7 @@ async function handleGetProgress(challengeId: string, request: Request, session:
     }
   }
 
-  const participation = await prisma.challengeParticipant.findUnique({
+  const participation = await prisma.challenge_participants.findUnique({
     where: { challengeId_userId: { challengeId, userId } },
     include: {
       challenge: {
@@ -546,7 +546,7 @@ async function handleGetLeaderboard(challengeId: string, request: Request, sessi
   // Check access permissions
   let userParticipation = null;
   if (session?.user?.id) {
-    userParticipation = await prisma.challengeParticipant.findUnique({
+    userParticipation = await prisma.challenge_participants.findUnique({
       where: { challengeId_userId: { challengeId, userId: session.user.id } },
       select: { status: true, rank: true }
     });
@@ -628,7 +628,7 @@ async function handleJoinChallenge(challengeId: string, body: any, session: any)
   }
 
   // Check if already participating
-  const existingParticipation = await prisma.challengeParticipant.findUnique({
+  const existingParticipation = await prisma.challenge_participants.findUnique({
     where: { challengeId_userId: { challengeId, userId: session.user.id } }
   });
 
@@ -657,7 +657,7 @@ async function handleJoinChallenge(challengeId: string, body: any, session: any)
     paymentId = payment.id;
   }
 
-  const participation = await prisma.challengeParticipant.create({
+  const participation = await prisma.challenge_participants.create({
     data: {
       challengeId,
       userId: session.user.id,
@@ -699,7 +699,7 @@ async function handleJoinChallenge(challengeId: string, body: any, session: any)
  * Handle leaving a challenge
  */
 async function handleLeaveChallenge(challengeId: string, session: any) {
-  const participation = await prisma.challengeParticipant.findUnique({
+  const participation = await prisma.challenge_participants.findUnique({
     where: { challengeId_userId: { challengeId, userId: session.user.id } },
     include: {
       challenge: { select: { status: true, entryFee: true, startDate: true } }
@@ -722,7 +722,7 @@ async function handleLeaveChallenge(challengeId: string, session: any) {
     }, { status: 400 });
   }
 
-  await prisma.challengeParticipant.delete({
+  await prisma.challenge_participants.delete({
     where: { id: participation.id }
   });
 
@@ -751,7 +751,7 @@ async function handleUpdateProgress(challengeId: string, body: any, session: any
     }, { status: 400 });
   }
 
-  const participation = await prisma.challengeParticipant.findUnique({
+  const participation = await prisma.challenge_participants.findUnique({
     where: { challengeId_userId: { challengeId, userId: session.user.id } },
     include: {
       challenge: {
@@ -814,7 +814,7 @@ async function handleUpdateProgress(challengeId: string, body: any, session: any
 
   const aggregatedProgress = calculateAggregatedProgress(allProgress, participation.challenge.metrics);
 
-  await prisma.challengeParticipant.update({
+  await prisma.challenge_participants.update({
     where: { id: participation.id },
     data: { currentProgress: aggregatedProgress, updatedAt: new Date() }
   });
@@ -969,7 +969,7 @@ async function recalculateLeaderboardRanks(challengeId: string) {
     await Promise.all(updatePromises);
 
     const participantUpdatePromises = leaderboard.map((entry, index) =>
-      prisma.challengeParticipant.updateMany({
+      prisma.challenge_participants.updateMany({
         where: { challengeId, userId: entry.userId },
         data: { rank: index + 1 }
       })
