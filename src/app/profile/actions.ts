@@ -179,6 +179,7 @@ export async function updateProfileBasicsAction(formData: FormData): Promise<voi
     const nickname = String(formData.get('nickname') || '').trim()
     const bio = String(formData.get('bio') || '').trim()
 
+    // Always update basic fields first
     await prisma.users.update({
       where: { id: userId },
       data: {
@@ -188,10 +189,67 @@ export async function updateProfileBasicsAction(formData: FormData): Promise<voi
         trainerBio: bio || null
       }
     })
+    // Determine desired public username
+    // Priority:
+    // 1) Nickname (user explicit choice)
+    // 2) name+surname (default), only if username not set yet
+    const current = await prisma.users.findUnique({ where: { id: userId }, select: { massiminoUsername: true } })
+    const nicknameCandidate = normalizeUsernameFromNickname(nickname)
+    const fullNameCandidate = normalizeUsernameFromFullName(firstName, lastName)
+
+    if (nicknameCandidate) {
+      // User explicitly wants a nickname-based username; try set/overwrite
+      try {
+        await prisma.users.update({ where: { id: userId }, data: { massiminoUsername: nicknameCandidate } })
+      } catch (e) {
+        console.warn('Skipping username update (taken/invalid):', nicknameCandidate)
+      }
+    } else if (!current?.massiminoUsername && fullNameCandidate) {
+      // No username yet; set default from name+surname
+      try {
+        await prisma.users.update({ where: { id: userId }, data: { massiminoUsername: fullNameCandidate } })
+      } catch (e) {
+        console.warn('Skipping default username set (taken/invalid):', fullNameCandidate)
+      }
+    }
     revalidatePath('/profile')
   } catch (e) {
     console.error('updateProfileBasicsAction error', e)
   }
+}
+
+// Username normalization using nickname
+function normalizeUsernameFromNickname(nickname: string): string | null {
+  if (!nickname) return null
+  // Convert to lowercase, replace spaces with underscores, remove invalid chars
+  let u = nickname.trim().toLowerCase()
+  u = u.replace(/\s+/g, '_')
+  u = u.replace(/[^a-z0-9_]/g, '')
+
+  // Must start with a letter and be 3-20 chars
+  if (!/^[a-z]/.test(u)) return null
+  if (u.length < 3 || u.length > 20) return null
+  // No consecutive underscores
+  if (/__/.test(u)) return null
+  // Disallow reserved words
+  const reserved = new Set(['admin','api','app','about','help','support','contact','terms','privacy','login','signup','register','massimino','massiminos','massitree','trainer','client','user'])
+  if (reserved.has(u)) return null
+  return u
+}
+
+function normalizeUsernameFromFullName(firstName: string, lastName: string): string | null {
+  const f = (firstName || '').trim().toLowerCase()
+  const l = (lastName || '').trim().toLowerCase()
+  if (!f && !l) return null
+  let base = `${f}${l}`
+  base = base.replace(/\s+/g, '')
+  base = base.replace(/[^a-z0-9_]/g, '')
+  if (!/^[a-z]/.test(base)) return null
+  if (base.length < 3 || base.length > 20) return null
+  if (/__/.test(base)) return null
+  const reserved = new Set(['admin','api','app','about','help','support','contact','terms','privacy','login','signup','register','massimino','massiminos','massitree','trainer','client','user'])
+  if (reserved.has(base)) return null
+  return base
 }
 
 export async function uploadAvatarAction(formData: FormData): Promise<void> {
@@ -614,5 +672,29 @@ export async function updateMediaSettingsAction(formData: FormData): Promise<voi
     revalidatePath('/profile')
   } catch (e) {
     console.error('updateMediaSettingsAction error', e)
+  }
+}
+
+export async function updateWorkoutSharingAction(formData: FormData): Promise<void> {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!isSignedIn(session)) return
+    const userId = String(formData.get('userId') || '')
+    if (!userId || userId !== session!.user!.id) return
+
+    const allowWorkoutSharing = formData.get('allowWorkoutSharing') === 'on'
+    const shareWeightsPublicly = formData.get('shareWeightsPublicly') === 'on'
+
+    await prisma.users.update({
+      where: { id: userId },
+      data: {
+        allowWorkoutSharing,
+        shareWeightsPublicly,
+      }
+    })
+
+    revalidatePath('/profile')
+  } catch (e) {
+    console.error('updateWorkoutSharingAction error', e)
   }
 }

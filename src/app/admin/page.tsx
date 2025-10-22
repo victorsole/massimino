@@ -92,6 +92,43 @@ export default async function AdminHomePage() {
     getMigrationStatus()
   ])
 
+  // Feedback metrics (guarded if tables are not present yet)
+  let openFeedback = 0
+  let p0p1Bugs = 0
+  let npsAvg30 = 0
+  let aiPositiveRate = 0
+  try {
+    const db: any = prisma as any
+    const last30 = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+    const [openF, pBugs, npsAgg, aiTotal, aiUp] = await Promise.all([
+      db.feedback_entries.count({ where: { status: { in: ['OPEN', 'TRIAGED'] } } }),
+      db.feedback_entries.count({ where: { type: 'BUG', severity: { in: ['P0', 'P1'] }, status: { in: ['OPEN', 'TRIAGED'] } } }),
+      db.feedback_entries.aggregate({ _avg: { nps_score: true }, where: { type: 'NPS', createdAt: { gte: last30 } } }),
+      db.feedback_entries.count({ where: { type: 'AI', createdAt: { gte: last30 } } }),
+      db.feedback_entries.count({ where: { type: 'AI', ai_rating: 'UP', createdAt: { gte: last30 } } }),
+    ])
+    openFeedback = openF || 0
+    p0p1Bugs = pBugs || 0
+    npsAvg30 = Number(npsAgg?._avg?.nps_score || 0)
+    aiPositiveRate = aiTotal > 0 ? Math.round((aiUp / aiTotal) * 100) : 0
+  } catch {}
+
+  // Awards & Points (guard if models are not present yet)
+  let awardsUsersGrouped: Array<{ userId: string }> = []
+  let totalPoints: { _sum: { points: number | null } } = { _sum: { points: 0 } }
+  let recentAwards = 0
+
+  try {
+    awardsUsersGrouped = await prisma.user_achievements.groupBy({ by: ['userId'] }) as any
+  } catch {}
+  try {
+    // @ts-ignore runtime guard for optional model
+    totalPoints = await (prisma as any).user_points?.aggregate?.({ _sum: { points: true } }) || { _sum: { points: 0 } }
+  } catch {}
+  try {
+    recentAwards = await prisma.user_achievements.count({ where: { unlockedAt: { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) } } })
+  } catch {}
+
   return (
     <div className="space-y-6">
       <div>
@@ -135,6 +172,74 @@ export default async function AdminHomePage() {
           <CardContent className="pt-4">
             <div className="text-2xl font-bold text-orange-600">{pendingReports + totalViolations}</div>
             <p className="text-xs text-gray-600 mt-1">pending moderation</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Feedback Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card className="border-brand-primary/20">
+          <CardHeader className="pb-2 bg-brand-secondary/30">
+            <CardTitle className="text-sm font-medium text-brand-primary">Open Feedback</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-4">
+            <div className="text-2xl font-bold text-brand-primary">{openFeedback.toLocaleString()}</div>
+            <p className="text-xs text-gray-600 mt-1">Open or triaged</p>
+          </CardContent>
+        </Card>
+        <Card className="border-brand-primary/20">
+          <CardHeader className="pb-2 bg-brand-secondary/30">
+            <CardTitle className="text-sm font-medium text-brand-primary">P0/P1 Bugs</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-4">
+            <div className="text-2xl font-bold text-red-600">{p0p1Bugs.toLocaleString()}</div>
+            <p className="text-xs text-gray-600 mt-1">Open high-priority bugs</p>
+          </CardContent>
+        </Card>
+        <Card className="border-brand-primary/20">
+          <CardHeader className="pb-2 bg-brand-secondary/30">
+            <CardTitle className="text-sm font-medium text-brand-primary">NPS (30d)</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-4">
+            <div className="text-2xl font-bold text-indigo-600">{Number.isFinite(npsAvg30) ? npsAvg30.toFixed(1) : '0.0'}</div>
+            <p className="text-xs text-gray-600 mt-1">Average score</p>
+          </CardContent>
+        </Card>
+        <Card className="border-brand-primary/20">
+          <CardHeader className="pb-2 bg-brand-secondary/30">
+            <CardTitle className="text-sm font-medium text-brand-primary">AI Positive (30d)</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-4">
+            <div className="text-2xl font-bold text-emerald-600">{aiPositiveRate}%</div>
+            <p className="text-xs text-gray-600 mt-1">Thumbs-up rate</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Awards & Points Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="border-brand-primary/20">
+          <CardHeader className="pb-2 bg-brand-secondary/30">
+            <CardTitle className="text-sm font-medium text-brand-primary">Users With Awards</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-4">
+            <div className="text-2xl font-bold text-brand-primary">{awardsUsersGrouped.length.toLocaleString()}</div>
+          </CardContent>
+        </Card>
+        <Card className="border-brand-primary/20">
+          <CardHeader className="pb-2 bg-brand-secondary/30">
+            <CardTitle className="text-sm font-medium text-brand-primary">Total Points (All Users)</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-4">
+            <div className="text-2xl font-bold text-emerald-600">{(totalPoints._sum.points || 0).toLocaleString()}</div>
+          </CardContent>
+        </Card>
+        <Card className="border-brand-primary/20">
+          <CardHeader className="pb-2 bg-brand-secondary/30">
+            <CardTitle className="text-sm font-medium text-brand-primary">Recent Awards (30d)</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-4">
+            <div className="text-2xl font-bold text-indigo-600">{recentAwards.toLocaleString()}</div>
           </CardContent>
         </Card>
       </div>
@@ -570,4 +675,3 @@ export default async function AdminHomePage() {
     </div>
   )
 }
-

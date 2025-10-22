@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { prisma } from '@/core/database';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
@@ -12,7 +13,27 @@ import {
   Star
 } from 'lucide-react';
 
-export default function HomePage() {
+export default async function HomePage() {
+  const db: any = prisma as any
+  const rows: Array<any> = db?.partners?.findMany
+    ? await db.partners.findMany({ where: { isActive: true }, orderBy: { createdAt: 'desc' } })
+    : []
+  const fallback = [
+    { name: 'Amix', url: 'https://amix.com/?utm_source=massimino&utm_medium=partner_band&utm_campaign=amix', logoUrl: '/images/amix-logo.png', blurb: 'Quality sports supplements' },
+    { name: 'Bo', url: 'http://app.hellobo.eu?utm_source=massimino&utm_medium=partner_band&utm_campaign=bo', logoUrl: '/images/Bo_logo.png', blurb: 'Local producer network' },
+    { name: 'Jims', url: 'https://www.jims.be/nl?utm_source=massimino&utm_medium=partner_band&utm_campaign=jims', logoUrl: '/images/jims-logo.png', blurb: 'Accessible gym network' },
+  ]
+  const byName = new Set<string>()
+  const partners = [...fallback, ...(rows || [])].filter((p: any) => {
+    const key = (p.name || '').toLowerCase().trim()
+    if (!key) return false
+    if (byName.has(key)) return false
+    byName.add(key)
+    return true
+  })
+
+  const normalizeLogo = (logoUrl: string | null | undefined) =>
+    (logoUrl || '').replace(/^\/assets\/images\//, '/images/')
   return (
     <>
       {/* Hero Section */}
@@ -37,7 +58,7 @@ export default function HomePage() {
               Safe Workouts for Everyone
             </p>
             <p className="text-lg text-brand-primary max-w-3xl mx-auto mb-12">
-              The safety-first fitness community platform where trainers and clients connect, 
+              The safety-first fitness community platform where trainers and athletes connect, 
               track workouts, and achieve goals together in a secure environment.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -53,6 +74,29 @@ export default function HomePage() {
                 </Button>
               </Link>
             </div>
+          </div>
+        </div>
+  </section>
+
+      {/* Partners Band */}
+      <section className="py-10 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-center text-sm text-gray-500 mb-6">Trusted by partners</p>
+          <div className="flex items-center justify-center gap-8 flex-wrap">
+            {partners.map((p: any) => (
+              <Link key={p.name || p.id} href={p.url || '#'} target="_blank" rel="noopener" className="group">
+                <span className="sr-only">{p.name}</span>
+                <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
+                  <Image
+                    src={normalizeLogo(p.logoUrl)}
+                    alt={p.name || 'Partner'}
+                    width={140}
+                    height={44}
+                    className="object-contain rounded-xl p-2"
+                  />
+                </span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -148,7 +192,7 @@ export default function HomePage() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Sign Up</h3>
               <p className="text-gray-600">
-                Create your account and choose your role as a client or trainer.
+                Create your account and choose your role as an athlete or trainer.
               </p>
             </div>
 
@@ -158,7 +202,7 @@ export default function HomePage() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Connect</h3>
               <p className="text-gray-600">
-                Find trainers or clients and establish your fitness partnerships.
+                Find trainers or athletes and establish your fitness partnerships.
               </p>
             </div>
 
@@ -193,7 +237,7 @@ export default function HomePage() {
                   ))}
                 </div>
                 <p className="text-gray-600 mb-4">
-                  "Massimino has transformed how I train my clients. The safety features and 
+                  "Massimino has transformed how I train my athletes. The safety features and 
                   workout tracking make everything so much more professional."
                 </p>
                 <div className="flex items-center">
@@ -242,7 +286,7 @@ export default function HomePage() {
                   <div className="w-10 h-10 bg-gray-300 rounded-full mr-3"></div>
                   <div>
                     <p className="font-semibold">Emma Rodriguez</p>
-                    <p className="text-sm text-gray-500">Client</p>
+                    <p className="text-sm text-gray-500">Athlete</p>
                   </div>
                 </div>
               </CardContent>

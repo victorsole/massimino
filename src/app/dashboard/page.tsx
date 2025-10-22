@@ -367,7 +367,7 @@ export default function DashboardPage() {
                 <div className="flex items-center">
                   <Users className="h-8 w-8 text-blue-600" />
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Active Clients</p>
+                    <p className="text-sm font-medium text-gray-600">Active Athletes</p>
                     <p className="text-2xl font-bold text-gray-900">{trainerStats?.activeClients || 0}</p>
                     <p className="text-xs text-gray-500">of {trainerStats?.totalClients || 0} total</p>
                   </div>
@@ -493,17 +493,17 @@ export default function DashboardPage() {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Users className="h-5 w-5 mr-2 text-brand-primary" />
-                  Client Management
+                  Athlete Management
                 </CardTitle>
                 <CardDescription>
-                  Manage your clients and track their progress
+                  Manage your athletes and track their progress
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <Link href="/trainer/clients">
                   <Button className="w-full">
                     <Users className="h-4 w-4 mr-2" />
-                    View Clients
+                    View Athletes
                   </Button>
                 </Link>
                 {(trainerStats?.newClientsThisMonth || 0) > 0 && (
@@ -546,7 +546,7 @@ export default function DashboardPage() {
                   Progress Reports
                 </CardTitle>
                 <CardDescription>
-                  Create and manage client progress reports
+                  Create and manage athlete progress reports
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -861,7 +861,7 @@ export default function DashboardPage() {
               Business Dashboard
             </CardTitle>
             <CardDescription>
-              Manage your training business, revenue, and client payments
+              Manage your training business, revenue, and athlete payments
             </CardDescription>
           </CardHeader>
           <CardContent>

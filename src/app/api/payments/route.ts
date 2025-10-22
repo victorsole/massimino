@@ -120,6 +120,23 @@ export async function POST(request: Request) {
         redirectUrl,
         webhookUrl
       });
+    } else if (type === 'tip') {
+      // Create a tip payment (one-off)
+      const { createPayment } = await import('@/core/integrations/mollie');
+      molliePayment = await createPayment({
+        amount: {
+          value: formatAmount(Math.round(amount * 100)),
+          currency
+        },
+        description: description || 'Massimino Tip',
+        redirectUrl,
+        webhookUrl,
+        metadata: {
+          type: 'TIP',
+          trainerId,
+          clientId
+        }
+      });
     } else {
       return NextResponse.json({
         error: 'Invalid payment type or missing required IDs'
@@ -132,8 +149,8 @@ export async function POST(request: Request) {
       }, { status: 500 });
     }
 
-    // Calculate platform fee (5% for example)
-    const platformFeeRate = 0.05;
+    // Calculate platform fee (85/15 coach/platform split)
+    const platformFeeRate = 0.15;
     const platformFee = Math.round(amount * 100 * platformFeeRate);
     const trainerEarnings = Math.round(amount * 100) - platformFee;
 

@@ -1,3 +1,4 @@
+// scripts/import-exercises.ts
 /**
  * Import Exercises from Google Sheets
  * This script imports all exercises from the Google Sheets database
@@ -98,7 +99,7 @@ async function importExercises() {
     let failedCount = 0;
     for (const ex of exercises) {
       try {
-        const upserted = await prisma.exercise.upsert({
+        const upserted = await prisma.exercises.upsert({
           where: { name: ex.name },
           create: ex,
           update: ex,
@@ -114,7 +115,7 @@ async function importExercises() {
     // Optional: Mirror to Firestore if configured
     try {
       console.log('🔁 Mirroring exercises to Firestore (if configured)...')
-      const all = await prisma.exercise.findMany()
+      const all = await prisma.exercises.findMany()
       let mirrored = 0
       for (const ex of all) {
         await publishExercise({
@@ -140,11 +141,11 @@ async function importExercises() {
       console.warn('⚠️ Skipped Firestore mirroring (missing env or dependency):', e)
     }
     // Verify import
-    const totalExercises = await prisma.exercise.count();
+    const totalExercises = await prisma.exercises.count();
     console.log(`📊 Total exercises in database: ${totalExercises}`);
     
     // Show some statistics
-    const categories = await prisma.exercise.groupBy({
+    const categories = await prisma.exercises.groupBy({
       by: ['category'],
       _count: { category: true },
     });

@@ -69,8 +69,8 @@ export async function POST(request: Request) {
         trainerEarnings = te;
         platformFee = payment.amount - te;
       } else {
-        // Fallback calculation (95% to trainer, 5% platform fee)
-        const platformFeeRate = 0.05;
+        // Fallback calculation (85/15 coach/platform split)
+        const platformFeeRate = 0.15;
         platformFee = Math.round(payment.amount * platformFeeRate);
         trainerEarnings = payment.amount - platformFee;
       }

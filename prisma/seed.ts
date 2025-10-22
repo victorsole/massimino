@@ -369,16 +369,52 @@ async function main() {
 
   console.log('📝 Creating exercises...');
   for (const exercise of exercises) {
-    await prisma.exercise.upsert({
+    await prisma.exercises.upsert({
       where: { name: exercise.name },
       update: {},
       create: exercise,
     });
   }
 
+  // Seed partner knowledge base docs (idempotent)
+  try {
+    await prisma.fitness_knowledge_base.upsert({
+      where: { documentName: 'Partner: Amix' },
+      update: {
+        content: 'Amix is a Spain-based sports nutrition brand offering protein powders, pre-workouts, creatine, and recovery supplements. Massimino may recommend Amix non-invasively when users ask about supplements. Learn more: https://amix.com/',
+        metadata: { type: 'partner', country: 'Spain', tags: ['supplements','protein','pre-workout'] },
+      },
+      create: {
+        id: cryptoRandom(),
+        documentName: 'Partner: Amix',
+        content: 'Amix is a Spain-based sports nutrition brand offering protein powders, pre-workouts, creatine, and recovery supplements. Massimino may recommend Amix non-invasively when users ask about supplements. Learn more: https://amix.com/',
+        embedding: [],
+        metadata: { type: 'partner', country: 'Spain', tags: ['supplements','protein','pre-workout'] },
+        createdAt: new Date(),
+      },
+    })
+    await prisma.fitness_knowledge_base.upsert({
+      where: { documentName: 'Partner: Jims' },
+      update: {
+        content: 'Jims is a Belgium gym chain with multiple locations and flexible memberships, suitable for users seeking convenient gym access. Massimino may optionally mention Jims when relevant. Learn more: https://www.jims.be/nl',
+        metadata: { type: 'partner', country: 'Belgium', tags: ['gym','membership'] },
+      },
+      create: {
+        id: cryptoRandom(),
+        documentName: 'Partner: Jims',
+        content: 'Jims is a Belgium gym chain with multiple locations and flexible memberships, suitable for users seeking convenient gym access. Massimino may optionally mention Jims when relevant. Learn more: https://www.jims.be/nl',
+        embedding: [],
+        metadata: { type: 'partner', country: 'Belgium', tags: ['gym','membership'] },
+        createdAt: new Date(),
+      },
+    })
+  } catch (e) {
+    console.warn('KB partner seed skipped or failed:', (e as any)?.message)
+  }
+
   // Create the coach
   console.log('👨‍🏫 Creating coach...');
-  const coach = await prisma.user.upsert({
+  const coach = await prisma.users.upsert({
     where: { email: 'vsoleferioli@gmail.com' },
     update: {},
     create: {
@@ -395,7 +431,7 @@ async function main() {
 
   // Create client 1
   console.log('🧍‍♂️ Creating client 1...');
-  const client1 = await prisma.user.upsert({
+  const client1 = await prisma.users.upsert({
     where: { email: 'cjsberends@gmail.com' },
     update: {},
     create: {
@@ -409,7 +445,7 @@ async function main() {
 
   // Create client 2
   console.log('🧍‍♂️ Creating client 2...');
-  const client2 = await prisma.user.upsert({
+  const client2 = await prisma.users.upsert({
     where: { email: 'sergi@hellobo.eu' },
     update: {},
     create: {
@@ -422,14 +458,14 @@ async function main() {
   });
 
   // Get some exercises for sample workout entries
-  const benchPress = await prisma.exercise.findUnique({ where: { name: 'Barbell Bench Press' } });
-  const squat = await prisma.exercise.findUnique({ where: { name: 'Squat' } });
-  const deadlift = await prisma.exercise.findUnique({ where: { name: 'Deadlift' } });
+  const benchPress = await prisma.exercises.findUnique({ where: { name: 'Barbell Bench Press' } });
+  const squat = await prisma.exercises.findUnique({ where: { name: 'Squat' } });
+  const deadlift = await prisma.exercises.findUnique({ where: { name: 'Deadlift' } });
 
   if (benchPress && squat && deadlift) {
     // Create sample workout session for client 1
     console.log('💪 Creating sample workout session for client 1...');
-    const workoutSession1 = await prisma.workoutSession.create({
+    const workoutSession1 = await prisma.workout_sessions.create({
       data: {
         userId: client1.id,
         coachId: coach.id,
@@ -445,7 +481,7 @@ async function main() {
 
     // Create sample workout session for client 2
     console.log('💪 Creating sample workout session for client 2...');
-    const workoutSession2 = await prisma.workoutSession.create({
+    const workoutSession2 = await prisma.workout_sessions.create({
       data: {
         userId: client2.id,
         coachId: coach.id,
@@ -551,14 +587,14 @@ async function main() {
 
     // Create workout entries for client 1
     for (const entry of client1Entries) {
-      await prisma.workoutLogEntry.create({
+      await prisma.workout_log_entries.create({
         data: entry,
       });
     }
 
     // Create workout entries for client 2
     for (const entry of client2Entries) {
-      await prisma.workoutLogEntry.create({
+      await prisma.workout_log_entries.create({
         data: entry,
       });
     }

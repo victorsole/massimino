@@ -433,7 +433,7 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
             <DialogHeader>
               <DialogTitle>Create New Team</DialogTitle>
               <DialogDescription>
-                Create a new fitness team to manage your clients and workouts.
+                Create a new fitness team to manage your athletes and workouts.
               </DialogDescription>
             </DialogHeader>
 

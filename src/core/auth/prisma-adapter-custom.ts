@@ -10,16 +10,22 @@ import { PrismaClient } from "@prisma/client"
 export function CustomPrismaAdapter(prisma: PrismaClient): Adapter {
   return {
     async createUser(user: Omit<AdapterUser, "id">) {
+      // Ensure we always have an email for DB constraint in dev scenarios where
+      // some providers may not return email (e.g., LinkedIn without extra request)
+      const safeEmail = user.email ?? `${crypto.randomUUID()}@oauth.local`
       const data = {
         id: crypto.randomUUID(),
-        email: user.email!,
+        email: safeEmail,
         emailVerified: user.emailVerified ?? null,
         name: user.name ?? null,
         image: user.image ?? null,
         updatedAt: new Date(),
         createdAt: new Date(),
       };
-      return await prisma.users.create({ data }) as any;
+      return await prisma.users.create({
+        data,
+        select: { id: true, email: true, name: true, image: true },
+      }) as any;
     },
     async getUser(id) {
       return await prisma.users.findUnique({ where: { id } }) as any;
@@ -35,12 +41,31 @@ export function CustomPrismaAdapter(prisma: PrismaClient): Adapter {
             providerAccountId,
           },
         },
-        include: { users: true },
+        include: {
+          users: {
+            select: {
+              id: true,
+              email: true,
+              name: true,
+              image: true,
+              role: true,
+              status: true,
+              reputationScore: true,
+              warningCount: true,
+              trainerVerified: true,
+              suspendedUntil: true,
+            },
+          },
+        },
       });
       return account?.users as any ?? null;
     },
     async updateUser({ id, ...data }) {
-      return await prisma.users.update({ where: { id }, data }) as any;
+      return await prisma.users.update({
+        where: { id },
+        data,
+        select: { id: true, email: true, name: true, image: true },
+      }) as any;
     },
     async deleteUser(userId) {
       await prisma.users.delete({ where: { id: userId } });
@@ -86,11 +111,26 @@ export function CustomPrismaAdapter(prisma: PrismaClient): Adapter {
     async getSessionAndUser(sessionToken) {
       const userAndSession = await prisma.sessions.findUnique({
         where: { sessionToken },
-        include: { users: true },
+        include: {
+          users: {
+            select: {
+              id: true,
+              email: true,
+              name: true,
+              image: true,
+              role: true,
+              status: true,
+              reputationScore: true,
+              warningCount: true,
+              trainerVerified: true,
+              suspendedUntil: true,
+            },
+          },
+        },
       });
       if (!userAndSession) return null;
-      const { users: user, ...session } = userAndSession;
-      return { user: user as any, session: session as any };
+      const { users: user, ...session } = userAndSession as any;
+      return { user, session } as any;
     },
     async updateSession({ sessionToken, ...data }) {
       return await prisma.sessions.update({

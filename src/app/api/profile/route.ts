@@ -65,6 +65,8 @@ export async function GET(_request: NextRequest) {
         acceptDMs: true,
         onlyTrainerDMs: true,
         showRealName: true,
+        allowWorkoutSharing: true,
+        shareWeightsPublicly: true,
 
         // Trainer Info
         trainerVerified: true,

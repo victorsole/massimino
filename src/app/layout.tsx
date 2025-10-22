@@ -7,7 +7,7 @@ import Script from 'next/script'
 
 export const metadata = {
   title: 'Massimino - Safe Workouts for Everyone',
-  description: 'The safety-first fitness community platform where trainers and clients connect, track workouts, and achieve goals together.',
+  description: 'The safety-first fitness community platform where trainers and athletes connect, track workouts, and achieve goals together.',
 }
 
 export default function RootLayout({

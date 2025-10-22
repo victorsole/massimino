@@ -9,8 +9,8 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { prisma } from '@/core/database/client'
 import { UserPublicProfile } from '@/components/layout/user_public_profile'
-import { Button } from '@/components/ui/button'
 import { Share2 } from 'lucide-react'
+import { ShareButton } from '@/components/ui/share_button'
 
 // ===== INLINE FUNCTIONS =====
 
@@ -154,21 +154,10 @@ export default async function BioPage({
           <h1 className="text-xl font-bold text-purple-600">
             Massimino
           </h1>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              if (navigator.share) {
-                navigator.share({ title: shareText, url: shareUrl })
-              } else {
-                navigator.clipboard.writeText(shareUrl)
-                alert('Link copied to clipboard!')
-              }
-            }}
-          >
-            <Share2 size={16} className="mr-2" />
-            Share
-          </Button>
+          <div className="flex items-center gap-2">
+            <Share2 size={16} className="text-gray-700" />
+            <ShareButton shareUrl={shareUrl} shareText={shareText} />
+          </div>
         </div>
       </header>
 

@@ -26,8 +26,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon, Plus, Edit, Trash2, Filter, SortAsc, SortDesc, Activity, Star, Eye, MessageCircle } from 'lucide-react';
-import { cn } from '@/core/utils';
+import { CalendarIcon, Plus, Edit, Trash2, Filter, SortAsc, SortDesc, Activity, Star, Eye, MessageCircle, Link as LinkIcon } from 'lucide-react';
+import { cn } from '@/core/utils/common';
 import { 
   WorkoutLogEntry, 
   WorkoutFilterOptions,
@@ -67,6 +67,8 @@ export function WorkoutLogTable({
   const [filters, setFilters] = useState<WorkoutFilterOptions>({});
   const [sort, setSort] = useState<WorkoutSortOptions>({ field: 'date', direction: 'desc' });
   const [showFilters, setShowFilters] = useState(false);
+  const [attachTarget, setAttachTarget] = useState<{ entryId: string; exerciseId: string } | null>(null);
+  const [attachForm, setAttachForm] = useState<{ provider: string; url: string }>({ provider: 'youtube', url: '' });
 
   const isTrainer = session?.user?.role === UserRole.TRAINER;
 
@@ -278,6 +280,47 @@ export function WorkoutLogTable({
                       onRefresh();
                     }}
                   />
+                </DialogContent>
+              </Dialog>
+              <Dialog open={!!attachTarget} onOpenChange={(open) => { if (!open) setAttachTarget(null) }}>
+                <DialogContent className="max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Attach Media</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="text-sm">Provider</label>
+                      <Select value={attachForm.provider} onValueChange={(v) => setAttachForm(prev => ({ ...prev, provider: v }))}>
+                        <SelectTrigger><SelectValue placeholder="Select provider" /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="youtube">YouTube</SelectItem>
+                          <SelectItem value="instagram">Instagram</SelectItem>
+                          <SelectItem value="tiktok">TikTok</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="text-sm">URL</label>
+                      <Input placeholder="https://..." value={attachForm.url} onChange={(e) => setAttachForm(prev => ({ ...prev, url: e.target.value }))} />
+                    </div>
+                    <div className="flex justify-end gap-2">
+                      <Button variant="outline" onClick={() => setAttachTarget(null)}>Cancel</Button>
+                      <Button onClick={async () => {
+                        if (!attachTarget) return;
+                        const mediaRes = await fetch(`/api/workout/exercises/${attachTarget.exerciseId}/media`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(attachForm) });
+                        if (mediaRes.ok) {
+                          const data = await mediaRes.json();
+                          const mediaId = data.media?.id;
+                          if (mediaId) {
+                            await fetch(`/api/workout/entries/${attachTarget.entryId}/media`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mediaId }) });
+                          }
+                          setAttachTarget(null);
+                          onRefresh();
+                        }
+                      }}>Save</Button>
+                    </div>
+                  </div>
                 </DialogContent>
               </Dialog>
             </div>
@@ -625,6 +668,13 @@ export function WorkoutLogTable({
                           onClick={() => handleDelete(entry.id)}
                         >
                           <Trash2 className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setAttachTarget({ entryId: entry.id, exerciseId: entry.exerciseId })}
+                        >
+                          <LinkIcon className="h-4 w-4" />
                         </Button>
                       </div>
                     )}
