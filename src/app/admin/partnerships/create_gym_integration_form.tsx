@@ -31,11 +31,11 @@ export default function CreateGymIntegrationForm({ action }: { action: ServerAct
   const [apiKey, setApiKey] = useState<string | null>(null);
 
   useEffect(() => {
-    if (state?.apiKey) {
+    if (state && 'apiKey' in state && state.apiKey) {
       setApiKey(state.apiKey);
       setOpen(true);
     }
-  }, [state?.apiKey]);
+  }, [state]);
 
   return (
     <>
