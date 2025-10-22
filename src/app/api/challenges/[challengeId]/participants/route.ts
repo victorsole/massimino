@@ -9,6 +9,7 @@ import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
 import { createPayment } from '@/core/integrations/mollie';
 import { $Enums } from '@prisma/client';
+import crypto from 'crypto';
 
 // ============================================================================
 // GET - Fetch challenge participants
@@ -195,12 +196,14 @@ export async function POST(
     // Create participation record
     const participation = await prisma.challenge_participants.create({
       data: {
+        id: crypto.randomUUID(),
         challengeId,
         userId: session.user.id,
         status: participantStatus,
         notes,
         paymentId: paymentId ?? null,
-        currentProgress: {}
+        currentProgress: {},
+        updatedAt: new Date()
       },
       include: {
         users: {
