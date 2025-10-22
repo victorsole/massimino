@@ -7,6 +7,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
+import crypto from 'crypto';
 
 // ============================================================================
 // GET - Fetch challenge progress for participant
@@ -194,12 +195,14 @@ export async function POST(
     // Create progress entry
     const progressEntry = await prisma.challenge_progress.create({
       data: {
+        id: crypto.randomUUID(),
         participantId: participation.id,
         date: progressDate,
         metrics,
         notes,
         proofImages,
-        isVerified: false
+        isVerified: false,
+        updatedAt: new Date()
       }
     });
 
