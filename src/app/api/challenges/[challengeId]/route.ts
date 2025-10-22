@@ -612,7 +612,7 @@ async function handleJoinChallenge(challengeId: string, body: any, session: any)
 
   const challenge = await prisma.challenges.findUnique({
     where: { id: challengeId },
-    include: { users: { // creator select: { id: true } } }
+    include: { users: { select: { id: true } } } // creator
   });
 
   if (!challenge) {
