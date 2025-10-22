@@ -561,7 +561,7 @@ async function handleGetLeaderboard(challengeId: string, request: Request, sessi
   }
 
   const [leaderboard, total] = await Promise.all([
-    prisma.challengeLeaderboard.findMany({
+    prisma.challenge_leaderboard.findMany({
       where: { challengeId },
       include: {
         user: { select: { id: true, name: true, image: true } }
@@ -570,7 +570,7 @@ async function handleGetLeaderboard(challengeId: string, request: Request, sessi
       skip,
       take: limit
     }),
-    prisma.challengeLeaderboard.count({ where: { challengeId } })
+    prisma.challenge_leaderboard.count({ where: { challengeId } })
   ]);
 
   const processedLeaderboard = leaderboard.map((entry, index) => ({
@@ -578,11 +578,11 @@ async function handleGetLeaderboard(challengeId: string, request: Request, sessi
     rank: entry.rank,
     position: skip + index + 1,
     score: entry.score,
-    user: applyPrivacyMasking(entry.user, session?.user?.id, isCreator, isParticipant),
-    metrics: showDetails && (isCreator || isParticipant || entry.user.id === session?.user?.id)
+    user: applyPrivacyMasking(entry.users, session?.user?.id, isCreator, isParticipant),
+    metrics: showDetails && (isCreator || isParticipant || entry.users.id === session?.user?.id)
       ? entry.metrics : null,
     lastUpdated: entry.lastUpdated,
-    isCurrentUser: entry.user.id === session?.user?.id
+    isCurrentUser: entry.users.id === session?.user?.id
   }));
 
   let userPosition = null;
@@ -852,7 +852,7 @@ async function handleUpdateLeaderboard(challengeId: string, body: any, session: 
     return NextResponse.json({ error: 'Access denied - creators and admins only' }, { status: 403 });
   }
 
-  const leaderboardEntry = await prisma.challengeLeaderboard.upsert({
+  const leaderboardEntry = await prisma.challenge_leaderboard.upsert({
     where: { challengeId_userId: { challengeId, userId } },
     update: { score, metrics, lastUpdated: new Date() },
     create: { challengeId, userId, rank: 1, score, metrics }
@@ -940,7 +940,7 @@ async function updateChallengeLeaderboard(challengeId: string, userId: string, p
       });
     }
 
-    await prisma.challengeLeaderboard.upsert({
+    await prisma.challenge_leaderboard.upsert({
       where: { challengeId_userId: { challengeId, userId } },
       update: { score, metrics: progress, lastUpdated: new Date() },
       create: { challengeId, userId, rank: 1, score, metrics: progress }
@@ -954,13 +954,13 @@ async function updateChallengeLeaderboard(challengeId: string, userId: string, p
 
 async function recalculateLeaderboardRanks(challengeId: string) {
   try {
-    const leaderboard = await prisma.challengeLeaderboard.findMany({
+    const leaderboard = await prisma.challenge_leaderboard.findMany({
       where: { challengeId },
       orderBy: [{ score: 'desc' }, { lastUpdated: 'asc' }]
     });
 
     const updatePromises = leaderboard.map((entry, index) =>
-      prisma.challengeLeaderboard.update({
+      prisma.challenge_leaderboard.update({
         where: { id: entry.id },
         data: { rank: index + 1 }
       })
