@@ -72,7 +72,7 @@ export async function GET(
       prisma.challenge_leaderboard.findMany({
         where: { challengeId },
         include: {
-          user: {
+          users: {
             select: {
               // Apply privacy controls based on user settings
               ...getPrivacyFields(session?.user?.id, isCreator, isParticipant)
@@ -98,13 +98,13 @@ export async function GET(
         rank: entry.rank,
         position, // Position in this page
         score: entry.score,
-        user: applyPrivacyMasking(entry.user, session?.user?.id, isCreator, isParticipant),
-        metrics: showDetails && (isCreator || isParticipant || entry.user.id === session?.user?.id)
+        user: applyPrivacyMasking(entry.users, session?.user?.id, isCreator, isParticipant),
+        metrics: showDetails && (isCreator || isParticipant || entry.users.id === session?.user?.id)
           ? entry.metrics
           : null,
         lastUpdated: entry.lastUpdated,
         // Show if this is the current user
-        isCurrentUser: entry.user.id === session?.user?.id
+        isCurrentUser: entry.users.id === session?.user?.id
       };
     });
 
