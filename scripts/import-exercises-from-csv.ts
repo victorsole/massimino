@@ -130,7 +130,7 @@ async function importExercises() {
     const existingExercises = await prisma.exercises.findMany({
       select: { name: true }
     });
-    const existingNames = new Set(existingExercises.map(e => e.name));
+    const existingNames = new Set(existingExercises.map((e: { name: string }) => e.name));
     console.log(`Found ${existingNames.size} existing exercises in database`);
 
     let imported = 0;
@@ -139,8 +139,8 @@ async function importExercises() {
 
     // Merge both datasets; first primary, then megaGym
     const merged = [
-      ...records1.map(r => ({ source: 'primary', row: r })),
-      ...records2.map(r => ({ source: 'mega', row: r }))
+      ...records1.map((r: CSVExercise) => ({ source: 'primary', row: r })),
+      ...records2.map((r: any) => ({ source: 'mega', row: r }))
     ]
 
     for (const item of merged) {
