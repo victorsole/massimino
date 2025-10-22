@@ -511,7 +511,7 @@ async function handleGetProgress(challengeId: string, request: Request, session:
     success: true,
     data: {
       participation,
-      progressHistory: participation.progressUpdates,
+      progressHistory: participation.challenge_progress,
       challengeMetrics: participation.challenges.metrics
     }
   });
