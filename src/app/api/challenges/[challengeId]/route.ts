@@ -113,7 +113,7 @@ export async function PUT(
     const body = await request.json();
 
     // Get challenge to check ownership
-    const challenge = await prisma.challenge.findUnique({
+    const challenge = await prisma.challenges.findUnique({
       where: { id: challengeId },
       select: {
         creatorId: true,
@@ -210,7 +210,7 @@ export async function PUT(
 
     updateData.updatedAt = new Date();
 
-    const updatedChallenge = await prisma.challenge.update({
+    const updatedChallenge = await prisma.challenges.update({
       where: { id: challengeId },
       data: updateData,
       include: {
@@ -271,7 +271,7 @@ export async function DELETE(
     const { challengeId } = params;
 
     // Get challenge to check ownership and participant count
-    const challenge = await prisma.challenge.findUnique({
+    const challenge = await prisma.challenges.findUnique({
       where: { id: challengeId },
       select: {
         creatorId: true,
@@ -298,7 +298,7 @@ export async function DELETE(
     }
 
     // Delete the challenge (cascade will handle related records)
-    await prisma.challenge.delete({
+    await prisma.challenges.delete({
       where: { id: challengeId }
     });
 
@@ -330,7 +330,7 @@ export async function DELETE(
  * Handle getting challenge details
  */
 async function handleGetChallengeDetails(challengeId: string, session: any) {
-  const challenge = await prisma.challenge.findUnique({
+  const challenge = await prisma.challenges.findUnique({
     where: { id: challengeId },
     include: {
       creator: {
@@ -417,7 +417,7 @@ async function handleGetParticipants(challengeId: string, request: Request, sess
   const skip = (page - 1) * limit;
 
   // Check access permissions
-  const challenge = await prisma.challenge.findUnique({
+  const challenge = await prisma.challenges.findUnique({
     where: { id: challengeId },
     select: { isPublic: true, creatorId: true }
   });
@@ -473,7 +473,7 @@ async function handleGetProgress(challengeId: string, request: Request, session:
 
   // Check access permissions
   if (userId !== session.user.id) {
-    const challenge = await prisma.challenge.findUnique({
+    const challenge = await prisma.challenges.findUnique({
       where: { id: challengeId },
       select: { creatorId: true }
     });
@@ -527,7 +527,7 @@ async function handleGetLeaderboard(challengeId: string, request: Request, sessi
   const showDetails = searchParams.get('details') === 'true';
   const skip = (page - 1) * limit;
 
-  const challenge = await prisma.challenge.findUnique({
+  const challenge = await prisma.challenges.findUnique({
     where: { id: challengeId },
     select: {
       id: true,
@@ -610,7 +610,7 @@ async function handleGetLeaderboard(challengeId: string, request: Request, sessi
 async function handleJoinChallenge(challengeId: string, body: any, session: any) {
   const { notes } = body;
 
-  const challenge = await prisma.challenge.findUnique({
+  const challenge = await prisma.challenges.findUnique({
     where: { id: challengeId },
     include: { creator: { select: { id: true } } }
   });
@@ -673,7 +673,7 @@ async function handleJoinChallenge(challengeId: string, body: any, session: any)
   });
 
   if (participantStatus === 'REGISTERED') {
-    await prisma.challenge.update({
+    await prisma.challenges.update({
       where: { id: challengeId },
       data: { currentParticipants: { increment: 1 } }
     });
@@ -727,7 +727,7 @@ async function handleLeaveChallenge(challengeId: string, session: any) {
   });
 
   if (participation.status === 'REGISTERED') {
-    await prisma.challenge.update({
+    await prisma.challenges.update({
       where: { id: challengeId },
       data: { currentParticipants: { decrement: 1 } }
     });
@@ -836,7 +836,7 @@ async function handleUpdateProgress(challengeId: string, body: any, session: any
 async function handleUpdateLeaderboard(challengeId: string, body: any, session: any) {
   const { userId, score, metrics } = body;
 
-  const challenge = await prisma.challenge.findUnique({
+  const challenge = await prisma.challenges.findUnique({
     where: { id: challengeId },
     select: { creatorId: true }
   });
