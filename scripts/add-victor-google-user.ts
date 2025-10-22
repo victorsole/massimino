@@ -5,6 +5,7 @@
  */
 
 import { PrismaClient } from '@prisma/client';
+import crypto from 'crypto';
 
 const prisma = new PrismaClient();
 
@@ -30,6 +31,7 @@ async function addVictorGoogleUser() {
     // Create user account for Google OAuth
     const user = await prisma.users.create({
       data: {
+        id: crypto.randomUUID(),
         email: 'vsoleferioli@gmail.com',
         name: 'Victor Sole',
         image: 'https://lh3.googleusercontent.com/a/ACg8ocLarwTFwW9ZNE6UHalJLt39gewXv0-h7lbz-YKFYakxIgSRXgBCbA=s96-c',
@@ -57,6 +59,7 @@ async function addVictorGoogleUser() {
     // Also create an account record for OAuth linking
     await prisma.accounts.create({
       data: {
+        id: crypto.randomUUID(),
         userId: user.id,
         type: 'oauth',
         provider: 'google',
@@ -67,6 +70,7 @@ async function addVictorGoogleUser() {
         token_type: 'Bearer',
         scope: 'openid email profile',
         id_token: 'dummy_id_token',
+        updatedAt: new Date(),
       }
     });
 
