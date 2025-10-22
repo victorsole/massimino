@@ -4,6 +4,7 @@
  */
 
 import { PrismaClient } from '@prisma/client';
+import crypto from 'crypto';
 
 const prisma = new PrismaClient();
 
@@ -372,42 +373,51 @@ async function main() {
     await prisma.exercises.upsert({
       where: { name: exercise.name },
       update: {},
-      create: exercise,
+      create: {
+        ...exercise,
+        id: crypto.randomUUID(),
+        updatedAt: new Date(),
+      },
     });
   }
 
   // Seed partner knowledge base docs (idempotent)
   try {
-    await prisma.fitness_knowledge_base.upsert({
-      where: { documentName: 'Partner: Amix' },
-      update: {
-        content: 'Amix is a Spain-based sports nutrition brand offering protein powders, pre-workouts, creatine, and recovery supplements. Massimino may recommend Amix non-invasively when users ask about supplements. Learn more: https://amix.com/',
-        metadata: { type: 'partner', country: 'Spain', tags: ['supplements','protein','pre-workout'] },
-      },
-      create: {
-        id: cryptoRandom(),
-        documentName: 'Partner: Amix',
-        content: 'Amix is a Spain-based sports nutrition brand offering protein powders, pre-workouts, creatine, and recovery supplements. Massimino may recommend Amix non-invasively when users ask about supplements. Learn more: https://amix.com/',
-        embedding: [],
-        metadata: { type: 'partner', country: 'Spain', tags: ['supplements','protein','pre-workout'] },
-        createdAt: new Date(),
-      },
-    })
-    await prisma.fitness_knowledge_base.upsert({
-      where: { documentName: 'Partner: Jims' },
-      update: {
-        content: 'Jims is a Belgium gym chain with multiple locations and flexible memberships, suitable for users seeking convenient gym access. Massimino may optionally mention Jims when relevant. Learn more: https://www.jims.be/nl',
-        metadata: { type: 'partner', country: 'Belgium', tags: ['gym','membership'] },
-      },
-      create: {
-        id: cryptoRandom(),
-        documentName: 'Partner: Jims',
-        content: 'Jims is a Belgium gym chain with multiple locations and flexible memberships, suitable for users seeking convenient gym access. Massimino may optionally mention Jims when relevant. Learn more: https://www.jims.be/nl',
-        embedding: [],
-        metadata: { type: 'partner', country: 'Belgium', tags: ['gym','membership'] },
-        createdAt: new Date(),
-      },
-    })
+    // Check if Amix partner exists
+    const amixExists = await prisma.fitness_knowledge_base.findFirst({
+      where: { documentName: 'Partner: Amix' }
+    });
+
+    if (!amixExists) {
+      await prisma.fitness_knowledge_base.create({
+        data: {
+          id: crypto.randomUUID(),
+          documentName: 'Partner: Amix',
+          content: 'Amix is a Spain-based sports nutrition brand offering protein powders, pre-workouts, creatine, and recovery supplements. Massimino may recommend Amix non-invasively when users ask about supplements. Learn more: https://amix.com/',
+          embedding: [],
+          metadata: { type: 'partner', country: 'Spain', tags: ['supplements','protein','pre-workout'] },
+          createdAt: new Date(),
+        },
+      });
+    }
+
+    // Check if Jims partner exists
+    const jimsExists = await prisma.fitness_knowledge_base.findFirst({
+      where: { documentName: 'Partner: Jims' }
+    });
+
+    if (!jimsExists) {
+      await prisma.fitness_knowledge_base.create({
+        data: {
+          id: crypto.randomUUID(),
+          documentName: 'Partner: Jims',
+          content: 'Jims is a Belgium gym chain with multiple locations and flexible memberships, suitable for users seeking convenient gym access. Massimino may optionally mention Jims when relevant. Learn more: https://www.jims.be/nl',
+          embedding: [],
+          metadata: { type: 'partner', country: 'Belgium', tags: ['gym','membership'] },
+          createdAt: new Date(),
+        },
+      });
+    }
   } catch (e) {
     console.warn('KB partner seed skipped or failed:', (e as any)?.message)
   }
@@ -418,6 +428,7 @@ async function main() {
     where: { email: 'vsoleferioli@gmail.com' },
     update: {},
     create: {
+      id: crypto.randomUUID(),
       email: 'vsoleferioli@gmail.com',
       name: 'V Sola Ferioli',
       role: 'TRAINER',
@@ -426,6 +437,7 @@ async function main() {
       trainerBio: 'Experienced fitness coach specializing in strength training and bodybuilding.',
       trainerCredentials: 'Certified Personal Trainer, Strength & Conditioning Specialist',
       googleId: 'coach-vsoleferioli-google-id',
+      updatedAt: new Date(),
     },
   });
 
@@ -435,11 +447,13 @@ async function main() {
     where: { email: 'cjsberends@gmail.com' },
     update: {},
     create: {
+      id: crypto.randomUUID(),
       email: 'cjsberends@gmail.com',
       name: 'C J S Berends',
       role: 'CLIENT',
       status: 'ACTIVE',
       googleId: 'client-cjsberends-google-id',
+      updatedAt: new Date(),
     },
   });
 
@@ -449,11 +463,13 @@ async function main() {
     where: { email: 'sergi@hellobo.eu' },
     update: {},
     create: {
+      id: crypto.randomUUID(),
       email: 'sergi@hellobo.eu',
       name: 'Sergi',
       role: 'CLIENT',
       status: 'ACTIVE',
       googleId: 'client-sergi-google-id',
+      updatedAt: new Date(),
     },
   });
 
@@ -467,6 +483,7 @@ async function main() {
     console.log('💪 Creating sample workout session for client 1...');
     const workoutSession1 = await prisma.workout_sessions.create({
       data: {
+        id: crypto.randomUUID(),
         userId: client1.id,
         coachId: coach.id,
         date: new Date(),
@@ -476,6 +493,7 @@ async function main() {
         location: 'Gym',
         isComplete: false,
         isTemplate: false,
+        updatedAt: new Date(),
       },
     });
 
@@ -483,6 +501,7 @@ async function main() {
     console.log('💪 Creating sample workout session for client 2...');
     const workoutSession2 = await prisma.workout_sessions.create({
       data: {
+        id: crypto.randomUUID(),
         userId: client2.id,
         coachId: coach.id,
         date: new Date(),
@@ -492,6 +511,7 @@ async function main() {
         location: 'Gym',
         isComplete: false,
         isTemplate: false,
+        updatedAt: new Date(),
       },
     });
 
@@ -588,14 +608,22 @@ async function main() {
     // Create workout entries for client 1
     for (const entry of client1Entries) {
       await prisma.workout_log_entries.create({
-        data: entry,
+        data: {
+          ...entry,
+          id: crypto.randomUUID(),
+          updatedAt: new Date(),
+        },
       });
     }
 
     // Create workout entries for client 2
     for (const entry of client2Entries) {
       await prisma.workout_log_entries.create({
-        data: entry,
+        data: {
+          ...entry,
+          id: crypto.randomUUID(),
+          updatedAt: new Date(),
+        },
       });
     }
   }
