@@ -84,7 +84,7 @@ export async function GET(request: Request) {
     }
 
     // Apply privacy controls
-    const processedLeaderboard = leaderboardData.map((entry, index) =>
+    const processedLeaderboard = leaderboardData.map((entry: any, index: number) =>
       applyPrivacyControls(entry, session?.user?.id, skip + index + 1, includeAnonymous)
     );
 
@@ -159,7 +159,7 @@ async function getWorkoutLeaderboard(params: any) {
   };
 
   // Get aggregated workout stats per user
-  const workoutStats = await prisma.workoutSession.groupBy({
+  const workoutStats = await prisma.workout_sessions.groupBy({
     by: ['userId'],
     where: whereClause,
     _sum: {
@@ -257,7 +257,7 @@ async function getChallengeLeaderboard(params: any) {
   };
 
   // Get top performers across all challenges
-  const challengeStats = await prisma.challengeLeaderboard.groupBy({
+  const challengeStats = await prisma.challenge_leaderboard.groupBy({
     by: ['userId'],
     where: whereClause,
     _sum: {
@@ -315,7 +315,7 @@ async function getTeamLeaderboard(params: any) {
   const { timeframe, skip, limit } = params;
 
   // Get most successful team creators/owners
-  const teamStats = await prisma.premiumCommunity.findMany({
+  const teamStats = await prisma.premium_communities.findMany({
     where: {
       isActive: true,
       ...(timeframe.start && {
@@ -485,7 +485,7 @@ async function getUserPosition(type: string, userId: string, params: any) {
     switch (type) {
       case 'workout':
         // Calculate user's workout rank
-        const userWorkoutStats = await prisma.workoutSession.aggregate({
+        const userWorkoutStats = await prisma.workout_sessions.aggregate({
           where: {
             userId,
             isComplete: true,

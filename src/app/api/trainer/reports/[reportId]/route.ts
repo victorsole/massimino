@@ -177,7 +177,7 @@ export async function PUT(
           return obj;
         }, {});
 
-      const updatedReport = await prisma.progressReport.update({
+      const updatedReport = await prisma.progress_reports.update({
         where: { id: reportId },
         data: {
           ...filteredData,
@@ -228,7 +228,7 @@ export async function DELETE(
 
     const { reportId } = params;
 
-    const report = await prisma.progressReport.findUnique({
+    const report = await prisma.progress_reports.findUnique({
       where: { id: reportId },
       include: {
         trainer: {

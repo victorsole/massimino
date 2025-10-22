@@ -230,20 +230,20 @@ async function handleGetReports(session: any, searchParams: URLSearchParams) {
  * Handle getting specific report
  */
 async function handleGetReport(userId: string, reportId: string) {
-  const report = await prisma.progressReport.findUnique({
+  const report = await prisma.progress_reports.findUnique({
     where: { id: reportId },
     include: {
-      trainer: {
+      trainer_profiles: {
         include: {
-          user: {
+          users: {
             select: { id: true, name: true, email: true }
           }
         }
       },
-      client: {
+      users: { // client
         select: { id: true, name: true, email: true, image: true }
       },
-      trainerClient: {
+      trainer_clients: {
         select: { id: true, goals: true, startDate: true }
       }
     }
@@ -254,7 +254,7 @@ async function handleGetReport(userId: string, reportId: string) {
   }
 
   // Check authorization
-  const isTrainer = userId === report.trainer.userId;
+  const isTrainer = userId === report.trainer_profiles.userId;
   const isClient = userId === report.clientId;
 
   if (!isTrainer && !isClient) {
@@ -268,7 +268,7 @@ async function handleGetReport(userId: string, reportId: string) {
 
   // Mark as viewed by client
   if (isClient && !report.clientViewed) {
-    await prisma.progressReport.update({
+    await prisma.progress_reports.update({
       where: { id: reportId },
       data: {
         clientViewed: true,
@@ -326,8 +326,8 @@ async function handleGetTrainerStats(userId: string) {
     include: {
       _count: {
         select: {
-          clients: { where: { status: 'ACTIVE' } },
-          progressReports: true,
+          trainer_clients: { where: { status: 'ACTIVE' } },
+          progress_reports: true,
           appointments: { where: { status: 'COMPLETED' } }
         }
       }
@@ -342,13 +342,13 @@ async function handleGetTrainerStats(userId: string) {
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
   const recentStats = await Promise.all([
-    prisma.workoutSession.count({
+    prisma.workout_sessions.count({
       where: { coachId: userId, startTime: { gte: thirtyDaysAgo } }
     }),
-    prisma.progressReport.count({
-      where: { trainer: { userId }, createdAt: { gte: thirtyDaysAgo } }
+    prisma.progress_reports.count({
+      where: { trainer_profiles: { userId }, createdAt: { gte: thirtyDaysAgo } }
     }),
-    prisma.appointment.count({
+    prisma.appointments.count({
       where: { trainerId: trainerProfile.id, scheduledAt: { gte: thirtyDaysAgo }, status: 'COMPLETED' }
     })
   ]);
@@ -445,10 +445,10 @@ async function handleCreateReport(userId: string, body: any) {
 async function handleUpdateReport(userId: string, body: any) {
   const validatedData = updateReportSchema.parse(body);
 
-  const report = await prisma.progressReport.findUnique({
+  const report = await prisma.progress_reports.findUnique({
     where: { id: validatedData.reportId },
     include: {
-      trainer: { select: { userId: true } }
+      trainer_profiles: { select: { userId: true } }
     }
   });
 
@@ -457,7 +457,7 @@ async function handleUpdateReport(userId: string, body: any) {
   }
 
   // Only trainer can update reports
-  if (userId !== report.trainer.userId) {
+  if (userId !== report.trainer_profiles.userId) {
     return NextResponse.json({ error: 'Access denied - trainers only' }, { status: 403 });
   }
 
@@ -474,7 +474,7 @@ async function handleUpdateReport(userId: string, body: any) {
       return obj;
     }, {});
 
-  const updatedReport = await prisma.progressReport.update({
+  const updatedReport = await prisma.progress_reports.update({
     where: { id: reportId },
     data: {
       ...filteredData,
@@ -495,10 +495,10 @@ async function handleUpdateReport(userId: string, body: any) {
 async function handleShareReport(userId: string, body: any) {
   const { reportId } = shareReportSchema.parse(body);
 
-  const report = await prisma.progressReport.findUnique({
+  const report = await prisma.progress_reports.findUnique({
     where: { id: reportId },
     include: {
-      trainer: { select: { userId: true } }
+      trainer_profiles: { select: { userId: true } }
     }
   });
 
@@ -507,7 +507,7 @@ async function handleShareReport(userId: string, body: any) {
   }
 
   // Only trainer can share reports
-  if (userId !== report.trainer.userId) {
+  if (userId !== report.trainer_profiles.userId) {
     return NextResponse.json({ error: 'Access denied - trainers only' }, { status: 403 });
   }
 
@@ -526,7 +526,7 @@ async function handleShareReport(userId: string, body: any) {
 async function handleClientFeedback(userId: string, body: any) {
   const { reportId, feedbackFromClient, rating } = clientFeedbackSchema.parse(body);
 
-  const report = await prisma.progressReport.findUnique({
+  const report = await prisma.progress_reports.findUnique({
     where: { id: reportId },
     select: { id: true, clientId: true, isShared: true }
   });
@@ -547,7 +547,7 @@ async function handleClientFeedback(userId: string, body: any) {
     }, { status: 400 });
   }
 
-  const updatedReport = await prisma.progressReport.update({
+  const updatedReport = await prisma.progress_reports.update({
     where: { id: reportId },
     data: {
       feedbackFromClient: feedbackFromClient || null,
@@ -595,10 +595,10 @@ async function handleSearchAccreditedPost(body: any) {
  * Handle deleting progress report
  */
 async function handleDeleteReport(userId: string, reportId: string) {
-  const report = await prisma.progressReport.findUnique({
+  const report = await prisma.progress_reports.findUnique({
     where: { id: reportId },
     include: {
-      trainer: { select: { userId: true } }
+      trainer_profiles: { select: { userId: true } }
     }
   });
 
@@ -607,7 +607,7 @@ async function handleDeleteReport(userId: string, reportId: string) {
   }
 
   // Only trainer can delete reports
-  if (userId !== report.trainer.userId) {
+  if (userId !== report.trainer_profiles.userId) {
     return NextResponse.json({ error: 'Access denied - trainers only' }, { status: 403 });
   }
 
@@ -618,7 +618,7 @@ async function handleDeleteReport(userId: string, reportId: string) {
     }, { status: 400 });
   }
 
-  await prisma.progressReport.delete({
+  await prisma.progress_reports.delete({
     where: { id: reportId }
   });
 
@@ -653,7 +653,7 @@ async function generateProgressReportData(trainerId: string, clientId: string, p
     }
 
     // Get workout sessions for the period
-    const workoutSessions = await prisma.workoutSession.findMany({
+    const workoutSessions = await prisma.workout_sessions.findMany({
       where: {
         userId: clientId,
         coachId: trainerId,
@@ -661,9 +661,9 @@ async function generateProgressReportData(trainerId: string, clientId: string, p
         isComplete: true
       },
       include: {
-        entries: {
+        workout_session_entries: {
           include: {
-            exercise: {
+            exercises: {
               select: { name: true, category: true, muscleGroups: true }
             }
           }
@@ -770,20 +770,20 @@ function generateProgressionTrends(sessions: any[]) {
 }
 
 async function getPersonalRecords(clientId: string, startDate: Date) {
-  const personalRecords = await prisma.personalRecord.findMany({
+  const personalRecords = await prisma.personal_records.findMany({
     where: {
       userId: clientId,
       achievedAt: { gte: startDate }
     },
     include: {
-      exercise: { select: { name: true } }
+      exercises: { select: { name: true } }
     },
     orderBy: { achievedAt: 'desc' },
     take: 5
   });
 
   return personalRecords.map(pr => ({
-    exercise: pr.exercise.name,
+    exercises: pr.exercises.name,
     type: pr.recordType,
     value: pr.value,
     unit: pr.unit,

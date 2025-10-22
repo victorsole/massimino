@@ -10,6 +10,7 @@ import { prisma } from '@/core/database';
 import { moderateContent } from '@/services/moderation/openai';
 import { createPayment } from '@/core/integrations/mollie';
 import { $Enums } from '@prisma/client';
+import crypto from 'crypto';
 
 // ============================================================================
 // GET - Fetch challenge data based on resource type
@@ -659,12 +660,14 @@ async function handleJoinChallenge(challengeId: string, body: any, session: any)
 
   const participation = await prisma.challenge_participants.create({
     data: {
+      id: crypto.randomUUID(),
       challengeId,
       userId: session.user.id,
       status: participantStatus,
       notes,
       paymentId: paymentId ?? null,
-      currentProgress: {}
+      currentProgress: {},
+      updatedAt: new Date()
     },
     include: {
       users: { select: { id: true, name: true, image: true } },
@@ -754,7 +757,7 @@ async function handleUpdateProgress(challengeId: string, body: any, session: any
   const participation = await prisma.challenge_participants.findUnique({
     where: { challengeId_userId: { challengeId, userId: session.user.id } },
     include: {
-      challenge: {
+      challenges: {
         select: { status: true, startDate: true, endDate: true, metrics: true }
       }
     }
@@ -787,7 +790,7 @@ async function handleUpdateProgress(challengeId: string, body: any, session: any
   }
 
   // Check for existing progress
-  const existingProgress = await prisma.challengeProgress.findFirst({
+  const existingProgress = await prisma.challenge_progress.findFirst({
     where: { participantId: participation.id, date: progressDate }
   });
 
@@ -795,8 +798,9 @@ async function handleUpdateProgress(challengeId: string, body: any, session: any
     return NextResponse.json({ error: 'Progress already logged for this date' }, { status: 400 });
   }
 
-  const progressEntry = await prisma.challengeProgress.create({
+  const progressEntry = await prisma.challenge_progress.create({
     data: {
+      id: crypto.randomUUID(),
       participantId: participation.id,
       date: progressDate,
       metrics,
@@ -807,7 +811,7 @@ async function handleUpdateProgress(challengeId: string, body: any, session: any
   });
 
   // Update aggregated progress
-  const allProgress = await prisma.challengeProgress.findMany({
+  const allProgress = await prisma.challenge_progress.findMany({
     where: { participantId: participation.id },
     orderBy: { date: 'asc' }
   });
@@ -855,7 +859,7 @@ async function handleUpdateLeaderboard(challengeId: string, body: any, session: 
   const leaderboardEntry = await prisma.challenge_leaderboard.upsert({
     where: { challengeId_userId: { challengeId, userId } },
     update: { score, metrics, lastUpdated: new Date() },
-    create: { challengeId, userId, rank: 1, score, metrics }
+    create: { id: crypto.randomUUID(), challengeId, userId, rank: 1, score, metrics }
   });
 
   await recalculateLeaderboardRanks(challengeId);
@@ -943,7 +947,7 @@ async function updateChallengeLeaderboard(challengeId: string, userId: string, p
     await prisma.challenge_leaderboard.upsert({
       where: { challengeId_userId: { challengeId, userId } },
       update: { score, metrics: progress, lastUpdated: new Date() },
-      create: { challengeId, userId, rank: 1, score, metrics: progress }
+      create: { id: crypto.randomUUID(), challengeId, userId, rank: 1, score, metrics: progress }
     });
 
     await recalculateLeaderboardRanks(challengeId);
