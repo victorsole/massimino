@@ -126,7 +126,7 @@ export async function POST(
     }
 
     // Get participation record
-    const participation = await prisma.challengeParticipant.findUnique({
+    const participation = await prisma.challenge_participants.findUnique({
       where: {
         challengeId_userId: {
           challengeId,
