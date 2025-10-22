@@ -50,7 +50,7 @@ export async function GET(req: Request) {
     }
     const last = readLastCookie();
     const lastId = last[placement];
-    const creative = await PartnershipsService.selectAdForUser({ userId: session?.user?.id, placement, excludeCreativeId: lastId });
+    const creative = await PartnershipsService.selectAdForUser({ userId: session?.user?.id ?? null, placement, excludeCreativeId: lastId ?? null });
     if (!creative) return NextResponse.json({ creative: null });
     // Record local cookie impression only after creative exists
     const updated = [...withinWindow, now];
