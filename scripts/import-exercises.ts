@@ -5,7 +5,7 @@
  */
 
 import { PrismaClient } from '@prisma/client';
-import { publishExercise } from '../src/lib/integrations/firebase'
+// import { publishExercise } from '../src/lib/integrations/firebase'
 import { parse } from 'csv-parse/sync'
 
 const prisma = new PrismaClient();
@@ -113,6 +113,8 @@ async function importExercises() {
     }
     console.log(`🎉 Import completed! Imported ${importedCount}, Updated ${updatedCount}, Failed ${failedCount}`);
     // Optional: Mirror to Firestore if configured
+    // TODO: Restore Firebase integration when '../src/lib/integrations/firebase' is available
+    /*
     try {
       console.log('🔁 Mirroring exercises to Firestore (if configured)...')
       const all = await prisma.exercises.findMany()
@@ -140,6 +142,7 @@ async function importExercises() {
     } catch (e) {
       console.warn('⚠️ Skipped Firestore mirroring (missing env or dependency):', e)
     }
+    */
     // Verify import
     const totalExercises = await prisma.exercises.count();
     console.log(`📊 Total exercises in database: ${totalExercises}`);
