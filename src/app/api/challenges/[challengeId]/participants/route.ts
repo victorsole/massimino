@@ -132,11 +132,11 @@ export async function POST(
     // Get challenge details
     const challenge = await prisma.challenges.findUnique({
       where: { id: challengeId },
-      include: {
-        creator: {
-          select: { id: true }
-        }
-      }
+      // include: {
+      //   creator: {
+      //     select: { id: true }
+      //   }
+      // }
     });
 
     if (!challenge) {
