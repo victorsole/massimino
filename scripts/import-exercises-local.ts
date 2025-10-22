@@ -14,6 +14,7 @@ import { PrismaClient } from '@prisma/client';
 import { readFileSync } from 'fs';
 import { parse } from 'csv-parse/sync'
 import { join } from 'path';
+import crypto from 'crypto';
 
 const prisma = new PrismaClient();
 
@@ -100,8 +101,15 @@ async function importExercisesFromFile() {
       try {
         const upserted = await prisma.exercises.upsert({
           where: { name: ex.name },
-          create: ex,
-          update: ex,
+          create: {
+            ...ex,
+            id: crypto.randomUUID(),
+            updatedAt: new Date(),
+          },
+          update: {
+            ...ex,
+            updatedAt: new Date(),
+          },
         })
         if (upserted.createdAt.getTime() === upserted.updatedAt.getTime()) importedCount++
         else updatedCount++
