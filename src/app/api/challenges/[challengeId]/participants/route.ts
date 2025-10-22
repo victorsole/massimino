@@ -213,7 +213,7 @@ export async function POST(
             image: true
           }
         },
-        challenge: {
+        challenges: {
           select: {
             title: true,
             entryFee: true
