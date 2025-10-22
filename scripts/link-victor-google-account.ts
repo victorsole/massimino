@@ -5,6 +5,7 @@
  */
 
 import { PrismaClient } from '@prisma/client';
+import crypto from 'crypto';
 
 const prisma = new PrismaClient();
 
@@ -49,6 +50,7 @@ async function linkVictorGoogleAccount() {
     // Create the OAuth account record
     const account = await prisma.accounts.create({
       data: {
+        id: crypto.randomUUID(),
         userId: user.id,
         type: 'oauth',
         provider: 'google',
