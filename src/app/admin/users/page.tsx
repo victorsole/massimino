@@ -4,7 +4,7 @@ import { getUserRepository } from '@/services/repository'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { updateUserAction, syncUserFromFirestoreAction, createUserAction, updateRedemptionStatusAction, adjustUserPointsAction, bulkAwardPointsAction, quickPointsAwardAction, createInvitationAction } from './actions'
+import { updateUserAction, syncUserFromFirestoreAction, createUserAction, updateRedemptionStatusAction, adjustUserPointsAction, bulkAwardPointsAction, quickPointsAwardAction, createInvitationAction, updateInvitationAction } from './actions'
 import { Textarea } from '@/components/ui/textarea'
 import { prisma } from '@/core/database'
 
