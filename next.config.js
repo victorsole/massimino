@@ -114,6 +114,17 @@ const nextConfig = {
               },
             ]
           : []),
+        // Redirect missing /bio routes to /login
+        {
+          source: '/bio/signup',
+          destination: '/login',
+          permanent: false,
+        },
+        {
+          source: '/bio/forgot-password',
+          destination: '/login',
+          permanent: false,
+        },
         // Redirect bare usernames to /bio/:username, excluding known top-level routes
         {
           source:
