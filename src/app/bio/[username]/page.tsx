@@ -38,21 +38,29 @@ async function getUserByUsername(username: string) {
 
 /**
  * Generate static params for top trainers (optional, for performance)
+ * Falls back to on-demand generation if database is unavailable during build
  */
 export async function generateStaticParams() {
-  const users = await prisma.users.findMany({
-    where: {
-      massiminoUsername: { not: null },
-      trainerVerified: true,
-      status: 'ACTIVE'
-    },
-    select: { massiminoUsername: true },
-    take: 50 // Pre-render top 50 trainer profiles
-  })
+  try {
+    const users = await prisma.users.findMany({
+      where: {
+        massiminoUsername: { not: null },
+        trainerVerified: true,
+        status: 'ACTIVE'
+      },
+      select: { massiminoUsername: true },
+      take: 50 // Pre-render top 50 trainer profiles
+    })
 
-  return users.map(user => ({
-    username: user.massiminoUsername!
-  }))
+    return users.map(user => ({
+      username: user.massiminoUsername!
+    }))
+  } catch (error) {
+    // If database is unavailable during build, return empty array
+    // Pages will be generated on-demand instead
+    console.warn('Database unavailable during build, skipping static generation for /bio/[username]')
+    return []
+  }
 }
 
 /**
