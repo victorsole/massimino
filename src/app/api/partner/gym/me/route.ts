@@ -3,6 +3,8 @@ import { verifyGymApiKey } from '@/services/partner_api_auth';
 import { prisma } from '@/core/database';
 
 export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+export const revalidate = 0
 
 export async function GET(req: Request) {
   try {
