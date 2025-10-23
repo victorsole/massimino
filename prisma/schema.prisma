@@ -216,8 +216,9 @@ model ad_campaigns {
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
 
-  partners     partners     @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  partners     partners       @relation(fields: [partnerId], references: [id], onDelete: Cascade)
   ad_creatives ad_creatives[]
+  ad_events    ad_events[]
 
   @@index([partnerId, status])
   @@index([startAt, endAt])
@@ -239,6 +240,7 @@ model ad_creatives {
   updatedAt   DateTime        @updatedAt
 
   ad_campaigns ad_campaigns @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  ad_events    ad_events[]
 
   @@index([campaignId, status])
 }
