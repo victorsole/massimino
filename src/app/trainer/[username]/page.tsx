@@ -16,52 +16,58 @@ interface TrainerPageProps {
 }
 
 async function getTrainerByUsername(username: string) {
-  // Map common username formats to email lookup
-  const emailMappings: Record<string, string> = {
-    'victorsole': 'vsoleferioli@gmail.com',
-    'victor-sole': 'vsoleferioli@gmail.com',
-    'victor.sole': 'vsoleferioli@gmail.com',
-  };
+  try {
+    // Map common username formats to email lookup
+    const emailMappings: Record<string, string> = {
+      'victorsole': 'vsoleferioli@gmail.com',
+      'victor-sole': 'vsoleferioli@gmail.com',
+      'victor.sole': 'vsoleferioli@gmail.com',
+    };
 
-  const email = emailMappings[username.toLowerCase()];
+    const email = emailMappings[username.toLowerCase()];
 
-  if (!email) {
-    return null;
-  }
-
-  const user = await prisma.users.findUnique({
-    where: {
-      email: email,
-      role: UserRole.TRAINER,
-      status: 'ACTIVE'
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      image: true,
-      role: true,
-      trainerVerified: true,
-      trainerBio: true,
-      trainerRating: true,
-      reputationScore: true,
-      createdAt: true,
-      city: true,
-      state: true,
-      country: true,
-      showLocation: true,
-      instagramUrl: true,
-      youtubeUrl: true,
-      linkedinUrl: true,
-      showSocialMedia: true,
-      fitnessGoals: true,
-      experienceLevel: true,
-      preferredWorkoutTypes: true,
-      // ownedTeams and workoutLogs are not direct relations on users; fetch separately downstream
+    if (!email) {
+      return null;
     }
-  });
 
-  return user;
+    const user = await prisma.users.findUnique({
+      where: {
+        email: email,
+        role: UserRole.TRAINER,
+        status: 'ACTIVE'
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        image: true,
+        role: true,
+        trainerVerified: true,
+        trainerBio: true,
+        trainerRating: true,
+        reputationScore: true,
+        createdAt: true,
+        city: true,
+        state: true,
+        country: true,
+        showLocation: true,
+        instagramUrl: true,
+        youtubeUrl: true,
+        linkedinUrl: true,
+        showSocialMedia: true,
+        fitnessGoals: true,
+        experienceLevel: true,
+        preferredWorkoutTypes: true,
+        // ownedTeams and workoutLogs are not direct relations on users; fetch separately downstream
+      }
+    });
+
+    return user;
+  } catch (error) {
+    // Database unavailable during build - return null
+    console.warn(`Database unavailable when fetching trainer: ${username}`)
+    return null
+  }
 }
 
 export async function generateMetadata({ params }: TrainerPageProps): Promise<Metadata> {
@@ -110,11 +116,18 @@ export default async function TrainerPage({ params }: TrainerPageProps) {
   const initials = trainerName.split(' ').map((n: string) => n[0]).join('').toUpperCase();
 
   // Fetch derived data: owned teams and recent workout logs
-  const [ownedTeams, workoutLogs] = await Promise.all([
-    // TODO: Fix _count selector - 'members' doesn't exist on teams
-    prisma.teams.findMany({ where: { trainerId: trainer.id }, select: { id: true, name: true, _count: { select: { team_members: true } } } }),
-    prisma.workout_log_entries.findMany({ where: { userId: trainer.id }, select: { id: true, createdAt: true }, orderBy: { createdAt: 'desc' }, take: 30 })
-  ])
+  let ownedTeams: any[] = [];
+  let workoutLogs: any[] = [];
+
+  try {
+    [ownedTeams, workoutLogs] = await Promise.all([
+      prisma.teams.findMany({ where: { trainerId: trainer.id }, select: { id: true, name: true, _count: { select: { team_members: true } } } }),
+      prisma.workout_log_entries.findMany({ where: { userId: trainer.id }, select: { id: true, createdAt: true }, orderBy: { createdAt: 'desc' }, take: 30 })
+    ])
+  } catch (error) {
+    // Database unavailable during build - use empty arrays
+    console.warn(`Database unavailable when fetching trainer details for: ${trainer.id}`)
+  }
 
   // Calculate workout consistency (percentage of days with workouts in last 30 days)
   const workoutConsistency = Math.round((workoutLogs.length / 30) * 100);

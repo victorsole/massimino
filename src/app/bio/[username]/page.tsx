@@ -16,24 +16,31 @@ import { ShareButton } from '@/components/ui/share_button'
 
 /**
  * Fetch user by massiminoUsername
+ * Returns null if database is unavailable (during build) or user not found
  */
 async function getUserByUsername(username: string) {
-  const user = await prisma.users.findUnique({
-    where: { massiminoUsername: username },
-    select: {
-      id: true,
-      name: true,
-      image: true,
-      role: true,
-      trainerVerified: true,
-      trainerBio: true,
-      status: true,
-      city: true,
-      state: true
-    }
-  })
+  try {
+    const user = await prisma.users.findUnique({
+      where: { massiminoUsername: username },
+      select: {
+        id: true,
+        name: true,
+        image: true,
+        role: true,
+        trainerVerified: true,
+        trainerBio: true,
+        status: true,
+        city: true,
+        state: true
+      }
+    })
 
-  return user
+    return user
+  } catch (error) {
+    // Database unavailable during build - return null for graceful handling
+    console.warn(`Database unavailable when fetching user: ${username}`)
+    return null
+  }
 }
 
 /**
