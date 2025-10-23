@@ -4,6 +4,8 @@ import { authOptions } from '@/core/auth/config';
 import { prisma } from '@/core/database';
 
 export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+export const revalidate = 0
 
 // Helper function to get coaching cues based on movement pattern and fitness level
 function get_coaching_cues(movement_pattern: string, fitness_level: string): string[] {
