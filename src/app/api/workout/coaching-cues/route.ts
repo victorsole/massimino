@@ -3,6 +3,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core/auth/config';
 import { prisma } from '@/core/database';
 
+export const dynamic = 'force-dynamic'
+
 // Helper function to get coaching cues based on movement pattern and fitness level
 function get_coaching_cues(movement_pattern: string, fitness_level: string): string[] {
   const cues_map: Record<string, Record<string, string[]>> = {

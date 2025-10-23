@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { verifyGymApiKey } from '@/services/partner_api_auth';
 import { prisma } from '@/core/database';
 
+export const dynamic = 'force-dynamic'
+
 function subDays(days: number) {
   const d = new Date();
   d.setDate(d.getDate() - days);

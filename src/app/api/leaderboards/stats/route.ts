@@ -8,6 +8,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
 
+export const dynamic = 'force-dynamic'
+
 // ============================================================================
 // GET - Fetch leaderboard statistics and insights
 // ============================================================================

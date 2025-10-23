@@ -14,10 +14,18 @@ import {
 } from 'lucide-react';
 
 export default async function HomePage() {
-  const db: any = prisma as any
-  const rows: Array<any> = db?.partners?.findMany
-    ? await db.partners.findMany({ where: { isActive: true }, orderBy: { createdAt: 'desc' } })
-    : []
+  let rows: Array<any> = []
+
+  try {
+    const db: any = prisma as any
+    if (db?.partners?.findMany) {
+      rows = await db.partners.findMany({ where: { isActive: true }, orderBy: { createdAt: 'desc' } })
+    }
+  } catch (error) {
+    // Database unavailable during build - use fallback partners only
+    console.warn('Database unavailable, using fallback partners')
+  }
+
   const fallback = [
     { name: 'Amix', url: 'https://amix.com/?utm_source=massimino&utm_medium=partner_band&utm_campaign=amix', logoUrl: '/images/amix-logo.png', blurb: 'Quality sports supplements' },
     { name: 'Bo', url: 'http://app.hellobo.eu?utm_source=massimino&utm_medium=partner_band&utm_campaign=bo', logoUrl: '/images/Bo_logo.png', blurb: 'Local producer network' },
