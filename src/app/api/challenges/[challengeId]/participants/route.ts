@@ -8,7 +8,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
 import { createPayment } from '@/core/integrations/mollie';
-import { $Enums } from '@prisma/client';
+import { ParticipantStatus } from '@prisma/client';
 import crypto from 'crypto';
 
 // ============================================================================
@@ -174,7 +174,7 @@ export async function POST(
 
     // If challenge has entry fee, create payment
     let paymentId: string | undefined;
-    let participantStatus: $Enums.ParticipantStatus = 'REGISTERED';
+    let participantStatus: ParticipantStatus = 'REGISTERED';
 
     if ((challenge.entryFee ?? 0) > 0) {
       const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.BASE_URL || 'https://massimino.app';
