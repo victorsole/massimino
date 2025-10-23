@@ -29,9 +29,9 @@ export async function GET(
     const report = await prisma.progress_reports.findUnique({
       where: { id: reportId },
       include: {
-        trainer: {
+        trainer_profiles: {
           include: {
-            user: {
+            users: {
               select: {
                 id: true,
                 name: true,
@@ -40,7 +40,7 @@ export async function GET(
             }
           }
         },
-        client: {
+        users: {
           select: {
             id: true,
             name: true,
@@ -48,7 +48,7 @@ export async function GET(
             image: true
           }
         },
-        trainerClient: {
+        trainer_clients: {
           select: {
             id: true,
             goals: true,
@@ -63,7 +63,7 @@ export async function GET(
     }
 
     // Check authorization
-    const isTrainer = session.user.id === report.trainer.userId;
+    const isTrainer = session.user.id === report.trainerId;
     const isClient = session.user.id === report.clientId;
 
     if (!isTrainer && !isClient) {
@@ -121,7 +121,7 @@ export async function PUT(
     const report = await prisma.progress_reports.findUnique({
       where: { id: reportId },
       include: {
-        trainer: {
+        trainer_profiles: {
           select: { userId: true }
         }
       }
@@ -132,7 +132,7 @@ export async function PUT(
     }
 
     // Only trainer can update reports
-    if (session.user.id !== report.trainer.userId) {
+    if (session.user.id !== report.trainerId) {
       return NextResponse.json({ error: 'Access denied - trainers only' }, { status: 403 });
     }
 
@@ -231,7 +231,7 @@ export async function DELETE(
     const report = await prisma.progress_reports.findUnique({
       where: { id: reportId },
       include: {
-        trainer: {
+        trainer_profiles: {
           select: { userId: true }
         }
       }
@@ -242,7 +242,7 @@ export async function DELETE(
     }
 
     // Only trainer can delete reports
-    if (session.user.id !== report.trainer.userId) {
+    if (session.user.id !== report.trainerId) {
       return NextResponse.json({ error: 'Access denied - trainers only' }, { status: 403 });
     }
 

@@ -8,6 +8,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
 import { createPayment } from '@/core/integrations/mollie';
+import crypto from 'crypto';
 //
 
 // ============================================================================
@@ -48,7 +49,7 @@ export async function GET(
           status: status as any
         },
         include: {
-          user: {
+          users: {
             select: {
               id: true,
               name: true,
@@ -115,7 +116,7 @@ export async function POST(
     const team = await prisma.premium_communities.findUnique({
       where: { id: teamId },
       include: {
-        owner: {
+        users: { // owner
           select: { id: true }
         }
       }
@@ -165,13 +166,15 @@ export async function POST(
 
       const membership = await prisma.premium_memberships.create({
         data: {
+          id: crypto.randomUUID(),
           communityId: teamId,
           userId: session.user.id,
           status: 'ACTIVE',
           startDate: new Date(),
           endDate: endDate ?? null,
           isTrialActive: trialDays > 0,
-          trialEndsAt: trialDays > 0 ? endDate! : null
+          trialEndsAt: trialDays > 0 ? endDate! : null,
+          updatedAt: new Date()
         }
       });
 
@@ -213,10 +216,12 @@ export async function POST(
     // Create pending membership
     const membership = await prisma.premium_memberships.create({
       data: {
+        id: crypto.randomUUID(),
         communityId: teamId,
         userId: session.user.id,
         status: 'SUSPENDED',
-        paymentId: payment.id
+        paymentId: payment.id,
+        updatedAt: new Date()
       }
     });
 

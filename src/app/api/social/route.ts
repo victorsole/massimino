@@ -21,6 +21,7 @@ import {
 import { moderateContent } from '@/services/moderation/openai';
 import { logModerationAction } from '@/services/moderation/loggers';
 import { z } from 'zod';
+import crypto from 'crypto';
 
 // Validation schemas
 const authActionSchema = z.object({
@@ -362,8 +363,11 @@ async function handleShare(userId: string, body: any) {
   }
 
   // Prepare post data
-  const cleanedWorkoutData = workoutData ? {
-    ...workoutData,
+  const cleanedWorkoutData: SocialMediaPost['workoutData'] = workoutData ? {
+    exercise: workoutData.exercise,
+    sets: workoutData.sets,
+    reps: workoutData.reps,
+    weight: workoutData.weight,
     duration: workoutData.duration || ''
   } : undefined;
 
@@ -494,10 +498,15 @@ async function handleUpdatePrivacy(userId: string, body: any) {
     Object.entries(privacySettings).filter(([_, value]) => value !== undefined)
   );
 
-  const updatedSettings = await prisma.safetySettings.upsert({
+  const updatedSettings = await prisma.safety_settings.upsert({
     where: { userId },
     update: cleanedPrivacySettings,
-    create: { userId, ...cleanedPrivacySettings },
+    create: {
+      id: crypto.randomUUID(),
+      userId,
+      updatedAt: new Date(),
+      ...cleanedPrivacySettings
+    },
   });
 
   return NextResponse.json({
@@ -531,10 +540,15 @@ async function handleResetPrivacy(userId: string) {
     lastUpdated: new Date().toISOString()
   };
 
-  const resetSettings = await prisma.safetySettings.upsert({
+  const resetSettings = await prisma.safety_settings.upsert({
     where: { userId },
     update: defaultSettings,
-    create: { userId, ...defaultSettings },
+    create: {
+      id: crypto.randomUUID(),
+      userId,
+      updatedAt: new Date(),
+      ...defaultSettings
+    },
   });
 
   return NextResponse.json({
@@ -625,7 +639,7 @@ async function handleGetShareStatus(userId: string) {
 async function handleGetPrivacySettings(userId: string) {
   const user = await prisma.users.findUnique({
     where: { id: userId },
-    select: { id: true, safetySettings: true }
+    select: { id: true, safety_settings: true }
   });
 
   if (!user) {
@@ -651,7 +665,7 @@ async function handleGetPrivacySettings(userId: string) {
 
   const privacySettings = {
     ...defaultSettings,
-    ...(user.safetySettings || {})
+    ...(user.safety_settings || {})
   };
 
   return NextResponse.json({

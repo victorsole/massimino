@@ -17,7 +17,7 @@ export async function PUT(req: NextRequest, { params }: { params: { media_id: st
   const body = await req.json().catch(() => null)
   const parsed = updateSchema.safeParse(body)
   if (!parsed.success) return NextResponse.json({ error: 'Invalid body' }, { status: 400 })
-  const updated = await updateExerciseMediaDB(params.media_id, session.user.id, parsed.data)
+  const updated = await updateExerciseMediaDB(params.media_id, parsed.data)
   if (!updated) return NextResponse.json({ error: 'Not found' }, { status: 404 })
   return NextResponse.json({ success: true, media: updated })
 }
@@ -25,7 +25,7 @@ export async function PUT(req: NextRequest, { params }: { params: { media_id: st
 export async function DELETE(_req: NextRequest, { params }: { params: { media_id: string } }) {
   const session = await getServerSession(authOptions)
   if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  const ok = await deleteExerciseMediaDB(params.media_id, session.user.id)
+  const ok = await deleteExerciseMediaDB(params.media_id)
   if (!ok) return NextResponse.json({ error: 'Not found' }, { status: 404 })
   return NextResponse.json({ success: true })
 }

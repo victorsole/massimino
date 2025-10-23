@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
+import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 
 const workoutSessionSchema = z.object({
@@ -61,7 +62,7 @@ export async function POST(request: NextRequest) {
         userComments: `${sessionData.type} workout synced from wearable device: ${sessionData.deviceId}`,
         duration: sessionData.duration ? sessionData.duration.toString() : null,
         allowComments: false,
-      },
+      } as Prisma.workout_log_entriesUncheckedCreateInput,
     });
 
     // Create health data entries for key metrics

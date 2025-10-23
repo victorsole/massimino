@@ -153,7 +153,10 @@ export async function GET(request: NextRequest) {
       try {
         const parsedPagination = JSON.parse(paginationParam);
         const validatedPagination = paginationSchema.parse(parsedPagination);
-        pagination = validatedPagination;
+        pagination = {
+          page: validatedPagination.page ?? 1,
+          limit: validatedPagination.limit ?? 50
+        };
       } catch (error) {
         return NextResponse.json(
           { error: 'Invalid pagination format' },

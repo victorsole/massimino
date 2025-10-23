@@ -7,7 +7,7 @@ import { NextAuthOptions } from 'next-auth';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import GoogleProvider from 'next-auth/providers/google';
 import { prisma } from '@/lib/database/client';
-import { UserRole, UserStatus } from '@prisma/client';
+import { UserRole, UserStatus, Prisma } from '@prisma/client';
 
 // Environment variable validation
 const requiredEnvVars = {
@@ -97,7 +97,7 @@ export const authOptions: NextAuthOptions = {
         }
 
         // Check if user is banned
-        const existingUser = await prisma.user.findUnique({
+        const existingUser = await prisma.users.findUnique({
           where: { email: user.email },
           select: { status: true, suspendedUntil: true },
         });
@@ -125,7 +125,7 @@ export const authOptions: NextAuthOptions = {
             existingUser.suspendedUntil &&
             existingUser.suspendedUntil <= new Date()
           ) {
-            await prisma.user.update({
+            await prisma.users.update({
               where: { email: user.email },
               data: {
                 status: UserStatus.ACTIVE,
@@ -137,7 +137,7 @@ export const authOptions: NextAuthOptions = {
 
         // Update last login time for security tracking
         if (existingUser) {
-          await prisma.user.update({
+          await prisma.users.update({
             where: { email: user.email },
             data: { lastLoginAt: new Date() },
           });
@@ -154,7 +154,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, user }) {
       if (session.user && user) {
         // Add user role and safety info to session
-        const dbUser = await prisma.user.findUnique({
+        const dbUser = await prisma.users.findUnique({
           where: { id: user.id },
           select: {
             id: true,
@@ -250,7 +250,7 @@ export const authOptions: NextAuthOptions = {
 
       // Initialize safety settings for new users
       try {
-        await prisma.safetySettings.create({
+        await prisma.safety_settings.create({
           data: {
             userId: user.id,
             // Default to safe settings
@@ -261,7 +261,7 @@ export const authOptions: NextAuthOptions = {
             contentFilterStrength: 'MEDIUM',
             safetyAlerts: true,
             moderationNotifications: true,
-          },
+          } as Prisma.safety_settingsUncheckedCreateInput,
         });
       } catch (error) {
         console.error('Failed to create safety settings for new user:', error);

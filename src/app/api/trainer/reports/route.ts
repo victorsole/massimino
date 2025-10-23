@@ -213,19 +213,20 @@ async function generateProgressReportData(trainerId: string, clientId: string, p
         startTime: { gte: startDate },
         isComplete: true
       },
-      include: {
-        entries: {
-          include: {
-            exercise: {
-              select: {
-                name: true,
-                category: true,
-                muscleGroups: true
-              }
-            }
-          }
-        }
-      },
+      // TODO: Fix relationship name - 'entries' doesn't exist on workout_sessions
+      // include: {
+      //   entries: {
+      //     include: {
+      //       exercise: {
+      //         select: {
+      //           name: true,
+      //           category: true,
+      //           muscleGroups: true
+      //         }
+      //       }
+      //     }
+      //   }
+      // },
       orderBy: { startTime: 'desc' }
     });
 
@@ -366,7 +367,7 @@ async function getPersonalRecords(clientId: string, startDate: Date) {
       achievedAt: { gte: startDate }
     },
     include: {
-      exercise: {
+      exercises: {
         select: { name: true }
       }
     },
@@ -375,7 +376,7 @@ async function getPersonalRecords(clientId: string, startDate: Date) {
   });
 
   return personalRecords.map(pr => ({
-    exercise: pr.exercise.name,
+    exercise: pr.exercises.name,
     type: pr.recordType,
     value: pr.value,
     unit: pr.unit,

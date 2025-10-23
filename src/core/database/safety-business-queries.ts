@@ -6,6 +6,7 @@
  */
 
 import { prisma } from './client';
+import { Prisma } from '@prisma/client';
 
 // Define types locally since Prisma client may not be available
 export const UserRole = {
@@ -691,7 +692,7 @@ export async function getUserViolationHistory(
  */
 export async function getUserSafetySettings(userId: string): Promise<SafetySettings | null> {
   // @ts-expect-error Prisma type mismatch with local types
-  return prisma.safetySettings.findUnique({
+  return prisma.safety_settings.findUnique({
     where: { userId },
   });
 }
@@ -715,15 +716,14 @@ export async function updateUserSafetySettings(
     moderationNotifications: boolean;
   }>
 ): Promise<SafetySettings> {
-  // @ts-expect-error Prisma type mismatch with local types
-  return prisma.safetySettings.upsert({
+  return prisma.safety_settings.upsert({
     where: { userId },
     create: {
       userId,
       ...settings,
-    },
+    } as Prisma.safety_settingsUncheckedCreateInput,
     update: settings,
-  });
+  }) as any;
 }
 
 // ============================================================================
@@ -951,7 +951,7 @@ export async function createOrUpdateTrainerProfile(userId: string, data: {
         id: crypto.randomUUID(),
         userId,
         ...data
-      }
+      } as Prisma.trainer_profilesUncheckedCreateInput
     });
   }
 }
@@ -963,7 +963,7 @@ export async function getTrainerProfileWithStats(trainerId: string) {
   return prisma.trainer_profiles.findUnique({
     where: { id: trainerId },
     include: {
-      user: {
+      users: {
         select: {
           id: true,
           name: true,
@@ -1073,7 +1073,7 @@ export async function addClientToTrainer(trainerId: string, clientId: string, da
       clientId,
       status: 'ACTIVE',
       ...data
-    }
+    } as Prisma.trainer_clientsUncheckedCreateInput
   });
 
   // Update trainer's client counts
@@ -1119,7 +1119,7 @@ export async function createAppointment(data: {
       price: data.price ?? null,
       currency: data.currency ?? 'USD',
       status: 'SCHEDULED'
-    }
+    } as Prisma.appointmentsUncheckedCreateInput
   });
 }
 
@@ -1237,8 +1237,9 @@ export async function createProgressReport(data: {
       id: crypto.randomUUID(),
       ...data,
       reportDate: new Date(),
-      period: data.period || 'MONTHLY'
-    }
+      period: data.period || 'MONTHLY',
+      updatedAt: new Date()
+    } as Prisma.progress_reportsUncheckedCreateInput
   });
 }
 
@@ -1496,7 +1497,7 @@ export async function createMolliePayment(data: {
       ...(data.sessionDate ? { sessionDate: data.sessionDate } : {}),
       packageId: data.packageId ?? null,
       metadata: data.metadata
-    }
+    } as Prisma.paymentsUncheckedCreateInput
   });
 
   console.log('Payment record created:', {
@@ -1587,7 +1588,7 @@ export async function getPaymentByMollieId(molliePaymentId: string) {
     include: {
       trainer_profiles: {
         include: {
-          user: {
+          users: {
             select: {
               id: true,
               name: true,
@@ -1781,7 +1782,7 @@ export async function createPremiumTeam(data: {
       trialPeriodDays: data.trialPeriodDays ?? 0,
       coverImage: data.coverImage ?? null,
       currentMembers: 0
-    },
+    } as Prisma.premium_communitiesUncheckedCreateInput,
     include: {
       users: {
         select: {
@@ -1979,7 +1980,7 @@ export async function joinPremiumTeam(teamId: string, userId: string, paymentId?
       isTrialActive,
       trialEndsAt: trialEndsAt ?? null,
       ...(paymentId ? { paymentId } : {})
-    }
+    } as Prisma.premium_membershipsUncheckedCreateInput
   });
 
   // Update team member count if membership is active
@@ -2305,8 +2306,9 @@ export async function createChallenge(data: {
       rewards: data.rewards ?? [],
       coverImage: data.coverImage ?? null,
       tags: data.tags ?? [],
-      status: 'UPCOMING'
-    },
+      status: 'UPCOMING',
+      updatedAt: new Date()
+    } as Prisma.challengesUncheckedCreateInput,
     include: {
       users: {
         select: {
@@ -2408,7 +2410,7 @@ export async function getChallenges(params: {
   return {
     challenges: challenges.map(challenge => ({
       ...challenge,
-      userParticipation: challenge.participants?.[0] || null
+      userParticipation: challenge.challenge_participants?.[0] || null
     })),
     pagination: {
       page,
@@ -2476,7 +2478,7 @@ export async function joinChallenge(challengeId: string, userId: string, payment
       status: status as any,
       paymentId: paymentId ?? null,
       currentProgress: {}
-    }
+    } as Prisma.challenge_participantsUncheckedCreateInput
   });
 
   // Update challenge participant count if registered
