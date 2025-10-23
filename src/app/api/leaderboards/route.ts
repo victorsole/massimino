@@ -8,6 +8,10 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
 
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+export const revalidate = 0
+
 // ============================================================================
 // GET - Fetch leaderboards with privacy controls
 // ============================================================================
