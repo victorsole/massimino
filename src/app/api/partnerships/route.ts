@@ -62,7 +62,9 @@ export async function POST(req: Request) {
       const { type, payload } = LeadSubmitSchema.parse(json);
       const lead = await PartnershipsService.createLead({
         type,
-        ...payload,
+        orgName: payload.orgName,
+        contactName: payload.contactName,
+        email: payload.email,
         phone: payload.phone ?? null,
         website: payload.website ?? null,
         details: payload.details ?? null,

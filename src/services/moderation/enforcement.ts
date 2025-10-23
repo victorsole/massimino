@@ -5,13 +5,13 @@
 
 import { prisma } from '@/lib/database/client';
 import { logModerationAction } from './loggers';
-import type { 
+import type {
   ModerationResult,
   EnforcementConfig,
   EnforcementResult,
   UserAction
 } from '@/types/moderation';
-import { UserStatus, ViolationType } from '@prisma/client';
+import { UserStatus, ViolationType, Prisma } from '@prisma/client';
 
 // ============================================================================
 // ENFORCEMENT CONFIGURATION
@@ -156,7 +156,7 @@ interface UserSafetyInfo {
  * Get comprehensive user safety information
  */
 async function getUserSafetyInfo(userId: string): Promise<UserSafetyInfo | null> {
-  const user = await prisma.user.findUnique({
+  const user = await prisma.users.findUnique({
     where: { id: userId },
     select: {
       id: true,
@@ -170,7 +170,7 @@ async function getUserSafetyInfo(userId: string): Promise<UserSafetyInfo | null>
   if (!user) return null;
 
   // Get violation history
-  const violations = await prisma.userViolation.findMany({
+  const violations = await prisma.user_violations.findMany({
     where: { userId },
     orderBy: { createdAt: 'desc' },
   });
@@ -330,7 +330,7 @@ async function applyEnforcementAction(
       // Start database transaction
     const result = await prisma.$transaction(async (tx) => {
     // Get current user state
-    const currentUser = await tx.user.findUniqueOrThrow({
+    const currentUser = await tx.users.findUniqueOrThrow({
       where: { id: userId },
       select: { reputationScore: true, warningCount: true, status: true },
     });
@@ -339,9 +339,9 @@ async function applyEnforcementAction(
     const newReputationScore = Math.max(0, currentUser.reputationScore - reputationPenalty);
     const newWarningCount = actionDetails.isWarning ? currentUser.warningCount + 1 : currentUser.warningCount;
     const newStatus = actionDetails.newStatus || currentUser.status;
-    
+
     // Update user record
-    await tx.user.update({
+    await tx.users.update({
       where: { id: userId },
       data: {
         reputationScore: newReputationScore,
@@ -352,7 +352,7 @@ async function applyEnforcementAction(
     });
 
     // Create violation record
-    await tx.userViolation.create({
+    await tx.user_violations.create({
       data: {
         userId,
         violationType: getViolationTypeFromResult(moderationResult),
@@ -364,7 +364,7 @@ async function applyEnforcementAction(
         ...(actionDetails.duration && { suspensionHours: actionDetails.duration }),
         reputationHit: reputationPenalty,
         moderationLogId: 'temp', // Would be set by the logging system
-      },
+      } as Prisma.user_violationsUncheckedCreateInput,
     });
 
     const result: EnforcementResult = {

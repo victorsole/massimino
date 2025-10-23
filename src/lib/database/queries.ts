@@ -4,17 +4,18 @@
  */
 
 import { prisma, safeTransaction } from '@/lib/database/client';
-import { 
-  User, 
-  UserViolation, 
-  ModerationLog, 
-  SafetyReport,
-  SafetySettings,
+import {
+  users as User,
+  user_violations as UserViolation,
+  moderation_logs as ModerationLog,
+  safety_reports as SafetyReport,
+  safety_settings as SafetySettings,
   UserRole,
   UserStatus,
   ViolationType,
   ModerationAction,
-  ModerationSource
+  ModerationSource,
+  Prisma
 } from '@prisma/client';
 import type { SafeUser } from '@/types/auth';
 
@@ -34,7 +35,7 @@ export async function getUserSafetyProfile(userId: string): Promise<{
   riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   restrictions: string[];
 }> {
-  const user = await prisma.user.findUnique({
+  const user = await prisma.users.findUnique({
     where: { id: userId },
     select: {
       id: true,
@@ -65,20 +66,20 @@ export async function getUserSafetyProfile(userId: string): Promise<{
 
   // Get violation statistics
   const [violationCount, recentViolations, suspensionHistory, lastViolationResult] = await Promise.all([
-    prisma.userViolation.count({ where: { userId } }),
-    prisma.userViolation.count({
+    prisma.user_violations.count({ where: { userId } }),
+    prisma.user_violations.count({
       where: {
         userId,
         createdAt: { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) }, // Last 30 days
       },
     }),
-    prisma.userViolation.count({
+    prisma.user_violations.count({
       where: {
         userId,
         suspensionHours: { gt: 0 },
       },
     }),
-    prisma.userViolation.findFirst({
+    prisma.user_violations.findFirst({
       where: { userId },
       orderBy: { createdAt: 'desc' },
       select: { createdAt: true },
@@ -144,7 +145,7 @@ export async function getFlaggedUsers(params: {
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
   
   // Get users with safety concerns
-  const users = await prisma.user.findMany({
+  const users = await prisma.users.findMany({
     where: {
       OR: [
         { reputationScore: { lt: 50 } },
@@ -152,7 +153,7 @@ export async function getFlaggedUsers(params: {
         { status: { in: [UserStatus.SUSPENDED] } },
       ],
       ...(params.includeRecent && {
-        violations: {
+        user_violations: {
           some: {
             createdAt: { gte: thirtyDaysAgo },
           },
@@ -166,7 +167,7 @@ export async function getFlaggedUsers(params: {
       role: true,
       reputationScore: true,
       warningCount: true,
-      violations: {
+      user_violations: {
         select: {
           createdAt: true,
         },
@@ -221,7 +222,7 @@ export async function updateUserSafetyStatus(
   }
 ): Promise<User> {
   return safeTransaction(async (tx) => {
-    const currentUser = await tx.user.findUniqueOrThrow({
+    const currentUser = await tx.users.findUniqueOrThrow({
       where: { id: userId },
       select: { reputationScore: true },
     });
@@ -230,7 +231,7 @@ export async function updateUserSafetyStatus(
       ? Math.max(0, currentUser.reputationScore + updates.reputationChange)
       : undefined;
 
-    return tx.user.update({
+    return tx.users.update({
       where: { id: userId },
       data: {
         ...(newReputationScore !== undefined && { reputationScore: newReputationScore }),
@@ -260,11 +261,11 @@ export async function createModerationLog(data: {
   confidence?: number;
   openaiResponse?: any;
 }): Promise<ModerationLog> {
-  return prisma.moderationLog.create({
+  return prisma.moderation_logs.create({
     data: {
       ...data,
       processedAt: new Date(),
-    },
+    } as Prisma.moderation_logsUncheckedCreateInput,
   });
 }
 
@@ -281,7 +282,7 @@ export async function getModerationLogs(params: {
   offset?: number;
   includeUser?: boolean;
 }): Promise<Array<ModerationLog & { user?: { name: string; role: UserRole } }>> {
-  return prisma.moderationLog.findMany({
+  return prisma.moderation_logs.findMany({
     where: {
       ...(params.userId && { userId: params.userId }),
       ...(params.action && { action: params.action }),
@@ -295,7 +296,7 @@ export async function getModerationLogs(params: {
     },
     ...(params.includeUser && {
       include: {
-        user: {
+        users: {
           select: {
             name: true,
             role: true,
@@ -324,7 +325,7 @@ export async function getModerationStatistics(timeframe: 'day' | 'week' | 'month
   const since = new Date(Date.now() - hoursMap[timeframe] * 60 * 60 * 1000);
 
   const [logs, reasonCounts] = await Promise.all([
-    prisma.moderationLog.findMany({
+    prisma.moderation_logs.findMany({
       where: { createdAt: { gte: since } },
       select: {
         action: true,
@@ -332,12 +333,12 @@ export async function getModerationStatistics(timeframe: 'day' | 'week' | 'month
         confidence: true,
         userId: true,
         flaggedReason: true,
-        user: {
+        users: {
           select: { name: true },
         },
       },
     }),
-    prisma.moderationLog.groupBy({
+    prisma.moderation_logs.groupBy({
       by: ['flaggedReason'],
       where: {
         createdAt: { gte: since },
@@ -370,8 +371,8 @@ export async function getModerationStatistics(timeframe: 'day' | 'week' | 'month
     if (log.userId) {
       if (!userActivity[log.userId]) {
         const userData: { count: number; name?: string } = { count: 0 };
-        if (log.user?.name) {
-          userData.name = log.user.name;
+        if (log.users?.name) {
+          userData.name = log.users.name;
         }
         userActivity[log.userId] = userData;
       }
@@ -429,13 +430,13 @@ export async function createSafetyReport(data: {
   contentId?: string;
   contentType?: string;
 }): Promise<SafetyReport> {
-  return prisma.safetyReport.create({
+  return prisma.safety_reports.create({
     data: {
       ...data,
       status: 'PENDING',
       priority: determinePriority(data.violationType, data.description),
       createdAt: new Date(),
-    },
+    } as Prisma.safety_reportsUncheckedCreateInput,
   });
 }
 
@@ -450,16 +451,16 @@ export async function getPendingSafetyReports(params: {
   reporter: { name: string | null; role: UserRole };
   reportedUser: { name: string | null; role: UserRole; reputationScore: number };
 }>> {
-  return prisma.safetyReport.findMany({
+  const reports = await prisma.safety_reports.findMany({
     where: {
       status: { in: ['PENDING', 'INVESTIGATING'] },
       ...(params.priority && { priority: params.priority }),
     },
     include: {
-      reporter: {
+      users_safety_reports_reporterIdTousers: {
         select: { name: true, role: true },
       },
-      reportedUser: {
+      users_safety_reports_reportedUserIdTousers: {
         select: { name: true, role: true, reputationScore: true },
       },
     },
@@ -470,6 +471,12 @@ export async function getPendingSafetyReports(params: {
     take: params.limit || 20,
     skip: params.offset || 0,
   });
+
+  return reports.map(report => ({
+    ...report,
+    reporter: report.users_safety_reports_reporterIdTousers,
+    reportedUser: report.users_safety_reports_reportedUserIdTousers,
+  })) as any;
 }
 
 /**
@@ -484,7 +491,7 @@ export async function updateSafetyReport(
     actionTaken?: string;
   }
 ): Promise<SafetyReport> {
-  return prisma.safetyReport.update({
+  return prisma.safety_reports.update({
     where: { id: reportId },
     data: {
       ...updates,
@@ -517,16 +524,16 @@ export async function createUserViolation(data: {
 }): Promise<UserViolation> {
   return safeTransaction(async (tx) => {
     // Create violation record
-    const violation = await tx.userViolation.create({
+    const violation = await tx.user_violations.create({
       data: {
         ...data,
         createdAt: new Date(),
-      },
+      } as Prisma.user_violationsUncheckedCreateInput,
     });
 
     // Update user statistics
     if (data.warningIssued) {
-      await tx.user.update({
+      await tx.users.update({
         where: { id: data.userId },
         data: {
           warningCount: { increment: 1 },
@@ -550,7 +557,7 @@ export async function getUserViolationHistory(
     includeResolved?: boolean;
   }
 ): Promise<UserViolation[]> {
-  return prisma.userViolation.findMany({
+  return prisma.user_violations.findMany({
     where: {
       userId,
       ...(params?.includeResolved === false && { resolved: false }),
@@ -569,7 +576,7 @@ export async function getUserViolationHistory(
  * Get user safety settings
  */
 export async function getUserSafetySettings(userId: string): Promise<SafetySettings | null> {
-  return prisma.safetySettings.findUnique({
+  return prisma.safety_settings.findUnique({
     where: { userId },
   });
 }
@@ -593,12 +600,12 @@ export async function updateUserSafetySettings(
     moderationNotifications: boolean;
   }>
 ): Promise<SafetySettings> {
-  return prisma.safetySettings.upsert({
+  return prisma.safety_settings.upsert({
     where: { userId },
     create: {
       userId,
       ...settings,
-    },
+    } as Prisma.safety_settingsUncheckedCreateInput,
     update: settings,
   });
 }
@@ -671,11 +678,11 @@ export async function generateSafetyReport(params: {
   details: any[];
 }> {
   const summary = await Promise.all([
-    prisma.user.count(),
-    prisma.user.count({ where: { status: UserStatus.ACTIVE } }),
-    prisma.user.count({ where: { status: UserStatus.SUSPENDED } }),
-    prisma.user.count({ where: { status: UserStatus.BANNED } }),
-    prisma.userViolation.count({
+    prisma.users.count(),
+    prisma.users.count({ where: { status: UserStatus.ACTIVE } }),
+    prisma.users.count({ where: { status: UserStatus.SUSPENDED } }),
+    prisma.users.count({ where: { status: UserStatus.BANNED } }),
+    prisma.user_violations.count({
       where: {
         createdAt: {
           gte: params.startDate,
@@ -683,7 +690,7 @@ export async function generateSafetyReport(params: {
         },
       },
     }),
-    prisma.safetyReport.count({
+    prisma.safety_reports.count({
       where: {
         status: 'RESOLVED',
         createdAt: {

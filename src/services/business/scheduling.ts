@@ -129,7 +129,7 @@ export async function createAppointment(data: CreateAppointmentData): Promise<ap
       (trainerProfile.hourlyRate ? (trainerProfile.hourlyRate * ((data.duration || 60) / 60)) : undefined);
 
     // Create appointment
-    const appointment = await prisma.appointmentss.create({
+    const appointment = await prisma.appointments.create({
       data: {
         id: randomUUID(),
         trainerId: data.trainerId,
@@ -211,7 +211,7 @@ export async function getAppointments(
 
     // Get appointments with details
     const [rows, total] = await Promise.all([
-      prisma.appointmentss.findMany({
+      prisma.appointments.findMany({
         where,
         include: {
           trainer_profiles: {
@@ -236,7 +236,7 @@ export async function getAppointments(
         take: limit
       }),
 
-      prisma.appointmentss.count({ where })
+      prisma.appointments.count({ where })
     ]);
 
     const appointments: AppointmentWithDetails[] = rows.map((row: any) => ({
@@ -273,7 +273,7 @@ export async function updateAppointment(
   updatedBy: string
 ): Promise<appointments> {
   try {
-    const appointment = await prisma.appointmentss.findUnique({ where: { id: appointmentId } });
+    const appointment = await prisma.appointments.findUnique({ where: { id: appointmentId } });
 
     if (!appointment) {
       throw new Error('Appointment not found');
@@ -335,7 +335,7 @@ export async function updateAppointment(
       updateData.status = AppointmentStatus.RESCHEDULED;
     }
 
-    const updatedAppointment = await prisma.appointmentss.update({
+    const updatedAppointment = await prisma.appointments.update({
       where: { id: appointmentId },
       data: {
         ...updateData,
@@ -366,7 +366,7 @@ export async function cancelAppointment(
   cancelledBy: string
 ): Promise<appointments> {
   try {
-    const appointment = await prisma.appointmentss.findUnique({
+    const appointment = await prisma.appointments.findUnique({
       where: { id: appointmentId }
     });
 
@@ -382,7 +382,7 @@ export async function cancelAppointment(
       throw new Error('Appointment is already cancelled');
     }
 
-    const updatedAppointment = await prisma.appointmentss.update({
+    const updatedAppointment = await prisma.appointments.update({
       where: { id: appointmentId },
       data: {
         status: AppointmentStatus.CANCELLED,
@@ -422,7 +422,7 @@ export async function checkSchedulingConflict(
   try {
     const endTime = new Date(scheduledAt.getTime() + (duration * 60 * 1000));
 
-    const conflictingAppointment = await prisma.appointmentss.findFirst({
+    const conflictingAppointment = await prisma.appointments.findFirst({
       where: {
         trainerId,
         ...(excludeAppointmentId && { id: { not: excludeAppointmentId } }),
@@ -492,7 +492,7 @@ export async function getTrainerAvailability(
     }
 
     // Get existing appointments in the date range
-    const appointments = await prisma.appointmentss.findMany({
+    const appointments = await prisma.appointments.findMany({
       where: {
         trainerId,
         scheduledAt: {
@@ -569,7 +569,7 @@ export async function getUpcomingAppointments(
     const endDate = new Date();
     endDate.setDate(startDate.getDate() + days);
 
-    const rows = await prisma.appointmentss.findMany({
+    const rows = await prisma.appointments.findMany({
       where: {
         trainerId,
         scheduledAt: {
