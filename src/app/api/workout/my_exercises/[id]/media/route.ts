@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { listExerciseMediaDB, addExerciseMediaDB } from '@/core/database'
 
 export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
-  const media = await listExerciseMediaDB({ userExerciseId: params.id })
+  const media = await listExerciseMediaDB(params.id)
   return NextResponse.json(media)
 }
 
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   const body = await req.json().catch(() => null)
   const parsed = createSchema.safeParse(body)
   if (!parsed.success) return NextResponse.json({ error: 'Invalid body' }, { status: 400 })
-  const created = await addExerciseMediaDB(session.user.id, { userExerciseId: params.id }, parsed.data)
+  const created = await addExerciseMediaDB(params.id, parsed.data)
   return NextResponse.json({ success: true, media: created })
 }
 

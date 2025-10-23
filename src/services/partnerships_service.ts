@@ -247,7 +247,8 @@ export const PartnershipsService = {
       where: { id: creative.campaignId },
       data: { impressions: { increment: 1 } as any },
     });
-    await prisma.ad_events.create({ data: { campaignId: campaign.id, creativeId, placement, event: 'IMPRESSION' as any, userId: _userId || null } });
+    // TODO: Create ad_events table in Prisma schema
+    // await prisma.ad_events.create({ data: { campaignId: campaign.id, creativeId, placement, event: 'IMPRESSION' as any, userId: _userId || null } });
     await this.updateCampaignSpendAndPacing(campaign.id);
   },
 
@@ -260,7 +261,8 @@ export const PartnershipsService = {
       where: { id: creative.campaignId },
       data: { clicks: { increment: 1 } as any },
     });
-    await prisma.ad_events.create({ data: { campaignId: campaign.id, creativeId, placement: placement || 'unknown', event: 'CLICK' as any, userId: _userId || null } });
+    // TODO: Create ad_events table in Prisma schema
+    // await prisma.ad_events.create({ data: { campaignId: campaign.id, creativeId, placement: placement || 'unknown', event: 'CLICK' as any, userId: _userId || null } });
     await this.updateCampaignSpendAndPacing(campaign.id);
     return creative.clickUrl;
   },
@@ -269,8 +271,9 @@ export const PartnershipsService = {
     const c = await prisma.ad_campaigns.findUnique({ where: { id: campaignId } });
     if (!c) return;
     // Compute spend: impressions * (cpm/1000) + clicks * cpc
-    const cpm = c.cpmCents ?? 0;
-    const cpc = c.cpcCents ?? 0;
+    // TODO: Add cpmCents and cpcCents fields to ad_campaigns table
+    const cpm = (c as any).cpmCents ?? 0;
+    const cpc = (c as any).cpcCents ?? 0;
     const spend = Math.round((c.impressions * (cpm / 1000)) + (c.clicks * cpc));
     const updates: any = { spendCents: spend };
     // Auto-pause when over budget or flight ended

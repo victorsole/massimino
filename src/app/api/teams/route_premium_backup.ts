@@ -43,7 +43,7 @@ export async function GET(request: Request) {
 
     // If fetching user memberships, add membership filter
     if (myMemberships && session?.user?.id) {
-      where.memberships = {
+      where.premium_memberships = {
         some: {
           userId: session.user.id,
           status: 'ACTIVE'
@@ -55,7 +55,7 @@ export async function GET(request: Request) {
       prisma.premium_communities.findMany({
         where,
         include: {
-          owner: {
+          users: { // owner
             select: {
               id: true,
               name: true,
@@ -65,14 +65,14 @@ export async function GET(request: Request) {
           },
           _count: {
             select: {
-              memberships: {
+              premium_memberships: {
                 where: { status: 'ACTIVE' }
               },
-              posts: true
+              community_posts: true
             }
           },
           ...(session?.user?.id && {
-            memberships: {
+            premium_memberships: {
               where: { userId: session.user.id },
               select: {
                 status: true,
@@ -99,7 +99,7 @@ export async function GET(request: Request) {
       data: {
         teams: teams.map(team => ({
           ...team,
-          userMembership: team.memberships?.[0] || null
+          userMembership: team.premium_memberships?.[0] || null
         })),
         pagination: {
           page,
@@ -195,7 +195,7 @@ export async function POST(request: Request) {
         currentMembers: 0
       },
       include: {
-        owner: {
+        users: { // owner
           select: {
             id: true,
             name: true,

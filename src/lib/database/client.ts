@@ -321,7 +321,7 @@ export async function safeRawQuery<T = unknown>(
 export async function needsMigration(): Promise<boolean> {
   try {
     // This is a simple check - in production you might want more sophisticated logic
-    await prisma.user.findFirst();
+    await prisma.users.findFirst();
     return false;
   } catch (error) {
     // If basic table doesn't exist, likely needs migration

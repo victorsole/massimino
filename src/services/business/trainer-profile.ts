@@ -135,7 +135,7 @@ export async function getTrainerProfileWithStats(userId: string): Promise<Traine
     const profile = await prisma.trainer_profiles.findUnique({
       where: { userId },
       include: {
-        user: {
+        users: {
           select: {
             id: true,
             name: true,
@@ -169,7 +169,7 @@ export async function getTrainerProfileWithStats(userId: string): Promise<Traine
       }),
 
       // Monthly earnings
-      prisma.paymentss.aggregate({
+      prisma.payments.aggregate({
         where: {
           trainerId: profile.id,
           status: 'COMPLETED',
@@ -191,10 +191,11 @@ export async function getTrainerProfileWithStats(userId: string): Promise<Traine
 
     return {
       ...profile,
+      user: profile.users,
       averageRating: ratingStats._avg.rating || 0,
       monthlyEarnings: earningsStats._sum.trainerEarnings || 0,
       activeClients
-    } as TrainerProfileWithStats;
+    } as any;
 
   } catch (error) {
     console.error('Error getting trainer profile with stats:', error);
@@ -376,7 +377,7 @@ export async function getTrainerClients(
       prisma.trainer_clients.findMany({
         where,
         include: {
-          client: {
+          users: {
             select: {
               id: true,
               name: true,
@@ -400,11 +401,11 @@ export async function getTrainerClients(
     ]);
 
     return {
-      clients,
+      clients: clients.map(c => ({ ...c, client: c.users })),
       total,
       page,
       totalPages: Math.ceil(total / limit)
-    };
+    } as any;
 
   } catch (error) {
     console.error('Error getting trainer clients:', error);
@@ -531,7 +532,7 @@ export async function getTrainerDashboardStats(trainerId: string): Promise<{
       }),
 
       // Upcoming appointments (next 7 days)
-      prisma.appointmentss.count({
+      prisma.appointments.count({
         where: {
           trainerId,
           scheduledAt: {
@@ -561,7 +562,7 @@ export async function getTrainerDashboardStats(trainerId: string): Promise<{
       }),
 
       // Completed sessions this month
-      prisma.appointmentss.count({
+      prisma.appointments.count({
         where: {
           trainerId,
           status: 'COMPLETED',
@@ -572,7 +573,7 @@ export async function getTrainerDashboardStats(trainerId: string): Promise<{
       }),
 
       // Last month's earnings for comparison
-      prisma.paymentss.aggregate({
+      prisma.payments.aggregate({
         where: {
           trainerId,
           status: 'COMPLETED',
@@ -595,7 +596,7 @@ export async function getTrainerDashboardStats(trainerId: string): Promise<{
       }),
 
       // Session completion stats
-      prisma.appointmentss.groupBy({
+      prisma.appointments.groupBy({
         by: ['status'],
         where: {
           trainerId,

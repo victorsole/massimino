@@ -344,13 +344,13 @@ async function handleGetChallengeDetails(challengeId: string, session: any) {
       },
       _count: {
         select: {
-          participants: {
+          challenge_participants: {
             where: { status: 'REGISTERED' }
           },
-          posts: true
+          challenge_posts: true
         }
       },
-      leaderboard: {
+      challenge_leaderboard: {
         include: {
           users: {
             select: {

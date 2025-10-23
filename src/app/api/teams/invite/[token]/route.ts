@@ -34,7 +34,7 @@ export async function GET(
     // Mark invitation as viewed (first time)
     if (!invite.viewedAt) {
       const { prisma } = await import('@/core/database');
-      await prisma.teamInvite.update({
+      await prisma.team_invites.update({
         where: { id: invite.id },
         data: { viewedAt: new Date() }
       });

@@ -10,6 +10,7 @@ import { prisma } from '@/core/database';
 import { moderateContent } from '@/services/moderation/openai';
 import { createPayment } from '@/core/integrations/mollie';
 import { z } from 'zod';
+import crypto from 'crypto';
 
 // Validation schemas
 const joinTeamSchema = z.object({
@@ -201,7 +202,7 @@ export async function PUT(
       where: { id: teamId },
       data: updateData,
       include: {
-        owner: {
+        users: { // owner
           select: {
             id: true,
             name: true,
@@ -211,10 +212,10 @@ export async function PUT(
         },
         _count: {
           select: {
-            memberships: {
+            premium_memberships: {
               where: { status: 'ACTIVE' }
             },
-            posts: true
+            community_posts: true
           }
         }
       }
@@ -327,7 +328,7 @@ async function handleGetTeamDetails(teamId: string, session: any) {
   const team = await prisma.premium_communities.findUnique({
     where: { id: teamId },
     include: {
-      owner: {
+      users: { // owner
         select: {
           id: true,
           name: true,
@@ -337,14 +338,14 @@ async function handleGetTeamDetails(teamId: string, session: any) {
       },
       _count: {
         select: {
-          memberships: {
+          premium_memberships: {
             where: { status: 'ACTIVE' }
           },
-          posts: true
+          community_posts: true
         }
       },
       ...(session?.user?.id && {
-        memberships: {
+        premium_memberships: {
           where: { userId: session.user.id },
           select: {
             status: true,
@@ -364,7 +365,7 @@ async function handleGetTeamDetails(teamId: string, session: any) {
   // Check access for private teams
   if (!team.isPublic && session?.user?.id) {
     const hasAccess = team.ownerId === session.user.id ||
-                     team.memberships?.some(m => m.status === 'ACTIVE');
+                     team.premium_memberships?.some(m => m.status === 'ACTIVE');
 
     if (!hasAccess) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
@@ -374,7 +375,7 @@ async function handleGetTeamDetails(teamId: string, session: any) {
   // Add user membership info
   const teamWithMembership = {
     ...team,
-    userMembership: team.memberships?.[0] || null
+    userMembership: team.premium_memberships?.[0] || null
   } as any;
 
   return NextResponse.json({
@@ -413,7 +414,7 @@ async function handleGetMembers(teamId: string, request: Request, session: any) 
         status: status as any
       },
       include: {
-        user: {
+        users: {
           select: {
             id: true,
             name: true,
@@ -459,7 +460,9 @@ async function handleJoinTeam(teamId: string, body: any, session: any) {
   const team = await prisma.premium_communities.findUnique({
     where: { id: teamId },
     include: {
-      owner: { select: { id: true } }
+      users: { // owner
+        select: { id: true }
+      }
     }
   });
 
@@ -507,13 +510,15 @@ async function handleJoinTeam(teamId: string, body: any, session: any) {
 
     const membership = await prisma.premium_memberships.create({
       data: {
+        id: crypto.randomUUID(),
         communityId: teamId,
         userId: session.user.id,
         status: 'ACTIVE',
         startDate: new Date(),
         endDate: endDate ?? null,
         isTrialActive: trialDays > 0,
-        trialEndsAt: trialDays > 0 ? endDate! : null
+        trialEndsAt: trialDays > 0 ? endDate! : null,
+        updatedAt: new Date()
       }
     });
 
@@ -548,10 +553,12 @@ async function handleJoinTeam(teamId: string, body: any, session: any) {
   // Create pending membership
   const membership = await prisma.premium_memberships.create({
     data: {
+      id: crypto.randomUUID(),
       communityId: teamId,
       userId: session.user.id,
       status: 'SUSPENDED',
-      paymentId: payment.id
+      paymentId: payment.id,
+      updatedAt: new Date()
     }
   });
 
@@ -638,7 +645,7 @@ async function handleUpdateMembership(teamId: string, body: any, session: any) {
     where: { id: membershipId },
     data: updateData,
     include: {
-      user: {
+      users: {
         select: { id: true, name: true, email: true }
       }
     }

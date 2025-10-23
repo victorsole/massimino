@@ -111,7 +111,8 @@ export default async function TrainerPage({ params }: TrainerPageProps) {
 
   // Fetch derived data: owned teams and recent workout logs
   const [ownedTeams, workoutLogs] = await Promise.all([
-    prisma.teams.findMany({ where: { trainerId: trainer.id }, select: { id: true, name: true, _count: { select: { members: true } } } }),
+    // TODO: Fix _count selector - 'members' doesn't exist on teams
+    prisma.teams.findMany({ where: { trainerId: trainer.id }, select: { id: true, name: true, _count: { select: { team_members: true } } } }),
     prisma.workout_log_entries.findMany({ where: { userId: trainer.id }, select: { id: true, createdAt: true }, orderBy: { createdAt: 'desc' }, take: 30 })
   ])
 
@@ -214,7 +215,7 @@ export default async function TrainerPage({ params }: TrainerPageProps) {
                 <span className="text-2xl font-bold text-slate-900">{totalTeamMembers}</span>
               </div>
               <p className="text-slate-600 text-sm">Team Members</p>
-              <p className="text-xs text-slate-500 mt-1">Across {trainer.ownedTeams.length} teams</p>
+              <p className="text-xs text-slate-500 mt-1">Across {ownedTeams.length} teams</p>
             </CardContent>
           </Card>
 
@@ -249,7 +250,7 @@ export default async function TrainerPage({ params }: TrainerPageProps) {
         )}
 
         {/* Teams Section */}
-        {trainer.ownedTeams.length > 0 && (
+        {ownedTeams.length > 0 && (
           <Card className="mb-6 border-0 shadow-lg">
             <CardHeader>
               <CardTitle className="text-xl">My Training Teams</CardTitle>
@@ -259,7 +260,7 @@ export default async function TrainerPage({ params }: TrainerPageProps) {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {trainer.ownedTeams.map((team: any) => (
+                {ownedTeams.map((team: any) => (
                   <div key={team.id} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
                     <div>
                       <h3 className="font-semibold text-slate-900">{team.name}</h3>

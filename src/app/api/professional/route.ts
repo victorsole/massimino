@@ -356,8 +356,8 @@ async function handleGetTrainerStats(userId: string) {
   return NextResponse.json({
     success: true,
     data: {
-      activeClients: trainerProfile._count.clients,
-      totalReports: trainerProfile._count.progressReports,
+      activeClients: trainerProfile._count.trainer_clients,
+      totalReports: trainerProfile._count.progress_reports,
       totalAppointments: trainerProfile._count.appointments,
       recentActivity: {
         sessionsLast30Days: recentStats[0],
@@ -661,7 +661,7 @@ async function generateProgressReportData(trainerId: string, clientId: string, p
         isComplete: true
       },
       include: {
-        workout_session_entries: {
+        workout_log_entries: {
           include: {
             exercises: {
               select: { name: true, category: true, muscleGroups: true }

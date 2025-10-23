@@ -2719,7 +2719,8 @@ export async function createUserExerciseDB(userId: string, data: any) {
       instructions: data.instructions ?? null,
       difficulty: data.difficulty || 'BEGINNER',
       safetyNotes: data.safetyNotes ?? null,
-      tags: data.tags || [],
+      // TODO: Add 'tags' field to exercises table
+      // tags: data.tags || [],
       createdBy: userId,
       isCustom: true,
       updatedAt: new Date()

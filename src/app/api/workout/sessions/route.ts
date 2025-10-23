@@ -85,7 +85,10 @@ export async function GET(request: NextRequest) {
       try {
         const parsedPagination = JSON.parse(paginationParam);
         const validatedPagination = paginationSchema.parse(parsedPagination);
-        pagination = validatedPagination;
+        pagination = {
+          page: validatedPagination.page ?? 1,
+          limit: validatedPagination.limit ?? 20
+        };
       } catch (error) {
         return NextResponse.json(
           { error: 'Invalid pagination format' },
@@ -98,11 +101,12 @@ export async function GET(request: NextRequest) {
     if (actionParam === 'clients' && (session.user.role === UserRole.TRAINER || session.user.role === UserRole.ADMIN)) {
       const list = await prisma.trainer_clients.findMany({
         where: session.user.role === UserRole.TRAINER ? { trainerId: session.user.id } : {},
-        include: { client: { select: { id: true, name: true, email: true, image: true } } },
+        // TODO: Fix relationship - 'client' doesn't exist on trainer_clients
+        // include: { client: { select: { id: true, name: true, email: true, image: true } } },
         orderBy: { createdAt: 'desc' },
         take: 200
       });
-      const clients = list.map((tc) => tc.client);
+      const clients = list.map((tc) => ({ id: (tc as any).clientId, name: null, email: null, image: null }));
       return NextResponse.json({ clients });
     }
 

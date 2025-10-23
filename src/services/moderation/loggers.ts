@@ -134,7 +134,7 @@ class ModerationLogger {
     
     try {
       // Batch insert to database
-      await prisma.moderationLog.createMany({
+      await prisma.moderation_logs.createMany({
         data: logsToFlush.map(({ entry, timestamp, id }) => {
           const contentId = this.extractContentId(entry.content);
           const data: any = {
@@ -366,7 +366,7 @@ export async function getUserModerationLogs(
   confidence: number | null;
   createdAt: Date;
 }>> {
-  return prisma.moderationLog.findMany({
+  return prisma.moderation_logs.findMany({
     where: { userId },
     select: {
       id: true,
@@ -405,7 +405,7 @@ export async function getModerationStats(
   const windowHours = { day: 24, week: 168, month: 720 }[timeWindow];
   const since = new Date(Date.now() - windowHours * 60 * 60 * 1000);
 
-  const logs = await prisma.moderationLog.findMany({
+  const logs = await prisma.moderation_logs.findMany({
     where: {
       createdAt: { gte: since },
     },
@@ -469,11 +469,11 @@ export async function getRecentModerationActivity(limit: number = 20): Promise<A
     role: string;
   };
 }>> {
-  const logs = await prisma.moderationLog.findMany({
+  const logs = await prisma.moderation_logs.findMany({
     take: limit,
     orderBy: { createdAt: 'desc' },
     include: {
-      user: {
+      users: {
         select: {
           name: true,
           role: true,
@@ -489,7 +489,7 @@ export async function getRecentModerationActivity(limit: number = 20): Promise<A
     contentType: log.contentType,
     confidence: log.confidence,
     createdAt: log.createdAt,
-    ...(log.user && { user: { name: log.user.name, role: log.user.role } }),
+    ...(log.users && { user: { name: log.users.name, role: log.users.role } }),
   }));
 }
 
@@ -525,7 +525,7 @@ export async function searchModerationLogs(params: {
     if (params.dateTo) where.createdAt.lte = params.dateTo;
   }
 
-  return prisma.moderationLog.findMany({
+  return prisma.moderation_logs.findMany({
     where,
     select: {
       id: true,
@@ -548,8 +548,8 @@ export async function searchModerationLogs(params: {
  */
 export async function cleanupOldLogs(): Promise<number> {
   const cutoffDate = new Date(Date.now() - LOGGING_CONFIG.retentionDays * 24 * 60 * 60 * 1000);
-  
-  const result = await prisma.moderationLog.deleteMany({
+
+  const result = await prisma.moderation_logs.deleteMany({
     where: {
       createdAt: { lt: cutoffDate },
     },
