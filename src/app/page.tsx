@@ -3,15 +3,18 @@ import Link from 'next/link';
 import { prisma } from '@/core/database';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
-  Shield, 
-  Users, 
-  Dumbbell, 
-  Heart, 
+import {
+  Shield,
+  Users,
+  Dumbbell,
+  Heart,
   CheckCircle as _CheckCircle,
   ArrowRight,
   Star
 } from 'lucide-react';
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export default async function HomePage() {
   let rows: Array<any> = []
