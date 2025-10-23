@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { verifyGymApiKey } from '@/services/partner_api_auth';
 import { prisma } from '@/core/database';
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(req: Request) {
   try {
     const apiKey = (req.headers.get('x-api-key') || '').trim();
