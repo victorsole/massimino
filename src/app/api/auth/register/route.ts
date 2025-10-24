@@ -85,38 +85,30 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    // TODO: Send verification email via Resend
-    // For now, we'll just log the verification link
+    // Send verification email
     const verificationUrl = `${process.env.NEXTAUTH_URL}/api/auth/verify-email?token=${verificationToken}`;
-    console.log('📧 Verification email would be sent to:', email);
     console.log('🔗 Verification link:', verificationUrl);
 
-    // TODO: Uncomment when Resend is configured
-    /*
+    // Import and use the email service
+    const { sendVerificationEmail } = await import('@/services/email/email_service');
+
     try {
-      await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`
-        },
-        body: JSON.stringify({
-          from: 'onboarding@resend.dev',
-          to: email,
-          subject: 'Verify your Massimino account',
-          html: `
-            <h1>Welcome to Massimino!</h1>
-            <p>Please verify your email address by clicking the link below:</p>
-            <a href="${verificationUrl}">Verify Email</a>
-            <p>This link will expire in 24 hours.</p>
-          `
-        })
+      const emailResult = await sendVerificationEmail({
+        to: email,
+        name: name,
+        verificationToken: verificationToken,
       });
+
+      if (!emailResult.success) {
+        console.warn('Failed to send verification email:', emailResult.error);
+        // Don't fail registration if email fails - user can request resend
+      } else {
+        console.log('✅ Verification email sent successfully');
+      }
     } catch (emailError) {
       console.error('Failed to send verification email:', emailError);
       // Don't fail registration if email fails
     }
-    */
 
     return NextResponse.json(
       {

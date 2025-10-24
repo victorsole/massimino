@@ -149,6 +149,99 @@ export function isEmailServiceConfigured(): boolean {
 }
 
 /**
+ * Send email verification email
+ */
+export async function sendVerificationEmail(params: {
+  to: string;
+  name: string;
+  verificationToken: string;
+}): Promise<{ success: boolean; messageId?: string; error?: string }> {
+  try {
+    if (!resend) {
+      console.warn('Email service not configured - verification email not sent');
+      return { success: false, error: 'Email service not configured (missing RESEND_API_KEY)' };
+    }
+
+    const verificationUrl = `${process.env.NEXTAUTH_URL}/api/auth/verify-email?token=${params.verificationToken}`;
+
+    const { data, error } = await resend.emails.send({
+      from: EMAIL_CONFIG.from,
+      to: params.to,
+      replyTo: EMAIL_CONFIG.replyTo,
+      subject: 'Verify your Massimino account',
+      html: `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Verify Your Email</title>
+          </head>
+          <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <div style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 30px; border-radius: 10px; text-align: center;">
+              <h1 style="color: #2563eb; margin-bottom: 10px;">Welcome to Massimino!</h1>
+              <p style="font-size: 18px; color: #4b5563;">Hi ${params.name},</p>
+            </div>
+
+            <div style="padding: 30px 20px;">
+              <p style="font-size: 16px; margin-bottom: 20px;">
+                Thank you for signing up for Massimino, your safety-first fitness community platform.
+              </p>
+
+              <p style="font-size: 16px; margin-bottom: 20px;">
+                To complete your registration and start your fitness journey, please verify your email address by clicking the button below:
+              </p>
+
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="${verificationUrl}"
+                   style="background-color: #2563eb; color: white; padding: 14px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block; font-size: 16px;">
+                  Verify Email Address
+                </a>
+              </div>
+
+              <p style="font-size: 14px; color: #6b7280; margin-top: 30px;">
+                This verification link will expire in 24 hours. If you didn't create an account with Massimino, you can safely ignore this email.
+              </p>
+
+              <p style="font-size: 14px; color: #6b7280; margin-top: 20px;">
+                If the button doesn't work, copy and paste this link into your browser:<br>
+                <a href="${verificationUrl}" style="color: #2563eb; word-break: break-all;">${verificationUrl}</a>
+              </p>
+            </div>
+
+            <div style="background-color: #f3f4f6; padding: 20px; border-radius: 10px; margin-top: 30px; text-align: center;">
+              <p style="font-size: 14px; color: #6b7280; margin: 0;">
+                Safe Workouts for Everyone<br>
+                <a href="${process.env.NEXTAUTH_URL}" style="color: #2563eb; text-decoration: none;">massimino.fitness</a>
+              </p>
+            </div>
+          </body>
+        </html>
+      `,
+    });
+
+    if (error) {
+      console.error('[EmailService] Failed to send verification email:', error);
+      return {
+        success: false,
+        error: error.message || 'Failed to send email',
+      };
+    }
+
+    return {
+      success: true,
+      messageId: data?.id,
+    };
+  } catch (error: any) {
+    console.error('[EmailService] Error sending verification email:', error);
+    return {
+      success: false,
+      error: error.message || 'Unknown error',
+    };
+  }
+}
+
+/**
  * Send a simple transactional email (generic helper)
  */
 export async function sendEmail(params: { to: string; subject: string; text: string; replyTo?: string }): Promise<{ success: boolean; messageId?: string; error?: string }> {
