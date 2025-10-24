@@ -128,7 +128,7 @@ const nextConfig = {
         // Redirect bare usernames to /bio/:username, excluding known top-level routes
         {
           source:
-            '/:username((?!api|admin|profile|dashboard|messages|teams|exercises|workout-log|terms|privacy|massiminos|login|signup|register|unauthorized|partnerships|assessments|bio|static|uploads|public|images|_next|favicon\\.ico|.*\\..*).+)',
+            '/:username((?!api|admin|profile|dashboard|messages|teams|exercises|workout-log|terms|privacy|safety|community|massiminos|login|signup|register|unauthorized|partnerships|assessments|bio|static|uploads|public|images|_next|favicon\\.ico|.*\\..*).+)',
           destination: '/bio/:username',
           permanent: false,
         },
