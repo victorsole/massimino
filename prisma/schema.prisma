@@ -2302,6 +2302,20 @@ model users {
   workout_entry_comments                                      workout_entry_comments[]
   workout_session_comments                                    workout_session_comments[]
   user_achievements                                           user_achievements[]
+  email_verification_tokens                                   email_verification_tokens[]
+}
+
+model email_verification_tokens {
+  id        String   @id
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user users @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
 }
 
 model verificationtokens {
