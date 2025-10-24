@@ -1,17 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { 
-  Mail, 
-  Lock, 
-  Eye, 
+import {
+  Mail,
+  Lock,
+  Eye,
   EyeOff,
   Chrome,
   Linkedin,
@@ -22,15 +22,37 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function LoginPage() {
+function LoginContent() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+
+  useEffect(() => {
+    // Handle URL params for success/error messages
+    const successParam = searchParams.get('success');
+    const errorParam = searchParams.get('error');
+
+    if (successParam === 'email-verified') {
+      setSuccess('Email verified successfully! You can now sign in.');
+    } else if (successParam === 'already-verified') {
+      setSuccess('Your email is already verified. You can sign in.');
+    }
+
+    if (errorParam === 'invalid-token') {
+      setError('Invalid verification link. Please request a new one.');
+    } else if (errorParam === 'token-expired') {
+      setError('Verification link has expired. Please request a new one.');
+    } else if (errorParam === 'verification-failed') {
+      setError('Email verification failed. Please try again.');
+    }
+  }, [searchParams]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -98,8 +120,8 @@ export default function LoginPage() {
               className="object-contain"
             />
           </div>
-          <h1 className="text-3xl font-bold text-brand-primary mb-2">Welcome to Massimino</h1>
-          <p className="text-brand-primary-light">Your personal fitness journey starts here</p>
+          <h1 className="text-3xl font-bold text-brand-primary mb-2">Welcome Back</h1>
+          <p className="text-brand-primary-light">Sign in to continue your fitness journey</p>
         </div>
 
         {/* Login Card */}
@@ -112,6 +134,13 @@ export default function LoginPage() {
           </CardHeader>
           
           <CardContent className="space-y-6">
+            {/* Success Message */}
+            {success && (
+              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md">
+                {success}
+              </div>
+            )}
+
             {/* Error Message */}
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
@@ -225,30 +254,38 @@ export default function LoginPage() {
               
               <Button
                 variant="outline"
-                onClick={() => handleSocialLogin('Facebook')}
-                className="h-11 border-brand-primary-light hover:border-brand-primary hover:bg-brand-secondary-dark bg-white/50"
+                disabled
+                className="h-11 border-brand-primary-light bg-white/30 cursor-not-allowed relative"
+                title="Coming soon"
               >
-                <Facebook className="h-4 w-4 mr-2 text-blue-700" />
-                Facebook
+                <Facebook className="h-4 w-4 mr-2 text-blue-700 opacity-50" />
+                <span className="opacity-50">Facebook</span>
+                <span className="absolute -top-1 -right-1 bg-brand-primary text-white text-[10px] px-1.5 py-0.5 rounded-full">
+                  Soon
+                </span>
               </Button>
-              
+
               <Button
                 variant="outline"
-                onClick={() => handleSocialLogin('Instagram')}
-                className="h-11 border-brand-primary-light hover:border-brand-primary hover:bg-brand-secondary-dark bg-white/50"
+                disabled
+                className="h-11 border-brand-primary-light bg-white/30 cursor-not-allowed relative"
+                title="Coming soon"
               >
-                <Instagram className="h-4 w-4 mr-2 text-pink-500" />
-                Instagram
+                <Instagram className="h-4 w-4 mr-2 text-pink-500 opacity-50" />
+                <span className="opacity-50">Instagram</span>
+                <span className="absolute -top-1 -right-1 bg-brand-primary text-white text-[10px] px-1.5 py-0.5 rounded-full">
+                  Soon
+                </span>
               </Button>
             </div>
 
             {/* Sign Up Link */}
             <div className="text-center pt-4">
               <p className="text-sm text-brand-primary-light">
-                New to Massimino? Join our community by signing up with Google, LinkedIn, or Facebook above.
-              </p>
-              <p className="text-xs text-brand-primary-light mt-2">
-                Have an invitation code? Just use your invited email to sign up with any social provider.
+                Don't have an account?{' '}
+                <Link href="/signup" className="text-brand-primary hover:text-brand-primary-dark font-medium">
+                  Sign up here
+                </Link>
               </p>
             </div>
           </CardContent>
@@ -268,5 +305,20 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-brand-secondary to-brand-secondary-dark flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-primary mx-auto mb-4"></div>
+          <p className="text-brand-primary">Loading...</p>
+        </div>
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }
