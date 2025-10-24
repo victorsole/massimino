@@ -5,6 +5,9 @@ import authOptions from '@/core/auth/config';
 import PartnershipsService from '@/services/partnerships_service';
 import { cookies } from 'next/headers';
 
+// Mark as dynamic since it uses cookies() and getServerSession
+export const dynamic = 'force-dynamic';
+
 function getCapWindowMs() { return 60 * 60 * 1000; } // 1 hour
 function getCapLimit() { return 3; } // max 3 impressions per placement per hour
 

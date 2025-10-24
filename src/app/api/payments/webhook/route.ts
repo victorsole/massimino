@@ -16,6 +16,9 @@ import {
   isPaymentFailed
 } from '@/core/integrations/mollie';
 
+// Mark as dynamic since it uses headers()
+export const dynamic = 'force-dynamic';
+
 // ============================================================================
 // POST - Handle Mollie webhook
 // ============================================================================
