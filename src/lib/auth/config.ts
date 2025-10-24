@@ -1,4 +1,17 @@
 /**
+ * ⚠️ DEPRECATED - DO NOT USE ⚠️
+ *
+ * This file is LEGACY and NOT USED by the application.
+ *
+ * The active NextAuth configuration is located at:
+ * → src/core/auth/config.ts
+ *
+ * This file is kept for reference only and may be removed in the future.
+ *
+ * Last updated: 2025-01-24
+ */
+
+/**
  * Authentication Configuration for Massimino
  * Safety-first approach with strict validation and role-based access
  */
