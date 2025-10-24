@@ -9,6 +9,9 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/core/auth/config'
 import { prisma } from '@/core/database/client'
 
+// Mark as dynamic since getServerSession uses headers()
+export const dynamic = 'force-dynamic';
+
 // ===== API ROUTE =====
 
 export async function GET(request: NextRequest) {
