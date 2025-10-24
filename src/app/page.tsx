@@ -75,7 +75,7 @@ export default async function HomePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/signup">
                 <Button size="lg" className="w-full sm:w-auto bg-brand-primary hover:bg-brand-primary-dark">
-                  Get Started Free
+                  Sign Up
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
