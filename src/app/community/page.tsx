@@ -31,6 +31,152 @@ export default function CommunityPage() {
           </p>
         </div>
 
+        {/* Research-Backed Difference */}
+        <div className="mb-12">
+          <Card className="border-2 border-brand-primary bg-white">
+            <CardHeader>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 relative">
+                  <Image
+                    src="/ionicons.designerpack/bulb.svg"
+                    alt="Research"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                <CardTitle className="text-2xl">A Different Approach to Fitness</CardTitle>
+              </div>
+              <CardDescription className="text-base">
+                Research shows traditional fitness apps can harm motivation and well-being.
+                Massimino was built differently.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-gray-700">
+                Recent research on commercial fitness apps revealed significant problems: rigid calorie counting
+                that triggers shame and guilt, algorithmic goals that ignore individual needs, and competitive
+                features that undermine motivation rather than build it.
+              </p>
+
+              <p className="text-gray-700 font-semibold">
+                Massimino addresses these issues head-on with an evidence-based approach:
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex items-start gap-3 p-3 bg-green-50 rounded-lg">
+                  <div className="w-6 h-6 relative flex-shrink-0 mt-0.5">
+                    <Image
+                      src="/ionicons.designerpack/checkmark-circle.svg"
+                      alt="Check"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-brand-primary mb-1">Well-Being Over Numbers</h4>
+                    <p className="text-sm text-gray-600">
+                      We focus on your overall health and happiness, not just calories burned or weight lost
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-3 bg-blue-50 rounded-lg">
+                  <div className="w-6 h-6 relative flex-shrink-0 mt-0.5">
+                    <Image
+                      src="/ionicons.designerpack/checkmark-circle.svg"
+                      alt="Check"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-brand-primary mb-1">Holistic Approach</h4>
+                    <p className="text-sm text-gray-600">
+                      Combine professional guidance, community support, proper technique, and sustainable habits
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-3 bg-purple-50 rounded-lg">
+                  <div className="w-6 h-6 relative flex-shrink-0 mt-0.5">
+                    <Image
+                      src="/ionicons.designerpack/checkmark-circle.svg"
+                      alt="Check"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-brand-primary mb-1">Safety-First Design</h4>
+                    <p className="text-sm text-gray-600">
+                      Built-in protections, verified trainers, and moderation to prevent the harms other apps create
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-3 bg-orange-50 rounded-lg">
+                  <div className="w-6 h-6 relative flex-shrink-0 mt-0.5">
+                    <Image
+                      src="/ionicons.designerpack/checkmark-circle.svg"
+                      alt="Check"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-brand-primary mb-1">Personalized & Adaptive</h4>
+                    <p className="text-sm text-gray-600">
+                      Real trainers who understand your unique needs, not one-size-fits-all algorithms
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-3 bg-pink-50 rounded-lg">
+                  <div className="w-6 h-6 relative flex-shrink-0 mt-0.5">
+                    <Image
+                      src="/ionicons.designerpack/checkmark-circle.svg"
+                      alt="Check"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-brand-primary mb-1">Intrinsic Motivation</h4>
+                    <p className="text-sm text-gray-600">
+                      Build lasting motivation through mastery, autonomy, and genuine connection—not shame or guilt
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-3 bg-teal-50 rounded-lg">
+                  <div className="w-6 h-6 relative flex-shrink-0 mt-0.5">
+                    <Image
+                      src="/ionicons.designerpack/checkmark-circle.svg"
+                      alt="Check"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-brand-primary mb-1">Human-Centered</h4>
+                    <p className="text-sm text-gray-600">
+                      Built for people by people—trainers, teams, and community support at the core
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 p-4 bg-gradient-to-r from-brand-secondary to-brand-secondary-dark rounded-lg">
+                <p className="text-sm text-gray-700 italic">
+                  "Unlike apps that reduce fitness to numbers and algorithms, Massimino combines verified
+                  professional guidance with supportive community features to help you build sustainable,
+                  healthy habits—without the shame, guilt, or harmful obsession with quantification."
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Community Features */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           <Card className="hover:shadow-lg transition-shadow">
