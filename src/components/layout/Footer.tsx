@@ -1,3 +1,4 @@
+// src/components/layout/Footer.tsx
 "use client";
 
 import Link from 'next/link';
@@ -121,7 +122,7 @@ export default function Footer() {
               </li>
               <li>
                 <button onClick={() => setOpen(true)} className="text-gray-600 hover:text-brand-primary transition-colors">
-                  Contact Us
+                  Give Us Your Feedback
                 </button>
               </li>
             </ul>
