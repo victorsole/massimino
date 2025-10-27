@@ -11,8 +11,8 @@ export const dynamic = 'force-dynamic';
 function getCapWindowMs() { return 60 * 60 * 1000; } // 1 hour
 function getCapLimit() { return 3; } // max 3 impressions per placement per hour
 
-function readFreqCookie() {
-  const store = cookies();
+async function readFreqCookie() {
+  const store = await cookies();
   try {
     const raw = store.get('ad_freq')?.value || '{}';
     return JSON.parse(raw || '{}') as Record<string, number[]>;
@@ -20,21 +20,21 @@ function readFreqCookie() {
 }
 
 // @ts-ignore - utility function kept for potential future use
-function _writeFreqCookie(freq: Record<string, number[]>) {
-  const store = cookies();
+async function _writeFreqCookie(freq: Record<string, number[]>) {
+  const store = await cookies();
   store.set('ad_freq', JSON.stringify(freq), { httpOnly: false, sameSite: 'lax', maxAge: 60 * 60 * 24 });
 }
 
-function readLastCookie() {
-  const store = cookies();
+async function readLastCookie() {
+  const store = await cookies();
   try {
     return JSON.parse(store.get('ad_last')?.value || '{}') as Record<string, string>;
   } catch { return {}; }
 }
 
 // @ts-ignore - utility function kept for potential future use
-function _writeLastCookie(last: Record<string, string>) {
-  const store = cookies();
+async function _writeLastCookie(last: Record<string, string>) {
+  const store = await cookies();
   store.set('ad_last', JSON.stringify(last), { httpOnly: false, sameSite: 'lax', maxAge: 60 * 60 * 24 });
 }
 
@@ -44,14 +44,14 @@ export async function GET(req: Request) {
     const placement = url.searchParams.get('placement') || 'feed';
     const session = await getServerSession(authOptions);
     // Simple frequency cap via cookie per placement (anonymous or logged)
-    const freq = readFreqCookie();
+    const freq = await readFreqCookie();
     const now = Date.now();
     const windowMs = getCapWindowMs();
     const withinWindow = (freq[placement] || []).filter((t) => now - t < windowMs);
     if (withinWindow.length >= getCapLimit()) {
       return NextResponse.json({ creative: null });
     }
-    const last = readLastCookie();
+    const last = await readLastCookie();
     const lastId = last[placement];
     const creative = await PartnershipsService.selectAdForUser({ userId: session?.user?.id ?? null, placement, excludeCreativeId: lastId ?? null });
     if (!creative) return NextResponse.json({ creative: null });

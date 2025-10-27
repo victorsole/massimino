@@ -534,6 +534,12 @@ export async function getExercises(options: {
   difficulty?: string;
   isActive?: boolean;
   search?: string;
+  // New filters
+  bodyPart?: string;
+  movementPattern?: string;
+  type?: string;
+  tags?: string[];
+  curated?: boolean;
 } = {}): Promise<Exercise[]> {
   const where: any = {};
 
@@ -566,6 +572,23 @@ export async function getExercises(options: {
       contains: options.search,
       mode: 'insensitive',
     };
+  }
+
+  // New taxonomy filters
+  if (options.bodyPart) {
+    where.bodyPart = options.bodyPart;
+  }
+  if (options.movementPattern) {
+    where.movementPattern = options.movementPattern;
+  }
+  if (options.type) {
+    where.type = options.type;
+  }
+  if (options.tags && options.tags.length > 0) {
+    where.tags = { hasSome: options.tags };
+  }
+  if (options.curated !== undefined) {
+    where.curated = options.curated;
   }
 
   return prisma.exercises.findMany({
@@ -1193,6 +1216,51 @@ export async function getEquipmentTypes(): Promise<string[]> {
 
   const allEquipment = exercises.flatMap(e => e.equipment);
   return [...new Set(allEquipment)];
+}
+
+/**
+ * Get body parts for filtering
+ */
+export async function getBodyParts(): Promise<string[]> {
+  const rows = await prisma.exercises.findMany({
+    select: { bodyPart: true },
+    where: { isActive: true, bodyPart: { not: null } },
+  });
+  return [...new Set(rows.map(r => r.bodyPart as string))];
+}
+
+/**
+ * Get movement patterns for filtering
+ */
+export async function getMovementPatterns(): Promise<string[]> {
+  const rows = await prisma.exercises.findMany({
+    select: { movementPattern: true },
+    where: { isActive: true, movementPattern: { not: null } },
+  });
+  return [...new Set(rows.map(r => r.movementPattern as string))];
+}
+
+/**
+ * Get exercise types (modalities) for filtering
+ */
+export async function getExerciseTypes(): Promise<string[]> {
+  const rows = await prisma.exercises.findMany({
+    select: { type: true },
+    where: { isActive: true, type: { not: null } },
+  });
+  return [...new Set(rows.map(r => r.type as string))];
+}
+
+/**
+ * Get tags used by exercises
+ */
+export async function getTags(): Promise<string[]> {
+  const rows = await prisma.exercises.findMany({
+    select: { tags: true },
+    where: { isActive: true },
+  });
+  const all = rows.flatMap(r => r.tags || []);
+  return [...new Set(all)];
 }
 
 /**
@@ -2681,9 +2749,8 @@ async function check_volume_achievement(
  */
 export async function listUserExercisesDB(userId: string, filters: any = {}) {
   const where: any = {
-    createdBy: userId,
-    isCustom: true,
-    isActive: true
+    userId,
+    isActive: true,
   };
 
   if (filters.q) {
@@ -2699,7 +2766,7 @@ export async function listUserExercisesDB(userId: string, filters: any = {}) {
     where.equipment = { has: filters.equipment };
   }
 
-  return prisma.exercises.findMany({
+  return prisma.user_exercises.findMany({
     where,
     orderBy: { createdAt: 'desc' }
   });
@@ -2709,9 +2776,11 @@ export async function listUserExercisesDB(userId: string, filters: any = {}) {
  * Create user's custom exercise
  */
 export async function createUserExerciseDB(userId: string, data: any) {
-  return prisma.exercises.create({
+  return prisma.user_exercises.create({
     data: {
       id: crypto.randomUUID(),
+      userId,
+      baseExerciseId: data.baseExerciseId ?? null,
       name: data.name || 'Custom Exercise',
       category: data.category || 'Custom',
       muscleGroups: data.muscleGroups || [],
@@ -2719,10 +2788,8 @@ export async function createUserExerciseDB(userId: string, data: any) {
       instructions: data.instructions ?? null,
       difficulty: data.difficulty || 'BEGINNER',
       safetyNotes: data.safetyNotes ?? null,
-      // TODO: Add 'tags' field to exercises table
-      // tags: data.tags || [],
-      createdBy: userId,
-      isCustom: true,
+      tags: data.tags || [],
+      visibility: data.visibility || 'private',
       updatedAt: new Date()
     }
   });
@@ -2732,12 +2799,8 @@ export async function createUserExerciseDB(userId: string, data: any) {
  * Get user's custom exercise by ID
  */
 export async function getUserExerciseDB(userId: string, exerciseId: string) {
-  return prisma.exercises.findFirst({
-    where: {
-      id: exerciseId,
-      createdBy: userId,
-      isCustom: true
-    }
+  return prisma.user_exercises.findFirst({
+    where: { id: exerciseId, userId }
   });
 }
 
@@ -2746,23 +2809,29 @@ export async function getUserExerciseDB(userId: string, exerciseId: string) {
  */
 export async function updateUserExerciseDB(userId: string, exerciseId: string, data: any) {
   // First verify ownership
-  const exercise = await prisma.exercises.findFirst({
-    where: {
-      id: exerciseId,
-      createdBy: userId,
-      isCustom: true
-    }
+  const exercise = await prisma.user_exercises.findFirst({
+    where: { id: exerciseId, userId }
   });
 
   if (!exercise) {
     throw new Error('Exercise not found or not owned by user');
   }
 
-  return prisma.exercises.update({
+  return prisma.user_exercises.update({
     where: { id: exerciseId },
     data: {
-      ...data,
-      updatedAt: new Date()
+      ...(data.baseExerciseId !== undefined && { baseExerciseId: data.baseExerciseId }),
+      ...(data.name !== undefined && { name: data.name }),
+      ...(data.category !== undefined && { category: data.category }),
+      ...(data.muscleGroups !== undefined && { muscleGroups: data.muscleGroups }),
+      ...(data.equipment !== undefined && { equipment: data.equipment }),
+      ...(data.instructions !== undefined && { instructions: data.instructions }),
+      ...(data.difficulty !== undefined && { difficulty: data.difficulty }),
+      ...(data.safetyNotes !== undefined && { safetyNotes: data.safetyNotes }),
+      ...(data.tags !== undefined && { tags: data.tags }),
+      ...(data.visibility !== undefined && { visibility: data.visibility }),
+      ...(data.isActive !== undefined && { isActive: data.isActive }),
+      updatedAt: new Date(),
     }
   });
 }
@@ -2772,25 +2841,20 @@ export async function updateUserExerciseDB(userId: string, exerciseId: string, d
  */
 export async function deleteUserExerciseDB(userId: string, exerciseId: string) {
   // First verify ownership
-  const exercise = await prisma.exercises.findFirst({
-    where: {
-      id: exerciseId,
-      createdBy: userId,
-      isCustom: true
-    }
+  const exercise = await prisma.user_exercises.findFirst({
+    where: { id: exerciseId, userId }
   });
 
   if (!exercise) {
     throw new Error('Exercise not found or not owned by user');
   }
 
-  return prisma.exercises.update({
+  const res = await prisma.user_exercises.update({
     where: { id: exerciseId },
-    data: {
-      isActive: false,
-      updatedAt: new Date()
-    }
+    data: { isActive: false, updatedAt: new Date() }
   });
+
+  return !!res;
 }
 
 // ============================================================================
@@ -2800,59 +2864,104 @@ export async function deleteUserExerciseDB(userId: string, exerciseId: string) {
 /**
  * List exercise media
  */
-export async function listExerciseMediaDB(exerciseId: string) {
-  // Placeholder: Return empty array as media table may not exist
-  return [];
+export async function listExerciseMediaDB(
+  exerciseId: string,
+  options: { kind?: 'global' | 'user'; userId?: string } = {}
+) {
+  const kind = options.kind || 'global';
+  if (kind === 'user') {
+    // Only return media for this user's user_exercise
+    if (!options.userId) return [];
+    return prisma.exercise_media.findMany({
+      where: { userExerciseId: exerciseId, userId: options.userId },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+  // Global exercise media: only public by default
+  return prisma.exercise_media.findMany({
+    where: { globalExerciseId: exerciseId, visibility: 'public' },
+    orderBy: { createdAt: 'desc' },
+  });
 }
 
 /**
  * Add exercise media
  */
-export async function addExerciseMediaDB(exerciseId: string, data: any) {
-  // Placeholder: Return mock media object
-  return {
-    id: crypto.randomUUID(),
-    exerciseId,
-    url: data.url,
-    type: data.type || 'image',
-    createdAt: new Date()
-  };
+export async function addExerciseMediaDB(
+  exerciseId: string,
+  data: any,
+  options: { kind: 'global' | 'user'; userId: string }
+) {
+  return prisma.exercise_media.create({
+    data: {
+      id: crypto.randomUUID(),
+      userId: options.userId,
+      globalExerciseId: options.kind === 'global' ? exerciseId : null,
+      userExerciseId: options.kind === 'user' ? exerciseId : null,
+      provider: data.provider,
+      url: data.url,
+      title: data.title ?? null,
+      thumbnailUrl: data.thumbnailUrl ?? null,
+      visibility: data.visibility ?? 'private',
+      status: 'pending',
+      updatedAt: new Date(),
+    },
+  });
 }
 
 /**
  * Update exercise media
  */
-export async function updateExerciseMediaDB(mediaId: string, data: any) {
-  // Placeholder: Return mock updated media object
-  return {
-    id: mediaId,
-    ...data,
-    updatedAt: new Date()
-  };
+export async function updateExerciseMediaDB(mediaId: string, data: any, userId: string) {
+  // Ensure ownership
+  const media = await prisma.exercise_media.findFirst({ where: { id: mediaId, userId } });
+  if (!media) return null;
+  return prisma.exercise_media.update({
+    where: { id: mediaId },
+    data: {
+      ...(data.title !== undefined && { title: data.title }),
+      ...(data.thumbnailUrl !== undefined && { thumbnailUrl: data.thumbnailUrl }),
+      ...(data.visibility !== undefined && { visibility: data.visibility }),
+      ...(data.status !== undefined && { status: data.status }),
+      updatedAt: new Date(),
+    },
+  });
 }
 
 /**
  * Delete exercise media
  */
-export async function deleteExerciseMediaDB(mediaId: string) {
-  // Placeholder: Return success
+export async function deleteExerciseMediaDB(mediaId: string, userId: string) {
+  // Ensure ownership
+  const media = await prisma.exercise_media.findFirst({ where: { id: mediaId, userId } });
+  if (!media) return null;
+  await prisma.exercise_media.delete({ where: { id: mediaId } });
   return { success: true, id: mediaId };
 }
 
 /**
  * Attach media to workout entry
  */
-export async function attachMediaToEntryDB(entryId: string, mediaId: string) {
-  // Placeholder: Return success
-  return { success: true, entryId, mediaId };
+export async function attachMediaToEntryDB(entryId: string, mediaId: string, userId: string) {
+  // Verify the entry belongs to the user
+  const entry = await prisma.workout_log_entries.findFirst({ where: { id: entryId, userId } });
+  if (!entry) return null;
+  // Verify media belongs to the user
+  const media = await prisma.exercise_media.findFirst({ where: { id: mediaId, userId } });
+  if (!media) return null;
+  await prisma.workout_entry_media.create({ data: { id: crypto.randomUUID(), entryId, mediaId } });
+  return { success: true };
 }
 
 /**
  * Detach media from workout entry
  */
-export async function detachMediaFromEntryDB(entryId: string, mediaId: string) {
-  // Placeholder: Return success
-  return { success: true, entryId, mediaId };
+export async function detachMediaFromEntryDB(entryId: string, mediaId: string, userId: string) {
+  // Verify the entry belongs to the user
+  const entry = await prisma.workout_log_entries.findFirst({ where: { id: entryId, userId } });
+  if (!entry) return null;
+  await prisma.workout_entry_media.deleteMany({ where: { entryId, mediaId } });
+  return { success: true };
 }
 
 async function check_consistency_achievement(

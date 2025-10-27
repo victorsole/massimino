@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { mdiMedalOutline, mdiEmoticonConfusedOutline } from '@mdi/js'
+import { Medal, Frown } from 'lucide-react'
 
 interface ChatMessage { id?: string; role: 'user' | 'assistant'; content: string }
 interface WorkoutItemPreview { exerciseName: string; sets?: number; reps?: number; restSeconds?: number; notes?: string }
@@ -475,15 +475,11 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
                 </div>
                 {m.role === 'assistant' && (
                   <div className="flex gap-1 pt-1">
-                    <button aria-label="Helpful" className="p-1 rounded hover:bg-emerald-50" onClick={() => rateAssistantMessage(m, 'UP')}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="text-emerald-600">
-                        <path d={mdiMedalOutline} />
-                      </svg>
+                    <button aria-label="Helpful" className="p-1 rounded hover:bg-emerald-50 text-emerald-600" onClick={() => rateAssistantMessage(m, 'UP')}>
+                      <Medal size={20} />
                     </button>
-                    <button aria-label="Not helpful" className="p-1 rounded hover:bg-red-50" onClick={() => rateAssistantMessage(m, 'DOWN')}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="text-red-600">
-                        <path d={mdiEmoticonConfusedOutline} />
-                      </svg>
+                    <button aria-label="Not helpful" className="p-1 rounded hover:bg-red-50 text-red-600" onClick={() => rateAssistantMessage(m, 'DOWN')}>
+                      <Frown size={20} />
                     </button>
                   </div>
                 )}

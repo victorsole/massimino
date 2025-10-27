@@ -2,13 +2,12 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { 
   Search, 
   Filter, 
@@ -28,6 +27,12 @@ interface ExerciseFilters {
   muscleGroup: string;
   equipment: string;
   difficulty: string;
+  bodyPart: string;
+  movementPattern: string;
+  type: string;
+  tag: string;
+  curatedOnly: boolean;
+  mediaStatus?: 'all' | 'with' | 'without';
 }
 
 interface ExerciseStats {
@@ -35,6 +40,10 @@ interface ExerciseStats {
   categories: string[];
   muscleGroups: string[];
   equipment: string[];
+  bodyParts: string[];
+  movementPatterns: string[];
+  types: string[];
+  tags: string[];
 }
 
 export default function ExercisesPage() {
@@ -45,14 +54,24 @@ export default function ExercisesPage() {
     totalExercises: 0,
     categories: [],
     muscleGroups: [],
-    equipment: []
+    equipment: [],
+    bodyParts: [],
+    movementPatterns: [],
+    types: [],
+    tags: [],
   });
   const [filters, setFilters] = useState<ExerciseFilters>({
     search: '',
     category: 'all',
     muscleGroup: 'all',
     equipment: 'all',
-    difficulty: 'all'
+    difficulty: 'all',
+    bodyPart: 'all',
+    movementPattern: 'all',
+    type: 'all',
+    tag: 'all',
+    curatedOnly: true,
+    mediaStatus: 'all',
   });
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -68,6 +87,8 @@ export default function ExercisesPage() {
   const [showMediaModal, setShowMediaModal] = useState(false);
   const [mediaForm, setMediaForm] = useState<{ provider: string; url: string; title?: string }>({ provider: 'youtube', url: '' });
   const [targetRef, setTargetRef] = useState<{ type: 'global'|'user'; id: string } | null>(null);
+  const [highlightedId, setHighlightedId] = useState<string | null>(null);
+  const [highlightPulse, setHighlightPulse] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [createForm, setCreateForm] = useState({
     name: '',
@@ -100,6 +121,61 @@ export default function ExercisesPage() {
     }
   }, [exercises]);
 
+  // Deep-link support: /exercises?exerciseId=...&openMedia=1
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const url = new URL(window.location.href);
+    const exerciseId = url.searchParams.get('exerciseId');
+    const openMedia = url.searchParams.get('openMedia') === '1';
+    if (!exerciseId) return;
+    // Ensure All tab
+    if (activeTab !== 'all') setActiveTab('all');
+    const ex = (exercises as any[]).find(e => e.id === exerciseId);
+    if (ex) {
+      setSelectedExercise(ex as any);
+      setHighlightedId(exerciseId);
+      setHighlightPulse(true);
+      setTimeout(() => setHighlightPulse(false), 4000);
+      if (openMedia) {
+        setTargetRef({ type: 'global', id: exerciseId });
+        setShowMediaModal(true);
+      }
+    } else if (filters.curatedOnly) {
+      // If not found under curated, fetch full list by disabling curated filter
+      setFilters(prev => ({ ...prev, curatedOnly: false }));
+    }
+  }, [exercises, activeTab, filters.curatedOnly]);
+
+  // Auto-scroll highlighted card into view when it appears
+  useEffect(() => {
+    if (!highlightedId) return;
+    const t = setTimeout(() => {
+      const el = document.querySelector(`[data-ex-id="${highlightedId}"]`);
+      if (el && 'scrollIntoView' in el) {
+        (el as any).scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
+    return () => clearTimeout(t);
+  }, [highlightedId, filteredExercises, currentPage]);
+
+  // Ensure pagination jumps to the page containing the highlighted exercise
+  useEffect(() => {
+    if (!highlightedId) return;
+    // Avoid repeated jumps for the same target
+    const markerId = `__paged__${highlightedId}`;
+    if ((window as any)[markerId]) return;
+    const idx = (filteredExercises as any[]).findIndex((e) => e.id === highlightedId);
+    if (idx >= 0) {
+      const targetPage = Math.floor(idx / itemsPerPage) + 1;
+      if (targetPage !== currentPage) {
+        (window as any)[markerId] = true;
+        setCurrentPage(targetPage);
+        return;
+      }
+      (window as any)[markerId] = true;
+    }
+  }, [highlightedId, filteredExercises, itemsPerPage, currentPage]);
+
   // Filter exercises when filters change
   useEffect(() => {
     filterExercises();
@@ -108,7 +184,10 @@ export default function ExercisesPage() {
   const fetchExercises = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/workout/exercises');
+      const params = new URLSearchParams();
+      if (filters.curatedOnly) params.set('curated', 'true');
+      const sep = params.toString() ? '&' : '?'
+      const response = await fetch(`/api/workout/exercises${params.toString() ? `?${params.toString()}` : ''}${sep}include=cover,mediaCount`);
       if (response.ok) {
         const data = await response.json();
         setExercises(data);
@@ -131,13 +210,27 @@ export default function ExercisesPage() {
       const categories = categoriesRes.ok ? await categoriesRes.json() : [];
       const muscleGroups = muscleGroupsRes.ok ? await muscleGroupsRes.json() : [];
       const equipment = equipmentRes.ok ? await equipmentRes.json() : [];
+      const [bodyPartsRes, movementPatternsRes, typesRes, tagsRes] = await Promise.all([
+        fetch('/api/workout/exercises?meta=bodyParts'),
+        fetch('/api/workout/exercises?meta=movementPatterns'),
+        fetch('/api/workout/exercises?meta=types'),
+        fetch('/api/workout/exercises?meta=tags'),
+      ]);
+      const bodyParts = bodyPartsRes.ok ? await bodyPartsRes.json() : [];
+      const movementPatterns = movementPatternsRes.ok ? await movementPatternsRes.json() : [];
+      const types = typesRes.ok ? await typesRes.json() : [];
+      const tags = tagsRes.ok ? await tagsRes.json() : [];
 
       setStats(prevStats => ({
         ...prevStats,
         totalExercises: exercises.length,
         categories,
         muscleGroups,
-        equipment
+        equipment,
+        bodyParts,
+        movementPatterns,
+        types,
+        tags,
       }));
     } catch (error) {
       console.error('Error fetching stats:', error);
@@ -176,6 +269,36 @@ export default function ExercisesPage() {
     if (filters.difficulty && filters.difficulty !== 'all') {
       filtered = filtered.filter(exercise => exercise.difficulty === filters.difficulty);
     }
+    if (filters.bodyPart && filters.bodyPart !== 'all') {
+      filtered = (filtered as any[]).filter(exercise => (exercise.bodyPart || '').toLowerCase() === filters.bodyPart.toLowerCase());
+    }
+    if (filters.movementPattern && filters.movementPattern !== 'all') {
+      filtered = (filtered as any[]).filter(exercise => (exercise.movementPattern || '').toLowerCase() === filters.movementPattern.toLowerCase());
+    }
+    if (filters.type && filters.type !== 'all') {
+      filtered = (filtered as any[]).filter(exercise => (exercise.type || '').toLowerCase() === filters.type.toLowerCase());
+    }
+    if (filters.tag && filters.tag !== 'all') {
+      filtered = (filtered as any[]).filter(exercise => Array.isArray(exercise.tags) && exercise.tags.includes(filters.tag));
+    }
+
+    // Media Status filter (global exercises only)
+    if (activeTab === 'all' && filters.mediaStatus && filters.mediaStatus !== 'all') {
+      filtered = (filtered as any[]).filter(ex => {
+        const mc = (ex as any).mediaCount ?? 0
+        return filters.mediaStatus === 'with' ? mc > 0 : mc === 0
+      })
+    }
+
+    // Sort: mediaCount desc, then name asc (global list only)
+    if (activeTab === 'all') {
+      filtered = (filtered as any[]).slice().sort((a, b) => {
+        const am = ((a as any).mediaCount ?? 0)
+        const bm = ((b as any).mediaCount ?? 0)
+        if (bm !== am) return bm - am
+        return (a.name || '').localeCompare(b.name || '')
+      })
+    }
 
     setFilteredExercises(filtered as Exercise[]);
     setCurrentPage(1);
@@ -187,7 +310,13 @@ export default function ExercisesPage() {
       category: 'all',
       muscleGroup: 'all',
       equipment: 'all',
-      difficulty: 'all'
+      difficulty: 'all',
+      bodyPart: 'all',
+      movementPattern: 'all',
+      type: 'all',
+      tag: 'all',
+      curatedOnly: true,
+      mediaStatus: 'all',
     });
   };
 
@@ -394,6 +523,75 @@ export default function ExercisesPage() {
                 </SelectContent>
               </Select>
             </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-2 block">Body Part</label>
+              <Select value={filters.bodyPart} onValueChange={(value) => setFilters(prev => ({ ...prev, bodyPart: value }))}>
+                <SelectTrigger>
+                  <SelectValue placeholder="All body parts" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All body parts</SelectItem>
+                  {stats.bodyParts.map((bp: string) => (
+                    <SelectItem key={bp} value={bp}>{bp}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-2 block">Movement Pattern</label>
+              <Select value={filters.movementPattern} onValueChange={(value) => setFilters(prev => ({ ...prev, movementPattern: value }))}>
+                <SelectTrigger>
+                  <SelectValue placeholder="All movement patterns" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All movement patterns</SelectItem>
+                  {stats.movementPatterns.map((mp: string) => (
+                    <SelectItem key={mp} value={mp}>{mp}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-2 block">Type</label>
+              <Select value={filters.type} onValueChange={(value) => setFilters(prev => ({ ...prev, type: value }))}>
+                <SelectTrigger>
+                  <SelectValue placeholder="All types" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All types</SelectItem>
+                  {stats.types.map((t: string) => (
+                    <SelectItem key={t} value={t}>{t}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-2 block">Tag</label>
+              <Select value={filters.tag} onValueChange={(value) => setFilters(prev => ({ ...prev, tag: value }))}>
+                <SelectTrigger>
+                  <SelectValue placeholder="All tags" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All tags</SelectItem>
+                  {stats.tags.map((tag: string) => (
+                    <SelectItem key={tag} value={tag}>{tag}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-2 block">Media Status</label>
+              <Select value={filters.mediaStatus || 'all'} onValueChange={(value) => setFilters(prev => ({ ...prev, mediaStatus: value as any }))}>
+                <SelectTrigger>
+                  <SelectValue placeholder="All media statuses" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="with">With Media</SelectItem>
+                  <SelectItem value="without">Without Media</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="flex justify-between items-center mt-4">
@@ -401,6 +599,10 @@ export default function ExercisesPage() {
               Showing {filteredExercises.length} of {exercises.length} exercises
             </div>
             <div className="flex space-x-2">
+              <div className="flex items-center gap-2 mr-2">
+                <input id="curatedOnly" type="checkbox" className="h-4 w-4" checked={filters.curatedOnly} onChange={(e)=>setFilters(prev=>({ ...prev, curatedOnly: e.target.checked }))} />
+                <label htmlFor="curatedOnly" className="text-sm">Curated only</label>
+              </div>
               <Button variant="outline" onClick={clearFilters}>
                 Clear Filters
               </Button>
@@ -413,13 +615,11 @@ export default function ExercisesPage() {
         </CardContent>
       </Card>
 
-      {/* Exercise Table */}
+      {/* Exercise Grid */}
       <Card>
         <CardHeader>
           <CardTitle>Exercise Database</CardTitle>
-          <CardDescription>
-            Browse through our comprehensive collection of fitness exercises
-          </CardDescription>
+          <CardDescription>Browse through our curated collection with visual covers</CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -429,110 +629,85 @@ export default function ExercisesPage() {
             </div>
           ) : (
             <>
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead>Muscle Groups</TableHead>
-                      <TableHead>Equipment</TableHead>
-                      <TableHead>Difficulty</TableHead>
-                      <TableHead>Usage</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {currentExercises.map((exercise) => (
-                      <TableRow key={exercise.id}>
-                        <TableCell className="font-medium">{exercise.name}</TableCell>
-                        <TableCell>
-                          <Badge className={getCategoryColor(exercise.category)}>
-                            {exercise.category}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex flex-wrap gap-1">
-                            {exercise.muscleGroups.slice(0, 2).map((muscleGroup, index) => (
-                              <Badge key={index} variant="outline" className="text-xs">
-                                {muscleGroup}
-                              </Badge>
-                            ))}
-                            {exercise.muscleGroups.length > 2 && (
-                              <Badge variant="outline" className="text-xs">
-                                +{exercise.muscleGroups.length - 2}
-                              </Badge>
-                            )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {currentExercises.map((exercise) => {
+                  const coverUrl = (exercise as any).coverUrl as string | undefined
+                  const mediaCount = (exercise as any).mediaCount as number | undefined
+                  return (
+                    <Card
+                      key={exercise.id}
+                      data-ex-id={exercise.id}
+                      className={`overflow-hidden group ${highlightedId===exercise.id ? `ring-2 ring-indigo-500${highlightPulse ? ' animate-pulse' : ''}` : ''}`}
+                    >
+                      <div className="relative aspect-video bg-gray-50">
+                        {coverUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={coverUrl} alt={exercise.name} className="absolute inset-0 h-full w-full object-cover" />
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center text-gray-400">No image</div>
+                        )}
+                        <div className="absolute top-2 right-2 flex items-center gap-1">
+                          {mediaCount !== undefined && (
+                            <span className="rounded bg-black/60 text-white text-xs px-2 py-0.5">{mediaCount} media</span>
+                          )}
+                        </div>
+                      </div>
+                      <CardContent className="p-4 space-y-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <div className="font-semibold leading-tight line-clamp-2">{exercise.name}</div>
+                            <div className="mt-1 flex flex-wrap gap-1">
+                              <Badge className={getCategoryColor(exercise.category)}>{exercise.category}</Badge>
+                              {(exercise.bodyPart || (exercise as any).bodyPart) && (
+                                <Badge variant="outline" className="text-xs">{(exercise as any).bodyPart || exercise.bodyPart}</Badge>
+                              )}
+                            </div>
                           </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex flex-wrap gap-1">
-                            {exercise.equipment.slice(0, 2).map((equipment, index) => (
-                              <Badge key={index} variant="secondary" className="text-xs">
-                                {equipment}
-                              </Badge>
-                            ))}
-                            {exercise.equipment.length > 2 && (
-                              <Badge variant="secondary" className="text-xs">
-                                +{exercise.equipment.length - 2}
-                              </Badge>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge className={getDifficultyColor(exercise.difficulty)}>
-                            {exercise.difficulty}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <span className="text-sm text-gray-600">
-                            {exercise.usageCount} times
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex space-x-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setSelectedExercise(exercise)}
-                            >
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                            {activeTab === 'all' && (
-                              <Button size="sm" onClick={async () => {
-                                await fetch('/api/workout/my_exercises', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ baseExerciseId: (exercise as any).id, name: exercise.name, category: exercise.category, muscleGroups: exercise.muscleGroups, equipment: exercise.equipment, difficulty: exercise.difficulty }) })
-                                const res = await fetch('/api/workout/my_exercises');
-                                if (res.ok) setMyExercises(await res.json())
-                              }}>Add to My Library</Button>
-                            )}
-                            <Button variant="outline" size="sm" onClick={() => { setTargetRef({ type: activeTab==='mine' ? 'user' : 'global', id: (exercise as any).id }); setShowMediaModal(true) }}>+ Media</Button>
-                            {activeTab === 'mine' && !(exercise as any).baseExerciseId && (
-                              <Button variant="outline" size="sm" onClick={() => {
-                                setLinkModal({ userExerciseId: (exercise as any).id, name: exercise.name });
-                                setLinkSearch(exercise.name);
-                                setLinkResults([]);
-                              }}>Link</Button>
-                            )}
-                            {exercise.videoUrl && (
-                              <Button variant="outline" size="sm" asChild>
-                                <a href={exercise.videoUrl} target="_blank" rel="noopener noreferrer">
-                                  <Play className="h-4 w-4" />
-                                </a>
-                              </Button>
-                            )}
-                            {exercise.imageUrl && (
-                              <Button variant="outline" size="sm" asChild>
-                                <a href={exercise.imageUrl} target="_blank" rel="noopener noreferrer">
-                                  <ImageIcon className="h-4 w-4" />
-                                </a>
-                              </Button>
-                            )}
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                          <Badge className={getDifficultyColor(exercise.difficulty)}>{exercise.difficulty}</Badge>
+                        </div>
+                        <div className="flex flex-wrap gap-1">
+                          {exercise.muscleGroups.slice(0, 3).map((m, i) => (
+                            <Badge key={i} variant="outline" className="text-xs">{m}</Badge>
+                          ))}
+                          {exercise.muscleGroups.length > 3 && (
+                            <Badge variant="outline" className="text-xs">+{exercise.muscleGroups.length - 3}</Badge>
+                          )}
+                        </div>
+                        {activeTab === 'all' && (
+                          (() => {
+                            const mc = (exercise as any).mediaCount ?? 0
+                            const xp = mc === 0 ? 50 : (mc < 3 ? 25 : 0)
+                            return xp > 0 ? (
+                              <div className="text-xs text-green-700 bg-green-50 inline-block px-2 py-1 rounded">
+                                {xp} XP available by adding media
+                              </div>
+                            ) : null
+                          })()
+                        )}
+                        <div className="flex items-center gap-2">
+                          <Button variant="outline" size="sm" onClick={() => setSelectedExercise(exercise)}>
+                            <Eye className="h-4 w-4 mr-1" /> View
+                          </Button>
+                          {activeTab === 'all' && (
+                            <Button size="sm" onClick={async () => {
+                              await fetch('/api/workout/my_exercises', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ baseExerciseId: (exercise as any).id, name: exercise.name, category: exercise.category, muscleGroups: exercise.muscleGroups, equipment: exercise.equipment, difficulty: exercise.difficulty }) })
+                              const res = await fetch('/api/workout/my_exercises');
+                              if (res.ok) setMyExercises(await res.json())
+                            }}>Add</Button>
+                          )}
+                          <Button variant="outline" size="sm" onClick={() => { setTargetRef({ type: activeTab==='mine' ? 'user' : 'global', id: (exercise as any).id }); setShowMediaModal(true) }}>+ Media</Button>
+                          {activeTab === 'mine' && !(exercise as any).baseExerciseId && (
+                            <Button variant="outline" size="sm" onClick={() => {
+                              setLinkModal({ userExerciseId: (exercise as any).id, name: exercise.name });
+                              setLinkSearch(exercise.name);
+                              setLinkResults([]);
+                            }}>Link</Button>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
               </div>
 
               {/* Pagination */}

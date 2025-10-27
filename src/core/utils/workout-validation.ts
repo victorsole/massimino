@@ -147,6 +147,15 @@ export const createExerciseSchema = z.object({
   imageUrl: z.string().url('Must be a valid URL').optional(),
   difficulty: z.enum(['BEGINNER', 'INTERMEDIATE', 'ADVANCED']).default('BEGINNER'),
   safetyNotes: z.string().max(1000, 'Safety notes must be less than 1000 characters').optional(),
+  // New taxonomy
+  bodyPart: z.string().optional(),
+  movementPattern: z.string().optional(),
+  type: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+  aliasNames: z.array(z.string()).optional(),
+  curated: z.boolean().optional(),
+  source: z.string().optional(),
+  sourceId: z.string().optional(),
 });
 
 /**
@@ -303,6 +312,12 @@ export const exerciseSearchOptionsSchema = z.object({
   difficulty: z.enum(['BEGINNER', 'INTERMEDIATE', 'ADVANCED']).optional(),
   isActive: z.boolean().optional(),
   search: z.string().max(100, 'Search query must be less than 100 characters').optional(),
+  // New filters
+  bodyPart: z.string().optional(),
+  movementPattern: z.string().optional(),
+  type: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+  curated: z.boolean().optional(),
 });
 
 /**
