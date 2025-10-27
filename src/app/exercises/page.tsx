@@ -353,10 +353,19 @@ export default function ExercisesPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Exercise Database</h1>
-        <p className="text-gray-600">
-          Browse and search through our comprehensive database of fitness exercises
-        </p>
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Exercise Database</h1>
+            <p className="text-gray-600">
+              Browse and search through our comprehensive database of fitness exercises
+            </p>
+          </div>
+          <Button asChild className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
+            <a href="/exercises/contribute">
+              🏋️ Fill the Gym
+            </a>
+          </Button>
+        </div>
         <div className="mt-4 flex gap-2">
           <Button variant={activeTab==='all' ? 'default' : 'outline'} onClick={() => setActiveTab('all')}>All Exercises</Button>
           <Button variant={activeTab==='mine' ? 'default' : 'outline'} onClick={() => setActiveTab('mine')}>My Exercise Library</Button>
