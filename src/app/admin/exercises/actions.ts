@@ -28,6 +28,21 @@ export async function createExerciseAction(formData: FormData) {
   const safetyNotes = (formData.get('safetyNotes') as string | null) || null
   const imageUrl = (formData.get('imageUrl') as string | null) || null
   const videoUrl = (formData.get('videoUrl') as string | null) || null
+  const bodyPart = ((formData.get('bodyPart') as string) || '').trim() || null
+  const movementPattern = ((formData.get('movementPattern') as string) || '').trim() || null
+  const type = ((formData.get('type') as string) || '').trim() || null
+  const tags = String(formData.get('tags') || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean)
+  const aliasNames = String(formData.get('aliasNames') || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean)
+  const curated = (() => {
+    const v = formData.get('curated')
+    return v != null ? (v === 'on' || v === 'true') : false
+  })()
 
   if (!name || !category) throw new Error('Name and category are required')
 
@@ -41,6 +56,12 @@ export async function createExerciseAction(formData: FormData) {
     imageUrl,
     videoUrl,
     difficulty,
+    bodyPart,
+    movementPattern,
+    type,
+    tags,
+    aliasNames,
+    curated,
   })
 
   try { await publishExercise(created) } catch {}
@@ -65,6 +86,18 @@ export async function updateExerciseAction(formData: FormData) {
   if (eq != null) data.equipment = eq.split(',').map(s=>s.trim()).filter(Boolean)
   const isActiveRaw = formData.get('isActive')
   if (isActiveRaw != null) data.isActive = isActiveRaw === 'on' || isActiveRaw === 'true'
+  const bp = formData.get('bodyPart') as string | null
+  if (bp != null) data.bodyPart = bp.trim() || null
+  const mp = formData.get('movementPattern') as string | null
+  if (mp != null) data.movementPattern = mp.trim() || null
+  const typ = formData.get('type') as string | null
+  if (typ != null) data.type = typ.trim() || null
+  const tags = formData.get('tags') as string | null
+  if (tags != null) data.tags = tags.split(',').map(s=>s.trim()).filter(Boolean)
+  const alias = formData.get('aliasNames') as string | null
+  if (alias != null) data.aliasNames = alias.split(',').map(s=>s.trim()).filter(Boolean)
+  const curatedRaw = formData.get('curated')
+  if (curatedRaw != null) data.curated = curatedRaw === 'on' || curatedRaw === 'true'
 
   const updated = await repo.update(id, data)
   try { await publishExercise(updated) } catch {}
@@ -119,6 +152,23 @@ export async function bulkUpdateExercisesAction(formData: FormData) {
     if (difficulty) await repo.bulkUpdate(ids, { difficulty })
   } else if (action === 'setActive') {
     await repo.bulkUpdate(ids, { isActive: true })
+  } else if (action === 'setCuratedTrue') {
+    await repo.bulkUpdate(ids, { curated: true })
+  } else if (action === 'setCuratedFalse') {
+    await repo.bulkUpdate(ids, { curated: false })
+  } else if (action === 'mergeToCanonical') {
+    const canonicalId = String(formData.get('canonicalId') || '')
+    if (canonicalId && ids.length) {
+      // Merge names into aliasNames and deactivate duplicates
+      const dups = await prisma.exercises.findMany({ where: { id: { in: ids.filter(i=>i!==canonicalId) } }, select: { id: true, name: true } })
+      const canon = await prisma.exercises.findUnique({ where: { id: canonicalId }, select: { id: true, aliasNames: true } })
+      if (canon) {
+        const aliasSet = new Set<string>(canon.aliasNames || [])
+        dups.forEach(d => aliasSet.add(d.name))
+        await prisma.exercises.update({ where: { id: canonicalId }, data: { aliasNames: Array.from(aliasSet) } })
+        await prisma.exercises.updateMany({ where: { id: { in: dups.map(d=>d.id) } }, data: { isActive: false, curated: false } })
+      }
+    }
   }
 
   revalidatePath('/admin/exercises')

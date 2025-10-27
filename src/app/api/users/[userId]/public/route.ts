@@ -364,7 +364,7 @@ export async function GET(
     if (include.includes('media')) {
       const limit = parseLimit('media_limit', 6)
       const media = await prisma.exercise_media.findMany({
-        where: { userId: user.id, visibility: 'public' },
+        where: { userId: user.id, visibility: 'public', status: 'approved' },
         orderBy: { createdAt: 'desc' },
         take: limit,
         select: { id: true, url: true, thumbnailUrl: true, provider: true, title: true }

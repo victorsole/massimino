@@ -874,6 +874,15 @@ model exercises {
   createdBy                  String?
   formCues                   String[]                     @default([])
   isCustom                   Boolean                      @default(false)
+  // New taxonomy + integration fields (non-breaking)
+  bodyPart                   String?
+  movementPattern            String?
+  type                       String?
+  tags                       String[]                     @default([])
+  aliasNames                 String[]                     @default([])
+  curated                    Boolean                      @default(false)
+  source                     String?
+  sourceId                   String?
   exercise_variations        exercise_variations[]
   personal_records           personal_records[]
   team_workout_exercises     team_workout_exercises[]
@@ -884,6 +893,10 @@ model exercises {
   exercise_media             exercise_media[]
 
   @@index([category])
+  @@index([bodyPart])
+  @@index([movementPattern])
+  @@index([type])
+  @@index([curated])
   @@index([category, muscleGroups])
   @@index([createdBy, isCustom])
   @@index([isActive, difficulty])
@@ -2449,6 +2462,7 @@ model exercise_media {
   durationSec     Int?
   visibility      String   @default("private")
   status          String   @default("pending") // pending | approved | rejected
+  featured        Boolean  @default(false)
   createdAt       DateTime @default(now())
   updatedAt       DateTime
 

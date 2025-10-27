@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { updateUserExerciseDB, deleteUserExerciseDB, getUserExerciseDB } from '@/core/database'
 
 const updateSchema = z.object({
+  baseExerciseId: z.string().optional(),
   name: z.string().optional(),
   category: z.string().optional(),
   muscleGroups: z.array(z.string()).optional(),
@@ -20,7 +21,7 @@ const updateSchema = z.object({
 export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions)
   if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  const item = await getUserExerciseDB(params.id, session.user.id)
+  const item = await getUserExerciseDB(session.user.id, params.id)
   if (!item) return NextResponse.json({ error: 'Not found' }, { status: 404 })
   return NextResponse.json(item)
 }
@@ -31,7 +32,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   const body = await req.json().catch(() => null)
   const parsed = updateSchema.safeParse(body)
   if (!parsed.success) return NextResponse.json({ error: 'Invalid body' }, { status: 400 })
-  const updated = await updateUserExerciseDB(params.id, session.user.id, parsed.data)
+  const updated = await updateUserExerciseDB(session.user.id, params.id, parsed.data)
   if (!updated) return NextResponse.json({ error: 'Not found' }, { status: 404 })
   return NextResponse.json({ success: true, exercise: updated })
 }
@@ -39,8 +40,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions)
   if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  const ok = await deleteUserExerciseDB(params.id, session.user.id)
+  const ok = await deleteUserExerciseDB(session.user.id, params.id)
   if (!ok) return NextResponse.json({ error: 'Not found' }, { status: 404 })
   return NextResponse.json({ success: true })
 }
-

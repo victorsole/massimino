@@ -89,6 +89,15 @@ export interface Exercise {
   lastUsed?: Date;
   createdAt: Date;
   updatedAt: Date;
+  // New (optional) taxonomy + integration fields
+  bodyPart?: string;
+  movementPattern?: string;
+  type?: string; // modality: resistance/mobility/cardio/balance
+  tags?: string[];
+  aliasNames?: string[];
+  curated?: boolean;
+  source?: string;
+  sourceId?: string;
 }
 
 /**

@@ -37,7 +37,7 @@ export async function GET(request: Request) {
     let leaderboardData = [];
     let total = 0;
 
-    switch (type) {
+  switch (type) {
       case 'workout':
         ({ leaderboardData, total } = await getWorkoutLeaderboard({
           category,
@@ -69,6 +69,17 @@ export async function GET(request: Request) {
           limit,
           skip,
           userId: session?.user?.id
+        }));
+        break;
+
+      case 'media':
+        ({ leaderboardData, total } = await getMediaLeaderboard({
+          metric,
+          timeframe: timeframeDates,
+          page,
+          limit,
+          skip,
+          userId: session?.user?.id,
         }));
         break;
 
@@ -243,6 +254,59 @@ async function getWorkoutLeaderboard(params: any) {
   }));
 
   return { leaderboardData, total };
+}
+
+/**
+ * Media contributors leaderboard
+ * metric: count | quality
+ */
+async function getMediaLeaderboard(params: any) {
+  const { timeframe, skip, limit, metric } = params
+  const where: any = { status: 'approved', visibility: 'public' }
+  if (timeframe.start) {
+    where.createdAt = { gte: timeframe.start, lte: timeframe.end }
+  }
+  // Aggregate by user
+  const rows = await prisma.exercise_media.groupBy({
+    by: ['userId'],
+    where,
+    _count: { id: true },
+  })
+  // Fetch featured/rejected counts for quality metric
+  const userIds = rows.map(r => r.userId)
+  const [featured, rejected] = await Promise.all([
+    prisma.exercise_media.groupBy({ by: ['userId'], where: { ...where, featured: true }, _count: { id: true } }),
+    prisma.exercise_media.groupBy({ by: ['userId'], where: { status: 'rejected', ...(timeframe.start ? { createdAt: { gte: timeframe.start, lte: timeframe.end } } : {}) }, _count: { id: true } }),
+  ])
+  const fMap = new Map<string, number>(featured.map(r => [r.userId, r._count.id]))
+  const rMap = new Map<string, number>(rejected.map(r => [r.userId, r._count.id]))
+
+  const withScores = rows.map(r => {
+    const approved = r._count.id
+    const feat = fMap.get(r.userId) || 0
+    const rej = rMap.get(r.userId) || 0
+    const quality = (feat * 3) + (approved * 1) - (rej * 2)
+    return { userId: r.userId, approved, feat, rej, quality }
+  })
+
+  const sorted = withScores.sort((a, b) => {
+    const aScore = metric === 'quality' ? a.quality : a.approved
+    const bScore = metric === 'quality' ? b.quality : b.approved
+    return bScore - aScore
+  })
+  const total = sorted.length
+  const pageRows = sorted.slice(skip, skip + limit)
+
+  const users = await prisma.users.findMany({ where: { id: { in: pageRows.map(r => r.userId) } }, select: { id: true, name: true, image: true } })
+  const uMap = new Map(users.map(u => [u.id, u]))
+  const leaderboardData = pageRows.map((r, idx) => ({
+    userId: r.userId,
+    user: uMap.get(r.userId),
+    rank: skip + idx + 1,
+    score: metric === 'quality' ? r.quality : r.approved,
+    metrics: { approved: r.approved, featured: r.feat, rejected: r.rej },
+  }))
+  return { leaderboardData, total }
 }
 
 /**
