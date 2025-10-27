@@ -69,6 +69,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                   </div>
                   <Badge className="bg-red-100 text-red-700 text-xs">Priority</Badge>
                 </Link>
+                <Link
+                  href="/admin/moderation/media_queue"
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:text-brand-primary hover:bg-brand-secondary/20 rounded-md transition-colors"
+                >
+                  <span className="w-2 h-2 bg-red-400 rounded-full"></span>
+                  Media Queue
+                </Link>
               </div>
             </div>
 

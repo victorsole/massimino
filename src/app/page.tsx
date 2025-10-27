@@ -254,7 +254,7 @@ export default async function HomePage() {
                 <div className="flex items-center">
                   <div className="w-10 h-10 bg-gray-300 rounded-full mr-3"></div>
                   <div>
-                    <p className="font-semibold">Sarah Johnson</p>
+                    <p className="font-semibold">Victor</p>
                     <p className="text-sm text-gray-500">Personal Trainer</p>
                   </div>
                 </div>
@@ -269,13 +269,12 @@ export default async function HomePage() {
                   ))}
                 </div>
                 <p className="text-gray-600 mb-4">
-                  "I love how safe and supportive the community is. My trainer's feedback 
-                  has helped me reach goals I never thought possible."
+                  "Molt recomanable, m'ajuda en els meus entrenaments individuals."
                 </p>
                 <div className="flex items-center">
                   <div className="w-10 h-10 bg-gray-300 rounded-full mr-3"></div>
                   <div>
-                    <p className="font-semibold">Mike Chen</p>
+                    <p className="font-semibold">Josep</p>
                     <p className="text-sm text-gray-500">Fitness Enthusiast</p>
                   </div>
                 </div>
@@ -290,14 +289,13 @@ export default async function HomePage() {
                   ))}
                 </div>
                 <p className="text-gray-600 mb-4">
-                  "The workout logging system is incredible. I can see my progress 
-                  clearly and my coach can provide targeted feedback."
+                  "Massichat has helped me craft a workout log to get back in shape after my pregnancy!"
                 </p>
                 <div className="flex items-center">
                   <div className="w-10 h-10 bg-gray-300 rounded-full mr-3"></div>
                   <div>
-                    <p className="font-semibold">Emma Rodriguez</p>
-                    <p className="text-sm text-gray-500">Athlete</p>
+                    <p className="font-semibold">Charlotte</p>
+                    <p className="text-sm text-gray-500">Post-natal mum</p>
                   </div>
                 </div>
               </CardContent>

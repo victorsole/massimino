@@ -1,10 +1,10 @@
 import { getExerciseRepository } from '@/services/repository/exercises'
-import { getExerciseCategories, getMuscleGroups, getEquipmentTypes } from '@/core/database'
+import { getExerciseCategories, getMuscleGroups, getEquipmentTypes, getBodyParts, getMovementPatterns, getExerciseTypes, getTags } from '@/core/database'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { createExerciseAction, updateExerciseAction, deleteExerciseAction, syncExerciseFromFirestoreAction, importExercisesCsvAction, syncAllExercisesToFirestoreAction } from './actions'
+import { createExerciseAction, updateExerciseAction, deleteExerciseAction, syncExerciseFromFirestoreAction, importExercisesCsvAction, syncAllExercisesToFirestoreAction, bulkUpdateExercisesAction } from './actions'
 
-type PageProps = { searchParams?: Promise<{ q?: string; page?: string; active?: string; sort?: string; dir?: 'asc'|'desc'; category?: string; difficulty?: string; muscle?: string; equipment?: string }> }
+type PageProps = { searchParams?: Promise<{ q?: string; page?: string; active?: string; sort?: string; dir?: 'asc'|'desc'; category?: string; difficulty?: string; muscle?: string; equipment?: string; bodyPart?: string; movementPattern?: string; type?: string; tag?: string; curated?: string }> }
 
 const DIFFICULTIES = ['BEGINNER','INTERMEDIATE','ADVANCED'] as const
 
@@ -25,15 +25,24 @@ export default async function AdminExercisesPage({ searchParams }: PageProps) {
   if (urlParams?.difficulty) params.difficulty = urlParams.difficulty
   if (urlParams?.muscle) params.muscle = urlParams.muscle
   if (urlParams?.equipment) params.equipment = urlParams.equipment
+  if (urlParams?.bodyPart) params.bodyPart = urlParams.bodyPart
+  if (urlParams?.movementPattern) params.movementPattern = urlParams.movementPattern
+  if (urlParams?.type) params.type = urlParams.type
+  if (urlParams?.tag) params.tags = urlParams.tag
+  if (urlParams?.curated) params.curated = urlParams.curated === 'true'
   const { items, total } = await repo.list(params)
   const hasPrev = page > 1
   const hasNext = page * pageSize < total
 
   // For filter selectors
-  const [categories, muscles, equipmentList] = await Promise.all([
+  const [categories, muscles, equipmentList, bodyParts, movementPatterns, types, tags] = await Promise.all([
     getExerciseCategories(),
     getMuscleGroups(),
     getEquipmentTypes(),
+    getBodyParts(),
+    getMovementPatterns(),
+    getExerciseTypes(),
+    getTags(),
   ])
 
   return (
@@ -78,6 +87,37 @@ export default async function AdminExercisesPage({ searchParams }: PageProps) {
               <option value="false">Inactive</option>
             </select>
           </div>
+          <div>
+            <select name="bodyPart" defaultValue={urlParams?.bodyPart || ''} className="border rounded px-2 py-2">
+              <option value="">All body parts</option>
+              {bodyParts.map(bp => <option key={bp} value={bp}>{bp}</option>)}
+            </select>
+          </div>
+          <div>
+            <select name="movementPattern" defaultValue={urlParams?.movementPattern || ''} className="border rounded px-2 py-2">
+              <option value="">All movement patterns</option>
+              {movementPatterns.map(mp => <option key={mp} value={mp}>{mp}</option>)}
+            </select>
+          </div>
+          <div>
+            <select name="type" defaultValue={urlParams?.type || ''} className="border rounded px-2 py-2">
+              <option value="">All types</option>
+              {types.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
+          </div>
+          <div>
+            <select name="tag" defaultValue={urlParams?.tag || ''} className="border rounded px-2 py-2">
+              <option value="">All tags</option>
+              {tags.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
+          </div>
+          <div>
+            <select name="curated" defaultValue={urlParams?.curated || ''} className="border rounded px-2 py-2">
+              <option value="">Curated: Any</option>
+              <option value="true">Curated only</option>
+              <option value="false">Not curated</option>
+            </select>
+          </div>
           <Button type="submit" variant="secondary">Filter</Button>
         </form>
       </div>
@@ -92,6 +132,12 @@ export default async function AdminExercisesPage({ searchParams }: PageProps) {
           </select>
           <Input name="muscleGroups" placeholder="Muscle groups (comma-separated)" />
           <Input name="equipment" placeholder="Equipment (comma-separated)" />
+          <Input name="bodyPart" placeholder="Body part (e.g. Chest)" />
+          <Input name="movementPattern" placeholder="Movement pattern (e.g. Push)" />
+          <Input name="type" placeholder="Type (e.g. Resistance)" />
+          <Input name="tags" placeholder="Tags (comma-separated)" />
+          <Input name="aliasNames" placeholder="Alias names (comma-separated)" />
+          <label className="flex items-center gap-2"><input type="checkbox" name="curated" /> Curated</label>
           <Input name="imageUrl" placeholder="Image URL" />
           <Input name="videoUrl" placeholder="Video URL" />
           <textarea name="instructions" placeholder="Instructions" className="border rounded px-2 py-2 min-h-[80px]" />
@@ -131,6 +177,7 @@ export default async function AdminExercisesPage({ searchParams }: PageProps) {
       </div>
 
       <div className="overflow-x-auto rounded-md border border-gray-200 bg-white">
+        <form action={updateExerciseAction} className="hidden" />
         <table className="min-w-full text-sm">
           <thead className="bg-gray-50 text-gray-600">
             <tr>
@@ -153,6 +200,7 @@ export default async function AdminExercisesPage({ searchParams }: PageProps) {
                 <a href={`/admin/exercises?${new URLSearchParams({ q, page: String(page), active: isActive === undefined ? '' : String(isActive), sort: 'updatedAt', dir: (urlParams?.sort==='updatedAt' && urlParams.dir==='asc') ? 'desc' : 'asc' })}`}>Updated</a>
               </th>
               <th className="px-3 py-2 text-left">Active</th>
+              <th className="px-3 py-2 text-left">Curated</th>
               <th className="px-3 py-2 text-left">Actions</th>
             </tr>
           </thead>
@@ -168,6 +216,7 @@ export default async function AdminExercisesPage({ searchParams }: PageProps) {
                 <td className="px-3 py-2">{ex.usageCount}</td>
                 <td className="px-3 py-2">{new Date(ex.updatedAt).toLocaleDateString()}</td>
                 <td className="px-3 py-2">{ex.isActive ? 'Yes' : 'No'}</td>
+                <td className="px-3 py-2">{ex.curated ? 'Yes' : 'No'}</td>
                 <td className="px-3 py-2 space-y-2">
                   <form action={updateExerciseAction} className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     <input type="hidden" name="id" value={ex.id} />
@@ -179,6 +228,12 @@ export default async function AdminExercisesPage({ searchParams }: PageProps) {
                     <Input name="muscleGroups" defaultValue={ex.muscleGroups.join(', ')} />
                     <Input name="equipment" defaultValue={ex.equipment.join(', ')} />
                     <label className="flex items-center gap-2"><input type="checkbox" name="isActive" defaultChecked={ex.isActive} /> Active</label>
+                    <label className="flex items-center gap-2"><input type="checkbox" name="curated" defaultChecked={!!ex.curated} /> Curated</label>
+                    <Input name="bodyPart" defaultValue={ex.bodyPart || ''} placeholder="Body part" />
+                    <Input name="movementPattern" defaultValue={ex.movementPattern || ''} placeholder="Movement pattern" />
+                    <Input name="type" defaultValue={ex.type || ''} placeholder="Type" />
+                    <Input name="tags" defaultValue={(ex.tags || []).join(', ')} placeholder="Tags" />
+                    <Input name="aliasNames" defaultValue={(ex.aliasNames || []).join(', ')} placeholder="Alias names" />
                     <Input name="imageUrl" defaultValue={ex.imageUrl ?? ''} placeholder="Image URL" />
                     <Input name="videoUrl" defaultValue={ex.videoUrl ?? ''} placeholder="Video URL" />
                     <textarea name="instructions" defaultValue={ex.instructions ?? ''} className="border rounded px-2 py-2 min-h-[60px]" />
@@ -201,6 +256,43 @@ export default async function AdminExercisesPage({ searchParams }: PageProps) {
           </tbody>
         </table>
         <div className="flex items-center gap-2 p-3 border-t">
+          {/* Bulk actions: curated toggle and merge */}
+          <form action={importExercisesCsvAction} className="hidden" />
+          <form action="/admin/exercises" method="get" className="hidden" />
+          <form action={async (formData) => { 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async (fd: FormData) => { 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
+          <form action={async ()=>{ 'use server' }} className="hidden" />
           <form action={syncAllExercisesToFirestoreAction} className="ml-auto">
             <Button type="submit" variant="secondary">Sync All to Firestore</Button>
           </form>

@@ -17,6 +17,14 @@ export type ExerciseDTO = {
   lastUsed?: Date | null
   createdAt: Date
   updatedAt: Date
+  bodyPart?: string | null
+  movementPattern?: string | null
+  type?: string | null
+  tags?: string[]
+  aliasNames?: string[]
+  curated?: boolean
+  source?: string | null
+  sourceId?: string | null
 }
 
 export type ListExercisesParams = {
@@ -26,6 +34,11 @@ export type ListExercisesParams = {
   muscle?: string
   equipment?: string
   isActive?: boolean
+  bodyPart?: string
+  movementPattern?: string
+  type?: string
+  tags?: string
+  curated?: boolean
   page?: number
   pageSize?: number
   orderBy?: { field: 'name' | 'category' | 'difficulty' | 'usageCount' | 'updatedAt'; direction: 'asc' | 'desc' }
@@ -65,6 +78,11 @@ class PrismaExerciseRepository implements ExerciseRepository {
     if (params.muscle) where.muscleGroups = { has: params.muscle }
     if (params.equipment) where.equipment = { has: params.equipment }
     if (params.isActive !== undefined) where.isActive = params.isActive
+    if (params.bodyPart) where.bodyPart = params.bodyPart
+    if (params.movementPattern) where.movementPattern = params.movementPattern
+    if (params.type) where.type = params.type
+    if (params.tags) where.tags = { has: params.tags }
+    if (params.curated !== undefined) where.curated = params.curated
 
     const orderBy = params.orderBy ? [{ [params.orderBy.field]: params.orderBy.direction }] as any : [{ isActive: 'desc' }, { name: 'asc' }]
     const [total, items] = await Promise.all([
@@ -93,6 +111,14 @@ class PrismaExerciseRepository implements ExerciseRepository {
       difficulty: data.difficulty ?? 'BEGINNER',
       safetyNotes: data.safetyNotes ?? null,
       isActive: data.isActive ?? true,
+      bodyPart: data.bodyPart ?? null,
+      movementPattern: data.movementPattern ?? null,
+      type: data.type ?? null,
+      tags: data.tags ?? [],
+      aliasNames: data.aliasNames ?? [],
+      curated: data.curated ?? false,
+      source: data.source ?? null,
+      sourceId: data.sourceId ?? null,
       updatedAt: new Date(),
     }
 
