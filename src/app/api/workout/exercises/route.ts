@@ -100,7 +100,12 @@ export async function GET(request: NextRequest) {
     if (muscleGroups && muscleGroups.length > 0) searchOptions.muscleGroups = muscleGroups;
     if (equipment && equipment.length > 0) searchOptions.equipment = equipment;
     if (difficulty) searchOptions.difficulty = difficulty;
-    if (isActiveParam !== null) searchOptions.isActive = isActiveParam === 'true';
+    // Default to active exercises only
+    if (isActiveParam !== null) {
+      searchOptions.isActive = isActiveParam === 'true';
+    } else {
+      searchOptions.isActive = true;
+    }
     // New filters
     if (bodyPart) searchOptions.bodyPart = bodyPart;
     if (movementPattern) searchOptions.movementPattern = movementPattern;
