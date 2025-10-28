@@ -323,6 +323,44 @@ export default function WorkoutLogPage() {
     return '2.5';
   };
 
+  // Get current workout from active program subscription
+  const getCurrentProgramWorkout = () => {
+    if (!programSubscriptions || programSubscriptions.length === 0) return null;
+
+    const activeSub = programSubscriptions[0]; // Get first active subscription
+    const currentWeek = activeSub.currentWeek || 1;
+    const currentDay = activeSub.currentDay || 1;
+
+    const program = activeSub.program_templates;
+    if (!program || !program.program_phases || program.program_phases.length === 0) return null;
+
+    // Find the phase that contains the current week
+    const currentPhase = program.program_phases.find((phase: any) => {
+      return phase.microcycles && phase.microcycles.some((micro: any) => micro.weekNumber === currentWeek);
+    });
+
+    if (!currentPhase) return null;
+
+    // Find the microcycle for current week
+    const currentMicrocycle = currentPhase.microcycles.find((micro: any) => micro.weekNumber === currentWeek);
+
+    if (!currentMicrocycle || !currentMicrocycle.workouts) return null;
+
+    // Find the workout for current day
+    const currentWorkout = currentMicrocycle.workouts.find((workout: any) => workout.dayNumber === currentDay);
+
+    if (!currentWorkout) return null;
+
+    return {
+      subscription: activeSub,
+      program,
+      phase: currentPhase,
+      microcycle: currentMicrocycle,
+      workout: currentWorkout,
+      exercises: currentWorkout.workout_exercises || []
+    };
+  };
+
   async function load_recommendations() {
     try {
       const response = await fetch('/api/workout/recommendations');
@@ -1254,42 +1292,151 @@ export default function WorkoutLogPage() {
         {/* Conditional rendering based on active tab */}
         {activeTab === 'today' && (
           <>
-            {/* Active Program Prefill */}
-            {programSubscriptions.length > 0 && (
-              <Card className="mb-6">
-                <CardHeader>
-                  <CardTitle className="text-base">Today's Program</CardTitle>
-                  <CardDescription>
-                    {programSubscriptions[0]?.program_templates?.name || 'Active Program'}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="text-sm text-muted-foreground">Prefill exercises from your program’s day template.</div>
-                    <Button size="sm" onClick={openPrefill}>Prefill today’s plan</Button>
-                  </div>
-                  {plannedExercises.length > 0 && (
-                    <div className="mt-4">
-                      <div className="text-xs font-medium text-muted-foreground mb-2">Planned exercises</div>
-                      <div className="grid md:grid-cols-2 gap-2">
-                        {plannedExercises.map((it, idx) => (
-                          <div key={it.id + idx} className="flex items-center justify-between p-2 border rounded">
-                            <div className="text-sm">
-                              <div className="font-medium">{it.name}</div>
-                              <div className="text-xs text-muted-foreground">{it.sets} sets{it.reps ? ` • ${it.reps}` : ''}</div>
-                            </div>
-                            <Button size="sm" variant="outline" onClick={() => loadPlannedIntoForm(it)}>Load</Button>
+            {/* Active Program Workout */}
+            {(() => {
+              const currentWorkout = getCurrentProgramWorkout();
+              if (!currentWorkout) return null;
+
+              const { subscription, program, phase, workout, exercises } = currentWorkout;
+              const athleteName = program.legendary_athlete?.name || 'Program';
+
+              return (
+                <Card className="mb-6">
+                  <CardHeader>
+                    <CardTitle className="text-base">Today's Workout - {program.name}</CardTitle>
+                    <CardDescription>
+                      {athleteName} • Week {subscription.currentWeek}, Day {subscription.currentDay}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {/* Workout Info */}
+                      <div className="flex items-start justify-between gap-3 pb-3 border-b">
+                        <div>
+                          <div className="font-medium text-sm">{workout.dayLabel || `Day ${workout.dayNumber}`}</div>
+                          <div className="text-xs text-muted-foreground mt-1">
+                            {phase.title} • {phase.description}
                           </div>
-                        ))}
+                        </div>
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            // Auto-populate first exercise when starting workout
+                            if (exercises.length > 0) {
+                              const firstEx = exercises[0];
+                              const exercise = firstEx.exercises;
+
+                              if (exercise) {
+                                // Set the selected exercise
+                                setSelectedExercise({
+                                  id: exercise.id,
+                                  name: exercise.name,
+                                  category: exercise.category,
+                                  muscleGroups: exercise.muscleGroups || [],
+                                  equipment: exercise.equipment || []
+                                });
+
+                                // Pre-fill sets and reps from program
+                                setNewEntry({
+                                  ...newEntry,
+                                  exerciseId: exercise.id,
+                                  sets: String(firstEx.sets || 3),
+                                  reps: String(firstEx.repsMin || firstEx.repsMax || 10),
+                                  setType: 'REGULAR'
+                                });
+                              }
+                            }
+
+                            setIsAddingEntry(true);
+
+                            // Scroll to form
+                            setTimeout(() => {
+                              document.querySelector('[data-workout-form]')?.scrollIntoView({ behavior: 'smooth' });
+                            }, 100);
+                          }}
+                        >
+                          Start Workout
+                        </Button>
                       </div>
+
+                      {/* Exercise List */}
+                      {exercises.length > 0 && (
+                        <div>
+                          <div className="text-xs font-medium text-muted-foreground mb-2">
+                            {exercises.length} exercises
+                          </div>
+                          <div className="space-y-2">
+                            {exercises.map((ex: any, idx: number) => {
+                              const exercise = ex.exercises;
+                              const setsDisplay = ex.sets || '-';
+                              const repsDisplay = ex.repsMin && ex.repsMax
+                                ? (ex.repsMin === ex.repsMax ? ex.repsMin : `${ex.repsMin}-${ex.repsMax}`)
+                                : (ex.repsMin || ex.repsMax || '-');
+
+                              return (
+                                <div
+                                  key={ex.id || idx}
+                                  className="flex items-center justify-between p-3 border rounded-lg hover:bg-blue-50 cursor-pointer transition-colors"
+                                  onClick={() => {
+                                    if (exercise) {
+                                      // Load this exercise into the form
+                                      setSelectedExercise({
+                                        id: exercise.id,
+                                        name: exercise.name,
+                                        category: exercise.category,
+                                        muscleGroups: exercise.muscleGroups || [],
+                                        equipment: exercise.equipment || []
+                                      });
+
+                                      setNewEntry({
+                                        ...newEntry,
+                                        exerciseId: exercise.id,
+                                        sets: String(ex.sets || 3),
+                                        reps: String(ex.repsMin || ex.repsMax || 10),
+                                        setType: 'REGULAR'
+                                      });
+
+                                      setIsAddingEntry(true);
+
+                                      // Scroll to form
+                                      setTimeout(() => {
+                                        document.querySelector('[data-workout-form]')?.scrollIntoView({ behavior: 'smooth' });
+                                      }, 100);
+                                    }
+                                  }}
+                                >
+                                  <div className="flex-1">
+                                    <div className="font-medium text-sm">{exercise?.name || 'Exercise'}</div>
+                                    <div className="text-xs text-muted-foreground mt-1">
+                                      {exercise?.category && <span>{exercise.category}</span>}
+                                      {exercise?.muscleGroups && exercise.muscleGroups.length > 0 && (
+                                        <span> • {exercise.muscleGroups.slice(0, 2).join(', ')}</span>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="text-sm font-medium text-gray-900 ml-4">
+                                    {setsDisplay} × {repsDisplay}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+
+                      {exercises.length === 0 && (
+                        <div className="text-sm text-muted-foreground text-center py-4">
+                          No exercises scheduled for today
+                        </div>
+                      )}
                     </div>
-                  )}
-                </CardContent>
-              </Card>
-            )}
+                  </CardContent>
+                </Card>
+              );
+            })()}
             {/* Add New Entry Form */}
             {isAddingEntry && (
-              <Card className="mb-8">
+              <Card className="mb-8" data-workout-form>
                 <CardHeader>
                   <CardTitle>Add New Workout Entry</CardTitle>
               <CardDescription>
