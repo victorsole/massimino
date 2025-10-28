@@ -219,7 +219,7 @@ export function ProgramsTab() {
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
-          Athlete Programs
+          Train Like A Master
         </button>
         <button
           onClick={() => setFilter('PERIODIZATION')}
