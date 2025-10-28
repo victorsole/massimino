@@ -1756,7 +1756,46 @@ export async function getUserProgramSubscriptions(userId: string) {
           users: {
             select: { id: true, name: true, trainerVerified: true }
           },
-          program_weeks: { orderBy: { weekNumber: 'asc' } }
+          legendary_athlete: {
+            select: { name: true, slug: true, eraLabel: true }
+          },
+          program_weeks: { orderBy: { weekNumber: 'asc' } },
+          program_phases: {
+            include: {
+              microcycles: {
+                include: {
+                  workouts: {
+                    include: {
+                      workout_exercises: {
+                        include: {
+                          exercises: {
+                            select: { id: true, name: true, category: true, muscleGroups: true, equipment: true }
+                          },
+                          exercise_slots: {
+                            select: { id: true, slotLabel: true, muscleTargets: true }
+                          }
+                        },
+                        orderBy: { exerciseOrder: 'asc' }
+                      }
+                    },
+                    orderBy: { dayNumber: 'asc' }
+                  }
+                },
+                orderBy: { weekNumber: 'asc' }
+              }
+            },
+            orderBy: { phaseNumber: 'asc' }
+          }
+        }
+      },
+      user_exercise_selections: {
+        include: {
+          exercises: {
+            select: { id: true, name: true, category: true, muscleGroups: true, equipment: true }
+          },
+          exercise_slots: {
+            select: { id: true, slotLabel: true }
+          }
         }
       }
     },
