@@ -11,7 +11,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SessionHistoryTable, WorkoutCalendar, CommentsPanel } from '@/components/workout-log/WorkoutLogTable';
 import { startOfMonth, endOfMonth, format, subMonths, addMonths } from 'date-fns';
-import { Plus, Calendar, Dumbbell, Clock, Weight, MessageCircle, Edit, Trash2, Search, Info, Target, Zap, ChevronLeft, ChevronRight, Sparkles, Trophy } from 'lucide-react';
+import { Plus, Calendar, Dumbbell, Clock, Weight, MessageCircle, Edit, Trash2, Search, Info, Target, Zap, ChevronLeft, ChevronRight, Sparkles, Trophy, ListChecks, LineChart } from 'lucide-react';
+import Link from 'next/link';
+import { RestTimerBar } from '@/components/workout-log/rest_timer_bar';
+import { BodyMetricsTab } from '@/components/workout-log/body_metrics_tab';
+import { ProgressTab } from '@/components/workout-log/progress_tab';
+import { HabitsTab } from '@/components/workout-log/habits_tab';
+import { ProgramsTab } from '@/components/workout-log/programs_tab';
 // Use a relaxed exercise type matching what the UI actually uses
 type ExerciseListItem = {
   id: string;
@@ -131,19 +137,46 @@ export default function WorkoutLogPage() {
   const [restDuration, setRestDuration] = useState<number>(90);
 
   // Tab navigation
-  const [activeTab, setActiveTab] = useState<'entries' | 'sessions' | 'calendar'>('entries');
+  const [activeTab, setActiveTab] = useState<'today' | 'programs' | 'history' | 'metrics' | 'progress' | 'habits'>('today');
   const [, setSessions] = useState<any[]>([]);
 
   // Calendar state
   const [calendarMonth, setCalendarMonth] = useState(new Date());
   const [monthSessions, setMonthSessions] = useState<any[]>([]);
 
+  // Rest timer state
+  const [restVisible, setRestVisible] = useState(false);
+  const [restRemaining, setRestRemaining] = useState<number>(0);
+  useEffect(() => {
+    if (!restVisible || restRemaining <= 0) return;
+    const id = setInterval(() => setRestRemaining((s) => Math.max(0, s - 1)), 1000);
+    return () => clearInterval(id);
+  }, [restVisible, restRemaining]);
+
+  // Program subscription + prefill state
+  const [programSubscriptions, setProgramSubscriptions] = useState<any[]>([]);
+  const [showPrefillModal, setShowPrefillModal] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState<any | null>(null);
+  const [plannedExercises, setPlannedExercises] = useState<Array<{ id: string; name: string; sets: number; reps: string }>>([]);
+
   // Fetch exercises and workout entries on component mount
   useEffect(() => {
     fetchExercises();
     fetchWorkoutEntries();
-    if (activeTab === 'sessions') {
+    if (activeTab === 'history') {
       fetchSessions();
+    }
+    if (activeTab === 'today') {
+      // Load active subscriptions for prefill
+      (async () => {
+        try {
+          const r = await fetch('/api/workout/programs?subscriptions=true');
+          if (r.ok) {
+            const subs = await r.json();
+            setProgramSubscriptions(Array.isArray(subs) ? subs : []);
+          }
+        } catch {}
+      })();
     }
   }, [activeTab]);
 
@@ -200,7 +233,7 @@ export default function WorkoutLogPage() {
 
   // Load sessions for calendar month
   useEffect(() => {
-    if (activeTab === 'calendar') {
+    if (activeTab === 'history') {
       loadMonthSessions();
     }
   }, [activeTab, calendarMonth]);
@@ -518,6 +551,50 @@ export default function WorkoutLogPage() {
     return out;
   };
 
+  // Prefill helpers
+  const openPrefill = async () => {
+    try {
+      if (!programSubscriptions.length) { alert('No active program'); return; }
+      const sub = programSubscriptions[0];
+      const pid = sub.programId || sub.program?.id || sub.id;
+      if (!pid) { alert('No program id found'); return; }
+      const res = await fetch(`/api/workout/programs/${pid}`);
+      if (!res.ok) { alert('Failed to load program'); return; }
+      const program = await res.json();
+      setSelectedProgram(program);
+      setShowPrefillModal(true);
+    } catch (e) {
+      console.error(e);
+      alert('Failed to load program');
+    }
+  };
+
+  const useTemplate = (tpl: any) => {
+    const list = (tpl?.workout_template_exercises || []).map((wte: any) => ({
+      id: String(wte.exercises?.id || wte.exerciseId),
+      name: String(wte.exercises?.name || 'Exercise'),
+      sets: Number(wte.sets) || 3,
+      reps: String(wte.reps || ''),
+    }));
+    setPlannedExercises(list);
+    setShowPrefillModal(false);
+  };
+
+  const loadPlannedIntoForm = (item: { id: string; name: string; sets: number; reps: string }) => {
+    const ex = exercises.find((e) => e.id === item.id) || { id: item.id, name: item.name, category: 'General', muscleGroups: [], equipment: [] } as any;
+    setSelectedExercise(ex as any);
+    // If reps is a single number, prefill; otherwise leave blank for user to follow target range
+    const singleRep = /^\d+$/.test(item.reps.trim()) ? item.reps.trim() : '';
+    setNewEntry((prev) => ({
+      ...prev,
+      exercise: ex.name,
+      exerciseId: ex.id,
+      setType: 'STRAIGHT',
+      sets: String(item.sets || '3'),
+      reps: singleRep,
+    }));
+  };
+
   // Compute how many entries will be created with current form state
   const computePlannedEntriesCount = (): number => {
     const setsNum = parseInt(newEntry.sets || '1', 10) || 1;
@@ -814,6 +891,11 @@ export default function WorkoutLogPage() {
           restSeconds: '',
           userComment: ''
         }));
+
+        // Start rest timer (use per-exercise or default restDuration)
+        const baseRest = restDuration || (newEntry.restSeconds ? parseInt(newEntry.restSeconds) : 90) || 90;
+        setRestRemaining(baseRest);
+        setRestVisible(true);
       } else {
         let msg = 'Unknown error';
         try {
@@ -1061,41 +1143,26 @@ export default function WorkoutLogPage() {
           </div>
         </div>
 
-        {/* Tab Navigation */}
+        {/* Tab Navigation (Excel-inspired, on-brand) */}
         <div className="border-b border-gray-200 mb-6">
-          <nav className="-mb-px flex space-x-8">
-            <button
-              onClick={() => setActiveTab('entries')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'entries'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              <Dumbbell className="inline h-4 w-4 mr-2" />
-              Workout Entries
+          <nav className="-mb-px flex space-x-6 overflow-x-auto">
+            <button onClick={() => setActiveTab('today')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='today'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
+              <Dumbbell className="inline h-4 w-4 mr-2" /> Today
             </button>
-            <button
-              onClick={() => setActiveTab('sessions')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'sessions'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              <Calendar className="inline h-4 w-4 mr-2" />
-              Session History
+            <button onClick={() => setActiveTab('programs')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='programs'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
+              <Target className="inline h-4 w-4 mr-2" /> Programs
             </button>
-            <button
-              onClick={() => setActiveTab('calendar')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'calendar'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              <Calendar className="inline h-4 w-4 mr-2" />
-              Calendar View
+            <button onClick={() => setActiveTab('history')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='history'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
+              <Calendar className="inline h-4 w-4 mr-2" /> History
+            </button>
+            <button onClick={() => setActiveTab('metrics')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='metrics'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
+              <Weight className="inline h-4 w-4 mr-2" /> Body Metrics
+            </button>
+            <button onClick={() => setActiveTab('progress')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='progress'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
+              <LineChart className="inline h-4 w-4 mr-2" /> Progress
+            </button>
+            <button onClick={() => setActiveTab('habits')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='habits'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
+              <ListChecks className="inline h-4 w-4 mr-2" /> Habits
             </button>
           </nav>
         </div>
@@ -1185,8 +1252,41 @@ export default function WorkoutLogPage() {
         )}
 
         {/* Conditional rendering based on active tab */}
-        {activeTab === 'entries' && (
+        {activeTab === 'today' && (
           <>
+            {/* Active Program Prefill */}
+            {programSubscriptions.length > 0 && (
+              <Card className="mb-6">
+                <CardHeader>
+                  <CardTitle className="text-base">Today's Program</CardTitle>
+                  <CardDescription>
+                    {programSubscriptions[0]?.program_templates?.name || 'Active Program'}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-sm text-muted-foreground">Prefill exercises from your program’s day template.</div>
+                    <Button size="sm" onClick={openPrefill}>Prefill today’s plan</Button>
+                  </div>
+                  {plannedExercises.length > 0 && (
+                    <div className="mt-4">
+                      <div className="text-xs font-medium text-muted-foreground mb-2">Planned exercises</div>
+                      <div className="grid md:grid-cols-2 gap-2">
+                        {plannedExercises.map((it, idx) => (
+                          <div key={it.id + idx} className="flex items-center justify-between p-2 border rounded">
+                            <div className="text-sm">
+                              <div className="font-medium">{it.name}</div>
+                              <div className="text-xs text-muted-foreground">{it.sets} sets{it.reps ? ` • ${it.reps}` : ''}</div>
+                            </div>
+                            <Button size="sm" variant="outline" onClick={() => loadPlannedIntoForm(it)}>Load</Button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
             {/* Add New Entry Form */}
             {isAddingEntry && (
               <Card className="mb-8">
@@ -2124,39 +2224,40 @@ export default function WorkoutLogPage() {
           </>
         )}
 
-        {activeTab === 'sessions' && (
-          <SessionHistoryTable />
+        {activeTab === 'history' && (
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-sm font-medium mb-2">Session History</h3>
+              <SessionHistoryTable />
+            </div>
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <div className="text-sm font-medium">Calendar</div>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" onClick={() => setCalendarMonth(subMonths(calendarMonth, 1))}><ChevronLeft className="h-4 w-4"/></Button>
+                  <div className="text-xs text-muted-foreground">{format(calendarMonth, 'MMMM yyyy')}</div>
+                  <Button variant="outline" size="sm" onClick={() => setCalendarMonth(addMonths(calendarMonth, 1))}><ChevronRight className="h-4 w-4"/></Button>
+                </div>
+              </div>
+              <WorkoutCalendar month={calendarMonth} sessions={monthSessions} />
+            </div>
+          </div>
         )}
 
-        {activeTab === 'calendar' && (
-          <div>
-            {/* Month navigation */}
-            <div className="flex items-center justify-between mb-6">
-              <Button
-                variant="outline"
-                onClick={() => setCalendarMonth(subMonths(calendarMonth, 1))}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
+        {activeTab === 'programs' && (
+          <ProgramsTab />
+        )}
 
-              <h2 className="text-xl font-semibold">
-                {format(calendarMonth, 'MMMM yyyy')}
-              </h2>
+        {activeTab === 'metrics' && (
+          <BodyMetricsTab />
+        )}
 
-              <Button
-                variant="outline"
-                onClick={() => setCalendarMonth(addMonths(calendarMonth, 1))}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
+        {activeTab === 'progress' && (
+          <ProgressTab />
+        )}
 
-            {/* Calendar grid */}
-            <WorkoutCalendar
-              month={calendarMonth}
-              sessions={monthSessions}
-            />
-          </div>
+        {activeTab === 'habits' && (
+          <HabitsTab />
         )}
       </div>
 
@@ -2539,6 +2640,40 @@ export default function WorkoutLogPage() {
           </Card>
         </div>
       )}
+
+      {/* Prefill Modal */}
+      {showPrefillModal && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-background rounded-lg shadow max-w-2xl w-full">
+            <div className="p-4 border-b flex items-center justify-between">
+              <div className="font-medium">Choose a day from your program</div>
+              <Button variant="ghost" size="sm" onClick={() => setShowPrefillModal(false)}>Close</Button>
+            </div>
+            <div className="p-4 space-y-2 max-h-[60vh] overflow-y-auto">
+              {!selectedProgram && <div className="text-sm text-muted-foreground">Loading…</div>}
+              {selectedProgram && (selectedProgram.workout_templates || []).map((tpl: any) => (
+                <div key={tpl.id} className="flex items-center justify-between p-2 border rounded">
+                  <div className="text-sm">
+                    <div className="font-medium">{tpl.name || 'Day Template'}</div>
+                    <div className="text-xs text-muted-foreground">{tpl.workout_template_exercises?.length || 0} exercises</div>
+                  </div>
+                  <Button size="sm" onClick={() => useTemplate(tpl)}>Use this day</Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <RestTimerBar
+        visible={restVisible}
+        remaining={restRemaining}
+        onAdd15={() => setRestRemaining((s) => s + 15)}
+        onSkip={() => { setRestVisible(false); setRestRemaining(0); }}
+        onDone={() => { setRestVisible(false); setRestRemaining(0); }}
+        exerciseId={selectedExercise?.id}
+        sessionId={activeSession?.id}
+      />
     </>
   );
 }

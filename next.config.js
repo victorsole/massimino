@@ -71,23 +71,6 @@ const nextConfig = {
       ],
       formats: ['image/webp', 'image/avif'],
     },
-  
-    // Webpack configuration
-    webpack: (config, { dev, isServer }) => {
-      // Add path aliases for both dev and production
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        '@': require('path').resolve(__dirname, 'src'),
-        '@/core': require('path').resolve(__dirname, 'src/core'),
-        '@/services': require('path').resolve(__dirname, 'src/services'),
-        '@/components': require('path').resolve(__dirname, 'src/components'),
-        '@/types': require('path').resolve(__dirname, 'src/types'),
-        '@/hooks': require('path').resolve(__dirname, 'src/hooks'),
-        '@/app': require('path').resolve(__dirname, 'src/app'),
-      };
-      return config;
-    },
-  
     // Environment variables validation
     env: {
       CUSTOM_KEY: process.env.NODE_ENV,

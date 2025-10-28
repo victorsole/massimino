@@ -45,28 +45,28 @@ enum FeedbackCommentVisibility {
 }
 
 model feedback_entries {
-  id           String          @id @default(uuid())
+  id           String              @id @default(uuid())
   userId       String?
   email        String?
   type         FeedbackType
-  status       FeedbackStatus   @default(OPEN)
+  status       FeedbackStatus      @default(OPEN)
   severity     FeedbackSeverity?
   title        String?
-  message      String           @db.Text
+  message      String              @db.Text
   url          String?
   appVersion   String?
   platform     DevicePlatform?
   userAgent    String?
   context      Json?
-  labels       String[]         @default([])
+  labels       String[]            @default([])
   assignedTo   String?
   related_type String?
   related_id   String?
   ai_rating    AiRating?
-  ai_tags      String[]         @default([])
+  ai_tags      String[]            @default([])
   nps_score    Int?
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
   votes        feedback_votes[]
   comments     feedback_comments[]
 
@@ -77,7 +77,7 @@ model feedback_entries {
 }
 
 model feedback_votes {
-  id        String  @id @default(uuid())
+  id        String   @id @default(uuid())
   ticketId  String
   userId    String
   createdAt DateTime @default(now())
@@ -89,15 +89,15 @@ model feedback_votes {
 }
 
 model feedback_comments {
-  id          String                     @id @default(uuid())
-  ticketId    String
-  authorId    String?
-  visibility  FeedbackCommentVisibility  @default(INTERNAL)
-  content     String                     @db.Text
-  createdAt   DateTime                   @default(now())
+  id         String                    @id @default(uuid())
+  ticketId   String
+  authorId   String?
+  visibility FeedbackCommentVisibility @default(INTERNAL)
+  content    String                    @db.Text
+  createdAt  DateTime                  @default(now())
 
   feedback_entries feedback_entries @relation(fields: [ticketId], references: [id], onDelete: Cascade)
-  users            users?            @relation("feedback_comment_author", fields: [authorId], references: [id], onDelete: SetNull)
+  users            users?           @relation("feedback_comment_author", fields: [authorId], references: [id], onDelete: SetNull)
 
   @@index([ticketId, createdAt])
 }
@@ -146,16 +146,16 @@ enum creative_status {
 }
 
 model partners {
-  id          String    @id @default(uuid())
-  name        String
-  country     String?
-  url         String
-  logoUrl     String?
-  description String?
-  tags        String[]  @default([])
-  isActive    Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id               String             @id @default(uuid())
+  name             String
+  country          String?
+  url              String
+  logoUrl          String?
+  description      String?
+  tags             String[]           @default([])
+  isActive         Boolean            @default(true)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
   gym_integrations gym_integrations[]
   ad_campaigns     ad_campaigns[]
 
@@ -163,7 +163,7 @@ model partners {
 }
 
 model partner_leads {
-  id                 String       @id @default(uuid())
+  id                 String      @id @default(uuid())
   type               lead_type
   orgName            String
   contactName        String
@@ -171,25 +171,25 @@ model partner_leads {
   phone              String?
   website            String?
   details            Json?
-  status             lead_status  @default(NEW)
+  status             lead_status @default(NEW)
   convertedPartnerId String?
-  createdAt          DateTime     @default(now())
-  updatedAt          DateTime     @updatedAt
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
 
   @@index([status, createdAt])
   @@index([email])
 }
 
 model gym_integrations {
-  id             String              @id @default(uuid())
-  partnerId      String
-  apiKeyHash     String
+  id              String             @id @default(uuid())
+  partnerId       String
+  apiKeyHash      String
   allowedFeatures Json?
-  webhookUrl     String?
-  branding       Json?
-  status         integration_status  @default(PENDING)
-  createdAt      DateTime            @default(now())
-  updatedAt      DateTime            @updatedAt
+  webhookUrl      String?
+  branding        Json?
+  status          integration_status @default(PENDING)
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
 
   partners partners @relation(fields: [partnerId], references: [id], onDelete: Cascade)
 
@@ -378,8 +378,8 @@ model ai_chat_sessions {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  users             users             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  ai_chat_messages  ai_chat_messages[]
+  users                users                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ai_chat_messages     ai_chat_messages[]
   ai_workout_proposals ai_workout_proposals[]
 
   @@index([userId, status])
@@ -387,13 +387,13 @@ model ai_chat_sessions {
 }
 
 model ai_chat_messages {
-  id        String   @id @default(uuid())
-  sessionId String
-  role      String   // user, assistant, system
-  content   String   @db.Text
-  metadata  Json?
+  id         String   @id @default(uuid())
+  sessionId  String
+  role       String // user, assistant, system
+  content    String   @db.Text
+  metadata   Json?
   aiProvider String?
-  createdAt DateTime @default(now())
+  createdAt  DateTime @default(now())
 
   ai_chat_sessions ai_chat_sessions @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
@@ -401,13 +401,13 @@ model ai_chat_messages {
 }
 
 model ai_workout_proposals {
-  id           String   @id @default(uuid())
+  id           String    @id @default(uuid())
   sessionId    String
   userId       String
-  status       String   @default("pending") // pending, accepted, rejected, modified
+  status       String    @default("pending") // pending, accepted, rejected, modified
   workoutData  Json
-  aiReasoning  String?  @db.Text
-  createdAt    DateTime @default(now())
+  aiReasoning  String?   @db.Text
+  createdAt    DateTime  @default(now())
   acceptedAt   DateTime?
   workoutLogId String?
 
@@ -891,6 +891,8 @@ model exercises {
   // Back-relations
   user_exercises             user_exercises[]
   exercise_media             exercise_media[]
+  user_exercise_selections   user_exercise_selections[]
+  program_workout_exercises  program_workout_exercises[]
 
   @@index([category])
   @@index([bodyPart])
@@ -1428,42 +1430,65 @@ model program_ratings {
 }
 
 model program_subscriptions {
-  id                String            @id
-  userId            String
-  programId         String
-  currentWeek       Int               @default(1)
-  currentDay        Int               @default(1)
-  startDate         DateTime          @default(now())
-  endDate           DateTime?
-  isActive          Boolean           @default(true)
-  progressData      Json?
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime
+  id           String    @id
+  userId       String
+  programId    String
+  currentWeek  Int       @default(1)
+  currentDay   Int       @default(1)
+  startDate    DateTime  @default(now())
+  endDate      DateTime?
+  isActive     Boolean   @default(true)
+  progressData Json?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime
+
+  // NEW: Periodization tracking
+  currentPhaseId         String?
+  currentMicrocycleId    String?
+  currentWeekInPhase     Int?
+  phaseStartedAt         DateTime?
+  lastWorkoutCompletedAt DateTime?
+  workoutsCompleted      Int       @default(0)
+  adherenceRate          Float?
+
   program_templates program_templates @relation(fields: [programId], references: [id])
   users             users             @relation(fields: [userId], references: [id])
 
+  // NEW: Periodization relations
+  user_exercise_selections user_exercise_selections[]
+  workout_performances     workout_performances[]
+
   @@unique([userId, programId])
   @@index([userId, isActive])
+  @@index([currentPhaseId])
 }
 
 model program_templates {
-  id                    String                  @id
-  name                  String
-  description           String?
-  createdBy             String
-  duration              String
-  difficulty            String                  @default("BEGINNER")
-  category              String?
-  isPublic              Boolean                 @default(false)
-  price                 Float?
-  currency              String                  @default("USD")
-  purchaseCount         Int                     @default(0)
-  rating                Float?                  @default(0.0)
-  ratingCount           Int                     @default(0)
-  isActive              Boolean                 @default(true)
-  tags                  String[]                @default([])
-  createdAt             DateTime                @default(now())
-  updatedAt             DateTime
+  id            String   @id
+  name          String
+  description   String?
+  createdBy     String
+  duration      String
+  difficulty    String   @default("BEGINNER")
+  category      String?
+  isPublic      Boolean  @default(false)
+  price         Float?
+  currency      String   @default("USD")
+  purchaseCount Int      @default(0)
+  rating        Float?   @default(0.0)
+  ratingCount   Int      @default(0)
+  isActive      Boolean  @default(true)
+  tags          String[] @default([])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime
+
+  // NEW: Periodization fields
+  programType         ProgramType?         @default(CUSTOM)
+  athleteId           String?
+  hasExerciseSlots    Boolean              @default(false)
+  progressionStrategy ProgressionStrategy?
+  autoRegulation      Boolean              @default(false)
+
   program_purchases     program_purchases[]
   program_ratings       program_ratings[]
   program_subscriptions program_subscriptions[]
@@ -1471,9 +1496,15 @@ model program_templates {
   program_weeks         program_weeks[]
   workout_templates     workout_templates[]     @relation("ProgramTemplateToWorkoutTemplate")
 
+  // NEW: Periodization relations
+  legendary_athlete legendary_athletes? @relation("AthleteProgramTemplates", fields: [athleteId], references: [id])
+  program_phases    program_phases[]
+  exercise_slots    exercise_slots[]
+
   @@index([category, difficulty])
   @@index([createdBy, isActive])
   @@index([isPublic, isActive])
+  @@index([programType, athleteId])
 }
 
 model program_weeks {
@@ -2301,11 +2332,12 @@ model users {
   workout_log_entries_workout_log_entries_coachIdTousers      workout_log_entries[]            @relation("workout_log_entries_coachIdTousers")
   workout_log_entries_workout_log_entries_userIdTousers       workout_log_entries[]            @relation("workout_log_entries_userIdTousers")
   // Back-relations for user content
-  user_exercises                                             user_exercises[]
-  exercise_media                                             exercise_media[]
-  user_points                                                user_points[]
-  feedback_comment_author                                    feedback_comments[]              @relation("feedback_comment_author")
+  user_exercises                                              user_exercises[]
+  exercise_media                                              exercise_media[]
+  user_points                                                 user_points[]
+  feedback_comment_author                                     feedback_comments[]              @relation("feedback_comment_author")
   workout_progress                                            workout_progress[]
+  habit_logs                                                  habit_logs[]
   workout_sessions_workout_sessions_coachIdTousers            workout_sessions[]               @relation("workout_sessions_coachIdTousers")
   workout_sessions_workout_sessions_userIdTousers             workout_sessions[]               @relation("workout_sessions_userIdTousers")
   workout_templates                                           workout_templates[]
@@ -2316,6 +2348,9 @@ model users {
   workout_session_comments                                    workout_session_comments[]
   user_achievements                                           user_achievements[]
   email_verification_tokens                                   email_verification_tokens[]
+  // NEW: Periodization system relations
+  user_exercise_selections                                    user_exercise_selections[]
+  workout_performances                                        workout_performances[]
 }
 
 model email_verification_tokens {
@@ -2359,11 +2394,11 @@ model workout_analytics {
 }
 
 model workout_log_entries {
-  id                                       String                  @id
+  id                                       String                   @id
   userId                                   String
   coachId                                  String?
   sessionId                                String?
-  date                                     DateTime                @db.Date
+  date                                     DateTime                 @db.Date
   exerciseId                               String
   order                                    String
   setNumber                                Int
@@ -2385,24 +2420,26 @@ model workout_log_entries {
   formQuality                              Int?
   nasmPrinciple                            String?
   movementPattern                          String?
-  personalRecord                           Boolean                 @default(false)
-  volumeRecord                             Boolean                 @default(false)
-  createdAt                                DateTime                @default(now())
+  personalRecord                           Boolean                  @default(false)
+  volumeRecord                             Boolean                  @default(false)
+  // Optional: mark warm-up sets for easier filtering in UI/analytics
+  isWarmup                                 Boolean                  @default(false)
+  createdAt                                DateTime                 @default(now())
   updatedAt                                DateTime
-  allowComments                            Boolean                 @default(true)
+  allowComments                            Boolean                  @default(true)
   teamWorkoutId                            String?
-  isTeamWorkout                            Boolean                 @default(false)
+  isTeamWorkout                            Boolean                  @default(false)
   workoutTitle                             String?
   workoutDescription                       String?
   instructionalVideoUrl                    String?
   instagramUrl                             String?
   tiktokUrl                                String?
   comments                                 comments[]
-  users_workout_log_entries_coachIdTousers users?                  @relation("workout_log_entries_coachIdTousers", fields: [coachId], references: [id])
-  exercises                                exercises               @relation(fields: [exerciseId], references: [id])
-  workout_sessions                         workout_sessions?       @relation(fields: [sessionId], references: [id])
-  users_workout_log_entries_userIdTousers  users                   @relation("workout_log_entries_userIdTousers", fields: [userId], references: [id])
-  team_workout_logs                        team_workout_logs?      @relation(fields: [teamWorkoutId], references: [id])
+  users_workout_log_entries_coachIdTousers users?                   @relation("workout_log_entries_coachIdTousers", fields: [coachId], references: [id])
+  exercises                                exercises                @relation(fields: [exerciseId], references: [id])
+  workout_sessions                         workout_sessions?        @relation(fields: [sessionId], references: [id])
+  users_workout_log_entries_userIdTousers  users                    @relation("workout_log_entries_userIdTousers", fields: [userId], references: [id])
+  team_workout_logs                        team_workout_logs?       @relation(fields: [teamWorkoutId], references: [id])
   entry_comments                           workout_entry_comments[]
   workout_entry_media                      workout_entry_media[]
 
@@ -2415,29 +2452,58 @@ model workout_log_entries {
 }
 
 // ===========================
+// Habit Tracking (weekly grid)
+// ===========================
+
+model habit_logs {
+  id               String   @id @default(uuid())
+  userId           String
+  date             DateTime @db.Date
+  weekNumber       Int
+  dayOfWeek        Int
+  sleepRating      Int?
+  stressRating     Int?
+  resistanceRating Int?
+  aerobicRating    Int?
+  calorieRating    Int?
+  proteinRating    Int?
+  vegetableRating  Int?
+  habit8Rating     Int?
+  weeklyScore      Int?
+  notes            String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  users users @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, weekNumber])
+}
+
+// ===========================
 // User Exercise Library
 // ===========================
 
 model user_exercises {
-  id            String   @id @default(uuid())
-  userId        String
+  id             String   @id @default(uuid())
+  userId         String
   baseExerciseId String? // references global exercises.id when forked
-  name          String
-  slug          String?
-  category      String
-  muscleGroups  String[] @default([])
-  equipment     String[] @default([])
-  instructions  String?
-  difficulty    String   @default("BEGINNER")
-  safetyNotes   String?
-  tags          String[] @default([])
-  visibility    String   @default("private") // private | followers | team | public
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime
+  name           String
+  slug           String?
+  category       String
+  muscleGroups   String[] @default([])
+  equipment      String[] @default([])
+  instructions   String?
+  difficulty     String   @default("BEGINNER")
+  safetyNotes    String?
+  tags           String[] @default([])
+  visibility     String   @default("private") // private | followers | team | public
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime
 
-  users         users    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  exercises     exercises? @relation(fields: [baseExerciseId], references: [id])
+  users          users            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercises      exercises?       @relation(fields: [baseExerciseId], references: [id])
   // Back-relations
   exercise_media exercise_media[]
 
@@ -2451,24 +2517,24 @@ model user_exercises {
 // ===========================
 
 model exercise_media {
-  id              String   @id @default(uuid())
-  userId          String
+  id               String   @id @default(uuid())
+  userId           String
   globalExerciseId String?
-  userExerciseId  String?
-  provider        String   // instagram | tiktok | youtube | upload | other
-  url             String
-  title           String?
-  thumbnailUrl    String?
-  durationSec     Int?
-  visibility      String   @default("private")
-  status          String   @default("pending") // pending | approved | rejected
-  featured        Boolean  @default(false)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime
+  userExerciseId   String?
+  provider         String // instagram | tiktok | youtube | upload | other
+  url              String
+  title            String?
+  thumbnailUrl     String?
+  durationSec      Int?
+  visibility       String   @default("private")
+  status           String   @default("pending") // pending | approved | rejected
+  featured         Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime
 
-  users           users    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  exercises       exercises? @relation(fields: [globalExerciseId], references: [id])
-  user_exercises  user_exercises? @relation(fields: [userExerciseId], references: [id])
+  users               users                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercises           exercises?            @relation(fields: [globalExerciseId], references: [id])
+  user_exercises      user_exercises?       @relation(fields: [userExerciseId], references: [id])
   workout_entry_media workout_entry_media[]
 
   @@index([userId, createdAt])
@@ -2478,10 +2544,10 @@ model exercise_media {
 }
 
 model workout_entry_media {
-  id        String               @id @default(uuid())
+  id        String   @id @default(uuid())
   entryId   String
   mediaId   String
-  createdAt DateTime             @default(now())
+  createdAt DateTime @default(now())
 
   workout_log_entries workout_log_entries @relation(fields: [entryId], references: [id], onDelete: Cascade)
   exercise_media      exercise_media      @relation(fields: [mediaId], references: [id], onDelete: Cascade)
@@ -2498,12 +2564,12 @@ model workout_entry_media {
 model user_points {
   id          String   @id @default(uuid())
   userId      String
-  source      String   // exercise_created | media_added | media_attached
+  source      String // exercise_created | media_added | media_attached
   points      Int      @default(1)
   description String?
   createdAt   DateTime @default(now())
 
-  users       users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  users users @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
 }
@@ -2523,10 +2589,10 @@ model workout_progress {
 }
 
 model workout_sessions {
-  id                                    String                   @id
+  id                                    String                     @id
   userId                                String
   coachId                               String?
-  date                                  DateTime                 @db.Date
+  date                                  DateTime                   @db.Date
   startTime                             DateTime
   endTime                               DateTime?
   duration                              Int?
@@ -2534,29 +2600,29 @@ model workout_sessions {
   notes                                 String?
   location                              String?
   totalVolume                           Float?
-  totalSets                             Int                      @default(0)
-  totalReps                             Int                      @default(0)
-  isComplete                            Boolean                  @default(false)
-  isTemplate                            Boolean                  @default(false)
+  totalSets                             Int                        @default(0)
+  totalReps                             Int                        @default(0)
+  isComplete                            Boolean                    @default(false)
+  isTemplate                            Boolean                    @default(false)
   assessmentId                          String?
   fitnessLevel                          String?
   primaryGoal                           String?
-  aiGenerated                           Boolean                  @default(false)
+  aiGenerated                           Boolean                    @default(false)
   aiRecommendations                     Json?
   aiConfidenceScore                     Float?
-  experiencePoints                      Int                      @default(0)
-  achievementsEarned                    String[]                 @default([])
+  experiencePoints                      Int                        @default(0)
+  achievementsEarned                    String[]                   @default([])
   performanceRating                     Int?
   sessionBehaviour                      String?
   effortLevel                           Int?
   sessionNotes                          String?
-  createdAt                             DateTime                 @default(now())
+  createdAt                             DateTime                   @default(now())
   updatedAt                             DateTime
   appointments                          appointments?
   workout_log_entries                   workout_log_entries[]
-  users_workout_sessions_coachIdTousers users?                   @relation("workout_sessions_coachIdTousers", fields: [coachId], references: [id])
-  users_workout_sessions_userIdTousers  users                    @relation("workout_sessions_userIdTousers", fields: [userId], references: [id])
-  assessments                           assessments?             @relation(fields: [assessmentId], references: [id])
+  users_workout_sessions_coachIdTousers users?                     @relation("workout_sessions_coachIdTousers", fields: [coachId], references: [id])
+  users_workout_sessions_userIdTousers  users                      @relation("workout_sessions_userIdTousers", fields: [userId], references: [id])
+  assessments                           assessments?               @relation(fields: [assessmentId], references: [id])
   session_comments                      workout_session_comments[]
 
   @@index([coachId, date])
@@ -2615,14 +2681,14 @@ model workout_templates {
 }
 
 model workout_entry_comments {
-  id              String              @id
-  userId          String
-  entryId         String
-  content         String              @db.Text
-  createdAt       DateTime            @default(now())
-  updatedAt       DateTime            @updatedAt
-  users           users               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  workout_entry   workout_log_entries @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  id            String              @id
+  userId        String
+  entryId       String
+  content       String              @db.Text
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  users         users               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workout_entry workout_log_entries @relation(fields: [entryId], references: [id], onDelete: Cascade)
 
   @@index([entryId, createdAt])
   @@index([userId])
@@ -2643,17 +2709,17 @@ model workout_session_comments {
 }
 
 model achievements {
-  id                  String                @id
-  code                String                @unique
-  name                String
-  description         String
-  category            String
-  tier                String
-  experiencePoints    Int
-  criteria            Json
-  iconColour          String
-  createdAt           DateTime              @default(now())
-  user_achievements   user_achievements[]
+  id                String              @id
+  code              String              @unique
+  name              String
+  description       String
+  category          String
+  tier              String
+  experiencePoints  Int
+  criteria          Json
+  iconColour        String
+  createdAt         DateTime            @default(now())
+  user_achievements user_achievements[]
 }
 
 model user_achievements {
@@ -2668,6 +2734,225 @@ model user_achievements {
   @@unique([userId, achievementId])
   @@index([userId])
   @@index([achievementId])
+}
+
+// ===========================
+// PERIODIZATION SYSTEM MODELS
+// ===========================
+
+model legendary_athletes {
+  id                 String            @id @default(uuid())
+  name               String            @unique
+  slug               String            @unique
+  eraLabel           String // "Golden Era Bodybuilding"
+  yearsActive        String // "1960s-1980s"
+  achievements       String[] // ["7x Mr. Olympia", "1975 Mr. Universe"]
+  bio                String            @db.Text
+  trainingPhilosophy String            @db.Text
+  imageUrl           String?
+  videoUrl           String?
+  nationality        String?
+  birthYear          Int?
+  discipline         AthleteDiscipline
+  isPremium          Boolean           @default(false)
+  displayOrder       Int               @default(999)
+  isActive           Boolean           @default(true)
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  program_templates       program_templates[]       @relation("AthleteProgramTemplates")
+  athlete_training_phases athlete_training_phases[]
+
+  @@index([discipline, displayOrder])
+  @@index([isActive, isPremium])
+}
+
+model program_phases {
+  id               String    @id @default(uuid())
+  programId        String
+  phaseNumber      Int
+  phaseName        String // "Hypertrophy", "Strength", "Power", "Deload"
+  phaseType        PhaseType
+  startWeek        Int
+  endWeek          Int
+  description      String?   @db.Text
+  trainingFocus    String? // "Volume", "Intensity", "Skill"
+  targetIntensity  String? // "60-70%", "75-85%", "85-95%"
+  targetVolume     String? // "High", "Medium", "Low"
+  targetRPE        Int?
+  repRangeLow      Int?
+  repRangeHigh     Int?
+  setsPerExercise  Int?
+  restSecondsMin   Int?
+  restSecondsMax   Int?
+  deloadPercentage Int? // 40 for deload phases
+
+  program_templates program_templates     @relation(fields: [programId], references: [id], onDelete: Cascade)
+  microcycles       program_microcycles[]
+
+  @@unique([programId, phaseNumber])
+  @@index([programId, startWeek, endWeek])
+}
+
+model program_microcycles {
+  id                String  @id @default(uuid())
+  phaseId           String
+  weekNumber        Int // Absolute week (1-16)
+  weekInPhase       Int // Week within phase (1-4)
+  title             String?
+  description       String? @db.Text
+  volumeModifier    Float   @default(1.0) // 1.0 = 100%, 0.9 = 90%
+  intensityModifier Float   @default(1.0)
+
+  program_phases program_phases     @relation(fields: [phaseId], references: [id], onDelete: Cascade)
+  workouts       program_workouts[]
+
+  @@unique([phaseId, weekNumber])
+  @@index([phaseId, weekInPhase])
+}
+
+model program_workouts {
+  id                String  @id @default(uuid())
+  microcycleId      String
+  dayNumber         Int // 1-7
+  dayLabel          String // "Upper Power", "Lower Hypertrophy"
+  workoutType       String? // "PUSH", "PULL", "LEGS", "UPPER", "LOWER", "FULLBODY"
+  description       String? @db.Text
+  estimatedDuration Int? // Minutes
+
+  program_microcycles  program_microcycles         @relation(fields: [microcycleId], references: [id], onDelete: Cascade)
+  workout_exercises    program_workout_exercises[]
+  workout_performances workout_performances[]
+
+  @@unique([microcycleId, dayNumber])
+  @@index([microcycleId])
+}
+
+model exercise_slots {
+  id                   String           @id @default(uuid())
+  programId            String
+  slotNumber           Int
+  slotLabel            String // "Horizontal Push (Compound)"
+  exerciseType         ExerciseSlotType
+  movementPattern      MovementPattern?
+  muscleTargets        String[]
+  equipmentOptions     String[]
+  requiresSpotter      Boolean          @default(false)
+  difficultyMin        String?
+  suggestedExerciseIds String[] // Array of exercise IDs
+  description          String?          @db.Text
+  isRequired           Boolean          @default(true)
+
+  program_templates         program_templates           @relation(fields: [programId], references: [id], onDelete: Cascade)
+  user_exercise_selections  user_exercise_selections[]
+  program_workout_exercises program_workout_exercises[]
+
+  @@unique([programId, slotNumber])
+  @@index([programId])
+}
+
+model user_exercise_selections {
+  id             String   @id @default(uuid())
+  userId         String
+  subscriptionId String
+  slotId         String
+  exerciseId     String
+  createdAt      DateTime @default(now())
+
+  users                 users                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  program_subscriptions program_subscriptions @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  exercise_slots        exercise_slots        @relation(fields: [slotId], references: [id], onDelete: Cascade)
+  exercises             exercises             @relation(fields: [exerciseId], references: [id])
+
+  @@unique([subscriptionId, slotId])
+  @@index([userId, subscriptionId])
+}
+
+model program_workout_exercises {
+  id            String @id @default(uuid())
+  workoutId     String
+  exerciseOrder Int
+
+  // EITHER: Exercise Slot (user fills) OR Fixed Exercise (athlete program)
+  slotId          String?
+  fixedExerciseId String?
+
+  // Programming parameters
+  sets            Int
+  repsMin         Int?
+  repsMax         Int?
+  targetRPE       Int?
+  targetIntensity String? // "70%", "8 RPE"
+  restSeconds     Int?
+  tempo           String? // "3010" (eccentric-pause-concentric-pause)
+  notes           String? @db.Text
+
+  // Athlete-specific
+  intensityTechniques IntensityTechnique[]
+  supersetWith        String? // exerciseId for superset partner
+
+  program_workouts program_workouts @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  exercise_slots   exercise_slots?  @relation(fields: [slotId], references: [id])
+  exercises        exercises?       @relation(fields: [fixedExerciseId], references: [id])
+
+  @@unique([workoutId, exerciseOrder])
+  @@index([workoutId])
+}
+
+model athlete_training_phases {
+  id                 String   @id @default(uuid())
+  athleteId          String
+  phaseName          String // "Golden Six", "Blueprint to Mass"
+  era                String // "1960s Beginner", "1970s Competition"
+  description        String   @db.Text
+  trainingPhilosophy String   @db.Text
+  durationWeeks      Int
+  frequency          Int // Days per week
+  volumeLevel        String // "HIGH", "MEDIUM", "LOW"
+  intensityLevel     String
+  nutrition          Json? // {calories: 5000, protein: 300}
+  keyPrinciples      String[]
+  famousQuotes       String[]
+  imageUrl           String?
+  displayOrder       Int      @default(999)
+
+  legendary_athletes legendary_athletes @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+
+  @@index([athleteId, displayOrder])
+}
+
+model intensity_techniques_library {
+  id             String   @id @default(uuid())
+  code           String   @unique // "DROP_SET"
+  name           String // "Drop Sets"
+  description    String   @db.Text
+  instructions   String   @db.Text
+  videoUrl       String?
+  difficulty     String // "BEGINNER", "INTERMEDIATE", "ADVANCED"
+  muscleStimulus String // "HYPERTROPHY", "STRENGTH", "ENDURANCE"
+  famousUsers    String[] // ["Ronnie Coleman", "Dorian Yates"]
+  safetyNotes    String?  @db.Text
+
+  @@index([difficulty])
+}
+
+model workout_performances {
+  id                String   @id @default(uuid())
+  subscriptionId    String
+  workoutId         String
+  userId            String
+  completedAt       DateTime @default(now())
+  duration          Int? // Minutes
+  performanceRating Int? // 1-5 stars
+  adherence         Float? // 0.0-1.0 (% of prescribed volume)
+  notes             String?  @db.Text
+
+  program_subscriptions program_subscriptions @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  program_workouts      program_workouts      @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  users                 users                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([subscriptionId, completedAt])
+  @@index([userId, completedAt])
 }
 
 enum AchievementType {
@@ -3090,4 +3375,83 @@ enum ViolationType {
 enum WeightUnit {
   KG
   LB
+}
+
+// ===========================
+// PERIODIZATION SYSTEM ENUMS
+// ===========================
+
+enum ProgramType {
+  PERIODIZATION // User-customizable templates with exercise slots
+  ATHLETE // Fixed historical programs from legendary athletes
+  HYBRID // Athlete program with swappable exercises
+  CUSTOM // User-created programs
+}
+
+enum ProgressionStrategy {
+  LINEAR // Add fixed weight each week
+  BLOCK // Block periodization (accumulation/intensification/realization)
+  DUP // Daily Undulating Periodization
+  WAVE // Wave loading
+  AUTOREGULATED // RPE/RIR based progression
+  CUSTOM // Custom progression rules
+}
+
+enum PhaseType {
+  ACCUMULATION // Volume focus, build work capacity
+  INTENSIFICATION // Intensity focus, heavy loads
+  REALIZATION // Peak performance, competition prep
+  DELOAD // Recovery week
+  HYPERTROPHY // Muscle building phase
+  STRENGTH // Maximal strength phase
+  POWER // Power development phase
+  ENDURANCE // Muscular endurance phase
+}
+
+enum ExerciseSlotType {
+  COMPOUND // Multi-joint movements
+  ISOLATION // Single-joint movements
+  ACCESSORY // Supplementary work
+  OPTIONAL // User can skip
+}
+
+enum MovementPattern {
+  HORIZONTAL_PUSH // Bench press, push-ups
+  VERTICAL_PUSH // Overhead press
+  HORIZONTAL_PULL // Rows
+  VERTICAL_PULL // Pull-ups, lat pulldowns
+  SQUAT_PATTERN // Squats, leg press
+  HINGE_PATTERN // Deadlifts, RDLs
+  LUNGE_PATTERN // Lunges, split squats
+  CARRY // Farmer's walks, loaded carries
+  ROTATION // Rotational core work
+  ANTIROTATION // Pallof press, dead bugs
+}
+
+enum AthleteDiscipline {
+  BODYBUILDING
+  POWERLIFTING
+  WEIGHTLIFTING
+  CROSSFIT
+  STRONGMAN
+  PHYSIQUE
+  FITNESS
+}
+
+enum IntensityTechnique {
+  DROP_SET // Reduce weight and continue
+  REST_PAUSE // Brief rest then continue set
+  FORCED_REPS // Partner assists past failure
+  NEGATIVES // Slow eccentric with assistance
+  SUPERSET // Two exercises back-to-back
+  GIANT_SET // 4+ exercises back-to-back
+  CLUSTER_SET // Mini-rests within a set
+  TEMPO // Controlled tempo variations
+  PAUSE_REPS // Pause at bottom/top
+  PARTIAL_REPS // Partial range of motion
+  PRE_EXHAUST // Isolation before compound
+  POST_EXHAUST // Isolation after compound
+  STRIP_SET // Progressive weight reduction
+  PYRAMID // Ascending or descending weight
+  TWENTYONES // 7+7+7 rep scheme
 }
