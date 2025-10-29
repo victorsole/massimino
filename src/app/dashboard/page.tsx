@@ -891,8 +891,8 @@ function DashboardContent() {
         </Card>
       )}
 
-      {/* My Athletes Section for Verified Trainers */}
-      {userRole === 'TRAINER' && session?.user?.trainerVerified && (
+      {/* My Athletes Section for Verified Trainers and Admins */}
+      {((userRole === 'TRAINER' && session?.user?.trainerVerified) || userRole === 'ADMIN') && (
         <div className="mt-8">
           <MyAthletesDashboardSection />
         </div>
