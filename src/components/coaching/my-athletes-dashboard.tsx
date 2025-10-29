@@ -10,6 +10,8 @@ import { PendingRequests } from './pending-requests';
 import { InviteAthleteModal } from './invite-athlete-modal';
 import { CreateSessionModal } from './create-session-modal';
 import { AthleteProgressModal } from './athlete-progress-modal';
+import { AthleteChatModal } from './athlete-chat-modal';
+import { AssignProgramModal } from './assign-program-modal';
 import { TeamAssignment } from './team-assignment';
 import { TrainerMassichatInterface } from '@/components/massichat/trainer-massichat-interface';
 
@@ -24,6 +26,8 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [showCreateSessionModal, setShowCreateSessionModal] = useState(false);
   const [showProgressModal, setShowProgressModal] = useState(false);
+  const [showChatModal, setShowChatModal] = useState(false);
+  const [showAssignProgramModal, setShowAssignProgramModal] = useState(false);
   const [selectedAthleteId, setSelectedAthleteId] = useState<string>('');
   const [selectedAthleteName, setSelectedAthleteName] = useState<string>('');
 
@@ -140,8 +144,17 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
   };
 
   const handleMessage = (athleteId: string) => {
-    // TODO: Open messaging
-    console.log('Message athlete:', athleteId);
+    const athlete = data?.withProfile?.find((a: any) => a.clientId === athleteId);
+    setSelectedAthleteId(athleteId);
+    setSelectedAthleteName(athlete?.client?.name || athlete?.client?.email || 'Athlete');
+    setShowChatModal(true);
+  };
+
+  const handleAssignProgram = (athleteId: string) => {
+    const athlete = data?.withProfile?.find((a: any) => a.clientId === athleteId);
+    setSelectedAthleteId(athleteId);
+    setSelectedAthleteName(athlete?.client?.name || athlete?.client?.email || 'Athlete');
+    setShowAssignProgramModal(true);
   };
 
   if (loading) {
@@ -267,6 +280,7 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
               onViewProgress={handleViewProgress}
               onCreateSession={handleCreateSession}
               onMessage={handleMessage}
+              onAssignProgram={handleAssignProgram}
             />
           )}
           {activeTab === 'invited' && (
@@ -330,6 +344,31 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
           setShowProgressModal(false);
           setSelectedAthleteId('');
           setSelectedAthleteName('');
+        }}
+        athleteId={selectedAthleteId}
+        athleteName={selectedAthleteName}
+      />
+
+      <AthleteChatModal
+        isOpen={showChatModal}
+        onClose={() => {
+          setShowChatModal(false);
+          setSelectedAthleteId('');
+          setSelectedAthleteName('');
+        }}
+        athleteId={selectedAthleteId}
+        athleteName={selectedAthleteName}
+      />
+
+      <AssignProgramModal
+        isOpen={showAssignProgramModal}
+        onClose={() => {
+          setShowAssignProgramModal(false);
+          setSelectedAthleteId('');
+          setSelectedAthleteName('');
+        }}
+        onSuccess={() => {
+          fetchData();
         }}
         athleteId={selectedAthleteId}
         athleteName={selectedAthleteName}

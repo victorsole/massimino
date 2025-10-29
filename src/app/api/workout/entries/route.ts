@@ -21,6 +21,58 @@ import {
 } from '@/core/utils/workout-validation';
 import { UserRole } from '@prisma/client';
 import { prisma } from '@/core/database';
+import { nanoid } from 'nanoid';
+import { sendEmail } from '@/services/email/email_service';
+
+// Helper function to notify trainer of workout completion
+async function notifyTrainerOfWorkoutCompletion(entry: any, coachId: string, userId: string) {
+  try {
+    // Get user and exercise details
+    const user = await prisma.users.findUnique({
+      where: { id: userId },
+      select: { name: true, email: true },
+    });
+
+    const exercise = await prisma.exercises.findUnique({
+      where: { id: entry.exerciseId },
+      select: { name: true },
+    });
+
+    const trainer = await prisma.users.findUnique({
+      where: { id: coachId },
+      select: { name: true, email: true },
+    });
+
+    if (!user || !exercise || !trainer) return;
+
+    const athleteName = user.name || user.email;
+    const exerciseName = exercise.name;
+
+    // Create push notification
+    await prisma.push_notifications.create({
+      data: {
+        id: nanoid(),
+        userId: coachId,
+        type: 'PROGRESS_UPDATE',
+        title: 'Workout Completed',
+        body: `${athleteName} completed ${exerciseName} - ${entry.reps} reps @ ${entry.weight}${entry.unit === 'KG' ? 'kg' : 'lbs'}`,
+        status: 'PENDING',
+        createdAt: new Date(),
+      },
+    });
+
+    // Send email notification
+    if (trainer.email) {
+      await sendEmail({
+        to: trainer.email,
+        subject: `${athleteName} completed a workout on Massimino`,
+        text: `Your athlete ${athleteName} just completed a workout:\n\nExercise: ${exerciseName}\nSet ${entry.setNumber}: ${entry.reps} reps @ ${entry.weight}${entry.unit === 'KG' ? 'kg' : 'lbs'}\n\nLog in to view their progress: ${process.env.NEXTAUTH_URL}/my-athletes`,
+      }).catch((err) => console.error('Failed to send workout completion email:', err));
+    }
+  } catch (error) {
+    console.error('Error notifying trainer of workout completion:', error);
+  }
+}
 
 // Helper function to check and award first workout bonus
 async function checkFirstWorkoutBonus(userId: string) {
@@ -285,6 +337,11 @@ export async function POST(request: NextRequest) {
         createdEntries.push(entry);
 
         await checkFirstWorkoutBonus(targetUserId);
+
+        // Notify trainer if this is a trainer-assigned workout
+        if (coachId && targetUserId !== coachId) {
+          await notifyTrainerOfWorkoutCompletion(entry, coachId, targetUserId);
+        }
       } catch (error) {
         console.error('Error creating workout entry:', error);
         errors.push({
