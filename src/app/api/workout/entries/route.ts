@@ -238,8 +238,8 @@ export async function POST(request: NextRequest) {
     const { sessionId: _sessionId, entries } = validatedRequest;
 
     // Create workout entries
-    const createdEntries = [];
-    const errors = [];
+    const createdEntries: any[] = [];
+    const errors: any[] = [];
 
     for (const entryData of entries) {
       try {

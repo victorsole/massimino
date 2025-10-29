@@ -2724,7 +2724,7 @@ export async function getPrivacyControlledLeaderboard(params: {
   // Calculate timeframe dates
   const timeframeDates = calculateTimeframeRange(params.timeframe || 'all_time');
 
-  let leaderboardData = [];
+  let leaderboardData: any[] = [];
   let total = 0;
 
   switch (params.type) {

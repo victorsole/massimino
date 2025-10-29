@@ -4,11 +4,20 @@ export interface UserContext {
   userProfile: string
   assessmentSummary: string
   workoutHistory: string
+  activeProgramsSummary?: string
 }
 
-export async function buildUserContext(userId: string, opts?: { focusAssessmentIds?: string[] }): Promise<UserContext> {
+export interface AthleteContext extends UserContext {
+  athleteId: string
+  athleteName: string
+  trainerRelationship: string
+}
+
+export async function buildUserContext(userId: string, opts?: { focusAssessmentIds?: string[]; includePrograms?: boolean }): Promise<UserContext> {
   const focusIds = opts?.focusAssessmentIds?.filter(Boolean)
-  const [user, assessments, recentWorkouts] = await Promise.all([
+  const includePrograms = opts?.includePrograms ?? true
+
+  const [user, assessments, recentWorkouts, activePrograms] = await Promise.all([
     prisma.users.findUnique({
       where: { id: userId },
       select: {
@@ -39,13 +48,104 @@ export async function buildUserContext(userId: string, opts?: { focusAssessmentI
       orderBy: { date: 'desc' },
       take: 10,
     }),
+    includePrograms
+      ? prisma.program_subscriptions.findMany({
+          where: { userId, isActive: true },
+          include: {
+            program_templates: {
+              select: {
+                name: true,
+                difficulty: true,
+                category: true,
+              },
+            },
+          },
+          orderBy: { startDate: 'desc' },
+        })
+      : Promise.resolve([]),
   ])
 
   const userProfile = formatUserProfile(user as any)
   const assessmentSummary = summarizeAssessments(assessments as any[])
   const workoutHistory = summarizeWorkouts(recentWorkouts as any[])
+  const activeProgramsSummary = includePrograms ? summarizePrograms(activePrograms as any[]) : undefined
 
-  return { userProfile, assessmentSummary, workoutHistory }
+  return { userProfile, assessmentSummary, workoutHistory, activeProgramsSummary }
+}
+
+/**
+ * Build context for a specific athlete (for trainer use)
+ * Verifies trainer has access to this athlete
+ */
+export async function buildAthleteContextForTrainer(
+  trainerId: string,
+  athleteId: string,
+  opts?: { focusAssessmentIds?: string[] }
+): Promise<AthleteContext | null> {
+  // Verify trainer-athlete relationship
+  const relationship = await prisma.trainer_clients.findFirst({
+    where: {
+      trainerId,
+      clientId: athleteId,
+      status: 'ACTIVE',
+    },
+    select: {
+      startDate: true,
+      users: {
+        select: {
+          name: true,
+          email: true,
+        },
+      },
+    },
+  })
+
+  if (!relationship) {
+    return null // Trainer doesn't have access to this athlete
+  }
+
+  // Build full context for athlete
+  const baseContext = await buildUserContext(athleteId, { ...opts, includePrograms: true })
+
+  const relationshipDuration = relationship.startDate
+    ? Math.floor((Date.now() - new Date(relationship.startDate).getTime()) / (1000 * 60 * 60 * 24))
+    : 0
+
+  return {
+    ...baseContext,
+    athleteId,
+    athleteName: relationship.users.name || relationship.users.email,
+    trainerRelationship: `Training together for ${relationshipDuration} days`,
+  }
+}
+
+/**
+ * Get list of all athletes for a trainer
+ */
+export async function getTrainerAthletesList(trainerId: string): Promise<Array<{ id: string; name: string; email: string; startDate: Date }>> {
+  const relationships = await prisma.trainer_clients.findMany({
+    where: {
+      trainerId,
+      status: 'ACTIVE',
+    },
+    include: {
+      users: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+    },
+    orderBy: { startDate: 'desc' },
+  })
+
+  return relationships.map(rel => ({
+    id: rel.users.id,
+    name: rel.users.name || rel.users.email,
+    email: rel.users.email,
+    startDate: rel.startDate,
+  }))
 }
 
 function formatUserProfile(user: any): string {
@@ -85,6 +185,22 @@ function summarizeWorkouts(entries: any[]): string {
   for (const e of entries) {
     const when = new Date(e.date).toISOString().split('T')[0]
     lines.push(`- ${when} • ${e.exercises?.name || 'Exercise'} • sets#${e.setNumber} • reps ${e.reps}`)
+  }
+  return lines.join('\n')
+}
+
+function summarizePrograms(programs: any[]): string {
+  if (!programs?.length) return 'No active programs.'
+  const lines: string[] = ['Active Programs:']
+  for (const p of programs) {
+    const template = p.program_templates
+    const progress = `Week ${p.currentWeek}, Day ${p.currentDay}`
+    lines.push(`- ${template?.name || 'Program'} (${template?.difficulty || 'N/A'}) • ${progress}`)
+    if (template?.category) lines.push(`  Category: ${template.category}`)
+    if (p.startDate) {
+      const daysActive = Math.floor((Date.now() - new Date(p.startDate).getTime()) / (1000 * 60 * 60 * 24))
+      lines.push(`  Started ${daysActive} days ago`)
+    }
   }
   return lines.join('\n')
 }

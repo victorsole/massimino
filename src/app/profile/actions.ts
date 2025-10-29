@@ -574,7 +574,7 @@ export async function uploadMediaAction(formData: FormData): Promise<{ success: 
     }
 
     // Content moderation for caption if provided
-    let moderationResult = null
+    let moderationResult: any = null
     if (caption) {
       moderationResult = await moderateContent(caption)
 

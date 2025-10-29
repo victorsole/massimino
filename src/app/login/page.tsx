@@ -36,8 +36,8 @@ function LoginContent() {
 
   useEffect(() => {
     // Handle URL params for success/error messages
-    const successParam = searchParams.get('success');
-    const errorParam = searchParams.get('error');
+    const successParam = searchParams?.get('success');
+    const errorParam = searchParams?.get('error');
 
     if (successParam === 'email-verified') {
       setSuccess('Email verified successfully! You can now sign in.');

@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { metrics, timestamp } = syncHealthDataSchema.parse(body);
 
-    const createdMetrics = [];
+    const createdMetrics: any[] = [];
 
     // Process each health metric
     for (const metric of metrics) {

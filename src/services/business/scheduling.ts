@@ -647,7 +647,7 @@ function generateTimeSlots(
   slotDuration: number,
   existingAppointments: { id: string; scheduledAt: Date; duration: number; type: AppointmentType }[]
 ): { time: string; available: boolean; appointmentId?: string; type?: AppointmentType }[] {
-  const slots = [];
+  const slots: { time: string; available: boolean; appointmentId?: string; type?: AppointmentType }[] = [];
   const [startHour, startMinute] = startTime.split(':').map(Number) as [number, number];
   const [endHour, endMinute] = endTime.split(':').map(Number) as [number, number];
 
