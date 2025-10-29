@@ -8,7 +8,10 @@ import { AthletesList } from './athletes-list';
 import { PreProfileList } from './pre-profile-list';
 import { PendingRequests } from './pending-requests';
 import { InviteAthleteModal } from './invite-athlete-modal';
+import { CreateSessionModal } from './create-session-modal';
+import { AthleteProgressModal } from './athlete-progress-modal';
 import { TeamAssignment } from './team-assignment';
+import { TrainerMassichatInterface } from '@/components/massichat/trainer-massichat-interface';
 
 interface MyAthletesDashboardProps {
   userId: string;
@@ -19,6 +22,10 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const [showCreateSessionModal, setShowCreateSessionModal] = useState(false);
+  const [showProgressModal, setShowProgressModal] = useState(false);
+  const [selectedAthleteId, setSelectedAthleteId] = useState<string>('');
+  const [selectedAthleteName, setSelectedAthleteName] = useState<string>('');
 
   const fetchData = async () => {
     try {
@@ -121,13 +128,15 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
   };
 
   const handleViewProgress = (athleteId: string) => {
-    // TODO: Open progress modal or navigate to progress page
-    console.log('View progress for:', athleteId);
+    const athlete = data?.withProfile?.find((a: any) => a.clientId === athleteId);
+    setSelectedAthleteId(athleteId);
+    setSelectedAthleteName(athlete?.client?.name || athlete?.client?.email || 'Athlete');
+    setShowProgressModal(true);
   };
 
   const handleCreateSession = (athleteId: string) => {
-    // TODO: Open create session modal
-    console.log('Create session for:', athleteId);
+    setSelectedAthleteId(athleteId);
+    setShowCreateSessionModal(true);
   };
 
   const handleMessage = (athleteId: string) => {
@@ -277,6 +286,13 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
         </CardContent>
       </Card>
 
+      {/* AI Workout Planner Section */}
+      {stats.activeAthletes > 0 && (
+        <div className="mt-8">
+          <TrainerMassichatInterface trainerId={userId} />
+        </div>
+      )}
+
       {/* Team Assignment Section */}
       {stats.activeAthletes > 0 && (
         <div className="mt-8">
@@ -294,6 +310,29 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
         isOpen={showInviteModal}
         onClose={() => setShowInviteModal(false)}
         onInvite={handleInviteAthlete}
+      />
+
+      <CreateSessionModal
+        isOpen={showCreateSessionModal}
+        onClose={() => {
+          setShowCreateSessionModal(false);
+          setSelectedAthleteId('');
+        }}
+        onSuccess={() => {
+          fetchData();
+        }}
+        preselectedAthleteId={selectedAthleteId}
+      />
+
+      <AthleteProgressModal
+        isOpen={showProgressModal}
+        onClose={() => {
+          setShowProgressModal(false);
+          setSelectedAthleteId('');
+          setSelectedAthleteName('');
+        }}
+        athleteId={selectedAthleteId}
+        athleteName={selectedAthleteName}
       />
     </div>
   );

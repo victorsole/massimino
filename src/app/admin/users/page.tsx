@@ -361,7 +361,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
     console.error('Error fetching top performer:', error)
   }
 
-  let topPerformerInfo = null
+  let topPerformerInfo: { name: string; email: string; points: number } | null = null
   if (topPerformer.length > 0) {
     const topTrainer = await prisma.users.findUnique({
       where: { id: topPerformer[0]!.trainerId },

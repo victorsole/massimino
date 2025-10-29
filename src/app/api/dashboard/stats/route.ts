@@ -180,7 +180,7 @@ export async function GET() {
       take: 1
     })
 
-    let favoriteExercise = null
+    let favoriteExercise: { name: string; count: number } | null = null
     if (exerciseUsage.length > 0) {
       const exercise = await prisma.exercises.findUnique({
         where: { id: exerciseUsage[0]!.exerciseId },
@@ -234,7 +234,7 @@ export async function GET() {
     }
 
     // Get weekly workout count for the last 4 weeks
-    const weeklyStats = []
+    const weeklyStats: Array<{ week: string; count: number }> = []
     for (let i = 0; i < 4; i++) {
       const weekStart = new Date(startOfWeek)
       weekStart.setDate(startOfWeek.getDate() - (i * 7))
@@ -354,8 +354,8 @@ export async function GET() {
     }
 
     // If user is a trainer, get business stats and points data
-    let trainerStats = null;
-    let trainerPointsStats = null;
+    let trainerStats: { totalClients: number; activeClients: number; totalEarnings: number; monthlyEarnings: number; averageRating: number; totalReviews: number; upcomingAppointments: number; newClientsThisMonth: number; pendingReports: number } | null = null;
+    let trainerPointsStats: any = null;
     if (user?.role === UserRole.TRAINER) {
       // Get trainer profile
       const trainerProfile = await prisma.trainer_profiles.findUnique({

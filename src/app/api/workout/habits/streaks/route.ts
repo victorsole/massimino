@@ -25,7 +25,7 @@ export async function GET(_request: NextRequest) {
     let prevDate: Date | null = null;
 
     for (const log of logs) {
-      const score = [
+      const score = ([
         log.sleepRating,
         log.stressRating,
         log.resistanceRating,
@@ -34,7 +34,7 @@ export async function GET(_request: NextRequest) {
         log.proteinRating,
         log.vegetableRating,
         log.habit8Rating,
-      ].reduce((sum, v) => sum + (v ?? 0), 0);
+      ].reduce((sum: number, v) => sum + (v ?? 0), 0)) as number;
 
       if (score <= 0) break; // streak ends if zero for the most recent day
 

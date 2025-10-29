@@ -545,7 +545,7 @@ async function handleGetLeaderboard(challengeId: string, request: Request, sessi
   }
 
   // Check access permissions
-  let userParticipation = null;
+  let userParticipation: { status: any; rank: number | null } | null = null;
   if (session?.user?.id) {
     userParticipation = await prisma.challenge_participants.findUnique({
       where: { challengeId_userId: { challengeId, userId: session.user.id } },
@@ -586,7 +586,7 @@ async function handleGetLeaderboard(challengeId: string, request: Request, sessi
     isCurrentUser: entry.users.id === session?.user?.id
   }));
 
-  let userPosition = null;
+  let userPosition: { rank: number; totalParticipants: number } | null = null;
   if (userParticipation?.rank) {
     userPosition = {
       rank: userParticipation.rank,

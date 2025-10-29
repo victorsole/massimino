@@ -1,0 +1,267 @@
+{
+    "sweat_loss_calculator": {
+      "name": "Sweat Loss Calculator",
+      "description": "Calculate fluid loss during exercise to optimize hydration strategy",
+      "purpose": "Determine sweat rate for personalized hydration planning",
+      "formula": {
+        "calculation": "initial_weight - post_weight + fluid_consumption - urine_volume",
+        "result_unit": "kg (L)",
+        "explanation": "Total sweat loss accounts for starting weight, ending weight, fluids consumed during activity, and any urine output"
+      },
+      "input_fields": [
+        {
+          "field_name": "initial_weight",
+          "label": "Initial Weight",
+          "description": "Body weight before exercise session",
+          "unit": "kg",
+          "required": true,
+          "validation": {
+            "min": 30,
+            "max": 300,
+            "type": "number"
+          }
+        },
+        {
+          "field_name": "post_weight",
+          "label": "Post Weight",
+          "description": "Body weight after exercise session",
+          "unit": "kg",
+          "required": true,
+          "validation": {
+            "min": 30,
+            "max": 300,
+            "type": "number"
+          }
+        },
+        {
+          "field_name": "fluid_consumption",
+          "label": "Fluid Consumption Between Weigh-ins",
+          "description": "Total volume of fluids consumed during the exercise session",
+          "unit": "kg",
+          "required": true,
+          "default": 0,
+          "validation": {
+            "min": 0,
+            "max": 10,
+            "type": "number"
+          }
+        },
+        {
+          "field_name": "urine_volume",
+          "label": "Urine Volume",
+          "description": "Volume of urine output during the exercise session (if any)",
+          "unit": "kg",
+          "required": true,
+          "default": 0,
+          "validation": {
+            "min": 0,
+            "max": 5,
+            "type": "number"
+          }
+        }
+      ],
+      "output": {
+        "field_name": "sweat_loss_volume",
+        "label": "Sweat Loss Volume",
+        "unit": "kg (L)",
+        "interpretation": {
+          "low": {
+            "range": "< 0.5",
+            "description": "Low sweat rate",
+            "recommendation": "Monitor hydration but current intake likely adequate"
+          },
+          "moderate": {
+            "range": "0.5 - 1.5",
+            "description": "Moderate sweat rate",
+            "recommendation": "Ensure regular fluid intake during exercise, aim for 400-800ml per hour"
+          },
+          "high": {
+            "range": "1.5 - 2.5",
+            "description": "High sweat rate",
+            "recommendation": "Prioritize hydration strategy, consume 600-1000ml per hour, consider electrolyte replacement"
+          },
+          "very_high": {
+            "range": "> 2.5",
+            "description": "Very high sweat rate",
+            "recommendation": "Implement comprehensive hydration plan with electrolyte supplementation, monitor for signs of dehydration"
+          }
+        }
+      },
+      "usage_guidelines": {
+        "when_to_measure": [
+          "Before and after intense training sessions",
+          "During different weather conditions (hot, humid, cold)",
+          "During different types of workouts (cardio, strength, HIIT)",
+          "At various training intensities"
+        ],
+        "best_practices": [
+          "Weigh yourself naked or in minimal clothing for accuracy",
+          "Use the same scale for both measurements",
+          "Empty bladder before initial weigh-in if possible",
+          "Towel off excess moisture before post-workout weigh-in",
+          "Track fluid intake accurately (measure bottles/containers)",
+          "Perform multiple tests to establish patterns",
+          "Test in conditions similar to your typical training environment"
+        ],
+        "hydration_strategy": {
+          "general_rule": "Aim to replace 100-150% of sweat losses in the hours after exercise",
+          "during_exercise": "Replace 60-80% of sweat losses during prolonged activity (>60 minutes)",
+          "considerations": [
+            "Individual sweat rates vary significantly",
+            "Electrolyte needs increase with higher sweat rates",
+            "Sweat sodium concentration varies (salty sweaters need more electrolytes)",
+            "Acclimatization affects sweat rate and composition"
+          ]
+        }
+      },
+      "example_calculation": {
+        "scenario": "90-minute intense training session",
+        "inputs": {
+          "initial_weight": 75.5,
+          "post_weight": 73.8,
+          "fluid_consumption": 0.8,
+          "urine_volume": 0.2
+        },
+        "calculation_steps": {
+          "weight_loss": "75.5 - 73.8 = 1.7 kg",
+          "fluid_additions": "1.7 + 0.8 = 2.5 kg",
+          "fluid_subtractions": "2.5 - 0.2 = 2.3 kg",
+          "result": "2.3 kg (L) sweat loss"
+        },
+        "result": {
+          "sweat_loss_volume": 2.3,
+          "sweat_rate_per_hour": 1.53,
+          "interpretation": "High sweat rate",
+          "recommendation": "Aim to consume 900-1200ml of fluid per hour during similar training sessions. Consider electrolyte supplementation."
+        }
+      }
+    },
+    "tracking_template": {
+      "session_log": [
+        {
+          "session_id": "example_001",
+          "date": "2025-10-28",
+          "time": "06:00",
+          "duration_minutes": 90,
+          "workout_type": "High-Intensity Training",
+          "temperature": 24,
+          "temperature_unit": "celsius",
+          "humidity": 65,
+          "humidity_unit": "percent",
+          "measurements": {
+            "initial_weight": 75.5,
+            "post_weight": 73.8,
+            "fluid_consumption": 0.8,
+            "urine_volume": 0.2,
+            "sweat_loss_volume": 2.3,
+            "sweat_rate_per_hour": 1.53
+          },
+          "notes": "Hot and humid conditions, felt very thirsty during workout",
+          "hydration_adequacy": "Underhydrated - should have consumed more fluids during session"
+        }
+      ]
+    },
+    "integration_features": {
+      "massimino_integration": {
+        "workout_log_connection": "Link sweat loss data to specific workout sessions",
+        "trend_analysis": "Track sweat rate changes over time and across workout types",
+        "personalized_recommendations": "Generate hydration plans based on historical sweat rate data",
+        "weather_integration": "Correlate sweat rates with temperature and humidity data",
+        "notifications": "Remind users to track sweat loss after intense sessions",
+        "trainer_features": "Trainers can monitor client hydration patterns and provide guidance"
+      },
+      "advanced_metrics": {
+        "sweat_rate_per_hour": {
+          "formula": "sweat_loss_volume / (duration_minutes / 60)",
+          "unit": "L/hour",
+          "purpose": "Standardize sweat loss across different workout durations"
+        },
+        "fluid_replacement_percentage": {
+          "formula": "(fluid_consumption / sweat_loss_volume) * 100",
+          "unit": "percent",
+          "purpose": "Assess how well hydration matched sweat losses"
+        },
+        "net_fluid_balance": {
+          "formula": "fluid_consumption - sweat_loss_volume - urine_volume",
+          "unit": "L",
+          "purpose": "Determine overall hydration status change"
+        }
+      }
+    },
+    "ui_components": {
+      "input_form": {
+        "layout": "vertical",
+        "sections": [
+          {
+            "section_name": "Pre-Workout",
+            "fields": ["initial_weight"]
+          },
+          {
+            "section_name": "Post-Workout",
+            "fields": ["post_weight"]
+          },
+          {
+            "section_name": "During Workout",
+            "fields": ["fluid_consumption", "urine_volume"]
+          }
+        ],
+        "submit_button_text": "Calculate Sweat Loss",
+        "clear_button_text": "Reset"
+      },
+      "results_display": {
+        "primary_result": {
+          "label": "Total Sweat Loss",
+          "format": "{value} kg (L)",
+          "style": "large_bold"
+        },
+        "secondary_metrics": [
+          {
+            "label": "Sweat Rate",
+            "format": "{value} L/hour",
+            "conditional_display": "if duration is provided"
+          },
+          {
+            "label": "Fluid Replacement",
+            "format": "{value}%",
+            "color_coding": {
+              "< 50": "red",
+              "50-80": "yellow",
+              "> 80": "green"
+            }
+          }
+        ],
+        "recommendation_card": {
+          "title": "Your Hydration Strategy",
+          "content": "Dynamic text based on sweat_loss_volume",
+          "action_button": "Save to My Plan"
+        }
+      },
+      "history_view": {
+        "chart_types": [
+          "Line chart showing sweat rate over time",
+          "Bar chart comparing sweat loss by workout type",
+          "Scatter plot of sweat rate vs temperature/humidity"
+        ],
+        "filters": [
+          "Date range",
+          "Workout type",
+          "Weather conditions"
+        ]
+      }
+    },
+    "metadata": {
+      "created_date": "2025-10-28",
+      "file_format": "JSON",
+      "version": "1.0",
+      "category": "hydration_tracking",
+      "related_features": [
+        "workout_log",
+        "body_composition_tracking",
+        "nutrition_planning"
+      ],
+      "scientific_references": [
+        "American College of Sports Medicine Position Stand on Exercise and Fluid Replacement",
+        "National Athletic Trainers' Association Position Statement on Fluid Replacement for Athletes"
+      ]
+    }
+  }

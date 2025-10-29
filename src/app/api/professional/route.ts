@@ -792,7 +792,7 @@ async function getPersonalRecords(clientId: string, startDate: Date) {
 }
 
 function generateAchievements(metrics: any, workoutStats: any) {
-  const achievements = [];
+  const achievements: any[] = [];
   if (metrics.totalWorkouts >= 12) {
     achievements.push({
       title: 'Consistency Champion',
@@ -818,7 +818,7 @@ function generateAchievements(metrics: any, workoutStats: any) {
 }
 
 function generateRecommendations(metrics: any, workoutStats: any) {
-  const recommendations = [];
+  const recommendations: any[] = [];
   if (metrics.consistency < 60) {
     recommendations.push('Focus on improving workout consistency. Aim for at least 3-4 sessions per week.');
   }
@@ -834,7 +834,7 @@ function generateRecommendations(metrics: any, workoutStats: any) {
 }
 
 function generateNextGoals(metrics: any, _workoutStats: any) {
-  const goals = [];
+  const goals: any[] = [];
   goals.push({
     category: 'consistency',
     target: Math.min(metrics.consistency + 10, 100),

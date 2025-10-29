@@ -27,3 +27,4 @@ tsconfig 2.tsbuildinfo
 # Uploads (credentials are user content; don’t track)
 public/uploads/credentials/
 .next*
+.env local

@@ -105,7 +105,7 @@ When proposing a workout:
    Keep each suggestion under 10 words.
 5) No other prose after the suggestions line.`;
 
-  const userContext = `User Profile:\n${context.userProfile}\n\nAssessments:\n${context.assessmentSummary}\n\nHistory:\n${context.workoutHistory}`
+  const userContext = `User Profile:\n${context.userProfile}\n\nAssessments:\n${context.assessmentSummary}\n\nHistory:\n${context.workoutHistory}${context.activeProgramsSummary ? `\n\n${context.activeProgramsSummary}` : ''}`
 
   // Build a brief partner context only if relevant to the user's query
   let partnerContext = ''

@@ -1,85 +1,111 @@
 {
-    "compilerOptions": {
-      // Language and syntax
-      "target": "ES2022",
-      "lib": ["dom", "dom.iterable", "es6", "es2022"],
-      "allowJs": true,
-      "skipLibCheck": true,
-      "strict": false,
-      "noEmit": true,
-      "esModuleInterop": true,
-      "module": "esnext",
-      "moduleResolution": "bundler",
-      "resolveJsonModule": true,
-      "isolatedModules": true,
-      "jsx": "preserve",
-      "incremental": true,
-      
-      // Type checking strictness for safety (temporarily relaxed for deployment)
-      "noImplicitAny": false,
-      "noImplicitReturns": false,
-      "noImplicitThis": true,
-      "noUnusedLocals": false,
-      "noUnusedParameters": false,
-      "exactOptionalPropertyTypes": false,
-      "noUncheckedIndexedAccess": false,
-      "noImplicitOverride": false,
-      
-      // Advanced features
-      "allowSyntheticDefaultImports": true,
-      "forceConsistentCasingInFileNames": true,
-      "useDefineForClassFields": true,
-      
-      // Path mapping
-      "baseUrl": ".",
-      "paths": {
-        "@/*": ["./src/*"],
-        "@/components/*": ["./src/components/*"],
-        "@/core": ["./src/core"],
-        "@/core/*": ["./src/core/*"],
-        "@/services": ["./src/services"],
-        "@/services/*": ["./src/services/*"],
-        "@/types/*": ["./src/types/*"],
-        "@/hooks/*": ["./src/hooks/*"],
-        "@/app/*": ["./src/app/*"],
-        "@/prisma/*": ["./prisma/*"],
-        "@/tests/*": ["./tests/*"],
-        "@/config/*": ["./config/*"]
-      },
-      
-      // Next.js specific
-      "plugins": [
-        {
-          "name": "next"
-        }
+  "compilerOptions": {
+    // Language and syntax
+    "target": "ES2022",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "es6",
+      "es2022"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    // Type checking strictness for safety (temporarily relaxed for deployment)
+    "noImplicitAny": false,
+    "noImplicitReturns": false,
+    "noImplicitThis": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "exactOptionalPropertyTypes": false,
+    "noUncheckedIndexedAccess": false,
+    "noImplicitOverride": false,
+    // Advanced features
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "useDefineForClassFields": true,
+    // Path mapping
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@/components/*": [
+        "./src/components/*"
+      ],
+      "@/core": [
+        "./src/core"
+      ],
+      "@/core/*": [
+        "./src/core/*"
+      ],
+      "@/services": [
+        "./src/services"
+      ],
+      "@/services/*": [
+        "./src/services/*"
+      ],
+      "@/types/*": [
+        "./src/types/*"
+      ],
+      "@/hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@/app/*": [
+        "./src/app/*"
+      ],
+      "@/prisma/*": [
+        "./prisma/*"
+      ],
+      "@/tests/*": [
+        "./tests/*"
+      ],
+      "@/config/*": [
+        "./config/*"
       ]
     },
-    "include": [
-      "next-env.d.ts",
-      "**/*.ts",
-      "**/*.tsx",
-      ".next/types/**/*.ts",
-      "src/**/*",
-      "prisma/**/*",
-      "tests/**/*",
-      "config/**/*"
-    ],
-    "exclude": [
-      "node_modules",
-      ".next",
-      "dist",
-      "build",
-      "coverage",
-      "playwright-report",
-      "test-results",
-      "mobile/**/*",
-      "**/*_backup.*",
-      "**/*.backup.*",
-      "src/scripts/**/*"
-    ],
-    "ts-node": {
-      "compilerOptions": {
-        "module": "CommonJS"
+    // Next.js specific
+    "plugins": [
+      {
+        "name": "next"
       }
+    ],
+    "strictNullChecks": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/**/*",
+    "prisma/**/*",
+    "tests/**/*",
+    "config/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "dist",
+    "build",
+    "coverage",
+    "playwright-report",
+    "test-results",
+    "mobile/**/*",
+    "**/*_backup.*",
+    "**/*.backup.*",
+    "src/scripts/**/*"
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
     }
   }
+}

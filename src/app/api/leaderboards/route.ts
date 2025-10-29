@@ -34,7 +34,7 @@ export async function GET(request: Request) {
     // Calculate timeframe dates
     const timeframeDates = getTimeframeRange(timeframe);
 
-    let leaderboardData = [];
+    let leaderboardData: any[] = [];
     let total = 0;
 
   switch (type) {
@@ -104,7 +104,7 @@ export async function GET(request: Request) {
     );
 
     // Get user's position if they're logged in
-    let userPosition = null;
+    let userPosition: any = null;
     if (session?.user?.id) {
       userPosition = await getUserPosition(type, session.user.id, {
         category,
