@@ -17,7 +17,7 @@ export default async function MyAthletesPage() {
     redirect('/login');
   }
 
-  if (session.user.role !== 'TRAINER') {
+  if (session.user.role !== 'TRAINER' && session.user.role !== 'ADMIN') {
     redirect('/dashboard');
   }
 
