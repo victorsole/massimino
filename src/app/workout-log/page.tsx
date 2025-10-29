@@ -352,14 +352,47 @@ export default function WorkoutLogPage() {
 
     if (!currentWorkout) return null;
 
+    // Calculate total days in this microcycle
+    const totalDays = currentMicrocycle.workouts.length;
+
     return {
       subscription: activeSub,
       program,
       phase: currentPhase,
       microcycle: currentMicrocycle,
       workout: currentWorkout,
-      exercises: currentWorkout.workout_exercises || []
+      exercises: currentWorkout.workout_exercises || [],
+      totalDays
     };
+  };
+
+  // Update program day navigation
+  const updateProgramDay = async (newDay: number) => {
+    if (!programSubscriptions || programSubscriptions.length === 0) return;
+
+    const activeSub = programSubscriptions[0];
+
+    try {
+      const response = await fetch('/api/workout/programs/progress', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subscriptionId: activeSub.id,
+          currentDay: newDay
+        })
+      });
+
+      if (response.ok) {
+        // Refresh subscriptions to get updated data
+        const r = await fetch('/api/workout/programs?subscriptions=true');
+        if (r.ok) {
+          const subs = await r.json();
+          setProgramSubscriptions(Array.isArray(subs) ? subs : []);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to update day:', error);
+    }
   };
 
   async function load_recommendations() {
@@ -1301,7 +1334,7 @@ export default function WorkoutLogPage() {
               const currentWorkout = getCurrentProgramWorkout();
               if (!currentWorkout) return null;
 
-              const { subscription, program, phase, workout, exercises } = currentWorkout;
+              const { subscription, program, phase, workout, exercises, totalDays } = currentWorkout;
               const athleteName = program.legendary_athlete?.name || 'Program';
 
               return (
@@ -1314,6 +1347,33 @@ export default function WorkoutLogPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
+                      {/* Day Navigation */}
+                      <div className="flex items-center justify-between gap-2 pb-3 border-b">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => updateProgramDay(Math.max(1, subscription.currentDay - 1))}
+                          disabled={subscription.currentDay <= 1}
+                        >
+                          <ChevronLeft className="h-4 w-4 mr-1" />
+                          Previous
+                        </Button>
+
+                        <div className="text-sm font-medium text-center">
+                          Day {subscription.currentDay} of {totalDays}
+                        </div>
+
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => updateProgramDay(Math.min(totalDays, subscription.currentDay + 1))}
+                          disabled={subscription.currentDay >= totalDays}
+                        >
+                          Next
+                          <ChevronRight className="h-4 w-4 ml-1" />
+                        </Button>
+                      </div>
+
                       {/* Workout Info */}
                       <div className="flex items-start justify-between gap-3 pb-3 border-b">
                         <div>
@@ -1376,11 +1436,12 @@ export default function WorkoutLogPage() {
                               const repsDisplay = ex.repsMin && ex.repsMax
                                 ? (ex.repsMin === ex.repsMax ? ex.repsMin : `${ex.repsMin}-${ex.repsMax}`)
                                 : (ex.repsMin || ex.repsMax || '-');
+                              const mediaUrl = exercise?.imageUrl || exercise?.videoUrl;
 
                               return (
                                 <div
                                   key={ex.id || idx}
-                                  className="flex items-center justify-between p-3 border rounded-lg hover:bg-blue-50 cursor-pointer transition-colors"
+                                  className="flex items-center gap-3 p-3 border rounded-lg hover:bg-blue-50 cursor-pointer transition-colors"
                                   onClick={() => {
                                     if (exercise) {
                                       // Load this exercise into the form
@@ -1409,8 +1470,36 @@ export default function WorkoutLogPage() {
                                     }
                                   }}
                                 >
-                                  <div className="flex-1">
-                                    <div className="font-medium text-sm">{exercise?.name || 'Exercise'}</div>
+                                  {/* Exercise Media Thumbnail */}
+                                  {mediaUrl && (
+                                    <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
+                                      {exercise.videoUrl ? (
+                                        <video
+                                          src={exercise.videoUrl}
+                                          className="w-full h-full object-cover"
+                                          muted
+                                          playsInline
+                                          preload="metadata"
+                                        />
+                                      ) : (
+                                        <img
+                                          src={exercise.imageUrl}
+                                          alt={exercise.name}
+                                          className="w-full h-full object-cover"
+                                        />
+                                      )}
+                                    </div>
+                                  )}
+
+                                  {/* No media placeholder */}
+                                  {!mediaUrl && (
+                                    <div className="w-16 h-16 flex-shrink-0 rounded-lg bg-gray-100 flex items-center justify-center">
+                                      <Dumbbell className="h-6 w-6 text-gray-400" />
+                                    </div>
+                                  )}
+
+                                  <div className="flex-1 min-w-0">
+                                    <div className="font-medium text-sm truncate">{exercise?.name || 'Exercise'}</div>
                                     <div className="text-xs text-muted-foreground mt-1">
                                       {exercise?.category && <span>{exercise.category}</span>}
                                       {exercise?.muscleGroups && exercise.muscleGroups.length > 0 && (
@@ -1418,7 +1507,7 @@ export default function WorkoutLogPage() {
                                       )}
                                     </div>
                                   </div>
-                                  <div className="text-sm font-medium text-gray-900 ml-4">
+                                  <div className="text-sm font-medium text-gray-900 ml-2">
                                     {setsDisplay} × {repsDisplay}
                                   </div>
                                 </div>
