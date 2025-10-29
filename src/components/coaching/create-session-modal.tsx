@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
@@ -17,6 +18,7 @@ export function CreateSessionModal({
   onSuccess,
   preselectedAthleteId
 }: CreateSessionModalProps) {
+  const router = useRouter();
   const [clients, setClients] = useState<Array<{id: string; name: string; email?: string}>>([]);
   const [selectedClientId, setSelectedClientId] = useState<string>(preselectedAthleteId || '');
   const [sessionTitle, setSessionTitle] = useState<string>('');
@@ -69,11 +71,14 @@ export function CreateSessionModal({
       const data = await res.json();
 
       if (data.session) {
-        alert('Athlete session started successfully');
+        // Session created successfully - navigate to workout-log for exercise management
         setSelectedClientId('');
         setSessionTitle('');
         onSuccess?.();
         onClose();
+
+        // Show success message and navigate
+        alert(`Workout session created successfully for athlete!\n\nThe session is now active for the athlete. You can assign programs or create workouts using Massichat Plus.`);
       } else {
         alert(data.error || 'Failed to create athlete session');
       }
