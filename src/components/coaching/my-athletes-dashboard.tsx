@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Users, Mail, MessageSquare, Plus, Dumbbell } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Link from 'next/link';
+import { Users, Mail, MessageSquare, Plus, Dumbbell, ClipboardList } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AthletesList } from './athletes-list';
 import { PreProfileList } from './pre-profile-list';
@@ -12,7 +13,7 @@ import { CreateSessionModal } from './create-session-modal';
 import { AthleteProgressModal } from './athlete-progress-modal';
 import { AthleteChatModal } from './athlete-chat-modal';
 import { AssignProgramModal } from './assign-program-modal';
-import { TeamAssignment } from './team-assignment';
+import { TeamManagement } from '@/components/teams/team_management';
 import { TrainerMassichatInterface } from '@/components/massichat/trainer-massichat-interface';
 
 interface MyAthletesDashboardProps {
@@ -182,10 +183,18 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
             Manage your athletes, track their progress, and create workouts
           </p>
         </div>
-        <Button onClick={() => setShowInviteModal(true)}>
-          <Plus className="h-4 w-4 mr-2" />
-          Invite Athlete
-        </Button>
+        <div className="flex gap-3">
+          <Link href="/assessments">
+            <Button variant="outline">
+              <ClipboardList className="h-4 w-4 mr-2" />
+              Assessments
+            </Button>
+          </Link>
+          <Button onClick={() => setShowInviteModal(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Invite Athlete
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -307,17 +316,22 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
         </div>
       )}
 
-      {/* Team Assignment Section */}
+      {/* Team Management Section */}
       {stats.activeAthletes > 0 && (
-        <div className="mt-8">
-          <h2 className="text-2xl font-bold text-brand-primary mb-4">
-            Team Management
-          </h2>
-          <p className="text-gray-600 mb-6">
-            Organize your athletes into teams for group workouts and challenges
-          </p>
-          <TeamAssignment athletes={data?.withProfile || []} />
-        </div>
+        <Card className="mt-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Users className="h-5 w-5" />
+              Team Management
+            </CardTitle>
+            <CardDescription>
+              Create and manage teams, organize athletes for group workouts and challenges
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <TeamManagement className="max-w-none" />
+          </CardContent>
+        </Card>
       )}
 
       <InviteAthleteModal
