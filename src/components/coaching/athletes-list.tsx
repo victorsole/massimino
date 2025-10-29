@@ -31,9 +31,10 @@ interface AthletesListProps {
   onViewProgress: (athleteId: string) => void;
   onCreateSession: (athleteId: string) => void;
   onMessage: (athleteId: string) => void;
+  onAssignProgram: (athleteId: string) => void;
 }
 
-export function AthletesList({ athletes, onViewProgress, onCreateSession, onMessage }: AthletesListProps) {
+export function AthletesList({ athletes, onViewProgress, onCreateSession, onMessage, onAssignProgram }: AthletesListProps) {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredAthletes = athletes.filter(athlete =>
@@ -181,6 +182,14 @@ export function AthletesList({ athletes, onViewProgress, onCreateSession, onMess
                 >
                   <Plus className="h-4 w-4 mr-1" />
                   Session
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => onAssignProgram(athlete.clientId)}
+                >
+                  <Dumbbell className="h-4 w-4 mr-1" />
+                  Program
                 </Button>
                 <Button
                   variant="ghost"
