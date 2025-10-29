@@ -1769,7 +1769,7 @@ export async function getUserProgramSubscriptions(userId: string) {
                       workout_exercises: {
                         include: {
                           exercises: {
-                            select: { id: true, name: true, category: true, muscleGroups: true, equipment: true }
+                            select: { id: true, name: true, category: true, muscleGroups: true, equipment: true, imageUrl: true, videoUrl: true }
                           },
                           exercise_slots: {
                             select: { id: true, slotLabel: true, muscleTargets: true }
@@ -1791,7 +1791,7 @@ export async function getUserProgramSubscriptions(userId: string) {
       user_exercise_selections: {
         include: {
           exercises: {
-            select: { id: true, name: true, category: true, muscleGroups: true, equipment: true }
+            select: { id: true, name: true, category: true, muscleGroups: true, equipment: true, imageUrl: true, videoUrl: true }
           },
           exercise_slots: {
             select: { id: true, slotLabel: true }
