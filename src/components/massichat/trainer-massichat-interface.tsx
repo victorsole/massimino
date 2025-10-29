@@ -89,7 +89,12 @@ export function TrainerMassichatInterface({ trainerId }: TrainerMassichatInterfa
       const response = await fetch('/api/coaching/athletes');
       if (response.ok) {
         const data = await response.json();
-        const athletesList = data.withProfile || [];
+        const athletesList = (data.withProfile || []).map((a: any) => ({
+          id: a.clientId,
+          name: a.client?.name || null,
+          email: a.client?.email || '',
+          since: a.startDate,
+        }));
         setAthletes(athletesList);
         if (athletesList.length > 0 && !selectedAthlete) {
           setSelectedAthlete(athletesList[0].id);
