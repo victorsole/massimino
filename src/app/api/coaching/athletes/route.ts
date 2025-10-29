@@ -11,9 +11,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Check if user is a trainer
-    if (session.user.role !== 'TRAINER') {
-      return NextResponse.json({ error: 'Only trainers can access this endpoint' }, { status: 403 });
+    // Check if user is a trainer or admin
+    if (session.user.role !== 'TRAINER' && session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Only trainers and admins can access this endpoint' }, { status: 403 });
     }
 
     const athletes = await getMyAthletes(session.user.id);
@@ -36,8 +36,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    if (session.user.role !== 'TRAINER') {
-      return NextResponse.json({ error: 'Only trainers can access this endpoint' }, { status: 403 });
+    if (session.user.role !== 'TRAINER' && session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Only trainers and admins can access this endpoint' }, { status: 403 });
     }
 
     const body = await request.json();
@@ -67,8 +67,8 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    if (session.user.role !== 'TRAINER') {
-      return NextResponse.json({ error: 'Only trainers can access this endpoint' }, { status: 403 });
+    if (session.user.role !== 'TRAINER' && session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Only trainers and admins can access this endpoint' }, { status: 403 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -98,8 +98,8 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    if (session.user.role !== 'TRAINER') {
-      return NextResponse.json({ error: 'Only trainers can access this endpoint' }, { status: 403 });
+    if (session.user.role !== 'TRAINER' && session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Only trainers and admins can access this endpoint' }, { status: 403 });
     }
 
     const body = await request.json();
