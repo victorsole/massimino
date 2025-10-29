@@ -111,7 +111,10 @@ export async function GET(request: NextRequest) {
       author: template.legendary_athlete?.name || template.users.name,
     }));
 
-    return NextResponse.json(templatesWithMetadata);
+    return NextResponse.json({
+      templates: templatesWithMetadata,
+      total: templatesWithMetadata.length,
+    });
   } catch (error) {
     console.error('Templates GET error:', error);
     return NextResponse.json(
