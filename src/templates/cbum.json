@@ -1,0 +1,777 @@
+{
+    "template_name": "Chris Bumstead (CBum) Training Program",
+    "athlete_info": {
+      "name": "Chris Bumstead",
+      "nickname": "CBum",
+      "achievements": "6x Mr. Olympia Classic Physique Champion (2019-2024)",
+      "height": "185 cm",
+      "weight": "97-100 kg",
+      "training_philosophy": "High volume, heavy weight, full range of motion with time-under-tension focus"
+    },
+    "program_structure": {
+      "split_type": "8-Day Push/Pull/Legs",
+      "training_days": 7,
+      "rest_days": 1,
+      "cycle_length": "8 days",
+      "frequency": "Each muscle group hit twice per week with high volume"
+    },
+    "training_principles": {
+      "time_under_tension": "5-second eccentric holds, controlled negatives (3 seconds)",
+      "range_of_motion": "Full ROM on all exercises to recruit maximum muscle fibers",
+      "intensity_techniques": ["drop sets", "supersets", "tri-sets", "training to failure"],
+      "warm_up": "Always warm up with light sets before heavy working sets",
+      "equipment": "Knee sleeves, lifting belt, lifting straps for heavy pulls"
+    },
+    "weekly_schedule": [
+      {
+        "day": 1,
+        "focus": "Legs (Quad Dominant) & Calves",
+        "muscle_groups": ["quadriceps", "calves"]
+      },
+      {
+        "day": 2,
+        "focus": "Push (Chest & Triceps)",
+        "muscle_groups": ["chest", "triceps"]
+      },
+      {
+        "day": 3,
+        "focus": "Pull (Back & Biceps)",
+        "muscle_groups": ["back", "biceps"]
+      },
+      {
+        "day": 4,
+        "focus": "REST",
+        "muscle_groups": []
+      },
+      {
+        "day": 5,
+        "focus": "Shoulders & Upper Chest",
+        "muscle_groups": ["shoulders", "upper_chest"]
+      },
+      {
+        "day": 6,
+        "focus": "Hamstrings & Back",
+        "muscle_groups": ["hamstrings", "back"]
+      },
+      {
+        "day": 7,
+        "focus": "Arms (Biceps & Triceps)",
+        "muscle_groups": ["biceps", "triceps"]
+      },
+      {
+        "day": 8,
+        "focus": "REST",
+        "muscle_groups": []
+      }
+    ],
+    "day_1_quads_calves": {
+      "client_name": "Chris Bumstead",
+      "goal": "Build massive quads and calves - Classic Physique",
+      "phase": "Off-Season Hypertrophy",
+      "date": "Day 1 of 8",
+      "sections": [
+        {
+          "section": "warm_up",
+          "description": "Activate quads and prepare joints",
+          "exercises": [
+            {
+              "exercise": "Leg Extension",
+              "sets": "2",
+              "reps": "15-20",
+              "tempo": "Controlled",
+              "rest": "60s",
+              "notes": "Light weight - blood flow and activation only"
+            }
+          ]
+        },
+        {
+          "section": "resistance_training",
+          "exercises": [
+            {
+              "exercise": "Smith Machine Back Squat",
+              "sets": "4-5",
+              "reps": "10-12",
+              "tempo": "Explosive up, 3 sec down",
+              "rest": "2-3 min",
+              "notes": "Build to heavy weight, use knee sleeves and belt"
+            },
+            {
+              "exercise": "Leg Press",
+              "sets": "4",
+              "reps": "10-15",
+              "tempo": "Controlled",
+              "rest": "90s",
+              "notes": "Focus on full depth and controlled tempo"
+            },
+            {
+              "exercise": "Leg Extension",
+              "sets": "4",
+              "reps": "12-15",
+              "tempo": "2-1-3 (2 sec up, 1 sec squeeze, 3 sec down)",
+              "rest": "60s",
+              "notes": "Working sets - squeeze at top, slow eccentric"
+            },
+            {
+              "exercise": "Sissy Squats",
+              "sets": "3-4",
+              "reps": "10-15",
+              "tempo": "Slow and controlled",
+              "rest": "90s",
+              "notes": "Bodyweight or weighted - full quad stretch"
+            },
+            {
+              "exercise": "Reverse Hack Squat",
+              "sets": "4-5",
+              "reps": "12",
+              "tempo": "Controlled",
+              "rest": "90s",
+              "notes": "Optional - additional quad volume"
+            },
+            {
+              "exercise": "Seated Calf Raises",
+              "sets": "4-5",
+              "reps": "15-20",
+              "tempo": "Pause at top and bottom",
+              "rest": "60s",
+              "notes": "Full stretch at bottom, peak contraction at top"
+            },
+            {
+              "exercise": "Standing Calf Raises",
+              "sets": "4",
+              "reps": "15-20",
+              "tempo": "Controlled with pauses",
+              "rest": "60s",
+              "notes": "Complete full ROM"
+            }
+          ]
+        }
+      ]
+    },
+    "day_2_chest_triceps": {
+      "client_name": "Chris Bumstead",
+      "goal": "Build thick, full chest with tricep development",
+      "phase": "Off-Season Hypertrophy",
+      "date": "Day 2 of 8",
+      "sections": [
+        {
+          "section": "warm_up",
+          "description": "Activate chest and shoulders",
+          "exercises": [
+            {
+              "exercise": "Pec Deck Flyes",
+              "sets": "2",
+              "reps": "15-20",
+              "tempo": "Light and controlled",
+              "rest": "60s",
+              "notes": "Focus on stretch and warming up pecs"
+            }
+          ]
+        },
+        {
+          "section": "resistance_training",
+          "exercises": [
+            {
+              "exercise": "Incline Dumbbell Bench Press",
+              "sets": "4",
+              "reps": "10-12",
+              "tempo": "Explosive up, 3 sec down",
+              "rest": "2-3 min",
+              "notes": "Upper chest focus, full ROM"
+            },
+            {
+              "exercise": "Hammer Strength Press / Incline Machine Press",
+              "sets": "4",
+              "reps": "10-12",
+              "tempo": "Controlled",
+              "rest": "90s",
+              "notes": "1 warm-up set of 15-20 reps first"
+            },
+            {
+              "exercise": "Incline Dumbbell Flyes",
+              "sets": "3-4",
+              "reps": "10-12",
+              "tempo": "Slow eccentric, squeeze at top",
+              "rest": "90s",
+              "notes": "Deep stretch, controlled movement"
+            },
+            {
+              "exercise": "Cable Crossovers (High to Low)",
+              "sets": "4",
+              "reps": "10-12",
+              "tempo": "Squeeze and hold",
+              "rest": "60s",
+              "notes": "Lower chest emphasis"
+            },
+            {
+              "exercise": "Cable Crossovers (Low to High)",
+              "sets": "3",
+              "reps": "12-15",
+              "tempo": "Controlled with squeeze",
+              "rest": "60s",
+              "notes": "Upper chest emphasis"
+            },
+            {
+              "exercise": "Rope Pushdowns (Triceps)",
+              "sets": "4",
+              "reps": "10-15",
+              "tempo": "Squeeze at bottom",
+              "rest": "60s",
+              "notes": "Keep elbows tucked, full extension"
+            },
+            {
+              "exercise": "Overhead Cable Triceps Extensions",
+              "sets": "4",
+              "reps": "10-15",
+              "tempo": "Stretch and squeeze",
+              "rest": "60s",
+              "notes": "Full stretch at top, full contraction"
+            },
+            {
+              "exercise": "EZ Bar Skull Crushers",
+              "sets": "3",
+              "reps": "8-10",
+              "tempo": "Controlled eccentric",
+              "rest": "90s",
+              "notes": "Lower behind head for stretch"
+            }
+          ]
+        }
+      ]
+    },
+    "day_3_back_biceps": {
+      "client_name": "Chris Bumstead",
+      "goal": "Build championship-winning back width and thickness",
+      "phase": "Off-Season Hypertrophy",
+      "date": "Day 3 of 8",
+      "sections": [
+        {
+          "section": "warm_up",
+          "description": "Warm up lats and prepare for heavy pulling",
+          "exercises": [
+            {
+              "exercise": "Lat Pulldown (Light)",
+              "sets": "1-2",
+              "reps": "12-15",
+              "tempo": "Controlled with stretch",
+              "rest": "60s",
+              "notes": "Light weight - get blood flowing to lats"
+            }
+          ]
+        },
+        {
+          "section": "resistance_training",
+          "exercises": [
+            {
+              "exercise": "Lat Pulldown (Medium/Wide Grip)",
+              "sets": "2-4",
+              "reps": "10-12",
+              "tempo": "5 sec hold at bottom, 3 sec up",
+              "rest": "90s",
+              "notes": "2 hard working sets with TUT - pull bar to upper chest, squeeze lats. Vary grip between sets"
+            },
+            {
+              "exercise": "Bent Over Barbell Row (Underhand Grip)",
+              "sets": "4",
+              "reps": "8-10",
+              "tempo": "Explosive up, 3 sec down",
+              "rest": "2-3 min",
+              "notes": "CBum's favorite back builder - pull to hips, elbows close to body, pause at top. No swinging!"
+            },
+            {
+              "exercise": "Chest-Supported T-Bar Row",
+              "sets": "3",
+              "reps": "10-12",
+              "tempo": "Fast up, 3 sec down",
+              "rest": "90s",
+              "notes": "Semi-pronated grip (45 degrees), elbows high and out. DROP SET on final set"
+            },
+            {
+              "exercise": "Chest-Supported Dumbbell Row (Single Arm)",
+              "sets": "3",
+              "reps": "10-12 per arm",
+              "tempo": "Pull elbow back and up",
+              "rest": "60s",
+              "notes": "Neutral grip, elbow close to body, arched pendulum motion"
+            },
+            {
+              "exercise": "One Arm Seated Cable Row",
+              "sets": "3-4",
+              "reps": "12-15 per arm",
+              "tempo": "Squeeze and hold",
+              "rest": "60s",
+              "notes": "Full stretch forward, pull back with control"
+            }
+          ]
+        },
+        {
+          "section": "arms_finisher",
+          "description": "Bicep tri-set - 3 rounds back-to-back",
+          "exercises": [
+            {
+              "exercise": "TRI-SET: Pronated Grip Preacher Curl",
+              "sets": "3",
+              "reps": "10-12",
+              "tempo": "Squeeze at top",
+              "rest": "0s - go to next exercise",
+              "notes": "Overhand grip - works forearms heavily"
+            },
+            {
+              "exercise": "TRI-SET: Hammer Curls",
+              "sets": "3",
+              "reps": "10-12",
+              "tempo": "Squeeze as if weight is impossible",
+              "rest": "0s - go to next exercise",
+              "notes": "Neutral grip, thumb up, targets brachialis"
+            },
+            {
+              "exercise": "TRI-SET: Supinated Grip Preacher Curl",
+              "sets": "3",
+              "reps": "10-12",
+              "tempo": "Full ROM with squeeze",
+              "rest": "2 min after completing tri-set",
+              "notes": "Underhand grip - full bicep activation. Then repeat tri-set 2 more times"
+            }
+          ]
+        }
+      ]
+    },
+    "day_4_rest": {
+      "client_name": "Chris Bumstead",
+      "goal": "Recovery and muscle repair",
+      "phase": "Active Recovery",
+      "date": "Day 4 of 8",
+      "sections": [
+        {
+          "section": "rest_day",
+          "exercises": [
+            {
+              "exercise": "Complete Rest or Light Activity",
+              "sets": "-",
+              "reps": "-",
+              "tempo": "-",
+              "rest": "-",
+              "notes": "Stretch, foam roll, walk, meal prep. Focus on nutrition and sleep for recovery"
+            }
+          ]
+        }
+      ]
+    },
+    "day_5_shoulders_upper_chest": {
+      "client_name": "Chris Bumstead",
+      "goal": "Build capped delts and upper chest fullness",
+      "phase": "Off-Season Hypertrophy",
+      "date": "Day 5 of 8",
+      "sections": [
+        {
+          "section": "warm_up",
+          "description": "Shoulder activation and joint prep",
+          "exercises": [
+            {
+              "exercise": "Lateral Raises",
+              "sets": "1",
+              "reps": "20",
+              "tempo": "Light and controlled",
+              "rest": "30s",
+              "notes": "Very light weight - warming up only"
+            },
+            {
+              "exercise": "Front Raises",
+              "sets": "1",
+              "reps": "20",
+              "tempo": "Light and controlled",
+              "rest": "30s",
+              "notes": "Very light weight - warming up only"
+            },
+            {
+              "exercise": "Overhead Press",
+              "sets": "1",
+              "reps": "20",
+              "tempo": "Light and controlled",
+              "rest": "60s",
+              "notes": "Very light weight - warming up only"
+            }
+          ]
+        },
+        {
+          "section": "resistance_training",
+          "exercises": [
+            {
+              "exercise": "Seated Dumbbell Overhead Press",
+              "sets": "3-4",
+              "reps": "10-15",
+              "tempo": "Controlled",
+              "rest": "2 min",
+              "notes": "Build to heavy weight, full ROM"
+            },
+            {
+              "exercise": "Behind The Neck Overhead Press",
+              "sets": "3-4",
+              "reps": "10-12",
+              "tempo": "Strict form",
+              "rest": "90s",
+              "notes": "Only if mobility allows - targets rear delts"
+            },
+            {
+              "exercise": "Dumbbell/Cable Lateral Raises",
+              "sets": "4",
+              "reps": "12-15",
+              "tempo": "Controlled with holds",
+              "rest": "60s",
+              "notes": "DROP SETS - side delt focus. Slight lean forward"
+            },
+            {
+              "exercise": "Single Arm Cable Lateral Raises",
+              "sets": "3-4",
+              "reps": "10-12 per arm",
+              "tempo": "Squeeze at top",
+              "rest": "45s",
+              "notes": "Unilateral work for symmetry"
+            },
+            {
+              "exercise": "Reverse Pec Deck Fly / Rear Delt Raises",
+              "sets": "4",
+              "reps": "12-15",
+              "tempo": "Squeeze and hold",
+              "rest": "60s",
+              "notes": "Rear delt isolation - elbows high"
+            },
+            {
+              "exercise": "Cable Front Raises",
+              "sets": "3",
+              "reps": "12-15",
+              "tempo": "Controlled",
+              "rest": "60s",
+              "notes": "Anterior delt work"
+            },
+            {
+              "exercise": "60-Degree Incline Machine Press",
+              "sets": "3-4",
+              "reps": "10-12",
+              "tempo": "Squeeze at top",
+              "rest": "90s",
+              "notes": "Upper chest focus"
+            },
+            {
+              "exercise": "Incline Dumbbell Bench Press",
+              "sets": "3-4",
+              "reps": "12-15",
+              "tempo": "Full ROM",
+              "rest": "90s",
+              "notes": "Upper chest finisher"
+            }
+          ]
+        },
+        {
+          "section": "core",
+          "exercises": [
+            {
+              "exercise": "Hanging Knee Raises",
+              "sets": "3",
+              "reps": "10-20",
+              "tempo": "Controlled",
+              "rest": "60s",
+              "notes": "Abs and core work"
+            }
+          ]
+        }
+      ]
+    },
+    "day_6_hamstrings_back": {
+      "client_name": "Chris Bumstead",
+      "goal": "Hamstring development and additional back work",
+      "phase": "Off-Season Hypertrophy",
+      "date": "Day 6 of 8",
+      "sections": [
+        {
+          "section": "warm_up",
+          "exercises": [
+            {
+              "exercise": "Light Leg Curls",
+              "sets": "1-2",
+              "reps": "15",
+              "tempo": "Controlled",
+              "rest": "60s",
+              "notes": "Warm up hamstrings"
+            }
+          ]
+        },
+        {
+          "section": "resistance_training",
+          "exercises": [
+            {
+              "exercise": "Seated Leg Curl",
+              "sets": "5",
+              "reps": "12-15",
+              "tempo": "Squeeze at peak contraction",
+              "rest": "90s",
+              "notes": "Focus on hamstring isolation"
+            },
+            {
+              "exercise": "Dumbbell Romanian Deadlifts / Straight Leg Deadlifts",
+              "sets": "5",
+              "reps": "8-10",
+              "tempo": "Slow eccentric, feel stretch",
+              "rest": "2 min",
+              "notes": "Deep stretch in hamstrings, controlled movement"
+            },
+            {
+              "exercise": "45-Degree Hyperextension",
+              "sets": "4",
+              "reps": "15",
+              "tempo": "Controlled",
+              "rest": "90s",
+              "notes": "Lower back and hamstring work"
+            },
+            {
+              "exercise": "Lying Leg Curl",
+              "sets": "4",
+              "reps": "10-15",
+              "tempo": "Squeeze and hold",
+              "rest": "60s",
+              "notes": "Additional hamstring volume"
+            },
+            {
+              "exercise": "Machine Lat Pulldown",
+              "sets": "4-5",
+              "reps": "12-15",
+              "tempo": "Full stretch and squeeze",
+              "rest": "90s",
+              "notes": "Additional back width work"
+            },
+            {
+              "exercise": "Barbell Deadlifts (Optional)",
+              "sets": "4-5",
+              "reps": "6-8",
+              "tempo": "Controlled",
+              "rest": "3 min",
+              "notes": "Heavy compound movement - overall back and hamstring development"
+            }
+          ]
+        }
+      ]
+    },
+    "day_7_arms": {
+      "client_name": "Chris Bumstead",
+      "goal": "Arm specialization - biceps and triceps",
+      "phase": "Off-Season Hypertrophy",
+      "date": "Day 7 of 8",
+      "sections": [
+        {
+          "section": "resistance_training",
+          "exercises": [
+            {
+              "exercise": "Rope Cable Triceps Pressdowns",
+              "sets": "3-4",
+              "reps": "10-12",
+              "tempo": "Squeeze at bottom",
+              "rest": "60s",
+              "notes": "DROP SETS on final set. Full extension"
+            },
+            {
+              "exercise": "Overhead Triceps Extensions (Cable or Dumbbell)",
+              "sets": "3",
+              "reps": "10-12",
+              "tempo": "Stretch and squeeze",
+              "rest": "90s",
+              "notes": "Long head emphasis"
+            },
+            {
+              "exercise": "Incline Close Grip Bench Press",
+              "sets": "3",
+              "reps": "10-15",
+              "tempo": "Controlled",
+              "rest": "90s",
+              "notes": "Compound tricep movement"
+            },
+            {
+              "exercise": "Bodyweight Bar Dips / Machine Dips",
+              "sets": "3",
+              "reps": "10-12",
+              "tempo": "Controlled descent",
+              "rest": "90s",
+              "notes": "Lean forward slightly, full ROM"
+            },
+            {
+              "exercise": "Single Arm Cable Extensions",
+              "sets": "3",
+              "reps": "10-15 per arm",
+              "tempo": "Squeeze",
+              "rest": "45s",
+              "notes": "Unilateral tricep work"
+            },
+            {
+              "exercise": "Preacher Curls (EZ Bar or Dumbbell)",
+              "sets": "3-4",
+              "reps": "10-12",
+              "tempo": "Squeeze at top, slow negative",
+              "rest": "60s",
+              "notes": "Strict form, no swinging"
+            },
+            {
+              "exercise": "Incline Dumbbell Curls / Spider Curls",
+              "sets": "3",
+              "reps": "10-12",
+              "tempo": "Full stretch and squeeze",
+              "rest": "60s",
+              "notes": "Long head emphasis"
+            },
+            {
+              "exercise": "Alternating Dumbbell Curls",
+              "sets": "3",
+              "reps": "10-12 per arm",
+              "tempo": "Controlled",
+              "rest": "60s",
+              "notes": "Standing, strict form"
+            },
+            {
+              "exercise": "Hammer Curls",
+              "sets": "3",
+              "reps": "10-12",
+              "tempo": "Squeeze hard at top",
+              "rest": "60s",
+              "notes": "Brachialis and forearm work"
+            },
+            {
+              "exercise": "Cable Curls / Reverse Grip EZ Bar Curls",
+              "sets": "3",
+              "reps": "12-15",
+              "tempo": "Constant tension",
+              "rest": "60s",
+              "notes": "Finisher - pump and burn"
+            }
+          ]
+        }
+      ]
+    },
+    "nutrition_plan": {
+      "off_season_calories": "5000 kcal/day",
+      "contest_prep_calories": "2500 kcal/day",
+      "protein_target": "2.2-2.5g per kg bodyweight",
+      "tracking_app": "MyFitnessPal",
+      "meals": [
+        {
+          "meal": "Breakfast (Meal 1)",
+          "foods": [
+            "2 Bananas",
+            "2 Scoops Protein Powder",
+            "Sun Fiber",
+            "Ezekiel Toast with Almond Butter"
+          ],
+          "macros": {
+            "calories": "827 kcal",
+            "protein": "80g",
+            "carbs": "87g",
+            "fats": "20g"
+          }
+        },
+        {
+          "meal": "Lunch (Meals 2 & 3)",
+          "foods": [
+            "300g Potatoes",
+            "225g Bison",
+            "220g Chicken",
+            "250g White Rice",
+            "15g Olive Oil"
+          ],
+          "macros": {
+            "calories": "~1500 kcal",
+            "protein": "~120g",
+            "carbs": "~150g",
+            "fats": "~30g"
+          }
+        },
+        {
+          "meal": "Afternoon (Meal 4)",
+          "foods": [
+            "170-225g Ground Beef",
+            "150g Carbs (Rice/Pasta)",
+            "Marinara Sauce",
+            "Glucose (GDA)"
+          ],
+          "macros": {
+            "calories": "~900 kcal",
+            "protein": "~60g",
+            "carbs": "~150g",
+            "fats": "~20g"
+          }
+        },
+        {
+          "meal": "Dinner (Meal 5)",
+          "foods": [
+            "170-225g Ground Turkey",
+            "Jasmine Rice",
+            "15g Olive Oil"
+          ],
+          "macros": {
+            "calories": "~850 kcal",
+            "protein": "~55g",
+            "carbs": "~100g",
+            "fats": "~25g"
+          }
+        },
+        {
+          "meal": "Before Bed (Meal 6)",
+          "foods": [
+            "1 Scoop Protein Powder",
+            "80g Oatmeal",
+            "Almond Butter",
+            "Revive Glutamine"
+          ],
+          "macros": {
+            "calories": "~500 kcal",
+            "protein": "~40g",
+            "carbs": "~60g",
+            "fats": "~15g"
+          }
+        }
+      ]
+    },
+    "key_training_techniques": {
+      "time_under_tension": "5-second holds at contraction, 3-second eccentric phases",
+      "range_of_motion": "Full ROM on every exercise - elongate muscles completely",
+      "drop_sets": "Used on final sets of isolation exercises for maximum pump",
+      "supersets_trisets": "Used as finishers, especially for arms",
+      "training_to_failure": "Selective use on final sets of key exercises",
+      "mind_muscle_connection": "Squeeze as if the weight is impossible, even if it's light",
+      "progressive_overload": "Gradually increase weight while maintaining perfect form"
+    },
+    "equipment_required": [
+      "Barbell",
+      "Dumbbells (5kg - 60kg range)",
+      "Smith Machine",
+      "Leg Press",
+      "Leg Extension Machine",
+      "Leg Curl Machine",
+      "Cable Machine with attachments",
+      "Lat Pulldown Machine",
+      "T-Bar Row (chest supported)",
+      "Preacher Curl Bench",
+      "Adjustable Bench",
+      "Dip Station",
+      "Pull-up Bar",
+      "Knee Sleeves",
+      "Lifting Belt",
+      "Lifting Straps"
+    ],
+    "recovery_protocols": {
+      "sleep": "8-9 hours per night minimum",
+      "rest_days": "2 per 8-day cycle",
+      "stretching": "Post-workout static stretching",
+      "foam_rolling": "Daily for muscle recovery",
+      "hydration": "4-5 liters water per day",
+      "supplements": [
+        "Protein Powder",
+        "Creatine Monohydrate",
+        "Glutamine",
+        "Sun Fiber",
+        "GDA (Glucose Disposal Agent)"
+      ]
+    },
+    "notes": {
+      "philosophy": "The most important factor is finding what works best for YOU. Don't follow a program just because someone else does it. Enjoy the journey, not just the result.",
+      "consistency": "Show up and do the work every day - even when no one's watching",
+      "adaptation": "This is a high-volume program designed for advanced lifters. Beginners should reduce volume by 30-40%",
+      "form_over_ego": "Never sacrifice form for weight. If you're swinging or using momentum, lower the weight",
+      "listen_to_body": "If something hurts (not just burns), stop and reassess. Longevity is key"
+    }
+  }

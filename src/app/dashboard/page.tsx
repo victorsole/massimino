@@ -42,6 +42,9 @@ import BusinessDashboard from '@/components/trainer/business_dashboard';
 // Professional components
 import ProfessionalInterface from '@/components/trainer/professional_interface';
 
+// My Athletes components
+import { MyAthletesDashboardSection } from '@/components/coaching/my-athletes-dashboard-section';
+
 interface DashboardStats {
   workoutsThisWeek: number;
   totalSessions: number;
@@ -888,16 +891,23 @@ function DashboardContent() {
         </Card>
       )}
 
+      {/* My Athletes Section for Verified Trainers */}
+      {userRole === 'TRAINER' && session?.user?.trainerVerified && (
+        <div className="mt-8">
+          <MyAthletesDashboardSection />
+        </div>
+      )}
+
       {/* Team Management Section for Trainers and Admins */}
       {(userRole === 'TRAINER' || userRole === 'ADMIN') && (
         <Card className="mt-8">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users size={20} />
-              
+
             </CardTitle>
             <CardDescription>
-              
+
             </CardDescription>
           </CardHeader>
           <CardContent>

@@ -1,0 +1,44 @@
+{
+    "template_name": "Programming Template",
+    "coaching_tips": "Coaching Tips:",
+    "header": {
+      "client_name": "CLIENT'S NAME:",
+      "goal": "GOAL:",
+      "phase": "PHASE:",
+      "date": "DATE:"
+    },
+    "columns": [
+      "EXERCISE",
+      "SETS",
+      "REPS",
+      "TEMPO",
+      "REST",
+      "NOTES"
+    ],
+    "sections": [
+      {
+        "name": "WARM-UP",
+        "exercise_slots": 4
+      },
+      {
+        "name": "ACTIVATION (core & balance)",
+        "exercise_slots": 4
+      },
+      {
+        "name": "SKILL DEVELOPMENT (plyometric & SAQ)",
+        "exercise_slots": 4
+      },
+      {
+        "name": "RESISTANCE TRAINING",
+        "exercise_slots": 8
+      },
+      {
+        "name": "CLIENT'S CHOICE",
+        "exercise_slots": 3
+      },
+      {
+        "name": "COOL-DOWN",
+        "exercise_slots": 3
+      }
+    ]
+  }

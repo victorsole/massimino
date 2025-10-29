@@ -1,0 +1,2402 @@
+{
+    "program_name": "Fat Loss Training Program",
+    "program_id": "fat-loss-12-workout",
+    "description": "12-workout fat loss program following NASM's OPT Model, progressing through Stabilization, Strength Endurance, and Muscular Development phases optimized for fat loss and body composition improvement",
+    "goal": "Fat Loss",
+    "methodology": "OPT Model",
+    "total_workouts": 12,
+    "duration": "4-12 weeks",
+    "target_audience": "Individuals seeking fat loss, body composition improvement, and metabolic conditioning",
+    "phases_covered": [
+      {
+        "phase": 1,
+        "phase_name": "Stabilization Endurance Training",
+        "workouts": "1-4",
+        "focus": "Building movement foundation, increasing caloric expenditure, and improving muscular endurance"
+      },
+      {
+        "phase": 2,
+        "phase_name": "Strength Endurance Training",
+        "workouts": "5-8",
+        "focus": "Increasing lean muscle mass to boost metabolism while maintaining high caloric burn"
+      },
+      {
+        "phase": 3,
+        "phase_name": "Muscular Development Training (Hypertrophy)",
+        "workouts": "9-12",
+        "focus": "Maximizing muscle growth to increase resting metabolic rate for long-term fat loss"
+      }
+    ],
+    "workouts": [
+      {
+        "workout_number": 1,
+        "workout_id": "cpt7-fat-loss-workout-01",
+        "phase": 1,
+        "phase_name": "Stabilization Endurance Training",
+        "date": "1 of 12",
+        "coaching_tips": "Perform activation and resistance exercises in two mini circuits.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              },
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 60,
+                "notes": "Brisk walk or slow jog for 5 minutes"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Floor Bridge",
+                "category": "Core",
+                "sets": 1,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Floor Cobra",
+                "category": "Core",
+                "sets": 1,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Single-leg Balance Reach: Frontal Plane",
+                "category": "Balance",
+                "sets": 1,
+                "reps": 16,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": "8 reps each leg"
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": []
+          },
+          "resistance_training": {
+            "exercises": [
+              {
+                "exercise_name": "Ball Squat",
+                "pattern": "Squat Pattern",
+                "sets": 1,
+                "reps": 20,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Bodyweight Good Mornings",
+                "pattern": "Hinge Pattern",
+                "sets": 1,
+                "reps": 20,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Incline Push-up",
+                "pattern": "Push Pattern",
+                "sets": 1,
+                "reps": 20,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": "Use a wall, bench, or chair"
+              },
+              {
+                "exercise_name": "Standing Tubing Row",
+                "pattern": "Pull Pattern",
+                "sets": 1,
+                "reps": 20,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Tubing Shoulder Press",
+                "pattern": "Press Pattern",
+                "sets": 1,
+                "reps": 20,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": ""
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Plank",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": "Hold for 30 sec"
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 0,
+                "notes": "Gradually reduce speed"
+              },
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 2,
+        "workout_id": "cpt7-fat-loss-workout-02",
+        "phase": 1,
+        "phase_name": "Stabilization Endurance Training",
+        "date": "2 of 12",
+        "coaching_tips": "Perform activation and resistance exercises in two mini circuits.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              },
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 60,
+                "notes": "Brisk walk or slow jog for 5 minutes"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Ball Bridge",
+                "category": "Core",
+                "sets": 1,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Ball Cobra",
+                "category": "Core",
+                "sets": 1,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Single-leg Hip Rotation",
+                "category": "Balance",
+                "sets": 1,
+                "reps": 16,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": "8 reps each leg"
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": []
+          },
+          "resistance_training": {
+            "exercises": [
+              {
+                "exercise_name": "Bodyweight Squat",
+                "pattern": "Squat Pattern",
+                "sets": 1,
+                "reps": 20,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Romanian Deadlift",
+                "pattern": "Hinge Pattern",
+                "sets": 1,
+                "reps": 20,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": "Use light weight or bodyweight"
+              },
+              {
+                "exercise_name": "Standing Tubing Chest Press",
+                "pattern": "Push Pattern",
+                "sets": 1,
+                "reps": 20,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Inverted Row",
+                "pattern": "Pull Pattern",
+                "sets": 1,
+                "reps": 20,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": "Use a Smith machine or another sturdy object"
+              },
+              {
+                "exercise_name": "Standing Dumbbell Shoulder Press",
+                "pattern": "Press Pattern",
+                "sets": 1,
+                "reps": 20,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": ""
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Side Plank",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": "Hold 30 sec each side"
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 0,
+                "notes": "Gradually reduce speed"
+              },
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 3,
+        "workout_id": "cpt7-fat-loss-workout-03",
+        "phase": 1,
+        "phase_name": "Stabilization Endurance Training",
+        "date": "3 of 12",
+        "coaching_tips": "Perform activation and resistance exercises in two mini circuits.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              },
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 60,
+                "notes": "Brisk walk or slow jog for 5 minutes"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Bird Dog",
+                "category": "Core",
+                "sets": 1,
+                "reps": 16,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": "8 each side"
+              },
+              {
+                "exercise_name": "Palloff Press",
+                "category": "Core",
+                "sets": 1,
+                "reps": 16,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": "8 each side"
+              },
+              {
+                "exercise_name": "Single-leg Lift and Chop",
+                "category": "Balance",
+                "sets": 1,
+                "reps": 16,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": "8 reps each leg"
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": [
+              {
+                "exercise_name": "Squat Jump with Stabilization",
+                "category": "Plyometric",
+                "sets": 1,
+                "reps": 8,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": "Hold landing 3-5 sec"
+              }
+            ]
+          },
+          "resistance_training": {
+            "exercises": [
+              {
+                "exercise_name": "Ball Squat, Curl to Press",
+                "pattern": "Total Body",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Cable Chest Press",
+                "pattern": "Chest",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Cable Row",
+                "pattern": "Back",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Dumbbell Scaption",
+                "pattern": "Shoulders",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Step-up to Balance",
+                "pattern": "Legs",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": ""
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Floor Bridge",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": ""
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 0,
+                "notes": "Gradually reduce speed"
+              },
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 4,
+        "workout_id": "cpt7-fat-loss-workout-04",
+        "phase": 1,
+        "phase_name": "Stabilization Endurance Training",
+        "date": "4 of 12",
+        "coaching_tips": "Perform activation and resistance exercises in two mini circuits.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              },
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 60,
+                "notes": "Brisk walk or slow jog for 5 minutes"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Dead Bug",
+                "category": "Core",
+                "sets": 2,
+                "reps": 16,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": "8 reps each side"
+              },
+              {
+                "exercise_name": "Cable Rotation",
+                "category": "Core",
+                "sets": 2,
+                "reps": 16,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": "8 each side"
+              },
+              {
+                "exercise_name": "Single-leg Throw and Catch",
+                "category": "Balance",
+                "sets": 2,
+                "reps": 16,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": "8 reps each leg"
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": [
+              {
+                "exercise_name": "Box Jump-up with Stabilization",
+                "category": "Plyometric",
+                "sets": 2,
+                "reps": 8,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": "Hold landing 3-5 sec"
+              }
+            ]
+          },
+          "resistance_training": {
+            "exercises": [
+              {
+                "exercise_name": "Ball Squat, Curl to Press",
+                "pattern": "Total-Body",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Cable Chest Press",
+                "pattern": "Chest",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Cable Row",
+                "pattern": "Back",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Dumbbell Scaption",
+                "pattern": "Shoulders",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Multiplanar Lunges",
+                "pattern": "Legs",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": ""
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Jump Rope",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "Moderate",
+                "rest_seconds": 90,
+                "notes": "5 minutes"
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 0,
+                "notes": "Gradually reduce speed"
+              },
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 5,
+        "workout_id": "cpt7-fat-loss-workout-05",
+        "phase": 2,
+        "phase_name": "Strength Endurance Training",
+        "date": "5 of 12",
+        "coaching_tips": "Perform activation and athlete's choice exercises in two mini circuits. Resistance training consists of supersets.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Active Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "1-2 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 1-2 sec"
+              },
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 60,
+                "notes": "Brisk walk or slow jog for 5 minutes"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Ball Crunch",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Reverse Crunch",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Single-leg Romanian Deadlift",
+                "category": "Balance",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": [
+              {
+                "exercise_name": "Squat Jump",
+                "category": "Plyometric",
+                "sets": 2,
+                "reps": 8,
+                "tempo": "Repeating",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "resistance_training": {
+            "structure": "Supersets",
+            "supersets": [
+              {
+                "superset": 1,
+                "body_part": "Legs",
+                "exercises": [
+                  {
+                    "exercise_name": "Leg Press",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Single-leg Squat",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 2,
+                "body_part": "Chest",
+                "exercises": [
+                  {
+                    "exercise_name": "Dumbbell Chest Press",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Push-up",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 3,
+                "body_part": "Back",
+                "exercises": [
+                  {
+                    "exercise_name": "Lat Pulldown",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Ball Dumbbell Row",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 4,
+                "body_part": "Shoulders",
+                "exercises": [
+                  {
+                    "exercise_name": "Shoulder Press Machine",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Single-leg Scaption",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Bicycle Crunch",
+                "sets": 2,
+                "reps": 20,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 0,
+                "notes": "Gradually reduce speed"
+              },
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 6,
+        "workout_id": "cpt7-fat-loss-workout-06",
+        "phase": 2,
+        "phase_name": "Strength Endurance Training",
+        "date": "6 of 12",
+        "coaching_tips": "Perform activation exercises and athlete's choice exercises in two mini circuits. Resistance training consists of supersets.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Active Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "1-2 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 1-2 sec"
+              },
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 60,
+                "notes": "Brisk walk or slow jog for 5 minutes"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Cable Rotation",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Back Extension",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Single-leg Squat Touchdown",
+                "category": "Balance",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": [
+              {
+                "exercise_name": "Tuck Jump",
+                "category": "Plyometric",
+                "sets": 2,
+                "reps": 8,
+                "tempo": "Repeating",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "resistance_training": {
+            "structure": "Supersets",
+            "supersets": [
+              {
+                "superset": 1,
+                "body_part": "Legs",
+                "exercises": [
+                  {
+                    "exercise_name": "Romanian Deadlift",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Single-leg Romanian Deadlift",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 2,
+                "body_part": "Chest",
+                "exercises": [
+                  {
+                    "exercise_name": "Barbell Bench Press",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Ball Push-up",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 3,
+                "body_part": "Back",
+                "exercises": [
+                  {
+                    "exercise_name": "Seated Cable Row",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Ball Dumbbell Cobra",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 4,
+                "body_part": "Shoulders",
+                "exercises": [
+                  {
+                    "exercise_name": "Standing Dumbbell Shoulder Press",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Single-leg Scaption",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Plank",
+                "sets": 2,
+                "reps": 1,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": "Hold for 30 sec"
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 0,
+                "notes": "Gradually reduce speed"
+              },
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 7,
+        "workout_id": "cpt7-fat-loss-workout-07",
+        "phase": 2,
+        "phase_name": "Strength Endurance Training",
+        "date": "7 of 12",
+        "coaching_tips": "Perform activation exercises in a circuit. Resistance training consists of supersets for each body part.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Active Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "1-2 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 1-2 sec"
+              },
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 60,
+                "notes": "Brisk walk or slow jog for 5 minutes"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Cable Lift",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Cable Chop",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Multiplanar Lunge to Balance",
+                "category": "Balance",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": [
+              {
+                "exercise_name": "Repeat Box Jumps",
+                "category": "Plyometric",
+                "sets": 2,
+                "reps": 8,
+                "tempo": "Repeating",
+                "rest_seconds": 60,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Speed Ladder: One-ins, Two-ins, Side Shuffle, In-In-Out-Out, Ali Shuffle",
+                "category": "SAQ",
+                "sets": 2,
+                "reps": 1,
+                "tempo": "Fast",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "resistance_training": {
+            "structure": "Supersets",
+            "supersets": [
+              {
+                "superset": 1,
+                "body_part": "Legs",
+                "exercises": [
+                  {
+                    "exercise_name": "Multiplanar Lunges",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Multiplanar Step-up to Balance",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 2,
+                "body_part": "Chest",
+                "exercises": [
+                  {
+                    "exercise_name": "Dumbbell Chest Press",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Push-up with Rotation",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 3,
+                "body_part": "Back",
+                "exercises": [
+                  {
+                    "exercise_name": "Bent Over Barbell Row",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Ball Dumbbell Row",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 4,
+                "body_part": "Shoulders",
+                "exercises": [
+                  {
+                    "exercise_name": "Standing Dumbbell Lateral Raise",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Single-leg Scaption",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Jump Rope",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": "5 minutes"
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 0,
+                "notes": "Gradually reduce speed"
+              },
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 8,
+        "workout_id": "cpt7-fat-loss-workout-08",
+        "phase": 2,
+        "phase_name": "Strength Endurance Training",
+        "date": "8 of 12",
+        "coaching_tips": "Perform activation exercises in a circuit. Resistance training consists of supersets for each body part.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Active Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "1-2 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 1-2 sec"
+              },
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 60,
+                "notes": "Brisk walk or slow jog for 5 minutes"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Ball Crunch",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Prone Iso-abs",
+                "category": "Core",
+                "sets": 2,
+                "reps": 1,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": "Hold for 30 sec"
+              },
+              {
+                "exercise_name": "Multiplanar Step-up to Balance",
+                "category": "Balance",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": [
+              {
+                "exercise_name": "Butt Kick",
+                "category": "Plyometric",
+                "sets": 2,
+                "reps": 8,
+                "tempo": "Repeating",
+                "rest_seconds": 60,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Speed Ladder: One-ins, Two-ins, Side Shuffle, In-In-Out-Out, Ali Shuffle",
+                "category": "SAQ",
+                "sets": 2,
+                "reps": 1,
+                "tempo": "Fast",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "resistance_training": {
+            "structure": "Supersets",
+            "supersets": [
+              {
+                "superset": 1,
+                "body_part": "Legs",
+                "exercises": [
+                  {
+                    "exercise_name": "Kettlebell Goblet Squat",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Single-leg Squat Touchdown",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 2,
+                "body_part": "Chest",
+                "exercises": [
+                  {
+                    "exercise_name": "Dumbbell Chest Press",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Single-leg Cable Chest Press",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 3,
+                "body_part": "Back",
+                "exercises": [
+                  {
+                    "exercise_name": "Seated Cable Row",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Single-leg Cable Row",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 4,
+                "body_part": "Shoulders",
+                "exercises": [
+                  {
+                    "exercise_name": "Seated Dumbbell Shoulder Press",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Single-leg Dumbbell Scaption",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Speed Ladder: One-ins, Two-ins, Side Shuffle",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 0,
+                "notes": "Gradually reduce speed"
+              },
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 9,
+        "workout_id": "cpt7-fat-loss-workout-09",
+        "phase": 3,
+        "phase_name": "Muscular Development Training (Hypertrophy)",
+        "date": "9 of 12",
+        "coaching_tips": "Perform activation exercises in a circuit.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Tensor Fascia Latae, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Active Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "1-2 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 1-2 sec"
+              },
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 60,
+                "notes": "Brisk walk or slow jog for 5 minutes"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Reverse Crunch",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Back Extension",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Lunge to Balance",
+                "category": "Balance",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": [
+              {
+                "exercise_name": "Repeat Box Jumps",
+                "category": "Plyometric",
+                "sets": 2,
+                "reps": 8,
+                "tempo": "Repeating",
+                "rest_seconds": 60,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Speed Ladder: One-ins, Two-ins, Side Shuffle, In-In-Out-Out, Ali Shuffle",
+                "category": "SAQ",
+                "sets": 2,
+                "reps": 1,
+                "tempo": "Fast",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "resistance_training": {
+            "structure": "Straight Sets",
+            "exercises": [
+              {
+                "exercise_name": "Dumbbell Chest Press",
+                "body_part": "Chest",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Incline Dumbbell Chest Press",
+                "body_part": "Chest",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Lat Pulldown",
+                "body_part": "Back",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Suspension Row",
+                "body_part": "Back",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Dumbbell Shoulder Press",
+                "body_part": "Shoulders",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Dumbbell Lateral Raise",
+                "body_part": "Shoulders",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Punching Bag",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": "5 minutes"
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 0,
+                "notes": "Gradually reduce speed"
+              },
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 10,
+        "workout_id": "cpt7-fat-loss-workout-10",
+        "phase": 3,
+        "phase_name": "Muscular Development Training (Hypertrophy)",
+        "date": "10 of 12",
+        "coaching_tips": "Perform activation exercises in a circuit.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Tensor Fascia Latae, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Active Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "1-2 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 1-2 sec"
+              },
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 60,
+                "notes": "Brisk walk or slow jog for 5 minutes"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Cable Rotation",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Prone Iso-abs",
+                "category": "Core",
+                "sets": 2,
+                "reps": 1,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": "Hold for 30 sec"
+              },
+              {
+                "exercise_name": "Single-leg Squat Touchdown",
+                "category": "Balance",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": [
+              {
+                "exercise_name": "Tuck Jump",
+                "category": "Plyometric",
+                "sets": 2,
+                "reps": 8,
+                "tempo": "Repeating",
+                "rest_seconds": 60,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Speed Ladder: One-ins, Two-ins, Side Shuffle, In-In-Out-Out, Ali Shuffle",
+                "category": "SAQ",
+                "sets": 2,
+                "reps": 1,
+                "tempo": "Fast",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "resistance_training": {
+            "structure": "Straight Sets",
+            "exercises": [
+              {
+                "exercise_name": "Barbell Squat",
+                "body_part": "Legs",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Leg Press",
+                "body_part": "Legs",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Romanian Deadlift",
+                "body_part": "Legs",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Dumbbell Chest Press",
+                "body_part": "Chest",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Lat Pulldown",
+                "body_part": "Back",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Dumbbell Shoulder Press",
+                "body_part": "Shoulders",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Jump Rope",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": "5 minutes"
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 0,
+                "notes": "Gradually reduce speed"
+              },
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 11,
+        "workout_id": "cpt7-fat-loss-workout-11",
+        "phase": 3,
+        "phase_name": "Muscular Development Training (Hypertrophy)",
+        "date": "11 of 12",
+        "coaching_tips": "Perform activation exercises in a circuit.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Tensor Fascia Latae, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Active Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "1-2 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 1-2 sec"
+              },
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 60,
+                "notes": "Brisk walk or slow jog for 5 minutes"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Cable Lift",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Cable Chop",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Lunge to Balance",
+                "category": "Balance",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": [
+              {
+                "exercise_name": "Repeat Box Jumps",
+                "category": "Plyometric",
+                "sets": 2,
+                "reps": 8,
+                "tempo": "Repeating",
+                "rest_seconds": 60,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Speed Ladder: One-ins, Two-ins, Side Shuffle, In-In-Out-Out, Ali Shuffle",
+                "category": "SAQ",
+                "sets": 2,
+                "reps": 1,
+                "tempo": "Fast",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "resistance_training": {
+            "structure": "Straight Sets",
+            "exercises": [
+              {
+                "exercise_name": "Barbell Bench Press",
+                "body_part": "Chest",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Dumbbell Chest Fly",
+                "body_part": "Chest",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Bent Over Barbell Row",
+                "body_part": "Back",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Seated Cable Row",
+                "body_part": "Back",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Barbell Shoulder Press",
+                "body_part": "Shoulders",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Dumbbell Lateral Raise",
+                "body_part": "Shoulders",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Battle Ropes",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": "3 minutes"
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 0,
+                "notes": "Gradually reduce speed"
+              },
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 12,
+        "workout_id": "cpt7-fat-loss-workout-12",
+        "phase": 3,
+        "phase_name": "Muscular Development Training (Hypertrophy)",
+        "date": "12 of 12",
+        "coaching_tips": "Perform activation exercises in a circuit.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Tensor Fascia Latae, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Active Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "1-2 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 1-2 sec"
+              },
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 60,
+                "notes": "Brisk walk or slow jog for 5 minutes"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Ball Crunch",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Back Extension",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Multiplanar Step-up to Balance",
+                "category": "Balance",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": [
+              {
+                "exercise_name": "Butt Kick",
+                "category": "Plyometric",
+                "sets": 2,
+                "reps": 8,
+                "tempo": "Repeating",
+                "rest_seconds": 60,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Speed Ladder: One-ins, Two-ins, Side Shuffle, In-In-Out-Out, Ali Shuffle",
+                "category": "SAQ",
+                "sets": 2,
+                "reps": 1,
+                "tempo": "Fast",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "resistance_training": {
+            "structure": "Straight Sets",
+            "exercises": [
+              {
+                "exercise_name": "Leg Press",
+                "body_part": "Legs",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Leg Extension",
+                "body_part": "Legs",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Lying Leg Curl",
+                "body_part": "Legs",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Incline Dumbbell Chest Press",
+                "body_part": "Chest",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Lat Pulldown",
+                "body_part": "Back",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Seated Dumbbell Shoulder Press",
+                "body_part": "Shoulders",
+                "sets": 3,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Speed Ladder: One-ins, Two-ins, Side Shuffle",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Cardio",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "5 min",
+                "rest_seconds": 0,
+                "notes": "Gradually reduce speed"
+              },
+              {
+                "exercise_name": "Foam Roll: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Adductors, Lats",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "program_notes": {
+      "phase_1_notes": "Focus on building movement foundation with high-rep, low-rest circuits to maximize caloric expenditure. Cardio integrated into warm-up and cool-down to enhance fat burning.",
+      "phase_2_notes": "Strength endurance supersets combine heavier loads with stabilization exercises. This phase builds lean muscle mass while maintaining high energy expenditure. Active stretching replaces static stretching to keep heart rate elevated.",
+      "phase_3_notes": "Hypertrophy phase with moderate loads and short rest periods. Focus on building lean muscle mass to increase resting metabolic rate for long-term fat loss. Includes plyometrics and SAQ drills for added caloric burn."
+    },
+    "cardio_integration": {
+      "warm_up_cardio": "5 minutes of brisk walking or light jogging to elevate heart rate and prepare body for training",
+      "cool_down_cardio": "5 minutes of gradually reducing intensity to aid recovery and continue caloric expenditure",
+      "additional_cardio_recommendation": "Add 20-40 minutes of steady-state cardio on non-training days for optimal fat loss results"
+    },
+    "nutrition_guidelines_for_fat_loss": {
+      "caloric_deficit": "Create a 300-500 calorie deficit below maintenance level",
+      "protein": "1.8-2.2g per kg bodyweight to preserve muscle mass during fat loss",
+      "carbohydrates": "Time carbs around workouts for optimal performance and recovery",
+      "fats": "0.8-1g per kg bodyweight for hormone production and satiety",
+      "hydration": "3-4 liters of water per day, increased during training",
+      "meal_timing": "4-6 meals per day to maintain stable blood sugar and energy levels"
+    },
+    "fat_loss_optimization_tips": {
+      "consistency": "Adhere to the program 3-4x per week with progressive overload",
+      "recovery": "7-9 hours of sleep per night for optimal hormone balance and recovery",
+      "stress_management": "High cortisol impairs fat loss - practice stress reduction techniques",
+      "neat": "Increase Non-Exercise Activity Thermogenesis (daily steps, movement)",
+      "tracking": "Monitor body measurements, progress photos, and strength metrics rather than just scale weight",
+      "patience": "Aim for 0.5-1kg fat loss per week for sustainable results"
+    },
+    "implementation_for_massimino": {
+      "usage": "This 12-workout program is ideal for clients focused on body composition and fat loss",
+      "customization": "Trainers can adjust cardio duration, rest periods, and exercise selection based on individual client needs",
+      "progression": "Clients should complete workouts 1-4 before progressing to 5-8, then 9-12",
+      "duration_recommendations": {
+        "minimum": "4 weeks (3x per week) + additional cardio sessions",
+        "optimal": "8-12 weeks (3-4x per week) + 2-3 cardio sessions",
+        "advanced": "Can cycle through phases multiple times with progressive overload"
+      },
+      "tracking_metrics": [
+        "Body weight and body fat percentage",
+        "Circumference measurements (waist, hips, chest, arms, thighs)",
+        "Progress photos (front, side, back)",
+        "Exercise weights and reps completed",
+        "Cardio duration and intensity",
+        "Energy levels and recovery quality"
+      ]
+    }
+  }
