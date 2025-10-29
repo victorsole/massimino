@@ -1,0 +1,654 @@
+{
+    "template_name": "Weekly-Monthly-Annual Programming Template",
+    "template_id": "periodization-template",
+    "description": "Professional fitness programming template following the OPT (Optimum Performance Training) model with 5 training phases across annual, monthly, and weekly planning cycles.",
+    "methodology": "OPT Model (Optimum Performance Training)",
+    "template_type": "Periodisation",
+    "metadata": {
+      "client_name": "",
+      "date": "",
+      "professional_name": "",
+      "goal": ""
+    },
+    "annual_plan": {
+      "description": "12-month macrocycle planning across 5 training phases",
+      "duration": "12 months",
+      "months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      "training_levels": [
+        {
+          "level": "Stabilization",
+          "phase": 1,
+          "phase_name": "Stabilization Endurance Training",
+          "primary_focus": "Muscular endurance and core stability",
+          "goals": [
+            "Improve muscular endurance",
+            "Enhance joint stability",
+            "Increase flexibility",
+            "Improve postural control",
+            "Build aerobic base"
+          ],
+          "training_characteristics": {
+            "sets": "1-3",
+            "reps": "12-20",
+            "tempo": "Slow (4-2-1)",
+            "rest": "0-90 seconds",
+            "intensity": "50-70% of 1RM"
+          },
+          "schedule": {
+            "Jan": false,
+            "Feb": false,
+            "Mar": false,
+            "Apr": false,
+            "May": false,
+            "Jun": false,
+            "Jul": false,
+            "Aug": false,
+            "Sep": false,
+            "Oct": false,
+            "Nov": false,
+            "Dec": false
+          }
+        },
+        {
+          "level": "Strength",
+          "phase": 2,
+          "phase_name": "Strength Endurance Training",
+          "primary_focus": "Stabilization endurance + prime mover strength",
+          "goals": [
+            "Improve stabilization endurance",
+            "Increase prime mover strength",
+            "Improve overall work capacity",
+            "Enhance neuromuscular efficiency"
+          ],
+          "training_characteristics": {
+            "sets": "2-4",
+            "reps": "8-12",
+            "tempo": "Medium (2-0-2)",
+            "rest": "0-60 seconds",
+            "intensity": "70-80% of 1RM"
+          },
+          "superset_structure": "Strength exercise + Stabilization exercise",
+          "schedule": {
+            "Jan": false,
+            "Feb": false,
+            "Mar": false,
+            "Apr": false,
+            "May": false,
+            "Jun": false,
+            "Jul": false,
+            "Aug": false,
+            "Sep": false,
+            "Oct": false,
+            "Nov": false,
+            "Dec": false
+          }
+        },
+        {
+          "level": "Strength",
+          "phase": 3,
+          "phase_name": "Hypertrophy Training",
+          "primary_focus": "Maximal muscle growth",
+          "goals": [
+            "Achieve maximal muscle growth",
+            "Increase lean body mass",
+            "Improve neuromuscular efficiency"
+          ],
+          "training_characteristics": {
+            "sets": "3-5",
+            "reps": "6-12",
+            "tempo": "Moderate (2-0-2)",
+            "rest": "0-60 seconds",
+            "intensity": "75-85% of 1RM"
+          },
+          "schedule": {
+            "Jan": false,
+            "Feb": false,
+            "Mar": false,
+            "Apr": false,
+            "May": false,
+            "Jun": false,
+            "Jul": false,
+            "Aug": false,
+            "Sep": false,
+            "Oct": false,
+            "Nov": false,
+            "Dec": false
+          }
+        },
+        {
+          "level": "Strength",
+          "phase": 4,
+          "phase_name": "Maximal Strength Training",
+          "primary_focus": "Maximal prime mover strength",
+          "goals": [
+            "Increase maximal strength",
+            "Increase motor unit recruitment",
+            "Improve rate of force production",
+            "Increase load-bearing capabilities"
+          ],
+          "training_characteristics": {
+            "sets": "4-6",
+            "reps": "1-5",
+            "tempo": "Explosive (X-X-X)",
+            "rest": "3-5 minutes",
+            "intensity": "85-100% of 1RM"
+          },
+          "schedule": {
+            "Jan": false,
+            "Feb": false,
+            "Mar": false,
+            "Apr": false,
+            "May": false,
+            "Jun": false,
+            "Jul": false,
+            "Aug": false,
+            "Sep": false,
+            "Oct": false,
+            "Nov": false,
+            "Dec": false
+          }
+        },
+        {
+          "level": "Power",
+          "phase": 5,
+          "phase_name": "Power Training",
+          "primary_focus": "Speed and power development",
+          "goals": [
+            "Enhance neuromuscular efficiency",
+            "Improve rate of force production",
+            "Increase power output",
+            "Develop speed and explosiveness"
+          ],
+          "training_characteristics": {
+            "sets": "3-6",
+            "reps": "1-10",
+            "tempo": "Explosive (X-X-X)",
+            "rest": "3-5 minutes",
+            "intensity": "30-45% of 1RM (for power) or 85-100% (for strength)"
+          },
+          "superset_structure": "Strength exercise + Power exercise",
+          "schedule": {
+            "Jan": false,
+            "Feb": false,
+            "Mar": false,
+            "Apr": false,
+            "May": false,
+            "Jun": false,
+            "Jul": false,
+            "Aug": false,
+            "Sep": false,
+            "Oct": false,
+            "Nov": false,
+            "Dec": false
+          }
+        }
+      ]
+    },
+    "monthly_weekly_plan": {
+      "description": "4-week mesocycle with daily training schedule",
+      "duration": "4 weeks (28 days)",
+      "structure": "7-day microcycles",
+      "weeks": [
+        {
+          "week_number": 1,
+          "days": [
+            {
+              "day": "Monday",
+              "day_abbr": "M",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Tuesday",
+              "day_abbr": "T",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Wednesday",
+              "day_abbr": "W",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Thursday",
+              "day_abbr": "T",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Friday",
+              "day_abbr": "F",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Saturday",
+              "day_abbr": "S",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Sunday",
+              "day_abbr": "S",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            }
+          ]
+        },
+        {
+          "week_number": 2,
+          "days": [
+            {
+              "day": "Monday",
+              "day_abbr": "M",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Tuesday",
+              "day_abbr": "T",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Wednesday",
+              "day_abbr": "W",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Thursday",
+              "day_abbr": "T",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Friday",
+              "day_abbr": "F",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Saturday",
+              "day_abbr": "S",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Sunday",
+              "day_abbr": "S",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            }
+          ]
+        },
+        {
+          "week_number": 3,
+          "days": [
+            {
+              "day": "Monday",
+              "day_abbr": "M",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Tuesday",
+              "day_abbr": "T",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Wednesday",
+              "day_abbr": "W",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Thursday",
+              "day_abbr": "T",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Friday",
+              "day_abbr": "F",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Saturday",
+              "day_abbr": "S",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Sunday",
+              "day_abbr": "S",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            }
+          ]
+        },
+        {
+          "week_number": 4,
+          "days": [
+            {
+              "day": "Monday",
+              "day_abbr": "M",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Tuesday",
+              "day_abbr": "T",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Wednesday",
+              "day_abbr": "W",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Thursday",
+              "day_abbr": "T",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Friday",
+              "day_abbr": "F",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Saturday",
+              "day_abbr": "S",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            },
+            {
+              "day": "Sunday",
+              "day_abbr": "S",
+              "phase_1_workout": null,
+              "phase_2_workout": null,
+              "phase_3_workout": null,
+              "phase_4_workout": null,
+              "phase_5_workout": null,
+              "cardio": null,
+              "reassessment": false
+            }
+          ]
+        }
+      ]
+    },
+    "cardio_guidelines": {
+      "phase_1_stabilization": {
+        "stage": "Stage I",
+        "type": "Low-intensity steady-state",
+        "zone": "Zone 1 (65-75% max HR)",
+        "duration": "30-60 minutes",
+        "frequency": "3-5x per week"
+      },
+      "phase_2_strength_endurance": {
+        "stage": "Stage II",
+        "type": "Moderate-intensity interval training",
+        "zone": "Zone 2 (76-85% max HR) with Zone 1 recovery",
+        "duration": "20-40 minutes total",
+        "frequency": "2-4x per week"
+      },
+      "phase_3_hypertrophy": {
+        "stage": "Stage II",
+        "type": "Moderate-intensity interval training",
+        "zone": "Zone 2 (76-85% max HR)",
+        "duration": "20-40 minutes",
+        "frequency": "2-3x per week"
+      },
+      "phase_4_maximal_strength": {
+        "stage": "Stage II or III",
+        "type": "Interval or high-intensity training",
+        "zone": "Zone 2-3 (76-95% max HR)",
+        "duration": "10-30 minutes",
+        "frequency": "2-3x per week"
+      },
+      "phase_5_power": {
+        "stage": "Stage III",
+        "type": "High-intensity interval training",
+        "zone": "Zone 3 (86-95% max HR)",
+        "duration": "10-20 minutes",
+        "frequency": "2-3x per week"
+      }
+    },
+    "reassessment_schedule": {
+      "description": "Regular client reassessments to track progress and adjust programming",
+      "frequency": "Every 4-6 weeks",
+      "assessments": [
+        {
+          "category": "Movement Assessment",
+          "tests": [
+            "Overhead Squat Assessment",
+            "Single-leg Squat Assessment",
+            "Push-up Assessment",
+            "Davies Test"
+          ]
+        },
+        {
+          "category": "Performance Assessment",
+          "tests": [
+            "Vertical Jump Test",
+            "Shark Skill Test",
+            "Upper Extremity Strength Assessment",
+            "Lower Extremity Strength Assessment"
+          ]
+        },
+        {
+          "category": "Physiological Assessment",
+          "tests": [
+            "Body Composition",
+            "Cardiorespiratory Fitness (VO2 max or submaximal)",
+            "Resting Heart Rate",
+            "Blood Pressure"
+          ]
+        },
+        {
+          "category": "Subjective Assessment",
+          "tests": [
+            "PAR-Q+ reassessment",
+            "Goal review",
+            "Client satisfaction survey"
+          ]
+        }
+      ]
+    },
+    "progression_model": {
+      "description": "Evidence-based progression through OPT phases",
+      "beginner_path": ["Phase 1 → Phase 2 → Phase 3"],
+      "intermediate_path": ["Phase 2 → Phase 3 → Phase 4"],
+      "advanced_path": ["Phase 3 → Phase 4 → Phase 5"],
+      "athlete_path": ["Phase 4 → Phase 5 (with Phase 1 maintenance)"],
+      "general_rules": [
+        "Spend 4-6 weeks in each phase before progressing",
+        "Can repeat phases based on client needs and goals",
+        "Always maintain some Phase 1 work for injury prevention",
+        "Deload every 4-6 weeks regardless of phase",
+        "Reassess before progressing to ensure readiness"
+      ]
+    },
+    "periodization_cycles": {
+      "macrocycle": {
+        "duration": "Annual plan (12 months)",
+        "purpose": "Long-term goal achievement"
+      },
+      "mesocycle": {
+        "duration": "Monthly plan (4-6 weeks)",
+        "purpose": "Phase-specific adaptations"
+      },
+      "microcycle": {
+        "duration": "Weekly plan (7 days)",
+        "purpose": "Daily training variation and recovery"
+      }
+    },
+    "implementation_notes": {
+      "for_trainers": [
+        "Fill in client metadata at the top of the template",
+        "Mark active months for each phase in the annual plan with 'X' or color coding",
+        "Assign specific phase workouts to days in the monthly/weekly plan",
+        "Schedule cardio sessions based on phase guidelines",
+        "Mark reassessment days (typically end of week 4 or week 6)",
+        "Adjust phases based on client progress and reassessment results",
+        "Consider client schedule, recovery capacity, and life stressors"
+      ],
+      "for_massimino_platform": [
+        "This template can be used to generate personalized training plans",
+        "Integrate with exercise database to auto-populate phase-appropriate exercises",
+        "Allow trainers to drag-and-drop workouts into calendar",
+        "Auto-calculate training volume and intensity",
+        "Send reminders for reassessment periods",
+        "Track client progression through phases over time",
+        "Generate progress reports based on reassessment data"
+      ]
+    },
+    "opt_model_reference": {
+      "source": "NASM (National Academy of Sports Medicine)",
+      "certification": "CPT (Certified Personal Trainer)",
+      "model": "OPT Model (Optimum Performance Training)",
+      "evidence_base": "Integrated approach combining flexibility, core, balance, plyometric, speed/agility/quickness, resistance training, and cardiorespiratory training"
+    }
+  }

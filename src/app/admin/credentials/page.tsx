@@ -282,7 +282,8 @@ export default async function CredentialsPage({ searchParams }: PageProps) {
             {hasPrev && (
               <Button variant="outline" asChild>
                 <a href={`/admin/credentials?${new URLSearchParams({
-                  ...searchParams,
+                  ...(q && { q }),
+                  ...(status && { status }),
                   page: String(page - 1)
                 }).toString()}`}>
                   Previous
@@ -292,7 +293,8 @@ export default async function CredentialsPage({ searchParams }: PageProps) {
             {hasNext && (
               <Button variant="outline" asChild>
                 <a href={`/admin/credentials?${new URLSearchParams({
-                  ...searchParams,
+                  ...(q && { q }),
+                  ...(status && { status }),
                   page: String(page + 1)
                 }).toString()}`}>
                   Next

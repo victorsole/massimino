@@ -1,0 +1,134 @@
+{
+    "program_name": "Arnold's Golden Six",
+    "program_id": "arnold-golden-six",
+    "description": "Arnold Schwarzenegger's beginner full-body workout routine designed to build a solid foundation of muscle mass and strength. This program is performed 3 times per week on non-consecutive days.",
+    "frequency": "3x per week (e.g., Monday, Wednesday, Friday)",
+    "duration": "8-12 weeks",
+    "level": "Beginner to Intermediate",
+    "goal": "Muscle mass and strength foundation",
+    "exercises": [
+      {
+        "exercise_id": "barbell-squat",
+        "exercise_name": "Barbell Back Squat",
+        "order": 1,
+        "sets": 4,
+        "reps": 10,
+        "rest_seconds": 90,
+        "tempo": "2-0-2-0",
+        "tempo_description": "2 sec down, no pause, 2 sec up, no pause",
+        "load_guidance": "Start with 40-60kg and progress weekly",
+        "load_percentage": "60-70% of 1RM",
+        "notes": "Focus on full depth and proper form. Go to parallel or below.",
+        "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+        "equipment": ["barbell", "squat_rack"]
+      },
+      {
+        "exercise_id": "barbell-bench-press",
+        "exercise_name": "Wide Grip Barbell Bench Press",
+        "order": 2,
+        "sets": 3,
+        "reps": 10,
+        "rest_seconds": 90,
+        "tempo": "2-0-2-0",
+        "tempo_description": "2 sec down, no pause, 2 sec up, no pause",
+        "load_guidance": "Start with 30-50kg and progress weekly",
+        "load_percentage": "60-70% of 1RM",
+        "notes": "Grip wider than shoulder width. Lower bar to mid-chest. Full range of motion.",
+        "primary_muscle_groups": ["chest", "triceps", "anterior_deltoids"],
+        "equipment": ["barbell", "bench"]
+      },
+      {
+        "exercise_id": "chin-ups",
+        "exercise_name": "Chin-Ups (or Barbell Pullover)",
+        "order": 3,
+        "sets": 3,
+        "reps": 10,
+        "rest_seconds": 90,
+        "tempo": "2-0-2-0",
+        "tempo_description": "2 sec down, no pause, 2 sec up, no pause",
+        "load_guidance": "Bodyweight or assisted. For pullover: 10-20kg",
+        "load_percentage": "Bodyweight",
+        "notes": "If unable to do chin-ups, substitute with barbell pullovers or lat pulldowns. Focus on pulling with back, not arms.",
+        "primary_muscle_groups": ["lats", "biceps", "upper_back"],
+        "equipment": ["pull_up_bar"],
+        "alternative_exercise": {
+          "exercise_name": "Barbell Pullover",
+          "load_guidance": "10-20kg",
+          "notes": "Lie across bench, lower dumbbell/barbell behind head with slight arm bend"
+        }
+      },
+      {
+        "exercise_id": "overhead-press",
+        "exercise_name": "Overhead Barbell Press (Military Press)",
+        "order": 4,
+        "sets": 4,
+        "reps": 10,
+        "rest_seconds": 90,
+        "tempo": "2-0-2-0",
+        "tempo_description": "2 sec down, no pause, 2 sec up, no pause",
+        "load_guidance": "Start with 20-40kg and progress weekly",
+        "load_percentage": "50-60% of 1RM",
+        "notes": "Can be done standing or seated. Press bar straight overhead, lock out arms at top. Don't lean back excessively.",
+        "primary_muscle_groups": ["shoulders", "triceps", "upper_chest"],
+        "equipment": ["barbell"]
+      },
+      {
+        "exercise_id": "barbell-curl",
+        "exercise_name": "Barbell Curl",
+        "order": 5,
+        "sets": 3,
+        "reps": 10,
+        "rest_seconds": 60,
+        "tempo": "2-0-2-0",
+        "tempo_description": "2 sec down, no pause, 2 sec up, no pause",
+        "load_guidance": "Start with 15-25kg and progress weekly",
+        "load_percentage": "N/A",
+        "notes": "Keep elbows tucked at sides. No swinging or momentum. Strict form only.",
+        "primary_muscle_groups": ["biceps"],
+        "equipment": ["barbell"]
+      },
+      {
+        "exercise_id": "situps",
+        "exercise_name": "Sit-Ups",
+        "order": 6,
+        "sets": 4,
+        "reps": "To failure (minimum 20-25)",
+        "rest_seconds": 60,
+        "tempo": "2-0-2-0",
+        "tempo_description": "Controlled movement",
+        "load_guidance": "Bodyweight, can add 2.5-10kg plate for progression",
+        "load_percentage": "Bodyweight",
+        "notes": "Can substitute with crunches or decline sit-ups. Focus on contracting abs, not pulling with neck.",
+        "primary_muscle_groups": ["abs", "core"],
+        "equipment": ["mat"]
+      }
+    ],
+    "progression_strategy": {
+      "method": "Linear Progression",
+      "description": "Add 2.5-5kg to the bar each week when you can complete all sets with good form. For bodyweight exercises, add reps before adding weight.",
+      "deload_frequency": "Every 4-6 weeks, reduce load by 10% for one week"
+    },
+    "warm_up": {
+      "description": "5-10 minutes light cardio + dynamic stretching + 2 warm-up sets with empty bar or light weight for first exercise",
+      "warm_up_sets": [
+        {
+          "set": 1,
+          "reps": 10,
+          "load": "Empty bar (20kg)"
+        },
+        {
+          "set": 2,
+          "reps": 5,
+          "load": "50% working weight"
+        }
+      ]
+    },
+    "cool_down": {
+      "description": "5-10 minutes of static stretching focusing on all major muscle groups worked"
+    },
+    "recovery_guidelines": {
+      "rest_days": "At least 1 day between workouts",
+      "sleep": "7-9 hours per night",
+      "nutrition": "Caloric surplus of 300-500 calories for muscle growth"
+    }
+  }
