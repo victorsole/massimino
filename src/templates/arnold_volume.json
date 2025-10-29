@@ -1,0 +1,602 @@
+{
+    "program": {
+      "name": "Arnold Schwarzenegger Volume Workout Routines",
+      "athlete": "Arnold Schwarzenegger",
+      "titles": "7x Mr. Olympia",
+      "main_goal": "Build Muscle",
+      "training_level": "Advanced",
+      "program_duration": "16 Weeks",
+      "days_per_week": 6,
+      "time_per_workout": "60-75 Minutes",
+      "equipment": [
+        "Barbell",
+        "Bodyweight",
+        "Cables",
+        "Dumbbells",
+        "EZ Bar"
+      ],
+      "author": "Steve Shaw",
+      "source": "MUSCLEANDSTRENGTH.COM",
+      "link": "https://www.muscleandstrength.com/workouts/arnold-schwarzenegger-volume-workout-routines",
+      "description": "Train insane like the one and only 7 time Mr. Olympia Arnold Schwarzenegger. Arnold's muscle building workouts feature an intense high volume and frequency approach to training."
+    },
+    "variations": [
+      {
+        "variation_name": "Variation 1",
+        "description": "6-day split focusing on chest/back/legs and shoulders/arms alternating",
+        "schedule": {
+          "day_1": "Chest & Back",
+          "day_2": "Shoulders & Arms",
+          "day_3": "Legs & Lower Back",
+          "day_4": "Chest & Back",
+          "day_5": "Shoulders & Arms",
+          "day_6": "Legs & Lower Back",
+          "day_7": "Rest"
+        },
+        "workouts": [
+          {
+            "workout_name": "Day 1 & 4 - Chest & Back",
+            "days": [1, 4],
+            "muscle_groups": [
+              {
+                "muscle_group": "Chest",
+                "exercises": [
+                  {
+                    "exercise_name": "Bench Press",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Incline Bench Press",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Dumbbell Pullovers",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "muscle_group": "Back",
+                "exercises": [
+                  {
+                    "exercise_name": "Chin Up",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Bent Over Row",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Deadlift",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "muscle_group": "Abs",
+                "exercises": [
+                  {
+                    "exercise_name": "Crunches",
+                    "sets": "5",
+                    "reps": "25",
+                    "notes": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "workout_name": "Day 2 & 5 - Shoulders & Arms",
+            "days": [2, 5],
+            "muscle_groups": [
+              {
+                "muscle_group": "Shoulders",
+                "exercises": [
+                  {
+                    "exercise_name": "Barbell Clean and Press",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Dumbbell Lateral Raise",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Upright Row",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Military Press",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "muscle_group": "Arms",
+                "exercises": [
+                  {
+                    "exercise_name": "Standing Barbell Curl",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Seated Dumbbell Curl",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Close Grip Bench Press",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Standing Barbell Tricep Extension",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "muscle_group": "Forearms",
+                "exercises": [
+                  {
+                    "exercise_name": "Wrist Curls",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Reverse Wrist Curls",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "muscle_group": "Abs",
+                "exercises": [
+                  {
+                    "exercise_name": "Reverse Crunch",
+                    "sets": "5",
+                    "reps": "25",
+                    "notes": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "workout_name": "Day 3 & 6 - Legs & Lower Back",
+            "days": [3, 6],
+            "muscle_groups": [
+              {
+                "muscle_group": "Legs",
+                "exercises": [
+                  {
+                    "exercise_name": "Squat",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Lunge",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Leg Curl",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "muscle_group": "Lower Back",
+                "exercises": [
+                  {
+                    "exercise_name": "Stiff Leg Deadlift",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Good Mornings",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "muscle_group": "Calves",
+                "exercises": [
+                  {
+                    "exercise_name": "Standing Calf Raise",
+                    "sets": "3-4",
+                    "reps": "10",
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "muscle_group": "Abs",
+                "exercises": [
+                  {
+                    "exercise_name": "Crunches",
+                    "sets": "5",
+                    "reps": "25",
+                    "notes": ""
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "variation_name": "Variation 2",
+        "description": "High volume 6-day split with chest/back/legs on odd days and shoulders/arms on even days",
+        "schedule": {
+          "day_1": "Chest, Back & Legs",
+          "day_2": "Shoulders & Arms",
+          "day_3": "Chest, Back & Legs",
+          "day_4": "Shoulders & Arms",
+          "day_5": "Chest, Back & Legs",
+          "day_6": "Shoulders & Arms",
+          "day_7": "Rest"
+        },
+        "workouts": [
+          {
+            "workout_name": "Day 1, 3 & 5 - Chest, Back & Legs",
+            "days": [1, 3, 5],
+            "muscle_groups": [
+              {
+                "muscle_group": "Chest",
+                "exercises": [
+                  {
+                    "exercise_name": "Bench Press",
+                    "sets": "5",
+                    "reps": "6-10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Dumbbell Flye",
+                    "sets": "5",
+                    "reps": "6-10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Incline Bench Press",
+                    "sets": "6",
+                    "reps": "6-10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Cable Crossovers",
+                    "sets": "6",
+                    "reps": "10-12",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Dips",
+                    "sets": "5",
+                    "reps": "Failure",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Dumbbell Pullover",
+                    "sets": "5",
+                    "reps": "10-12",
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "muscle_group": "Back",
+                "exercises": [
+                  {
+                    "exercise_name": "Wide Grip Pull up",
+                    "sets": "6",
+                    "reps": "Failure",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "T Bar Row",
+                    "sets": "5",
+                    "reps": "6-10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Seated Pulley Row",
+                    "sets": "6",
+                    "reps": "6-10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "One Arm Dumbbell Row",
+                    "sets": "5",
+                    "reps": "6-10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Stiff Leg Deadlift",
+                    "sets": "6",
+                    "reps": "15",
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "muscle_group": "Legs",
+                "exercises": [
+                  {
+                    "exercise_name": "Squat",
+                    "sets": "6",
+                    "reps": "8-12",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Leg Press",
+                    "sets": "6",
+                    "reps": "8-12",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Leg Extension",
+                    "sets": "6",
+                    "reps": "12-15",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Leg Curl",
+                    "sets": "6",
+                    "reps": "10-15",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Barbell Lunge",
+                    "sets": "5",
+                    "reps": "15",
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "muscle_group": "Calves",
+                "exercises": [
+                  {
+                    "exercise_name": "Standing Calf Raise",
+                    "sets": "10",
+                    "reps": "10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Seated Calf Raise",
+                    "sets": "8",
+                    "reps": "15",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "One Leg Dumbbell Calf Raise",
+                    "sets": "6",
+                    "reps": "12",
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "muscle_group": "Forearms",
+                "exercises": [
+                  {
+                    "exercise_name": "Wrist Curl",
+                    "sets": "4",
+                    "reps": "10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Reverse Barbell Curl",
+                    "sets": "4",
+                    "reps": "8",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Wrist Roller Machine",
+                    "sets": "4",
+                    "reps": "Failure",
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "muscle_group": "Abs",
+                "exercises": [
+                  {
+                    "exercise_name": "Non-Stop Abs Training",
+                    "sets": "1",
+                    "reps": "30 Minutes",
+                    "notes": "By Instinct"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "workout_name": "Day 2, 4 & 6 - Shoulders & Arms",
+            "days": [2, 4, 6],
+            "muscle_groups": [
+              {
+                "muscle_group": "Biceps",
+                "exercises": [
+                  {
+                    "exercise_name": "Barbell Curl",
+                    "sets": "6",
+                    "reps": "6-10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Seated Dumbbell Curl",
+                    "sets": "6",
+                    "reps": "6-10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Dumbbell Concentration Curl",
+                    "sets": "6",
+                    "reps": "6-10",
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "muscle_group": "Triceps",
+                "exercises": [
+                  {
+                    "exercise_name": "Close Grip Bench Press",
+                    "sets": "6",
+                    "reps": "6-10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Tricep Pushdown",
+                    "sets": "6",
+                    "reps": "6-10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Barbell French Press",
+                    "sets": "6",
+                    "reps": "6-10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "One Arm Dumbbell Tricep Extension",
+                    "sets": "6",
+                    "reps": "6-10",
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "muscle_group": "Shoulders",
+                "exercises": [
+                  {
+                    "exercise_name": "Seated Barbell Press",
+                    "sets": "6",
+                    "reps": "6-10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Lateral Raise",
+                    "sets": "6",
+                    "reps": "6-10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Rear Delt Lateral Raise",
+                    "sets": "5",
+                    "reps": "6-10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Cable Lateral Raise",
+                    "sets": "5",
+                    "reps": "10-12",
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "muscle_group": "Calves",
+                "exercises": [
+                  {
+                    "exercise_name": "Standing Calf Raise",
+                    "sets": "10",
+                    "reps": "10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Seated Calf Raise",
+                    "sets": "8",
+                    "reps": "15",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "One Leg Dumbbell Calf Raise",
+                    "sets": "6",
+                    "reps": "12",
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "muscle_group": "Forearms",
+                "exercises": [
+                  {
+                    "exercise_name": "Wrist Curl",
+                    "sets": "4",
+                    "reps": "10",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Reverse Barbell Curl",
+                    "sets": "4",
+                    "reps": "8",
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Wrist Roller Machine",
+                    "sets": "4",
+                    "reps": "Failure",
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "muscle_group": "Abs",
+                "exercises": [
+                  {
+                    "exercise_name": "Non-Stop Abs Training",
+                    "sets": "1",
+                    "reps": "30 Minutes",
+                    "notes": "By Instinct"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created_date": "2025-10-28",
+      "file_format": "JSON",
+      "version": "1.0",
+      "notes": "Converted from Arnold Schwarzenegger Volume Workout PDF from Muscle & Strength"
+    }
+  }

@@ -1940,6 +1940,8 @@ model trainer_clients {
   emergencyContact  Json?
   medicalConditions String[]           @default([])
   preferences       Json?              @default("{}")
+  invitationId      String?
+  source            ClientSource?
   createdAt         DateTime           @default(now())
   updatedAt         DateTime
   appointments      appointments[]
@@ -1948,8 +1950,47 @@ model trainer_clients {
   users             users              @relation(fields: [clientId], references: [id], onDelete: Cascade)
   trainer_packages  trainer_packages?  @relation(fields: [packageId], references: [id])
   trainer_profiles  trainer_profiles   @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  athlete_invitations athlete_invitations? @relation(fields: [invitationId], references: [id])
 
   @@unique([trainerId, clientId])
+  @@index([invitationId])
+}
+
+model athlete_invitations {
+  id              String           @id @default(uuid())
+  trainerId       String
+  athleteEmail    String
+  athleteName     String?
+  token           String           @unique
+  status          InvitationStatus @default(PENDING)
+  sentAt          DateTime         @default(now())
+  acceptedAt      DateTime?
+  expiresAt       DateTime
+  message         String?          @db.Text
+  trainer         users            @relation("trainer_invitations", fields: [trainerId], references: [id], onDelete: Cascade)
+  trainer_clients trainer_clients[]
+
+  @@index([trainerId])
+  @@index([athleteEmail])
+  @@index([token])
+  @@index([status])
+}
+
+model coaching_requests {
+  id           String        @id @default(uuid())
+  athleteId    String
+  trainerId    String
+  status       RequestStatus @default(PENDING)
+  requestedAt  DateTime      @default(now())
+  respondedAt  DateTime?
+  message      String?       @db.Text
+  trainerNotes String?       @db.Text
+  athlete      users         @relation("athlete_coaching_requests", fields: [athleteId], references: [id], onDelete: Cascade)
+  trainer      users         @relation("trainer_coaching_requests", fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@unique([athleteId, trainerId])
+  @@index([trainerId, status])
+  @@index([athleteId])
 }
 
 model trainer_connections {
@@ -2351,6 +2392,10 @@ model users {
   // NEW: Periodization system relations
   user_exercise_selections                                    user_exercise_selections[]
   workout_performances                                        workout_performances[]
+  // NEW: My Athletes system relations
+  athlete_invitations_sent                                    athlete_invitations[]        @relation("trainer_invitations")
+  coaching_requests_as_athlete                                coaching_requests[]          @relation("athlete_coaching_requests")
+  coaching_requests_as_trainer                                coaching_requests[]          @relation("trainer_coaching_requests")
 }
 
 model email_verification_tokens {
@@ -3097,6 +3142,22 @@ enum InvitationStatus {
   ACCEPTED
   EXPIRED
   REVOKED
+  CANCELLED
+}
+
+enum RequestStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  CANCELLED
+}
+
+enum ClientSource {
+  INVITATION
+  REQUEST
+  MANUAL
+  APPOINTMENT
+  ASSESSMENT
 }
 
 enum MembershipStatus {

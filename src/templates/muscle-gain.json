@@ -1,0 +1,2358 @@
+{
+    "program_name": "Muscle Gain Training Program",
+    "program_id": "muscle-gain-12-workout",
+    "description": "12-workout muscle building program following NASM's OPT Model, progressing through Stabilization, Strength Endurance, Muscular Development, and Maximal Strength phases optimized for hypertrophy and strength gains",
+    "goal": "Muscle Gain",
+    "methodology": "NASM OPT Model",
+    "total_workouts": 12,
+    "duration": "4-12 weeks",
+    "target_audience": "Individuals seeking muscle hypertrophy, strength development, and lean mass gains",
+    "phases_covered": [
+      {
+        "phase": 1,
+        "phase_name": "Stabilization Endurance Training",
+        "workouts": "1-3",
+        "focus": "Building movement foundation and preparing muscles/joints for heavier loads"
+      },
+      {
+        "phase": 2,
+        "phase_name": "Strength Endurance Training",
+        "workouts": "4-6",
+        "focus": "Developing work capacity and introducing higher training volumes with supersets"
+      },
+      {
+        "phase": 3,
+        "phase_name": "Muscular Development Training (Hypertrophy)",
+        "workouts": "7-9",
+        "focus": "Maximizing muscle growth through moderate loads, high volume, and short rest"
+      },
+      {
+        "phase": 4,
+        "phase_name": "Maximal Strength Training",
+        "workouts": "10-12",
+        "focus": "Building maximal strength with heavy loads, low reps, and long rest periods"
+      }
+    ],
+    "workouts": [
+      {
+        "workout_number": 1,
+        "workout_id": "cpt7-muscle-gain-workout-01",
+        "phase": 1,
+        "phase_name": "Stabilization Endurance Training",
+        "date": "1 of 12",
+        "coaching_tips": "Perform activation and resistance exercises in two mini circuits.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Tensor Fascia Latae, Erector Spinae",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              },
+              {
+                "exercise_name": "Dynamic Stretch: Tube Walking: Side to Side",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Dead Bug",
+                "category": "Core",
+                "sets": 1,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Bird Dog",
+                "category": "Core",
+                "sets": 1,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Single-leg Balance Reach",
+                "category": "Balance",
+                "sets": 1,
+                "reps": 16,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": "8 reps each leg"
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": []
+          },
+          "resistance_training": {
+            "exercises": [
+              {
+                "exercise_name": "Ball Squat",
+                "pattern": "Squat Pattern",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Single-leg Romanian Deadlift",
+                "pattern": "Hinge Pattern",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Tubing Chest Press",
+                "pattern": "Push Pattern",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Tubing Row",
+                "pattern": "Pull Pattern",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Tubing Shoulder Press",
+                "pattern": "Press Pattern",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": ""
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Plank",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Hold for 30 sec"
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Tensor Fascia Latae, Erector Spinae",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 2,
+        "workout_id": "cpt7-muscle-gain-workout-02",
+        "phase": 1,
+        "phase_name": "Stabilization Endurance Training",
+        "date": "2 of 12",
+        "coaching_tips": "Perform activation and resistance exercises in two mini circuits.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Tensor Fascia Latae, Erector Spinae",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              },
+              {
+                "exercise_name": "Dynamic Stretch: Tube Walking: Side to Side",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Ball Bridge",
+                "category": "Core",
+                "sets": 1,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Ball Cobra",
+                "category": "Core",
+                "sets": 1,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Single-leg Hip Rotation",
+                "category": "Balance",
+                "sets": 1,
+                "reps": 16,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": "8 reps each leg"
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": []
+          },
+          "resistance_training": {
+            "exercises": [
+              {
+                "exercise_name": "Step-up to Balance",
+                "pattern": "Squat Pattern",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Kettlebell Single-leg Romanian Deadlift",
+                "pattern": "Hinge Pattern",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Cable Chest Press",
+                "pattern": "Push Pattern",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Cable Row",
+                "pattern": "Pull Pattern",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Dumbbell Shoulder Press",
+                "pattern": "Press Pattern",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": ""
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Side Plank",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Hold 30 sec each side"
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Tensor Fascia Latae, Erector Spinae",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 3,
+        "workout_id": "cpt7-muscle-gain-workout-03",
+        "phase": 1,
+        "phase_name": "Stabilization Endurance Training",
+        "date": "3 of 12",
+        "coaching_tips": "Perform activation and resistance exercises in two mini circuits.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Tensor Fascia Latae, Erector Spinae",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              },
+              {
+                "exercise_name": "Dynamic Stretch: Tube Walking: Side to Side",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Palloff Press",
+                "category": "Core",
+                "sets": 2,
+                "reps": 16,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": "8 each side"
+              },
+              {
+                "exercise_name": "Cable Rotation",
+                "category": "Core",
+                "sets": 2,
+                "reps": 16,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": "8 each side"
+              },
+              {
+                "exercise_name": "Single-leg Throw and Catch",
+                "category": "Balance",
+                "sets": 2,
+                "reps": 16,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": "8 reps each leg"
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": [
+              {
+                "exercise_name": "Squat Jump with Stabilization",
+                "category": "Plyometric",
+                "sets": 1,
+                "reps": 8,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": "Hold landing 3-5 sec"
+              }
+            ]
+          },
+          "resistance_training": {
+            "exercises": [
+              {
+                "exercise_name": "Ball Squat, Curl to Press",
+                "pattern": "Total Body",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Cable Chest Press",
+                "pattern": "Chest",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Cable Row",
+                "pattern": "Back",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Dumbbell Scaption",
+                "pattern": "Shoulders",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Step-up to Balance",
+                "pattern": "Legs",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 90,
+                "notes": ""
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Biceps Curls",
+                "sets": 2,
+                "reps": 15,
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Tensor Fascia Latae, Erector Spinae",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 4,
+        "workout_id": "cpt7-muscle-gain-workout-04",
+        "phase": 2,
+        "phase_name": "Strength Endurance Training",
+        "date": "4 of 12",
+        "coaching_tips": "Perform activation exercises in a circuit. Resistance training consists of supersets for each body part.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Active Stretch: Calves, Tensor Fascia Latae, Pectorals",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "1-2 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 1-2 sec"
+              },
+              {
+                "exercise_name": "Dynamic Stretch: Tube Walking: Side to Side",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": "10 reps each leg"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Ball Crunch",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Back Extension",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Single-leg Squat",
+                "category": "Balance",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": [
+              {
+                "exercise_name": "Box Jump-up",
+                "category": "Plyometric",
+                "sets": 2,
+                "reps": 8,
+                "tempo": "Repeating",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "resistance_training": {
+            "structure": "Supersets",
+            "supersets": [
+              {
+                "superset": 1,
+                "body_part": "Chest",
+                "exercises": [
+                  {
+                    "exercise_name": "Dumbbell Chest Press",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Push-up",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": "Modified push-up if necessary"
+                  }
+                ]
+              },
+              {
+                "superset": 2,
+                "body_part": "Back",
+                "exercises": [
+                  {
+                    "exercise_name": "Seated Cable Row",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Ball Dumbbell Row",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 3,
+                "body_part": "Shoulders",
+                "exercises": [
+                  {
+                    "exercise_name": "Standing Dumbbell Shoulder Press",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Single-leg Scaption",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 4,
+                "body_part": "Biceps",
+                "exercises": [
+                  {
+                    "exercise_name": "Biceps Curl Machine",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Single-leg Dumbbell Curl",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 5,
+                "body_part": "Triceps",
+                "exercises": [
+                  {
+                    "exercise_name": "Cable Pushdown",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Prone Ball Dumbbell Triceps Extension",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 6,
+                "body_part": "Legs",
+                "exercises": [
+                  {
+                    "exercise_name": "Leg Press",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Single-leg Squat",
+                    "sets": 2,
+                    "reps": 12,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Plank",
+                "sets": 2,
+                "reps": 1,
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Hold for 30 sec"
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Tensor Fascia Latae, Pectorals",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 5,
+        "workout_id": "cpt7-muscle-gain-workout-05",
+        "phase": 2,
+        "phase_name": "Strength Endurance Training",
+        "date": "5 of 12",
+        "coaching_tips": "Perform activation exercises in a circuit. Resistance training consists of supersets for each body part.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Active Stretch: Calves, Tensor Fascia Latae, Pectorals",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "1-2 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 1-2 sec"
+              },
+              {
+                "exercise_name": "Dynamic Stretch: Tube Walking: Side to Side",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": "10 reps each leg"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Cable Rotation",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Cable Lift",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Single-leg Romanian Deadlift",
+                "category": "Balance",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": [
+              {
+                "exercise_name": "Tuck Jump",
+                "category": "Plyometric",
+                "sets": 2,
+                "reps": 8,
+                "tempo": "Repeating",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "resistance_training": {
+            "structure": "Supersets",
+            "supersets": [
+              {
+                "superset": 1,
+                "body_part": "Chest",
+                "exercises": [
+                  {
+                    "exercise_name": "Barbell Bench Press",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Ball Push-up",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 2,
+                "body_part": "Back",
+                "exercises": [
+                  {
+                    "exercise_name": "Lat Pulldown",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Ball Dumbbell Cobra",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 3,
+                "body_part": "Shoulders",
+                "exercises": [
+                  {
+                    "exercise_name": "Standing Dumbbell Shoulder Press",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Single-leg Dumbbell Scaption",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 4,
+                "body_part": "Biceps",
+                "exercises": [
+                  {
+                    "exercise_name": "Standing Barbell Curl",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Single-leg Dumbbell Curl",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 5,
+                "body_part": "Triceps",
+                "exercises": [
+                  {
+                    "exercise_name": "Cable Pushdown",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Prone Ball Dumbbell Triceps Extension",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 6,
+                "body_part": "Legs",
+                "exercises": [
+                  {
+                    "exercise_name": "Romanian Deadlift",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Single-leg Romanian Deadlift",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Bicycle Crunch",
+                "sets": 2,
+                "reps": 20,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Tensor Fascia Latae, Pectorals",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 6,
+        "workout_id": "cpt7-muscle-gain-workout-06",
+        "phase": 2,
+        "phase_name": "Strength Endurance Training",
+        "date": "6 of 12",
+        "coaching_tips": "Perform activation exercises in a circuit. Resistance training consists of supersets for each body part.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Active Stretch: Calves, Tensor Fascia Latae, Pectorals",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "1-2 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 1-2 sec"
+              },
+              {
+                "exercise_name": "Dynamic Stretch: Tube Walking: Side to Side",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": "10 reps each leg"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Cable Chop",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Reverse Crunch",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Multiplanar Step-up to Balance",
+                "category": "Balance",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": [
+              {
+                "exercise_name": "Butt Kick",
+                "category": "Plyometric",
+                "sets": 2,
+                "reps": 8,
+                "tempo": "Repeating",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "resistance_training": {
+            "structure": "Supersets",
+            "supersets": [
+              {
+                "superset": 1,
+                "body_part": "Chest",
+                "exercises": [
+                  {
+                    "exercise_name": "Incline Dumbbell Chest Press",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Single-leg Cable Chest Press",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 2,
+                "body_part": "Back",
+                "exercises": [
+                  {
+                    "exercise_name": "Bent Over Barbell Row",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Ball Dumbbell Row",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 3,
+                "body_part": "Shoulders",
+                "exercises": [
+                  {
+                    "exercise_name": "Standing Dumbbell Lateral Raise",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Single-leg Scaption",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 4,
+                "body_part": "Biceps",
+                "exercises": [
+                  {
+                    "exercise_name": "Dumbbell Biceps Curl",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Single-leg Dumbbell Curl",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 5,
+                "body_part": "Triceps",
+                "exercises": [
+                  {
+                    "exercise_name": "Dumbbell Overhead Triceps Extension",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Prone Ball Dumbbell Triceps Extension",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              },
+              {
+                "superset": 6,
+                "body_part": "Legs",
+                "exercises": [
+                  {
+                    "exercise_name": "Barbell Squat",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Moderate",
+                    "rest_seconds": 0,
+                    "notes": ""
+                  },
+                  {
+                    "exercise_name": "Single-leg Squat Touchdown",
+                    "sets": 3,
+                    "reps": 8,
+                    "tempo": "Slow",
+                    "rest_seconds": 60,
+                    "notes": ""
+                  }
+                ]
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Jump Rope",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": "5 minutes"
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Tensor Fascia Latae, Pectorals",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 7,
+        "workout_id": "cpt7-muscle-gain-workout-07",
+        "phase": 3,
+        "phase_name": "Muscular Development Training (Hypertrophy)",
+        "date": "7 of 12",
+        "coaching_tips": "Perform activation exercises in a circuit.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Active Stretch: Calves, Tensor Fascia Latae, Pectorals",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "1-2 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 1-2 sec"
+              },
+              {
+                "exercise_name": "Dynamic Stretch: Tube Walking: Side to Side",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": "10 reps each leg"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Cable Lift",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Cable Chop",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Single-leg Romanian Deadlift",
+                "category": "Balance",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": []
+          },
+          "resistance_training": {
+            "structure": "Straight Sets - Multiple Exercises per Body Part",
+            "exercises": [
+              {
+                "exercise_name": "Barbell Bench Press",
+                "body_part": "Chest",
+                "sets": 4,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Incline Dumbbell Chest Press",
+                "body_part": "Chest",
+                "sets": 4,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Push-ups",
+                "body_part": "Chest",
+                "sets": 4,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Pull-ups",
+                "body_part": "Back",
+                "sets": 4,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Seated Cable Row",
+                "body_part": "Back",
+                "sets": 4,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Seated Lat Pulldown",
+                "body_part": "Back",
+                "sets": 4,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Punching Bag",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": "Punch bag for 5 minutes"
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Tensor Fascia Latae, Pectorals",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 8,
+        "workout_id": "cpt7-muscle-gain-workout-08",
+        "phase": 3,
+        "phase_name": "Muscular Development Training (Hypertrophy)",
+        "date": "8 of 12",
+        "coaching_tips": "Perform activation exercises in a circuit.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Active Stretch: Calves, Tensor Fascia Latae, Pectorals",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "1-2 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 1-2 sec"
+              },
+              {
+                "exercise_name": "Dynamic Stretch: Tube Walking: Side to Side",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": "10 reps each leg"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Cable Rotation",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Back Extension",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Single-leg Squat",
+                "category": "Balance",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": []
+          },
+          "resistance_training": {
+            "structure": "Straight Sets - Multiple Exercises per Body Part",
+            "exercises": [
+              {
+                "exercise_name": "Standing Dumbbell Shoulder Press",
+                "body_part": "Shoulders",
+                "sets": 4,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Dumbbell Lateral Raise",
+                "body_part": "Shoulders",
+                "sets": 4,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Bent Over Dumbbell Reverse Fly",
+                "body_part": "Shoulders",
+                "sets": 4,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Barbell Curl",
+                "body_part": "Biceps",
+                "sets": 4,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Dumbbell Hammer Curl",
+                "body_part": "Biceps",
+                "sets": 4,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Cable Pushdown",
+                "body_part": "Triceps",
+                "sets": 4,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Dumbbell Overhead Triceps Extension",
+                "body_part": "Triceps",
+                "sets": 4,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Jump Rope",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": "5 minutes"
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Tensor Fascia Latae, Pectorals",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 9,
+        "workout_id": "cpt7-muscle-gain-workout-09",
+        "phase": 3,
+        "phase_name": "Muscular Development Training (Hypertrophy)",
+        "date": "9 of 12",
+        "coaching_tips": "Perform activation exercises in a circuit.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Active Stretch: Calves, Tensor Fascia Latae, Pectorals",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "1-2 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 1-2 sec"
+              },
+              {
+                "exercise_name": "Dynamic Stretch: Tube Walking: Side to Side",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": "10 reps each leg"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Ball Crunch",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Reverse Crunch",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Step-up to Balance",
+                "category": "Balance",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": []
+          },
+          "resistance_training": {
+            "structure": "Straight Sets - Multiple Exercises per Body Part",
+            "exercises": [
+              {
+                "exercise_name": "Barbell Squat",
+                "body_part": "Legs",
+                "sets": 4,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Leg Press",
+                "body_part": "Legs",
+                "sets": 4,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Romanian Deadlift",
+                "body_part": "Legs",
+                "sets": 4,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Leg Extension",
+                "body_part": "Legs",
+                "sets": 4,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Lying Leg Curl",
+                "body_part": "Legs",
+                "sets": 4,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Walking Lunges",
+                "body_part": "Legs",
+                "sets": 4,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": "10 reps each leg"
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Standing Calf Raises",
+                "sets": 3,
+                "reps": 15,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Tensor Fascia Latae, Pectorals",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 10,
+        "workout_id": "cpt7-muscle-gain-workout-10",
+        "phase": 4,
+        "phase_name": "Maximal Strength Training",
+        "date": "10 of 12",
+        "coaching_tips": "Perform activation exercises in a circuit. Focus on explosive tempo and maximal loads.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Active Stretch: Calves, Tensor Fascia Latae, Pectorals",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "1-2 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 1-2 sec"
+              },
+              {
+                "exercise_name": "Dynamic Stretch: Tube Walking: Side to Side",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": "10 reps each direction"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Ball Crunch",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Reverse Crunch",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Step-up to Balance",
+                "category": "Balance",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": []
+          },
+          "resistance_training": {
+            "structure": "Straight Sets - Heavy Loads, Low Reps, Long Rest",
+            "exercises": [
+              {
+                "exercise_name": "Barbell Bench Press",
+                "body_part": "Chest",
+                "sets": 5,
+                "reps": 5,
+                "tempo": "Explosive",
+                "rest_seconds": 180,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Incline Dumbbell Chest Press",
+                "body_part": "Chest",
+                "sets": 5,
+                "reps": 5,
+                "tempo": "Explosive",
+                "rest_seconds": 180,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Decline Dumbbell Chest Press",
+                "body_part": "Chest",
+                "sets": 5,
+                "reps": 5,
+                "tempo": "Explosive",
+                "rest_seconds": 180,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Barbell Bent Over Row",
+                "body_part": "Back",
+                "sets": 5,
+                "reps": 5,
+                "tempo": "Explosive",
+                "rest_seconds": 180,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Seated Lat Pulldown",
+                "body_part": "Back",
+                "sets": 5,
+                "reps": 5,
+                "tempo": "Explosive",
+                "rest_seconds": 180,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Seated Cable Row",
+                "body_part": "Back",
+                "sets": 5,
+                "reps": 5,
+                "tempo": "Explosive",
+                "rest_seconds": 180,
+                "notes": ""
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Floor Crunch",
+                "sets": 1,
+                "reps": 20,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Tensor Fascia Latae, Pectorals",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 11,
+        "workout_id": "cpt7-muscle-gain-workout-11",
+        "phase": 4,
+        "phase_name": "Maximal Strength Training",
+        "date": "11 of 12",
+        "coaching_tips": "Perform activation exercises in a circuit. Focus on explosive tempo and maximal loads.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Active Stretch: Calves, Tensor Fascia Latae, Pectorals",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "1-2 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 1-2 sec"
+              },
+              {
+                "exercise_name": "Dynamic Stretch: Tube Walking: Side to Side",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": "10 reps each direction"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Cable Rotation",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Cable Lift",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Single-leg Romanian Deadlift",
+                "category": "Balance",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": []
+          },
+          "resistance_training": {
+            "structure": "Straight Sets - Heavy Loads, Low Reps, Long Rest",
+            "exercises": [
+              {
+                "exercise_name": "Standing Dumbbell Shoulder Press",
+                "body_part": "Shoulders",
+                "sets": 5,
+                "reps": 5,
+                "tempo": "Explosive",
+                "rest_seconds": 180,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Standing Dumbbell Lateral Raise",
+                "body_part": "Shoulders",
+                "sets": 5,
+                "reps": 5,
+                "tempo": "Explosive",
+                "rest_seconds": 180,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Bent Over Dumbbell Reverse Fly",
+                "body_part": "Shoulders",
+                "sets": 5,
+                "reps": 5,
+                "tempo": "Explosive",
+                "rest_seconds": 180,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Barbell Curl",
+                "body_part": "Biceps",
+                "sets": 5,
+                "reps": 5,
+                "tempo": "Explosive",
+                "rest_seconds": 180,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Dumbbell Hammer Curl",
+                "body_part": "Biceps",
+                "sets": 5,
+                "reps": 5,
+                "tempo": "Explosive",
+                "rest_seconds": 180,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Close Grip Bench Press",
+                "body_part": "Triceps",
+                "sets": 5,
+                "reps": 5,
+                "tempo": "Explosive",
+                "rest_seconds": 180,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Dumbbell Overhead Triceps Extension",
+                "body_part": "Triceps",
+                "sets": 5,
+                "reps": 5,
+                "tempo": "Explosive",
+                "rest_seconds": 180,
+                "notes": ""
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Plank",
+                "sets": 2,
+                "reps": 1,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": "Hold for 30 sec"
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Tensor Fascia Latae, Pectorals",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "workout_number": 12,
+        "workout_id": "cpt7-muscle-gain-workout-12",
+        "phase": 4,
+        "phase_name": "Maximal Strength Training",
+        "date": "12 of 12",
+        "coaching_tips": "Perform activation exercises in a circuit. Focus on explosive tempo and maximal loads.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Active Stretch: Calves, Tensor Fascia Latae, Pectorals",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "1-2 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 1-2 sec"
+              },
+              {
+                "exercise_name": "Dynamic Stretch: Tube Walking: Side to Side",
+                "sets": 1,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": "10 reps each direction"
+              }
+            ]
+          },
+          "activation": {
+            "category": "Core & Balance",
+            "exercises": [
+              {
+                "exercise_name": "Cable Chop",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Back Extension",
+                "category": "Core",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 0,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Single-leg Squat",
+                "category": "Balance",
+                "sets": 2,
+                "reps": 12,
+                "tempo": "Moderate",
+                "rest_seconds": 60,
+                "notes": ""
+              }
+            ]
+          },
+          "skill_development": {
+            "category": "Plyometric & SAQ",
+            "exercises": []
+          },
+          "resistance_training": {
+            "structure": "Straight Sets - Heavy Loads, Low Reps, Long Rest",
+            "exercises": [
+              {
+                "exercise_name": "Barbell Squat",
+                "body_part": "Legs",
+                "sets": 5,
+                "reps": 5,
+                "tempo": "Explosive",
+                "rest_seconds": 180,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Leg Press",
+                "body_part": "Legs",
+                "sets": 5,
+                "reps": 5,
+                "tempo": "Explosive",
+                "rest_seconds": 180,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Romanian Deadlift",
+                "body_part": "Legs",
+                "sets": 5,
+                "reps": 5,
+                "tempo": "Explosive",
+                "rest_seconds": 180,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Leg Extension",
+                "body_part": "Legs",
+                "sets": 5,
+                "reps": 5,
+                "tempo": "Explosive",
+                "rest_seconds": 180,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Lying Leg Curl",
+                "body_part": "Legs",
+                "sets": 5,
+                "reps": 5,
+                "tempo": "Explosive",
+                "rest_seconds": 180,
+                "notes": ""
+              },
+              {
+                "exercise_name": "Walking Lunges",
+                "body_part": "Legs",
+                "sets": 5,
+                "reps": 5,
+                "tempo": "Explosive",
+                "rest_seconds": 180,
+                "notes": "5 reps each leg"
+              }
+            ]
+          },
+          "athletes_choice": {
+            "exercises": [
+              {
+                "exercise_name": "Standing Calf Raises",
+                "sets": 3,
+                "reps": 10,
+                "tempo": "Moderate",
+                "rest_seconds": 30,
+                "notes": ""
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": [
+              {
+                "exercise_name": "Foam Roll: Calves, Tensor Fascia Latae, Thoracic-Spine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold tender spot for 30 sec"
+              },
+              {
+                "exercise_name": "Static Stretch: Calves, Tensor Fascia Latae, Pectorals",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "30 sec",
+                "rest_seconds": 0,
+                "notes": "Hold each stretch for 30 sec"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "program_notes": {
+      "phase_1_notes": "Foundation building phase with slow tempo and stabilization emphasis. Prepares muscles, joints, and nervous system for heavier loads.",
+      "phase_2_notes": "Strength endurance with supersets pairing traditional strength exercises with stabilization movements. Increases work capacity and muscle endurance.",
+      "phase_3_notes": "Hypertrophy phase with 4 sets of 10 reps and 30-second rest. Multiple exercises per body part for maximum muscle growth stimulus.",
+      "phase_4_notes": "Maximal strength phase with 5 sets of 5 reps, explosive tempo, and 3-minute rest periods. Focus on neural adaptation and maximum force production."
+    },
+    "nutrition_guidelines_for_muscle_gain": {
+      "caloric_surplus": "Create a 300-500 calorie surplus above maintenance level",
+      "protein": "2.0-2.5g per kg bodyweight for optimal muscle protein synthesis",
+      "carbohydrates": "5-7g per kg bodyweight to fuel intense training and recovery",
+      "fats": "1-1.2g per kg bodyweight for hormone production and nutrient absorption",
+      "hydration": "3-4 liters of water per day, increased during heavy training phases",
+      "meal_timing": "5-6 meals per day with protein at each meal, pre and post-workout nutrition critical",
+      "post_workout": "20-40g protein + 40-80g carbs within 30-60 minutes post-training"
+    },
+    "muscle_gain_optimization_tips": {
+      "progressive_overload": "Increase weight by 2.5-5kg when you can complete all sets with good form",
+      "recovery": "8-10 hours of sleep per night, especially during Phase 3 and 4",
+      "training_frequency": "4-5x per week for optimal muscle growth stimulus",
+      "deload_weeks": "Every 4-6 weeks reduce volume by 40-50% to allow supercompensation",
+      "mind_muscle_connection": "Focus on feeling target muscles working rather than just moving weight",
+      "form_over_ego": "Perfect form is essential - don't sacrifice technique for heavier loads",
+      "tracking": "Log all weights, sets, reps to ensure progressive overload is occurring"
+    },
+    "phase_specific_guidelines": {
+      "phase_1": {
+        "duration": "2-3 weeks",
+        "tempo": "Slow (4-2-1)",
+        "rest": "60-90 seconds",
+        "intensity": "50-70% of 1RM",
+        "focus": "Movement quality and stabilization"
+      },
+      "phase_2": {
+        "duration": "2-3 weeks",
+        "tempo": "Moderate (2-0-2)",
+        "rest": "0-60 seconds between supersets",
+        "intensity": "70-80% of 1RM for strength exercises",
+        "focus": "Work capacity and strength endurance"
+      },
+      "phase_3": {
+        "duration": "3-4 weeks",
+        "tempo": "Moderate (2-0-2)",
+        "rest": "30 seconds",
+        "intensity": "75-85% of 1RM",
+        "focus": "Maximal muscle hypertrophy"
+      },
+      "phase_4": {
+        "duration": "2-3 weeks",
+        "tempo": "Explosive (X-X-X)",
+        "rest": "3 minutes",
+        "intensity": "85-100% of 1RM",
+        "focus": "Maximal strength and neural adaptation"
+      }
+    },
+    "implementation_for_massimino": {
+      "usage": "This 12-workout program is ideal for clients focused on muscle building and strength development",
+      "customization": "Trainers can adjust exercise selection, volume, and intensity based on individual client needs and equipment availability",
+      "progression": "Clients must complete Phases 1-3 before attempting Phase 4. Can cycle through phases multiple times with progressive overload",
+      "duration_recommendations": {
+        "minimum": "6 weeks (2 weeks per phase for Phases 1-3)",
+        "optimal": "10-12 weeks (allowing full adaptation to each phase)",
+        "advanced": "Can repeat entire cycle 2-3 times per year with increasing loads"
+      },
+      "tracking_metrics": [
+        "Body weight and lean muscle mass",
+        "Circumference measurements (chest, arms, thighs)",
+        "Progress photos",
+        "1RM or estimated 1RM for major lifts",
+        "Exercise weights for all movements",
+        "Total training volume per week",
+        "Recovery quality and sleep duration"
+      ],
+      "split_recommendations": {
+        "beginner": "Full body workouts 3x per week",
+        "intermediate": "Upper/Lower split 4x per week",
+        "advanced": "Body part split 5-6x per week (Chest/Back, Shoulders/Arms, Legs)"
+      }
+    }
+  }
