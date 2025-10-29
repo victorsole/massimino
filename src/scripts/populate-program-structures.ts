@@ -56,6 +56,11 @@ async function buildCBumStructure() {
 
   console.log(`✅ Created microcycle: ${microcycle.title}`);
 
+  // Load exercise mapping
+  console.log('\n📋 Loading exercise mapping...');
+  const exerciseMapping = await loadCBumExerciseMapping();
+  console.log(`✅ Loaded ${Object.keys(exerciseMapping).length} exercise mappings\n`);
+
   // Map CBum's workout days from the JSON
   const workoutDays = cbumData.weekly_schedule.filter((day: any) => day.focus !== 'REST');
 
@@ -79,8 +84,7 @@ async function buildCBumStructure() {
     console.log(`  ✅ Created workout: ${workout.dayLabel}`);
 
     // Add exercises for this workout
-    // Note: We'll use the exercise mappings from the previous script
-    const exercisesForDay = getExercisesForCBumDay(dayData.day);
+    const exercisesForDay = getExercisesForCBumDay(dayData.day, exerciseMapping);
 
     for (let i = 0; i < exercisesForDay.length; i++) {
       const ex = exercisesForDay[i];
@@ -95,7 +99,7 @@ async function buildCBumStructure() {
           repsMin: ex.repsMin || 8,
           repsMax: ex.repsMax || 15,
           targetRPE: ex.rpe || 8,
-          targetIntensity: ex.intensity || 75,
+          targetIntensity: ex.intensity ? String(ex.intensity) : '75',
           restSeconds: ex.rest || 75,
           tempo: ex.tempo || '3-0-1-0',
           notes: ex.notes || null,
@@ -119,33 +123,78 @@ async function buildCBumStructure() {
 async function loadCBumExerciseMapping(): Promise<Record<string, string>> {
   const mapping: Record<string, string> = {};
 
-  const exerciseKeys = [
-    'leg-extensions-warmup', 'squats', 'hack-squats', 'leg-press', 'leg-extensions',
-    'walking-lunges', 'lying-leg-curls', 'romanian-deadlifts', 'seated-leg-curls',
-    'standing-calf-raises', 'seated-calf-raises', 'incline-barbell-press',
-    'flat-dumbbell-press', 'dips', 'incline-dumbbell-flyes', 'cable-crossovers',
-    'overhead-press', 'lateral-raises', 'rear-delt-flyes', 'overhead-tricep-extension',
-    'rope-pushdowns', 'skull-crushers', 'deadlifts', 'barbell-rows', 'pull-ups',
-    'lat-pulldowns', 't-bar-rows', 'face-pulls', 'shrugs', 'barbell-curls',
-    'hammer-curls', 'preacher-curls', 'dumbbell-press', 'machine-flyes',
-    'arnold-press', 'front-raises', 'cable-lateral-raises', 'close-grip-bench',
-    'dumbbell-kickbacks', 'one-arm-rows', 'cable-rows', 'concentration-curls'
-  ];
+  const exerciseNames: Record<string, string> = {
+    'leg-extensions-warmup': 'leg extension',
+    'squats': 'barbell squat',
+    'hack-squats': 'hack squat',
+    'leg-press': 'leg press',
+    'leg-extensions': 'leg extension',
+    'walking-lunges': 'walking lunge',
+    'lying-leg-curls': 'lying leg curl',
+    'romanian-deadlifts': 'romanian deadlift',
+    'seated-leg-curls': 'seated leg curl',
+    'standing-calf-raises': 'standing calf raise',
+    'seated-calf-raises': 'seated calf raise',
+    'incline-barbell-press': 'incline barbell bench press',
+    'flat-dumbbell-press': 'dumbbell bench press',
+    'dips': 'dip',
+    'incline-dumbbell-flyes': 'incline dumbbell fly',
+    'cable-crossovers': 'cable crossover',
+    'overhead-press': 'overhead press',
+    'lateral-raises': 'dumbbell lateral raise',
+    'rear-delt-flyes': 'reverse fly',
+    'overhead-tricep-extension': 'overhead triceps extension',
+    'rope-pushdowns': 'cable tricep pushdown',
+    'skull-crushers': 'skull crusher',
+    'deadlifts': 'barbell deadlift',
+    'barbell-rows': 'barbell row',
+    'pull-ups': 'pull up',
+    'lat-pulldowns': 'lat pulldown',
+    't-bar-rows': 't-bar row',
+    'face-pulls': 'face pull',
+    'shrugs': 'barbell shrug',
+    'barbell-curls': 'barbell curl',
+    'hammer-curls': 'hammer curl',
+    'preacher-curls': 'preacher curl',
+    'dumbbell-press': 'dumbbell shoulder press',
+    'machine-flyes': 'pec deck',
+    'arnold-press': 'arnold press',
+    'front-raises': 'front raise',
+    'cable-lateral-raises': 'cable lateral raise',
+    'close-grip-bench': 'close grip bench press',
+    'dumbbell-kickbacks': 'dumbbell tricep kickback',
+    'one-arm-rows': 'dumbbell row',
+    'cable-rows': 'seated cable row',
+    'concentration-curls': 'concentration curl'
+  };
 
-  // Use a simple ID for exercises - we'll just grab first matching one
-  for (const key of exerciseKeys) {
+  // Look up each exercise by name
+  for (const [key, exerciseName] of Object.entries(exerciseNames)) {
     const exercise = await prisma.exercises.findFirst({
       where: {
-        OR: [
-          { videoUrl: { not: null } },
-          { imageUrl: { not: null } },
-        ],
+        name: { contains: exerciseName, mode: 'insensitive' },
       },
-      select: { id: true },
+      select: { id: true, name: true },
     });
 
     if (exercise) {
       mapping[key] = exercise.id;
+      console.log(`  ✓ Mapped ${key} -> ${exercise.name} (${exercise.id})`);
+    } else {
+      console.log(`  ✗ No exercise found for: ${key} (searching for "${exerciseName}")`);
+      // Fallback: use any exercise with media
+      const fallback = await prisma.exercises.findFirst({
+        where: {
+          OR: [
+            { videoUrl: { not: null } },
+            { imageUrl: { not: null } },
+          ],
+        },
+        select: { id: true },
+      });
+      if (fallback) {
+        mapping[key] = fallback.id;
+      }
     }
   }
 
@@ -155,7 +204,7 @@ async function loadCBumExerciseMapping(): Promise<Record<string, string>> {
 /**
  * Get exercises for a specific CBum workout day
  */
-function getExercisesForCBumDay(day: number, exerciseIds: Record<string, string>): any[] {
+function getExercisesForCBumDay(day: number, exerciseIds: Record<string, string> = {}): any[] {
   const exerciseMap: Record<number, any[]> = {
     1: [ // Legs (Quad Dominant) & Calves
       { key: 'leg-extensions-warmup', sets: 3, repsMin: 15, repsMax: 20, rpe: 6, notes: 'Warm-up sets' },
@@ -235,7 +284,13 @@ function getExercisesForCBumDay(day: number, exerciseIds: Record<string, string>
     ],
   };
 
-  return exerciseMap[day] || [];
+  const exercises = exerciseMap[day] || [];
+
+  // Add exerciseId from mapping
+  return exercises.map(ex => ({
+    ...ex,
+    exerciseId: exerciseIds[ex.key] || null
+  }));
 }
 
 /**
@@ -442,10 +497,10 @@ async function buildFatLossStructure() {
               fixedExerciseId: exerciseId,
               exerciseOrder: exerciseOrder++,
               sets: ex.sets || 3,
-              repsMin: ex.reps_min || ex.reps || 8,
-              repsMax: ex.reps_max || ex.reps || 12,
+              repsMin: (ex as any).reps_min || (ex as any).reps || 8,
+              repsMax: (ex as any).reps_max || (ex as any).reps || 12,
               targetRPE: workoutData.phase === 1 ? 6 : (workoutData.phase === 2 ? 7 : 8),
-              restSeconds: ex.rest_seconds || 60,
+              restSeconds: (ex as any).rest_seconds || 60,
               tempo: ex.tempo || null,
               notes: ex.notes || null,
             },
