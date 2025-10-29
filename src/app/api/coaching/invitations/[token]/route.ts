@@ -143,28 +143,15 @@ export async function POST(
         },
       });
 
-      // Update trainer's total points
-      const currentPoints = await prisma.trainer_points.aggregate({
-        where: { trainerId: trainerProfile.id },
-        _sum: { points: true },
-      });
-
-      await prisma.trainer_profiles.update({
-        where: { id: trainerProfile.id },
-        data: {
-          reputationPoints: currentPoints._sum.points || 0,
-        },
-      });
-
       // Create notification for trainer
-      await prisma.notifications.create({
+      await prisma.push_notifications.create({
         data: {
           id: nanoid(),
           userId: invitation.trainerId,
           type: 'ACHIEVEMENT',
           title: 'Athlete Joined!',
-          message: `${newUser.name || newUser.email} accepted your invitation and joined Massimino. You earned 100 points!`,
-          isRead: false,
+          body: `${newUser.name || newUser.email} accepted your invitation and joined Massimino. You earned 100 points!`,
+          status: 'PENDING',
           createdAt: new Date(),
         },
       });
