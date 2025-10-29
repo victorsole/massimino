@@ -136,7 +136,7 @@ export async function POST(
         data: {
           id: nanoid(),
           trainerId: trainerProfile.id,
-          pointType: 'REFERRAL',
+          pointType: 'INVITATION_ACCEPTED',
           points: 100,
           description: `${newUser.name || newUser.email} joined Massimino through your invitation`,
           createdAt: new Date(),
