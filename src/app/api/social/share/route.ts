@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
       ...(workoutData ? { workoutData } : {})
     }
 
-    const results = []
+    const results: any[] = []
 
     // Share to each platform
     for (const platform of platforms) {

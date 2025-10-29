@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Create health data entries for key metrics
-    const healthDataEntries = [];
+    const healthDataEntries: any[] = [];
 
     if (sessionData.calories) {
       healthDataEntries.push({

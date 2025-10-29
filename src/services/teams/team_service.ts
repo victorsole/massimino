@@ -1606,7 +1606,7 @@ export async function createTeamWorkoutUnified(params: {
   }
 
   // Create workout log entries for each exercise and set
-  const createdEntries = []
+  const createdEntries: any[] = []
 
   for (const exercise of exercises) {
     const setsCount = exercise.sets || 1

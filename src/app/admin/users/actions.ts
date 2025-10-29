@@ -71,7 +71,7 @@ async function checkAndUnlockAchievements(trainerId: string) {
     const existingTypes = new Set(existingAchievements.map((a: any) => a.achievementType))
 
     // Check for new achievements
-    const newAchievements = []
+    const newAchievements: Array<{ type: string; points: number }> = []
 
     // General invitation achievements
     if (totalInvites >= ACHIEVEMENT_REQUIREMENTS.ROOKIE_RECRUITER && !existingTypes.has('ROOKIE_RECRUITER')) {

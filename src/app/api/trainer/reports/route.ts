@@ -388,7 +388,7 @@ async function getPersonalRecords(clientId: string, startDate: Date) {
  * Generate achievements based on metrics
  */
 function generateAchievements(metrics: any, workoutStats: any) {
-  const achievements = [];
+  const achievements: any[] = [];
 
   if (metrics.totalWorkouts >= 12) {
     achievements.push({
@@ -421,7 +421,7 @@ function generateAchievements(metrics: any, workoutStats: any) {
  * Generate recommendations
  */
 function generateRecommendations(metrics: any, workoutStats: any) {
-  const recommendations = [];
+  const recommendations: any[] = [];
 
   if (metrics.consistency < 60) {
     recommendations.push('Focus on improving workout consistency. Aim for at least 3-4 sessions per week.');
@@ -444,7 +444,7 @@ function generateRecommendations(metrics: any, workoutStats: any) {
  * Generate next goals
  */
 function generateNextGoals(metrics: any, _workoutStats: any) {
-  const goals = [];
+  const goals: any[] = [];
 
   goals.push({
     category: 'consistency',

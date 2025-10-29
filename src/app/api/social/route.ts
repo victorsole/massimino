@@ -380,7 +380,7 @@ async function handleShare(userId: string, body: any) {
     ...(cleanedWorkoutData ? { workoutData: cleanedWorkoutData } : {})
   };
 
-  const results = [];
+  const results: any[] = [];
 
   // Share to each platform
   for (const platform of platforms) {

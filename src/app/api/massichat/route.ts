@@ -8,13 +8,25 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    const { message, sessionId, includeAssessments, includeWorkoutHistory } = await request.json()
+    const { message, sessionId, includeAssessments, includeWorkoutHistory, athleteId } = await request.json()
     if (!message || typeof message !== 'string') {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 })
     }
 
+    // Determine target user (for trainers planning for athletes)
+    let targetUserId = session.user.id;
+    if (athleteId && session.user.role === 'TRAINER') {
+      // Verify trainer has access to this athlete
+      const relationship = await (prisma as any).trainer_clients.findFirst({
+        where: { trainerId: session.user.id, clientId: athleteId, status: 'ACTIVE' },
+      });
+      if (relationship) {
+        targetUserId = athleteId;
+      }
+    }
+
     const res = await sendMassichatMessage({
-      userId: session.user.id,
+      userId: targetUserId,
       sessionId,
       message,
       includeAssessments: includeAssessments ?? true,

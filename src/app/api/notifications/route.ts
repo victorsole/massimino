@@ -337,7 +337,7 @@ export async function POST(request: NextRequest) {
           );
         }
 
-        const notifications = [];
+        const notifications: any[] = [];
 
         // Send notifications to all target users
         for (const user of targetUsers) {
