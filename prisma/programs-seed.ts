@@ -396,6 +396,373 @@ async function main() {
 
   console.log('✅ Created Linear Periodization with 4 phases, 12 weeks, 48 workouts');
 
+  // ===========================
+  // CBUM'S CLASSIC PHYSIQUE PPL
+  // ===========================
+
+  console.log('📝 Creating CBum\'s Classic Physique PPL Program...');
+
+  // Get CBum
+  const cbum = await prisma.legendary_athletes.findUnique({
+    where: { slug: 'chris-bumstead' }
+  });
+
+  if (!cbum) {
+    console.log('⚠️ CBum not found, skipping CBum program');
+  } else {
+    // Get exercises for CBum's program
+    const inclineBench = await prisma.exercises.findFirst({ where: { name: { contains: 'Incline', mode: 'insensitive' } } });
+    const cableFly = await prisma.exercises.findFirst({ where: { name: { contains: 'Cable', mode: 'insensitive' } } });
+    const lateralRaise = await prisma.exercises.findFirst({ where: { name: { contains: 'Lateral Raise', mode: 'insensitive' } } });
+    const deadlift = await prisma.exercises.findFirst({ where: { name: { contains: 'Deadlift', mode: 'insensitive' } } });
+    const barbellRow = await prisma.exercises.findFirst({ where: { name: { contains: 'Barbell Row', mode: 'insensitive' } } });
+    const legPress = await prisma.exercises.findFirst({ where: { name: { contains: 'Leg Press', mode: 'insensitive' } } });
+    const legCurl = await prisma.exercises.findFirst({ where: { name: { contains: 'Leg Curl', mode: 'insensitive' } } });
+
+    const cbumPPL = await prisma.program_templates.upsert({
+      where: { id: 'cbum-classic-ppl' },
+      update: {},
+      create: {
+        id: 'cbum-classic-ppl',
+        name: 'CBum\'s Classic Physique PPL',
+        description: 'Chris Bumstead\'s signature Push/Pull/Legs split designed for building a classic aesthetic physique. This program emphasizes controlled tempo, mind-muscle connection, and balanced development. Train 6 days per week with perfect form and progressive overload. Perfect for intermediate to advanced lifters seeking that timeless look.',
+        createdBy: systemUser.id,
+        duration: '8 weeks',
+        difficulty: 'INTERMEDIATE',
+        category: 'BODYBUILDING',
+        isPublic: true,
+        price: 0,
+        rating: 5.0,
+        ratingCount: 0,
+        isActive: true,
+        tags: ['CBum', 'PPL', 'Classic Physique', 'Aesthetic', 'Modern'],
+        programType: 'ATHLETE',
+        athleteId: cbum.id,
+        hasExerciseSlots: false,
+        progressionStrategy: 'LINEAR',
+        autoRegulation: false,
+        updatedAt: new Date(),
+      }
+    });
+
+    // Create single phase (8 weeks)
+    const cbumPhase = await prisma.program_phases.create({
+      data: {
+        id: crypto.randomUUID(),
+        programId: cbumPPL.id,
+        phaseNumber: 1,
+        phaseName: 'Classic Physique Development',
+        phaseType: 'HYPERTROPHY',
+        startWeek: 1,
+        endWeek: 8,
+        description: 'Build balanced, aesthetic proportions with CBum\'s signature training style',
+        trainingFocus: 'Aesthetic Development',
+        targetIntensity: '75-85%',
+        targetVolume: 'MEDIUM',
+        targetRPE: 8,
+        repRangeLow: 8,
+        repRangeHigh: 12,
+        setsPerExercise: 3,
+        restSecondsMin: 60,
+        restSecondsMax: 90,
+      }
+    });
+
+    // Create 8 microcycles (weeks)
+    for (let week = 1; week <= 8; week++) {
+      const microcycle = await prisma.program_microcycles.create({
+        data: {
+          id: crypto.randomUUID(),
+          phaseId: cbumPhase.id,
+          weekNumber: week,
+          weekInPhase: week,
+          title: `Week ${week}`,
+          description: `Week ${week} - Progressive Overload`,
+          volumeModifier: 1.0,
+          intensityModifier: 1.0 + (week * 0.01),
+        }
+      });
+
+      // Day 1: Push (Chest/Shoulders/Triceps)
+      if (benchPress && shoulderPress) {
+        const pushDay = await prisma.program_workouts.create({
+          data: {
+            id: crypto.randomUUID(),
+            microcycleId: microcycle.id,
+            dayNumber: 1,
+            dayLabel: 'Push Day - Chest, Shoulders, Triceps',
+            workoutType: 'PUSH',
+            description: 'Focus on controlled eccentric and explosive concentric',
+            estimatedDuration: 75,
+          }
+        });
+
+        // Bench Press
+        await prisma.program_workout_exercises.create({
+          data: {
+            id: crypto.randomUUID(),
+            workoutId: pushDay.id,
+            exerciseOrder: 1,
+            fixedExerciseId: benchPress.id,
+            sets: 4,
+            repsMin: 8,
+            repsMax: 10,
+            targetRPE: 8,
+            restSeconds: 90,
+            notes: 'Control the negative, explosive press',
+          }
+        });
+
+        // Shoulder Press
+        await prisma.program_workout_exercises.create({
+          data: {
+            id: crypto.randomUUID(),
+            workoutId: pushDay.id,
+            exerciseOrder: 2,
+            fixedExerciseId: shoulderPress.id,
+            sets: 3,
+            repsMin: 10,
+            repsMax: 12,
+            targetRPE: 8,
+            restSeconds: 75,
+            notes: 'Full range of motion',
+          }
+        });
+
+        if (lateralRaise) {
+          await prisma.program_workout_exercises.create({
+            data: {
+              id: crypto.randomUUID(),
+              workoutId: pushDay.id,
+              exerciseOrder: 3,
+              fixedExerciseId: lateralRaise.id,
+              sets: 3,
+              repsMin: 12,
+              repsMax: 15,
+              targetRPE: 9,
+              restSeconds: 60,
+              notes: 'Controlled tempo, perfect form',
+            }
+          });
+        }
+      }
+
+      // Day 2: Pull (Back/Biceps)
+      if (pullup && barbellRow) {
+        const pullDay = await prisma.program_workouts.create({
+          data: {
+            id: crypto.randomUUID(),
+            microcycleId: microcycle.id,
+            dayNumber: 2,
+            dayLabel: 'Pull Day - Back, Biceps',
+            workoutType: 'PULL',
+            description: 'Focus on lat width and thickness',
+            estimatedDuration: 75,
+          }
+        });
+
+        // Pull-ups
+        await prisma.program_workout_exercises.create({
+          data: {
+            id: crypto.randomUUID(),
+            workoutId: pullDay.id,
+            exerciseOrder: 1,
+            fixedExerciseId: pullup.id,
+            sets: 4,
+            repsMin: 8,
+            repsMax: 12,
+            targetRPE: 8,
+            restSeconds: 90,
+            notes: 'Full stretch at bottom, squeeze at top',
+          }
+        });
+
+        // Barbell Row
+        await prisma.program_workout_exercises.create({
+          data: {
+            id: crypto.randomUUID(),
+            workoutId: pullDay.id,
+            exerciseOrder: 2,
+            fixedExerciseId: barbellRow.id,
+            sets: 4,
+            repsMin: 8,
+            repsMax: 10,
+            targetRPE: 8,
+            restSeconds: 90,
+            notes: 'Pull to lower chest, squeeze lats',
+          }
+        });
+
+        if (curl) {
+          await prisma.program_workout_exercises.create({
+            data: {
+              id: crypto.randomUUID(),
+              workoutId: pullDay.id,
+              exerciseOrder: 3,
+              fixedExerciseId: curl.id,
+              sets: 3,
+              repsMin: 10,
+              repsMax: 12,
+              targetRPE: 8,
+              restSeconds: 60,
+              notes: 'Strict form, control the weight',
+            }
+          });
+        }
+      }
+
+      // Day 3: Legs (Quads/Hams/Calves)
+      if (squat && legPress) {
+        const legDay = await prisma.program_workouts.create({
+          data: {
+            id: crypto.randomUUID(),
+            microcycleId: microcycle.id,
+            dayNumber: 3,
+            dayLabel: 'Leg Day - Quads, Hamstrings, Calves',
+            workoutType: 'LEGS',
+            description: 'Build powerful, proportionate legs',
+            estimatedDuration: 80,
+          }
+        });
+
+        // Squats
+        await prisma.program_workout_exercises.create({
+          data: {
+            id: crypto.randomUUID(),
+            workoutId: legDay.id,
+            exerciseOrder: 1,
+            fixedExerciseId: squat.id,
+            sets: 4,
+            repsMin: 8,
+            repsMax: 10,
+            targetRPE: 8,
+            restSeconds: 120,
+            notes: 'Depth is key, control the descent',
+          }
+        });
+
+        // Leg Press
+        await prisma.program_workout_exercises.create({
+          data: {
+            id: crypto.randomUUID(),
+            workoutId: legDay.id,
+            exerciseOrder: 2,
+            fixedExerciseId: legPress.id,
+            sets: 3,
+            repsMin: 12,
+            repsMax: 15,
+            targetRPE: 9,
+            restSeconds: 90,
+            notes: 'Full range, focus on quads',
+          }
+        });
+
+        if (legCurl) {
+          await prisma.program_workout_exercises.create({
+            data: {
+              id: crypto.randomUUID(),
+              workoutId: legDay.id,
+              exerciseOrder: 3,
+              fixedExerciseId: legCurl.id,
+              sets: 3,
+              repsMin: 10,
+              repsMax: 12,
+              targetRPE: 8,
+              restSeconds: 60,
+              notes: 'Squeeze hamstrings at peak',
+            }
+          });
+        }
+      }
+    }
+
+    console.log('✅ Created CBum\'s Classic Physique PPL with 8 weeks, 24 workouts per week (Push/Pull/Legs x2)');
+  }
+
+  // ===========================
+  // RONNIE COLEMAN'S MASS BUILDER
+  // ===========================
+
+  console.log('📝 Creating Ronnie Coleman\'s Mass Builder Program...');
+
+  const ronnie = await prisma.legendary_athletes.findUnique({
+    where: { slug: 'ronnie-coleman' }
+  });
+
+  if (!ronnie) {
+    console.log('⚠️ Ronnie not found, skipping Ronnie program');
+  } else {
+    const ronnieMassBuilder = await prisma.program_templates.upsert({
+      where: { id: 'ronnie-mass-builder' },
+      update: {},
+      create: {
+        id: 'ronnie-mass-builder',
+        name: 'Ronnie Coleman\'s Mass Builder',
+        description: '8x Mr. Olympia Ronnie Coleman\'s legendary high-volume, heavy-weight program. "Everybody wants to be a bodybuilder, but nobody wants to lift no heavy-ass weights!" Train 6 days per week combining powerlifting intensity with bodybuilding volume. For advanced lifters only. Yeah buddy!',
+        createdBy: systemUser.id,
+        duration: '10 weeks',
+        difficulty: 'ADVANCED',
+        category: 'BODYBUILDING',
+        isPublic: true,
+        price: 0,
+        rating: 5.0,
+        ratingCount: 0,
+        isActive: true,
+        tags: ['Ronnie Coleman', 'Mass Building', 'High Volume', 'Heavy Weight', 'Advanced'],
+        programType: 'ATHLETE',
+        athleteId: ronnie.id,
+        hasExerciseSlots: false,
+        progressionStrategy: 'LINEAR',
+        autoRegulation: false,
+        updatedAt: new Date(),
+      }
+    });
+
+    console.log('✅ Created Ronnie Coleman\'s Mass Builder (placeholder - detailed workouts would be added here)');
+  }
+
+  // ===========================
+  // MIKE MENTZER'S HEAVY DUTY
+  // ===========================
+
+  console.log('📝 Creating Mike Mentzer\'s Heavy Duty Program...');
+
+  const mike = await prisma.legendary_athletes.findUnique({
+    where: { slug: 'mike-mentzer' }
+  });
+
+  if (!mike) {
+    console.log('⚠️ Mike Mentzer not found, skipping Heavy Duty program');
+  } else {
+    const heavyDuty = await prisma.program_templates.upsert({
+      where: { id: 'mentzer-heavy-duty' },
+      update: {},
+      create: {
+        id: 'mentzer-heavy-duty',
+        name: 'Mike Mentzer\'s Heavy Duty',
+        description: 'Revolutionary high-intensity training system by Mike Mentzer. Train each body part once every 7-10 days with brief, infrequent, and brutally intense workouts taken beyond failure. Only 1-2 all-out sets per exercise using forced reps, negatives, and rest-pause. Maximum intensity, minimum volume. For experienced lifters ready to challenge conventional training wisdom.',
+        createdBy: systemUser.id,
+        duration: '8 weeks',
+        difficulty: 'ADVANCED',
+        category: 'BODYBUILDING',
+        isPublic: true,
+        price: 0,
+        rating: 5.0,
+        ratingCount: 0,
+        isActive: true,
+        tags: ['Mike Mentzer', 'Heavy Duty', 'HIT', 'Low Volume', 'High Intensity', 'Advanced'],
+        programType: 'ATHLETE',
+        athleteId: mike.id,
+        hasExerciseSlots: false,
+        progressionStrategy: 'LINEAR',
+        autoRegulation: false,
+        updatedAt: new Date(),
+      }
+    });
+
+    console.log('✅ Created Mike Mentzer\'s Heavy Duty (placeholder - detailed workouts would be added here)');
+  }
+
   console.log('🎉 Program templates seeded successfully!');
 }
 

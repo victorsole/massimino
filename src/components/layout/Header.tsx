@@ -149,23 +149,6 @@ export default function Header({ user }: HeaderProps) {
                 </TooltipContent>
               </Tooltip>
 
-              {/* Assessments link - only for trainers and admins */}
-              {(user?.role === 'TRAINER' || user?.role === 'ADMIN') && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link
-                      href="/assessments"
-                      className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
-                    >
-                    <MdiIcon path={MDI_ICONS.clipboardCheck} size={0.83} />
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Assessments</p>
-                  </TooltipContent>
-                </Tooltip>
-              )}
-
               {/* Teams link - different tooltips for different roles */}
               {user?.role === 'TRAINER' ? (
                 <Tooltip>
@@ -379,18 +362,6 @@ export default function Header({ user }: HeaderProps) {
                 <MdiIcon path={MDI_ICONS.dumbbell} size={0.8} />
                 <span>Workout Log</span>
               </Link>
-
-              {/* Assessments link in mobile menu - only for trainers and admins */}
-              {(user?.role === 'TRAINER' || user?.role === 'ADMIN') && (
-                <Link
-                  href="/assessments"
-                  className="flex items-center gap-3 px-3 py-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 active:scale-95"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <MdiIcon path={MDI_ICONS.clipboardCheck} size={0.8} />
-                  <span>Assessments</span>
-                </Link>
-              )}
 
               {/* Teams link in mobile menu */}
               {user?.role === 'TRAINER' ? (

@@ -143,11 +143,39 @@ async function main() {
     }
   });
 
-  console.log('✅ Created 4 legendary athletes');
+  // 5. Chris Bumstead (CBum)
+  const cbum = await prisma.legendary_athletes.upsert({
+    where: { slug: 'chris-bumstead' },
+    update: {},
+    create: {
+      id: crypto.randomUUID(),
+      name: 'Chris Bumstead',
+      slug: 'chris-bumstead',
+      eraLabel: 'Modern Classic Physique Era',
+      yearsActive: '2010s-Present',
+      achievements: [
+        '5x Mr. Olympia Classic Physique (2019-2023)',
+        'IFBB Professional League Pro Card',
+        'Social Media Icon (10M+ followers)',
+        'RAW Nutrition Co-Founder'
+      ],
+      bio: `Chris Bumstead, known as "CBum," is a 5-time Mr. Olympia Classic Physique champion and one of the most popular bodybuilders in the world. Born in Canada in 1995, he represents the modern era of aesthetic bodybuilding with his perfect proportions, conditioning, and charisma. CBum has revolutionized how athletes connect with fans through social media, making bodybuilding more accessible and relatable. His battle with IgA nephropathy and continued dominance has inspired millions worldwide.`,
+      trainingPhilosophy: `CBum's approach balances old-school bodybuilding principles with modern science. He emphasizes the mind-muscle connection, progressive overload, and training longevity. His philosophy: "It's not about lifting the heaviest weight, it's about making the muscle work the hardest." He trains 5-6 days per week using a Push/Pull/Legs split with moderate volume (12-20 sets per muscle group). CBum focuses on controlled tempo, full range of motion, and perfecting exercise execution rather than ego-lifting. He believes in training sustainability and listening to your body to prevent injury.`,
+      nationality: 'Canadian',
+      birthYear: 1995,
+      discipline: 'BODYBUILDING',
+      isPremium: false,
+      displayOrder: 5,
+      isActive: true,
+    }
+  });
+
+  console.log('✅ Created 5 legendary athletes');
   console.log(`   - ${arnold.name}`);
   console.log(`   - ${ronnie.name}`);
   console.log(`   - ${mike.name}`);
   console.log(`   - ${dorian.name}`);
+  console.log(`   - ${cbum.name}`);
 
   // ===========================
   // ATHLETE TRAINING PHASES
