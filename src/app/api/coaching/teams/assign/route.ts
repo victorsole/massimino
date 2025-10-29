@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'teamId and athleteId are required' }, { status: 400 });
     }
 
-    const teamMember = await addAthleteToTeam(teamId, athleteId, session.user.id, role);
+    const teamMember = await addAthleteToTeam(teamId, athleteId, session.user.id);
 
     return NextResponse.json(teamMember, { status: 201 });
   } catch (error: any) {

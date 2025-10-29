@@ -7,8 +7,7 @@ import { nanoid } from 'nanoid';
 export async function addAthleteToTeam(
   teamId: string,
   athleteId: string,
-  trainerId: string,
-  role?: 'MEMBER' | 'CAPTAIN'
+  trainerId: string
 ): Promise<any> {
   // Verify trainer owns the team
   const team = await prisma.teams.findUnique({
@@ -59,7 +58,7 @@ export async function addAthleteToTeam(
       id: nanoid(),
       teamId: teamId,
       userId: athleteId,
-      role: role || 'MEMBER',
+      status: 'ACTIVE',
       joinedAt: new Date(),
     },
   });
@@ -158,7 +157,7 @@ export async function getTrainerTeamsWithAthletes(trainerId: string): Promise<an
           userId: { in: clientIds },
         },
         include: {
-          users: {
+          users_team_members_userIdTousers: {
             select: {
               id: true,
               name: true,
@@ -196,7 +195,7 @@ export async function getAthletesNotInTeam(
       status: 'ACTIVE',
     },
     include: {
-      client: {
+      users: {
         select: {
           id: true,
           name: true,
@@ -218,5 +217,5 @@ export async function getAthletesNotInTeam(
   // Filter out athletes already in team
   return allClients
     .filter(client => !teamMemberIds.has(client.clientId))
-    .map(client => client.client);
+    .map(client => client.users);
 }

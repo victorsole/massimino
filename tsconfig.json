@@ -74,7 +74,8 @@
       "test-results",
       "mobile/**/*",
       "**/*_backup.*",
-      "**/*.backup.*"
+      "**/*.backup.*",
+      "src/scripts/**/*"
     ],
     "ts-node": {
       "compilerOptions": {
