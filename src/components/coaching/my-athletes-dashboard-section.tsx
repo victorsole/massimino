@@ -14,6 +14,8 @@ export function MyAthletesDashboardSection() {
     loading: true,
   });
 
+  // Force cache invalidation
+
   useEffect(() => {
     fetchStats();
     // eslint-disable-next-line react-hooks/exhaustive-deps
