@@ -43,6 +43,7 @@ type WorkoutEntry = {
   intensity?: string;
   tempo?: string;
   restSeconds?: number;
+  coachId?: string | null;
   coachFeedback?: string;
   userComments?: string;
   personalRecord?: boolean;
@@ -55,6 +56,11 @@ type WorkoutEntry = {
     equipment: string[];
     difficulty?: string;
   };
+  coach?: {
+    id: string;
+    name: string | null;
+    role: string;
+  } | null;
 };
 
 export default function WorkoutLogPage() {
@@ -114,7 +120,8 @@ export default function WorkoutLogPage() {
     intensity: '',
     tempo: '',
     restSeconds: '',
-    userComments: ''
+    userComments: '',
+    trainerFeedback: '' // For trainer-assigned workouts
   });
 
   // Session management state
@@ -140,6 +147,9 @@ export default function WorkoutLogPage() {
   // Tab navigation
   const [activeTab, setActiveTab] = useState<'today' | 'programs' | 'athletes' | 'history' | 'metrics' | 'progress' | 'habits'>('today');
   const [, setSessions] = useState<any[]>([]);
+
+  // Workout filter state (for athletes viewing trainer-assigned workouts)
+  const [workoutFilter, setWorkoutFilter] = useState<'all' | 'my' | 'assigned'>('all');
 
   // Calendar state
   const [calendarMonth, setCalendarMonth] = useState(new Date());
@@ -533,6 +543,7 @@ export default function WorkoutLogPage() {
           intensity: entry.intensity,
           tempo: entry.tempo,
           restSeconds: entry.restSeconds,
+          coachId: entry.coachId,
           coachFeedback: entry.coachFeedback,
           userComments: entry.userComments,
           exercise: {
@@ -542,7 +553,8 @@ export default function WorkoutLogPage() {
             muscleGroups: entry.exercises?.muscleGroups || [],
             equipment: entry.exercises?.equipment || [],
             difficulty: entry.exercises?.difficulty
-          }
+          },
+          coach: entry.coach || null
         }));
         setWorkoutEntries(entries);
       } else {
@@ -1019,7 +1031,8 @@ export default function WorkoutLogPage() {
           intensity: '',
           tempo: '',
           restSeconds: '',
-          userComments: ''
+          userComments: '',
+          trainerFeedback: ''
         });
       } else {
         const errorData = await response.json();
@@ -1067,7 +1080,8 @@ export default function WorkoutLogPage() {
       intensity: entry.intensity || '',
       tempo: entry.tempo || '',
       restSeconds: entry.restSeconds?.toString() || '',
-      userComments: entry.userComments || ''
+      userComments: entry.userComments || '',
+      trainerFeedback: entry.userComments || '' // For trainer-assigned workouts
     });
   };
 
@@ -2216,7 +2230,48 @@ export default function WorkoutLogPage() {
 
         {!fetchingEntries && !error && workoutEntries.length > 0 && (
           <div className="space-y-6">
-            {workoutEntries.map((entry: WorkoutEntry) => (
+            {/* Workout Filter Tabs */}
+            <div className="flex items-center gap-2 border-b pb-3">
+              <button
+                onClick={() => setWorkoutFilter('all')}
+                className={`px-4 py-2 rounded-md font-medium text-sm transition-colors ${
+                  workoutFilter === 'all'
+                    ? 'bg-brand-primary text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                All Workouts
+              </button>
+              <button
+                onClick={() => setWorkoutFilter('my')}
+                className={`px-4 py-2 rounded-md font-medium text-sm transition-colors ${
+                  workoutFilter === 'my'
+                    ? 'bg-brand-primary text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                My Workouts
+              </button>
+              <button
+                onClick={() => setWorkoutFilter('assigned')}
+                className={`px-4 py-2 rounded-md font-medium text-sm transition-colors ${
+                  workoutFilter === 'assigned'
+                    ? 'bg-brand-primary text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Assigned by Trainer
+              </button>
+            </div>
+
+            {workoutEntries
+              .filter((entry: WorkoutEntry) => {
+                if (workoutFilter === 'all') return true;
+                if (workoutFilter === 'my') return !entry.coachId;
+                if (workoutFilter === 'assigned') return !!entry.coachId;
+                return true;
+              })
+              .map((entry: WorkoutEntry) => (
               <Card key={entry.id}>
               <CardHeader>
                 <div className="flex items-center justify-between">
@@ -2254,13 +2309,19 @@ export default function WorkoutLogPage() {
                   </div>
                 </div>
                 <CardTitle className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <Dumbbell className="h-5 w-5 mr-2" />
                     {entry.exercise.name}
                     {entry.personalRecord && (
                       <Badge className="bg-yellow-400 text-yellow-900 hover:bg-yellow-500 border-yellow-600">
                         <Trophy className="h-3 w-3 mr-1" />
                         PR!
+                      </Badge>
+                    )}
+                    {entry.coachId && entry.coach && (
+                      <Badge className="bg-blue-100 text-blue-800 border-blue-300">
+                        <Users className="h-3 w-3 mr-1" />
+                        Assigned by {entry.coach.name || 'Trainer'}
                       </Badge>
                     )}
                   </div>
@@ -2342,16 +2403,36 @@ export default function WorkoutLogPage() {
                           onChange={(e) => setEditFormData({...editFormData, restSeconds: e.target.value})}
                         />
                       </div>
-                      <div className="md:col-span-2 lg:col-span-3">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Personal Notes
-                        </label>
-                        <Textarea
-                          value={editFormData.userComments}
-                          onChange={(e) => setEditFormData({...editFormData, userComments: e.target.value})}
-                          rows={2}
-                        />
-                      </div>
+                      {!entry.coachId ? (
+                        <div className="md:col-span-2 lg:col-span-3">
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Personal Notes
+                          </label>
+                          <Textarea
+                            value={editFormData.userComments}
+                            onChange={(e) => setEditFormData({...editFormData, userComments: e.target.value})}
+                            placeholder="Add notes about this workout..."
+                            rows={2}
+                          />
+                        </div>
+                      ) : (
+                        <div className="md:col-span-2 lg:col-span-3 bg-blue-50 border border-blue-200 rounded-lg p-3">
+                          <label className="block text-sm font-medium text-blue-900 mb-1 flex items-center gap-2">
+                            <MessageCircle className="h-4 w-4" />
+                            Feedback for {entry.coach?.name || 'Trainer'}
+                          </label>
+                          <Textarea
+                            value={editFormData.trainerFeedback}
+                            onChange={(e) => setEditFormData({...editFormData, trainerFeedback: e.target.value, userComments: e.target.value})}
+                            placeholder="Share your thoughts about this workout with your trainer..."
+                            rows={3}
+                            className="bg-white"
+                          />
+                          <p className="text-xs text-blue-700 mt-1">
+                            Your trainer will see this feedback when they review your progress
+                          </p>
+                        </div>
+                      )}
                     </div>
                     <div className="flex justify-end space-x-2 mt-4">
                       <Button

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, Calendar, Dumbbell, Trophy, TrendingUp, Activity } from 'lucide-react';
+import { X, Calendar, Dumbbell, Trophy, TrendingUp, Activity, MessageCircle } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -19,14 +19,20 @@ export function AthleteProgressModal({
   athleteId,
   athleteName
 }: AthleteProgressModalProps) {
+  const [activeTab, setActiveTab] = useState<'overview' | 'feedback'>('overview');
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState<any>(null);
+  const [feedback, setFeedback] = useState<any[]>([]);
+  const [feedbackLoading, setFeedbackLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen && athleteId) {
       fetchProgress();
+      if (activeTab === 'feedback') {
+        fetchFeedback();
+      }
     }
-  }, [isOpen, athleteId]);
+  }, [isOpen, athleteId, activeTab]);
 
   const fetchProgress = async () => {
     try {
@@ -45,6 +51,23 @@ export function AthleteProgressModal({
     }
   };
 
+  const fetchFeedback = async () => {
+    try {
+      setFeedbackLoading(true);
+      const response = await fetch(`/api/coaching/athletes/${athleteId}/feedback`);
+      if (response.ok) {
+        const data = await response.json();
+        setFeedback(data.feedback || []);
+      } else {
+        console.error('Failed to fetch feedback');
+      }
+    } catch (error) {
+      console.error('Error fetching feedback:', error);
+    } finally {
+      setFeedbackLoading(false);
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -60,15 +83,52 @@ export function AthleteProgressModal({
               <X className="h-4 w-4" />
             </Button>
           </div>
+
+          {/* Tab Navigation */}
+          <div className="flex gap-2 mt-4 border-b">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`px-4 py-2 font-medium text-sm transition-colors relative ${
+                activeTab === 'overview'
+                  ? 'text-brand-primary'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Activity className="h-4 w-4" />
+                Overview
+              </div>
+              {activeTab === 'overview' && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-primary" />
+              )}
+            </button>
+            <button
+              onClick={() => setActiveTab('feedback')}
+              className={`px-4 py-2 font-medium text-sm transition-colors relative ${
+                activeTab === 'feedback'
+                  ? 'text-brand-primary'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <MessageCircle className="h-4 w-4" />
+                Feedback
+              </div>
+              {activeTab === 'feedback' && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-primary" />
+              )}
+            </button>
+          </div>
         </CardHeader>
 
         <CardContent>
-          {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-primary"></div>
-            </div>
-          ) : progress ? (
-            <div className="space-y-6">
+          {activeTab === 'overview' ? (
+            loading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-primary"></div>
+              </div>
+            ) : progress ? (
+              <div className="space-y-6">
               {/* Stats Overview */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Card>
@@ -225,10 +285,81 @@ export function AthleteProgressModal({
                 </CardContent>
               </Card>
             </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-gray-600">No progress data available</p>
+              </div>
+            )
           ) : (
-            <div className="text-center py-12">
-              <p className="text-gray-600">No progress data available</p>
-            </div>
+            // Feedback Tab
+            feedbackLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-primary"></div>
+              </div>
+            ) : feedback.length > 0 ? (
+              <div className="space-y-4">
+                <p className="text-sm text-gray-600 mb-4">
+                  Recent feedback from {athleteName} on assigned workouts
+                </p>
+                {feedback.map((entry) => (
+                  <Card key={entry.id} className="bg-blue-50 border-blue-200">
+                    <CardContent className="pt-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <p className="font-medium text-lg">{entry.exerciseName}</p>
+                          <Badge variant="outline" className="mt-1">
+                            {entry.exerciseCategory}
+                          </Badge>
+                        </div>
+                        <div className="text-right text-sm text-gray-600">
+                          <p>{new Date(entry.date).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                          })}</p>
+                          <p className="text-xs text-gray-500">
+                            {new Date(entry.createdAt).toLocaleTimeString('en-US', {
+                              hour: 'numeric',
+                              minute: '2-digit'
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2 mb-3 text-sm">
+                        <div>
+                          <span className="text-gray-600">Set:</span>
+                          <span className="font-medium ml-1">{entry.setNumber}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">Reps:</span>
+                          <span className="font-medium ml-1">{entry.reps}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">Weight:</span>
+                          <span className="font-medium ml-1">
+                            {entry.weight} {entry.unit === 'KG' ? 'kg' : 'lbs'}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="bg-white rounded-lg p-3 border border-blue-200">
+                        <div className="flex items-start gap-2">
+                          <MessageCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                          <p className="text-gray-700 text-sm">{entry.feedback}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <MessageCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-600 font-medium mb-2">No Feedback Yet</p>
+                <p className="text-sm text-gray-500">
+                  {athleteName} hasn't provided any feedback on assigned workouts yet.
+                </p>
+              </div>
+            )
           )}
         </CardContent>
 
