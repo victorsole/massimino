@@ -16,6 +16,7 @@ import {
   Activity,
 } from 'lucide-react';
 import { format } from 'date-fns';
+import { SpotifyLinkModal } from './spotify-link-modal';
 
 interface SessionCardProps {
   session: {
@@ -63,6 +64,7 @@ interface SessionCardProps {
 
 export function SessionCard({ session, onContinue, onStatusChange, onRefresh }: SessionCardProps) {
   const [loading, setLoading] = useState(false);
+  const [showSpotifyModal, setShowSpotifyModal] = useState(false);
 
   const handleStatusChange = async (newStatus: string) => {
     setLoading(true);
@@ -130,10 +132,23 @@ export function SessionCard({ session, onContinue, onStatusChange, onRefresh }: 
                   {session.athleteName}
                 </Badge>
               )}
-              {session.spotifyUrl && (
-                <Badge variant="outline" className="bg-green-50">
+              {session.spotifyUrl ? (
+                <Badge
+                  variant="outline"
+                  className="bg-green-50 cursor-pointer hover:bg-green-100 transition-colors"
+                  onClick={() => setShowSpotifyModal(true)}
+                >
                   <Music className="w-3 h-3 mr-1" />
                   Soundtrack
+                </Badge>
+              ) : (
+                <Badge
+                  variant="outline"
+                  className="bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors"
+                  onClick={() => setShowSpotifyModal(true)}
+                >
+                  <Music className="w-3 h-3 mr-1" />
+                  Add Soundtrack
                 </Badge>
               )}
             </div>
@@ -252,6 +267,19 @@ export function SessionCard({ session, onContinue, onStatusChange, onRefresh }: 
           </Button>
         </div>
       </CardContent>
+
+      {/* Spotify Link Modal */}
+      <SpotifyLinkModal
+        isOpen={showSpotifyModal}
+        onClose={() => setShowSpotifyModal(false)}
+        sessionId={session.id}
+        sessionName={session.name}
+        currentSpotifyUrl={session.spotifyUrl}
+        onSuccess={() => {
+          setShowSpotifyModal(false);
+          onRefresh?.();
+        }}
+      />
     </Card>
   );
 }
