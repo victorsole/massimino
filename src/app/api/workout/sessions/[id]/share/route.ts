@@ -35,7 +35,7 @@ export async function GET(
             description: true,
             difficulty: true,
             category: true,
-            imageUrl: true,
+            duration: true,
             legendary_athlete: {
               select: {
                 name: true,
@@ -48,10 +48,7 @@ export async function GET(
           select: {
             id: true,
             completedAt: true,
-            totalVolume: true,
-            totalSets: true,
-            totalReps: true,
-            durationMinutes: true,
+            duration: true,
           },
           orderBy: {
             completedAt: 'desc',
@@ -66,18 +63,19 @@ export async function GET(
       const totalWeeks = parseInt(template.duration?.match(/\d+/)?.[0] || '12');
       const progressPercentage = (programSub.currentWeek / totalWeeks) * 100;
 
-      // Calculate total stats
-      const totalVolume = programSub.workout_performances.reduce((sum, w) => sum + (w.totalVolume || 0), 0);
-      const totalSets = programSub.workout_performances.reduce((sum, w) => sum + (w.totalSets || 0), 0);
-      const totalReps = programSub.workout_performances.reduce((sum, w) => sum + (w.totalReps || 0), 0);
-      const totalDuration = programSub.workout_performances.reduce((sum, w) => sum + (w.durationMinutes || 0), 0);
+      // Calculate total stats from workout_performances
+      // Note: workout_performances doesn't have volume/sets/reps, so we set them to 0 for programs
+      const totalVolume = 0;
+      const totalSets = 0;
+      const totalReps = 0;
+      const totalDuration = programSub.workout_performances.reduce((sum, w) => sum + (w.duration || 0), 0);
 
       return NextResponse.json({
         type: 'program',
         name: template.name,
         description: template.description,
         athleteName: template.legendary_athlete?.name,
-        imageUrl: template.imageUrl || template.legendary_athlete?.imageUrl,
+        imageUrl: template.legendary_athlete?.imageUrl,
         difficulty: template.difficulty,
         category: template.category,
         progress: {
@@ -93,7 +91,7 @@ export async function GET(
           totalDuration: Math.round(totalDuration),
           recentWorkouts: programSub.workout_performances.length,
         },
-        shareText: `💪 Training with ${template.name}${template.legendary_athlete?.name ? ` by ${template.legendary_athlete.name}` : ''}!\n\n📊 Progress: Week ${programSub.currentWeek}/${totalWeeks} (${Math.round(progressPercentage)}%)\n🏋️ ${programSub.workoutsCompleted || 0} workouts completed\n⚡ ${Math.round(totalVolume)} kg total volume\n\n#MassiminoFitness #WorkoutProgram #FitnessJourney`,
+        shareText: `💪 Training with ${template.name}${template.legendary_athlete?.name ? ` by ${template.legendary_athlete.name}` : ''}!\n\n📊 Progress: Week ${programSub.currentWeek}/${totalWeeks} (${Math.round(progressPercentage)}%)\n🏋️ ${programSub.workoutsCompleted || 0} workouts completed\n⏱️ ${Math.round(totalDuration)} min total training time\n\n#MassiminoFitness #WorkoutProgram #FitnessJourney`,
       });
     }
 
@@ -118,11 +116,33 @@ export async function GET(
     });
 
     if (workoutSession) {
-      const exercises = workoutSession.workout_log_entries.map(entry => ({
-        name: entry.exercises?.name || 'Exercise',
-        sets: entry.sets || 0,
-        reps: entry.reps || 0,
-        weight: entry.weight || 0,
+      // Group exercises by name (each entry is a set, not an exercise)
+      const exerciseMap = new Map<string, { name: string; sets: number; totalReps: number; totalWeight: number }>();
+
+      workoutSession.workout_log_entries.forEach(entry => {
+        const name = entry.exercises?.name || 'Exercise';
+        const existing = exerciseMap.get(name);
+        const weight = parseFloat(entry.weight) || 0;
+
+        if (existing) {
+          existing.sets++;
+          existing.totalReps += entry.reps;
+          existing.totalWeight += weight * entry.reps;
+        } else {
+          exerciseMap.set(name, {
+            name,
+            sets: 1,
+            totalReps: entry.reps,
+            totalWeight: weight * entry.reps,
+          });
+        }
+      });
+
+      const exercises = Array.from(exerciseMap.values()).map(ex => ({
+        name: ex.name,
+        sets: ex.sets,
+        reps: Math.round(ex.totalReps / ex.sets), // Average reps per set
+        weight: Math.round(ex.totalWeight / ex.totalReps), // Average weight
       }));
 
       return NextResponse.json({

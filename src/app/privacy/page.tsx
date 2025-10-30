@@ -11,37 +11,52 @@ export const metadata = {
 const PRIVACY_MD = `# MASSIMINO PRIVACY POLICY
 
 **Effective Date:** Wednesday 18 September 2025  
-**Last Updated:** Wednesday 18 September 2025
+**Last Updated:** Thursday 30 October 2025
 
 ## 1. INTRODUCTION
 
-Massimino ("we," "us," "our") is committed to protecting your privacy while maintaining a safe, respectful fitness community. This Privacy Policy explains how we collect, use, share, and protect your personal information when you use our Platform.
+Massimino (“Massimino”, “we”, “us”, “our”) provides a fitness platform connecting athletes and trainers. We are committed to protecting your privacy and processing personal data lawfully and transparently. This Privacy Policy explains what we collect, why, how we share it, how long we keep it, and your rights.
 
-**Our Privacy Commitment:** We believe privacy and safety work together. Our data practices are designed to protect both your personal information and your safety within our fitness community.
+**Our Privacy Commitment:**
+We believe privacy and safety work together. Our data practices are designed to protect both your personal information and your safety within our fitness community.
 
-## 2. INFORMATION WE COLLECT
+## 2. CONTROLLER AND CONTRACT
+- Controller: Massimino, Zonnewende 181, 7325 EP, Apeldoorn, Netherlands
+- Email: helloberesol@gmail.com (because Massimino belongs to Beresol BV)
+- EU Supervisory Authority: You may lodge a complaint with your local authority or the Dutch Data Protection Authority.
 
-### 2.1 Information You Provide Directly
+## 3. SCOPE OF THIS PRIVACY POLICY
+This Privacy Policy applies to the website, apps, APIs, and services that link to this policy, including Massichat (AI assistant).
+
+## 4. INFORMATION WE COLLECT
+
+### 4.1 Information You Provide Directly
 
 **Account Information:**
-- Name, email address, phone number
-- Date of birth (for age verification)
-- Profile information (bio, fitness goals, specializations)
-- Professional certifications and credentials (for fitness professionals)
-- Payment information (processed by secure third-party providers)
+- Account data: name, email, password hash, date of birth (age gating), profile photo, role (athlete/trainer)
+- Profile and preferences: bio, training goals, visibility and communication preferences
+- Health/fitness data (special category): workout logs, assessments, injuries/limitations, body metrics
+
+**Collected only with your explicit consent:**
+- Communications and content: messages, comments, posts, trainer notes
+- Verification data: professional certifications (e.g., EREPS), credentials you upload; verification results
+- Device and usage: IP address, device/browser info, event logs, diagnostics
+- Cookies and similar technologies: strictly necessary, analytics, preferences, marketing (see Cookie Policy)
+- AI interactions: prompts, responses, limited context snippets used to provide Massichat functionality
+- Payments (if/when applicable): handled by third‑party processors; we receive transaction metadata but not full payment card details.
 
 **Content and Communications:**
 - Posts, comments, messages, and other content you create
 - Photos and videos you upload
 - Communications with other users and our support team
-- Feedback, reviews, and ratings
+- Feedback, reviews, and ratings.
 
 **Preferences and Settings:**
 - Privacy settings and communication preferences
 - Notification preferences
-- Community and content preferences
+- Community and content preferences.
 
-### 2.2 Information Collected Automatically
+### 4.2 Information Collected Automatically
 
 **Usage Information:**
 - How you interact with the Platform (clicks, views, time spent)
@@ -55,54 +70,59 @@ Massimino ("we," "us," "our") is committed to protecting your privacy while main
 - Log files and analytics data
 - Cookies and similar tracking technologies
 
-### 2.3 Information from Third Parties
+### 4.3 Information from third parties
 
 **Professional Verification:**
 - Certification verification from credentialing bodies
 - Background check information (for enhanced verification)
 
-**Social Media Integration:**
+**Social media integration:**
 - Information from connected social media accounts (when authorized)
 
-**Payment Processors:**
+**Payment processors:**
 - Transaction information from payment providers
 
-## 3. HOW WE USE YOUR INFORMATION
+## 5. HOW WE USE YOUR INFORMATION
 
-### 3.1 Core Platform Functions
+### 5.1 Core platform functions
 - Creating and managing your account
 - Facilitating connections between users
 - Enabling communication and content sharing
 - Processing payments and transactions
 - Providing customer support
 
-### 3.2 Safety and Community Protection
-**AI-Powered Moderation:**
+### 5.2 Safety and community protection
+**AI Processing (Massichat)
+- We use an AI service (OpenAI) to generate responses. We minimize personal data in prompts and discourage sharing sensitive information
+- Data sent to OpenAI is processed to deliver the feature; it is not used to train OpenAI’s models and is subject to SCCs for international transfers
+- You can opt out of AI features in settings; core service remains available.
+
+**AI-powered moderation:**
 - Analyzing content for inappropriate or harmful material
 - Detecting potential harassment or policy violations
 - Protecting users from unwanted interactions
-- Maintaining community guidelines compliance
+- Maintaining community guidelines compliance.
 
-**Behavioral Analysis:**
+**Behavioural analysis:**
 - Identifying patterns of inappropriate behavior
 - Preventing spam and fraudulent activity
 - Ensuring platform integrity and user safety
 
-### 3.3 Platform Improvement
+### 5.3 Platform improvement
 - Enhancing user experience and Platform features
 - Analyzing usage patterns to improve services
 - Developing new safety and moderation tools
 - Conducting research on fitness community needs
 
-### 3.4 Legal and Compliance
+### 5.4 Legal and Compliance
 - Complying with applicable laws and regulations
 - Responding to legal requests and court orders
 - Protecting our rights and the rights of users
 - Investigating and preventing illegal activity
 
-## 4. INFORMATION SHARING AND DISCLOSURE
+## 6. INFORMATION SHARING AND DISCLOSURE
 
-### 4.1 User-Controlled Sharing
+### 6.1 User-controlled sharing
 **Public Profiles:**
 - Information you choose to make public in your profile
 - Public posts and comments visible to the community
@@ -112,7 +132,7 @@ Massimino ("we," "us," "our") is committed to protecting your privacy while main
 - Direct messages between users (not shared with others)
 - Private community content (shared only with community members)
 
-### 4.2 Service Providers
+### 6.2 Service Providers
 We share information with trusted third-party service providers who help us operate the Platform:
 - Cloud hosting and data storage providers
 - Payment processing companies
@@ -120,7 +140,7 @@ We share information with trusted third-party service providers who help us oper
 - Customer support tools
 - Professional verification services
 
-### 4.3 Safety and Legal Requirements
+### 6.3 Safety and Legal Requirements
 We may disclose information when necessary for:
 - User safety and platform security
 - Compliance with legal obligations
@@ -128,13 +148,13 @@ We may disclose information when necessary for:
 - Prevention of illegal activity or harm
 - Response to valid legal requests
 
-### 4.4 Business Transfers
+### 6.4 Business transfers
 In the event of a merger, acquisition, or sale of assets, user information may be transferred as part of the business transaction.
 
-## 5. YOUR PRIVACY RIGHTS AND CONTROLS
+## 7. YOUR PRIVACY RIGHTS AND CONTROLS
 
-### 5.1 Account Controls
-**Profile Management:**
+### 7.1 Account controls
+**Profile management:**
 - Edit or update your profile information
 - Control visibility of your profile and content
 - Manage communication preferences
@@ -146,7 +166,7 @@ In the event of a merger, acquisition, or sale of assets, user information may b
 - Opt out of certain data uses
 - Manage cookie preferences
 
-### 5.2 Data Subject Rights (GDPR/CCPA)
+### 7.2 Data Subject Rights (GDPR/CCPA)
 **Access:** Request copies of your personal information
 **Correction:** Update or correct inaccurate information
 **Deletion:** Request deletion of your personal information
@@ -154,144 +174,132 @@ In the event of a merger, acquisition, or sale of assets, user information may b
 **Restriction:** Limit how we process your information
 **Objection:** Object to certain processing activities
 
-### 5.3 Communication Preferences
+### 7.3 Communication Preferences
 - Unsubscribe from marketing emails
 - Adjust push notification settings
 - Control safety and security alerts
 - Manage community update preferences
 
-## 6. DATA SECURITY
+## 8. DATA SECURITY
 
-### 6.1 Security Measures
+### 8.1 Security measures
 **Technical Safeguards:**
 - Encryption of data in transit and at rest
 - Secure data centers with physical access controls
 - Regular security audits and vulnerability testing
 - Multi-factor authentication options
 
-**Operational Safeguards:**
+**Operational safeguards:**
 - Employee training on privacy and security
 - Limited access to personal information on a need-to-know basis
 - Regular review of data access and handling procedures
 - Incident response and breach notification procedures
 
-### 6.2 Your Role in Security
+### 8.2 Your role in security
 - Use strong, unique passwords
 - Enable two-factor authentication
 - Keep your account information current
 - Report suspicious activity immediately
 
-## 7. DATA RETENTION
+## 9. DATA RETENTION
 
-### 7.1 Active Accounts
+### 9.1 Active accounts
 We retain your information for as long as your account is active or as needed to provide services.
 
-### 7.2 Deleted Accounts
-**Immediate Deletion:**
+### 9.2 Deleted accounts
+**Immediate deletion:**
 - Profile information and settings
 - Private messages and communications
 - Payment information (except as required for tax/legal purposes)
 
-**Extended Retention (for safety/legal purposes):**
+**Extended retention (for safety/legal purposes):**
 - Safety-related reports and investigations (up to 7 years)
 - Legal compliance records (as required by law)
 - Aggregated, non-personal analytics data
 
-### 7.3 Content Retention
-**Public Content:** May be retained even after account deletion if shared publicly
-**Reported Content:** Retained for safety and moderation purposes
+### 9.3 Content retention
+**Public content:** may be retained even after account deletion if shared publicly
+**Reported content:** retained for safety and moderation purposes
 
-## 8. INTERNATIONAL DATA TRANSFERS
+## 10. INTERNATIONAL DATA TRANSFERS
 
-### 8.1 Global Operations
+### 10.1 Global Operations
 Massimino operates globally and may transfer your information to countries outside your residence for processing and storage.
 
-### 8.2 Transfer Safeguards
+### 10.2 Transfer Safeguards
 We implement appropriate safeguards for international transfers:
 - Standard contractual clauses
 - Adequacy decisions where applicable
 - Other legally recognized transfer mechanisms
 
-## 9. COOKIES AND TRACKING TECHNOLOGIES
+## 11. COOKIES AND TRACKING TECHNOLOGIES
 
-### 9.1 Types of Cookies
+### 11.1 Types of Cookies
 **Essential Cookies:** Required for Platform functionality
 **Analytics Cookies:** Help us understand Platform usage
 **Preference Cookies:** Remember your settings and preferences
 **Marketing Cookies:** Used for advertising and promotion
 
-### 9.2 Managing Cookies
+### 11.2 Managing Cookies
 You can control cookies through:
 - Browser settings
 - Platform privacy controls
 - Third-party opt-out tools
 - Cookie preference center
 
-## 10. CHILDREN'S PRIVACY
+## 12. CHILDREN'S PRIVACY
 
 Massimino is not intended for users under 18 years of age. We do not knowingly collect personal information from children under 18. If we become aware that we have collected such information, we will take steps to delete it promptly.
 
-## 11. CALIFORNIA PRIVACY RIGHTS
+## 13. EUROPEAN PRIVACY RIGHTS
 
-### 11.1 CCPA Rights
-California residents have additional rights under the California Consumer Privacy Act (CCPA):
-- Right to know what personal information we collect
-- Right to delete personal information
-- Right to opt-out of the sale of personal information
-- Right to non-discrimination for exercising CCPA rights
-
-### 11.2 "Do Not Sell" Notice
-We do not sell personal information as defined by the CCPA.
-
-## 12. EUROPEAN PRIVACY RIGHTS
-
-### 12.1 GDPR Compliance
+### 13.1 GDPR Compliance
 For users in the European Economic Area, we comply with the General Data Protection Regulation (GDPR).
 
-### 12.2 Legal Basis for Processing
+### 13.2 Legal Basis for Processing
 We process personal information based on:
 - Consent (where you have given clear consent)
 - Contract performance (to provide Platform services)
 - Legitimate interests (for safety, security, and Platform improvement)
 - Legal obligations (to comply with applicable laws)
 
-## 13. UPDATES TO THIS PRIVACY POLICY
+## 14. UPDATES TO THIS PRIVACY POLICY
 
-### 13.1 Policy Changes
+### 14.1 Policy Changes
 We may update this Privacy Policy periodically. We will notify you of material changes through:
 - Email notification
 - Platform notifications
 - Prominent notice on our website
 
-### 13.2 Continued Use
+### 14.2 Continued Use
 Your continued use of the Platform after policy updates constitutes acceptance of the revised Privacy Policy.
 
-## 14. CONTACT US
+## 15. CONTACT US
 
-### 14.1 Privacy Questions
+### 15.1 Privacy Questions
 For questions about this Privacy Policy or our privacy practices:
 - **Email:** helloberesol@gmail.com
 - **Address:** Zonnewende 181, 7325EP Apeldoorn, Nederland
 - **Phone:** +32493365423
 
-### 14.2 Data Protection Officer
+### 15.2 Data Protection Officer
 For GDPR-related inquiries:
 - **Email:** helloberesol@gmail.com
 
-### 14.3 Exercise Your Rights
+### 15.3 Exercise Your Rights
 To exercise your privacy rights or submit privacy requests:
 - **Privacy Portal:** http://massimino.fitness
 - **Email:** rights@massimino.com
 
-## 15. ADDITIONAL INFORMATION
+## 16. ADDITIONAL INFORMATION
 
-### 15.1 Third-Party Links
+### 16.1 Third-Party Links
 Our Platform may contain links to third-party websites or services. This Privacy Policy does not apply to these external sites.
 
-### 15.2 Professional Services
+### 16.2 Professional Services
 When fitness professionals provide services through our Platform, they may have their own privacy practices. Please review their policies before engaging their services.
 
-### 15.3 Community Safety
+### 16.3 Community Safety
 Remember that information you share in public areas of the Platform may be visible to other users. Always consider what you share publicly.
 
 ---

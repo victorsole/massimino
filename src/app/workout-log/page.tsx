@@ -29,6 +29,8 @@ type ExerciseListItem = {
   equipment: string[];
   difficulty?: string;
   instructions?: string;
+  videoUrl?: string;
+  imageUrl?: string;
   _userExerciseId?: string; // present if this originated from My Library custom (no baseExerciseId)
 };
 
