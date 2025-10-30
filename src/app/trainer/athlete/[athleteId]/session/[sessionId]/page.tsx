@@ -8,10 +8,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, RefreshCw, Dumbbell, History, MessageSquare, Sparkles } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Dumbbell, History, MessageSquare, Sparkles, Target } from 'lucide-react';
 import { ExerciseList } from '@/components/training/session-view/exercise-list';
 import { AddExerciseModal } from '@/components/training/session-view/add-exercise-modal';
 import { AddMediaModal } from '@/components/training/session-view/add-media-modal';
+import { GoalsSection } from '@/components/training/session-view/goals-section';
+import { AddGoalModal } from '@/components/training/session-view/add-goal-modal';
+import { CommentsSection } from '@/components/training/session-view/comments-section';
+import { HistoryTab } from '@/components/training/session-view/history-tab';
+import { TrainerMassichatInterface } from '@/components/massichat/trainer-massichat-interface';
+import { AssessmentModal } from '@/components/training/session-view/assessment-modal';
 
 type SessionData = {
   id: string;
@@ -24,7 +30,7 @@ type SessionData = {
   exercises: any[];
   goals: any[];
   comments: any[];
-  history: any[];
+  history: any;
 };
 
 export default function TrainerSessionViewPage() {
@@ -41,6 +47,8 @@ export default function TrainerSessionViewPage() {
   const [error, setError] = useState<string | null>(null);
   const [showAddExerciseModal, setShowAddExerciseModal] = useState(false);
   const [showAddMediaModal, setShowAddMediaModal] = useState(false);
+  const [showAddGoalModal, setShowAddGoalModal] = useState(false);
+  const [showAssessmentModal, setShowAssessmentModal] = useState(false);
   const [selectedExerciseForMedia, setSelectedExerciseForMedia] = useState<string | null>(null);
 
   // Fetch session data
@@ -240,16 +248,27 @@ export default function TrainerSessionViewPage() {
                 </div>
               </div>
 
-              <Button
-                onClick={handleRefresh}
-                variant="outline"
-                size="sm"
-                disabled={refreshing}
-                className="flex items-center space-x-2"
-              >
-                <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-                <span>Refresh</span>
-              </Button>
+              <div className="flex items-center space-x-2">
+                <Button
+                  onClick={() => setShowAssessmentModal(true)}
+                  variant="default"
+                  size="sm"
+                  className="flex items-center space-x-2"
+                >
+                  <Target className="h-4 w-4" />
+                  <span>Assessment</span>
+                </Button>
+                <Button
+                  onClick={handleRefresh}
+                  variant="outline"
+                  size="sm"
+                  disabled={refreshing}
+                  className="flex items-center space-x-2"
+                >
+                  <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+                  <span>Refresh</span>
+                </Button>
+              </div>
             </div>
           </CardHeader>
         </Card>
@@ -281,38 +300,25 @@ export default function TrainerSessionViewPage() {
             onAddMedia={handleAddMedia}
             onRefresh={handleRefresh}
           />
+
+          <GoalsSection
+            sessionId={sessionId}
+            onAddGoal={() => setShowAddGoalModal(true)}
+          />
+
+          <CommentsSection sessionId={sessionId} />
         </TabsContent>
 
         {/* History Tab */}
         <TabsContent value="history" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Workout History</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-12 text-muted-foreground">
-                <History className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Past workout entries for this session will appear here.</p>
-                <p className="text-sm mt-2">Phase 6 will implement this section.</p>
-              </div>
-            </CardContent>
-          </Card>
+          <HistoryTab history={sessionData?.history || {}} />
         </TabsContent>
 
         {/* Massichat Plus Tab */}
         <TabsContent value="massichat" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Massichat Plus</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-12 text-muted-foreground">
-                <Sparkles className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>AI-powered training assistant will appear here.</p>
-                <p className="text-sm mt-2">Phase 8 will integrate Massichat Plus.</p>
-              </div>
-            </CardContent>
-          </Card>
+          {session?.user?.id && (
+            <TrainerMassichatInterface trainerId={session.user.id} />
+          )}
         </TabsContent>
       </Tabs>
 
@@ -336,6 +342,23 @@ export default function TrainerSessionViewPage() {
           onMediaAdded={handleRefresh}
         />
       )}
+
+      {/* Add Goal Modal */}
+      <AddGoalModal
+        open={showAddGoalModal}
+        onClose={() => setShowAddGoalModal(false)}
+        sessionId={sessionId}
+        onGoalAdded={handleRefresh}
+      />
+
+      {/* Assessment Modal */}
+      <AssessmentModal
+        open={showAssessmentModal}
+        onClose={() => setShowAssessmentModal(false)}
+        sessionId={sessionId}
+        athleteId={athleteId}
+        onExerciseAdd={handleAddExercise}
+      />
     </div>
   );
 }

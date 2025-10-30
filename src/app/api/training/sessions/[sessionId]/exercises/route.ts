@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
 import { v4 as uuidv4 } from 'uuid';
+import { notifyExercisesModified } from '@/lib/notifications/training-notifications';
 
 // POST - Add exercise to session
 export async function POST(
@@ -100,6 +101,11 @@ export async function POST(
       entries.push(entry);
     }
 
+    // Send notification to athlete
+    notifyExercisesModified(sessionId, workoutSession.userId, session.user.id, 'added').catch(err =>
+      console.error('Failed to send notification:', err)
+    );
+
     return NextResponse.json({
       success: true,
       message: `Added ${targetSets} sets of exercise`,
@@ -178,6 +184,11 @@ export async function DELETE(
         exerciseId,
       },
     });
+
+    // Send notification to athlete
+    notifyExercisesModified(sessionId, workoutSession.userId, session.user.id, 'removed').catch(err =>
+      console.error('Failed to send notification:', err)
+    );
 
     return NextResponse.json({
       success: true,
