@@ -2393,6 +2393,7 @@ model users {
   ai_workout_proposals                                        ai_workout_proposals[]
   workout_entry_comments                                      workout_entry_comments[]
   workout_session_comments                                    workout_session_comments[]
+  session_goals                                               session_goals[]
   user_achievements                                           user_achievements[]
   email_verification_tokens                                   email_verification_tokens[]
   // NEW: Periodization system relations

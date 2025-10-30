@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
+import { notifySessionCompleted } from '@/lib/notifications/training-notifications';
 
 export async function PATCH(
   request: NextRequest,
@@ -136,6 +137,15 @@ export async function PATCH(
             : {}),
         },
       });
+
+      // Send notification to trainer when athlete completes session
+      if (status === 'COMPLETED' && isOwner && workoutSession.coachId) {
+        notifySessionCompleted(
+          sessionId,
+          workoutSession.userId,
+          workoutSession.coachId
+        ).catch(err => console.error('Failed to send notification:', err));
+      }
 
       return NextResponse.json({
         success: true,
