@@ -31,15 +31,49 @@ export async function PATCH(
       );
     }
 
+    // Check if user is a trainer
+    let isTrainer = false;
+    let trainerProfile: { id: string } | null = null;
+    if (session.user.role === 'TRAINER' || session.user.role === 'ADMIN') {
+      const profile = await prisma.trainer_profiles.findFirst({
+        where: { userId },
+        select: { id: true },
+      });
+      trainerProfile = profile;
+      isTrainer = !!trainerProfile;
+    }
+
     // Try to update program subscription first
     const programSub = await prisma.program_subscriptions.findFirst({
       where: {
         id: sessionId,
-        userId,
       },
     });
 
+    // Verify ownership or trainer relationship
     if (programSub) {
+      const isOwner = programSub.userId === userId;
+      let hasTrainerAccess = false;
+
+      if (isTrainer && trainerProfile && !isOwner) {
+        // Check trainer-client relationship
+        const relationship = await prisma.trainer_clients.findFirst({
+          where: {
+            trainerId: trainerProfile.id,
+            clientId: programSub.userId,
+            status: 'ACTIVE',
+          },
+        });
+        hasTrainerAccess = !!relationship;
+      }
+
+      if (!isOwner && !hasTrainerAccess) {
+        return NextResponse.json(
+          { error: 'Not authorized to update this session' },
+          { status: 403 }
+        );
+      }
+
       const updated = await prisma.program_subscriptions.update({
         where: { id: sessionId },
         data: {
@@ -67,11 +101,31 @@ export async function PATCH(
     const workoutSession = await prisma.workout_sessions.findFirst({
       where: {
         id: sessionId,
-        userId,
       },
     });
 
     if (workoutSession) {
+      const isOwner = workoutSession.userId === userId;
+      let hasTrainerAccess = false;
+
+      if (isTrainer && trainerProfile && !isOwner) {
+        // Check trainer-client relationship
+        const relationship = await prisma.trainer_clients.findFirst({
+          where: {
+            trainerId: trainerProfile.id,
+            clientId: workoutSession.userId,
+            status: 'ACTIVE',
+          },
+        });
+        hasTrainerAccess = !!relationship;
+      }
+
+      if (!isOwner && !hasTrainerAccess) {
+        return NextResponse.json(
+          { error: 'Not authorized to update this session' },
+          { status: 403 }
+        );
+      }
       const updated = await prisma.workout_sessions.update({
         where: { id: sessionId },
         data: {
