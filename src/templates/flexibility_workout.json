@@ -1,0 +1,119 @@
+{
+    "program": "Flexibility Workout",
+    "author": "Victor Solé Ferioli",
+    "duration_weeks": 3,
+    "session_duration_minutes": {
+      "min": 20,
+      "max": 30
+    },
+    "frequency_per_week": 3,
+    "goal": {
+      "outcome_goal": "Touch toes with knees extended by end of Week 3",
+      "progress_goals": [
+        "Increase hip and shoulder mobility by 10° using mobility benchmarks",
+        "Reduce DOMS by at least 30% through consistent stretching and rolling"
+      ]
+    },
+    "focus": "Mobility, Recovery, Injury Prevention",
+    "flexibility_methods": [
+      "SMR (foam rolling)",
+      "Static stretching",
+      "Active-isolated stretching",
+      "Dynamic warm-up"
+    ],
+    "equipment": [
+      "Foam roller",
+      "Yoga mat",
+      "Optional resistance band"
+    ],
+    "weekly_structure": [
+      {
+        "week": 1,
+        "theme": "Restore + Relax",
+        "sessions": [
+          {
+            "name": "Session 1",
+            "components": [
+              "Foam Roll: Calves, Quads, Lats (30 sec each)",
+              "Static Stretch: Hamstring, Hip Flexor, Chest, Lat (30 sec x 2 rounds)",
+              "Breathing: 5 min deep belly breathing in supine position"
+            ]
+          },
+          {
+            "name": "Session 2",
+            "components": [
+              "Foam Roll: Glutes, IT Band, Thoracic Spine",
+              "Static Stretch: Glute Figure-4, Adductors, Neck",
+              "Seated forward fold (2 mins)"
+            ]
+          },
+          {
+            "name": "Session 3",
+            "components": [
+              "Yoga Flow: Child’s pose, Cobra, Downward Dog, Seated Twist",
+              "Static Hold: Pigeon pose (1 min each leg), Supine Twist",
+              "Diaphragmatic breathing to finish"
+            ]
+          }
+        ]
+      },
+      {
+        "week": 2,
+        "theme": "Active Recovery",
+        "sessions": [
+          {
+            "name": "Session 1",
+            "components": [
+              "Foam Roll: Calves, Quads",
+              "Active-Isolated Stretch: Hamstring, Hip Flexor, Chest (8–10 reps each)",
+              "Static hold for tightest areas (30 sec)"
+            ]
+          },
+          {
+            "name": "Session 2",
+            "components": [
+              "Band-assisted active stretches: Shoulders, Hip Flexors",
+              "Supine Leg Swings + Standing Arm Circles",
+              "Supine knees-to-chest hold (2 min)"
+            ]
+          },
+          {
+            "name": "Session 3",
+            "components": [
+              "Mobility Circuit: Cat-Cow, 90/90 Transitions, World’s Greatest Stretch",
+              "Static: Standing Forward Bend, Shoulder Thread-the-Needle"
+            ]
+          }
+        ]
+      },
+      {
+        "week": 3,
+        "theme": "Pre-Performance & Flow",
+        "sessions": [
+          {
+            "name": "Session 1",
+            "components": [
+              "Dynamic Warm-Up: Leg Swings, Arm Circles, Inchworms, Hip Openers",
+              "Static Post-Workout: Hamstrings, Adductors, Triceps, Neck"
+            ]
+          },
+          {
+            "name": "Session 2",
+            "components": [
+              "Foam Rolling (short): Quads and Lats",
+              "Dynamic: Spinal rolls, Deep squats with hold, Arm crosses",
+              "Yoga Flow: 3 rounds of Sun Salutation A"
+            ]
+          },
+          {
+            "name": "Session 3",
+            "components": [
+              "Full Body Flow: Downward Dog to Lunge, Cobra to Child’s Pose, Supine Leg Raise to Seated Twist",
+              "5 min relaxed breathing"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  

@@ -2681,6 +2681,7 @@ model workout_sessions {
   users_workout_sessions_userIdTousers  users                      @relation("workout_sessions_userIdTousers", fields: [userId], references: [id])
   assessments                           assessments?               @relation(fields: [assessmentId], references: [id])
   session_comments                      workout_session_comments[]
+  goals                                 session_goals[]
 
   @@index([coachId, date])
   @@index([userId, date])
@@ -3527,4 +3528,29 @@ enum IntensityTechnique {
   STRIP_SET // Progressive weight reduction
   PYRAMID // Ascending or descending weight
   TWENTYONES // 7+7+7 rep scheme
+}
+
+// ============================================================================
+// SESSION GOALS (Trainer-set goals for workout sessions)
+// ============================================================================
+
+model session_goals {
+  id            String           @id @default(uuid())
+  sessionId     String
+  type          String           // 'challenge', 'progress', 'outcome'
+  description   String           @db.Text
+  targetValue   Float?
+  targetDate    DateTime?
+  completed     Boolean          @default(false)
+  completedAt   DateTime?
+  createdBy     String
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  // Relations
+  session       workout_sessions @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  creator       users            @relation(fields: [createdBy], references: [id])
+
+  @@index([sessionId])
+  @@index([createdBy])
 }

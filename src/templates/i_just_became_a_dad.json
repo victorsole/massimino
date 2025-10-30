@@ -1,0 +1,247 @@
+{
+    "program": "I Just Became a Dad - Functional Strength & Energy Recovery",
+    "author": "Victor Solé Ferioli",
+    "version": "2.0_corrected",
+    "target_demographic": "Men aged 30-45, new fathers",
+    "duration_weeks": 6,
+    "session_duration_minutes": {
+      "min": 30,
+      "max": 45
+    },
+    "frequency_per_week": 3,
+    "optional_activity": {
+      "name": "Recharge Day",
+      "frequency": "1x per week",
+      "duration_minutes": "20-30",
+      "options": ["solo walk", "mobility session", "light sport", "enjoyable activity"]
+    },
+    "level": "Beginner-to-Intermediate (return to fitness)",
+    "settings": ["Home", "Gym", "Outdoor"],
+    "equipment": {
+      "minimal": ["Dumbbells (15-35 lbs)", "Light resistance band", "Yoga mat", "Couch/bench"],
+      "ideal": ["Adjustable dumbbells (5-50 lbs)", "Resistance band set", "Pull-up bar", "Foam roller"],
+      "budget": ["Single set 20-25 lb dumbbells", "Light band", "Use household items"]
+    },
+    
+    "health_screening": {
+      "considerations": [
+        "Chronic injuries (back, shoulders, knees)",
+        "Time since last training (>6 months = start conservatively)",
+        "Current stress and sleep quality",
+        "Age >40 with no recent exercise = medical clearance recommended"
+      ]
+    },
+    
+    "red_flags_to_stop": [
+      "Sharp joint, back, or chest pain",
+      "Dizziness or unusual shortness of breath",
+      "Numbness or tingling",
+      "Pain that doesn't resolve with rest",
+      "Extreme fatigue beyond normal tiredness"
+    ],
+    
+    "goals": {
+      "strength_goal": "Perform 3 sets of 10 push-ups, 15 squats, 45-second plank by Week 6",
+      "functional_goal": "Safely lift/carry baby, car seat, stroller without pain",
+      "posture_goal": "Reverse desk-job posture through targeted mobility",
+      "energy_goal": "Improve daily energy and stress resilience",
+      "habit_goal": "Establish 3x/week movement routine"
+    },
+    
+    "progressive_overload": {
+      "week_1": "Learn movements, find baseline",
+      "week_2": "Add resistance, full range of motion",
+      "week_3": "Increase volume (add sets, now 3-4)",
+      "week_4": "Increase load (+5-10 lbs)",
+      "week_5": "Reduce rest periods (60-90 sec)",
+      "week_6": "Test maxes, celebrate progress"
+    },
+    
+    "weekly_structure": [
+      {
+        "week": 1,
+        "theme": "Reconnect & Reset",
+        "focus": [
+          "Mobility for desk workers (cat-cow, thoracic opener, hip rocks, world's greatest stretch)",
+          "Foundation strength circuit: bodyweight squats, incline push-ups, glute bridges, dead bugs, band pull-aparts",
+          "Movement pattern assessment",
+          "Essential stretching (hip flexors, pecs, hamstrings)"
+        ],
+        "duration_minutes": "30-35",
+        "key_exercises": [
+          "Bodyweight squat (10 reps × 3 rounds)",
+          "Incline push-ups (8 reps × 3 rounds)",
+          "Glute bridges (15 reps × 3 rounds)",
+          "Dead bugs (8 each side × 3 rounds)"
+        ]
+      },
+      {
+        "week": 2,
+        "theme": "Build the Base",
+        "focus": [
+          "Full-body circuits with light dumbbells",
+          "Introduction to loaded movements",
+          "Core stability emphasis",
+          "Building work capacity"
+        ],
+        "duration_minutes": "35-40",
+        "key_exercises": [
+          "Goblet squat (12 reps, 15-20 lbs)",
+          "Elevated push-ups (10 reps)",
+          "Bent-over dumbbell row (12 reps, 15-20 lbs each)",
+          "Farmer carry position hold (30 sec)",
+          "Plank (20 sec × 3 sets)"
+        ]
+      },
+      {
+        "week": 3,
+        "theme": "Push & Pull Strength",
+        "focus": [
+          "Upper body emphasis with push/pull split",
+          "Movement quality over quantity",
+          "Volume increase (now 4 sets)",
+          "Postural correction exercises"
+        ],
+        "duration_minutes": "40-45",
+        "key_exercises": [
+          "Push-ups (8-12 reps × 4 rounds)",
+          "Dumbbell shoulder press (10 reps)",
+          "Bent-over rows (15 reps, increased weight)",
+          "Band face pulls (15 reps)",
+          "Side planks (20 sec each × 3 sets)"
+        ]
+      },
+      {
+        "week": 4,
+        "theme": "Lift & Carry (Dad Functional)",
+        "focus": [
+          "Lower body power development",
+          "Practical carrying strength",
+          "Romanian deadlift introduction",
+          "Load increase (+5-10 lbs on main lifts)"
+        ],
+        "duration_minutes": "40-45",
+        "key_exercises": [
+          "Romanian deadlift (10 reps, 20-30 lbs per hand)",
+          "Goblet squat (12 reps, heavier weight)",
+          "Single-arm dumbbell row (12 each)",
+          "Farmer carry (40 steps, 30-40+ lbs per hand)",
+          "Plank to down dog (10 reps)"
+        ]
+      },
+      {
+        "week": 5,
+        "theme": "Power & Work Capacity",
+        "focus": [
+          "Cardiovascular conditioning with walk/jog intervals",
+          "Anti-rotation core strength",
+          "Complex movements (thrusters, renegade rows)",
+          "Reduced rest periods"
+        ],
+        "duration_minutes": "40-45",
+        "key_exercises": [
+          "Walk/jog intervals (30 sec work / 90 sec rest × 8 rounds)",
+          "Dumbbell thrusters (10 reps)",
+          "Renegade rows (8 each side)",
+          "Pallof press (12 each side)",
+          "Reverse lunges (12 each leg)"
+        ]
+      },
+      {
+        "week": 6,
+        "theme": "Dad Strength (Testing)",
+        "focus": [
+          "Session 1: Strength testing (push-ups, squats, plank, farmer carry)",
+          "Sessions 2-3: Full integration workouts",
+          "Maximum effort with perfect form",
+          "Celebration of progress"
+        ],
+        "duration_minutes": "40-45",
+        "test_goals": [
+          "3 sets of 10 quality push-ups",
+          "3 sets of 15 bodyweight squats",
+          "45-second plank hold",
+          "Farmer carry distance/time record"
+        ]
+      }
+    ],
+    
+    "injury_prevention": {
+      "lower_back_safety": [
+        "Always brace core before lifting",
+        "Hip hinge properly (push butt back, flat back)",
+        "Nightly glute bridges (2 sets × 15 reps)",
+        "Perfect form > heavy weight"
+      ],
+      "shoulder_safety": [
+        "Elbows at 45° during push-ups, not 90°",
+        "Shoulder blades pinched back and down",
+        "Never shrug shoulders to ears",
+        "Initiate rows with shoulder blades, not arms"
+      ],
+      "breathing_pattern": [
+        "Exhale on exertion (lifting/pushing phase)",
+        "Inhale on eccentric (lowering phase)",
+        "Never hold breath during strength work",
+        "Maintain core brace while breathing"
+      ]
+    },
+    
+    "recovery_strategies": {
+      "sleep_deprivation_adaptations": [
+        "If <5 hours sleep: reduce weight by 20%, focus on form",
+        "If exhausted: take recharge day, 20-min walk > nothing",
+        "Don't create training debt"
+      ],
+      "stress_management": [
+        "Box breathing: 4 in, 4 hold, 4 out, 4 hold × 5 rounds",
+        "Progressive muscle relaxation before bed",
+        "Mindful cool-downs with breathing"
+      ],
+      "nutrition_quick_wins": [
+        "Hydrate every time you feed baby",
+        "Palm-sized protein each meal",
+        "Don't cut carbs (need energy)",
+        "Limit coffee after 2pm",
+        "Meal prep: make 2x dinner portions"
+      ]
+    },
+    
+    "progress_tracking": {
+      "week_1_baseline": [
+        "Max push-ups before form breaks",
+        "Continuous bodyweight squat reps",
+        "Plank hold seconds",
+        "Energy level (1-10 scale)"
+      ],
+      "week_3_check_in": [
+        "Push-up improvement check",
+        "Pain/injury assessment",
+        "Consistency tracking (out of 9 workouts)"
+      ],
+      "week_6_final": [
+        "3 sets × 10 push-ups (goal)",
+        "3 sets × 15 squats (goal)",
+        "45-second plank (goal)",
+        "Energy level improvement",
+        "Functional carrying ability assessment"
+      ]
+    },
+    
+    "what_comes_next": {
+      "option_1": "Repeat with 5-10 lbs added, reduced rest, optional 4th day",
+      "option_2": "Specialize in specific goal (strength/endurance/body comp)",
+      "option_3": "Maintain with Week 5-6 workouts, rotate exercises",
+      "long_term_goal": "Build identity as dad who prioritizes health and strength"
+    },
+    
+    "critical_form_cues": {
+      "squat": "Chest up, core braced, weight in heels. Exhale on stand.",
+      "push_up": "Elbows 45°, body straight line, 2 sec down / 1 sec up",
+      "romanian_deadlift": "FLAT BACK. Hinge at hips, slight knee bend. Push hips back, not down.",
+      "glute_bridge": "Drive through heels, squeeze glutes NOT lower back, exhale on lift",
+      "dead_bug": "Press lower back to floor. Stop if back arches.",
+      "plank": "Don't sag hips. Breathe normally. Stop when form breaks.",
+      "farmer_carry": "Stand tall, don't lean, shoulders packed down"
+    }
+  }
