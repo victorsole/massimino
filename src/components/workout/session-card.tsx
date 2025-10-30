@@ -14,9 +14,11 @@ import {
   Dumbbell,
   Trophy,
   Activity,
+  Share2,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { SpotifyLinkModal } from './spotify-link-modal';
+import { ShareModal } from './share-modal';
 
 interface SessionCardProps {
   session: {
@@ -65,6 +67,7 @@ interface SessionCardProps {
 export function SessionCard({ session, onContinue, onStatusChange, onRefresh }: SessionCardProps) {
   const [loading, setLoading] = useState(false);
   const [showSpotifyModal, setShowSpotifyModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   const handleStatusChange = async (newStatus: string) => {
     setLoading(true);
@@ -265,6 +268,15 @@ export function SessionCard({ session, onContinue, onStatusChange, onRefresh }: 
           >
             <Archive className="w-4 h-4" />
           </Button>
+
+          <Button
+            variant="outline"
+            onClick={() => setShowShareModal(true)}
+            disabled={loading}
+            className="border-blue-200 hover:bg-blue-50"
+          >
+            <Share2 className="w-4 h-4 text-blue-600" />
+          </Button>
         </div>
       </CardContent>
 
@@ -279,6 +291,14 @@ export function SessionCard({ session, onContinue, onStatusChange, onRefresh }: 
           setShowSpotifyModal(false);
           onRefresh?.();
         }}
+      />
+
+      {/* Share Modal */}
+      <ShareModal
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        sessionId={session.id}
+        sessionName={session.name}
       />
     </Card>
   );
