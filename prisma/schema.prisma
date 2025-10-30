@@ -1451,6 +1451,12 @@ model program_subscriptions {
   workoutsCompleted      Int       @default(0)
   adherenceRate          Float?
 
+  // NEW: Open Sessions feature
+  spotifyUrl        String?
+  status            String    @default("ACTIVE") // ACTIVE, PAUSED, ARCHIVED, COMPLETED
+  isCurrentlyActive Boolean   @default(false)
+  sessionName       String? // Optional custom name override
+
   program_templates program_templates @relation(fields: [programId], references: [id])
   users             users             @relation(fields: [userId], references: [id])
 
@@ -2661,6 +2667,12 @@ model workout_sessions {
   sessionBehaviour                      String?
   effortLevel                           Int?
   sessionNotes                          String?
+
+  // NEW: Open Sessions feature
+  spotifyUrl        String?
+  status            String    @default("ACTIVE") // ACTIVE, PAUSED, ARCHIVED, COMPLETED
+  isCurrentlyActive Boolean   @default(false)
+
   createdAt                             DateTime                   @default(now())
   updatedAt                             DateTime
   appointments                          appointments?
