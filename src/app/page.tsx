@@ -32,12 +32,15 @@ export default async function HomePage() {
   const fallback = [
     { name: 'Amix', url: 'https://amix.com/?utm_source=massimino&utm_medium=partner_band&utm_campaign=amix', logoUrl: '/images/amix-logo.png', blurb: 'Quality sports supplements' },
     { name: 'Bo', url: 'http://app.hellobo.eu?utm_source=massimino&utm_medium=partner_band&utm_campaign=bo', logoUrl: '/images/Bo_logo.png', blurb: 'Local producer network' },
-    { name: 'Jims', url: 'https://www.jims.be/nl?utm_source=massimino&utm_medium=partner_band&utm_campaign=jims', logoUrl: '/images/jims-logo.png', blurb: 'Accessible gym network' },
+    // Temporarily remove Jims from public display pending formal agreement
+    // { name: 'Jims', url: 'https://www.jims.be/nl?utm_source=massimino&utm_medium=partner_band&utm_campaign=jims', logoUrl: '/images/jims-logo.png', blurb: 'Accessible gym network' },
   ]
   const byName = new Set<string>()
   const partners = [...fallback, ...(rows || [])].filter((p: any) => {
     const key = (p.name || '').toLowerCase().trim()
     if (!key) return false
+    // Exclude Jims from homepage partner band
+    if (key === 'jims') return false
     if (byName.has(key)) return false
     byName.add(key)
     return true

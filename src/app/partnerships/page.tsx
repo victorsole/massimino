@@ -39,12 +39,15 @@ export default function PartnershipsPage() {
                 <img src="/images/Bo_logo.png" alt="Bo" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
               </span>
             </a>
+            {/** Temporarily removed Jims pending formal agreement **/}
+            {/**
             <a href="https://www.jims.be/nl?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=jims" target="_blank" rel="noopener" className="group">
               <span className="sr-only">Jims</span>
               <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
                 <img src="/images/jims-logo.png" alt="Jims" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
               </span>
             </a>
+            **/}
           </div>
         </section>
 
@@ -89,6 +92,8 @@ export default function PartnershipsPage() {
                 <a href="http://app.hellobo.eu?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=bo" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit Bo →</a>
               </CardContent>
             </Card>
+            {/** Temporarily removed Jims card pending formal agreement **/}
+            {/**
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-3">
@@ -108,6 +113,7 @@ export default function PartnershipsPage() {
                 <a href="https://www.jims.be/nl?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=jims" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit Jims →</a>
               </CardContent>
             </Card>
+            **/}
           </div>
           <p className="text-xs text-gray-500 mt-3">Partnership details subject to change.</p>
         </section>

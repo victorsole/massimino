@@ -11,13 +11,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SessionHistoryTable, WorkoutCalendar, CommentsPanel } from '@/components/workout-log/WorkoutLogTable';
 import { startOfMonth, endOfMonth, format, subMonths, addMonths } from 'date-fns';
-import { Plus, Calendar, Dumbbell, Clock, Weight, MessageCircle, Edit, Trash2, Search, Info, Target, Zap, ChevronLeft, ChevronRight, Sparkles, Trophy, ListChecks, LineChart, Users } from 'lucide-react';
+import { Plus, Calendar, Dumbbell, Clock, Weight, MessageCircle, Edit, Trash2, Search, Info, Target, Zap, ChevronLeft, ChevronRight, Sparkles, Trophy, ListChecks, LineChart, Users, Activity } from 'lucide-react';
 import Link from 'next/link';
 import { RestTimerBar } from '@/components/workout-log/rest_timer_bar';
 import { BodyMetricsTab } from '@/components/workout-log/body_metrics_tab';
 import { ProgressTab } from '@/components/workout-log/progress_tab';
 import { HabitsTab } from '@/components/workout-log/habits_tab';
 import { ProgramsTab } from '@/components/workout-log/programs_tab';
+import { OpenSessionsTab } from '@/components/workout/open-sessions-tab';
 import { AthleteGallery } from '@/components/periodization/athlete_gallery';
 // Use a relaxed exercise type matching what the UI actually uses
 type ExerciseListItem = {
@@ -145,7 +146,7 @@ export default function WorkoutLogPage() {
   const [restDuration, setRestDuration] = useState<number>(90);
 
   // Tab navigation
-  const [activeTab, setActiveTab] = useState<'today' | 'programs' | 'athletes' | 'history' | 'metrics' | 'progress' | 'habits'>('today');
+  const [activeTab, setActiveTab] = useState<'today' | 'sessions' | 'programs' | 'athletes' | 'history' | 'metrics' | 'progress' | 'habits'>('today');
   const [, setSessions] = useState<any[]>([]);
 
   // Workout filter state (for athletes viewing trainer-assigned workouts)
@@ -1234,6 +1235,9 @@ export default function WorkoutLogPage() {
           <nav className="-mb-px flex space-x-6 overflow-x-auto">
             <button onClick={() => setActiveTab('today')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='today'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
               <Dumbbell className="inline h-4 w-4 mr-2" /> Today
+            </button>
+            <button onClick={() => setActiveTab('sessions')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='sessions'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
+              <Activity className="inline h-4 w-4 mr-2" /> Open Sessions
             </button>
             <button onClick={() => setActiveTab('programs')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='programs'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
               <Target className="inline h-4 w-4 mr-2" /> Programs
@@ -2563,6 +2567,10 @@ export default function WorkoutLogPage() {
               <WorkoutCalendar month={calendarMonth} sessions={monthSessions} />
             </div>
           </div>
+        )}
+
+        {activeTab === 'sessions' && (
+          <OpenSessionsTab />
         )}
 
         {activeTab === 'programs' && (
