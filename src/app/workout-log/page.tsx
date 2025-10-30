@@ -1619,60 +1619,91 @@ export default function WorkoutLogPage() {
                   {/* Selected Exercise Display */}
                   {selectedExercise && (
                     <div className="mt-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h4 className="font-medium text-blue-900">{selectedExercise.name}</h4>
-                          <div className="mt-2 grid grid-cols-2 gap-2 text-sm">
-                            <div className="flex items-center">
-                              <Target className="h-4 w-4 mr-1 text-blue-600" />
-                              <span className="text-blue-700">
-                                {selectedExercise.muscleGroups.slice(0, 3).join(', ')}
-                              </span>
-                            </div>
-                            <div className="flex items-center">
-                              <Zap className="h-4 w-4 mr-1 text-blue-600" />
-                              <span className="text-blue-700">{selectedExercise.difficulty}</span>
-                            </div>
-                            <div className="flex items-center">
-                              <Dumbbell className="h-4 w-4 mr-1 text-blue-600" />
-                              <span className="text-blue-700">
-                                {selectedExercise.equipment.slice(0, 2).join(', ')}
-                              </span>
-                            </div>
-                            <div className="flex items-center">
-                              <Info className="h-4 w-4 mr-1 text-blue-600" />
-                              <span className="text-blue-700">{selectedExercise.category}</span>
+                      <div className="flex flex-col gap-4">
+                        {/* Exercise Media - Show First */}
+                        {(selectedExercise.videoUrl || selectedExercise.imageUrl) && (
+                          <div className="w-full rounded-lg overflow-hidden bg-gray-900">
+                            {selectedExercise.videoUrl ? (
+                              <video
+                                src={selectedExercise.videoUrl}
+                                className="w-full max-h-64 object-contain"
+                                controls
+                                loop
+                                muted
+                                playsInline
+                              />
+                            ) : (
+                              <img
+                                src={selectedExercise.imageUrl}
+                                alt={selectedExercise.name}
+                                className="w-full max-h-64 object-contain"
+                              />
+                            )}
+                          </div>
+                        )}
+
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <h4 className="font-medium text-blue-900">{selectedExercise.name}</h4>
+                            <div className="mt-2 grid grid-cols-2 gap-2 text-sm">
+                              <div className="flex items-center">
+                                <Target className="h-4 w-4 mr-1 text-blue-600" />
+                                <span className="text-blue-700">
+                                  {selectedExercise.muscleGroups.slice(0, 3).join(', ')}
+                                </span>
+                              </div>
+                              <div className="flex items-center">
+                                <Zap className="h-4 w-4 mr-1 text-blue-600" />
+                                <span className="text-blue-700">{selectedExercise.difficulty}</span>
+                              </div>
+                              <div className="flex items-center">
+                                <Dumbbell className="h-4 w-4 mr-1 text-blue-600" />
+                                <span className="text-blue-700">
+                                  {selectedExercise.equipment.slice(0, 2).join(', ')}
+                                </span>
+                              </div>
+                              <div className="flex items-center">
+                                <Info className="h-4 w-4 mr-1 text-blue-600" />
+                                <span className="text-blue-700">{selectedExercise.category}</span>
+                              </div>
                             </div>
                           </div>
-                          {selectedExercise.instructions && (
-                            <div className="mt-2 text-sm text-blue-700">
-                              <strong>Instructions:</strong> {selectedExercise.instructions.substring(0, 100)}
-                              {selectedExercise.instructions.length > 100 && '...'}
-                            </div>
-                          )}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setSelectedExercise(null);
+                              setNewEntry({...newEntry, exercise: '', exerciseId: ''});
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => {
-                            setSelectedExercise(null);
-                            setNewEntry({...newEntry, exercise: '', exerciseId: ''});
-                          }}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+
+                        {/* Collapsible Instructions */}
+                        {selectedExercise.instructions && (
+                          <details className="text-sm">
+                            <summary className="cursor-pointer font-medium text-blue-900 hover:text-blue-700 flex items-center gap-2">
+                              <Info className="h-4 w-4" />
+                              Show Exercise Instructions
+                            </summary>
+                            <div className="mt-2 text-blue-700 pl-6 whitespace-pre-wrap">
+                              {selectedExercise.instructions}
+                            </div>
+                          </details>
+                        )}
                       </div>
                     </div>
                   )}
 
-                  {/* Coaching Cues */}
+                  {/* Coaching Cues - Collapsible */}
                   {coaching_cues.length > 0 && (
-                    <div className="mt-3 bg-blue-50 border border-blue-200 rounded-md p-3">
-                      <h4 className="text-sm font-semibold text-blue-900 mb-2 flex items-center gap-2">
+                    <details className="mt-3 bg-blue-50 border border-blue-200 rounded-md p-3">
+                      <summary className="cursor-pointer text-sm font-semibold text-blue-900 hover:text-blue-700 flex items-center gap-2">
                         <Info className="h-4 w-4" />
-                        Exercise Tips
-                      </h4>
-                      <ul className="space-y-1">
+                        Exercise Tips ({coaching_cues.length})
+                      </summary>
+                      <ul className="mt-2 space-y-1">
                         {coaching_cues.map((cue, index) => (
                           <li key={index} className="text-sm text-blue-800 flex items-start gap-2">
                             <span className="text-blue-600 font-bold">•</span>
@@ -1680,7 +1711,7 @@ export default function WorkoutLogPage() {
                           </li>
                         ))}
                       </ul>
-                    </div>
+                    </details>
                   )}
                 </div>
 
