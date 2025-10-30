@@ -1,0 +1,85 @@
+{
+    "program": "Plyometric Workout",
+    "author": "Victor Solé Ferioli",
+    "duration_weeks": 2,
+    "session_duration_minutes": {
+      "min": 20,
+      "max": 30
+    },
+    "frequency_per_week": 2,
+    "level": "Intermediate",
+    "settings": ["Indoor", "Outdoor"],
+    "goal": {
+      "outcome_goal": "Improve vertical jump height by 2–4 cm",
+      "progress_goals": [
+        "Increase number of successful landing reps with proper form",
+        "Reduce ground contact time on repeated hops"
+      ]
+    },
+    "equipment": [
+      "Plyo box",
+      "Mat",
+      "Cone",
+      "Line or marker"
+    ],
+    "weekly_structure": [
+      {
+        "week": 1,
+        "theme": "Form & Control",
+        "sessions": [
+          {
+            "name": "Session 1",
+            "components": [
+              "Jump Squats – 3x10",
+              "Lateral Line Hops – 3x20 sec",
+              "Box Jumps (low height) – 3x6",
+              "Broad Jump with Stick Landing – 3x5",
+              "Core Finisher: Plank to Push-up – 3x30 sec"
+            ]
+          },
+          {
+            "name": "Session 2",
+            "components": [
+              "Tuck Jumps – 3x8",
+              "Skater Bounds – 3x10/side",
+              "Cone Jumps (forward/backward) – 3x12",
+              "Depth Jump + Stabilize (from small step) – 3x4",
+              "Mobility Cooldown: Hip flexor + Hamstring + Calf stretch"
+            ]
+          }
+        ]
+      },
+      {
+        "week": 2,
+        "theme": "Speed & Agility Load",
+        "sessions": [
+          {
+            "name": "Session 1",
+            "components": [
+              "Single-leg Lateral Hops – 3x8/leg",
+              "Reactive Box Jump (with clap cue) – 3x5",
+              "Jump Lunges – 3x12",
+              "Side-to-Side Skater + Pause – 3x8/side",
+              "Core Finisher: V-sit flutter kicks – 3x20 sec"
+            ]
+          },
+          {
+            "name": "Session 2",
+            "components": [
+              "Line Hops 3-way (front/back/side) – 3x15 sec each",
+              "Bounding Sprints (20m x 4)",
+              "Frog Jumps – 3x6",
+              "Burpee + Jump – 3x10",
+              "Cooldown Walk + Diaphragmatic Breathing"
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": [
+      "Warm-up before each session (e.g., jogging, dynamic stretches)",
+      "Focus on soft landings & knee alignment",
+      "Rest 48 hours between sessions"
+    ]
+  }
+  

@@ -1,0 +1,276 @@
+{
+    "program": "Bye Stress Bye - Stress Relief & Nervous System Recovery",
+    "author": "Victor Solé Ferioli",
+    "version": "2.0_corrected",
+    "target_population": "Adults experiencing chronic stress, overwhelm, or approaching burnout",
+    "duration_weeks": 4,
+    "session_duration_minutes": {
+      "min": 15,
+      "max": 40
+    },
+    "frequency_per_week": {
+      "ideal": 3,
+      "acceptable": "1-2",
+      "reality": "Whatever you can manage"
+    },
+    "optional_daily_practices": {
+      "duration_minutes": "5-10",
+      "frequency": "Daily or as needed",
+      "required": false
+    },
+    "level": "All levels (designed for depleted nervous systems)",
+    "settings": ["Home", "Quiet outdoor space", "Anywhere you feel safe"],
+    "equipment": {
+      "essential": ["Yoga mat", "Pillow", "Blanket"],
+      "helpful": ["Foam roller", "Tennis ball", "Eye pillow", "Blocks"]
+    },
+    
+    "critical_disclaimers": {
+      "not_a_substitute": "This program does NOT replace mental health treatment, therapy, or medication",
+      "seek_help_if": [
+        "Thoughts of self-harm or suicide",
+        "Inability to function in daily life",
+        "Severe anxiety or panic attacks",
+        "Depression preventing basic self-care",
+        "Using substances to cope",
+        "Complete emotional numbness"
+      ],
+      "appropriate_for": [
+        "General life stress and overwhelm",
+        "Mild to moderate stress symptoms",
+        "Complementing existing mental health treatment",
+        "Preventive self-care"
+      ]
+    },
+    
+    "core_philosophy": {
+      "principle": "Permission over pressure",
+      "rules": "There are no rules",
+      "acceptable_outcomes": [
+        "Skipping sessions",
+        "Doing less than written",
+        "Repeating easier weeks",
+        "Never progressing",
+        "Quitting entirely"
+      ],
+      "message": "Your nervous system needs safety, not another performance evaluation"
+    },
+    
+    "intentions_not_goals": {
+      "what_program_offers": [
+        "Structured-yet-flexible container for nervous system care",
+        "Permission to move slowly and rest often",
+        "Parasympathetic nervous system activation",
+        "Tools for stressful moments",
+        "Gentle reconnection with body"
+      ],
+      "what_program_does_not_promise": [
+        "Cure stress or burnout",
+        "Immediate relief",
+        "Replacement for professional care",
+        "Perfect completion"
+      ],
+      "realistic_expectation": "By Week 4, slightly better stress regulation, small sleep improvements, or simply showing up for yourself"
+    },
+    
+    "weekly_structure": [
+      {
+        "week": 1,
+        "theme": "Safety & Breath",
+        "focus": [
+          "Establishing bodily safety",
+          "Basic breathwork (box breathing, 4-7-8, extended exhale)",
+          "Gentle mobility (cat-cow, thread needle, twists)",
+          "Restorative yoga (child's pose, forward fold, legs up wall)",
+          "Grounding practices"
+        ],
+        "energy_options": {
+          "very_low": "10-15 min minimum viable movement",
+          "low_moderate": "20-30 min core practice",
+          "better_day": "30-40 min extended practice"
+        },
+        "when_to_use": "Starting point, or return when overwhelmed"
+      },
+      {
+        "week": 2,
+        "theme": "Gentle Movement & Release",
+        "focus": [
+          "Low-intensity zone 1 cardio (walking, cycling, dancing)",
+          "Dynamic mobility (world's greatest stretch, arm swings, hip circles)",
+          "Self-massage and somatic release (foam rolling, tennis ball work)",
+          "Cool-down flow (downward dog, forward fold, twists)"
+        ],
+        "duration_options": {
+          "lower_energy": "20 min - breathwork + mobility + massage",
+          "moderate": "30 min - add gentle cardio",
+          "higher": "40 min - full practice"
+        },
+        "key_principle": "Movement as medicine, not punishment"
+      },
+      {
+        "week": 3,
+        "theme": "Ground & Deep Rest",
+        "focus": [
+          "Nervous system downregulation (legs up wall, constructive rest, savasana)",
+          "Stretch circuit (neck rolls, wall chest opener, forward fold)",
+          "Sound + movement integration",
+          "Extended meditation (body scan, grounding, loving-kindness)"
+        ],
+        "emphasis": "Stillness over movement",
+        "duration_minutes": "25-40",
+        "when_to_use": "Sleep disruption, high anxiety, wired-but-tired state"
+      },
+      {
+        "week": 4,
+        "theme": "Integration & Sustainability",
+        "focus": [
+          "Cardio-breath fusion (walk with breath cueing, yoga flow)",
+          "Stress management circuit (movement, stillness, grounding)",
+          "Building personal toolkit (3 stress anchor practices)",
+          "Identifying sustainable practices"
+        ],
+        "duration_minutes": "30-45",
+        "important_note": "If Week 4 feels like too much, stay in Weeks 1-3"
+      }
+    ],
+    
+    "breathwork_techniques": {
+      "box_breathing": {
+        "pattern": "Inhale 4, hold 4, exhale 4, hold 4",
+        "rounds": 8,
+        "best_for": "Anxiety, racing thoughts",
+        "modification": "Skip holds if uncomfortable"
+      },
+      "4_7_8_breathing": {
+        "pattern": "Inhale 4, hold 7, exhale 8",
+        "rounds": 6,
+        "best_for": "Activation, stress",
+        "modification": "Try 4-4-6 if 7-count hold is too much"
+      },
+      "extended_exhale": {
+        "pattern": "Inhale 4, exhale 6-8",
+        "rounds": 10,
+        "best_for": "Overwhelm, shutdown",
+        "mechanism": "Activates vagus nerve"
+      },
+      "physiological_sigh": {
+        "pattern": "Two quick inhales through nose, long exhale through mouth",
+        "rounds": 5,
+        "best_for": "Quick stress reduction",
+        "evidence": "Scientifically proven rapid stress relief"
+      }
+    },
+    
+    "daily_micro_practices": [
+      {
+        "name": "Morning Grounding",
+        "duration_minutes": 5,
+        "steps": ["5 deep breaths in bed", "Body scan", "Set gentle intention"]
+      },
+      {
+        "name": "Midday Reset",
+        "duration_minutes": 5,
+        "steps": ["10 physiological sighs", "2-min stand or walk", "Drink water"]
+      },
+      {
+        "name": "Transition Ritual",
+        "duration_minutes": 5,
+        "steps": ["Between work and home", "Box breathing 5 rounds", "Leave work stress behind"]
+      },
+      {
+        "name": "Evening Wind-Down",
+        "duration_minutes": 5,
+        "steps": ["Gentle stretching", "Legs up wall 3 minutes", "Signal: time to rest"]
+      },
+      {
+        "name": "Gratitude Practice",
+        "duration_minutes": 3,
+        "steps": ["Write 3 real things", "Tiny things count", "No positivity pressure"]
+      },
+      {
+        "name": "Nothing",
+        "duration_minutes": 0,
+        "philosophy": "Rest is productive. You don't have to earn worthiness."
+      }
+    ],
+    
+    "when_exercise_makes_things_worse": {
+      "signs": [
+        "Consistently feeling worse after sessions for 2+ weeks",
+        "Increased cortisol response",
+        "Exercise triggers anxiety or depression"
+      ],
+      "modifications": [
+        "Do only breathwork and meditation",
+        "Reduce to 10-minute sessions",
+        "Focus solely on restorative yoga",
+        "Take complete break from structure"
+      ],
+      "considerations": [
+        "Speak with mental health professional",
+        "Check for adrenal fatigue, thyroid issues",
+        "Right now, rest might be the medicine"
+      ],
+      "message": "You're not failing. Your body is giving you information."
+    },
+    
+    "stress_anchor_toolkit": {
+      "emergency_calm": {
+        "duration_minutes": 2,
+        "example": "10 physiological sighs + hand on heart"
+      },
+      "daily_maintenance": {
+        "duration_minutes": 10,
+        "example": "Morning breathwork + child's pose"
+      },
+      "weekly_reset": {
+        "duration_minutes": 30,
+        "example": "One full session from program"
+      }
+    },
+    
+    "realistic_expectations": {
+      "might_notice": [
+        "Slightly better sleep (not perfect)",
+        "Moments of calm (not constant peace)",
+        "Catching stress earlier",
+        "One tool that helps",
+        "Feeling slightly more grounded"
+      ],
+      "probably_wont_notice": [
+        "All stress disappearing",
+        "Life becoming easy",
+        "Never feeling anxious",
+        "Burnout cured"
+      ],
+      "why_thats_okay": "This program gives tools, not miracles. Tools you can use again when life gets hard."
+    },
+    
+    "post_program_options": {
+      "option_1": "Repeat entire program",
+      "option_2": "Stay in favorite week (no shame in not advancing)",
+      "option_3": "Cherry-pick what worked, create custom practice",
+      "option_4": "Seek additional support (yoga classes, meditation groups, therapy)",
+      "long_term_goal": "Have nervous system regulation tools accessible anytime, anywhere"
+    },
+    
+    "key_positions_for_nervous_system": {
+      "legs_up_wall": {
+        "duration_minutes": "5-10",
+        "benefits": "Reduces cortisol, improves vagal tone, activates parasympathetic",
+        "caution": "Come down slowly if lightheaded"
+      },
+      "constructive_rest": {
+        "position": "Back, knees bent, feet flat wider than hips, knees together",
+        "benefits": "Body's natural resting position, gentle belly breathing"
+      },
+      "child_pose": {
+        "benefits": "Home base, decompresses spine, signals safety",
+        "modifications": "Knees wide, pillow under torso for support"
+      },
+      "supported_savasana": {
+        "props": "Pillow under knees, blanket over body, eye covering",
+        "benefits": "Deep rest, integration, stillness practice"
+      }
+    }
+  }

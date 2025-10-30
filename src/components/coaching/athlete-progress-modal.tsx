@@ -122,8 +122,13 @@ export function AthleteProgressModal({
   };
 
   const handleNavigateToSession = (sessionId: string, sessionType: 'custom' | 'program') => {
-    // Navigate to workout log - it will handle both custom sessions and programs
-    router.push('/workout-log');
+    // Navigate to trainer session view for custom sessions
+    if (sessionType === 'custom') {
+      router.push(`/trainer/athlete/${athleteId}/session/${sessionId}`);
+    } else {
+      // For programs, navigate to workout log for now
+      router.push('/workout-log');
+    }
     onClose();
   };
 
