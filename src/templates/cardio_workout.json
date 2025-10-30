@@ -1,0 +1,147 @@
+{
+    "program": "Cardio Workout",
+    "author": "Victor Solé Ferioli"
+    "duration_weeks": 3,
+    "session_duration": {
+      "min_minutes": 30,
+      "max_minutes": 60
+    },
+    "frequency_per_week": 4,
+    "goal": {
+      "outcome_goal": "Jog 5 km in under 35 min by end of Week 3",
+      "progress_goals": [
+        "Improve recovery HR by 10 bpm after 3-min step test by end of Week 3",
+        "Complete 2 stair climbs without rest by end of Week 3"
+      ]
+    },
+    "weekly_structure": [
+      {
+        "week": 1,
+        "theme": "Build the Base",
+        "focus": "Zone 2 (steady-state endurance)",
+        "sessions": [
+          {
+            "name": "Outdoor Walk-Jog Intervals",
+            "details": [
+              "5 min warm-up walk",
+              "20 min alternating 1-min jog / 2-min brisk walk",
+              "5–10 min cooldown walk/stretch"
+            ],
+            "goal": "Maintain nasal breathing (Zone 2)"
+          },
+          {
+            "name": "Indoor Bike / Treadmill Steady State",
+            "details": [
+              "5 min warm-up",
+              "30 min steady cardio at RPE 5/10",
+              "5 min cooldown"
+            ],
+            "goal": "Monitor HR recovery post-exercise"
+          },
+          {
+            "name": "Outdoor Steady Walk or Hike",
+            "details": [
+              "45–60 min brisk walk or hike"
+            ],
+            "goal": "Low impact, long duration"
+          },
+          {
+            "name": "Optional Bonus – Bodyweight Circuit",
+            "details": [
+              "3 rounds:",
+              "30s jumping jacks",
+              "30s high knees",
+              "30s rest",
+              "5 min walk to warm down"
+            ]
+          }
+        ]
+      },
+      {
+        "week": 2,
+        "theme": "Aerobic Conditioning",
+        "focus": "Zone 2–3 (intervals + hills)",
+        "sessions": [
+          {
+            "name": "Fartlek Run – Speed Play",
+            "details": [
+              "5 min jog",
+              "20 min: alternate between 1 min fast / 2 min slow jog",
+              "5–10 min cooldown"
+            ],
+            "goal": "Push RPE to 6–7 briefly"
+          },
+          {
+            "name": "Indoor Bike / Elliptical Intervals",
+            "details": [
+              "5 min warm-up",
+              "10 rounds: 1 min hard effort / 1 min easy",
+              "5 min cooldown"
+            ]
+          },
+          {
+            "name": "Hill/Incline Walking or Stair Climb",
+            "details": [
+              "40–60 min total"
+            ],
+            "goal": "Focus on rhythmic breathing, steady output"
+          },
+          {
+            "name": "Dynamic Bodyweight Combo",
+            "details": [
+              "4 rounds:",
+              "1 min squat to overhead reach",
+              "30s mountain climbers",
+              "30s jog in place",
+              "1 min rest"
+            ]
+          }
+        ]
+      },
+      {
+        "week": 3,
+        "theme": "Power + Threshold Push",
+        "focus": "Zone 3–4 (tempo + HIIT blocks)",
+        "sessions": [
+          {
+            "name": "Tempo Run or Power Walk Intervals",
+            "details": [
+              "5 min warm-up",
+              "20 min at sustained pace (RPE 7/10)",
+              "5 min cooldown"
+            ],
+            "goal": "Complete 3k without stopping"
+          },
+          {
+            "name": "HIIT Treadmill / Stationary Bike",
+            "details": [
+              "5 min warm-up",
+              "8 x 30s sprint / 90s rest",
+              "5 min cooldown"
+            ]
+          },
+          {
+            "name": "Outdoor Challenge – 'Run the City'",
+            "details": [
+              "Map a 5k route",
+              "Walk/run it with minimal stops",
+              "Track time for outcome goal"
+            ]
+          },
+          {
+            "name": "Recovery & Mobility Walk",
+            "details": [
+              "30 min gentle walk",
+              "10 min foam rolling or stretching"
+            ]
+          }
+        ]
+      }
+    ],
+    "tracking_tools": [
+      "Heart Rate Recovery (3-min YMCA step test or wearable)",
+      "Distance & Time Logs (Strava, Nike Run Club, Apple Health)",
+      "Mood/Energy Journaling post-session"
+    ]
+  }
+  

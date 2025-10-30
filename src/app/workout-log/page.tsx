@@ -11,14 +11,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SessionHistoryTable, WorkoutCalendar, CommentsPanel } from '@/components/workout-log/WorkoutLogTable';
 import { startOfMonth, endOfMonth, format, subMonths, addMonths } from 'date-fns';
-import { Plus, Calendar, Dumbbell, Clock, Weight, MessageCircle, Edit, Trash2, Search, Info, Target, Zap, ChevronLeft, ChevronRight, Sparkles, Trophy, ListChecks, LineChart, Users, Activity } from 'lucide-react';
+import { Plus, Calendar, Dumbbell, Clock, Weight, MessageCircle, Edit, Trash2, Search, Info, Target, Zap, ChevronLeft, ChevronRight, Sparkles, Trophy, ListChecks, LineChart, Users } from 'lucide-react';
 import Link from 'next/link';
 import { RestTimerBar } from '@/components/workout-log/rest_timer_bar';
 import { BodyMetricsTab } from '@/components/workout-log/body_metrics_tab';
 import { ProgressTab } from '@/components/workout-log/progress_tab';
 import { HabitsTab } from '@/components/workout-log/habits_tab';
 import { ProgramsTab } from '@/components/workout-log/programs_tab';
-import { OpenSessionsTab } from '@/components/workout/open-sessions-tab';
 import { AthleteGallery } from '@/components/periodization/athlete_gallery';
 // Use a relaxed exercise type matching what the UI actually uses
 type ExerciseListItem = {
@@ -29,8 +28,6 @@ type ExerciseListItem = {
   equipment: string[];
   difficulty?: string;
   instructions?: string;
-  videoUrl?: string;
-  imageUrl?: string;
   _userExerciseId?: string; // present if this originated from My Library custom (no baseExerciseId)
 };
 
@@ -46,7 +43,6 @@ type WorkoutEntry = {
   intensity?: string;
   tempo?: string;
   restSeconds?: number;
-  coachId?: string | null;
   coachFeedback?: string;
   userComments?: string;
   personalRecord?: boolean;
@@ -59,11 +55,6 @@ type WorkoutEntry = {
     equipment: string[];
     difficulty?: string;
   };
-  coach?: {
-    id: string;
-    name: string | null;
-    role: string;
-  } | null;
 };
 
 export default function WorkoutLogPage() {
@@ -123,8 +114,7 @@ export default function WorkoutLogPage() {
     intensity: '',
     tempo: '',
     restSeconds: '',
-    userComments: '',
-    trainerFeedback: '' // For trainer-assigned workouts
+    userComments: ''
   });
 
   // Session management state
@@ -148,11 +138,8 @@ export default function WorkoutLogPage() {
   const [restDuration, setRestDuration] = useState<number>(90);
 
   // Tab navigation
-  const [activeTab, setActiveTab] = useState<'today' | 'sessions' | 'programs' | 'athletes' | 'history' | 'metrics' | 'progress' | 'habits'>('today');
+  const [activeTab, setActiveTab] = useState<'today' | 'programs' | 'athletes' | 'history' | 'metrics' | 'progress' | 'habits'>('today');
   const [, setSessions] = useState<any[]>([]);
-
-  // Workout filter state (for athletes viewing trainer-assigned workouts)
-  const [workoutFilter, setWorkoutFilter] = useState<'all' | 'my' | 'assigned'>('all');
 
   // Calendar state
   const [calendarMonth, setCalendarMonth] = useState(new Date());
@@ -365,47 +352,14 @@ export default function WorkoutLogPage() {
 
     if (!currentWorkout) return null;
 
-    // Calculate total days in this microcycle
-    const totalDays = currentMicrocycle.workouts.length;
-
     return {
       subscription: activeSub,
       program,
       phase: currentPhase,
       microcycle: currentMicrocycle,
       workout: currentWorkout,
-      exercises: currentWorkout.workout_exercises || [],
-      totalDays
+      exercises: currentWorkout.workout_exercises || []
     };
-  };
-
-  // Update program day navigation
-  const updateProgramDay = async (newDay: number) => {
-    if (!programSubscriptions || programSubscriptions.length === 0) return;
-
-    const activeSub = programSubscriptions[0];
-
-    try {
-      const response = await fetch('/api/workout/programs/progress', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          subscriptionId: activeSub.id,
-          currentDay: newDay
-        })
-      });
-
-      if (response.ok) {
-        // Refresh subscriptions to get updated data
-        const r = await fetch('/api/workout/programs?subscriptions=true');
-        if (r.ok) {
-          const subs = await r.json();
-          setProgramSubscriptions(Array.isArray(subs) ? subs : []);
-        }
-      }
-    } catch (error) {
-      console.error('Failed to update day:', error);
-    }
   };
 
   async function load_recommendations() {
@@ -546,7 +500,6 @@ export default function WorkoutLogPage() {
           intensity: entry.intensity,
           tempo: entry.tempo,
           restSeconds: entry.restSeconds,
-          coachId: entry.coachId,
           coachFeedback: entry.coachFeedback,
           userComments: entry.userComments,
           exercise: {
@@ -556,8 +509,7 @@ export default function WorkoutLogPage() {
             muscleGroups: entry.exercises?.muscleGroups || [],
             equipment: entry.exercises?.equipment || [],
             difficulty: entry.exercises?.difficulty
-          },
-          coach: entry.coach || null
+          }
         }));
         setWorkoutEntries(entries);
       } else {
@@ -1034,8 +986,7 @@ export default function WorkoutLogPage() {
           intensity: '',
           tempo: '',
           restSeconds: '',
-          userComments: '',
-          trainerFeedback: ''
+          userComments: ''
         });
       } else {
         const errorData = await response.json();
@@ -1083,8 +1034,7 @@ export default function WorkoutLogPage() {
       intensity: entry.intensity || '',
       tempo: entry.tempo || '',
       restSeconds: entry.restSeconds?.toString() || '',
-      userComments: entry.userComments || '',
-      trainerFeedback: entry.userComments || '' // For trainer-assigned workouts
+      userComments: entry.userComments || ''
     });
   };
 
@@ -1238,9 +1188,6 @@ export default function WorkoutLogPage() {
             <button onClick={() => setActiveTab('today')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='today'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
               <Dumbbell className="inline h-4 w-4 mr-2" /> Today
             </button>
-            <button onClick={() => setActiveTab('sessions')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='sessions'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
-              <Activity className="inline h-4 w-4 mr-2" /> Open Sessions
-            </button>
             <button onClick={() => setActiveTab('programs')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='programs'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
               <Target className="inline h-4 w-4 mr-2" /> Programs
             </button>
@@ -1354,7 +1301,7 @@ export default function WorkoutLogPage() {
               const currentWorkout = getCurrentProgramWorkout();
               if (!currentWorkout) return null;
 
-              const { subscription, program, phase, workout, exercises, totalDays } = currentWorkout;
+              const { subscription, program, phase, workout, exercises } = currentWorkout;
               const athleteName = program.legendary_athlete?.name || 'Program';
 
               return (
@@ -1367,33 +1314,6 @@ export default function WorkoutLogPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {/* Day Navigation */}
-                      <div className="flex items-center justify-between gap-2 pb-3 border-b">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => updateProgramDay(Math.max(1, subscription.currentDay - 1))}
-                          disabled={subscription.currentDay <= 1}
-                        >
-                          <ChevronLeft className="h-4 w-4 mr-1" />
-                          Previous
-                        </Button>
-
-                        <div className="text-sm font-medium text-center">
-                          Day {subscription.currentDay} of {totalDays}
-                        </div>
-
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => updateProgramDay(Math.min(totalDays, subscription.currentDay + 1))}
-                          disabled={subscription.currentDay >= totalDays}
-                        >
-                          Next
-                          <ChevronRight className="h-4 w-4 ml-1" />
-                        </Button>
-                      </div>
-
                       {/* Workout Info */}
                       <div className="flex items-start justify-between gap-3 pb-3 border-b">
                         <div>
@@ -1456,12 +1376,11 @@ export default function WorkoutLogPage() {
                               const repsDisplay = ex.repsMin && ex.repsMax
                                 ? (ex.repsMin === ex.repsMax ? ex.repsMin : `${ex.repsMin}-${ex.repsMax}`)
                                 : (ex.repsMin || ex.repsMax || '-');
-                              const mediaUrl = exercise?.imageUrl || exercise?.videoUrl;
 
                               return (
                                 <div
                                   key={ex.id || idx}
-                                  className="flex items-center gap-3 p-3 border rounded-lg hover:bg-blue-50 cursor-pointer transition-colors"
+                                  className="flex items-center justify-between p-3 border rounded-lg hover:bg-blue-50 cursor-pointer transition-colors"
                                   onClick={() => {
                                     if (exercise) {
                                       // Load this exercise into the form
@@ -1490,36 +1409,8 @@ export default function WorkoutLogPage() {
                                     }
                                   }}
                                 >
-                                  {/* Exercise Media Thumbnail */}
-                                  {mediaUrl && (
-                                    <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
-                                      {exercise.videoUrl ? (
-                                        <video
-                                          src={exercise.videoUrl}
-                                          className="w-full h-full object-cover"
-                                          muted
-                                          playsInline
-                                          preload="metadata"
-                                        />
-                                      ) : (
-                                        <img
-                                          src={exercise.imageUrl}
-                                          alt={exercise.name}
-                                          className="w-full h-full object-cover"
-                                        />
-                                      )}
-                                    </div>
-                                  )}
-
-                                  {/* No media placeholder */}
-                                  {!mediaUrl && (
-                                    <div className="w-16 h-16 flex-shrink-0 rounded-lg bg-gray-100 flex items-center justify-center">
-                                      <Dumbbell className="h-6 w-6 text-gray-400" />
-                                    </div>
-                                  )}
-
-                                  <div className="flex-1 min-w-0">
-                                    <div className="font-medium text-sm truncate">{exercise?.name || 'Exercise'}</div>
+                                  <div className="flex-1">
+                                    <div className="font-medium text-sm">{exercise?.name || 'Exercise'}</div>
                                     <div className="text-xs text-muted-foreground mt-1">
                                       {exercise?.category && <span>{exercise.category}</span>}
                                       {exercise?.muscleGroups && exercise.muscleGroups.length > 0 && (
@@ -1527,7 +1418,7 @@ export default function WorkoutLogPage() {
                                       )}
                                     </div>
                                   </div>
-                                  <div className="text-sm font-medium text-gray-900 ml-2">
+                                  <div className="text-sm font-medium text-gray-900 ml-4">
                                     {setsDisplay} × {repsDisplay}
                                   </div>
                                 </div>
@@ -1621,91 +1512,60 @@ export default function WorkoutLogPage() {
                   {/* Selected Exercise Display */}
                   {selectedExercise && (
                     <div className="mt-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                      <div className="flex flex-col gap-4">
-                        {/* Exercise Media - Show First */}
-                        {(selectedExercise.videoUrl || selectedExercise.imageUrl) && (
-                          <div className="w-full rounded-lg overflow-hidden bg-gray-900">
-                            {selectedExercise.videoUrl ? (
-                              <video
-                                src={selectedExercise.videoUrl}
-                                className="w-full max-h-64 object-contain"
-                                controls
-                                loop
-                                muted
-                                playsInline
-                              />
-                            ) : (
-                              <img
-                                src={selectedExercise.imageUrl}
-                                alt={selectedExercise.name}
-                                className="w-full max-h-64 object-contain"
-                              />
-                            )}
-                          </div>
-                        )}
-
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <h4 className="font-medium text-blue-900">{selectedExercise.name}</h4>
-                            <div className="mt-2 grid grid-cols-2 gap-2 text-sm">
-                              <div className="flex items-center">
-                                <Target className="h-4 w-4 mr-1 text-blue-600" />
-                                <span className="text-blue-700">
-                                  {selectedExercise.muscleGroups.slice(0, 3).join(', ')}
-                                </span>
-                              </div>
-                              <div className="flex items-center">
-                                <Zap className="h-4 w-4 mr-1 text-blue-600" />
-                                <span className="text-blue-700">{selectedExercise.difficulty}</span>
-                              </div>
-                              <div className="flex items-center">
-                                <Dumbbell className="h-4 w-4 mr-1 text-blue-600" />
-                                <span className="text-blue-700">
-                                  {selectedExercise.equipment.slice(0, 2).join(', ')}
-                                </span>
-                              </div>
-                              <div className="flex items-center">
-                                <Info className="h-4 w-4 mr-1 text-blue-600" />
-                                <span className="text-blue-700">{selectedExercise.category}</span>
-                              </div>
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h4 className="font-medium text-blue-900">{selectedExercise.name}</h4>
+                          <div className="mt-2 grid grid-cols-2 gap-2 text-sm">
+                            <div className="flex items-center">
+                              <Target className="h-4 w-4 mr-1 text-blue-600" />
+                              <span className="text-blue-700">
+                                {selectedExercise.muscleGroups.slice(0, 3).join(', ')}
+                              </span>
+                            </div>
+                            <div className="flex items-center">
+                              <Zap className="h-4 w-4 mr-1 text-blue-600" />
+                              <span className="text-blue-700">{selectedExercise.difficulty}</span>
+                            </div>
+                            <div className="flex items-center">
+                              <Dumbbell className="h-4 w-4 mr-1 text-blue-600" />
+                              <span className="text-blue-700">
+                                {selectedExercise.equipment.slice(0, 2).join(', ')}
+                              </span>
+                            </div>
+                            <div className="flex items-center">
+                              <Info className="h-4 w-4 mr-1 text-blue-600" />
+                              <span className="text-blue-700">{selectedExercise.category}</span>
                             </div>
                           </div>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => {
-                              setSelectedExercise(null);
-                              setNewEntry({...newEntry, exercise: '', exerciseId: ''});
-                            }}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                          {selectedExercise.instructions && (
+                            <div className="mt-2 text-sm text-blue-700">
+                              <strong>Instructions:</strong> {selectedExercise.instructions.substring(0, 100)}
+                              {selectedExercise.instructions.length > 100 && '...'}
+                            </div>
+                          )}
                         </div>
-
-                        {/* Collapsible Instructions */}
-                        {selectedExercise.instructions && (
-                          <details className="text-sm">
-                            <summary className="cursor-pointer font-medium text-blue-900 hover:text-blue-700 flex items-center gap-2">
-                              <Info className="h-4 w-4" />
-                              Show Exercise Instructions
-                            </summary>
-                            <div className="mt-2 text-blue-700 pl-6 whitespace-pre-wrap">
-                              {selectedExercise.instructions}
-                            </div>
-                          </details>
-                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedExercise(null);
+                            setNewEntry({...newEntry, exercise: '', exerciseId: ''});
+                          }}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
                       </div>
                     </div>
                   )}
 
-                  {/* Coaching Cues - Collapsible */}
+                  {/* Coaching Cues */}
                   {coaching_cues.length > 0 && (
-                    <details className="mt-3 bg-blue-50 border border-blue-200 rounded-md p-3">
-                      <summary className="cursor-pointer text-sm font-semibold text-blue-900 hover:text-blue-700 flex items-center gap-2">
+                    <div className="mt-3 bg-blue-50 border border-blue-200 rounded-md p-3">
+                      <h4 className="text-sm font-semibold text-blue-900 mb-2 flex items-center gap-2">
                         <Info className="h-4 w-4" />
-                        Exercise Tips ({coaching_cues.length})
-                      </summary>
-                      <ul className="mt-2 space-y-1">
+                        Exercise Tips
+                      </h4>
+                      <ul className="space-y-1">
                         {coaching_cues.map((cue, index) => (
                           <li key={index} className="text-sm text-blue-800 flex items-start gap-2">
                             <span className="text-blue-600 font-bold">•</span>
@@ -1713,7 +1573,7 @@ export default function WorkoutLogPage() {
                           </li>
                         ))}
                       </ul>
-                    </details>
+                    </div>
                   )}
                 </div>
 
@@ -2267,48 +2127,7 @@ export default function WorkoutLogPage() {
 
         {!fetchingEntries && !error && workoutEntries.length > 0 && (
           <div className="space-y-6">
-            {/* Workout Filter Tabs */}
-            <div className="flex items-center gap-2 border-b pb-3">
-              <button
-                onClick={() => setWorkoutFilter('all')}
-                className={`px-4 py-2 rounded-md font-medium text-sm transition-colors ${
-                  workoutFilter === 'all'
-                    ? 'bg-brand-primary text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                All Workouts
-              </button>
-              <button
-                onClick={() => setWorkoutFilter('my')}
-                className={`px-4 py-2 rounded-md font-medium text-sm transition-colors ${
-                  workoutFilter === 'my'
-                    ? 'bg-brand-primary text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                My Workouts
-              </button>
-              <button
-                onClick={() => setWorkoutFilter('assigned')}
-                className={`px-4 py-2 rounded-md font-medium text-sm transition-colors ${
-                  workoutFilter === 'assigned'
-                    ? 'bg-brand-primary text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                Assigned by Trainer
-              </button>
-            </div>
-
-            {workoutEntries
-              .filter((entry: WorkoutEntry) => {
-                if (workoutFilter === 'all') return true;
-                if (workoutFilter === 'my') return !entry.coachId;
-                if (workoutFilter === 'assigned') return !!entry.coachId;
-                return true;
-              })
-              .map((entry: WorkoutEntry) => (
+            {workoutEntries.map((entry: WorkoutEntry) => (
               <Card key={entry.id}>
               <CardHeader>
                 <div className="flex items-center justify-between">
@@ -2346,19 +2165,13 @@ export default function WorkoutLogPage() {
                   </div>
                 </div>
                 <CardTitle className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 flex-wrap">
+                  <div className="flex items-center gap-2">
                     <Dumbbell className="h-5 w-5 mr-2" />
                     {entry.exercise.name}
                     {entry.personalRecord && (
                       <Badge className="bg-yellow-400 text-yellow-900 hover:bg-yellow-500 border-yellow-600">
                         <Trophy className="h-3 w-3 mr-1" />
                         PR!
-                      </Badge>
-                    )}
-                    {entry.coachId && entry.coach && (
-                      <Badge className="bg-blue-100 text-blue-800 border-blue-300">
-                        <Users className="h-3 w-3 mr-1" />
-                        Assigned by {entry.coach.name || 'Trainer'}
                       </Badge>
                     )}
                   </div>
@@ -2440,36 +2253,16 @@ export default function WorkoutLogPage() {
                           onChange={(e) => setEditFormData({...editFormData, restSeconds: e.target.value})}
                         />
                       </div>
-                      {!entry.coachId ? (
-                        <div className="md:col-span-2 lg:col-span-3">
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Personal Notes
-                          </label>
-                          <Textarea
-                            value={editFormData.userComments}
-                            onChange={(e) => setEditFormData({...editFormData, userComments: e.target.value})}
-                            placeholder="Add notes about this workout..."
-                            rows={2}
-                          />
-                        </div>
-                      ) : (
-                        <div className="md:col-span-2 lg:col-span-3 bg-blue-50 border border-blue-200 rounded-lg p-3">
-                          <label className="block text-sm font-medium text-blue-900 mb-1 flex items-center gap-2">
-                            <MessageCircle className="h-4 w-4" />
-                            Feedback for {entry.coach?.name || 'Trainer'}
-                          </label>
-                          <Textarea
-                            value={editFormData.trainerFeedback}
-                            onChange={(e) => setEditFormData({...editFormData, trainerFeedback: e.target.value, userComments: e.target.value})}
-                            placeholder="Share your thoughts about this workout with your trainer..."
-                            rows={3}
-                            className="bg-white"
-                          />
-                          <p className="text-xs text-blue-700 mt-1">
-                            Your trainer will see this feedback when they review your progress
-                          </p>
-                        </div>
-                      )}
+                      <div className="md:col-span-2 lg:col-span-3">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Personal Notes
+                        </label>
+                        <Textarea
+                          value={editFormData.userComments}
+                          onChange={(e) => setEditFormData({...editFormData, userComments: e.target.value})}
+                          rows={2}
+                        />
+                      </div>
                     </div>
                     <div className="flex justify-end space-x-2 mt-4">
                       <Button
@@ -2600,10 +2393,6 @@ export default function WorkoutLogPage() {
               <WorkoutCalendar month={calendarMonth} sessions={monthSessions} />
             </div>
           </div>
-        )}
-
-        {activeTab === 'sessions' && (
-          <OpenSessionsTab />
         )}
 
         {activeTab === 'programs' && (

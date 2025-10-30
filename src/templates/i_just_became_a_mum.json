@@ -1,0 +1,215 @@
+{
+    "program": "I Just Became a Mum - Postpartum Recovery & Empowerment",
+    "author": "Victor Solé Ferioli",
+    "version": "2.0_corrected",
+    "duration_weeks": 6,
+    "session_duration_minutes": {
+      "min": 30,
+      "max": 50
+    },
+    "frequency_per_week": 3,
+    "optional_activity": {
+      "name": "Freedom Flow",
+      "frequency": "1x per week",
+      "duration_minutes": "20-30",
+      "examples": ["nature walk", "gentle yoga", "stretching with affirmations", "swimming (if cleared)"]
+    },
+    "level": "Postpartum Beginner",
+    "settings": ["Home", "Outdoor", "Gym"],
+    "equipment": ["Yoga mat", "Light resistance band", "Sturdy chair or wall", "Low step or bench"],
+    
+    "prerequisites": {
+      "required": [
+        "Medical clearance from healthcare provider (6-8 weeks vaginal, 8-12 weeks C-section)",
+        "Diastasis recti assessment",
+        "Pelvic floor evaluation"
+      ]
+    },
+    
+    "red_flags_to_stop": [
+      "Urinary leaking during exercise",
+      "Pelvic heaviness or dragging sensation",
+      "Pain in abdomen, pelvis, or back",
+      "Vaginal bleeding (beyond normal lochia)",
+      "Visible doming/coning along abdomen midline",
+      "Feeling of 'something falling out'",
+      "Severe exhaustion beyond normal fatigue"
+    ],
+    
+    "goals": {
+      "safety_goal": "Master pelvic floor coordination and core breathing to prevent injury",
+      "outcome_goal": "Rebuild foundational core and pelvic stability to safely perform squats, lunges, and modified planks",
+      "progress_goal": "Walk continuously for 30 minutes by Week 6",
+      "empowerment_goal": "Reclaim 90-135 minutes per week of intentional self-care"
+    },
+    
+    "progressive_overload": {
+      "week_1": "Learn movements and form",
+      "week_2": "Full range of motion",
+      "week_3": "Add 2 reps per exercise",
+      "week_4": "Add 1 extra round to circuits",
+      "week_5": "Slower tempo (3-second lowering phase)",
+      "week_6": "Normal tempo, maximum reps with good form"
+    },
+    
+    "weekly_structure": [
+      {
+        "week": 1,
+        "theme": "Awaken & Reconnect",
+        "focus": [
+          "Pelvic floor awakening with diaphragmatic breathing",
+          "Gentle mobility (cat-cow, child's pose, chest openers)",
+          "Basic balance drills (heel-to-toe, single-leg stand with support)",
+          "Introduction to glute bridges, wall push-ups"
+        ],
+        "session_duration_minutes": "20-30",
+        "key_exercises": [
+          "Pelvic floor activation (3 sets × 10 reps)",
+          "Glute bridges (8 reps × 2 sets)",
+          "Wall push-ups (6 reps × 2 sets)",
+          "Wall sit hold (15 seconds × 3 reps)"
+        ]
+      },
+      {
+        "week": 2,
+        "theme": "Activate & Stabilize",
+        "focus": [
+          "Pelvic floor + breath coordination (3 sets × 10 reps)",
+          "Strength circuit: glute bridges, wall sits, bodyweight squats, incline push-ups, band pull-aparts, heel slides",
+          "Balance challenge: single-leg stands, heel-to-toe walk",
+          "Full range of motion emphasis"
+        ],
+        "session_duration_minutes": "35-40",
+        "key_exercises": [
+          "Glute bridges (12 reps, 2-sec hold at top)",
+          "Bodyweight squats (10 reps)",
+          "Incline push-ups (6-8 reps)",
+          "Heel slides (8 each leg)"
+        ]
+      },
+      {
+        "week": 3,
+        "theme": "Rebuild & Align",
+        "focus": [
+          "Pelvic floor with longer holds (3 sets × 12 reps)",
+          "Circuit format introduction: 3 rounds",
+          "Added reps: +2 per exercise from Week 2",
+          "Core engagement with dead bugs (if no doming)"
+        ],
+        "session_duration_minutes": "40-45",
+        "key_exercises": [
+          "Bodyweight squats (14 reps)",
+          "Glute bridges (17 reps)",
+          "Dead bugs (6 each side) - STOP if belly domes",
+          "Lateral band steps (8 steps each direction)"
+        ],
+        "c_section_modification": "Replace dead bugs with additional glute bridges"
+      },
+      {
+        "week": 4,
+        "theme": "Flow & Function",
+        "focus": [
+          "Cardio-strength combinations (step-ups + band press intervals)",
+          "Stability work: single-leg toe taps, hip abduction",
+          "Wall planks with strict form cues",
+          "Added circuit round (now 3-4 rounds)"
+        ],
+        "session_duration_minutes": "42-45",
+        "key_exercises": [
+          "Step-ups (30 seconds × 4 rounds)",
+          "Band chest press (30 seconds × 4 rounds)",
+          "Wall planks (15-20 seconds × 3 sets)",
+          "Glute bridge march (8 each leg)"
+        ]
+      },
+      {
+        "week": 5,
+        "theme": "Strengthen & Restore",
+        "focus": [
+          "Outdoor functional flow (walking lunges, elevated push-ups, glute kickbacks)",
+          "Resistance band integration",
+          "Slow tempo emphasis: 3-second lowering phase",
+          "Balance blast with clock reaches",
+          "Empowerment meditation (5 minutes)"
+        ],
+        "session_duration_minutes": "45",
+        "key_exercises": [
+          "Walking lunges (8 each leg, 3-sec lower)",
+          "Elevated push-ups (12 reps)",
+          "Bodyweight squats (15 reps, 3-sec lower)",
+          "Clock reaches (2 full clocks each leg)"
+        ]
+      },
+      {
+        "week": 6,
+        "theme": "Reclaim & Empower",
+        "focus": [
+          "Full circuit training: 4 rounds",
+          "Cardio progression: brisk marching (NOT jogging yet)",
+          "Core finisher: dead bugs + glute bridge march + bird dogs",
+          "Celebrating strength and progress"
+        ],
+        "session_duration_minutes": "45-50",
+        "key_exercises": [
+          "Step-ups (12 total)",
+          "Air squats (18 reps)",
+          "Push-ups (12 reps - incline or knee)",
+          "Side planks (20 seconds each)",
+          "Brisk march in place (40 seconds)"
+        ],
+        "note": "Most women need 3-6+ months postpartum before running is safe"
+      }
+    ],
+    
+    "special_populations": {
+      "c_section_modifications": {
+        "weeks_1_4": [
+          "Avoid all core flexion exercises",
+          "Focus on glutes, upper back, arms",
+          "Add scar massage once cleared (6-8 weeks)"
+        ],
+        "weeks_5_6": [
+          "Introduce wall planks only if comfortable",
+          "Still avoid full planks",
+          "May need 8-12 weeks total before full core work"
+        ]
+      }
+    },
+    
+    "progress_tracking": {
+      "week_1_baseline": [
+        "8 glute bridges with good form",
+        "10-second single-leg balance",
+        "15-minute comfortable walk"
+      ],
+      "week_3_check_in": [
+        "15 glute bridges",
+        "Squat to parallel without pelvic pressure",
+        "20-minute comfortable walk"
+      ],
+      "week_6_goals": [
+        "20+ glute bridges",
+        "Complete full circuit 3 times",
+        "30-minute walk with good posture",
+        "Leak-free during exercise",
+        "Feel strong and confident"
+      ]
+    },
+    
+    "critical_form_cues": {
+      "glute_bridges": "Exhale on lift, squeeze glutes not lower back, 2-second hold at top",
+      "squats": "Inhale down, exhale up, stop if any pelvic pressure",
+      "dead_bugs": "STOP immediately if belly domes/cones, exhale on extension",
+      "planks": "Exhale and draw belly in WITHOUT breath-holding, stop if doming visible",
+      "bird_dogs": "Move only as far as lower back stays still, exhale on extension",
+      "all_exercises": "Never hold breath, exhale on exertion"
+    },
+    
+    "what_comes_next": [
+      "Progress to intermediate programs",
+      "Add light weights (3-5 kg dumbbells)",
+      "Join postpartum fitness classes",
+      "Consider return to running with pelvic floor assessment",
+      "Continue building on foundation"
+    ]
+  }

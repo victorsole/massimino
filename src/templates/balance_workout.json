@@ -1,0 +1,90 @@
+{
+    "program": "Balance Workout",
+    "author": "Victor Solé Ferioli",
+    "duration_weeks": 2,
+    "session_duration_minutes": {
+      "min": 20,
+      "max": 30
+    },
+    "frequency_per_week": 3,
+    "level": "Beginner",
+    "settings": ["Indoor", "Outdoor"],
+    "goal": {
+      "outcome_goal": "Hold single-leg balance with eyes closed for 15 seconds each leg by end of Week 2",
+      "progress_goals": [
+        "Perform single-leg reaches without touching the floor for 8 reps",
+        "Improve postural control during basic strength exercises (e.g., squats, lunges)"
+      ]
+    },
+    "equipment": ["Optional balance pad", "Resistance bands", "Light weights"],
+    "weekly_structure": [
+      {
+        "week": 1,
+        "theme": "Stability Activation",
+        "sessions": [
+          {
+            "name": "Session 1 (Indoor)",
+            "components": [
+              "Standing balance on one foot (3x15 sec/side)",
+              "Tandem stance toe-to-heel hold (3x20 sec)",
+              "Glute bridge hold (3x30 sec)",
+              "Wall-supported single-leg calf raises (2x10/side)"
+            ]
+          },
+          {
+            "name": "Session 2 (Outdoor)",
+            "components": [
+              "Walk heel-to-toe in a straight line (3x15 steps)",
+              "One-leg balance on uneven surface (grass)",
+              "Standing knee lift holds (3x10 sec/side)",
+              "Side step-over drills (low cone or curb)"
+            ]
+          },
+          {
+            "name": "Session 3 (Indoor)",
+            "components": [
+              "Balance pad or pillow: 3 rounds of single-leg hold, forward reach, side reach (5 reps each)",
+              "Core finisher: Bird-Dog (3x8 per side)"
+            ]
+          }
+        ]
+      },
+      {
+        "week": 2,
+        "theme": "Dynamic Balance",
+        "sessions": [
+          {
+            "name": "Session 1 (Indoor/Outdoor)",
+            "components": [
+              "Single-leg reach (front, side, diagonal) – 2x8 per leg",
+              "Step-downs from low step (2x10 per leg)",
+              "Bear crawl 4 steps forward/back x 3 sets",
+              "Balance hold + resistance band pull (lateral) – 2x10 each side"
+            ]
+          },
+          {
+            "name": "Session 2 (Outdoor)",
+            "components": [
+              "Low agility ladder walk (or draw with chalk): single-leg steps",
+              "Curved walking paths (2x5 mins each direction)",
+              "Hops to stick balance (mini jumps hold for 2 sec)",
+              "Walking lunges with pause (2x10 steps)"
+            ]
+          },
+          {
+            "name": "Session 3 (Indoor)",
+            "components": [
+              "3-round circuit: BOSU or pillow balance toss, Squat with heel raise at top, Split stance hold + overhead reach",
+              "Finish with supine leg raise core activation (3x10)"
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": [
+      "Focus on control over speed",
+      "Hold near a support object for safety",
+      "Combine with resistance or cardio days for integrated neuromuscular benefits"
+    ]
+  }
+  
