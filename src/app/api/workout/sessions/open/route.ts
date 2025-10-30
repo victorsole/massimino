@@ -38,7 +38,6 @@ export async function GET(request: NextRequest) {
             difficulty: true,
             programType: true,
             category: true,
-            imageUrl: true,
             legendary_athlete: {
               select: {
                 name: true,
@@ -46,17 +45,17 @@ export async function GET(request: NextRequest) {
                 imageUrl: true,
               },
             },
-          },
-        },
-        program_phases: {
-          select: {
-            id: true,
-            phaseNumber: true,
-            phaseName: true,
-            phaseType: true,
-            startWeek: true,
-            endWeek: true,
-            description: true,
+            program_phases: {
+              select: {
+                id: true,
+                phaseNumber: true,
+                phaseName: true,
+                phaseType: true,
+                startWeek: true,
+                endWeek: true,
+                description: true,
+              },
+            },
           },
         },
       },
@@ -106,7 +105,7 @@ export async function GET(request: NextRequest) {
     // Format program sessions
     const formattedProgramSessions = programSessions.map((sub) => {
       const template = sub.program_templates;
-      const currentPhase = sub.program_phases.find((p) => p.id === sub.currentPhaseId);
+      const currentPhase = template.program_phases.find((p) => p.id === sub.currentPhaseId);
 
       // Calculate progress
       const totalWeeks = parseInt(template.duration.match(/\d+/)?.[0] || '12');
@@ -117,7 +116,7 @@ export async function GET(request: NextRequest) {
         type: 'program' as const,
         name: sub.sessionName || template.name,
         description: template.description,
-        imageUrl: template.imageUrl || template.legendary_athlete?.imageUrl,
+        imageUrl: template.legendary_athlete?.imageUrl,
         athleteName: template.legendary_athlete?.name,
         difficulty: template.difficulty,
         category: template.category,
