@@ -144,6 +144,12 @@ export default function Footer() {
               <Link href="/safety" className="text-sm text-gray-500 hover:text-gray-700">
                 Safety Guidelines
               </Link>
+              <Link href="/cookies" className="text-sm text-gray-500 hover:text-gray-700">
+                Cookies
+              </Link>
+              <Link href="/legal/subprocessors" className="text-sm text-gray-500 hover:text-gray-700">
+                Subprocessors
+              </Link>
             </div>
           </div>
         </div>

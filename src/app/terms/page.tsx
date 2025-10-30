@@ -11,11 +11,14 @@ export const metadata = {
 const TERMS_MD = `# MASSIMINO TERMS OF SERVICE
 
 **Effective Date:** Wednesday 18 September 2025  
-**Last Updated:** Wednesday 18 September 2025
+**Last Updated:** Thursday 30 October 2025
 
 ## 1. ACCEPTANCE OF TERMS
 
 Welcome to Massimino ("we," "us," "our," "Platform"), the fitness-first community platform. By accessing or using Massimino, you ("User," "you") agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, you may not access or use our Platform.
+
+**Scope:**
+These Terms of Service apply to the website, apps, APIs, and services that link to this policy, including Massichat (AI assistant).
 
 ## 2. PLATFORM PURPOSE AND CORE PRINCIPLES
 
