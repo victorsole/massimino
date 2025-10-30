@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, Calendar, Dumbbell, Trophy, TrendingUp, Activity, MessageCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { X, Calendar, Dumbbell, Trophy, TrendingUp, Activity, MessageCircle, Play, Pause, Archive, ListChecks, ExternalLink } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -19,17 +20,24 @@ export function AthleteProgressModal({
   athleteId,
   athleteName
 }: AthleteProgressModalProps) {
-  const [activeTab, setActiveTab] = useState<'overview' | 'feedback'>('overview');
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState<'overview' | 'feedback' | 'sessions'>('overview');
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState<any>(null);
   const [feedback, setFeedback] = useState<any[]>([]);
   const [feedbackLoading, setFeedbackLoading] = useState(false);
+  const [sessions, setSessions] = useState<any>(null);
+  const [sessionsLoading, setSessionsLoading] = useState(false);
+  const [statusLoading, setStatusLoading] = useState<string | null>(null);
 
   useEffect(() => {
     if (isOpen && athleteId) {
       fetchProgress();
       if (activeTab === 'feedback') {
         fetchFeedback();
+      }
+      if (activeTab === 'sessions') {
+        fetchSessions();
       }
     }
   }, [isOpen, athleteId, activeTab]);
@@ -68,6 +76,57 @@ export function AthleteProgressModal({
     }
   };
 
+  const fetchSessions = async () => {
+    try {
+      setSessionsLoading(true);
+      const response = await fetch(`/api/coaching/athletes/${athleteId}/sessions`);
+      if (response.ok) {
+        const data = await response.json();
+        setSessions(data);
+      } else {
+        console.error('Failed to fetch sessions');
+      }
+    } catch (error) {
+      console.error('Error fetching sessions:', error);
+    } finally {
+      setSessionsLoading(false);
+    }
+  };
+
+  const handleStatusChange = async (sessionId: string, newStatus: string, sessionType: 'custom' | 'program') => {
+    try {
+      setStatusLoading(sessionId);
+
+      const endpoint = sessionType === 'custom'
+        ? `/api/workout/sessions/${sessionId}/status`
+        : `/api/workout/sessions/${sessionId}/status`;
+
+      const response = await fetch(endpoint, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (response.ok) {
+        // Refresh sessions data
+        await fetchSessions();
+      } else {
+        alert('Failed to update session status');
+      }
+    } catch (error) {
+      console.error('Error updating status:', error);
+      alert('Failed to update session status');
+    } finally {
+      setStatusLoading(null);
+    }
+  };
+
+  const handleNavigateToSession = (sessionId: string, sessionType: 'custom' | 'program') => {
+    // Navigate to workout log - it will handle both custom sessions and programs
+    router.push('/workout-log');
+    onClose();
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -99,6 +158,22 @@ export function AthleteProgressModal({
                 Overview
               </div>
               {activeTab === 'overview' && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-primary" />
+              )}
+            </button>
+            <button
+              onClick={() => setActiveTab('sessions')}
+              className={`px-4 py-2 font-medium text-sm transition-colors relative ${
+                activeTab === 'sessions'
+                  ? 'text-brand-primary'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <ListChecks className="h-4 w-4" />
+                Sessions
+              </div>
+              {activeTab === 'sessions' && (
                 <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-primary" />
               )}
             </button>
@@ -288,6 +363,234 @@ export function AthleteProgressModal({
             ) : (
               <div className="text-center py-12">
                 <p className="text-gray-600">No progress data available</p>
+              </div>
+            )
+          ) : activeTab === 'sessions' ? (
+            // Sessions Tab
+            sessionsLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-primary"></div>
+              </div>
+            ) : sessions ? (
+              <div className="space-y-6">
+                {/* Custom Workout Sessions */}
+                {sessions.customSessions && sessions.customSessions.length > 0 && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                      <Dumbbell className="h-5 w-5 text-brand-primary" />
+                      Custom Workout Sessions ({sessions.customSessions.length})
+                    </h3>
+                    <div className="space-y-3">
+                      {sessions.customSessions.map((session: any) => (
+                        <Card
+                          key={session.id}
+                          className="hover:shadow-md transition-shadow cursor-pointer"
+                          onClick={() => handleNavigateToSession(session.id, 'custom')}
+                        >
+                          <CardContent className="p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <h4 className="font-medium text-lg">{session.title}</h4>
+                                  <Badge variant={session.status === 'ACTIVE' ? 'default' : session.status === 'PAUSED' ? 'secondary' : 'outline'}>
+                                    {session.status}
+                                  </Badge>
+                                  {session.isCoachCreated && (
+                                    <Badge variant="outline" className="bg-purple-50">
+                                      Trainer Created
+                                    </Badge>
+                                  )}
+                                  {session.isComplete && (
+                                    <Badge variant="outline" className="bg-green-50">
+                                      Complete
+                                    </Badge>
+                                  )}
+                                </div>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm text-gray-600 mb-2">
+                                  <div>
+                                    <span className="font-medium">{session.totalExercises}</span> exercises
+                                  </div>
+                                  <div>
+                                    <span className="font-medium">{session.totalSets}</span> sets
+                                  </div>
+                                  <div>
+                                    <span className="font-medium">{Math.round(session.totalVolume)}</span> kg volume
+                                  </div>
+                                  <div>
+                                    <span className="font-medium">{session.duration || 0}</span> min
+                                  </div>
+                                </div>
+                                <p className="text-xs text-gray-500">
+                                  {new Date(session.date).toLocaleDateString('en-US', {
+                                    month: 'short',
+                                    day: 'numeric',
+                                    year: 'numeric'
+                                  })} • Last activity: {new Date(session.lastActivity).toLocaleDateString()}
+                                </p>
+                              </div>
+                              <div className="flex gap-1 ml-4" onClick={(e) => e.stopPropagation()}>
+                                {session.status === 'ACTIVE' && (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => handleStatusChange(session.id, 'PAUSED', 'custom')}
+                                    disabled={statusLoading === session.id}
+                                  >
+                                    <Pause className="h-4 w-4" />
+                                  </Button>
+                                )}
+                                {session.status === 'PAUSED' && (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => handleStatusChange(session.id, 'ACTIVE', 'custom')}
+                                    disabled={statusLoading === session.id}
+                                  >
+                                    <Play className="h-4 w-4" />
+                                  </Button>
+                                )}
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => handleStatusChange(session.id, 'ARCHIVED', 'custom')}
+                                  disabled={statusLoading === session.id}
+                                >
+                                  <Archive className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Program Subscriptions */}
+                {sessions.programSubscriptions && sessions.programSubscriptions.length > 0 && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                      <TrendingUp className="h-5 w-5 text-brand-primary" />
+                      Assigned Programs ({sessions.programSubscriptions.length})
+                    </h3>
+                    <div className="space-y-3">
+                      {sessions.programSubscriptions.map((program: any) => (
+                        <Card
+                          key={program.id}
+                          className="hover:shadow-md transition-shadow cursor-pointer"
+                          onClick={() => handleNavigateToSession(program.id, 'program')}
+                        >
+                          <CardContent className="p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-2">
+                                  {program.imageUrl && (
+                                    <img
+                                      src={program.imageUrl}
+                                      alt={program.programName}
+                                      className="w-8 h-8 rounded-full object-cover"
+                                    />
+                                  )}
+                                  <div className="flex-1">
+                                    <h4 className="font-medium text-lg">{program.sessionName || program.programName}</h4>
+                                    {program.athleteName && (
+                                      <p className="text-sm text-gray-600">by {program.athleteName}</p>
+                                    )}
+                                  </div>
+                                  <Badge variant={program.status === 'ACTIVE' ? 'default' : program.status === 'PAUSED' ? 'secondary' : 'outline'}>
+                                    {program.status}
+                                  </Badge>
+                                </div>
+
+                                {/* Progress Bar */}
+                                <div className="mb-3">
+                                  <div className="flex justify-between text-sm mb-1">
+                                    <span className="text-gray-600">Week {program.currentWeek} of {program.totalWeeks}</span>
+                                    <span className="font-medium">{program.progressPercentage}%</span>
+                                  </div>
+                                  <div className="w-full bg-gray-200 rounded-full h-2">
+                                    <div
+                                      className="bg-brand-primary rounded-full h-2 transition-all"
+                                      style={{ width: `${program.progressPercentage}%` }}
+                                    />
+                                  </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm text-gray-600 mb-2">
+                                  <div>
+                                    <span className="font-medium">{program.workoutsCompleted}</span> workouts
+                                  </div>
+                                  {program.adherenceRate && (
+                                    <div>
+                                      <span className="font-medium">{Math.round(program.adherenceRate * 100)}%</span> adherence
+                                    </div>
+                                  )}
+                                  <div>
+                                    <Badge variant="outline">{program.difficulty}</Badge>
+                                  </div>
+                                </div>
+                                <p className="text-xs text-gray-500">
+                                  Started: {new Date(program.startDate).toLocaleDateString('en-US', {
+                                    month: 'short',
+                                    day: 'numeric',
+                                    year: 'numeric'
+                                  })}
+                                  {program.lastWorkout && ` • Last workout: ${new Date(program.lastWorkout).toLocaleDateString()}`}
+                                </p>
+                              </div>
+                              <div className="flex gap-1 ml-4" onClick={(e) => e.stopPropagation()}>
+                                {program.status === 'ACTIVE' && (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => handleStatusChange(program.id, 'PAUSED', 'program')}
+                                    disabled={statusLoading === program.id}
+                                  >
+                                    <Pause className="h-4 w-4" />
+                                  </Button>
+                                )}
+                                {program.status === 'PAUSED' && (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => handleStatusChange(program.id, 'ACTIVE', 'program')}
+                                    disabled={statusLoading === program.id}
+                                  >
+                                    <Play className="h-4 w-4" />
+                                  </Button>
+                                )}
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => handleStatusChange(program.id, 'ARCHIVED', 'program')}
+                                  disabled={statusLoading === program.id}
+                                >
+                                  <Archive className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Empty State */}
+                {(!sessions.customSessions || sessions.customSessions.length === 0) &&
+                 (!sessions.programSubscriptions || sessions.programSubscriptions.length === 0) && (
+                  <div className="text-center py-12">
+                    <ListChecks className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600 font-medium mb-2">No Sessions Yet</p>
+                    <p className="text-sm text-gray-500">
+                      Create a workout session or assign a program to {athleteName}.
+                    </p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-gray-600">Failed to load sessions</p>
               </div>
             )
           ) : (
