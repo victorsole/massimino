@@ -15,6 +15,8 @@ interface Athlete {
 
 interface TrainerMassichatInterfaceProps {
   trainerId: string;
+  sessionId?: string;
+  athleteId?: string;
 }
 
 interface ChatMessage {
@@ -41,9 +43,9 @@ interface WorkoutProposal {
   };
 }
 
-export function TrainerMassichatInterface({ trainerId }: TrainerMassichatInterfaceProps) {
+export function TrainerMassichatInterface({ trainerId, sessionId, athleteId }: TrainerMassichatInterfaceProps) {
   const [athletes, setAthletes] = useState<Athlete[]>([]);
-  const [selectedAthlete, setSelectedAthlete] = useState<string | null>(null);
+  const [selectedAthlete, setSelectedAthlete] = useState<string | null>(athleteId || null);
   const [loading, setLoading] = useState(false);
   const [loadingAthletes, setLoadingAthletes] = useState(true);
   const [input, setInput] = useState('');
@@ -211,7 +213,11 @@ export function TrainerMassichatInterface({ trainerId }: TrainerMassichatInterfa
       const response = await fetch(`/api/massichat/proposals/${workoutProposal.id}/accept`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ overrides: editable }),
+        body: JSON.stringify({
+          overrides: editable,
+          sessionId: sessionId || null,
+          athleteId: selectedAthlete || null,
+        }),
       });
 
       if (!response.ok) {
