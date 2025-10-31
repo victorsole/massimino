@@ -58,12 +58,14 @@ async function main() {
       ratingCount: 0,
       tags: ['youth', 'muscle building', 'aesthetics', '12 weeks', 'beginner-intermediate', 'mental health', 'realistic expectations'],
       progressionStrategy: 'LINEAR',
+      templateData: aestheticsHunter as any,
       createdBy,
       updatedAt: new Date(),
     },
     update: {
       isActive: true,
       isPublic: true,
+      templateData: aestheticsHunter as any,
     },
   });
   console.log('✅ Aesthetics Hunter');
@@ -86,12 +88,14 @@ async function main() {
       ratingCount: 0,
       tags: ['time-efficient', '20-30 minutes', 'bodyweight', 'home', 'busy professionals', '3 weeks', 'HIIT'],
       progressionStrategy: 'LINEAR',
+      templateData: iDontHaveMuchTime as any,
       createdBy,
       updatedAt: new Date(),
     },
     update: {
       isActive: true,
       isPublic: true,
+      templateData: iDontHaveMuchTime as any,
     },
   });
   console.log('✅ I Don\'t Have Much Time');
@@ -114,12 +118,14 @@ async function main() {
       ratingCount: 0,
       tags: ['fat loss', 'core strength', 'nutrition-focused', 'alcohol education', 'metabolic', '6 weeks', 'science-based'],
       progressionStrategy: 'LINEAR',
+      templateData: wannaLoseBeerBelly as any,
       createdBy,
       updatedAt: new Date(),
     },
     update: {
       isActive: true,
       isPublic: true,
+      templateData: wannaLoseBeerBelly as any,
     },
   });
   console.log('✅ Wanna Lose This Beer Belly');
@@ -142,12 +148,14 @@ async function main() {
       ratingCount: 0,
       tags: ['stress relief', 'nervous system', 'breathwork', 'yoga', 'mental health', '4 weeks', 'trauma-informed', 'recovery'],
       progressionStrategy: 'LINEAR',
+      templateData: byeStressBye as any,
       createdBy,
       updatedAt: new Date(),
     },
     update: {
       isActive: true,
       isPublic: true,
+      templateData: byeStressBye as any,
     },
   });
   console.log('✅ Bye Stress Bye');
@@ -170,12 +178,14 @@ async function main() {
       ratingCount: 0,
       tags: ['new dad', 'functional strength', 'parenting', 'practical', '6 weeks', 'home', 'minimal equipment'],
       progressionStrategy: 'LINEAR',
+      templateData: iJustBecameADad as any,
       createdBy,
       updatedAt: new Date(),
     },
     update: {
       isActive: true,
       isPublic: true,
+      templateData: iJustBecameADad as any,
     },
   });
   console.log('✅ I Just Became a Dad');
@@ -198,12 +208,14 @@ async function main() {
       ratingCount: 0,
       tags: ['new mum', 'postpartum', 'pelvic floor', 'core rehab', '6 weeks', 'home', 'gentle'],
       progressionStrategy: 'LINEAR',
+      templateData: iJustBecameAMum as any,
       createdBy,
       updatedAt: new Date(),
     },
     update: {
       isActive: true,
       isPublic: true,
+      templateData: iJustBecameAMum as any,
     },
   });
   console.log('✅ I Just Became a Mum');
@@ -228,12 +240,14 @@ async function main() {
       ratingCount: 0,
       tags: ['cardio', 'Zone 2', 'endurance', '5K', '3 weeks', 'running', 'walking', 'HIIT'],
       progressionStrategy: 'LINEAR',
+      templateData: cardioWorkout as any,
       createdBy,
       updatedAt: new Date(),
     },
     update: {
       isActive: true,
       isPublic: true,
+      templateData: cardioWorkout as any,
     },
   });
   console.log('✅ Cardio Workout');
@@ -256,12 +270,14 @@ async function main() {
       ratingCount: 0,
       tags: ['flexibility', 'mobility', 'stretching', 'yoga', 'foam rolling', '3 weeks', 'recovery'],
       progressionStrategy: 'LINEAR',
+      templateData: flexibilityWorkout as any,
       createdBy,
       updatedAt: new Date(),
     },
     update: {
       isActive: true,
       isPublic: true,
+      templateData: flexibilityWorkout as any,
     },
   });
   console.log('✅ Flexibility Workout');
@@ -284,12 +300,14 @@ async function main() {
       ratingCount: 0,
       tags: ['balance', 'stability', 'proprioception', 'injury prevention', '2 weeks', 'functional'],
       progressionStrategy: 'LINEAR',
+      templateData: balanceWorkout as any,
       createdBy,
       updatedAt: new Date(),
     },
     update: {
       isActive: true,
       isPublic: true,
+      templateData: balanceWorkout as any,
     },
   });
   console.log('✅ Balance Workout');
@@ -312,12 +330,14 @@ async function main() {
       ratingCount: 0,
       tags: ['plyometrics', 'power', 'explosiveness', 'jumping', '2 weeks', 'athletic'],
       progressionStrategy: 'LINEAR',
+      templateData: plyometricWorkout as any,
       createdBy,
       updatedAt: new Date(),
     },
     update: {
       isActive: true,
       isPublic: true,
+      templateData: plyometricWorkout as any,
     },
   });
   console.log('✅ Plyometric Workout');

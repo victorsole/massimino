@@ -306,7 +306,7 @@ Remember that information you share in public areas of the Platform may be visib
 
 **Your privacy and safety are our priorities. Train hard, stay safe, and keep your personal information secure.**
 
-**Questions? Contact us at privacy@massimino.com**` as const
+**Questions? Contact us at helloberesol@gmail.com**` as const
 
 function renderSimpleMarkdown(md: string) {
   const lines = md.split(/\r?\n/)

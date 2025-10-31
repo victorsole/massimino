@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, Target, Dumbbell, TrendingUp, User, ArrowLeft, Play } from 'lucide-react';
+import { TemplateRenderer } from './template-renderer';
 
 type ProgramDetail = {
   id: string;
@@ -21,6 +22,7 @@ type ProgramDetail = {
   hasExerciseSlots: boolean;
   progressionStrategy: string;
   autoRegulation: boolean;
+  templateData?: any; // Full template JSON
   legendary_athlete: {
     name: string;
     slug: string;
@@ -230,50 +232,54 @@ export function ProgramDetail({ programId }: Props) {
         </CardContent>
       </Card>
 
-      {/* Training Phases */}
-      <div className="space-y-4">
-        <h2 className="text-2xl font-bold">Training Phases</h2>
+      {/* Template Data Renderer (if available) OR Training Phases */}
+      {program.templateData ? (
+        <TemplateRenderer templateData={program.templateData} />
+      ) : program.program_phases.length > 0 ? (
         <div className="space-y-4">
-          {program.program_phases.map((phase) => (
-            <Card key={phase.id}>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="flex items-center gap-2">
-                      Phase {phase.phaseNumber}: {phase.phaseName}
-                    </CardTitle>
-                    <CardDescription>
-                      Weeks {phase.startWeek}-{phase.endWeek} • {phase.phaseType}
-                    </CardDescription>
+          <h2 className="text-2xl font-bold">Training Phases</h2>
+          <div className="space-y-4">
+            {program.program_phases.map((phase) => (
+              <Card key={phase.id}>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="flex items-center gap-2">
+                        Phase {phase.phaseNumber}: {phase.phaseName}
+                      </CardTitle>
+                      <CardDescription>
+                        Weeks {phase.startWeek}-{phase.endWeek} • {phase.phaseType}
+                      </CardDescription>
+                    </div>
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-gray-700">{phase.description}</p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-gray-700">{phase.description}</p>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                  <div>
-                    <div className="font-medium text-gray-700">Target Intensity</div>
-                    <div className="text-gray-600">{phase.targetIntensity}</div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div>
+                      <div className="font-medium text-gray-700">Target Intensity</div>
+                      <div className="text-gray-600">{phase.targetIntensity}</div>
+                    </div>
+                    <div>
+                      <div className="font-medium text-gray-700">Volume</div>
+                      <div className="text-gray-600">{phase.targetVolume}</div>
+                    </div>
+                    <div>
+                      <div className="font-medium text-gray-700">Rep Range</div>
+                      <div className="text-gray-600">{phase.repRangeLow}-{phase.repRangeHigh} reps</div>
+                    </div>
+                    <div>
+                      <div className="font-medium text-gray-700">Sets</div>
+                      <div className="text-gray-600">{phase.setsPerExercise} sets/exercise</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="font-medium text-gray-700">Volume</div>
-                    <div className="text-gray-600">{phase.targetVolume}</div>
-                  </div>
-                  <div>
-                    <div className="font-medium text-gray-700">Rep Range</div>
-                    <div className="text-gray-600">{phase.repRangeLow}-{phase.repRangeHigh} reps</div>
-                  </div>
-                  <div>
-                    <div className="font-medium text-gray-700">Sets</div>
-                    <div className="text-gray-600">{phase.setsPerExercise} sets/exercise</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
-      </div>
+      ) : null}
 
       {/* Exercise Slots */}
       {program.hasExerciseSlots && program.exercise_slots.length > 0 && (
