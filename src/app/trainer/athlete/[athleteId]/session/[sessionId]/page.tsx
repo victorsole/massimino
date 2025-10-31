@@ -321,6 +321,7 @@ export default function TrainerSessionViewPage() {
               trainerId={session.user.id}
               sessionId={sessionId}
               athleteId={athleteId}
+              onWorkoutAccepted={handleRefresh}
             />
           )}
         </TabsContent>
