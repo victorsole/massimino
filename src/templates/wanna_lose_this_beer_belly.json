@@ -1,0 +1,221 @@
+{
+    "program": "Wanna Lose This Beer Belly - Fat Loss & Core Strength",
+    "author": "Victor Solé Ferioli",
+    "version": "2.0_corrected",
+    "target_population": "Adults with 5-15kg to lose, committed to nutrition and training",
+    "duration_weeks": 6,
+    "minimum_duration_note": "Fat loss takes time; 6 weeks is minimum, most need 12-24 weeks",
+    "session_duration_minutes": {
+      "min": 45,
+      "max": 60
+    },
+    "frequency_per_week": 4,
+    "optional_day": "Active recovery or steady-state cardio",
+    "level": "Intermediate",
+    "settings": ["Gym", "Home with equipment"],
+    "equipment": ["Dumbbells", "Resistance bands", "Mat", "Timer", "Optional: kettlebell, box/bench"],
+    
+    "critical_disclaimers": {
+      "spot_reduction_myth": "Core exercises do NOT burn belly fat. Fat loss is systemic. Abs are revealed through nutrition (80%) and training (20%).",
+      "realistic_timeline_for_visible_abs": {
+        "from_25_percent_bodyfat": "6-12 months minimum",
+        "from_20_percent": "3-6 months",
+        "from_15_percent": "6-12 weeks",
+        "maintenance": "Lifelong commitment"
+      },
+      "do_not_start_if": [
+        "More than 20kg to lose (see doctor/nutritionist)",
+        "Unmanaged metabolic conditions",
+        "Under 18 years old",
+        "Eating disorder history",
+        "Looking for quick fix"
+      ]
+    },
+    
+    "goals": {
+      "realistic_6_week_outcomes": {
+        "fat_loss": "3-6kg total (if nutrition dialed in)",
+        "waist_reduction": "2-5cm (highly individual)",
+        "strength": "Plank +60sec, push-ups +10-15, significant squat improvement",
+        "metabolic": "Improved cardiovascular endurance, insulin sensitivity",
+        "habit": "Established 4x/week routine"
+      },
+      "cannot_achieve_in_6_weeks": [
+        "Six-pack abs (unless already close)",
+        "Complete transformation",
+        "10+ kg fat loss (unsafe)",
+        "Spot reduction"
+      ]
+    },
+    
+    "nutrition_principles": {
+      "importance": "80% of results come from nutrition",
+      "non_negotiables": [
+        {
+          "principle": "Calorie Deficit",
+          "details": "Calculate TDEE, subtract 300-500 calories, track intake",
+          "tools": ["MyFitnessPal", "Cronometer", "MacroFactor"]
+        },
+        {
+          "principle": "Protein Priority",
+          "target": "1.6-2.2g per kg body weight",
+          "purpose": "Prevents muscle loss during deficit",
+          "sources": ["Chicken", "Fish", "Eggs", "Greek yogurt", "Protein powder", "Legumes"]
+        },
+        {
+          "principle": "Reduce Alcohol",
+          "recommendation": "Max 2 drinks per week during program",
+          "best": "None for 6 weeks",
+          "reason": "Alcohol = 7 cal/g, impairs fat metabolism 24-48 hours, increases visceral fat"
+        },
+        {
+          "principle": "Whole Foods Focus",
+          "emphasis": ["Vegetables unlimited", "Complex carbs", "Healthy fats measured", "Minimize processed foods"]
+        },
+        {
+          "principle": "Consistency Over Perfection",
+          "rule": "Hit targets 80% of time, don't compensate for bad meals by starving"
+        }
+      ]
+    },
+    
+    "alcohol_impact": {
+      "why_beer_belly_is_real": [
+        "7 calories per gram (almost as much as fat at 9 cal/g)",
+        "Body prioritizes alcohol metabolism, stops burning fat",
+        "Fat metabolism halted 24-48 hours post-drinking",
+        "Reduces testosterone, increases cortisol",
+        "Specifically promotes visceral abdominal fat",
+        "Lowers inhibitions for poor food choices"
+      ],
+      "6_week_strategy": {
+        "best": "Complete elimination",
+        "realistic": "Maximum 2 drinks per week",
+        "avoid": "Binge drinking (destroys entire week's progress)"
+      }
+    },
+    
+    "weekly_schedule": {
+      "monday": "Workout A (Metabolic Resistance)",
+      "tuesday": "Rest or Active Recovery",
+      "wednesday": "Workout B (HIIT + Core)",
+      "thursday": "Rest or Active Recovery",
+      "friday": "Workout A (Metabolic Resistance)",
+      "saturday": "Workout B (HIIT + Core)",
+      "sunday": "Rest OR optional 30-45 min steady cardio"
+    },
+    
+    "weekly_structure": [
+      {
+        "week": 1,
+        "theme": "Foundation & Metabolic Awakening",
+        "focus": "Establish baseline, learn movements, initiate deficit",
+        "workout_a": "Full-Body Metabolic Resistance (4 rounds)",
+        "workout_b": "HIIT (30/30 intervals) + Core Strength",
+        "progression": "Learn form, establish work capacity"
+      },
+      {
+        "week": 2,
+        "theme": "Metabolic Acceleration",
+        "focus": "Increase volume, reduce rest, intensify calorie burn",
+        "workout_a": "Metabolic Circuit (5 rounds, 60-90 sec rest)",
+        "workout_b": "HIIT (40/20 intervals) + Core Endurance",
+        "progression": "More reps, less rest"
+      },
+      {
+        "week": 3,
+        "theme": "Midsection Control & Anti-Rotation",
+        "focus": "Advanced core stability, functional strength",
+        "workout_a": "Metabolic + Anti-Rotation (Pallof press, stability work)",
+        "workout_b": "Interval Cardio + Rotational Core (woodchoppers, bear crawls)",
+        "progression": "Anti-rotation exercises for functional core"
+      },
+      {
+        "week": 4,
+        "theme": "Intensification & Shred",
+        "focus": "Peak intensity, maximum calorie burn",
+        "workout_a": "Tabata Protocol (20/10) + Strength",
+        "workout_b": "HIIT Complex + Core Gauntlet (continuous work)",
+        "progression": "Minimal rest, maximum intensity"
+      },
+      {
+        "week": 5,
+        "theme": "Functional Power & Conditioning",
+        "focus": "Movement quality, power development",
+        "workout_a": "Kettlebell/Dumbbell Complex (5 rounds)",
+        "workout_b": "Sustained Cardio (20 min) + Core Flow (4 rounds)",
+        "progression": "Complex movements, longer work periods"
+      },
+      {
+        "week": 6,
+        "theme": "Testing & Consolidation",
+        "focus": "Test improvements, maximum effort, celebrate",
+        "workout_a": "EMOM (24 min) + Metabolic Finisher",
+        "workout_b": "Grand Finale Circuit (5 rounds) + Core Burnout",
+        "progression": "Performance testing, pushing limits"
+      }
+    ],
+    
+    "progress_tracking": {
+      "week_0_baseline": {
+        "body": ["Weight", "Waist at belly button (cm)", "Hips (cm)", "Chest (cm)", "Photos (front/side/back)"],
+        "performance": ["Plank hold time (sec)", "Push-ups continuous (reps)", "Bodyweight squats (reps)", "Optional: 1km run time"],
+        "lifestyle": ["Alcohol per week (drinks)", "Sleep per night (hours)", "Steps per day"]
+      },
+      "week_3_check_in": {
+        "measurements": "Weight (-1.5 to 3kg), Waist (-1 to 3cm)",
+        "performance": "Plank (+20-30 sec), Push-ups (+5-8 reps)",
+        "lifestyle": "Workouts completed (__/12), Alcohol reduction, Sleep improvement"
+      },
+      "week_6_final": {
+        "measurements": "Weight (-3 to 6kg), Waist (-2 to 5cm), Photos comparison",
+        "performance": "Plank (+60+ sec), Push-ups (+10-15), Squats (+20+)",
+        "lifestyle": "Workouts completed (__/24, goal 20+), Alcohol change, Energy/sleep improvement"
+      }
+    },
+    
+    "sleep_and_stress": {
+      "sleep_targets": {
+        "duration": "7-9 hours per night",
+        "consistency": "Same schedule including weekends",
+        "environment": "Dark, cool room, no screens 1 hour before",
+        "why_it_matters": "Poor sleep = increased cortisol = belly fat storage, insulin resistance, poor food choices"
+      },
+      "stress_management": {
+        "principle": "Chronic stress = elevated cortisol = belly fat",
+        "daily_practices": [
+          "10 min morning breathing/meditation",
+          "Walking for stress relief",
+          "Journaling",
+          "Reduce caffeine after 2pm",
+          "Social connection"
+        ]
+      }
+    },
+    
+    "troubleshooting_no_results": {
+      "check_after_3_weeks": [
+        "Actually in calorie deficit? Track honestly for 7 days",
+        "Tracking weight correctly? Same time daily, focus on weekly average",
+        "Drinking alcohol? Even 3-4 drinks/week stalls progress",
+        "Sleeping enough? <6 hours impairs fat loss significantly",
+        "Chronic stress? Elevated cortisol prevents fat loss",
+        "Overtraining? Too much exercise without recovery = cortisol spike",
+        "Medical factors? Thyroid, insulin resistance, medications - see doctor"
+      ]
+    },
+    
+    "post_program_options": {
+      "option_1": "Repeat with progression (increase weights, reduce rest, beat numbers)",
+      "option_2": "Transition to muscle building (hypertrophy, slight surplus)",
+      "option_3": "Maintenance mode (3-4x/week, maintenance calories, 80/20 rule)",
+      "long_term_reality": "Visible abs = year-round commitment, lifestyle not temporary fix, gets easier with habit"
+    },
+    
+    "critical_exercise_notes": {
+      "core_work_purpose": "Builds muscle under fat, does NOT burn belly fat",
+      "anti_rotation_exercises": "Pallof press, bird dog, dead bug - prevent spine rotation, functional strength",
+      "hiit_purpose": "Maximum calorie burn, improved insulin sensitivity, metabolic boost",
+      "full_body_resistance": "Builds muscle (increases metabolism), burns calories, improves insulin sensitivity"
+    }
+  }

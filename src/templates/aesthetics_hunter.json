@@ -1,0 +1,233 @@
+{
+    "program": "Aesthetics Hunter - Muscle Development & Symmetry",
+    "author": "Victor Solé Ferioli",
+    "version": "2.0_corrected",
+    "target_age_range": "16-25 (with development considerations)",
+    "duration_weeks": 12,
+    "note": "Phase 1 of multi-year journey",
+    "session_duration_minutes": {
+      "min": 45,
+      "max": 60
+    },
+    "frequency_per_week": 4,
+    "rest_days_per_week": 3,
+    "optional_day": "Active recovery (cardio, sports, stretching)",
+    "level": "Beginner to Early Intermediate",
+    "settings": ["Gym (preferred)", "Home with equipment (modifications provided)"],
+    "equipment": {
+      "required": ["Dumbbells", "Resistance bands", "Mat", "Timer"],
+      "recommended": ["Pull-up bar", "Bench", "Barbell (for Phase 2-3)"],
+      "optional": ["Kettlebell", "Cable machine access"]
+    },
+    
+    "age_specific_warnings": {
+      "under_18": [
+        "Body still developing - this is an advantage, not limitation",
+        "DO NOT use heavy overhead pressing until growth plates close (16-18)",
+        "DO NOT do heavy spinal loading without coach supervision",
+        "DO NOT cut calories aggressively - need energy for growth",
+        "Focus on form and movement patterns over maximum weight"
+      ],
+      "steroid_warning": "Many influencers use PEDs but claim natural. Steroids are illegal for minors, dangerous for developing bodies. Natural training works - be patient."
+    },
+    
+    "realistic_expectations": {
+      "timeline_comparison": {
+        "social_media": "8-week transformation",
+        "reality": "2-5 years consistent training"
+      },
+      "12_week_realistic_outcomes": [
+        "2-4kg muscle gain (with proper nutrition)",
+        "Noticeable strength increases (50-100% in some lifts)",
+        "Better posture and movement quality",
+        "Visible muscle development in previously untrained areas",
+        "Solid foundation for long-term growth"
+      ],
+      "12_weeks_will_not_achieve": [
+        "Complete physique transformation",
+        "Looking like favorite influencer",
+        "Six-pack abs (unless already lean)",
+        "Professional bodybuilder physique"
+      ],
+      "natural_muscle_building_timeline": {
+        "months_1_3": "Learning movements, neurological adaptations",
+        "months_3_6": "Noticeable muscle development",
+        "months_6_12": "Visible physique changes",
+        "years_1_2": "Substantial muscle mass",
+        "years_2_5": "Approaching genetic potential",
+        "years_5_plus": "Maintenance and minor improvements"
+      }
+    },
+    
+    "training_split": {
+      "monday": "Upper Push (chest, shoulders, triceps)",
+      "tuesday": "Lower Body + Core",
+      "wednesday": "Rest / Active Recovery",
+      "thursday": "Upper Pull (back, biceps, rear delts)",
+      "friday": "Full Body Circuits / Conditioning",
+      "saturday": "Active Recovery (optional)",
+      "sunday": "Complete Rest",
+      "rationale": "Each muscle group hit 2x/week (optimal for growth), adequate recovery, balances mirror muscles with functional back work"
+    },
+    
+    "phase_structure": [
+      {
+        "phase": "Foundation",
+        "weeks": [1, 2, 3, 4],
+        "focus": "Form, control, work capacity, mind-muscle connection",
+        "rep_range": "10-15",
+        "sets": 3,
+        "rest_seconds": "60-90",
+        "weight_approach": "FORM over WEIGHT - use lighter weights",
+        "key_principle": "Master movements before adding load"
+      },
+      {
+        "phase": "Sculpt",
+        "weeks": [5, 6, 7, 8],
+        "focus": "Hypertrophy, symmetry, progressive overload",
+        "rep_range": "8-12",
+        "sets": "3-4",
+        "rest_seconds": "60-75",
+        "weight_approach": "Increase weights by 2-5kg from Phase 1",
+        "key_changes": "More sets, heavier weights, advanced variations, drop sets"
+      },
+      {
+        "phase": "Refine",
+        "weeks": [9, 10, 11, 12],
+        "focus": "Definition, endurance, conditioning, peak performance",
+        "rep_range": "12-20",
+        "sets": "3-4",
+        "rest_seconds": "45-60",
+        "techniques": "Supersets, tri-sets, giant sets, burnouts",
+        "goal": "Bring everything together, maximize muscle endurance and definition"
+      }
+    ],
+    
+    "exercise_focus_by_bodypart": {
+      "chest": ["Push-ups (variations)", "Dumbbell press", "Incline press", "Cable fly", "Dips"],
+      "shoulders": ["Shoulder press", "Lateral raises", "Face pulls (rear delts)", "Arnold press", "Reverse fly"],
+      "triceps": ["Dips", "Overhead extension", "Skull crushers", "Pushdowns", "Close-grip push-ups"],
+      "back": ["Pull-ups", "Bent-over rows", "Single-arm rows", "Lat pulldowns", "Straight-arm pulldowns"],
+      "biceps": ["Curls (various grips)", "Hammer curls", "Cable curls", "21s technique"],
+      "legs_quads": ["Squats (goblet, barbell)", "Lunges", "Bulgarian split squats", "Leg press", "Jump squats"],
+      "legs_hamstrings_glutes": ["Romanian deadlifts", "Glute bridges", "Hip thrusts", "Single-leg work"],
+      "calves": ["Standing calf raises", "Seated calf raises", "Single-leg variations"],
+      "core": ["Planks (variations)", "Dead bugs", "Leg raises", "Russian twists", "Bicycle crunches", "Ab wheel"]
+    },
+    
+    "nutrition_principles": {
+      "caloric_approach": "Slight surplus for muscle growth (250-500 above maintenance)",
+      "teenage_note": "If under 18, DO NOT restrict calories - still growing",
+      "protein_target": "1.6-2.2g per kg bodyweight",
+      "carbohydrates": "Essential fuel for training - don't fear carbs",
+      "healthy_fats": "For hormones and recovery",
+      "hydration": "3-4 liters daily",
+      "common_mistakes": [
+        "Trying to get shredded while building muscle (can't do both simultaneously as beginner)",
+        "Not eating enough (no growth without surplus)",
+        "Dirty bulking (eating everything, getting fat)"
+      ]
+    },
+    
+    "supplements": {
+      "actually_useful": {
+        "creatine_monohydrate": "5g daily - works, safe, cheap",
+        "protein_powder": "Convenient for hitting protein targets",
+        "multivitamin": "Insurance policy",
+        "fish_oil": "If not eating fatty fish"
+      },
+      "waste_of_money": [
+        "Pre-workouts (mostly expensive caffeine)",
+        "BCAAs (useless with adequate protein)",
+        "Fat burners (don't work)",
+        "Testosterone boosters (don't work for young people)",
+        "90% of marketed supplements"
+      ]
+    },
+    
+    "sleep_and_recovery": {
+      "principle": "You grow when you sleep, not when you train",
+      "age_16_18": "8-10 hours (brain still developing)",
+      "age_19_25": "7-9 hours",
+      "without_adequate_sleep": "No muscle growth, poor recovery, increased injury",
+      "optimization": [
+        "Same bedtime every night",
+        "Dark, cool room",
+        "No screens 1 hour before bed",
+        "No caffeine after 3pm"
+      ],
+      "rest_days": "Not optional - muscle builds during rest, overtraining prevents gains"
+    },
+    
+    "mental_health_considerations": {
+      "social_media_reality": [
+        "Perfect lighting, angles, flexing, sometimes editing",
+        "Many influencers use PEDs without admitting it",
+        "Content designed to make you feel inadequate",
+        "Comparing your Chapter 1 to someone's Chapter 20 is unfair"
+      ],
+      "warning_signs_unhealthy_relationship": [
+        "Training interferes with school/social life/family",
+        "Obsessive thoughts about appearance",
+        "Constant comparison to others",
+        "Feeling worthless if miss workout",
+        "Unhealthy food restriction",
+        "Exercise as punishment for eating"
+      ],
+      "if_warning_signs_apply": "Talk to someone you trust - fitness should enhance life, not consume it",
+      "remember": [
+        "Worth not determined by physique",
+        "Health and strength matter more than aesthetics",
+        "Journey builds discipline and resilience",
+        "Looking good is side effect of living well"
+      ]
+    },
+    
+    "injury_prevention": {
+      "most_common_teenage_injuries": {
+        "lower_back_strain": {
+          "cause": "Ego lifting, poor form",
+          "prevention": "Master form with light weight, brace core"
+        },
+        "shoulder_impingement": {
+          "cause": "Too much pressing, not enough pulling",
+          "prevention": "2:1 pull-to-push ratio, daily face pulls"
+        },
+        "knee_pain": {
+          "cause": "Quad dominance, poor form, excessive jumping",
+          "prevention": "Strengthen hamstrings/glutes, check knee tracking"
+        },
+        "wrist_pain": {
+          "cause": "Poor push-up form, too much weight too soon",
+          "prevention": "Wrist warm-ups, gradual load increase"
+        }
+      }
+    },
+    
+    "progress_tracking": {
+      "week_0_baseline": {
+        "photos": "Front, side, back (relaxed + flexed, same time/lighting)",
+        "measurements": ["Weight", "Chest", "Waist", "Arms flexed", "Thighs", "Shoulders"],
+        "strength": ["Max push-ups", "Max pull-ups", "Max bodyweight squats", "Plank hold time"]
+      },
+      "week_4": "Weight (+0.5-1.5kg expected), photos, strength improvements",
+      "week_8": "Weight (+1-3kg expected), all measurements, photos, should have doubled some lifts",
+      "week_12": "Complete assessment, side-by-side photos, celebrate progress but remember this is just beginning"
+    },
+    
+    "post_program_options": {
+      "option_1_continue_building": "Repeat Phase 2-3 with heavier weights, another 12-24 weeks",
+      "option_2_cut_phase": "If gained fat, slight deficit, same training + cardio, 8-12 weeks",
+      "option_3_strength_focus": "Lower reps (3-6), heavier weight, big compounds",
+      "option_4_athletic": "More conditioning, plyometrics, sport-specific",
+      "long_term_reality": "Year 1-2: Foundation and significant development. Years 3-5: Approaching genetic potential. Years 5+: Refinement and maintenance. This is a marathon."
+    },
+    
+    "critical_form_cues": {
+      "squats": "Chest up, core braced, knees track over toes, weight in heels, depth to parallel if mobility allows",
+      "deadlifts_rdls": "FLAT BACK (most important), hip hinge not squat, bar/dumbbells close to body",
+      "push_ups": "Straight body line, elbows 45°, chest to floor",
+      "pull_ups": "Full ROM (dead hang to chest), shoulder blades down and back, no kipping",
+      "overhead_press": "Core braced, don't arch back excessively, press straight up, full ROM"
+    }
+  }
