@@ -1,0 +1,295 @@
+{
+    "program": "I Don't Have Much Time - High-Efficiency Training",
+    "author": "Victor Solé Ferioli",
+    "version": "2.0_corrected",
+    "target_population": "Busy individuals with 20-30 minutes available, intermediate fitness level",
+    "duration_weeks": 3,
+    "session_duration_minutes": {
+      "min": 20,
+      "max": 30,
+      "includes": "Warm-up and cool-down"
+    },
+    "frequency_per_week": 4,
+    "weekly_schedule": {
+      "monday": "Workout A",
+      "tuesday": "Rest or light walk",
+      "wednesday": "Workout B",
+      "thursday": "Rest or light walk",
+      "friday": "Workout A",
+      "saturday": "Workout B",
+      "sunday": "Rest (mandatory)"
+    },
+    "level": "Intermediate (beginner modifications provided)",
+    "settings": ["Home", "Hotel room", "Office", "Gym", "Outdoor"],
+    "equipment": {
+      "required": ["Timer", "Water"],
+      "optional": ["Yoga mat", "Interval timer app"]
+    },
+    
+    "prerequisites": {
+      "do_not_start_if": [
+        "No exercise in 6+ months (do beginner program first)",
+        "Unmanaged cardiovascular issues",
+        "Joint pain or injuries",
+        "Recovering from illness/surgery"
+      ],
+      "consult_doctor_if": [
+        "Over 40 without regular exercise history",
+        "Chronic health conditions",
+        "Any cardiovascular concerns"
+      ]
+    },
+    
+    "red_flags_stop": [
+      "Sharp joint pain",
+      "Chest pain or pressure",
+      "Severe dizziness",
+      "Nausea or faintness",
+      "Inability to catch breath"
+    ],
+    
+    "goals": {
+      "what_program_can_do": [
+        "Build cardiovascular endurance rapidly",
+        "Increase muscular endurance",
+        "Improve work capacity",
+        "Establish time-efficient exercise habit",
+        "Provide foundation for longer-term training"
+      ],
+      "what_program_cannot_do": [
+        "Build significant muscle mass without progressive resistance",
+        "Create dramatic body composition changes in 3 weeks",
+        "Replace comprehensive fitness programming",
+        "Substitute for proper nutrition"
+      ],
+      "realistic_3_week_outcomes": [
+        "5-10 more push-ups",
+        "20+ more squats",
+        "Improved cardiovascular recovery",
+        "Better movement patterns",
+        "Established 4x/week habit",
+        "Increased energy levels"
+      ]
+    },
+    
+    "weekly_structure": [
+      {
+        "week": 1,
+        "theme": "Foundation & Adaptation",
+        "focus": "Learn movements, establish baseline, prioritize FORM over speed",
+        "workout_a": {
+          "name": "Full-Body Circuit",
+          "duration_minutes": "20-25",
+          "format": "30 sec work / 15 sec rest, 3-4 rounds",
+          "warm_up_minutes": 5,
+          "main_work_minutes": "12-15",
+          "cool_down_minutes": "3-5",
+          "exercises": [
+            {
+              "name": "Bodyweight Squats",
+              "goal_reps": "10-15",
+              "modification": "Hold chair for balance"
+            },
+            {
+              "name": "Push-Ups",
+              "goal_reps": "6-12",
+              "levels": ["Wall", "Counter", "Couch", "Knee", "Floor"],
+              "cue": "Elbows 45°, core tight"
+            },
+            {
+              "name": "Alternating Reverse Lunges",
+              "goal_reps": "10-14 total",
+              "modification": "Hold chair, step-back only"
+            },
+            {
+              "name": "Mountain Climbers",
+              "goal_reps": "20-30",
+              "modification": "Hands elevated, slower pace, step version"
+            },
+            {
+              "name": "Glute Bridges",
+              "goal_reps": "15-20",
+              "cue": "Squeeze glutes NOT lower back"
+            }
+          ]
+        },
+        "workout_b": {
+          "name": "Strength-Endurance EMOM",
+          "duration_minutes": "20-25",
+          "format": "Every Minute On the Minute for 15 minutes",
+          "pattern": [
+            "Minute 1: 12-15 squats",
+            "Minute 2: 8-12 push-ups",
+            "Minute 3: 30 sec high knees (or march)"
+          ],
+          "rounds": 5,
+          "finisher": "Plank hold: 20 sec × 3 sets"
+        }
+      },
+      {
+        "week": 2,
+        "theme": "Intensity Increase",
+        "focus": "Longer work intervals (40 sec), less rest (20 sec), challenging variations",
+        "workout_a": {
+          "name": "Full-Body Circuit",
+          "duration_minutes": "22-28",
+          "format": "40 sec work / 20 sec rest, 3-4 rounds",
+          "exercises": [
+            {
+              "name": "Jump Squats",
+              "goal_reps": "10-15",
+              "modification": "Fast air squats (no jump)",
+              "cue": "Land softly with bent knees"
+            },
+            {
+              "name": "Push-Ups with Shoulder Tap",
+              "goal_reps": "8-12 reps total",
+              "modification": "Elevated, or skip taps"
+            },
+            {
+              "name": "Alternating Forward Lunges",
+              "goal_reps": "12-16 total"
+            },
+            {
+              "name": "Burpees",
+              "goal_reps": "6-10",
+              "levels": ["Full with push-up", "Step-back", "No jump up"],
+              "modification": "Step version for all phases"
+            },
+            {
+              "name": "Flutter Kicks",
+              "goal_reps": "30-40",
+              "cue": "Press lower back into floor"
+            }
+          ]
+        },
+        "workout_b": {
+          "name": "Tabata-Style Intervals",
+          "duration_minutes": "20-25",
+          "format": "20 sec max effort / 10 sec rest, 8 rounds per exercise",
+          "exercises": [
+            "Squats (4 min total)",
+            "Push-Ups (4 min total)",
+            "Mountain Climbers (4 min total)",
+            "Plank Jacks or Hold (4 min total)"
+          ],
+          "rest_between_exercises": "60 seconds"
+        }
+      },
+      {
+        "week": 3,
+        "theme": "Peak Performance",
+        "focus": "Maximum effort, complex movements, testing capacity",
+        "workout_a": {
+          "name": "Ascending Ladder",
+          "duration_minutes": "22-28",
+          "format": "6-8-10-12 reps ladder",
+          "exercises": [
+            "Jump Squats (or fast squats)",
+            "Push-Ups",
+            "V-Ups (or knee tucks)",
+            "Plank Shoulder Taps"
+          ],
+          "rest_between_rounds": "60 seconds",
+          "finisher": "Diaphragmatic breathing: 2 min (4 sec in / 6 sec out)"
+        },
+        "workout_b": {
+          "name": "HIIT Pyramid",
+          "duration_minutes": "20-28",
+          "format": "Pyramid: 20-30-40-30-20 sec work, 15 sec rest",
+          "exercises": [
+            "Fast Feet (high-speed running in place)",
+            "Jumping Lunges (or alternating lunges)",
+            "Push-Up to Down Dog",
+            "Bicycle Crunches",
+            "Burpees"
+          ]
+        }
+      }
+    ],
+    
+    "exercise_modifications": {
+      "push_ups": {
+        "level_1": "Wall push-ups",
+        "level_2": "Counter/desk push-ups (45° angle)",
+        "level_3": "Couch push-ups",
+        "level_4": "Knee push-ups",
+        "level_5": "Full push-ups",
+        "progression_rule": "Progress when you can do 15 reps with good form"
+      },
+      "low_impact_alternatives": {
+        "jump_squats": "Fast squats or weighted squats",
+        "jumping_jacks": "Step jacks",
+        "jump_lunges": "Fast alternating lunges",
+        "burpees": "Step-back burpees",
+        "high_knees": "High marching"
+      },
+      "plank_progression": {
+        "beginner": "Start on knees",
+        "goal": "Build to 10-second holds",
+        "principle": "Multiple short holds > one long hold with bad form"
+      }
+    },
+    
+    "time_saving_strategies": [
+      "Pre-set space: mat, timer, water ready",
+      "Use interval timer apps (Interval Timer iOS/Android)",
+      "Strategic timing: morning before shower, lunch break, or evening",
+      "Minimize transitions: plan floor-to-standing order",
+      "Clothes ready night before",
+      "Emergency 10-min backup workout available"
+    ],
+    
+    "emergency_10_min_workout": {
+      "warm_up": "2 min jog in place + arm circles",
+      "main": "6 min: 30 sec work / 15 sec rest - Squats, Push-ups, Mountain Climbers (repeat 4x)",
+      "cool_down": "2 min stretching",
+      "purpose": "Better than skipping entirely"
+    },
+    
+    "progress_tracking": {
+      "week_1_baseline": [
+        "Total push-ups across all rounds",
+        "Total squats across all rounds",
+        "Complete circuits finished",
+        "Energy level (1-10)"
+      ],
+      "week_2_check_in": [
+        "Total push-ups in Tabata",
+        "Total squats in Tabata",
+        "Consistency (workouts completed out of 4)"
+      ],
+      "week_3_final": [
+        "Total push-ups in ladder",
+        "Total squats in ladder",
+        "Highest ladder level completed",
+        "Energy improvement"
+      ],
+      "goal": "25-50% increase in total reps from Week 1 to Week 3"
+    },
+    
+    "post_program_options": {
+      "option_1": "Repeat with harder variations, less rest, extra rounds",
+      "option_2": "Extend to 6 weeks with Week 3 structure",
+      "option_3": "Transition to comprehensive 45-60 min program",
+      "option_4": "Maintain with Week 2-3 workouts indefinitely",
+      "long_term_principle": "Consistency beats duration"
+    },
+    
+    "critical_form_cues": {
+      "squat": "Chest up, weight in heels, knees track over toes, hip crease below knee",
+      "push_up": "Straight line head to heels, elbows 45°, chest to floor, exhale on push",
+      "lunge": "Front knee over ankle (not past toes), back knee toward floor, torso upright",
+      "mountain_climbers": "Solid plank, knee to chest, minimal hip rotation, shoulders over wrists",
+      "burpee": "Land softly, solid plank, stand fully, breathe (exhale on jump)",
+      "plank": "Neutral spine, shoulders over elbows/wrists, squeeze glutes and core, breathe, STOP if hips sag"
+    },
+    
+    "safety_reminders": {
+      "never_skip_warmup": "Injury risk too high without warm-up",
+      "rest_days_mandatory": "Recovery is when body improves",
+      "muscle_burn_vs_pain": "Burn is expected, sharp pain is not",
+      "modify_when_needed": "Smart training > hero training",
+      "hydrate": "Water before, during, after"
+    }
+  }
