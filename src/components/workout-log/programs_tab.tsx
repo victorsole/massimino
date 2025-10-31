@@ -73,7 +73,7 @@ export function ProgramsTab() {
       const res = await fetch(`/api/workout/programs/templates?${params.toString()}`);
       if (res.ok) {
         const json = await res.json();
-        setPrograms(Array.isArray(json) ? json : []);
+        setPrograms(json.templates || []);
       }
     } catch (error) {
       console.error('Failed to fetch programs:', error);
@@ -230,6 +230,26 @@ export function ProgramsTab() {
           }`}
         >
           Periodization Templates
+        </button>
+        <button
+          onClick={() => setFilter('LIFESTYLE')}
+          className={`px-4 py-2 rounded-md ${
+            filter === 'LIFESTYLE'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          Lifestyle Programs
+        </button>
+        <button
+          onClick={() => setFilter('COMPONENT')}
+          className={`px-4 py-2 rounded-md ${
+            filter === 'COMPONENT'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          Movement Essentials
         </button>
         <span className="ml-2 text-sm text-gray-500 flex items-center gap-1"><Filter className="h-4 w-4" /> Equipment:</span>
         {['home','gym','bodyweight'].map((eq) => (
