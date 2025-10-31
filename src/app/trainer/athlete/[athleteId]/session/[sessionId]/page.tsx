@@ -317,7 +317,11 @@ export default function TrainerSessionViewPage() {
         {/* Massichat Plus Tab */}
         <TabsContent value="massichat" className="space-y-6">
           {session?.user?.id && (
-            <TrainerMassichatInterface trainerId={session.user.id} />
+            <TrainerMassichatInterface
+              trainerId={session.user.id}
+              sessionId={sessionId}
+              athleteId={athleteId}
+            />
           )}
         </TabsContent>
       </Tabs>

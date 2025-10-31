@@ -263,7 +263,12 @@ When proposing a workout:
   }
 }
 
-export async function acceptWorkoutProposal(proposalId: string, overrides?: any): Promise<string> {
+export async function acceptWorkoutProposal(
+  proposalId: string,
+  overrides?: any,
+  sessionId?: string | null,
+  athleteId?: string | null
+): Promise<string> {
   const db: any = prisma as any
   if (!db?.ai_workout_proposals?.findUnique || !db?.workout_log_entries?.create) {
     throw new Error('Workout proposal tables not available. Run: npm run db:migrate')
@@ -272,13 +277,17 @@ export async function acceptWorkoutProposal(proposalId: string, overrides?: any)
   if (!proposal || proposal.status !== 'pending') throw new Error('Invalid proposal')
 
   const data = (overrides ?? proposal.workoutData) as any
-  // Minimal implementation: create entries for today
   const today = new Date()
+
+  // Use athleteId if provided (trainer creating for athlete), otherwise use proposal.userId
+  const targetUserId = athleteId || proposal.userId
+
   const entries = [] as any[]
   for (const item of data.items || []) {
     entries.push({
       id: cryptoRandom(),
-      userId: proposal.userId,
+      userId: targetUserId,
+      sessionId: sessionId || null,
       exerciseId: await resolveExerciseId(item.exerciseName),
       date: today,
       order: '0',
