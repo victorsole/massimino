@@ -345,7 +345,7 @@ export function TrainerMassichatInterface({ trainerId, sessionId, athleteId }: T
             </CardDescription>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => { setSessionId(null); setMessages([]); setWorkoutProposal(null); setEditable(null); }}>
+            <Button variant="outline" size="sm" onClick={() => { setChatSessionId(null); setMessages([]); setWorkoutProposal(null); setEditable(null); }}>
               New Chat
             </Button>
           </div>
@@ -359,7 +359,7 @@ export function TrainerMassichatInterface({ trainerId, sessionId, athleteId }: T
             value={selectedAthlete || ''}
             onChange={(e) => {
               setSelectedAthlete(e.target.value);
-              setSessionId(null);
+              setChatSessionId(null);
               setMessages([]);
               setWorkoutProposal(null);
             }}
