@@ -42,7 +42,27 @@ export async function GET(request: NextRequest) {
     // Get templates with their structure
     const templates = await prisma.program_templates.findMany({
       where,
-      include: {
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        duration: true,
+        difficulty: true,
+        category: true,
+        isPublic: true,
+        price: true,
+        currency: true,
+        purchaseCount: true,
+        rating: true,
+        ratingCount: true,
+        isActive: true,
+        tags: true,
+        programType: true,
+        athleteId: true,
+        hasExerciseSlots: true,
+        progressionStrategy: true,
+        autoRegulation: true,
+        templateData: true, // Include the full template JSON
         legendary_athlete: {
           select: {
             id: true,

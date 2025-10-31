@@ -1494,6 +1494,7 @@ model program_templates {
   hasExerciseSlots    Boolean              @default(false)
   progressionStrategy ProgressionStrategy?
   autoRegulation      Boolean              @default(false)
+  templateData        Json?                // Full template JSON (phases, exercises, schedules, etc.)
 
   program_purchases     program_purchases[]
   program_ratings       program_ratings[]
