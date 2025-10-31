@@ -3461,6 +3461,8 @@ enum ProgramType {
   ATHLETE // Fixed historical programs from legendary athletes
   HYBRID // Athlete program with swappable exercises
   CUSTOM // User-created programs
+  LIFESTYLE // Situation-specific programs (new dad, stress relief, time-constrained, etc.)
+  COMPONENT // Fitness component focus (cardio, flexibility, balance, plyometrics)
 }
 
 enum ProgressionStrategy {
