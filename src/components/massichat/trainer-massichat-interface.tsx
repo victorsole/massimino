@@ -50,7 +50,7 @@ export function TrainerMassichatInterface({ trainerId, sessionId, athleteId }: T
   const [loadingAthletes, setLoadingAthletes] = useState(true);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [chatSessionId, setChatSessionId] = useState<string | null>(null);
   const [sessions, setSessions] = useState<Array<{ id: string; title: string }>>([]);
   const [loadingSessions, setLoadingSessions] = useState(false);
   const [workoutProposal, setWorkoutProposal] = useState<WorkoutProposal | null>(null);
@@ -130,7 +130,7 @@ export function TrainerMassichatInterface({ trainerId, sessionId, athleteId }: T
       const response = await fetch(`/api/massichat?sessionId=${encodeURIComponent(id)}&athleteId=${selectedAthlete}`);
       if (response.ok) {
         const data = await response.json();
-        setSessionId(id);
+        setChatSessionId(id);
         const msgs = (data.messages || [])
           .filter((m: any) => (m.role === 'user' || m.role === 'assistant'));
         setMessages(msgs);
@@ -158,7 +158,7 @@ export function TrainerMassichatInterface({ trainerId, sessionId, athleteId }: T
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: userMessage.content,
-          sessionId,
+          sessionId: chatSessionId,
           athleteId: selectedAthlete,
         }),
       });
@@ -168,7 +168,7 @@ export function TrainerMassichatInterface({ trainerId, sessionId, athleteId }: T
       }
 
       const data = await response.json();
-      setSessionId(data.sessionId);
+      setChatSessionId(data.sessionId);
 
       const assistantMessage: ChatMessage = {
         id: data.messageId,
@@ -391,7 +391,7 @@ export function TrainerMassichatInterface({ trainerId, sessionId, athleteId }: T
             <div className="flex items-center justify-between">
               <div className="text-sm font-medium text-gray-700">Recent Sessions</div>
               <div className="flex items-center gap-2">
-                {sessionId && (
+                {chatSessionId && (
                   <>
                     <Button variant="ghost" size="sm" disabled={true}>Rename</Button>
                     <Button variant="ghost" size="sm" disabled={true}>Delete</Button>
@@ -405,7 +405,7 @@ export function TrainerMassichatInterface({ trainerId, sessionId, athleteId }: T
                 <button
                   key={s.id}
                   onClick={() => loadSession(s.id)}
-                  className={`text-xs px-2 py-1 rounded border ${sessionId === s.id ? 'bg-gray-200' : 'bg-white'} hover:bg-gray-100`}
+                  className={`text-xs px-2 py-1 rounded border ${chatSessionId === s.id ? 'bg-gray-200' : 'bg-white'} hover:bg-gray-100`}
                 >
                   {s.title || 'Untitled'}
                 </button>
