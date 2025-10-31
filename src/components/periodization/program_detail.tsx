@@ -74,8 +74,8 @@ export function ProgramDetail({ programId }: Props) {
     try {
       const res = await fetch(`/api/workout/programs/templates`);
       if (res.ok) {
-        const programs = await res.json();
-        const found = programs.find((p: any) => p.id === programId);
+        const data = await res.json();
+        const found = data.templates?.find((p: any) => p.id === programId);
         if (found) {
           setProgram(found);
         }
