@@ -17,6 +17,7 @@ interface TrainerMassichatInterfaceProps {
   trainerId: string;
   sessionId?: string;
   athleteId?: string;
+  onWorkoutAccepted?: () => void;
 }
 
 interface ChatMessage {
@@ -43,7 +44,7 @@ interface WorkoutProposal {
   };
 }
 
-export function TrainerMassichatInterface({ trainerId, sessionId, athleteId }: TrainerMassichatInterfaceProps) {
+export function TrainerMassichatInterface({ trainerId, sessionId, athleteId, onWorkoutAccepted }: TrainerMassichatInterfaceProps) {
   const [athletes, setAthletes] = useState<Athlete[]>([]);
   const [selectedAthlete, setSelectedAthlete] = useState<string | null>(athleteId || null);
   const [loading, setLoading] = useState(false);
@@ -144,6 +145,35 @@ export function TrainerMassichatInterface({ trainerId, sessionId, athleteId }: T
     }
   }
 
+  async function deleteSession(id: string) {
+    if (!confirm('Are you sure you want to delete this chat session?')) return;
+
+    try {
+      const response = await fetch(`/api/massichat?sessionId=${encodeURIComponent(id)}&athleteId=${selectedAthlete}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        // Clear current session if it was deleted
+        if (chatSessionId === id) {
+          setChatSessionId(null);
+          setMessages([]);
+          setWorkoutProposal(null);
+          setEditable(null);
+        }
+        // Refresh sessions list
+        fetchSessions();
+        setFlashMessage('Session deleted successfully');
+        setTimeout(() => setFlashMessage(null), 3000);
+      } else {
+        alert('Failed to delete session');
+      }
+    } catch (error) {
+      console.error('Error deleting session:', error);
+      alert('Failed to delete session');
+    }
+  }
+
   async function sendMessage() {
     if (!input.trim() || loading || !selectedAthlete) return;
 
@@ -230,6 +260,11 @@ export function TrainerMassichatInterface({ trainerId, sessionId, athleteId }: T
       setEditable(null);
       setShowPreview(false);
       setEditMode(false);
+
+      // Refresh session data to show new exercises
+      if (onWorkoutAccepted) {
+        onWorkoutAccepted();
+      }
     } catch (error) {
       console.error('Error accepting workout:', error);
       alert('Failed to add workout. Please try again.');
@@ -394,7 +429,14 @@ export function TrainerMassichatInterface({ trainerId, sessionId, athleteId }: T
                 {chatSessionId && (
                   <>
                     <Button variant="ghost" size="sm" disabled={true}>Rename</Button>
-                    <Button variant="ghost" size="sm" disabled={true}>Delete</Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => deleteSession(chatSessionId)}
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                    >
+                      Delete
+                    </Button>
                   </>
                 )}
                 {loadingSessions && <div className="text-xs text-gray-500">Loading…</div>}

@@ -81,8 +81,10 @@ export function AddExerciseModal({
       const response = await fetch('/api/workout/exercises');
       if (response.ok) {
         const data = await response.json();
-        setExercises(data.exercises || []);
-        setFilteredExercises(data.exercises || []);
+        // API returns exercises as array directly
+        const exerciseList = Array.isArray(data) ? data : data.exercises || [];
+        setExercises(exerciseList);
+        setFilteredExercises(exerciseList);
       }
     } catch (error) {
       console.error('Error fetching exercises:', error);
