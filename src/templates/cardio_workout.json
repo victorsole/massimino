@@ -1,6 +1,6 @@
 {
     "program": "Cardio Workout",
-    "author": "Victor Solé Ferioli"
+    "author": "Victor Solé Ferioli",
     "duration_weeks": 3,
     "session_duration": {
       "min_minutes": 30,
