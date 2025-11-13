@@ -21,34 +21,58 @@ export async function GET(
 
     const { id: athleteId } = await params;
 
-    // Verify trainer-client relationship
-    const trainerProfile = await prisma.trainer_profiles.findFirst({
-      where: { userId: session.user.id },
+    // Check if this is an invitation ID (for pending athletes)
+    const invitation = await prisma.athlete_invitations.findUnique({
+      where: { id: athleteId },
     });
 
-    if (!trainerProfile) {
-      return NextResponse.json({ error: 'Trainer profile not found' }, { status: 404 });
+    let isPendingAthlete = false;
+
+    if (invitation) {
+      // This is a pending athlete - verify trainer owns the invitation
+      if (session.user.role === 'TRAINER') {
+        const trainerProfile = await prisma.trainer_profiles.findFirst({
+          where: { userId: session.user.id },
+        });
+
+        if (!trainerProfile || invitation.trainerId !== trainerProfile.id) {
+          return NextResponse.json(
+            { error: 'Not authorized to view this athlete\'s sessions' },
+            { status: 403 }
+          );
+        }
+      }
+      isPendingAthlete = true;
+    } else {
+      // Regular athlete - verify trainer-client relationship
+      const trainerProfile = await prisma.trainer_profiles.findFirst({
+        where: { userId: session.user.id },
+      });
+
+      if (!trainerProfile) {
+        return NextResponse.json({ error: 'Trainer profile not found' }, { status: 404 });
+      }
+
+      const relationship = await prisma.trainer_clients.findFirst({
+        where: {
+          trainerId: trainerProfile.id,
+          clientId: athleteId,
+        },
+      });
+
+      if (!relationship) {
+        return NextResponse.json(
+          { error: 'Not authorized to view this athlete\'s sessions' },
+          { status: 403 }
+        );
+      }
     }
 
-    const relationship = await prisma.trainer_clients.findFirst({
-      where: {
-        trainerId: trainerProfile.id,
-        clientId: athleteId,
-      },
-    });
-
-    if (!relationship) {
-      return NextResponse.json(
-        { error: 'Not authorized to view this athlete\'s sessions' },
-        { status: 403 }
-      );
-    }
-
-    // Fetch custom workout sessions (both self-created and coach-created)
+    // Fetch custom workout sessions
     const customSessions = await prisma.workout_sessions.findMany({
-      where: {
-        userId: athleteId,
-      },
+      where: isPendingAthlete
+        ? { athleteInvitationId: athleteId }
+        : { userId: athleteId },
       select: {
         id: true,
         title: true,
@@ -73,8 +97,8 @@ export async function GET(
       },
     });
 
-    // Fetch program subscriptions
-    const programSubscriptions = await prisma.program_subscriptions.findMany({
+    // Fetch program subscriptions (only for non-pending athletes)
+    const programSubscriptions = isPendingAthlete ? [] : await prisma.program_subscriptions.findMany({
       where: {
         userId: athleteId,
       },

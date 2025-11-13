@@ -17,6 +17,9 @@ import bodyComposition from '@/components/assessments/body_composition.json'
 import staticPosturalAssessment from '@/components/assessments/static_postural_assessment.json'
 import dynamicPosturalAssessment from '@/components/assessments/dynamic_postural_assessment.json'
 import cardioAssessment from '@/components/assessments/cardio_assessment.json'
+import dietRecord from '@/components/assessments/diet_record.json'
+import fodmapReference from '@/components/assessments/fodmap_reference.json'
+import foodFrequencyQuestionnaire from '@/components/assessments/food_frequency_questionnaire.json'
 
 interface AssessmentClientProps {
   trainerId: string
@@ -91,6 +94,9 @@ const assessmentTemplates: Record<string, AssessmentTemplate> = {
   static_postural_assessment: staticPosturalAssessment,
   dynamic_postural_assessment: dynamicPosturalAssessment,
   cardio_assessment: cardioAssessment,
+  diet_record: dietRecord,
+  fodmap_reference: fodmapReference,
+  food_frequency_questionnaire: foodFrequencyQuestionnaire,
 }
 
 // Assessment types that have templates
@@ -101,6 +107,9 @@ const availableAssessments = [
   { id: 'static_postural_assessment', name: 'Static Postural Assessment' },
   { id: 'dynamic_postural_assessment', name: 'Dynamic Postural Assessment' },
   { id: 'cardio_assessment', name: 'Cardiorespiratory Assessment' },
+  { id: 'diet_record', name: 'Diet Record Worksheet' },
+  { id: 'fodmap_reference', name: 'FODMAP Food List & Assessment' },
+  { id: 'food_frequency_questionnaire', name: 'Food Frequency Questionnaire' },
 ]
 
 export default function AssessmentClient({ trainerId, clients }: AssessmentClientProps) {
