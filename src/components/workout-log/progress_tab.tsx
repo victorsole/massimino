@@ -58,7 +58,7 @@ export function ProgressTab() {
                     <td className="p-2">{r.exercises?.name || r.exerciseId}</td>
                     <td className="p-2">{r.value} {r.unit}</td>
                     <td className="p-2">{r.reps ?? '—'}</td>
-                    <td className="p-2">{new Date(r.achievedAt).toLocaleDateString()}</td>
+                    <td className="p-2">{r.achievedAt ? new Date(r.achievedAt).toLocaleDateString() : '—'}</td>
                   </tr>
                 ))}
               </tbody>

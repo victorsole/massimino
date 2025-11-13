@@ -116,7 +116,7 @@ export function WorkoutDetailsModal({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Calendar className="h-5 w-5" />
-            Workout Details - {format(new Date(date), 'EEEE, MMMM dd, yyyy')}
+            Workout Details{date ? ` - ${format(new Date(date), 'EEEE, MMMM dd, yyyy')}` : ''}
           </DialogTitle>
           <DialogDescription>
             <div className="flex gap-4 mt-2">
