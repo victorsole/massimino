@@ -56,8 +56,8 @@ export async function PATCH(
       const isOwner = programSub.userId === userId;
       let hasTrainerAccess = false;
 
-      if (isTrainer && trainerProfile && !isOwner) {
-        // Check trainer-client relationship
+      if (isTrainer && trainerProfile && !isOwner && programSub.userId) {
+        // Check trainer-client relationship (only if userId exists)
         const relationship = await prisma.trainer_clients.findFirst({
           where: {
             trainerId: trainerProfile.id,
@@ -66,6 +66,12 @@ export async function PATCH(
           },
         });
         hasTrainerAccess = !!relationship;
+      } else if (isTrainer && trainerProfile && !isOwner && programSub.athleteInvitationId) {
+        // Check trainer owns the invitation for pending athletes
+        const invitation = await prisma.athlete_invitations.findUnique({
+          where: { id: programSub.athleteInvitationId },
+        });
+        hasTrainerAccess = invitation?.trainerId === trainerProfile.id;
       }
 
       if (!isOwner && !hasTrainerAccess) {
