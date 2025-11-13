@@ -255,6 +255,7 @@ export interface TeamWorkoutLog {
 
   // Workout structure
   exercises: TeamWorkoutExercise[];
+  team_workout_exercises?: TeamWorkoutExercise[]; // Database relation name
 
   // Visibility and interaction
   allowComments: boolean;
@@ -295,6 +296,7 @@ export interface TeamWorkoutExercise {
   // Relationships
   workoutLog?: TeamWorkoutLog;
   exercise?: any; // Reference to Exercise from workout types
+  exercises?: any; // Database relation name (singular table uses plural)
 }
 
 /**
