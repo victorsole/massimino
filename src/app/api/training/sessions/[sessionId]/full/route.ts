@@ -32,6 +32,13 @@ export async function GET(
             email: true,
           },
         },
+        athlete_invitation: {
+          select: {
+            id: true,
+            athleteName: true,
+            athleteEmail: true,
+          },
+        },
       },
     });
 
@@ -48,23 +55,41 @@ export async function GET(
       return NextResponse.json({ error: 'Trainer profile not found' }, { status: 404 });
     }
 
-    // Check if the session belongs to a client of this trainer
-    // Handle pending invited athlete sessions (no userId yet)
-    if (!workoutSession.userId) {
-      return NextResponse.json({ error: 'Cannot access full session for pending athlete' }, { status: 400 });
+    // Check authorization based on whether this is a pending athlete or not
+    let isAuthorized = false;
+
+    if (!workoutSession.userId && workoutSession.athleteInvitationId) {
+      // This is a pending athlete session - verify trainer owns the invitation
+      const invitation = await prisma.athlete_invitations.findUnique({
+        where: { id: workoutSession.athleteInvitationId },
+      });
+
+      if (invitation && invitation.trainerId === trainerProfile.id) {
+        isAuthorized = true;
+      }
+    } else if (workoutSession.userId) {
+      // Regular athlete session - check trainer-client relationship
+      const relationship = await prisma.trainer_clients.findFirst({
+        where: {
+          trainerId: trainerProfile.id,
+          clientId: workoutSession.userId,
+        },
+      });
+
+      // Also allow if the trainer is the coach assigned to this session
+      const isAssignedCoach = workoutSession.coachId === session.user.id;
+
+      if (relationship || isAssignedCoach) {
+        isAuthorized = true;
+      }
     }
 
-    const relationship = await prisma.trainer_clients.findFirst({
-      where: {
-        trainerId: trainerProfile.id,
-        clientId: workoutSession.userId,
-      },
-    });
+    // Admin always authorized
+    if (session.user.role === 'ADMIN') {
+      isAuthorized = true;
+    }
 
-    // Also allow if the trainer is the coach assigned to this session
-    const isAssignedCoach = workoutSession.coachId === session.user.id;
-
-    if (!relationship && !isAssignedCoach && session.user.role !== 'ADMIN') {
+    if (!isAuthorized) {
       return NextResponse.json(
         { error: 'Not authorized to view this session' },
         { status: 403 }
@@ -171,8 +196,12 @@ export async function GET(
       duration: workoutSession.duration,
       status: workoutSession.status || 'ACTIVE',
       isComplete: workoutSession.isComplete,
-      athleteId: workoutSession.userId,
-      athleteName: workoutSession.users_workout_sessions_userIdTousers?.name || workoutSession.users_workout_sessions_userIdTousers?.email || workoutSession.athleteInvitationEmail || 'Pending Athlete',
+      athleteId: workoutSession.userId || workoutSession.athleteInvitationId,
+      athleteName: workoutSession.users_workout_sessions_userIdTousers?.name ||
+                   workoutSession.users_workout_sessions_userIdTousers?.email ||
+                   workoutSession.athlete_invitation?.athleteName ||
+                   workoutSession.athlete_invitation?.athleteEmail ||
+                   'Pending Athlete',
       trainerId: workoutSession.coachId,
       notes: workoutSession.notes,
       totalVolume: workoutSession.totalVolume,
