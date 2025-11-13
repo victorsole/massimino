@@ -133,9 +133,18 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
   };
 
   const handleViewProgress = (athleteId: string) => {
+    // Check if it's an active athlete or pending invitation
     const athlete = data?.withProfile?.find((a: any) => a.clientId === athleteId);
+    const invitation = data?.withoutProfile?.find((i: any) => i.id === athleteId);
+
     setSelectedAthleteId(athleteId);
-    setSelectedAthleteName(athlete?.client?.name || athlete?.client?.email || 'Athlete');
+    setSelectedAthleteName(
+      athlete?.client?.name ||
+      athlete?.client?.email ||
+      invitation?.athleteName ||
+      invitation?.athleteEmail ||
+      'Athlete'
+    );
     setShowProgressModal(true);
   };
 
@@ -158,9 +167,18 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
   };
 
   const handleAssignProgram = (athleteId: string) => {
+    // Check if it's an active athlete or pending invitation
     const athlete = data?.withProfile?.find((a: any) => a.clientId === athleteId);
+    const invitation = data?.withoutProfile?.find((i: any) => i.id === athleteId);
+
     setSelectedAthleteId(athleteId);
-    setSelectedAthleteName(athlete?.client?.name || athlete?.client?.email || 'Athlete');
+    setSelectedAthleteName(
+      athlete?.client?.name ||
+      athlete?.client?.email ||
+      invitation?.athleteName ||
+      invitation?.athleteEmail ||
+      'Athlete'
+    );
     setShowAssignProgramModal(true);
   };
 
@@ -304,6 +322,8 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
               onResend={handleResendInvitation}
               onCancel={handleCancelInvitation}
               onCreateSession={handleCreateSessionForInvitation}
+              onViewProgress={handleViewProgress}
+              onAssignProgram={handleAssignProgram}
             />
           )}
           {activeTab === 'requests' && (
