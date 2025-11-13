@@ -36,7 +36,7 @@ const npsSchema = baseSchema.extend({
 
 const genericSchema = baseSchema.extend({
   type: z.enum(['BUG', 'FEATURE', 'GENERAL']),
-  message: z.string().min(1).max(5000),
+  message: z.string().min(1).max(5000).optional(),
 })
 
 type CreatePayload = z.infer<typeof aiSchema> | z.infer<typeof npsSchema> | z.infer<typeof genericSchema>
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
         status: 'OPEN',
         severity: body.severity ?? null,
         title: body.title ?? null,
-        message: body.message || (body.type === 'NPS' ? `NPS score: ${'nps_score' in body ? body.nps_score : ''}` : ''),
+        message: body.message || body.title || (body.type === 'NPS' ? `NPS score: ${'nps_score' in body ? body.nps_score : ''}` : '(No message provided)'),
         url: body.url ?? null,
         appVersion: body.appVersion ?? null,
         platform: body.platform ?? null,

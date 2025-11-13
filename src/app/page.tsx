@@ -1,6 +1,7 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { prisma } from '@/core/database';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -12,49 +13,67 @@ import {
   ArrowRight,
   Star
 } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { heroVariants, staggerContainerVariants, staggerItemVariants, scrollRevealVariants } from '@/lib/animations/variants';
+import { useEffect, useState } from 'react';
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export default function HomePage() {
+  const [partners, setPartners] = useState<Array<any>>([]);
 
-export default async function HomePage() {
-  let rows: Array<any> = []
-
-  try {
-    const db: any = prisma as any
-    if (db?.partners?.findMany) {
-      rows = await db.partners.findMany({ where: { isActive: true }, orderBy: { createdAt: 'desc' } })
-    }
-  } catch (error) {
-    // Database unavailable during build - use fallback partners only
-    console.warn('Database unavailable, using fallback partners')
-  }
-
-  const fallback = [
-    { name: 'Amix', url: 'https://amix.com/?utm_source=massimino&utm_medium=partner_band&utm_campaign=amix', logoUrl: '/images/amix-logo.png', blurb: 'Quality sports supplements' },
-    { name: 'Bo', url: 'http://app.hellobo.eu?utm_source=massimino&utm_medium=partner_band&utm_campaign=bo', logoUrl: '/images/Bo_logo.png', blurb: 'Local producer network' },
-    // Temporarily remove Jims from public display pending formal agreement
-    // { name: 'Jims', url: 'https://www.jims.be/nl?utm_source=massimino&utm_medium=partner_band&utm_campaign=jims', logoUrl: '/images/jims-logo.png', blurb: 'Accessible gym network' },
-  ]
-  const byName = new Set<string>()
-  const partners = [...fallback, ...(rows || [])].filter((p: any) => {
-    const key = (p.name || '').toLowerCase().trim()
-    if (!key) return false
-    // Exclude Jims from homepage partner band
-    if (key === 'jims') return false
-    if (byName.has(key)) return false
-    byName.add(key)
-    return true
-  })
+  useEffect(() => {
+    const loadPartners = async () => {
+      try {
+        const response = await fetch('/api/partners');
+        const data = await response.json();
+        setPartners(data.partners || []);
+      } catch (error) {
+        console.warn('Failed to load partners, using fallback');
+        const fallback = [
+          { name: 'Amix', url: 'https://amix.com/?utm_source=massimino&utm_medium=partner_band&utm_campaign=amix', logoUrl: '/images/amix-logo.png', blurb: 'Quality sports supplements' },
+          { name: 'Bo', url: 'http://app.hellobo.eu?utm_source=massimino&utm_medium=partner_band&utm_campaign=bo', logoUrl: '/images/Bo_logo.png', blurb: 'Local producer network' },
+        ];
+        setPartners(fallback);
+      }
+    };
+    loadPartners();
+  }, []);
 
   const normalizeLogo = (logoUrl: string | null | undefined) =>
     (logoUrl || '').replace(/^\/assets\/images\//, '/images/')
+
   return (
     <>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-brand-secondary to-brand-secondary-dark py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="flex justify-center mb-8">
+      {/* Hero Section with Video Background */}
+      <section className="relative py-20 overflow-hidden">
+        {/* Video Background */}
+        <div className="absolute inset-0 z-0">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover opacity-60"
+          >
+            <source src="/images/background/autumn_run.mp4" type="video/mp4" />
+          </video>
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-secondary/50 to-brand-secondary-dark/50" />
+        </div>
+
+        {/* Hero Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            className="text-center"
+            initial="hidden"
+            animate="visible"
+            variants={heroVariants}
+          >
+            <motion.div
+              className="flex justify-center mb-8"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, type: 'spring', stiffness: 200 }}
+            >
               <div className="relative w-24 h-24">
                 <Image
                   src="/massimino_logo.png"
@@ -64,18 +83,38 @@ export default async function HomePage() {
                   className="object-contain"
                 />
               </div>
-            </div>
-            <h1 className="text-5xl font-bold text-brand-primary mb-4">
+            </motion.div>
+            <motion.h1
+              className="text-5xl font-bold text-brand-primary mb-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+            >
               Massimino
-            </h1>
-            <p className="text-xl text-brand-primary-light mb-8">
+            </motion.h1>
+            <motion.p
+              className="text-xl text-brand-primary-light mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+            >
               Safe Workouts for Everyone
-            </p>
-            <p className="text-lg text-brand-primary max-w-3xl mx-auto mb-12">
-              The safety-first fitness community platform where trainers and athletes connect, 
+            </motion.p>
+            <motion.p
+              className="text-lg text-brand-primary max-w-3xl mx-auto mb-12"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.6 }}
+            >
+              The safety-first fitness community platform where trainers and athletes connect,
               track workouts, and achieve goals together in a secure environment.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            </motion.p>
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4 justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.6 }}
+            >
               <Link href="/signup">
                 <Button size="lg" className="w-full sm:w-auto bg-brand-primary hover:bg-brand-primary-dark">
                   Sign Up
@@ -87,10 +126,10 @@ export default async function HomePage() {
                   Sign In
                 </Button>
               </Link>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
-  </section>
+      </section>
 
       {/* Partners Band */}
       <section className="py-10 bg-white">
@@ -118,72 +157,92 @@ export default async function HomePage() {
       {/* Features Section */}
       <section className="py-20 bg-brand-secondary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div
+            className="text-center mb-16"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={scrollRevealVariants}
+          >
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Why Choose Massimino?
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Built with safety, community, and results in mind
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <Card className="text-center">
-              <CardHeader>
-                <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                  <Shield className="h-6 w-6 text-green-600" />
-                </div>
-                <CardTitle>Safety First</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  Advanced moderation and safety features ensure a secure environment for all users.
-                </CardDescription>
-              </CardContent>
-            </Card>
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={staggerContainerVariants}
+          >
+            <motion.div variants={staggerItemVariants}>
+              <Card className="text-center h-full">
+                <CardHeader>
+                  <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                    <Shield className="h-6 w-6 text-green-600" />
+                  </div>
+                  <CardTitle>Safety First</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Advanced moderation and safety features ensure a secure environment for all users.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </motion.div>
 
-            <Card className="text-center">
-              <CardHeader>
-                <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                  <Users className="h-6 w-6 text-blue-600" />
-                </div>
-                <CardTitle>Expert Guidance</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  Connect with verified trainers and get personalized workout guidance.
-                </CardDescription>
-              </CardContent>
-            </Card>
+            <motion.div variants={staggerItemVariants}>
+              <Card className="text-center h-full">
+                <CardHeader>
+                  <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                    <Users className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <CardTitle>Expert Guidance</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Connect with verified trainers and get personalized workout guidance.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </motion.div>
 
-            <Card className="text-center">
-              <CardHeader>
-                <div className="mx-auto w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
-                  <Dumbbell className="h-6 w-6 text-purple-600" />
-                </div>
-                <CardTitle>Smart Tracking</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  Track workouts, progress, and achievements with our intelligent logging system.
-                </CardDescription>
-              </CardContent>
-            </Card>
+            <motion.div variants={staggerItemVariants}>
+              <Card className="text-center h-full">
+                <CardHeader>
+                  <div className="mx-auto w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                    <Dumbbell className="h-6 w-6 text-purple-600" />
+                  </div>
+                  <CardTitle>Smart Tracking</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Track workouts, progress, and achievements with our intelligent logging system.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </motion.div>
 
-            <Card className="text-center">
-              <CardHeader>
-                <div className="mx-auto w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
-                  <Heart className="h-6 w-6 text-red-600" />
-                </div>
-                <CardTitle>Community Support</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  Join a supportive community of fitness enthusiasts and professionals.
-                </CardDescription>
-              </CardContent>
-            </Card>
-          </div>
+            <motion.div variants={staggerItemVariants}>
+              <Card className="text-center h-full">
+                <CardHeader>
+                  <div className="mx-auto w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                    <Heart className="h-6 w-6 text-red-600" />
+                  </div>
+                  <CardTitle>Community Support</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Join a supportive community of fitness enthusiasts and professionals.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 

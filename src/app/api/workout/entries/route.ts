@@ -266,10 +266,9 @@ export async function POST(request: NextRequest) {
           // Admin allowed
           targetUserId = targetSession.userId;
         } else {
-          // No sessionId provided
-          if (session.user.role !== UserRole.CLIENT) {
-            throw new Error('Session is required for trainer/admin');
-          }
+          // No sessionId provided - allow users to create personal workout entries
+          // targetUserId is already set to session.user.id (line 247)
+          // This allows trainers and admins to log their own workouts
         }
 
         const data = Object.fromEntries(

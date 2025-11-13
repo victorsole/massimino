@@ -10,8 +10,10 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SessionHistoryTable, WorkoutCalendar, CommentsPanel } from '@/components/workout-log/WorkoutLogTable';
+import { WorkoutSummaryTable } from '@/components/workout-log/workout_summary_table';
+import { WorkoutDetailsModal } from '@/components/workout-log/workout_details_modal';
 import { startOfMonth, endOfMonth, format, subMonths, addMonths } from 'date-fns';
-import { Plus, Calendar, Dumbbell, Clock, Weight, MessageCircle, Edit, Trash2, Search, Info, Target, Zap, ChevronLeft, ChevronRight, Sparkles, Trophy, ListChecks, LineChart, Users } from 'lucide-react';
+import { Plus, Calendar, Dumbbell, Clock, Weight, MessageCircle, Edit, Trash2, Search, Info, Target, Zap, ChevronLeft, ChevronRight, Sparkles, Trophy, ListChecks, LineChart, Users, LayoutGrid, TableIcon } from 'lucide-react';
 import Link from 'next/link';
 import { RestTimerBar } from '@/components/workout-log/rest_timer_bar';
 import { BodyMetricsTab } from '@/components/workout-log/body_metrics_tab';
@@ -153,6 +155,39 @@ export default function WorkoutLogPage() {
     const id = setInterval(() => setRestRemaining((s) => Math.max(0, s - 1)), 1000);
     return () => clearInterval(id);
   }, [restVisible, restRemaining]);
+
+  // View mode state (cards or table)
+  const [view_mode, set_view_mode] = useState<'cards' | 'table'>('cards');
+  const [workout_details_modal, set_workout_details_modal] = useState<{
+    is_open: boolean;
+    date: string;
+    entries: WorkoutEntry[];
+  }>({
+    is_open: false,
+    date: '',
+    entries: []
+  });
+
+  // Load view preference from localStorage
+  useEffect(() => {
+    try {
+      const saved_view = localStorage.getItem('massimino_workout_view_mode');
+      if (saved_view === 'cards' || saved_view === 'table') {
+        set_view_mode(saved_view);
+      }
+    } catch (error) {
+      console.error('Failed to load view preference:', error);
+    }
+  }, []);
+
+  // Save view preference to localStorage when changed
+  useEffect(() => {
+    try {
+      localStorage.setItem('massimino_workout_view_mode', view_mode);
+    } catch (error) {
+      console.error('Failed to save view preference:', error);
+    }
+  }, [view_mode]);
 
   // Program subscription + prefill state
   const [programSubscriptions, setProgramSubscriptions] = useState<any[]>([]);
@@ -2126,9 +2161,37 @@ export default function WorkoutLogPage() {
         )}
 
         {!fetchingEntries && !error && workoutEntries.length > 0 && (
-          <div className="space-y-6">
-            {workoutEntries.map((entry: WorkoutEntry) => (
-              <Card key={entry.id}>
+          <>
+            {/* View Toggle */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Button
+                  variant={view_mode === 'cards' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => set_view_mode('cards')}
+                >
+                  <LayoutGrid className="h-4 w-4 mr-2" />
+                  Cards
+                </Button>
+                <Button
+                  variant={view_mode === 'table' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => set_view_mode('table')}
+                >
+                  <TableIcon className="h-4 w-4 mr-2" />
+                  Table
+                </Button>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                {workoutEntries.length} {workoutEntries.length === 1 ? 'entry' : 'entries'}
+              </div>
+            </div>
+
+            {/* Cards View */}
+            {view_mode === 'cards' && (
+              <div className="space-y-6">
+                {workoutEntries.map((entry: WorkoutEntry) => (
+                  <Card key={entry.id}>
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
@@ -2353,8 +2416,45 @@ export default function WorkoutLogPage() {
                 </div>
               </CardContent>
             </Card>
-            ))}
-          </div>
+                ))}
+              </div>
+            )}
+
+            {/* Table View */}
+            {view_mode === 'table' && (
+              <WorkoutSummaryTable
+                entries={workoutEntries}
+                on_view_details={(date, entries) => {
+                  set_workout_details_modal({
+                    is_open: true,
+                    date,
+                    entries
+                  });
+                }}
+              />
+            )}
+
+            {/* Workout Details Modal */}
+            <WorkoutDetailsModal
+              is_open={workout_details_modal.is_open}
+              on_close={() => set_workout_details_modal({ is_open: false, date: '', entries: [] })}
+              date={workout_details_modal.date}
+              entries={workout_details_modal.entries}
+              on_edit={(entry) => {
+                // Close modal and start editing
+                set_workout_details_modal({ is_open: false, date: '', entries: [] });
+                startEditing(entry);
+              }}
+              on_delete={(entry_id) => {
+                handleDeleteEntry(entry_id);
+                // Refresh modal data by removing the deleted entry
+                set_workout_details_modal(prev => ({
+                  ...prev,
+                  entries: prev.entries.filter(e => e.id !== entry_id)
+                }));
+              }}
+            />
+          </>
         )}
 
         {!fetchingEntries && !error && workoutEntries.length === 0 && (

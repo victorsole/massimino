@@ -15,6 +15,7 @@ import { Separator } from '@/components/ui/separator';
 import { updateEmailAction, submitTrainerAccreditationAction, updateProfileBasicsAction, uploadAvatarAction, deleteTrainerCredentialAction, updateSocialMediaAction, updateFitnessPreferencesAction, updateLocationAction, uploadMediaAction, updateMediaSettingsAction, uploadTrainerCertificateAction, updateWorkoutSharingAction } from './actions';
 import CameraCapture from '@/components/ui/camera_capture';
 import SocialMediaIntegration from '@/components/ui/social_media_integration';
+import PersonaliseBackground from '@/components/profile/personalise_background';
 import { Plus } from 'lucide-react';
 import Image from 'next/image';
 import { useFormStatus } from 'react-dom';
@@ -955,6 +956,9 @@ export default function ProfilePage() {
           </form>
         </CardContent>
       </Card>
+
+      {/* Personalise your Massimino */}
+      <PersonaliseBackground onUpdate={refreshProfile} />
 
       {/* Location & Discovery (Optional) */}
       <Card>

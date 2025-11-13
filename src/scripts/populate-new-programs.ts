@@ -12,6 +12,7 @@ import cardioWorkout from '../templates/cardio_workout.json';
 import flexibilityWorkout from '../templates/flexibility_workout.json';
 import balanceWorkout from '../templates/balance_workout.json';
 import plyometricWorkout from '../templates/plyometric_workout.json';
+import arnoldVolume from '../templates/arnold_volume.json';
 
 const prisma = new PrismaClient();
 
@@ -220,6 +221,48 @@ async function main() {
   });
   console.log('✅ I Just Became a Mum');
 
+  // ATHLETE PROGRAMS
+
+  // Get Arnold Schwarzenegger legendary athlete
+  const arnold = await prisma.legendary_athletes.findUnique({
+    where: { slug: 'arnold-schwarzenegger' },
+  });
+
+  if (!arnold) {
+    console.log('⚠️  Arnold Schwarzenegger not found - skipping arnold-volume-workout');
+  } else {
+    // Arnold Volume Workout
+    await prisma.program_templates.upsert({
+      where: { id: 'arnold-volume-workout' },
+      create: {
+        id: 'arnold-volume-workout',
+        name: arnoldVolume.program.name,
+        description: arnoldVolume.program.description,
+        duration: arnoldVolume.program.program_duration,
+        difficulty: 'ADVANCED',
+        category: 'HYPERTROPHY',
+        programType: 'ATHLETE',
+        athleteId: arnold.id,
+        isPublic: true,
+        isActive: true,
+        hasExerciseSlots: false,
+        rating: 0,
+        ratingCount: 0,
+        tags: ['Arnold Schwarzenegger', 'high volume', 'bodybuilding', 'advanced', '16 weeks', '6 days/week', 'Mr. Olympia'],
+        progressionStrategy: 'LINEAR',
+        templateData: arnoldVolume as any,
+        createdBy,
+        updatedAt: new Date(),
+      },
+      update: {
+        isActive: true,
+        isPublic: true,
+        templateData: arnoldVolume as any,
+      },
+    });
+    console.log('✅ Arnold Volume Workout');
+  }
+
   // COMPONENT PROGRAMS
 
   // 7. Cardio Workout
@@ -343,9 +386,12 @@ async function main() {
   console.log('✅ Plyometric Workout');
 
   console.log('\n=== SUMMARY ===');
-  console.log('Created/Updated 10 new programs:');
-  console.log('  - 6 LIFESTYLE programs');
-  console.log('  - 4 COMPONENT programs');
+  console.log('Created/Updated 11 new programs:');
+  console.log('  - 6 LIFESTYLE programs (Aesthetics Hunter, Time-Efficient, Beer Belly, Stress Relief, New Dad, New Mum)');
+  console.log('  - 1 additional ATHLETE program (Arnold Volume Workout)');
+  console.log('  - 4 COMPONENT programs (Cardio, Flexibility, Balance, Plyometric)');
+  console.log('\nNote: This script adds to the existing athlete programs from programs-seed.ts:');
+  console.log('  - Arnold\'s Golden Six, CBum PPL, Ronnie Mass Builder, Mentzer Heavy Duty');
   console.log('\nAll programs are now active and public!');
 }
 

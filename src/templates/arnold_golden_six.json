@@ -1,134 +1,486 @@
 {
-    "program_name": "Arnold's Golden Six",
+    "program": "Arnold's Golden Six - Foundation for Champions",
+    "author": "Arnold Schwarzenegger",
+    "era": "Golden Era Bodybuilding (1960s)",
+    "version": "2.0_enhanced",
     "program_id": "arnold-golden-six",
-    "description": "Arnold Schwarzenegger's beginner full-body workout routine designed to build a solid foundation of muscle mass and strength. This program is performed 3 times per week on non-consecutive days.",
-    "frequency": "3x per week (e.g., Monday, Wednesday, Friday)",
-    "duration": "8-12 weeks",
-    "level": "Beginner to Intermediate",
-    "goal": "Muscle mass and strength foundation",
-    "exercises": [
-      {
-        "exercise_id": "barbell-squat",
-        "exercise_name": "Barbell Back Squat",
-        "order": 1,
-        "sets": 4,
-        "reps": 10,
-        "rest_seconds": 90,
-        "tempo": "2-0-2-0",
-        "tempo_description": "2 sec down, no pause, 2 sec up, no pause",
-        "load_guidance": "Start with 40-60kg and progress weekly",
-        "load_percentage": "60-70% of 1RM",
-        "notes": "Focus on full depth and proper form. Go to parallel or below.",
-        "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
-        "equipment": ["barbell", "squat_rack"]
-      },
-      {
-        "exercise_id": "barbell-bench-press",
-        "exercise_name": "Wide Grip Barbell Bench Press",
-        "order": 2,
-        "sets": 3,
-        "reps": 10,
-        "rest_seconds": 90,
-        "tempo": "2-0-2-0",
-        "tempo_description": "2 sec down, no pause, 2 sec up, no pause",
-        "load_guidance": "Start with 30-50kg and progress weekly",
-        "load_percentage": "60-70% of 1RM",
-        "notes": "Grip wider than shoulder width. Lower bar to mid-chest. Full range of motion.",
-        "primary_muscle_groups": ["chest", "triceps", "anterior_deltoids"],
-        "equipment": ["barbell", "bench"]
-      },
-      {
-        "exercise_id": "chin-ups",
-        "exercise_name": "Chin-Ups (or Barbell Pullover)",
-        "order": 3,
-        "sets": 3,
-        "reps": 10,
-        "rest_seconds": 90,
-        "tempo": "2-0-2-0",
-        "tempo_description": "2 sec down, no pause, 2 sec up, no pause",
-        "load_guidance": "Bodyweight or assisted. For pullover: 10-20kg",
-        "load_percentage": "Bodyweight",
-        "notes": "If unable to do chin-ups, substitute with barbell pullovers or lat pulldowns. Focus on pulling with back, not arms.",
-        "primary_muscle_groups": ["lats", "biceps", "upper_back"],
-        "equipment": ["pull_up_bar"],
-        "alternative_exercise": {
-          "exercise_name": "Barbell Pullover",
-          "load_guidance": "10-20kg",
-          "notes": "Lie across bench, lower dumbbell/barbell behind head with slight arm bend"
-        }
-      },
-      {
-        "exercise_id": "overhead-press",
-        "exercise_name": "Overhead Barbell Press (Military Press)",
-        "order": 4,
-        "sets": 4,
-        "reps": 10,
-        "rest_seconds": 90,
-        "tempo": "2-0-2-0",
-        "tempo_description": "2 sec down, no pause, 2 sec up, no pause",
-        "load_guidance": "Start with 20-40kg and progress weekly",
-        "load_percentage": "50-60% of 1RM",
-        "notes": "Can be done standing or seated. Press bar straight overhead, lock out arms at top. Don't lean back excessively.",
-        "primary_muscle_groups": ["shoulders", "triceps", "upper_chest"],
-        "equipment": ["barbell"]
-      },
-      {
-        "exercise_id": "barbell-curl",
-        "exercise_name": "Barbell Curl",
-        "order": 5,
-        "sets": 3,
-        "reps": 10,
-        "rest_seconds": 60,
-        "tempo": "2-0-2-0",
-        "tempo_description": "2 sec down, no pause, 2 sec up, no pause",
-        "load_guidance": "Start with 15-25kg and progress weekly",
-        "load_percentage": "N/A",
-        "notes": "Keep elbows tucked at sides. No swinging or momentum. Strict form only.",
-        "primary_muscle_groups": ["biceps"],
-        "equipment": ["barbell"]
-      },
-      {
-        "exercise_id": "situps",
-        "exercise_name": "Sit-Ups",
-        "order": 6,
-        "sets": 4,
-        "reps": "To failure (minimum 20-25)",
-        "rest_seconds": 60,
-        "tempo": "2-0-2-0",
-        "tempo_description": "Controlled movement",
-        "load_guidance": "Bodyweight, can add 2.5-10kg plate for progression",
-        "load_percentage": "Bodyweight",
-        "notes": "Can substitute with crunches or decline sit-ups. Focus on contracting abs, not pulling with neck.",
-        "primary_muscle_groups": ["abs", "core"],
-        "equipment": ["mat"]
-      }
-    ],
-    "progression_strategy": {
-      "method": "Linear Progression",
-      "description": "Add 2.5-5kg to the bar each week when you can complete all sets with good form. For bodyweight exercises, add reps before adding weight.",
-      "deload_frequency": "Every 4-6 weeks, reduce load by 10% for one week"
+    "target_audience": "Beginners to Early Intermediate",
+    "duration_weeks": 12,
+    "session_duration_minutes": {
+      "min": 45,
+      "max": 60
     },
-    "warm_up": {
-      "description": "5-10 minutes light cardio + dynamic stretching + 2 warm-up sets with empty bar or light weight for first exercise",
-      "warm_up_sets": [
-        {
-          "set": 1,
-          "reps": 10,
-          "load": "Empty bar (20kg)"
-        },
-        {
-          "set": 2,
-          "reps": 5,
-          "load": "50% working weight"
-        }
+    "frequency_per_week": 3,
+    "rest_days_per_week": 4,
+    "level": "Beginner to Intermediate",
+    "settings": ["Gym (required - barbells needed)", "Commercial gym recommended"],
+    "equipment": {
+      "required": ["Barbell", "Squat rack", "Bench", "Pull-up bar", "Weight plates"],
+      "recommended": ["Lifting belt (for heavier squats)", "Chalk"],
+      "optional": ["Dip station"]
+    },
+
+    "program_philosophy": {
+      "origin": "This was Arnold's first structured program when he began serious training in Austria. Before the split routines and high volume that made him famous, Arnold built his foundation with this simple, effective full-body routine.",
+      "arnold_quote": "\"The Golden Six built my base. Every champion starts with mastering the fundamentals. You must walk before you run, and you must build a solid foundation before you sculpt a masterpiece.\"",
+      "core_principles": [
+        "Master the fundamental movement patterns",
+        "Train the whole body frequently (3x per week)",
+        "Progressive overload - add weight when you can complete all reps",
+        "Perfect form over heavy weight",
+        "Consistency and patience - this is a marathon, not a sprint"
       ]
     },
-    "cool_down": {
-      "description": "5-10 minutes of static stretching focusing on all major muscle groups worked"
+
+    "realistic_expectations": {
+      "historical_context": "Arnold used this program at age 15-17 before transitioning to more advanced split routines. This is NOT the routine that built his Mr. Olympia physique - that came later with much higher volume and intensity.",
+      "12_week_realistic_outcomes": [
+        "3-6kg muscle gain (with proper nutrition)",
+        "Strength increases of 50-100% in major lifts",
+        "Solid understanding of fundamental barbell movements",
+        "Improved work capacity and recovery",
+        "Foundation ready for intermediate programming"
+      ],
+      "12_weeks_will_not_achieve": [
+        "Arnold's physique (that took 8+ years of advanced training)",
+        "Massive arms or chest (need more volume and specialization)",
+        "Competition-ready condition",
+        "Elite strength levels"
+      ],
+      "timeline": {
+        "weeks_1_4": "Learning movements, neurological adaptation, minimal visible muscle",
+        "weeks_5_8": "Noticeable strength gains, some muscle fullness",
+        "weeks_9_12": "Visible muscle development, confident with all movements",
+        "after_12_weeks": "Ready to progress to Arnold's intermediate programs with split routines"
+      }
     },
-    "recovery_guidelines": {
-      "rest_days": "At least 1 day between workouts",
-      "sleep": "7-9 hours per night",
-      "nutrition": "Caloric surplus of 300-500 calories for muscle growth"
+
+    "training_schedule": {
+      "monday": "Full Body - Golden Six",
+      "tuesday": "Rest / Light Cardio",
+      "wednesday": "Full Body - Golden Six",
+      "thursday": "Rest / Light Cardio",
+      "friday": "Full Body - Golden Six",
+      "saturday": "Active Recovery (walking, stretching, sports)",
+      "sunday": "Complete Rest",
+      "rationale": "Training each muscle 3x per week maximizes protein synthesis for beginners. Full-body routines are superior for novices compared to body-part splits."
+    },
+
+    "phase_structure": [
+      {
+        "phase": "Foundation Building",
+        "weeks": [1, 2, 3, 4],
+        "focus": "Perfect form, establish work capacity, learn the movements",
+        "weight_progression": "Start with 50-60% of estimated max, focus on technique",
+        "sets_reps": "Use prescribed sets/reps but don't train to failure",
+        "key_principle": "Ego kills gains. Master the movement with lighter weight first."
+      },
+      {
+        "phase": "Progressive Overload",
+        "weeks": [5, 6, 7, 8],
+        "focus": "Increase weights weekly, build strength and mass",
+        "weight_progression": "Add 2.5-5kg per week when you complete all sets with good form",
+        "sets_reps": "Start taking final set close to failure (1-2 reps in reserve)",
+        "key_principle": "Consistent small increases beat erratic big jumps"
+      },
+      {
+        "phase": "Solidification",
+        "weeks": [9, 10, 11, 12],
+        "focus": "Consolidate gains, prepare for next phase",
+        "weight_progression": "Continue adding weight but expect slower progress",
+        "sets_reps": "Final sets to failure, maintain perfect form",
+        "key_principle": "Finish strong - this final push prepares you for intermediate training"
+      }
+    },
+
+    "the_six_exercises": [
+      {
+        "exercise_number": 1,
+        "exercise_name": "Barbell Back Squat",
+        "arnold_perspective": "The king of exercises. Squats built my legs and helped me add size all over my body. No squat, no mass.",
+        "sets": 4,
+        "reps": 10,
+        "rest_seconds": 90,
+        "tempo": "2-0-2-0",
+        "load_guidance": "Start with 40-60kg, aim for 80-100kg by week 12",
+        "primary_muscles": ["Quadriceps", "Glutes", "Hamstrings", "Core"],
+        "form_cues": [
+          "Bar on upper traps, not neck",
+          "Chest up, core braced",
+          "Knees track over toes",
+          "Descend to parallel or below",
+          "Drive through heels",
+          "Full lockout at top"
+        ],
+        "common_mistakes": [
+          "Leaning too far forward (weak core)",
+          "Knees caving inward (weak glutes)",
+          "Not going deep enough",
+          "Bouncing out of the hole"
+        ],
+        "progression_notes": "This will likely be your slowest progressing lift. That's normal. 2.5-5kg per week is excellent."
+      },
+      {
+        "exercise_number": 2,
+        "exercise_name": "Wide Grip Barbell Bench Press",
+        "arnold_perspective": "I built my chest foundation with heavy barbell pressing. The pump you get is unmatched.",
+        "sets": 3,
+        "reps": 10,
+        "rest_seconds": 90,
+        "tempo": "2-0-2-0",
+        "load_guidance": "Start with 30-50kg, aim for 60-80kg by week 12",
+        "primary_muscles": ["Pectorals", "Front Deltoids", "Triceps"],
+        "form_cues": [
+          "Grip wider than shoulder-width",
+          "Retract shoulder blades",
+          "Bar touches mid-chest",
+          "Elbows at 45-degree angle",
+          "Press in slight arc back to start",
+          "Squeeze chest at top"
+        ],
+        "common_mistakes": [
+          "Bouncing bar off chest",
+          "Flaring elbows too wide (shoulder injury risk)",
+          "Partial reps",
+          "Lifting butt off bench"
+        ],
+        "progression_notes": "Upper body typically progresses faster than lower body for beginners. Enjoy it while it lasts!"
+      },
+      {
+        "exercise_number": 3,
+        "exercise_name": "Chin-Ups (or Barbell Pullover)",
+        "arnold_perspective": "Chin-ups built width in my lats. If you can't do them yet, use pulldowns or pullovers and work toward them.",
+        "sets": 3,
+        "reps": 10,
+        "rest_seconds": 90,
+        "tempo": "2-0-2-0",
+        "load_guidance": "Bodyweight (use assistance if needed)",
+        "primary_muscles": ["Latissimus Dorsi", "Biceps", "Rear Deltoids"],
+        "form_cues": [
+          "Underhand grip, shoulder-width",
+          "Dead hang start",
+          "Pull until chin over bar",
+          "Control descent",
+          "No kipping or swinging"
+        ],
+        "common_mistakes": [
+          "Partial range of motion",
+          "Using momentum",
+          "Not engaging lats (pulling with arms only)"
+        ],
+        "progression_notes": "Can't do 10 chin-ups yet? Use lat pulldowns at 70-80% bodyweight, or do negative chin-ups. Add 1 rep per week.",
+        "alternative_exercise": {
+          "exercise_name": "Barbell Pullover",
+          "sets": 3,
+          "reps": 10,
+          "load_guidance": "10-20kg barbell or dumbbell",
+          "form_cues": [
+            "Lie across bench (perpendicular)",
+            "Hold barbell with straight arms",
+            "Lower behind head with slight bend",
+            "Feel stretch in lats and chest",
+            "Pull back over chest"
+          ]
+        }
+      },
+      {
+        "exercise_number": 4,
+        "exercise_name": "Overhead Barbell Press (Military Press)",
+        "arnold_perspective": "For big, strong shoulders. This exercise separates champions from casual lifters.",
+        "sets": 4,
+        "reps": 10,
+        "rest_seconds": 90,
+        "tempo": "2-0-2-0",
+        "load_guidance": "Start with 20-40kg, aim for 40-60kg by week 12",
+        "primary_muscles": ["Deltoids (all three heads)", "Triceps", "Upper Chest"],
+        "form_cues": [
+          "Bar starts at upper chest",
+          "Core tight, glutes squeezed",
+          "Press straight up",
+          "Head moves back slightly as bar passes",
+          "Full lockout overhead",
+          "Don't hyperextend lower back"
+        ],
+        "common_mistakes": [
+          "Excessive back arch (ego lifting)",
+          "Not pressing to full lockout",
+          "Bar drifts forward",
+          "Partial range of motion"
+        ],
+        "progression_notes": "Overhead press is often the hardest to progress. Adding 1kg per week is excellent progress."
+      },
+      {
+        "exercise_number": 5,
+        "exercise_name": "Barbell Curl",
+        "arnold_perspective": "Everyone wants big arms. Barbell curls with strict form build them. No cheating!",
+        "sets": 3,
+        "reps": 10,
+        "rest_seconds": 60,
+        "tempo": "2-0-2-0",
+        "load_guidance": "Start with 15-25kg, aim for 30-40kg by week 12",
+        "primary_muscles": ["Biceps", "Forearms"],
+        "form_cues": [
+          "Shoulder-width grip",
+          "Elbows pinned to sides",
+          "No swinging or momentum",
+          "Curl to full contraction",
+          "Control the negative",
+          "Squeeze at top"
+        ],
+        "common_mistakes": [
+          "Swinging the weight (using back/shoulders)",
+          "Moving elbows forward",
+          "Partial reps",
+          "Dropping the weight on the way down"
+        ],
+        "progression_notes": "Arms recover quickly. You may progress every workout at first."
+      },
+      {
+        "exercise_number": 6,
+        "exercise_name": "Sit-Ups",
+        "arnold_perspective": "A strong core is the foundation of a strong body. I did hundreds of sit-ups daily.",
+        "sets": 4,
+        "reps": "To failure (minimum 20-25 per set)",
+        "rest_seconds": 60,
+        "tempo": "Controlled",
+        "load_guidance": "Bodyweight, progress to holding 2.5-10kg plate",
+        "primary_muscles": ["Rectus Abdominis", "Hip Flexors", "Obliques"],
+        "form_cues": [
+          "Feet anchored or bent knees",
+          "Curl up rather than hinging at hips",
+          "Contract abs throughout",
+          "Don't pull on neck",
+          "Controlled descent"
+        ],
+        "common_mistakes": [
+          "Using hip flexors instead of abs",
+          "Jerking and using momentum",
+          "Pulling on neck/head",
+          "Not using full range of motion"
+        ],
+        "progression_notes": "Progress by adding reps first (aim for 50+ per set), then add weight. Modern alternative: planks and ab wheel are excellent additions."
+      }
+    ],
+
+    "workout_structure": {
+      "total_time": "45-60 minutes",
+      "warm_up": "10 minutes",
+      "work_sets": "30-40 minutes",
+      "cool_down": "5-10 minutes",
+      "warm_up_protocol": [
+        "5 min light cardio (bike, row, or jog)",
+        "Dynamic stretching (leg swings, arm circles)",
+        "2 warm-up sets for squats: empty bar x 10, then 50% working weight x 5",
+        "1 warm-up set for each subsequent exercise"
+      ],
+      "rest_between_exercises": "Walk around, stay warm, 2-3 minutes maximum",
+      "session_order": "Always perform in this order: Squat → Bench → Chin-up → Press → Curl → Sit-ups. The order matters for energy management."
+    },
+
+    "progression_strategy": {
+      "method": "Linear Progression",
+      "description": "Add weight every week when you successfully complete all prescribed sets and reps with good form.",
+      "progression_rate": {
+        "squats": "2.5-5kg per week",
+        "bench_press": "2.5-5kg per week",
+        "chin_ups": "+1 rep per week or add weight vest",
+        "overhead_press": "1-2.5kg per week",
+        "barbell_curl": "1-2.5kg per week",
+        "sit_ups": "+5 reps per week or add weight"
+      },
+      "when_to_deload": "Every 4-6 weeks, reduce all weights by 10% for one full week. This allows recovery and prevents burnout.",
+      "what_if_you_stall": [
+        "Check nutrition (eating enough?)",
+        "Check sleep (7-9 hours?)",
+        "Check form (video yourself)",
+        "Deload for a week",
+        "Reset that lift by 10% and build back up"
+      ]
+    },
+
+    "nutrition_principles": {
+      "caloric_approach": "You MUST eat in a surplus to build muscle. 300-500 calories above maintenance.",
+      "how_to_find_maintenance": "Bodyweight (kg) x 33 = approximate maintenance calories. Add 300-500 for muscle gain.",
+      "protein_target": "1.8-2.2g per kg bodyweight daily (140-175g for a 80kg person)",
+      "carbohydrates": "Main energy source. 4-6g per kg bodyweight. Don't fear carbs - you need them to train hard and recover.",
+      "healthy_fats": "1g per kg bodyweight minimum for hormone production",
+      "meal_timing": "Eat protein every 3-4 hours. Have carbs before and after training.",
+      "hydration": "3-4 liters of water daily, more if you sweat heavily",
+      "arnold_nutrition_philosophy": "Arnold ate 5-6 meals per day with lots of meat, eggs, dairy, and carbs. No fancy supplements - just real food and hard work.",
+      "sample_day": [
+        "Breakfast: 4 eggs, oatmeal, fruit",
+        "Snack: Protein shake, banana",
+        "Lunch: Chicken breast, rice, vegetables",
+        "Pre-workout: Sandwich, fruit",
+        "Post-workout: Protein shake",
+        "Dinner: Steak, potatoes, salad",
+        "Before bed: Cottage cheese or casein protein"
+      ],
+      "common_mistakes": [
+        "Not eating enough (you can't build muscle in a deficit)",
+        "Too much junk food (eat clean 80% of the time)",
+        "Skipping meals",
+        "Not tracking anything (at least track protein)"
+      ]
+    },
+
+    "supplements": {
+      "arnold_era": "In the 1960s, Arnold had access to basic protein powder, vitamins, and liver tablets. That's it. No pre-workouts, no fancy supplements. Just food and hard work.",
+      "actually_useful_today": {
+        "creatine_monohydrate": "5g daily. Proven, safe, effective. Arnold would have loved this.",
+        "protein_powder": "Convenient for hitting protein targets. Whey is fine.",
+        "multivitamin": "Insurance policy for micronutrients",
+        "fish_oil": "If not eating fatty fish 2-3x per week"
+      },
+      "waste_of_money": [
+        "Pre-workouts (caffeine is fine but overpriced)",
+        "BCAAs (unnecessary with adequate protein)",
+        "Fat burners (don't work)",
+        "Testosterone boosters (don't work for natural lifters)",
+        "Most supplements"
+      ]
+    },
+
+    "recovery_and_lifestyle": {
+      "sleep": {
+        "minimum": "7 hours",
+        "optimal": "8-9 hours",
+        "why_it_matters": "You grow when you sleep, not when you train. Arnold slept 8 hours plus napped. Recovery is non-negotiable.",
+        "sleep_tips": [
+          "Same bedtime every night",
+          "Dark, cool room (16-19°C)",
+          "No screens 1 hour before bed",
+          "No caffeine after 2 PM"
+        ]
+      },
+      "stress_management": "Training is a stressor. Life stress + training stress = too much stress. Manage your total stress load.",
+      "rest_days": "Completely necessary. Your muscles grow on rest days. Active recovery (walking, stretching, light swimming) is fine.",
+      "overtraining_signs": [
+        "Persistent fatigue",
+        "Declining performance",
+        "Sleep problems",
+        "Irritability",
+        "Loss of appetite",
+        "Getting sick frequently"
+      ]
+    },
+
+    "injury_prevention": {
+      "warm_up_always": "Never skip the warm-up. Cold muscles tear easily.",
+      "form_over_weight": "Perfect form with 50kg beats terrible form with 100kg. Injuries set you back months.",
+      "listen_to_your_body": {
+        "good_pain": "Muscle burn, muscle soreness (DOMS) 24-48hrs after training",
+        "bad_pain": "Sharp pain, joint pain, pain during the movement - STOP IMMEDIATELY"
+      },
+      "common_beginner_injuries": {
+        "lower_back_strain": {
+          "cause": "Poor squat/deadlift form, weak core",
+          "prevention": "Film yourself, focus on bracing, strengthen core"
+        },
+        "shoulder_pain": {
+          "cause": "Bench pressing with flared elbows, overhead pressing with excessive arch",
+          "prevention": "Elbows at 45° on bench, don't hyperextend on press, strengthen rotator cuff"
+        },
+        "elbow_tendonitis": {
+          "cause": "Too much curling volume, ego lifting",
+          "prevention": "Perfect form, warm up elbows, don't train through pain"
+        }
+      },
+      "when_injured": "REST. See a doctor/physio. Don't be a hero. Arnold had several injuries that sidelined him - learn from mistakes."
+    },
+
+    "mental_approach": {
+      "arnold_mindset": [
+        "\"The mind is the limit. As long as the mind can envision you doing something, you can do it, as long as you really believe 100%.\"",
+        "\"Strength does not come from winning. Your struggles develop your strengths.\"",
+        "\"The worst thing I can be is the same as everybody else.\"",
+        "\"The resistance that you fight physically in the gym and the resistance that you fight in life can only build a strong character.\""
+      ],
+      "visualization": "Arnold famously visualized his biceps as mountains. See yourself successful BEFORE you are.",
+      "consistency_over_intensity": "Missing one workout won't hurt you. Missing consistently destroys progress. Show up even when you don't feel like it.",
+      "enjoy_the_process": "This is a 12-week program, but fitness is a lifetime journey. Fall in love with the process, not just the outcome.",
+      "avoid_comparison": "Don't compare yourself to Arnold's peak physique or other people in the gym. Compare yourself to yourself yesterday."
+    },
+
+    "progress_tracking": {
+      "week_0_baseline": {
+        "photos": "Front, side, back (relaxed + flexed), same lighting, same time of day, same pose",
+        "measurements_cm": ["Weight", "Chest", "Waist", "Arms flexed (both)", "Thighs", "Calves", "Shoulders"],
+        "strength_baselines": {
+          "squat": "Test 1RM or use your starting working weight",
+          "bench_press": "Test 1RM or use starting weight",
+          "chin_ups": "Max reps unassisted",
+          "overhead_press": "Starting weight",
+          "barbell_curl": "Starting weight"
+        }
+      },
+      "weekly_tracking": {
+        "weight": "Every Monday morning, same conditions",
+        "workout_log": "Record every set, every rep, every weight - NO EXCEPTIONS",
+        "how_you_feel": "Energy level, sleep quality, soreness"
+      },
+      "week_4_check": "Weight (+0.5-1.5kg expected), compare strength (should be 10-20% up), photos",
+      "week_8_check": "Weight (+1.5-3kg expected), compare strength (should be 30-50% up), all measurements, photos",
+      "week_12_final": "Full reassessment, side-by-side photo comparison, celebrate improvements, plan next phase"
+    },
+
+    "after_the_golden_six": {
+      "you_have_built": [
+        "Solid strength foundation",
+        "3-6kg of muscle mass",
+        "Proper movement patterns",
+        "Discipline and consistency",
+        "Base for intermediate training"
+      ],
+      "next_steps": [
+        "Option 1: Arnold's Volume Program (high volume split routine)",
+        "Option 2: Upper/Lower split 4x per week",
+        "Option 3: Push/Pull/Legs 6x per week",
+        "Option 4: Repeat Golden Six with heavier weights for another 8-12 weeks"
+      ],
+      "long_term_reality": "Arnold trained for 8 years before his first Mr. Olympia. This 12-week program is step 1 of a multi-year journey. Be patient.",
+      "maintenance": "Once you achieve your goals, you'll need to train 2-3x per week to maintain. But building takes years of consistent effort."
+    },
+
+    "frequently_asked_questions": {
+      "q1": {
+        "question": "Can I add exercises to the Golden Six?",
+        "answer": "No. The program is called the Golden SIX, not the Golden Ten. Adding exercises reduces recovery and dilutes focus. Trust the program."
+      },
+      "q2": {
+        "question": "Can I train 4-5 days per week instead of 3?",
+        "answer": "No. You grow when you rest. More is not better for beginners. 3x per week is optimal. Advanced lifters can train more because they've adapted over years."
+      },
+      "q3": {
+        "question": "What if I can't do chin-ups?",
+        "answer": "Use the lat pulldown machine at 70-80% of your bodyweight, or do barbell pullovers, or do negative chin-ups (jump up, lower slowly). Work toward unassisted chin-ups."
+      },
+      "q4": {
+        "question": "Can I do this program at home?",
+        "answer": "You need a barbell, weights, squat rack, bench, and pull-up bar minimum. If you have these, yes. If not, you need a gym."
+      },
+      "q5": {
+        "question": "How long can I run this program?",
+        "answer": "12 weeks is ideal. You can extend to 16 weeks if still making progress. After that, you need more volume and variety."
+      },
+      "q6": {
+        "question": "Should I do cardio?",
+        "answer": "Light cardio (walking, easy cycling) on rest days is fine. Don't do intense cardio that interferes with recovery. 2-3 sessions of 20-30 minutes maximum."
+      },
+      "q7": {
+        "question": "What if I'm not getting stronger every week?",
+        "answer": "Check: Are you eating enough? Sleeping enough? Using proper form? If yes to all, take a deload week and try again. Progress isn't always linear."
+      },
+      "q8": {
+        "question": "Can women do this program?",
+        "answer": "Absolutely. The same principles apply. Women may progress slightly slower on upper body but can often match or exceed men on lower body progression."
+      }
+    },
+
+    "historical_context": {
+      "when_arnold_used_this": "1960-1962, age 13-15, training in Graz, Austria",
+      "how_it_fit_in_his_journey": "This was the beginning. Arnold outgrew this program after 18-24 months and moved to high-volume split routines. The Golden Six built his foundation.",
+      "training_environment": "Arnold trained in a basic gym with minimal equipment. No fancy machines, no supplements, just barbells and iron will.",
+      "golden_era_philosophy": "The Golden Era (1960s-1970s) focused on: full-body workouts for beginners, compound movements, high frequency, eating huge amounts of food, and unwavering dedication."
     }
   }
