@@ -1,0 +1,402 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "template_version": "1.0.0",
+  "last_updated": "2025-11-02",
+  "description": "Standard Massimino workout template - Foundation structure for all workout routine and log templates",
+
+  "metadata": {
+    "program_name": "Template Program Name",
+    "program_id": "unique-program-identifier",
+    "author": "Program Author/Creator Name",
+    "version": "1.0",
+    "creation_date": "YYYY-MM-DD",
+    "description": "Brief description of the program goals and approach",
+    "goal": "Primary goal (e.g., Muscle Gain, Fat Loss, Strength, Endurance, Recovery, etc.)",
+    "methodology": "Training methodology or system used (e.g., OPT Model, Linear Periodization, PPL, etc.)",
+    "target_audience": "Who this program is designed for (e.g., Beginners, Intermediate, Advanced, Postpartum, etc.)",
+    "level": "Beginner | Intermediate | Advanced | Sport-Specific",
+    "settings": ["Home", "Gym", "Outdoor", "Minimal Equipment"],
+    "duration_weeks": 0,
+    "total_workouts": 0,
+    "frequency_per_week": 0,
+    "session_duration_minutes": {
+      "min": 0,
+      "max": 0
+    }
+  },
+
+  "equipment_required": [
+    "List of equipment needed",
+    "e.g., Barbell and plates",
+    "Dumbbells",
+    "Resistance bands",
+    "etc."
+  ],
+
+  "prerequisites": {
+    "required": [
+      "Any required clearances or assessments",
+      "e.g., Medical clearance",
+      "Movement screening",
+      "Baseline fitness assessment"
+    ],
+    "recommended": [
+      "Recommended but not mandatory prerequisites"
+    ]
+  },
+
+  "contraindications_and_warnings": {
+    "red_flags_to_stop": [
+      "Pain signals that require stopping exercise",
+      "Abnormal symptoms that require medical consultation"
+    ],
+    "modifications_needed_for": [
+      "Conditions requiring exercise modifications",
+      "e.g., Lower back issues, shoulder impingement, etc."
+    ]
+  },
+
+  "program_goals": {
+    "primary_goal": "Main outcome goal of the program",
+    "outcome_goals": [
+      "Specific measurable outcomes",
+      "e.g., Increase 1RM by X%, Run 5k under Y minutes"
+    ],
+    "progress_goals": [
+      "Milestone goals throughout the program",
+      "Week-by-week or phase-by-phase targets"
+    ],
+    "safety_goal": "Primary safety focus (especially for special populations)"
+  },
+
+  "training_philosophy": {
+    "key_principles": [
+      "Core training principles guiding the program",
+      "e.g., Progressive overload",
+      "Compound movements before isolation",
+      "Balanced muscle development"
+    ],
+    "training_approach": "Description of the overall training approach and strategy",
+    "volume_justification": "Explanation of set/rep/volume choices",
+    "sustainability": "How the program ensures long-term adherence and injury prevention"
+  },
+
+  "periodization": {
+    "type": "Linear | Undulating | Block | Concurrent | Wave Loading | Rotating Emphasis",
+    "phases_covered": [
+      {
+        "phase": 1,
+        "phase_name": "Phase Name",
+        "duration": "Weeks X-Y or Workouts A-B",
+        "focus": "Primary focus of this phase",
+        "volume": "Sets x Reps structure",
+        "intensity": "% of 1RM or RPE range",
+        "tempo": "Eccentric-Pause-Concentric-Pause notation",
+        "rest_periods": "Rest between sets (seconds)",
+        "key_adaptations": "Physiological adaptations targeted"
+      }
+    ],
+    "mesocycles": [
+      {
+        "mesocycle_number": 1,
+        "name": "Mesocycle Name",
+        "weeks": "Week range",
+        "focus": "Primary focus",
+        "progression_notes": "How to progress through this mesocycle",
+        "microcycles": [
+          {
+            "microcycle_number": 1,
+            "week_number": 1,
+            "emphasis": "Weekly emphasis or theme",
+            "notes": "Any specific notes for this week"
+          }
+        ]
+      }
+    ],
+    "deload_protocol": {
+      "frequency": "Every X weeks",
+      "method": "Volume reduction | Intensity reduction | Active recovery",
+      "volume_reduction": "Percentage reduction (e.g., 50%)",
+      "intensity_reduction": "Percentage reduction (e.g., 70%)",
+      "notes": "Deload implementation details"
+    }
+  },
+
+  "warm_up_protocol": {
+    "general_warmup": {
+      "duration_minutes": 5,
+      "activities": [
+        "Light cardio options",
+        "Dynamic stretching",
+        "Joint mobility work"
+      ],
+      "description": "Purpose and execution of general warm-up"
+    },
+    "specific_warmup": {
+      "description": "Movement-specific warm-up before heavy compounds",
+      "sets": [
+        {
+          "set": 1,
+          "load": "% of working weight or description",
+          "reps": 0,
+          "rest_seconds": 0,
+          "notes": "Focus and purpose"
+        }
+      ]
+    }
+  },
+
+  "workout_structure_template": {
+    "sections": [
+      {
+        "section_name": "warm_up",
+        "description": "Prepare body for training, elevate heart rate, mobilize joints",
+        "exercises": []
+      },
+      {
+        "section_name": "activation",
+        "description": "Core activation, balance work, movement preparation",
+        "category": "Core & Balance",
+        "exercises": []
+      },
+      {
+        "section_name": "skill_development",
+        "description": "Plyometrics, speed, agility, quickness (SAQ), skill work",
+        "category": "Plyometric & SAQ",
+        "exercises": []
+      },
+      {
+        "section_name": "resistance_training",
+        "description": "Main strength/hypertrophy work",
+        "structure": "Straight Sets | Supersets | Circuits | AMRAP | EMOM | etc.",
+        "exercises": []
+      },
+      {
+        "section_name": "athletes_choice",
+        "description": "Client-selected exercises, optional finishers, or additional work",
+        "exercises": []
+      },
+      {
+        "section_name": "cool_down",
+        "description": "Lower heart rate, static stretching, foam rolling, recovery",
+        "exercises": []
+      }
+    ]
+  },
+
+  "exercise_template": {
+    "exercise_name": "Name of the exercise",
+    "exercise_id": "unique-exercise-identifier",
+    "category": "compound | isolation | plyometric | cardio | mobility | core | balance",
+    "pattern": "Squat | Hinge | Push | Pull | Press | Lunge | Rotation | Anti-rotation | Loaded Carry",
+    "muscle_groups": ["primary", "secondary", "tertiary"],
+    "primary_muscle_groups": ["main muscles targeted"],
+    "equipment": ["equipment needed for this exercise"],
+    "sets": 0,
+    "reps": 0,
+    "tempo": "Eccentric-Pause-Concentric-Pause (e.g., 3-0-1-0)",
+    "tempo_description": "Human-readable tempo explanation",
+    "rest_seconds": 0,
+    "weight_kg": "Number or 'bodyweight' or description",
+    "load_guidance": "How to select appropriate load",
+    "load_percentage": "% of 1RM if applicable",
+    "tr_intensity": 0,
+    "rpe": 0,
+    "rir": 0,
+    "notes": "Form cues, coaching points, safety considerations",
+    "alternative_exercise": {
+      "exercise_name": "Alternative if primary cannot be performed",
+      "notes": "When and why to use alternative"
+    }
+  },
+
+  "superset_template": {
+    "superset_number": 1,
+    "type": "Superset | Triset | Giant Set",
+    "body_part": "Target body part or movement pattern",
+    "exercises": [
+      {
+        "exercise_name": "First exercise",
+        "sets": 0,
+        "reps": 0,
+        "tempo": "tempo",
+        "rest_seconds": 0,
+        "notes": "Exercise-specific notes"
+      }
+    ],
+    "rest_between_exercises_seconds": 0,
+    "rest_after_superset_seconds": 0,
+    "notes": "Superset-specific instructions"
+  },
+
+  "circuit_template": {
+    "circuit_name": "Circuit Name",
+    "rounds": 0,
+    "exercises_in_circuit": [
+      {
+        "exercise_name": "Exercise name",
+        "reps": 0,
+        "duration_seconds": 0,
+        "notes": "Exercise notes"
+      }
+    ],
+    "rest_between_exercises_seconds": 0,
+    "rest_after_circuit_seconds": 0,
+    "notes": "Circuit execution notes"
+  },
+
+  "progression_strategy": {
+    "primary_method": "Progressive overload method (e.g., Linear, Double, Wave)",
+    "when_to_progress": "Criteria for increasing difficulty",
+    "how_to_progress": [
+      "Increase weight by X kg",
+      "Add reps when reaching top of range",
+      "Reduce rest periods",
+      "Increase tempo difficulty",
+      "Add sets",
+      "Increase range of motion",
+      "Progress exercise variation"
+    ],
+    "progression_by_phase": {
+      "phase_1": "Phase-specific progression guidance",
+      "phase_2": "Phase-specific progression guidance"
+    },
+    "autoregulation": "How to adjust based on readiness, RPE, velocity, etc.",
+    "stalling_protocol": "What to do if progress stalls"
+  },
+
+  "nutrition_guidelines": {
+    "caloric_target": "Surplus | Deficit | Maintenance + specific amount",
+    "macronutrient_targets": {
+      "protein": "g per kg bodyweight or total grams",
+      "carbohydrates": "g per kg bodyweight or total grams",
+      "fats": "g per kg bodyweight or total grams"
+    },
+    "meal_timing": {
+      "pre_workout": "Timing and composition",
+      "post_workout": "Timing and composition",
+      "daily_structure": "Number of meals, timing strategy"
+    },
+    "hydration": "Daily water intake recommendations",
+    "supplements": {
+      "essential": ["Critical supplements for this program"],
+      "optional": ["Beneficial but not required supplements"]
+    },
+    "program_specific_notes": "Nutrition guidance specific to program goals"
+  },
+
+  "recovery_protocols": {
+    "sleep": "Recommended hours and quality guidance",
+    "rest_days": "Number and scheduling of rest days",
+    "active_recovery": "Active recovery recommendations",
+    "tissue_work": "Foam rolling, massage, stretching protocols",
+    "stress_management": "Stress management importance and techniques",
+    "monitoring": "What to track for recovery (HRV, soreness, sleep quality, etc.)"
+  },
+
+  "injury_prevention": {
+    "warm_up_mandatory": "Warm-up requirements and non-negotiables",
+    "form_over_ego": "Form standards and when to reduce weight",
+    "listen_to_body": "Pain vs. discomfort education",
+    "joint_health": "Joint-specific protection strategies",
+    "muscle_balance": "Strategies to maintain muscle balance and prevent imbalances",
+    "common_mistakes": "Common errors to avoid",
+    "critical_form_cues": {
+      "exercise_name": "Critical cues for high-risk exercises"
+    }
+  },
+
+  "testing_protocols": {
+    "strength_testing": {
+      "frequency": "How often to test",
+      "method": "1RM, 3RM, 5RM, AMRAP, etc.",
+      "exercises": ["Exercises to test"],
+      "notes": "Testing guidelines and safety"
+    },
+    "body_composition": {
+      "frequency": "How often to assess",
+      "measurements": ["What to measure"],
+      "consistency": "How to ensure consistent measurements"
+    },
+    "performance_testing": {
+      "frequency": "How often to test performance",
+      "tests": ["Specific performance tests"],
+      "benchmarks": "Performance benchmarks and standards"
+    }
+  },
+
+  "progress_tracking": {
+    "tracking_metrics": [
+      "Body weight and composition",
+      "Circumference measurements",
+      "Progress photos",
+      "Strength metrics",
+      "Performance metrics",
+      "Energy levels and recovery",
+      "Sleep quality",
+      "Mood and well-being"
+    ],
+    "baseline_assessment": "What to measure before starting",
+    "check_in_frequency": "How often to assess progress",
+    "milestone_goals": {
+      "week_X": ["Goals to achieve by this timepoint"]
+    }
+  },
+
+  "special_populations": {
+    "population_name": {
+      "modifications": [
+        "Specific modifications needed"
+      ],
+      "contraindications": [
+        "Exercises or movements to avoid"
+      ],
+      "progressions": "How to progress this population safely"
+    }
+  },
+
+  "program_notes": {
+    "philosophy": "Overall program philosophy and approach",
+    "ideal_user": "Who will benefit most from this program",
+    "customization": "How trainers can customize for individual clients",
+    "sustainability": "What makes this program sustainable long-term",
+    "after_completion": "What to do after completing the program",
+    "important_notes": [
+      "Critical information for success",
+      "Common questions and answers"
+    ]
+  },
+
+  "implementation_for_massimino": {
+    "usage": "How this template should be used in the Massimino platform",
+    "customization": "Fields that should be customized per client",
+    "tracking_integration": "How to integrate with workout logging",
+    "ai_trainer_guidelines": "Guidance for AI trainer to use this template",
+    "template_data_requirements": "What templateData is required for rich display"
+  },
+
+  "template_fields_reference": {
+    "required_fields": [
+      "metadata.program_name",
+      "metadata.goal",
+      "metadata.duration_weeks"
+    ],
+    "optional_fields": [
+      "Fields that may be omitted depending on program type"
+    ],
+    "conditional_fields": [
+      "Fields required only in certain program types"
+    ]
+  },
+
+  "version_history": {
+    "1.0.0": {
+      "date": "2025-11-02",
+      "changes": [
+        "Initial standard template creation",
+        "Analyzed all existing templates to create comprehensive foundation",
+        "Includes support for all common program types: periodized, split, circuit, special populations"
+      ]
+    }
+  }
+}

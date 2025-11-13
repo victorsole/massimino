@@ -1,0 +1,1907 @@
+{
+    "workout_program": {
+      "metadata": {
+        "program_name": "Hybrid Emphasis Training System",
+        "version": "1.0",
+        "author": "Victor Solé Ferioli",
+        "creation_date": "2025-11-02",
+        "duration_weeks": 16,
+        "training_philosophy": "Rotating emphasis approach with balanced volume, sustainable progression, and proper recovery periods",
+        "target_audience": "Advanced trainees with 2+ years consistent training experience",
+        "equipment_required": [
+          "Barbell and plates",
+          "Dumbbells (adjustable preferred)",
+          "Cable machine",
+          "Leg press/hack squat",
+          "Pull-up bar",
+          "Bench (flat, incline)",
+          "Squat rack",
+          "Resistance bands"
+        ],
+        "key_principles": [
+          "15-20 sets per muscle group per week (emphasis weeks: 20-25 sets)",
+          "Progressive overload: +2-5kg per mesocycle on main lifts",
+          "True deload: Week 4 of each mesocycle (50% volume, 70% intensity)",
+          "Compounds before isolation",
+          "2:1 pull to push ratio for shoulder health",
+          "Mandatory warm-up protocols"
+        ]
+      },
+      "warm_up_protocol": {
+        "general_warmup": {
+          "duration_minutes": 5,
+          "activities": [
+            "Light cardio (treadmill, bike, rowing)",
+            "Dynamic stretching",
+            "Joint rotations (ankles, knees, hips, shoulders)"
+          ]
+        },
+        "specific_warmup": {
+          "description": "Before first compound exercise of each session",
+          "sets": [
+            {
+              "set": 1,
+              "load": "Empty bar or 30% working weight",
+              "reps": 10,
+              "rest_seconds": 60
+            },
+            {
+              "set": 2,
+              "load": "50% working weight",
+              "reps": 8,
+              "rest_seconds": 90
+            },
+            {
+              "set": 3,
+              "load": "75% working weight",
+              "reps": 5,
+              "rest_seconds": 120
+            }
+          ]
+        }
+      },
+      "mesocycles": [
+        {
+          "mesocycle_number": 1,
+          "name": "Foundation Phase",
+          "weeks": "1-4",
+          "focus": "Establishing baseline, learning movement patterns, building work capacity",
+          "microcycles": [
+            {
+              "microcycle_number": 1,
+              "week_number": 1,
+              "emphasis": "Leg Emphasis",
+              "days": [
+                {
+                  "day_number": 1,
+                  "name": "Leg Emphasis Day",
+                  "type": "resistance_training",
+                  "target_duration_minutes": 75,
+                  "exercises": [
+                    {
+                      "order": 1,
+                      "name": "Box Jumps",
+                      "category": "plyometric",
+                      "muscle_groups": ["quads", "glutes", "explosive_power"],
+                      "sets": 3,
+                      "reps": 6,
+                      "weight_kg": "bodyweight",
+                      "rest_seconds": 120,
+                      "tempo": "explosive",
+                      "notes": "Focus on landing softly, full hip extension"
+                    },
+                    {
+                      "order": 2,
+                      "name": "Back Squat",
+                      "category": "compound",
+                      "muscle_groups": ["quads", "glutes", "core"],
+                      "sets": 4,
+                      "reps": 10,
+                      "weight_kg": 60,
+                      "rest_seconds": 180,
+                      "tempo": "3-0-1-0",
+                      "notes": "Primary leg builder. Keep chest up, depth to parallel minimum",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 3,
+                      "name": "Romanian Deadlift",
+                      "category": "compound",
+                      "muscle_groups": ["hamstrings", "glutes", "lower_back"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 50,
+                      "rest_seconds": 120,
+                      "tempo": "3-0-1-0",
+                      "notes": "Keep slight knee bend, hinge at hips, feel hamstring stretch",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 4,
+                      "name": "Walking Lunges (DB)",
+                      "category": "unilateral",
+                      "muscle_groups": ["quads", "glutes", "balance"],
+                      "sets": 3,
+                      "reps": "12 each leg",
+                      "weight_kg": 10,
+                      "rest_seconds": 90,
+                      "tempo": "2-0-1-0",
+                      "notes": "Control descent, knee shouldn't pass toes excessively",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 5,
+                      "name": "Leg Press",
+                      "category": "compound",
+                      "muscle_groups": ["quads", "glutes"],
+                      "sets": 3,
+                      "reps": 15,
+                      "weight_kg": 100,
+                      "rest_seconds": 90,
+                      "tempo": "2-0-1-0",
+                      "notes": "Feet shoulder-width, full ROM without lower back lifting",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 6,
+                      "name": "Leg Extension",
+                      "category": "isolation",
+                      "muscle_groups": ["quads"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 45,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "notes": "Squeeze at top, control negative",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 7,
+                      "name": "Lying Leg Curl",
+                      "category": "isolation",
+                      "muscle_groups": ["hamstrings"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 32,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "notes": "Hips stay down, full contraction",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 8,
+                      "name": "Standing Calf Raise",
+                      "category": "isolation",
+                      "muscle_groups": ["calves"],
+                      "sets": 4,
+                      "reps": 15,
+                      "weight_kg": 50,
+                      "rest_seconds": 45,
+                      "tempo": "2-2-1-0",
+                      "notes": "Full stretch at bottom, hold squeeze at top",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 9,
+                      "name": "Core Circuit",
+                      "category": "core",
+                      "muscle_groups": ["abs", "obliques", "transverse_abdominis"],
+                      "sets": 3,
+                      "exercises_in_circuit": [
+                        {
+                          "name": "Plank",
+                          "duration_seconds": 45,
+                          "notes": "Neutral spine, squeeze glutes"
+                        },
+                        {
+                          "name": "Dead Bugs",
+                          "reps": "10 each side",
+                          "notes": "Lower back pressed to floor"
+                        },
+                        {
+                          "name": "Bird Dogs",
+                          "reps": "10 each side",
+                          "notes": "Keep hips level, no rotation"
+                        }
+                      ],
+                      "rest_between_exercises_seconds": 15,
+                      "rest_after_circuit_seconds": 90
+                    }
+                  ],
+                  "total_sets": 29,
+                  "cooldown": "5-10 min light stretching, foam rolling quads/hamstrings"
+                },
+                {
+                  "day_number": 2,
+                  "name": "Rest Day",
+                  "type": "rest",
+                  "activities": [
+                    "Light walking (30 min optional)",
+                    "Mobility work",
+                    "Focus on nutrition and sleep"
+                  ]
+                },
+                {
+                  "day_number": 3,
+                  "name": "Upper Push",
+                  "type": "resistance_training",
+                  "target_duration_minutes": 60,
+                  "exercises": [
+                    {
+                      "order": 1,
+                      "name": "Flat Barbell Bench Press",
+                      "category": "compound",
+                      "muscle_groups": ["chest", "front_delts", "triceps"],
+                      "sets": 4,
+                      "reps": 10,
+                      "weight_kg": 65,
+                      "rest_seconds": 180,
+                      "tempo": "3-0-1-0",
+                      "notes": "Retract scapula, bar to lower chest, elbows 45° angle",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 2,
+                      "name": "Incline DB Press",
+                      "category": "compound",
+                      "muscle_groups": ["upper_chest", "front_delts", "triceps"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 24,
+                      "rest_seconds": 120,
+                      "tempo": "3-0-1-0",
+                      "notes": "30-45° incline, DBs to chest level",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 3,
+                      "name": "Dumbbell Overhead Press (Seated)",
+                      "category": "compound",
+                      "muscle_groups": ["shoulders", "triceps"],
+                      "sets": 3,
+                      "reps": 10,
+                      "weight_kg": 20,
+                      "rest_seconds": 120,
+                      "tempo": "2-0-1-0",
+                      "notes": "Core tight, slight lean back, press to lockout",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 4,
+                      "name": "Cable Crossover (Mid Height)",
+                      "category": "isolation",
+                      "muscle_groups": ["chest"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 12,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "notes": "Slight bend in elbows, squeeze at midline",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 5,
+                      "name": "Lateral Raise (DB)",
+                      "category": "isolation",
+                      "muscle_groups": ["medial_delts"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 10,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "notes": "Slight forward lean, thumbs up or neutral, raise to shoulder height",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 6,
+                      "name": "Tricep Rope Pushdown",
+                      "category": "isolation",
+                      "muscle_groups": ["triceps"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 16,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "notes": "Elbows pinned, pull rope apart at bottom",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 7,
+                      "name": "Face Pulls",
+                      "category": "isolation",
+                      "muscle_groups": ["rear_delts", "upper_back"],
+                      "sets": 3,
+                      "reps": 15,
+                      "weight_kg": 20,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "notes": "Pull to face level, external rotation at end",
+                      "tr_intensity": 6
+                    }
+                  ],
+                  "total_sets": 22,
+                  "cooldown": "Chest and shoulder stretches"
+                },
+                {
+                  "day_number": 4,
+                  "name": "Cardio & Core",
+                  "type": "conditioning",
+                  "target_duration_minutes": 45,
+                  "cardio": {
+                    "type": "steady_state",
+                    "activity": "Treadmill or bike",
+                    "duration_minutes": 30,
+                    "intensity": "Zone 2 (60-70% max HR)",
+                    "notes": "Maintain conversational pace"
+                  },
+                  "core_work": {
+                    "exercises": [
+                      {
+                        "name": "Ab Wheel Rollouts",
+                        "sets": 3,
+                        "reps": 10,
+                        "rest_seconds": 60,
+                        "notes": "From knees if needed, full extension"
+                      },
+                      {
+                        "name": "Side Plank",
+                        "sets": 3,
+                        "duration_seconds": 30,
+                        "rest_seconds": 45,
+                        "notes": "Each side, hips elevated"
+                      },
+                      {
+                        "name": "Hanging Knee Raises",
+                        "sets": 3,
+                        "reps": 12,
+                        "rest_seconds": 60,
+                        "notes": "Control, no swinging"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "day_number": 5,
+                  "name": "Upper Pull",
+                  "type": "resistance_training",
+                  "target_duration_minutes": 65,
+                  "exercises": [
+                    {
+                      "order": 1,
+                      "name": "Pull-Ups (Weighted if possible)",
+                      "category": "compound",
+                      "muscle_groups": ["lats", "biceps", "upper_back"],
+                      "sets": 4,
+                      "reps": 8,
+                      "weight_kg": "bodyweight or +5kg",
+                      "rest_seconds": 150,
+                      "tempo": "3-0-1-0",
+                      "notes": "Full ROM, chin over bar, control descent",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 2,
+                      "name": "Barbell Bent-Over Row",
+                      "category": "compound",
+                      "muscle_groups": ["lats", "rhomboids", "biceps"],
+                      "sets": 4,
+                      "reps": 10,
+                      "weight_kg": 60,
+                      "rest_seconds": 120,
+                      "tempo": "2-1-1-0",
+                      "notes": "Hip hinge position, row to lower chest, retract scapula",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 3,
+                      "name": "Seated Cable Row",
+                      "category": "compound",
+                      "muscle_groups": ["mid_back", "lats", "biceps"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 50,
+                      "rest_seconds": 90,
+                      "tempo": "2-1-1-0",
+                      "notes": "Chest up, squeeze shoulder blades together",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 4,
+                      "name": "Lat Pulldown",
+                      "category": "compound",
+                      "muscle_groups": ["lats", "biceps"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 55,
+                      "rest_seconds": 90,
+                      "tempo": "2-1-1-0",
+                      "notes": "Wide grip, pull to upper chest, lean back slightly",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 5,
+                      "name": "Face Pulls",
+                      "category": "isolation",
+                      "muscle_groups": ["rear_delts", "upper_back"],
+                      "sets": 3,
+                      "reps": 15,
+                      "weight_kg": 22,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "notes": "Critical for shoulder health, 2:1 pull to push ratio",
+                      "tr_intensity": 6
+                    },
+                    {
+                      "order": 6,
+                      "name": "Barbell Curl (EZ Bar)",
+                      "category": "isolation",
+                      "muscle_groups": ["biceps"],
+                      "sets": 3,
+                      "reps": 10,
+                      "weight_kg": 25,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "notes": "Elbows pinned, no body English",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 7,
+                      "name": "Hammer Curls (DB)",
+                      "category": "isolation",
+                      "muscle_groups": ["biceps", "brachialis"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 12,
+                      "rest_seconds": 60,
+                      "tempo": "2-0-1-0",
+                      "notes": "Neutral grip, alternating or together",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 8,
+                      "name": "Dumbbell Shrugs",
+                      "category": "isolation",
+                      "muscle_groups": ["traps"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 28,
+                      "rest_seconds": 60,
+                      "tempo": "2-2-1-0",
+                      "notes": "Straight up and down, no rolling, hold squeeze",
+                      "tr_intensity": 7
+                    }
+                  ],
+                  "total_sets": 26,
+                  "cooldown": "Upper back and lat stretches"
+                },
+                {
+                  "day_number": 6,
+                  "name": "Active Recovery",
+                  "type": "recovery",
+                  "activities": [
+                    {
+                      "activity": "Light cardio",
+                      "duration_minutes": 20,
+                      "intensity": "Very easy (50-60% max HR)",
+                      "options": ["Walking", "Cycling", "Swimming"]
+                    },
+                    {
+                      "activity": "Mobility work",
+                      "duration_minutes": 15,
+                      "focus": ["Hip mobility", "Thoracic spine", "Ankle mobility"]
+                    },
+                    {
+                      "activity": "Foam rolling",
+                      "duration_minutes": 10,
+                      "focus": ["Quads", "IT band", "Lats", "Glutes"]
+                    }
+                  ]
+                },
+                {
+                  "day_number": 7,
+                  "name": "Complete Rest",
+                  "type": "rest",
+                  "activities": [
+                    "Full day off training",
+                    "Focus on nutrition (1g protein per lb bodyweight)",
+                    "Prioritize sleep (8+ hours)",
+                    "Light walking only if desired"
+                  ]
+                }
+              ]
+            },
+            {
+              "microcycle_number": 2,
+              "week_number": 2,
+              "emphasis": "Push Emphasis",
+              "days": [
+                {
+                  "day_number": 1,
+                  "name": "Push Emphasis Day",
+                  "type": "resistance_training",
+                  "target_duration_minutes": 75,
+                  "exercises": [
+                    {
+                      "order": 1,
+                      "name": "Flat Barbell Bench Press",
+                      "category": "compound",
+                      "muscle_groups": ["chest", "front_delts", "triceps"],
+                      "sets": 5,
+                      "reps": 8,
+                      "weight_kg": 70,
+                      "rest_seconds": 180,
+                      "tempo": "3-0-1-0",
+                      "notes": "Primary push builder, focus on progressive overload",
+                      "tr_intensity": 9
+                    },
+                    {
+                      "order": 2,
+                      "name": "Incline Barbell Press",
+                      "category": "compound",
+                      "muscle_groups": ["upper_chest", "front_delts", "triceps"],
+                      "sets": 4,
+                      "reps": 10,
+                      "weight_kg": 55,
+                      "rest_seconds": 150,
+                      "tempo": "3-0-1-0",
+                      "notes": "30° incline, full ROM",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 3,
+                      "name": "Dumbbell Overhead Press (Seated)",
+                      "category": "compound",
+                      "muscle_groups": ["shoulders", "triceps"],
+                      "sets": 4,
+                      "reps": 10,
+                      "weight_kg": 22,
+                      "rest_seconds": 120,
+                      "tempo": "2-0-1-0",
+                      "notes": "Main shoulder builder",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 4,
+                      "name": "Dips (Weighted)",
+                      "category": "compound",
+                      "muscle_groups": ["chest", "triceps", "front_delts"],
+                      "sets": 3,
+                      "reps": 10,
+                      "weight_kg": "bodyweight +5kg",
+                      "rest_seconds": 120,
+                      "tempo": "3-0-1-0",
+                      "notes": "Lean forward for chest emphasis",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 5,
+                      "name": "Cable Crossover (High to Low)",
+                      "category": "isolation",
+                      "muscle_groups": ["lower_chest"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 14,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "notes": "Squeeze and hold at bottom",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 6,
+                      "name": "Lateral Raise (Cable)",
+                      "category": "isolation",
+                      "muscle_groups": ["medial_delts"],
+                      "sets": 4,
+                      "reps": 12,
+                      "weight_kg": 8,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "notes": "Constant tension from cable",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 7,
+                      "name": "Reverse Pec Deck",
+                      "category": "isolation",
+                      "muscle_groups": ["rear_delts"],
+                      "sets": 3,
+                      "reps": 15,
+                      "weight_kg": 30,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "notes": "Essential for shoulder balance",
+                      "tr_intensity": 6
+                    },
+                    {
+                      "order": 8,
+                      "name": "Tricep Superset",
+                      "category": "isolation",
+                      "muscle_groups": ["triceps"],
+                      "sets": 3,
+                      "superset": [
+                        {
+                          "name": "French Press (EZ Bar)",
+                          "reps": 12,
+                          "weight_kg": 20,
+                          "tempo": "2-0-1-0",
+                          "notes": "Lower behind head, full extension"
+                        },
+                        {
+                          "name": "Tricep Rope Pushdown",
+                          "reps": 12,
+                          "weight_kg": 18,
+                          "tempo": "2-1-1-0",
+                          "notes": "Pull apart at bottom"
+                        }
+                      ],
+                      "rest_between_exercises_seconds": 0,
+                      "rest_after_superset_seconds": 90,
+                      "tr_intensity": 8
+                    }
+                  ],
+                  "total_sets": 29,
+                  "cooldown": "Chest and shoulder stretches, pec doorway stretch"
+                },
+                {
+                  "day_number": 2,
+                  "name": "Rest Day",
+                  "type": "rest"
+                },
+                {
+                  "day_number": 3,
+                  "name": "Legs",
+                  "type": "resistance_training",
+                  "target_duration_minutes": 60,
+                  "exercises": [
+                    {
+                      "order": 1,
+                      "name": "Back Squat",
+                      "category": "compound",
+                      "muscle_groups": ["quads", "glutes", "core"],
+                      "sets": 4,
+                      "reps": 10,
+                      "weight_kg": 65,
+                      "rest_seconds": 180,
+                      "tempo": "3-0-1-0",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 2,
+                      "name": "Romanian Deadlift",
+                      "category": "compound",
+                      "muscle_groups": ["hamstrings", "glutes"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 55,
+                      "rest_seconds": 120,
+                      "tempo": "3-0-1-0",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 3,
+                      "name": "Bulgarian Split Squat (DB)",
+                      "category": "unilateral",
+                      "muscle_groups": ["quads", "glutes"],
+                      "sets": 3,
+                      "reps": "10 each leg",
+                      "weight_kg": 14,
+                      "rest_seconds": 90,
+                      "tempo": "2-0-1-0",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 4,
+                      "name": "Leg Extension",
+                      "category": "isolation",
+                      "muscle_groups": ["quads"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 50,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 5,
+                      "name": "Lying Leg Curl",
+                      "category": "isolation",
+                      "muscle_groups": ["hamstrings"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 35,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 6,
+                      "name": "Seated Calf Raise",
+                      "category": "isolation",
+                      "muscle_groups": ["calves"],
+                      "sets": 3,
+                      "reps": 15,
+                      "weight_kg": 30,
+                      "rest_seconds": 45,
+                      "tempo": "2-2-1-0",
+                      "tr_intensity": 6
+                    }
+                  ],
+                  "total_sets": 22,
+                  "cooldown": "Quad and hamstring stretches"
+                },
+                {
+                  "day_number": 4,
+                  "name": "Cardio & Core",
+                  "type": "conditioning",
+                  "target_duration_minutes": 45,
+                  "cardio": {
+                    "type": "intervals",
+                    "activity": "Treadmill or bike",
+                    "duration_minutes": 25,
+                    "protocol": "30 seconds hard / 90 seconds easy × 10 rounds",
+                    "notes": "Higher intensity than Week 1"
+                  },
+                  "core_work": {
+                    "exercises": [
+                      {
+                        "name": "Cable Crunches",
+                        "sets": 3,
+                        "reps": 15,
+                        "weight_kg": 30,
+                        "rest_seconds": 60
+                      },
+                      {
+                        "name": "Russian Twists (Weighted)",
+                        "sets": 3,
+                        "reps": 20,
+                        "weight_kg": 10,
+                        "rest_seconds": 45
+                      },
+                      {
+                        "name": "Leg Raises",
+                        "sets": 3,
+                        "reps": 12,
+                        "rest_seconds": 60
+                      }
+                    ]
+                  }
+                },
+                {
+                  "day_number": 5,
+                  "name": "Upper Pull",
+                  "type": "resistance_training",
+                  "target_duration_minutes": 65,
+                  "exercises": [
+                    {
+                      "order": 1,
+                      "name": "Pull-Ups",
+                      "category": "compound",
+                      "muscle_groups": ["lats", "biceps"],
+                      "sets": 4,
+                      "reps": 8,
+                      "weight_kg": "bodyweight +5kg",
+                      "rest_seconds": 150,
+                      "tempo": "3-0-1-0",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 2,
+                      "name": "Barbell Bent-Over Row",
+                      "category": "compound",
+                      "muscle_groups": ["lats", "rhomboids"],
+                      "sets": 4,
+                      "reps": 10,
+                      "weight_kg": 62,
+                      "rest_seconds": 120,
+                      "tempo": "2-1-1-0",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 3,
+                      "name": "Chest-Supported Row (DB)",
+                      "category": "compound",
+                      "muscle_groups": ["mid_back", "rhomboids"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 26,
+                      "rest_seconds": 90,
+                      "tempo": "2-1-1-0",
+                      "notes": "Removes lower back from equation",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 4,
+                      "name": "Lat Pulldown",
+                      "category": "compound",
+                      "muscle_groups": ["lats"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 58,
+                      "rest_seconds": 90,
+                      "tempo": "2-1-1-0",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 5,
+                      "name": "Face Pulls",
+                      "category": "isolation",
+                      "muscle_groups": ["rear_delts", "upper_back"],
+                      "sets": 3,
+                      "reps": 15,
+                      "weight_kg": 24,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "tr_intensity": 6
+                    },
+                    {
+                      "order": 6,
+                      "name": "Barbell Curl (EZ Bar)",
+                      "category": "isolation",
+                      "muscle_groups": ["biceps"],
+                      "sets": 3,
+                      "reps": 10,
+                      "weight_kg": 27,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 7,
+                      "name": "Preacher Curl (Machine)",
+                      "category": "isolation",
+                      "muscle_groups": ["biceps"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 20,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 8,
+                      "name": "Dumbbell Shrugs",
+                      "category": "isolation",
+                      "muscle_groups": ["traps"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 30,
+                      "rest_seconds": 60,
+                      "tempo": "2-2-1-0",
+                      "tr_intensity": 7
+                    }
+                  ],
+                  "total_sets": 26,
+                  "cooldown": "Upper back stretches"
+                },
+                {
+                  "day_number": 6,
+                  "name": "Active Recovery",
+                  "type": "recovery",
+                  "activities": [
+                    {
+                      "activity": "Swimming or cycling",
+                      "duration_minutes": 25,
+                      "intensity": "Easy pace"
+                    },
+                    {
+                      "activity": "Yoga or mobility routine",
+                      "duration_minutes": 20
+                    }
+                  ]
+                },
+                {
+                  "day_number": 7,
+                  "name": "Complete Rest",
+                  "type": "rest"
+                }
+              ]
+            },
+            {
+              "microcycle_number": 3,
+              "week_number": 3,
+              "emphasis": "Pull Emphasis",
+              "days": [
+                {
+                  "day_number": 1,
+                  "name": "Pull Emphasis Day",
+                  "type": "resistance_training",
+                  "target_duration_minutes": 75,
+                  "exercises": [
+                    {
+                      "order": 1,
+                      "name": "Deadlift (Conventional)",
+                      "category": "compound",
+                      "muscle_groups": ["posterior_chain", "traps", "forearms"],
+                      "sets": 4,
+                      "reps": 6,
+                      "weight_kg": 100,
+                      "rest_seconds": 210,
+                      "tempo": "1-0-3-0",
+                      "notes": "Primary pull builder. Focus on hip hinge, neutral spine",
+                      "tr_intensity": 9
+                    },
+                    {
+                      "order": 2,
+                      "name": "Pull-Ups (Weighted)",
+                      "category": "compound",
+                      "muscle_groups": ["lats", "biceps"],
+                      "sets": 5,
+                      "reps": 8,
+                      "weight_kg": "bodyweight +10kg",
+                      "rest_seconds": 150,
+                      "tempo": "3-0-1-0",
+                      "notes": "Full ROM, controlled negative",
+                      "tr_intensity": 9
+                    },
+                    {
+                      "order": 3,
+                      "name": "Barbell Bent-Over Row",
+                      "category": "compound",
+                      "muscle_groups": ["lats", "rhomboids", "traps"],
+                      "sets": 4,
+                      "reps": 10,
+                      "weight_kg": 65,
+                      "rest_seconds": 120,
+                      "tempo": "2-1-1-0",
+                      "notes": "Row to lower chest",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 4,
+                      "name": "Seated Cable Row (Wide Grip)",
+                      "category": "compound",
+                      "muscle_groups": ["mid_back", "lats"],
+                      "sets": 4,
+                      "reps": 12,
+                      "weight_kg": 55,
+                      "rest_seconds": 90,
+                      "tempo": "2-1-1-0",
+                      "notes": "Wide grip emphasizes lats more",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 5,
+                      "name": "Lat Pulldown (Close Grip)",
+                      "category": "compound",
+                      "muscle_groups": ["lats", "biceps"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 60,
+                      "rest_seconds": 90,
+                      "tempo": "2-1-1-0",
+                      "notes": "Close grip increases ROM",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 6,
+                      "name": "Face Pulls",
+                      "category": "isolation",
+                      "muscle_groups": ["rear_delts", "upper_back"],
+                      "sets": 4,
+                      "reps": 15,
+                      "weight_kg": 26,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "notes": "Extra volume for shoulder health",
+                      "tr_intensity": 6
+                    },
+                    {
+                      "order": 7,
+                      "name": "Bicep Curl Superset",
+                      "category": "isolation",
+                      "muscle_groups": ["biceps"],
+                      "sets": 3,
+                      "superset": [
+                        {
+                          "name": "Barbell Curl (EZ Bar)",
+                          "reps": 10,
+                          "weight_kg": 30,
+                          "tempo": "2-1-1-0"
+                        },
+                        {
+                          "name": "Hammer Curls",
+                          "reps": 12,
+                          "weight_kg": 14,
+                          "tempo": "2-0-1-0"
+                        }
+                      ],
+                      "rest_between_exercises_seconds": 0,
+                      "rest_after_superset_seconds": 90,
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 8,
+                      "name": "Dumbbell Shrugs",
+                      "category": "isolation",
+                      "muscle_groups": ["traps"],
+                      "sets": 4,
+                      "reps": 12,
+                      "weight_kg": 32,
+                      "rest_seconds": 60,
+                      "tempo": "2-2-1-0",
+                      "tr_intensity": 7
+                    }
+                  ],
+                  "total_sets": 31,
+                  "cooldown": "Lat and upper back stretches, forearm stretches"
+                },
+                {
+                  "day_number": 2,
+                  "name": "Rest Day",
+                  "type": "rest"
+                },
+                {
+                  "day_number": 3,
+                  "name": "Push",
+                  "type": "resistance_training",
+                  "target_duration_minutes": 60,
+                  "exercises": [
+                    {
+                      "order": 1,
+                      "name": "Flat Barbell Bench Press",
+                      "category": "compound",
+                      "muscle_groups": ["chest", "triceps"],
+                      "sets": 4,
+                      "reps": 10,
+                      "weight_kg": 70,
+                      "rest_seconds": 180,
+                      "tempo": "3-0-1-0",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 2,
+                      "name": "Incline DB Press",
+                      "category": "compound",
+                      "muscle_groups": ["upper_chest"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 26,
+                      "rest_seconds": 120,
+                      "tempo": "3-0-1-0",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 3,
+                      "name": "Dumbbell Overhead Press",
+                      "category": "compound",
+                      "muscle_groups": ["shoulders"],
+                      "sets": 3,
+                      "reps": 10,
+                      "weight_kg": 24,
+                      "rest_seconds": 120,
+                      "tempo": "2-0-1-0",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 4,
+                      "name": "Cable Crossover",
+                      "category": "isolation",
+                      "muscle_groups": ["chest"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 14,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 5,
+                      "name": "Lateral Raise (DB)",
+                      "category": "isolation",
+                      "muscle_groups": ["medial_delts"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 12,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 6,
+                      "name": "Tricep Rope Pushdown",
+                      "category": "isolation",
+                      "muscle_groups": ["triceps"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 18,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 7,
+                      "name": "Face Pulls",
+                      "category": "isolation",
+                      "muscle_groups": ["rear_delts"],
+                      "sets": 3,
+                      "reps": 15,
+                      "weight_kg": 22,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "tr_intensity": 6
+                    }
+                  ],
+                  "total_sets": 22,
+                  "cooldown": "Chest and shoulder stretches"
+                },
+                {
+                  "day_number": 4,
+                  "name": "Cardio & Core",
+                  "type": "conditioning",
+                  "target_duration_minutes": 40,
+                  "cardio": {
+                    "type": "steady_state",
+                    "activity": "Incline treadmill walk",
+                    "duration_minutes": 30,
+                    "intensity": "12-15% incline at 3-3.5 mph",
+                    "notes": "Great for glute activation and recovery"
+                  },
+                  "core_work": {
+                    "exercises": [
+                      {
+                        "name": "Ab Wheel Rollouts",
+                        "sets": 3,
+                        "reps": 12,
+                        "rest_seconds": 60
+                      },
+                      {
+                        "name": "Pallof Press",
+                        "sets": 3,
+                        "reps": "10 each side",
+                        "weight_kg": 15,
+                        "rest_seconds": 45
+                      }
+                    ]
+                  }
+                },
+                {
+                  "day_number": 5,
+                  "name": "Legs",
+                  "type": "resistance_training",
+                  "target_duration_minutes": 65,
+                  "exercises": [
+                    {
+                      "order": 1,
+                      "name": "Back Squat",
+                      "category": "compound",
+                      "muscle_groups": ["quads", "glutes"],
+                      "sets": 4,
+                      "reps": 10,
+                      "weight_kg": 70,
+                      "rest_seconds": 180,
+                      "tempo": "3-0-1-0",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 2,
+                      "name": "Romanian Deadlift",
+                      "category": "compound",
+                      "muscle_groups": ["hamstrings", "glutes"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 60,
+                      "rest_seconds": 120,
+                      "tempo": "3-0-1-0",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 3,
+                      "name": "Leg Press",
+                      "category": "compound",
+                      "muscle_groups": ["quads", "glutes"],
+                      "sets": 3,
+                      "reps": 15,
+                      "weight_kg": 120,
+                      "rest_seconds": 90,
+                      "tempo": "2-0-1-0",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 4,
+                      "name": "Walking Lunges (DB)",
+                      "category": "unilateral",
+                      "muscle_groups": ["quads", "glutes"],
+                      "sets": 3,
+                      "reps": "12 each leg",
+                      "weight_kg": 12,
+                      "rest_seconds": 90,
+                      "tempo": "2-0-1-0",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 5,
+                      "name": "Leg Extension",
+                      "category": "isolation",
+                      "muscle_groups": ["quads"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 52,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 6,
+                      "name": "Lying Leg Curl",
+                      "category": "isolation",
+                      "muscle_groups": ["hamstrings"],
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 37,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 7,
+                      "name": "Standing Calf Raise",
+                      "category": "isolation",
+                      "muscle_groups": ["calves"],
+                      "sets": 3,
+                      "reps": 15,
+                      "weight_kg": 55,
+                      "rest_seconds": 45,
+                      "tempo": "2-2-1-0",
+                      "tr_intensity": 7
+                    }
+                  ],
+                  "total_sets": 25,
+                  "cooldown": "Full leg stretches"
+                },
+                {
+                  "day_number": 6,
+                  "name": "Active Recovery",
+                  "type": "recovery",
+                  "activities": [
+                    {
+                      "activity": "Light cardio",
+                      "duration_minutes": 20
+                    },
+                    {
+                      "activity": "Foam rolling full body",
+                      "duration_minutes": 15
+                    },
+                    {
+                      "activity": "Stretching routine",
+                      "duration_minutes": 15
+                    }
+                  ]
+                },
+                {
+                  "day_number": 7,
+                  "name": "Complete Rest",
+                  "type": "rest"
+                }
+              ]
+            },
+            {
+              "microcycle_number": 4,
+              "week_number": 4,
+              "emphasis": "DELOAD - Recovery Week",
+              "notes": "50% volume (half the sets), 70% intensity (lighter weights), focus on technique and recovery",
+              "days": [
+                {
+                  "day_number": 1,
+                  "name": "Light Full Body",
+                  "type": "resistance_training",
+                  "target_duration_minutes": 40,
+                  "notes": "All weights at 70% of normal working weight",
+                  "exercises": [
+                    {
+                      "order": 1,
+                      "name": "Back Squat",
+                      "category": "compound",
+                      "muscle_groups": ["legs"],
+                      "sets": 2,
+                      "reps": 10,
+                      "weight_kg": 45,
+                      "rest_seconds": 120,
+                      "tempo": "2-0-1-0",
+                      "notes": "70% of normal weight, focus on form",
+                      "tr_intensity": 5
+                    },
+                    {
+                      "order": 2,
+                      "name": "Bench Press",
+                      "category": "compound",
+                      "muscle_groups": ["chest"],
+                      "sets": 2,
+                      "reps": 10,
+                      "weight_kg": 45,
+                      "rest_seconds": 120,
+                      "tempo": "2-0-1-0",
+                      "tr_intensity": 5
+                    },
+                    {
+                      "order": 3,
+                      "name": "Barbell Row",
+                      "category": "compound",
+                      "muscle_groups": ["back"],
+                      "sets": 2,
+                      "reps": 10,
+                      "weight_kg": 40,
+                      "rest_seconds": 90,
+                      "tempo": "2-0-1-0",
+                      "tr_intensity": 5
+                    },
+                    {
+                      "order": 4,
+                      "name": "Overhead Press (DB)",
+                      "category": "compound",
+                      "muscle_groups": ["shoulders"],
+                      "sets": 2,
+                      "reps": 10,
+                      "weight_kg": 14,
+                      "rest_seconds": 90,
+                      "tempo": "2-0-1-0",
+                      "tr_intensity": 5
+                    },
+                    {
+                      "order": 5,
+                      "name": "Leg Curl",
+                      "category": "isolation",
+                      "muscle_groups": ["hamstrings"],
+                      "sets": 2,
+                      "reps": 12,
+                      "weight_kg": 25,
+                      "rest_seconds": 60,
+                      "tempo": "2-0-1-0",
+                      "tr_intensity": 5
+                    }
+                  ],
+                  "total_sets": 10,
+                  "cooldown": "Light stretching"
+                },
+                {
+                  "day_number": 2,
+                  "name": "Rest",
+                  "type": "rest"
+                },
+                {
+                  "day_number": 3,
+                  "name": "Light Full Body",
+                  "type": "resistance_training",
+                  "target_duration_minutes": 40,
+                  "exercises": [
+                    {
+                      "order": 1,
+                      "name": "Romanian Deadlift",
+                      "sets": 2,
+                      "reps": 10,
+                      "weight_kg": 40,
+                      "rest_seconds": 120,
+                      "tr_intensity": 5
+                    },
+                    {
+                      "order": 2,
+                      "name": "Incline DB Press",
+                      "sets": 2,
+                      "reps": 10,
+                      "weight_kg": 16,
+                      "rest_seconds": 90,
+                      "tr_intensity": 5
+                    },
+                    {
+                      "order": 3,
+                      "name": "Lat Pulldown",
+                      "sets": 2,
+                      "reps": 12,
+                      "weight_kg": 40,
+                      "rest_seconds": 90,
+                      "tr_intensity": 5
+                    },
+                    {
+                      "order": 4,
+                      "name": "Lateral Raise",
+                      "sets": 2,
+                      "reps": 12,
+                      "weight_kg": 7,
+                      "rest_seconds": 60,
+                      "tr_intensity": 5
+                    },
+                    {
+                      "order": 5,
+                      "name": "Bicep Curl",
+                      "sets": 2,
+                      "reps": 12,
+                      "weight_kg": 18,
+                      "rest_seconds": 60,
+                      "tr_intensity": 5
+                    }
+                  ],
+                  "total_sets": 10
+                },
+                {
+                  "day_number": 4,
+                  "name": "Easy Cardio",
+                  "type": "conditioning",
+                  "cardio": {
+                    "activity": "Walking or easy cycling",
+                    "duration_minutes": 30,
+                    "intensity": "Very easy, conversational pace"
+                  }
+                },
+                {
+                  "day_number": 5,
+                  "name": "Mobility & Stretching",
+                  "type": "recovery",
+                  "duration_minutes": 45,
+                  "activities": [
+                    "Full body mobility routine",
+                    "Foam rolling",
+                    "Static stretching",
+                    "Breathing exercises"
+                  ]
+                },
+                {
+                  "day_number": 6,
+                  "name": "Complete Rest",
+                  "type": "rest"
+                },
+                {
+                  "day_number": 7,
+                  "name": "Complete Rest",
+                  "type": "rest",
+                  "notes": "Prepare for Mesocycle 2. Ensure sleep and nutrition are optimized"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mesocycle_number": 2,
+          "name": "Strength Development Phase",
+          "weeks": "5-8",
+          "focus": "Progressive overload from Mesocycle 1, increased intensity, refined technique",
+          "progression_notes": "+2-5kg on main compound lifts, +1-2kg on accessories, or +1-2 reps if weight cannot increase",
+          "microcycles": [
+            {
+              "microcycle_number": 5,
+              "week_number": 5,
+              "emphasis": "Leg Emphasis",
+              "notes": "Week 1 pattern repeated with 2-5kg added to all exercises from Mesocycle 1 Week 1",
+              "days": [
+                {
+                  "day_number": 1,
+                  "name": "Leg Emphasis Day",
+                  "type": "resistance_training",
+                  "target_duration_minutes": 75,
+                  "exercises": [
+                    {
+                      "order": 1,
+                      "name": "Box Jumps",
+                      "sets": 3,
+                      "reps": 6,
+                      "weight_kg": "bodyweight",
+                      "rest_seconds": 120,
+                      "notes": "Same volume as M1W1"
+                    },
+                    {
+                      "order": 2,
+                      "name": "Back Squat",
+                      "sets": 4,
+                      "reps": 10,
+                      "weight_kg": 65,
+                      "rest_seconds": 180,
+                      "tempo": "3-0-1-0",
+                      "notes": "+5kg from M1W1",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 3,
+                      "name": "Romanian Deadlift",
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 55,
+                      "rest_seconds": 120,
+                      "tempo": "3-0-1-0",
+                      "notes": "+5kg progression",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 4,
+                      "name": "Walking Lunges (DB)",
+                      "sets": 3,
+                      "reps": "12 each leg",
+                      "weight_kg": 12,
+                      "rest_seconds": 90,
+                      "tempo": "2-0-1-0",
+                      "notes": "+2kg per hand",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 5,
+                      "name": "Leg Press",
+                      "sets": 3,
+                      "reps": 15,
+                      "weight_kg": 110,
+                      "rest_seconds": 90,
+                      "tempo": "2-0-1-0",
+                      "notes": "+10kg",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 6,
+                      "name": "Leg Extension",
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 48,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "notes": "+3kg",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 7,
+                      "name": "Lying Leg Curl",
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 35,
+                      "rest_seconds": 60,
+                      "tempo": "2-1-1-0",
+                      "notes": "+3kg",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 8,
+                      "name": "Standing Calf Raise",
+                      "sets": 4,
+                      "reps": 15,
+                      "weight_kg": 55,
+                      "rest_seconds": 45,
+                      "tempo": "2-2-1-0",
+                      "notes": "+5kg",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 9,
+                      "name": "Core Circuit",
+                      "sets": 3,
+                      "exercises_in_circuit": [
+                        {"name": "Plank", "duration_seconds": 50},
+                        {"name": "Dead Bugs", "reps": "12 each side"},
+                        {"name": "Bird Dogs", "reps": "12 each side"}
+                      ],
+                      "rest_after_circuit_seconds": 90,
+                      "notes": "+5s plank, +2 reps"
+                    }
+                  ],
+                  "total_sets": 29
+                },
+                {
+                  "day_number": 2,
+                  "name": "Rest Day",
+                  "type": "rest"
+                },
+                {
+                  "day_number": 3,
+                  "name": "Upper Push",
+                  "type": "resistance_training",
+                  "exercises": [
+                    {
+                      "order": 1,
+                      "name": "Flat Barbell Bench Press",
+                      "sets": 4,
+                      "reps": 10,
+                      "weight_kg": 70,
+                      "rest_seconds": 180,
+                      "notes": "+5kg from M1W1",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 2,
+                      "name": "Incline DB Press",
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 26,
+                      "rest_seconds": 120,
+                      "notes": "+2kg per hand",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 3,
+                      "name": "Dumbbell Overhead Press (Seated)",
+                      "sets": 3,
+                      "reps": 10,
+                      "weight_kg": 22,
+                      "rest_seconds": 120,
+                      "notes": "+2kg per hand",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 4,
+                      "name": "Cable Crossover (Mid Height)",
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 14,
+                      "rest_seconds": 60,
+                      "notes": "+2kg",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 5,
+                      "name": "Lateral Raise (DB)",
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 12,
+                      "rest_seconds": 60,
+                      "notes": "+2kg",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 6,
+                      "name": "Tricep Rope Pushdown",
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 18,
+                      "rest_seconds": 60,
+                      "notes": "+2kg",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 7,
+                      "name": "Face Pulls",
+                      "sets": 3,
+                      "reps": 15,
+                      "weight_kg": 22,
+                      "rest_seconds": 60,
+                      "notes": "+2kg",
+                      "tr_intensity": 6
+                    }
+                  ],
+                  "total_sets": 22
+                },
+                {
+                  "day_number": 4,
+                  "name": "Cardio & Core",
+                  "type": "conditioning",
+                  "cardio": {
+                    "type": "steady_state",
+                    "duration_minutes": 30,
+                    "intensity": "Zone 2"
+                  },
+                  "core_work": {
+                    "exercises": [
+                      {"name": "Ab Wheel Rollouts", "sets": 3, "reps": 12},
+                      {"name": "Side Plank", "sets": 3, "duration_seconds": 35},
+                      {"name": "Hanging Knee Raises", "sets": 3, "reps": 15}
+                    ]
+                  }
+                },
+                {
+                  "day_number": 5,
+                  "name": "Upper Pull",
+                  "type": "resistance_training",
+                  "exercises": [
+                    {
+                      "order": 1,
+                      "name": "Pull-Ups",
+                      "sets": 4,
+                      "reps": 8,
+                      "weight_kg": "bodyweight +7kg",
+                      "rest_seconds": 150,
+                      "notes": "+2kg added weight",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 2,
+                      "name": "Barbell Bent-Over Row",
+                      "sets": 4,
+                      "reps": 10,
+                      "weight_kg": 65,
+                      "rest_seconds": 120,
+                      "notes": "+5kg",
+                      "tr_intensity": 8
+                    },
+                    {
+                      "order": 3,
+                      "name": "Seated Cable Row",
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 55,
+                      "rest_seconds": 90,
+                      "notes": "+5kg",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 4,
+                      "name": "Lat Pulldown",
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 60,
+                      "rest_seconds": 90,
+                      "notes": "+5kg",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 5,
+                      "name": "Face Pulls",
+                      "sets": 3,
+                      "reps": 15,
+                      "weight_kg": 24,
+                      "rest_seconds": 60,
+                      "notes": "+2kg",
+                      "tr_intensity": 6
+                    },
+                    {
+                      "order": 6,
+                      "name": "Barbell Curl (EZ Bar)",
+                      "sets": 3,
+                      "reps": 10,
+                      "weight_kg": 27,
+                      "rest_seconds": 60,
+                      "notes": "+2kg",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 7,
+                      "name": "Hammer Curls (DB)",
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 14,
+                      "rest_seconds": 60,
+                      "notes": "+2kg",
+                      "tr_intensity": 7
+                    },
+                    {
+                      "order": 8,
+                      "name": "Dumbbell Shrugs",
+                      "sets": 3,
+                      "reps": 12,
+                      "weight_kg": 30,
+                      "rest_seconds": 60,
+                      "notes": "+2kg",
+                      "tr_intensity": 7
+                    }
+                  ],
+                  "total_sets": 26
+                },
+                {
+                  "day_number": 6,
+                  "name": "Active Recovery",
+                  "type": "recovery"
+                },
+                {
+                  "day_number": 7,
+                  "name": "Complete Rest",
+                  "type": "rest"
+                }
+              ]
+            },
+            {
+              "microcycle_number": 6,
+              "week_number": 6,
+              "emphasis": "Push Emphasis",
+              "notes": "Push emphasis pattern with progressive overload from M1W2"
+            },
+            {
+              "microcycle_number": 7,
+              "week_number": 7,
+              "emphasis": "Pull Emphasis",
+              "notes": "Pull emphasis pattern with progressive overload from M1W3"
+            },
+            {
+              "microcycle_number": 8,
+              "week_number": 8,
+              "emphasis": "DELOAD - Recovery Week",
+              "notes": "Same deload protocol as Week 4, 50% volume, 70% intensity"
+            }
+          ]
+        },
+        {
+          "mesocycle_number": 3,
+          "name": "Hypertrophy Focus Phase",
+          "weeks": "9-12",
+          "focus": "Continued progression, adding volume through additional reps or sets where appropriate",
+          "progression_notes": "Continue +2-5kg on compounds, or increase to 4 sets where previously 3 sets, or add 1-2 reps",
+          "microcycles": [
+            {
+              "microcycle_number": 9,
+              "week_number": 9,
+              "emphasis": "Leg Emphasis"
+            },
+            {
+              "microcycle_number": 10,
+              "week_number": 10,
+              "emphasis": "Push Emphasis"
+            },
+            {
+              "microcycle_number": 11,
+              "week_number": 11,
+              "emphasis": "Pull Emphasis"
+            },
+            {
+              "microcycle_number": 12,
+              "week_number": 12,
+              "emphasis": "DELOAD - Recovery Week"
+            }
+          ]
+        },
+        {
+          "mesocycle_number": 4,
+          "name": "Peak Performance Phase",
+          "weeks": "13-16",
+          "focus": "Maximizing strength and muscle gains, preparing for next training cycle or testing",
+          "progression_notes": "Final progression phase before reassessment. Consider testing 1RM after Week 16 deload",
+          "microcycles": [
+            {
+              "microcycle_number": 13,
+              "week_number": 13,
+              "emphasis": "Leg Emphasis"
+            },
+            {
+              "microcycle_number": 14,
+              "week_number": 14,
+              "emphasis": "Push Emphasis"
+            },
+            {
+              "microcycle_number": 15,
+              "week_number": 15,
+              "emphasis": "Pull Emphasis"
+            },
+            {
+              "microcycle_number": 16,
+              "week_number": 16,
+              "emphasis": "DELOAD - Recovery Week",
+              "notes": "Final recovery week. Take assessments: photos, measurements, strength tests (optional 1RM testing), body composition. Plan next 16-week cycle."
+            }
+          ]
+        }
+      ],
+      "nutrition_guidelines": {
+        "protein_intake": "1.6-2.2g per kg bodyweight",
+        "timing": "Pre-workout meal 2-3 hours before training, post-workout meal within 2 hours",
+        "hydration": "Minimum 3L water daily, more on training days",
+        "supplements": {
+          "essential": ["Creatine monohydrate 5g daily", "Whey protein as needed for protein goals"],
+          "optional": ["Caffeine pre-workout", "Omega-3 fatty acids", "Vitamin D3", "Magnesium"]
+        }
+      },
+      "recovery_protocols": {
+        "sleep": "7-9 hours per night, consistent schedule",
+        "stress_management": "Meditation, breathing exercises, adequate rest days",
+        "active_recovery": "Light cardio, yoga, swimming on rest days",
+        "tissue_work": "Foam rolling, massage, stretching 3-4x per week",
+        "deload_weeks": "Every 4th week - mandatory 50% volume reduction, 70% intensity"
+      },
+      "progression_strategy": {
+        "primary_method": "Linear progression with wave loading",
+        "when_to_progress": "When completing all prescribed reps with good form for 2 consecutive weeks",
+        "how_to_progress": [
+          "Main lifts (squat, bench, deadlift, row): +2.5-5kg",
+          "Accessory lifts: +1-2.5kg or +1-2 reps",
+          "If stalling: Add 1 set before increasing weight",
+          "If failing: Deload for 1 week, rebuild"
+        ],
+        "autoregulation": "Use RPE/TR Intensity feedback. If consistently below target intensity, increase weight. If above and form suffers, maintain or reduce."
+      },
+      "injury_prevention": {
+        "warm_up_mandatory": "Never skip warm-up protocol before heavy compounds",
+        "form_over_ego": "Reduce weight if form breaks down",
+        "listen_to_body": "Persistent pain = stop exercise, substitute or rest",
+        "shoulder_health": "Maintain 2:1 pull to push ratio, daily band pull-aparts (100 reps)",
+        "lower_back_protection": "Never combine heavy squats and heavy deadlifts same day, 48hr minimum between",
+        "joint_health": "Vary grip positions, include unilateral work, adequate rest periods"
+      },
+      "testing_protocols": {
+        "strength_testing": {
+          "frequency": "Every 8-12 weeks (after deload)",
+          "method": "Work up to 3RM or 5RM on main lifts, calculate estimated 1RM",
+          "exercises": ["Back Squat", "Bench Press", "Deadlift", "Barbell Row"],
+          "notes": "Only test when feeling recovered and fresh"
+        },
+        "body_composition": {
+          "frequency": "Every 4 weeks (Monday of Week 1)",
+          "measurements": ["Weight (daily average)", "Body fat % (if available)", "Circumference measurements (chest, waist, arms, thighs)", "Progress photos"],
+          "consistency": "Same time of day, same conditions, same scale/method"
+        }
+      },
+      "program_notes": {
+        "philosophy": "This program uses a hybrid rotating emphasis approach where each 4-week mesocycle contains 3 weeks of progressive training (Leg emphasis → Push emphasis → Pull emphasis) followed by a proper deload week. This allows for focused volume on specific muscle groups while maintaining balanced overall development and proper recovery.",
+        "volume_justification": "Emphasis days: 25-30 sets for primary muscle groups. Non-emphasis days: 15-20 sets. This is within optimal hypertrophy volume recommendations (10-20 sets per muscle per week), with emphasis weeks pushing slightly higher for advanced trainees.",
+        "sustainability": "Unlike the original superday approach with 50-60 sets, this program maintains sustainable volume that allows for consistent progression over 16 weeks without excessive fatigue or injury risk.",
+        "customization": "Advanced trainees may add 1-2 sets to emphasis days if recovery permits. Beginners should reduce all sets by 1 and focus on technique mastery.",
+        "after_completion": "After completing all 4 mesocycles (16 weeks), take a full week off or do light activity only, reassess goals, test strength, and begin a new training phase with adjusted weights based on new baseline."
+      }
+    }
+  }

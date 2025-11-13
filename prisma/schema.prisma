@@ -2292,6 +2292,8 @@ model users {
   surname                                                     String?
   nickname                                                    String?
   spotifyUrl                                                  String?
+  backgroundImage                                             String?
+  customBackgroundUrl                                         String?
   accounts                                                    accounts[]
   appointments                                                appointments[]
   assessments_assessments_clientIdTousers                     assessments[]                    @relation("assessments_clientIdTousers")
