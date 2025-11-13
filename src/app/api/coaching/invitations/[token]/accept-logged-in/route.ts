@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
 import { nanoid } from 'nanoid';
+import { transferPendingTeamMemberships } from '@/services/teams/pending_members';
 
 export async function POST(
   request: NextRequest,
@@ -136,6 +137,9 @@ export async function POST(
         acceptedAt: new Date(),
       },
     });
+
+    // Transfer pending team memberships
+    await transferPendingTeamMemberships(invitation.id, user.id);
 
     return NextResponse.json({
       success: true,

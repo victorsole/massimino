@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/core/database';
 import { nanoid } from 'nanoid';
 import { hash } from 'bcryptjs';
+import { transferPendingTeamMemberships } from '@/services/teams/pending_members';
 
 export async function GET(
   request: NextRequest,
@@ -165,6 +166,9 @@ export async function POST(
         acceptedAt: new Date(),
       },
     });
+
+    // Transfer pending team memberships
+    await transferPendingTeamMemberships(invitation.id, newUser.id);
 
     return NextResponse.json({
       success: true,
