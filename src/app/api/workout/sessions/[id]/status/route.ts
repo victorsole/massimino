@@ -110,6 +110,10 @@ export async function PATCH(
       let hasTrainerAccess = false;
 
       if (isTrainer && trainerProfile && !isOwner) {
+        // Handle pending invited athlete sessions (no userId yet)
+        if (!workoutSession.userId) {
+          return NextResponse.json({ error: 'Cannot update status for pending athlete session' }, { status: 400 });
+        }
         // Check trainer-client relationship
         const relationship = await prisma.trainer_clients.findFirst({
           where: {
@@ -139,7 +143,7 @@ export async function PATCH(
       });
 
       // Send notification to trainer when athlete completes session
-      if (status === 'COMPLETED' && isOwner && workoutSession.coachId) {
+      if (status === 'COMPLETED' && isOwner && workoutSession.coachId && workoutSession.userId) {
         notifySessionCompleted(
           sessionId,
           workoutSession.userId,

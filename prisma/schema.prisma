@@ -1982,6 +1982,7 @@ model athlete_invitations {
   trainer         users            @relation("trainer_invitations", fields: [trainerId], references: [id], onDelete: Cascade)
   trainer_clients trainer_clients[]
   team_members    team_members[]
+  workout_sessions workout_sessions[]
 
   @@index([trainerId])
   @@index([athleteEmail])
@@ -2651,7 +2652,9 @@ model workout_progress {
 
 model workout_sessions {
   id                                    String                     @id
-  userId                                String
+  userId                                String?
+  athleteInvitationId                   String?
+  athleteInvitationEmail                String?
   coachId                               String?
   date                                  DateTime                   @db.Date
   startTime                             DateTime
@@ -2688,14 +2691,16 @@ model workout_sessions {
   appointments                          appointments?
   workout_log_entries                   workout_log_entries[]
   users_workout_sessions_coachIdTousers users?                     @relation("workout_sessions_coachIdTousers", fields: [coachId], references: [id])
-  users_workout_sessions_userIdTousers  users                      @relation("workout_sessions_userIdTousers", fields: [userId], references: [id])
+  users_workout_sessions_userIdTousers  users?                     @relation("workout_sessions_userIdTousers", fields: [userId], references: [id])
   assessments                           assessments?               @relation(fields: [assessmentId], references: [id])
+  athlete_invitation                    athlete_invitations?       @relation(fields: [athleteInvitationId], references: [id])
   session_comments                      workout_session_comments[]
   goals                                 session_goals[]
 
   @@index([coachId, date])
   @@index([userId, date])
   @@index([assessmentId])
+  @@index([athleteInvitationId])
 }
 
 model workout_template_exercises {

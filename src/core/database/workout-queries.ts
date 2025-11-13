@@ -809,7 +809,7 @@ export async function getWorkoutSessions(
   } = {}
 ): Promise<{
   sessions: (WorkoutSession & {
-    user: { id: string; name: string | null; role: string };
+    user: { id: string; name: string | null; role: string } | null;
     coach: { id: string; name: string | null; role: string } | null;
     entries: WorkoutLogEntry[];
   })[];
@@ -898,7 +898,7 @@ export async function getWorkoutSession(
   id: string,
   userId: string
 ): Promise<(WorkoutSession & {
-  user: { id: string; name: string | null; role: string };
+  user: { id: string; name: string | null; role: string } | null;
   coach: { id: string; name: string | null; role: string } | null;
   entries: (WorkoutLogEntry & { exercise: Exercise })[];
 }) | null> {
@@ -946,13 +946,13 @@ export async function getWorkoutSession(
  * Create a new workout session
  */
 export async function createWorkoutSession(
-  userId: string,
-  data: WorkoutSessionFormData,
+  userId: string | null,
+  data: WorkoutSessionFormData & { athleteInvitationId?: string; athleteInvitationEmail?: string },
   coachId?: string
 ): Promise<WorkoutSession> {
   const startTime = new Date(`${data.date}T${data.startTime}`);
   const endTime = data.endTime ? new Date(`${data.date}T${data.endTime}`) : null;
-  
+
   let duration: number | undefined;
   if (startTime && endTime) {
     duration = Math.floor((endTime.getTime() - startTime.getTime()) / 1000);
@@ -962,6 +962,8 @@ export async function createWorkoutSession(
     data: {
       id: crypto.randomUUID(),
       userId,
+      athleteInvitationId: data.athleteInvitationId ?? null,
+      athleteInvitationEmail: data.athleteInvitationEmail ?? null,
       coachId: coachId ?? null,
       date: new Date(data.date),
       startTime,
@@ -2663,8 +2665,10 @@ export async function calculate_session_experience_points(
   }
 
   // Consistency bonus (check if session continues a streak)
-  const streak_bonus = await calculate_consistency_streak_bonus(session.userId, session.date);
-  breakdown.consistency_bonus = streak_bonus;
+  if (session.userId) {
+    const streak_bonus = await calculate_consistency_streak_bonus(session.userId, session.date);
+    breakdown.consistency_bonus = streak_bonus;
+  }
 
   // Achievement bonus (any personal records)
   const pr_count = session.workout_log_entries.filter(e => e.personalRecord || e.volumeRecord).length;
@@ -3087,7 +3091,10 @@ export async function finalise_session_with_gamification(
   const xp_breakdown = await calculate_session_experience_points(session_id);
 
   // Check achievements
-  const new_achievements = await check_and_award_achievements(session.userId, session_id);
+  let new_achievements: any[] = [];
+  if (session.userId) {
+    new_achievements = await check_and_award_achievements(session.userId, session_id);
+  }
 
   // Add achievement bonus to XP
   const achievement_xp = new_achievements.length * 100;

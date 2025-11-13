@@ -38,6 +38,11 @@ export async function GET(
     }
 
     // Fetch the most recent assessment for this athlete
+    // Skip assessment lookup if this is a pending invited athlete session (no userId yet)
+    if (!workoutSession.userId) {
+      return NextResponse.json({ error: 'Cannot fetch assessment data for pending athlete' }, { status: 400 });
+    }
+
     const assessment = await prisma.assessments.findFirst({
       where: {
         clientId: workoutSession.userId,

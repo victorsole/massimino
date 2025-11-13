@@ -50,6 +50,11 @@ export async function POST(
       return NextResponse.json({ error: 'Trainer profile not found' }, { status: 404 });
     }
 
+    // Handle pending invited athlete sessions (no userId yet)
+    if (!workoutSession.userId) {
+      return NextResponse.json({ error: 'Cannot modify exercises for pending athlete session' }, { status: 400 });
+    }
+
     const relationship = await prisma.trainer_clients.findFirst({
       where: {
         trainerId: trainerProfile.id,
@@ -159,6 +164,11 @@ export async function DELETE(
 
     if (!trainerProfile) {
       return NextResponse.json({ error: 'Trainer profile not found' }, { status: 404 });
+    }
+
+    // Handle pending invited athlete sessions (no userId yet)
+    if (!workoutSession.userId) {
+      return NextResponse.json({ error: 'Cannot modify exercises for pending athlete session' }, { status: 400 });
     }
 
     const relationship = await prisma.trainer_clients.findFirst({

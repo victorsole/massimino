@@ -2880,7 +2880,7 @@ async function buildWorkoutLeaderboard(params: any) {
   const paginatedStats = sortedStats.slice(skip, skip + limit);
 
   // Get user details
-  const userIds = paginatedStats.map(stat => stat.userId);
+  const userIds = paginatedStats.map(stat => stat.userId).filter((id): id is string => id !== null);
   const users = await prisma.users.findMany({
     where: { id: { in: userIds } },
     select: {
@@ -2895,9 +2895,9 @@ async function buildWorkoutLeaderboard(params: any) {
     return acc;
   }, {} as Record<string, any>);
 
-  const leaderboardData = paginatedStats.map((stat, index) => ({
-    userId: stat.userId,
-    user: userMap[stat.userId],
+  const leaderboardData = paginatedStats.filter(stat => stat.userId !== null).map((stat, index) => ({
+    userId: stat.userId as string,
+    user: userMap[stat.userId as string],
     rank: skip + index + 1,
     score: getLeaderboardMetricValue(stat, metric),
     metrics: {
@@ -2947,7 +2947,7 @@ async function buildChallengeLeaderboard(params: any) {
   const total = sortedStats.length;
   const paginatedStats = sortedStats.slice(skip, skip + limit);
 
-  const userIds = paginatedStats.map(stat => stat.userId);
+  const userIds = paginatedStats.map(stat => stat.userId).filter((id): id is string => id !== null);
   const users = await prisma.users.findMany({
     where: { id: { in: userIds } },
     select: {

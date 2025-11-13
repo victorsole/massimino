@@ -38,6 +38,11 @@ export async function POST(
     }
 
     // Fetch the most recent assessment for this athlete
+    // Handle pending invited athlete sessions (no userId yet)
+    if (!workoutSession.userId) {
+      return NextResponse.json({ error: 'Cannot recommend exercises for pending athlete session' }, { status: 400 });
+    }
+
     const assessment = await prisma.assessments.findFirst({
       where: {
         clientId: workoutSession.userId,
