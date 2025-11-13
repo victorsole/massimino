@@ -52,6 +52,7 @@ export function HabitsTab() {
         const json = await res.json();
         const map: Record<string, Ratings> = {};
         for (const log of json.logs || []) {
+          if (!log.date) continue;
           const key = format(new Date(log.date), 'yyyy-MM-dd');
           map[key] = {
             sleepRating: log.sleepRating ?? undefined,
