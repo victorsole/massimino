@@ -21,6 +21,9 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { slideUpVariants } from '@/lib/animations/variants';
+import { smoothSpring } from '@/lib/animations/transitions';
 
 function LoginContent() {
   const [showPassword, setShowPassword] = useState(false);
@@ -107,25 +110,55 @@ function LoginContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-brand-secondary to-brand-secondary-dark flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/background/dumbells_gloves_01.jpg"
+          alt="Background"
+          fill
+          className="object-cover opacity-50"
+          priority
+        />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-secondary/60 to-brand-secondary-dark/60" />
+      </div>
+
+      <div className="w-full max-w-md relative z-10">
         {/* Logo */}
-        <div className="text-center mb-8">
+        <motion.div
+          className="text-center mb-8"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
           <div className="flex justify-center mb-4">
-            <Image
-              src="/massimino_logo.png"
-              alt="Massimino Logo"
-              width={120}
-              height={120}
-              className="object-contain"
-            />
+            <motion.div
+              initial={{ scale: 0.5, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+            >
+              <Image
+                src="/massimino_logo.png"
+                alt="Massimino Logo"
+                width={120}
+                height={120}
+                className="object-contain"
+              />
+            </motion.div>
           </div>
           <h1 className="text-3xl font-bold text-brand-primary mb-2">Welcome Back</h1>
           <p className="text-brand-primary-light">Sign in to continue your fitness journey</p>
-        </div>
+        </motion.div>
 
         {/* Login Card */}
-        <Card className="shadow-xl border-0 bg-brand-secondary/90 backdrop-blur-sm">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={slideUpVariants}
+          transition={smoothSpring}
+        >
+          <Card className="shadow-xl border-0 bg-brand-secondary/90 backdrop-blur-sm">
           <CardHeader className="space-y-1 pb-6">
             <CardTitle className="text-2xl text-center font-semibold text-brand-primary">Sign In</CardTitle>
             <CardDescription className="text-center text-brand-primary-light">
@@ -290,6 +323,7 @@ function LoginContent() {
             </div>
           </CardContent>
         </Card>
+        </motion.div>
 
         {/* Footer */}
         <div className="text-center mt-8 text-sm text-brand-primary-light">

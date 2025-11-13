@@ -36,6 +36,7 @@
     "scripts:exercises:sync:firestore": "ts-node -e \"(async()=>{const { prisma } = require('./dist')?.lib?.database?.client || require('./src/lib/database/client'); const { publishExercise } = require('./src/lib/integrations/firebase'); const all = await prisma.exercise.findMany(); let n=0; for (const ex of all){ await publishExercise(ex); if(++n%200===0) console.log('...synced', n);} console.log('done'); process.exit(0)})()\""
   },
   "dependencies": {
+    "@gsap/react": "^2.1.2",
     "@mdi/js": "^7.4.47",
     "@mollie/api-client": "^4.3.3",
     "@next-auth/prisma-adapter": "^1.0.7",
@@ -65,6 +66,8 @@
     "csv-parse": "^6.1.0",
     "date-fns": "^4.1.0",
     "firebase-admin": "^13.5.0",
+    "framer-motion": "^12.23.24",
+    "gsap": "^3.13.0",
     "lucide-react": "^0.294.0",
     "next": "^15.5.6",
     "next-auth": "^4.24.11",
@@ -74,6 +77,7 @@
     "react-dom": "^18.2.0",
     "react-email": "^4.2.12",
     "react-hook-form": "^7.48.2",
+    "react-spring": "^10.0.3",
     "resend": "^6.1.1",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",

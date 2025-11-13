@@ -249,6 +249,11 @@ export async function inviteAthlete(
     });
   } catch (error) {
     console.error('Failed to send invitation email:', error);
+    // Delete the invitation since email failed
+    await prisma.athlete_invitations.delete({
+      where: { id: invitation.id },
+    });
+    throw new Error('Failed to send invitation email. Please verify the email address and try again.');
   }
 
   return invitation;

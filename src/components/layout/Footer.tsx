@@ -197,7 +197,7 @@ export default function Footer() {
               </div>
             ) : (
               <div>
-                <label className="text-sm text-gray-600">Message</label>
+                <label className="text-sm text-gray-600">Message (optional)</label>
                 <Textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Tell us more..." rows={4} />
               </div>
             )}

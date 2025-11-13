@@ -10,6 +10,12 @@ export const metadata = {
   description: 'The safety-first fitness community platform where trainers and athletes connect, track workouts, and achieve goals together.',
 }
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+}
+
 export default function RootLayout({
   children,
 }: {
