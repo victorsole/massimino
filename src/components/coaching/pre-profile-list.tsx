@@ -1,6 +1,6 @@
 'use client';
 
-import { Mail, Clock, RefreshCw, X, Gift, Dumbbell, Users } from 'lucide-react';
+import { Mail, Clock, RefreshCw, X, Gift, Dumbbell, Users, Eye, Plus, TrendingUp } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -23,10 +23,11 @@ interface PreProfileListProps {
   onResend: (invitationId: string) => void;
   onCancel: (invitationId: string) => void;
   onCreateSession?: (invitationId: string) => void;
-  onAssignToTeam?: (invitationId: string) => void;
+  onViewProgress?: (invitationId: string) => void;
+  onAssignProgram?: (invitationId: string) => void;
 }
 
-export function PreProfileList({ invitations, onResend, onCancel, onCreateSession, onAssignToTeam }: PreProfileListProps) {
+export function PreProfileList({ invitations, onResend, onCancel, onCreateSession, onViewProgress, onAssignProgram }: PreProfileListProps) {
   const getTimeAgo = (date: Date) => {
     const seconds = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
 
@@ -80,81 +81,61 @@ export function PreProfileList({ invitations, onResend, onCancel, onCreateSessio
                       </Badge>
                     </div>
 
-                    <div className="text-sm text-gray-600 space-y-1">
-                      <div className="flex items-center">
+                    <div className="flex items-center space-x-4 text-sm text-gray-600">
+                      <span className="flex items-center">
                         <Mail className="h-3 w-3 mr-1" />
                         {invitation.athleteEmail}
-                      </div>
-                      <div className="flex items-center space-x-4">
-                        <span className="flex items-center text-gray-500">
-                          <Clock className="h-3 w-3 mr-1" />
-                          Sent {getTimeAgo(invitation.sentAt)}
-                        </span>
-                        <span className={`flex items-center ${isExpiringSoon ? 'text-orange-600' : 'text-gray-500'}`}>
-                          Expires in {daysLeft} {daysLeft === 1 ? 'day' : 'days'}
-                        </span>
-                      </div>
+                      </span>
+                      <span className="flex items-center text-gray-500">
+                        <Clock className="h-3 w-3 mr-1" />
+                        Sent {getTimeAgo(invitation.sentAt)}
+                      </span>
                     </div>
 
-                    <div className="mt-3 space-y-2">
-                      <div className="flex items-start gap-2 p-3 rounded-lg bg-indigo-50 border border-indigo-200">
-                        <Gift className="h-4 w-4 text-indigo-600 mt-0.5" />
-                        <div>
-                          <p className="text-sm font-medium text-indigo-900">
-                            Earn 100 points when they join!
-                          </p>
-                          <p className="text-xs text-indigo-700">
-                            Unlock discounts on Massimino partners
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Action buttons for pending athletes */}
-                      <div className="flex flex-wrap gap-2">
-                        {onCreateSession && (
-                          <Button
-                            size="sm"
-                            variant="default"
-                            onClick={() => onCreateSession(invitation.id)}
-                            className="bg-brand-primary hover:bg-brand-primary-dark"
-                          >
-                            <Dumbbell className="h-4 w-4 mr-1" />
-                            Create Session
-                          </Button>
-                        )}
-                        {onAssignToTeam && (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => onAssignToTeam(invitation.id)}
-                          >
-                            <Users className="h-4 w-4 mr-1" />
-                            Add to Team
-                          </Button>
-                        )}
-                      </div>
+                    <div className="mt-2 flex flex-wrap gap-1">
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${isExpiringSoon ? 'bg-orange-100 text-orange-800' : 'bg-gray-100 text-gray-800'}`}>
+                        <Clock className="h-3 w-3 mr-1" />
+                        Expires in {daysLeft} {daysLeft === 1 ? 'day' : 'days'}
+                      </span>
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">
+                        <Gift className="h-3 w-3 mr-1" />
+                        100 pts when they join
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex flex-col items-end gap-2 ml-4">
-                  <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 ml-4">
+                  {onViewProgress && (
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => onResend(invitation.id)}
+                      onClick={() => onViewProgress(invitation.id)}
                     >
-                      <RefreshCw className="h-4 w-4 mr-1" />
-                      Resend
+                      <Eye className="h-4 w-4 mr-1" />
+                      View
                     </Button>
+                  )}
+                  {onCreateSession && (
                     <Button
-                      variant="ghost"
+                      variant="default"
                       size="sm"
-                      onClick={() => onCancel(invitation.id)}
+                      onClick={() => onCreateSession(invitation.id)}
                     >
-                      <X className="h-4 w-4" />
+                      <Plus className="h-4 w-4 mr-1" />
+                      Session
                     </Button>
-                  </div>
+                  )}
+                  {onAssignProgram && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onAssignProgram(invitation.id)}
+                    >
+                      <TrendingUp className="h-4 w-4 mr-1" />
+                      Progress
+                    </Button>
+                  )}
                 </div>
               </div>
             </CardContent>
