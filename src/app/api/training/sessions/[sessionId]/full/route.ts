@@ -49,6 +49,11 @@ export async function GET(
     }
 
     // Check if the session belongs to a client of this trainer
+    // Handle pending invited athlete sessions (no userId yet)
+    if (!workoutSession.userId) {
+      return NextResponse.json({ error: 'Cannot access full session for pending athlete' }, { status: 400 });
+    }
+
     const relationship = await prisma.trainer_clients.findFirst({
       where: {
         trainerId: trainerProfile.id,
@@ -167,7 +172,7 @@ export async function GET(
       status: workoutSession.status || 'ACTIVE',
       isComplete: workoutSession.isComplete,
       athleteId: workoutSession.userId,
-      athleteName: workoutSession.users_workout_sessions_userIdTousers.name || workoutSession.users_workout_sessions_userIdTousers.email,
+      athleteName: workoutSession.users_workout_sessions_userIdTousers?.name || workoutSession.users_workout_sessions_userIdTousers?.email || workoutSession.athleteInvitationEmail || 'Pending Athlete',
       trainerId: workoutSession.coachId,
       notes: workoutSession.notes,
       totalVolume: workoutSession.totalVolume,

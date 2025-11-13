@@ -144,6 +144,12 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
     setShowCreateSessionModal(true);
   };
 
+  const handleCreateSessionForInvitation = (invitationId: string) => {
+    // Pass invitation ID instead of athlete ID
+    setSelectedAthleteId(invitationId);
+    setShowCreateSessionModal(true);
+  };
+
   const handleMessage = (athleteId: string) => {
     const athlete = data?.withProfile?.find((a: any) => a.clientId === athleteId);
     setSelectedAthleteId(athleteId);
@@ -297,6 +303,7 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
               invitations={data?.withoutProfile || []}
               onResend={handleResendInvitation}
               onCancel={handleCancelInvitation}
+              onCreateSession={handleCreateSessionForInvitation}
             />
           )}
           {activeTab === 'requests' && (
