@@ -1,0 +1,467 @@
+{
+  "id": "food_frequency_questionnaire",
+  "title": "Food Frequency Questionnaire",
+  "version": "1.0",
+  "description": "Comprehensive dietary assessment tool adapted from NIH Diet History Questionnaire (DHQIII). This questionnaire has been adapted from the National Institute of Health's Diet History Questionnaire (DHQIII). To simplify this questionnaire and help Nutrition Coaches remain within their scope of practice, vitamin and mineral supplement questions have been omitted. This questionnaire is for informational and nutrition coaching purposes and is not intended to diagnose illness or prescribe nutritional therapy.",
+  "sections": [
+    {
+      "id": "personal_info",
+      "title": "Personal Information",
+      "fields": [
+        {"id": "name", "type": "text", "label": "Name", "required": true},
+        {"id": "date", "type": "date", "label": "Date", "required": true}
+      ]
+    },
+    {
+      "id": "instructions",
+      "title": "Instructions",
+      "description": "Answer the following questions to the best of your ability. It is important, for the accuracy of this questionnaire, to answer each question truthfully. Questions are broken into major categories similar to the DHQIII. If a question does not apply to you or you simply do not consume the food or drink in question, leave the associated answer fields blank. For each food/beverage you consumed at least once in the past 12 months, indicate how often you consumed it and what portion size you usually eat in one sitting.",
+      "fields": []
+    },
+    {
+      "id": "beverages",
+      "title": "Beverages",
+      "description": "For each beverage you consumed at least once in the past 12 months, indicate frequency and portion size",
+      "subsections": [
+        {
+          "id": "bev_001",
+          "title": "Tomato juice or vegetable juice",
+          "fields": [
+            {"id": "bev_001_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "bev_001_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "bev_002",
+          "title": "Orange juice or grapefruit juice",
+          "fields": [
+            {"id": "bev_002_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "bev_002_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "bev_003",
+          "title": "Grape juice",
+          "fields": [
+            {"id": "bev_003_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "bev_003_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "bev_004",
+          "title": "Other 100% fruit juices (ex. apple)",
+          "fields": [
+            {"id": "bev_004_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "bev_004_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "bev_005",
+          "title": "Fruit or vegetable smoothies",
+          "fields": [
+            {"id": "bev_005_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "bev_005_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "bev_006",
+          "title": "Boxed fruit drinks",
+          "fields": [
+            {"id": "bev_006_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "bev_006_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "bev_007",
+          "title": "Milk as a beverage",
+          "fields": [
+            {"id": "bev_007_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "bev_007_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "bev_008",
+          "title": "Milkshakes",
+          "fields": [
+            {"id": "bev_008_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "bev_008_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "bev_009",
+          "title": "Meal replacement or high-protein beverages",
+          "fields": [
+            {"id": "bev_009_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "bev_009_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "bev_010",
+          "title": "Soda or pop",
+          "fields": [
+            {"id": "bev_010_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "bev_010_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "bev_011",
+          "title": "Sports drinks",
+          "fields": [
+            {"id": "bev_011_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "bev_011_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "bev_012",
+          "title": "Energy drinks",
+          "fields": [
+            {"id": "bev_012_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "bev_012_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "bev_013",
+          "title": "Water",
+          "fields": [
+            {"id": "bev_013_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "bev_013_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dairy",
+      "title": "Dairy Products",
+      "description": "For each dairy product you consumed at least once in the past 12 months, indicate frequency and portion size",
+      "subsections": [
+        {
+          "id": "dairy_001",
+          "title": "Yogurt",
+          "fields": [
+            {"id": "dairy_001_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "dairy_001_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "dairy_002",
+          "title": "Cottage cheese",
+          "fields": [
+            {"id": "dairy_002_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "dairy_002_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "dairy_003",
+          "title": "Other cheese",
+          "fields": [
+            {"id": "dairy_003_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "dairy_003_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "meats_proteins",
+      "title": "Meats and Proteins",
+      "description": "For each meat/protein you consumed at least once in the past 12 months, indicate frequency and portion size",
+      "subsections": [
+        {
+          "id": "meat_001",
+          "title": "Beef",
+          "fields": [
+            {"id": "meat_001_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "meat_001_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "meat_002",
+          "title": "Pork",
+          "fields": [
+            {"id": "meat_002_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "meat_002_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "meat_003",
+          "title": "Chicken",
+          "fields": [
+            {"id": "meat_003_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "meat_003_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "meat_004",
+          "title": "Turkey",
+          "fields": [
+            {"id": "meat_004_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "meat_004_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "meat_005",
+          "title": "Fish",
+          "fields": [
+            {"id": "meat_005_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "meat_005_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "meat_006",
+          "title": "Seafood",
+          "fields": [
+            {"id": "meat_006_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "meat_006_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "meat_007",
+          "title": "Eggs",
+          "fields": [
+            {"id": "meat_007_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "meat_007_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fruits_vegetables",
+      "title": "Fruits and Vegetables",
+      "description": "For each fruit/vegetable you consumed at least once in the past 12 months, indicate frequency and portion size",
+      "subsections": [
+        {
+          "id": "fv_001",
+          "title": "Green salad",
+          "fields": [
+            {"id": "fv_001_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "fv_001_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "fv_002",
+          "title": "Carrots",
+          "fields": [
+            {"id": "fv_002_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "fv_002_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "fv_003",
+          "title": "Broccoli",
+          "fields": [
+            {"id": "fv_003_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "fv_003_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "fv_004",
+          "title": "Tomatoes",
+          "fields": [
+            {"id": "fv_004_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "fv_004_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "fv_005",
+          "title": "Apples",
+          "fields": [
+            {"id": "fv_005_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "fv_005_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "fv_006",
+          "title": "Bananas",
+          "fields": [
+            {"id": "fv_006_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "fv_006_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "fv_007",
+          "title": "Berries",
+          "fields": [
+            {"id": "fv_007_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "fv_007_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grains_bread",
+      "title": "Grains and Bread",
+      "description": "For each grain/bread you consumed at least once in the past 12 months, indicate frequency and portion size",
+      "subsections": [
+        {
+          "id": "grain_001",
+          "title": "Bread",
+          "fields": [
+            {"id": "grain_001_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "grain_001_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "grain_002",
+          "title": "Pasta",
+          "fields": [
+            {"id": "grain_002_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "grain_002_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "grain_003",
+          "title": "Rice",
+          "fields": [
+            {"id": "grain_003_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "grain_003_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "grain_004",
+          "title": "Cereal",
+          "fields": [
+            {"id": "grain_004_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "grain_004_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "grain_005",
+          "title": "Oatmeal",
+          "fields": [
+            {"id": "grain_005_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "grain_005_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "snacks_desserts",
+      "title": "Snacks and Desserts",
+      "description": "For each snack/dessert you consumed at least once in the past 12 months, indicate frequency and portion size",
+      "subsections": [
+        {
+          "id": "snack_001",
+          "title": "Ice cream (not light, low-fat, or fat-free)",
+          "fields": [
+            {"id": "snack_001_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "snack_001_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "snack_002",
+          "title": "Cake",
+          "fields": [
+            {"id": "snack_002_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "snack_002_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "snack_003",
+          "title": "Pie",
+          "fields": [
+            {"id": "snack_003_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "snack_003_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "snack_004",
+          "title": "Cookies",
+          "fields": [
+            {"id": "snack_004_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "snack_004_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "snack_005",
+          "title": "Brownies",
+          "fields": [
+            {"id": "snack_005_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "snack_005_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "snack_006",
+          "title": "Doughnuts, sweet rolls, Danish",
+          "fields": [
+            {"id": "snack_006_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "snack_006_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "snack_007",
+          "title": "Sweet muffins or dessert breads",
+          "fields": [
+            {"id": "snack_007_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "snack_007_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "snack_008",
+          "title": "Pudding or custard",
+          "fields": [
+            {"id": "snack_008_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "snack_008_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "snack_009",
+          "title": "Chocolate bar or chocolate candy",
+          "fields": [
+            {"id": "snack_009_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "snack_009_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spreads_dressings",
+      "title": "Spreads and Dressings",
+      "description": "For each spread/dressing you consumed at least once in the past 12 months, indicate frequency and portion size",
+      "subsections": [
+        {
+          "id": "spread_001",
+          "title": "Margarine",
+          "fields": [
+            {"id": "spread_001_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "spread_001_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "spread_002",
+          "title": "Butter",
+          "fields": [
+            {"id": "spread_002_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "spread_002_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "spread_003",
+          "title": "Mayonnaise or mayonnaise-based dressing",
+          "fields": [
+            {"id": "spread_003_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "spread_003_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        },
+        {
+          "id": "spread_004",
+          "title": "Salad dressing",
+          "fields": [
+            {"id": "spread_004_frequency", "type": "select", "label": "Frequency", "options": ["", "Rarely", "Sometimes", "Consistently"]},
+            {"id": "spread_004_portion", "type": "select", "label": "Portion Size", "options": ["", "Small", "Medium", "Large"]}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "summary_questions",
+      "title": "Summary Question",
+      "description": "Which of the following foods did you TOTALLY EXCLUDE from your diet? Mark all that apply.",
+      "fields": [
+        {"id": "excluded_meat", "type": "checkbox", "label": "Meat (beef, pork, lamb, etc.)"},
+        {"id": "excluded_poultry", "type": "checkbox", "label": "Poultry (chicken, turkey, duck)"},
+        {"id": "excluded_fish_seafood", "type": "checkbox", "label": "Fish and seafood"},
+        {"id": "excluded_eggs", "type": "checkbox", "label": "Eggs"},
+        {"id": "excluded_dairy", "type": "checkbox", "label": "Dairy products (milk, cheese, etc.)"}
+      ]
+    }
+  ]
+}

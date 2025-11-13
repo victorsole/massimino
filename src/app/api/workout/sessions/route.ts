@@ -40,6 +40,7 @@ export async function GET(request: NextRequest) {
     const statusParam = searchParams.get('status');
     const actionParam = searchParams.get('action');
     const targetUserIdParam = searchParams.get('userId');
+    const invitationIdParam = searchParams.get('invitationId');
     
     // Parse query parameters
     const dateRangeParam = searchParams.get('dateRange');
@@ -139,6 +140,73 @@ export async function GET(request: NextRequest) {
       ];
 
       return NextResponse.json({ clients });
+    }
+
+    // Handle invitation ID parameter (for pending athletes)
+    if (invitationIdParam && (session.user.role === UserRole.TRAINER || session.user.role === UserRole.ADMIN)) {
+      // Verify trainer owns the invitation
+      const invitation = await prisma.athlete_invitations.findUnique({
+        where: { id: invitationIdParam }
+      });
+
+      if (!invitation) {
+        return NextResponse.json({ error: 'Invitation not found' }, { status: 404 });
+      }
+
+      if (session.user.role === UserRole.TRAINER && invitation.trainerId !== session.user.id) {
+        return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+      }
+
+      // Get sessions for this invitation
+      const sessions = await prisma.workout_sessions.findMany({
+        where: { athleteInvitationId: invitationIdParam },
+        include: {
+          users_workout_sessions_userIdTousers: {
+            select: {
+              id: true,
+              name: true,
+              role: true,
+            },
+          },
+          users_workout_sessions_coachIdTousers: {
+            select: {
+              id: true,
+              name: true,
+              role: true,
+            },
+          },
+          workout_log_entries: {
+            include: {
+              exercises: true,
+            },
+            orderBy: { order: 'asc' },
+          },
+        },
+        orderBy: { date: 'desc' },
+        take: pagination.limit || 20,
+      });
+
+      // Map the Prisma relation names to the expected format
+      const mappedSessions = sessions.map((session) => ({
+        ...session,
+        user: session.users_workout_sessions_userIdTousers,
+        coach: session.users_workout_sessions_coachIdTousers,
+        entries: session.workout_log_entries.map((entry) => ({
+          ...entry,
+          exercise: entry.exercises,
+        })),
+      }));
+
+      return NextResponse.json({
+        sessions: mappedSessions,
+        pagination: {
+          page: pagination.page || 1,
+          limit: pagination.limit || 20,
+          total: sessions.length,
+          totalPages: 1,
+          hasMore: false,
+        },
+      });
     }
 
     // Determine target user ID based on role and optional userId param

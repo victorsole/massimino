@@ -1,0 +1,147 @@
+{
+  "id": "diet_record",
+  "title": "Diet Record Worksheet",
+  "version": "1.0",
+  "description": "Daily food intake tracking form with macronutrient estimates",
+  "sections": [
+    {
+      "id": "personal_info",
+      "title": "Personal Information",
+      "fields": [
+        {"id": "name", "type": "text", "label": "Name", "required": true},
+        {"id": "date", "type": "date", "label": "Date", "required": true},
+        {"id": "day_of_week", "type": "select", "label": "Day of Week", "options": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], "required": true}
+      ]
+    },
+    {
+      "id": "food_entry_1",
+      "title": "Food Entry 1",
+      "description": "Example: 1 cup of 2% milk",
+      "fields": [
+        {"id": "food_1_description", "type": "text", "label": "Food Description", "placeholder": "Example: 1 cup of 2% milk"},
+        {"id": "food_1_calories", "type": "number", "label": "Calories (est.)", "min": 0, "decimal": true},
+        {"id": "food_1_protein", "type": "number", "label": "Protein (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_1_carbs", "type": "number", "label": "Carbs (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_1_fat", "type": "number", "label": "Fat (est. grams)", "min": 0, "decimal": true}
+      ]
+    },
+    {
+      "id": "food_entry_2",
+      "title": "Food Entry 2",
+      "fields": [
+        {"id": "food_2_description", "type": "text", "label": "Food Description", "placeholder": "Example: 1 cup of 2% milk"},
+        {"id": "food_2_calories", "type": "number", "label": "Calories (est.)", "min": 0, "decimal": true},
+        {"id": "food_2_protein", "type": "number", "label": "Protein (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_2_carbs", "type": "number", "label": "Carbs (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_2_fat", "type": "number", "label": "Fat (est. grams)", "min": 0, "decimal": true}
+      ]
+    },
+    {
+      "id": "food_entry_3",
+      "title": "Food Entry 3",
+      "fields": [
+        {"id": "food_3_description", "type": "text", "label": "Food Description", "placeholder": "Example: 1 cup of 2% milk"},
+        {"id": "food_3_calories", "type": "number", "label": "Calories (est.)", "min": 0, "decimal": true},
+        {"id": "food_3_protein", "type": "number", "label": "Protein (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_3_carbs", "type": "number", "label": "Carbs (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_3_fat", "type": "number", "label": "Fat (est. grams)", "min": 0, "decimal": true}
+      ]
+    },
+    {
+      "id": "food_entry_4",
+      "title": "Food Entry 4",
+      "fields": [
+        {"id": "food_4_description", "type": "text", "label": "Food Description", "placeholder": "Example: 1 cup of 2% milk"},
+        {"id": "food_4_calories", "type": "number", "label": "Calories (est.)", "min": 0, "decimal": true},
+        {"id": "food_4_protein", "type": "number", "label": "Protein (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_4_carbs", "type": "number", "label": "Carbs (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_4_fat", "type": "number", "label": "Fat (est. grams)", "min": 0, "decimal": true}
+      ]
+    },
+    {
+      "id": "food_entry_5",
+      "title": "Food Entry 5",
+      "fields": [
+        {"id": "food_5_description", "type": "text", "label": "Food Description", "placeholder": "Example: 1 cup of 2% milk"},
+        {"id": "food_5_calories", "type": "number", "label": "Calories (est.)", "min": 0, "decimal": true},
+        {"id": "food_5_protein", "type": "number", "label": "Protein (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_5_carbs", "type": "number", "label": "Carbs (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_5_fat", "type": "number", "label": "Fat (est. grams)", "min": 0, "decimal": true}
+      ]
+    },
+    {
+      "id": "food_entry_6",
+      "title": "Food Entry 6",
+      "fields": [
+        {"id": "food_6_description", "type": "text", "label": "Food Description", "placeholder": "Example: 1 cup of 2% milk"},
+        {"id": "food_6_calories", "type": "number", "label": "Calories (est.)", "min": 0, "decimal": true},
+        {"id": "food_6_protein", "type": "number", "label": "Protein (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_6_carbs", "type": "number", "label": "Carbs (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_6_fat", "type": "number", "label": "Fat (est. grams)", "min": 0, "decimal": true}
+      ]
+    },
+    {
+      "id": "food_entry_7",
+      "title": "Food Entry 7",
+      "fields": [
+        {"id": "food_7_description", "type": "text", "label": "Food Description", "placeholder": "Example: 1 cup of 2% milk"},
+        {"id": "food_7_calories", "type": "number", "label": "Calories (est.)", "min": 0, "decimal": true},
+        {"id": "food_7_protein", "type": "number", "label": "Protein (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_7_carbs", "type": "number", "label": "Carbs (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_7_fat", "type": "number", "label": "Fat (est. grams)", "min": 0, "decimal": true}
+      ]
+    },
+    {
+      "id": "food_entry_8",
+      "title": "Food Entry 8",
+      "fields": [
+        {"id": "food_8_description", "type": "text", "label": "Food Description", "placeholder": "Example: 1 cup of 2% milk"},
+        {"id": "food_8_calories", "type": "number", "label": "Calories (est.)", "min": 0, "decimal": true},
+        {"id": "food_8_protein", "type": "number", "label": "Protein (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_8_carbs", "type": "number", "label": "Carbs (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_8_fat", "type": "number", "label": "Fat (est. grams)", "min": 0, "decimal": true}
+      ]
+    },
+    {
+      "id": "food_entry_9",
+      "title": "Food Entry 9",
+      "fields": [
+        {"id": "food_9_description", "type": "text", "label": "Food Description", "placeholder": "Example: 1 cup of 2% milk"},
+        {"id": "food_9_calories", "type": "number", "label": "Calories (est.)", "min": 0, "decimal": true},
+        {"id": "food_9_protein", "type": "number", "label": "Protein (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_9_carbs", "type": "number", "label": "Carbs (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_9_fat", "type": "number", "label": "Fat (est. grams)", "min": 0, "decimal": true}
+      ]
+    },
+    {
+      "id": "food_entry_10",
+      "title": "Food Entry 10",
+      "fields": [
+        {"id": "food_10_description", "type": "text", "label": "Food Description", "placeholder": "Example: 1 cup of 2% milk"},
+        {"id": "food_10_calories", "type": "number", "label": "Calories (est.)", "min": 0, "decimal": true},
+        {"id": "food_10_protein", "type": "number", "label": "Protein (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_10_carbs", "type": "number", "label": "Carbs (est. grams)", "min": 0, "decimal": true},
+        {"id": "food_10_fat", "type": "number", "label": "Fat (est. grams)", "min": 0, "decimal": true}
+      ]
+    },
+    {
+      "id": "hydration_and_notes",
+      "title": "Hydration & Notes",
+      "fields": [
+        {"id": "total_water_intake", "type": "number", "label": "Total Water Intake (L)", "min": 0, "decimal": 1, "step": 0.1},
+        {"id": "notes", "type": "textarea", "label": "Notes", "placeholder": "Additional observations, energy levels, digestion, etc.", "rows": 4}
+      ]
+    },
+    {
+      "id": "daily_totals",
+      "title": "Daily Totals",
+      "description": "Automatic calculations of your daily intake",
+      "fields": [
+        {"id": "total_calories", "type": "calculated", "label": "Total Calories", "formula": "sum(food_*_calories)", "decimal": 0},
+        {"id": "total_protein", "type": "calculated", "label": "Total Protein (g)", "formula": "sum(food_*_protein)", "decimal": 1},
+        {"id": "total_carbs", "type": "calculated", "label": "Total Carbs (g)", "formula": "sum(food_*_carbs)", "decimal": 1},
+        {"id": "total_fat", "type": "calculated", "label": "Total Fat (g)", "formula": "sum(food_*_fat)", "decimal": 1}
+      ]
+    }
+  ]
+}
