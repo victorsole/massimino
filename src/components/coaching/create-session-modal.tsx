@@ -57,11 +57,18 @@ export function CreateSessionModal({
       const date = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
       const startTime = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
 
+      // Check if this is an invitation ID (starts with different pattern) or a user ID
+      // Invitation IDs are being passed from the pending athletes section
+      const isPendingInvitation = !clients.some(c => c.id === selectedClientId);
+
       const res = await fetch('/api/workout/sessions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId: selectedClientId,
+          ...(isPendingInvitation
+            ? { athleteInvitationId: selectedClientId }
+            : { userId: selectedClientId }
+          ),
           title: sessionTitle || undefined,
           date,
           startTime
@@ -71,14 +78,14 @@ export function CreateSessionModal({
       const data = await res.json();
 
       if (data.session) {
-        // Session created successfully - navigate to workout-log for exercise management
+        // Session created successfully
         setSelectedClientId('');
         setSessionTitle('');
         onSuccess?.();
         onClose();
 
-        // Show success message and navigate
-        alert(`Workout session created successfully for athlete!\n\nThe session is now active for the athlete. You can assign programs or create workouts using Massichat Plus.`);
+        // Show success message
+        alert(`Workout session created successfully!\n\nThe session is now ${isPendingInvitation ? 'prepared and will be transferred when the athlete accepts the invitation' : 'active for the athlete'}. You can assign programs or create workouts using Massichat Plus.`);
       } else {
         alert(data.error || 'Failed to create athlete session');
       }

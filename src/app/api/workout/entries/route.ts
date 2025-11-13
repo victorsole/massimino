@@ -254,6 +254,10 @@ export async function POST(request: NextRequest) {
           if (!targetSession) {
             throw new Error('Session not found');
           }
+          // Handle pending invited athlete sessions (no userId yet)
+          if (!targetSession.userId) {
+            throw new Error('Cannot add entries to pending athlete session');
+          }
           if (session.user.role === UserRole.TRAINER) {
             const rel = await prisma.trainer_clients.findUnique({
               where: { trainerId_clientId: { trainerId: session.user.id, clientId: targetSession.userId } }

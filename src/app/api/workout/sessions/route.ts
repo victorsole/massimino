@@ -197,12 +197,37 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Optional target user (for trainer/admin)
+    // Handle either userId OR athleteInvitationId (for pending invited athletes)
     const targetUserId: string | undefined = body.userId;
-    let ownerUserId = session.user.id;
+    const athleteInvitationId: string | undefined = body.athleteInvitationId;
+    let ownerUserId: string | null = session.user.id;
     let coachId: string | undefined = undefined;
+    let athleteEmail: string | undefined = undefined;
 
-    if (targetUserId && (session.user.role === UserRole.TRAINER || session.user.role === UserRole.ADMIN)) {
+    // For pending invited athletes (invitation ID provided)
+    if (athleteInvitationId && (session.user.role === UserRole.TRAINER || session.user.role === UserRole.ADMIN)) {
+      const { prisma } = await import('@/core/database');
+
+      // Verify trainer owns the invitation
+      const invitation = await prisma.athlete_invitations.findUnique({
+        where: { id: athleteInvitationId },
+      });
+
+      if (!invitation || invitation.trainerId !== session.user.id) {
+        return NextResponse.json({ error: 'Forbidden - invalid invitation' }, { status: 403 });
+      }
+
+      if (invitation.status !== 'PENDING') {
+        return NextResponse.json({ error: 'Invitation already processed' }, { status: 400 });
+      }
+
+      // Session for pending athlete - no userId yet
+      ownerUserId = null;
+      coachId = session.user.id;
+      athleteEmail = invitation.athleteEmail;
+    }
+    // For existing users
+    else if (targetUserId && (session.user.role === UserRole.TRAINER || session.user.role === UserRole.ADMIN)) {
       ownerUserId = targetUserId;
       if (session.user.role === UserRole.TRAINER) {
         // Verify trainer-client relationship
@@ -229,6 +254,12 @@ export async function POST(request: NextRequest) {
     // Validate normalized payload
     const validatedData = createWorkoutSessionSchema.parse(normalized);
     const data: any = Object.fromEntries(Object.entries(validatedData).filter(([, v]) => v !== undefined));
+
+    // Add invitation fields if creating for pending athlete
+    if (athleteInvitationId) {
+      data.athleteInvitationId = athleteInvitationId;
+      data.athleteInvitationEmail = athleteEmail;
+    }
 
     // Create workout session
     const workoutSession = await createWorkoutSession(ownerUserId, data, coachId);
@@ -311,7 +342,10 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
-    // Compute XP breakdown and award achievements
+    // Compute XP breakdown and award achievements (skip for pending invited athletes)
+    if (!completedSession.userId) {
+      return NextResponse.json({ error: 'Cannot complete session for pending athlete' }, { status: 400 });
+    }
     const xp = await calculate_session_experience_points(sessionId);
     const awarded = await check_and_award_achievements(completedSession.userId, sessionId);
 

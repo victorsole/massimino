@@ -1,6 +1,6 @@
 'use client';
 
-import { Mail, Clock, RefreshCw, X, Gift } from 'lucide-react';
+import { Mail, Clock, RefreshCw, X, Gift, Dumbbell, Users } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -22,9 +22,11 @@ interface PreProfileListProps {
   invitations: AthleteInvitation[];
   onResend: (invitationId: string) => void;
   onCancel: (invitationId: string) => void;
+  onCreateSession?: (invitationId: string) => void;
+  onAssignToTeam?: (invitationId: string) => void;
 }
 
-export function PreProfileList({ invitations, onResend, onCancel }: PreProfileListProps) {
+export function PreProfileList({ invitations, onResend, onCancel, onCreateSession, onAssignToTeam }: PreProfileListProps) {
   const getTimeAgo = (date: Date) => {
     const seconds = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
 
@@ -94,36 +96,65 @@ export function PreProfileList({ invitations, onResend, onCancel }: PreProfileLi
                       </div>
                     </div>
 
-                    <div className="mt-3 flex items-start gap-2 p-3 rounded-lg bg-indigo-50 border border-indigo-200">
-                      <Gift className="h-4 w-4 text-indigo-600 mt-0.5" />
-                      <div>
-                        <p className="text-sm font-medium text-indigo-900">
-                          Earn 100 points when they join!
-                        </p>
-                        <p className="text-xs text-indigo-700">
-                          Unlock discounts on Massimino partners
-                        </p>
+                    <div className="mt-3 space-y-2">
+                      <div className="flex items-start gap-2 p-3 rounded-lg bg-indigo-50 border border-indigo-200">
+                        <Gift className="h-4 w-4 text-indigo-600 mt-0.5" />
+                        <div>
+                          <p className="text-sm font-medium text-indigo-900">
+                            Earn 100 points when they join!
+                          </p>
+                          <p className="text-xs text-indigo-700">
+                            Unlock discounts on Massimino partners
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Action buttons for pending athletes */}
+                      <div className="flex flex-wrap gap-2">
+                        {onCreateSession && (
+                          <Button
+                            size="sm"
+                            variant="default"
+                            onClick={() => onCreateSession(invitation.id)}
+                            className="bg-brand-primary hover:bg-brand-primary-dark"
+                          >
+                            <Dumbbell className="h-4 w-4 mr-1" />
+                            Create Session
+                          </Button>
+                        )}
+                        {onAssignToTeam && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => onAssignToTeam(invitation.id)}
+                          >
+                            <Users className="h-4 w-4 mr-1" />
+                            Add to Team
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 ml-4">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => onResend(invitation.id)}
-                  >
-                    <RefreshCw className="h-4 w-4 mr-1" />
-                    Resend
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => onCancel(invitation.id)}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
+                <div className="flex flex-col items-end gap-2 ml-4">
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onResend(invitation.id)}
+                    >
+                      <RefreshCw className="h-4 w-4 mr-1" />
+                      Resend
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => onCancel(invitation.id)}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
               </div>
             </CardContent>
