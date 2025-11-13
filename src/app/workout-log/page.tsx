@@ -240,7 +240,7 @@ export default function WorkoutLogPage() {
         if (data.activeSession) {
           setActiveSession({
             id: data.activeSession.id,
-            startTime: new Date(data.activeSession.startTime),
+            startTime: data.activeSession.startTime ? new Date(data.activeSession.startTime) : new Date(),
             assessmentId: data.activeSession.assessmentId
           });
         }
@@ -709,7 +709,7 @@ export default function WorkoutLogPage() {
       if (data.session) {
         setActiveSession({
           id: data.session.id,
-          startTime: new Date(data.session.startTime),
+          startTime: data.session.startTime ? new Date(data.session.startTime) : new Date(),
           assessmentId: data.session.assessmentId
         });
         setShowSessionCreationModal(false);

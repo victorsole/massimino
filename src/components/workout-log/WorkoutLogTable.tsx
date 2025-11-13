@@ -111,7 +111,7 @@ export function WorkoutLogTable({
       .join(',');
 
     setEditForm({
-      date: format(typeof entry.date === 'string' ? new Date(entry.date) : entry.date, 'yyyy-MM-dd'),
+      date: entry.date ? format(typeof entry.date === 'string' ? new Date(entry.date) : entry.date, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd'),
       exerciseId: entry.exerciseId,
       setNumber: entry.setNumber,
       setType: entry.setType,
@@ -237,8 +237,10 @@ export function WorkoutLogTable({
     return `${formatted.join(', ')} KG`;
   };
 
-  const formatDate = (date: string | Date) => {
+  const formatDate = (date: string | Date | null | undefined) => {
+    if (!date) return 'No date';
     const d = typeof date === 'string' ? new Date(date) : date;
+    if (isNaN(d.getTime())) return 'Invalid date';
     return format(d, 'MMM dd, yyyy');
   };
 
@@ -862,12 +864,12 @@ export function SessionHistoryTable() {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <CardTitle className="text-lg">
-                      {format(new Date(session.date), 'EEEE, d MMMM yyyy')}
+                      {session.date ? format(new Date(session.date), 'EEEE, d MMMM yyyy') : 'No date'}
                     </CardTitle>
                     <CardDescription>
-                      {format(new Date(session.startTime), 'HH:mm')}
-                      {session.endTime && ` - ${format(new Date(session.endTime), 'HH:mm')}`}
-                      {session.endTime && (
+                      {session.startTime ? format(new Date(session.startTime), 'HH:mm') : '--:--'}
+                      {session.endTime && session.endTime && ` - ${format(new Date(session.endTime), 'HH:mm')}`}
+                      {session.endTime && session.startTime && (
                         <span className="ml-2 text-gray-500">
                           ({formatDuration(
                             intervalToDuration({
@@ -1013,6 +1015,7 @@ export function WorkoutCalendar({ month, sessions }: WorkoutCalendarProps) {
   // Group sessions by date
   const sessions_by_date = new Map<string, any[]>();
   sessions.forEach(session => {
+    if (!session.date) return;
     const date_key = format(new Date(session.date), 'yyyy-MM-dd');
     if (!sessions_by_date.has(date_key)) {
       sessions_by_date.set(date_key, []);
@@ -1223,9 +1226,9 @@ export function CommentsPanel({ commentable_type, commentable_id }: CommentsPane
                       {comment.users.name}
                     </span>
                     <span className="text-xs text-gray-500">
-                      {formatDistanceToNow(new Date(comment.createdAt), {
+                      {comment.createdAt ? formatDistanceToNow(new Date(comment.createdAt), {
                         addSuffix: true
-                      })}
+                      }) : 'recently'}
                     </span>
                   </div>
                   <p className="text-sm text-gray-700">{comment.content}</p>
