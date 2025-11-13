@@ -1,6 +1,7 @@
 // src/app/api/profile/background/upload/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
+import { authOptions } from '@/core/auth/config';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 import { existsSync } from 'fs';
@@ -11,7 +12,7 @@ const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
 
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
