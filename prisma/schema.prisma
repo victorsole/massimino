@@ -3480,6 +3480,7 @@ enum ProgramType {
   CUSTOM // User-created programs
   LIFESTYLE // Situation-specific programs (new dad, stress relief, time-constrained, etc.)
   COMPONENT // Fitness component focus (cardio, flexibility, balance, plyometrics)
+  CASTELLERS // Castell training programs for human tower builders
 }
 
 enum ProgressionStrategy {

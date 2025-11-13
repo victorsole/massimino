@@ -1253,7 +1253,7 @@ export default function WorkoutLogPage() {
                 <div>
                   <h3 className="font-semibold text-lg">Active Workout Session</h3>
                   <p className="text-sm text-green-50">
-                    Started {new Date(activeSession.startTime).toLocaleTimeString()}
+                    Started {activeSession.startTime ? new Date(activeSession.startTime).toLocaleTimeString() : 'recently'}
                   </p>
                 </div>
               </div>
@@ -2204,7 +2204,7 @@ export default function WorkoutLogPage() {
                     />
                     <div className="flex items-center text-sm text-gray-500">
                       <Calendar className="h-4 w-4 mr-1" />
-                      {new Date(entry.date).toLocaleDateString()}
+                      {entry.date ? new Date(entry.date).toLocaleDateString() : 'No date'}
                     </div>
                     <Badge variant="outline">{entry.setType}</Badge>
                   </div>
@@ -2736,7 +2736,7 @@ export default function WorkoutLogPage() {
                   <option value="">No assessment</option>
                   {availableAssessments.map(assessment => (
                     <option key={assessment.id} value={assessment.id}>
-                      {new Date(assessment.createdAt).toLocaleDateString()} - {assessment.primaryGoal}
+                      {assessment.createdAt ? new Date(assessment.createdAt).toLocaleDateString() : 'No date'} - {assessment.primaryGoal}
                     </option>
                   ))}
                 </select>
