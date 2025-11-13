@@ -72,6 +72,10 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
     exercises: [] as { exerciseId: string; order: number; sets: number; reps: string; weight?: string }[]
   });
 
+  // Workout details modal state
+  const [selectedWorkout, setSelectedWorkout] = useState<TeamWorkoutLog | null>(null);
+  const [showWorkoutDetails, setShowWorkoutDetails] = useState(false);
+
   // Member invitation modal state
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [inviteUserId, setInviteUserId] = useState('');
@@ -907,7 +911,14 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
                       {workouts.map((workout) => {
                         const isCompleted = workout.completions?.some(c => c.userId === session?.user?.id);
                         return (
-                          <div key={workout.id} className="p-3 border rounded-lg bg-white hover:border-brand-primary/30 transition-colors">
+                          <div
+                            key={workout.id}
+                            className="p-3 border rounded-lg bg-white hover:border-brand-primary/30 transition-colors cursor-pointer"
+                            onClick={() => {
+                              setSelectedWorkout(workout);
+                              setShowWorkoutDetails(true);
+                            }}
+                          >
                             <div className="flex items-center justify-between mb-2">
                               <h4 className="font-medium text-brand-primary">{workout.title}</h4>
                               <p className="text-sm text-gray-600">
@@ -920,7 +931,7 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
                             <div className="flex items-center justify-between text-sm">
                               <div className="flex gap-3">
                                 <span className="text-gray-500">
-                                  {workout.exercises?.length || 0} exercises
+                                  {workout.team_workout_exercises?.length || 0} exercises
                                 </span>
                                 <span className="text-gray-500">
                                   {workout.completions?.length || 0} completions
@@ -938,7 +949,10 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
                                 <Button
                                   size="sm"
                                   variant="outline"
-                                  onClick={() => completeWorkout(workout.id)}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    completeWorkout(workout.id);
+                                  }}
                                   className="h-7 text-xs border-brand-primary text-brand-primary hover:bg-brand-secondary"
                                 >
                                   Mark Complete
@@ -1033,6 +1047,77 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
                 className="bg-brand-primary hover:bg-brand-primary-dark text-white"
               >
                 {loading ? 'Creating...' : 'Create Workout'}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Workout Details Modal */}
+      <Dialog open={showWorkoutDetails} onOpenChange={setShowWorkoutDetails}>
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{selectedWorkout?.title}</DialogTitle>
+            <DialogDescription>
+              {selectedWorkout?.date && new Date(selectedWorkout.date).toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            {selectedWorkout?.description && (
+              <div>
+                <h4 className="font-medium mb-2">Description</h4>
+                <p className="text-sm text-gray-600">{selectedWorkout.description}</p>
+              </div>
+            )}
+
+            {selectedWorkout?.duration && (
+              <div className="flex gap-4 text-sm">
+                <span className="text-gray-600">
+                  <strong>Duration:</strong> {selectedWorkout.duration} minutes
+                </span>
+              </div>
+            )}
+
+            <div>
+              <h4 className="font-medium mb-3">Exercises ({selectedWorkout?.team_workout_exercises?.length || 0})</h4>
+              {selectedWorkout?.team_workout_exercises && selectedWorkout.team_workout_exercises.length > 0 ? (
+                <div className="space-y-3">
+                  {selectedWorkout.team_workout_exercises.map((exercise, idx) => (
+                    <div key={exercise.id} className="p-3 border rounded-lg bg-gray-50">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-sm font-medium text-gray-500">#{idx + 1}</span>
+                            <h5 className="font-medium">{exercise.exercises?.name}</h5>
+                          </div>
+                          <div className="flex gap-4 text-sm text-gray-600">
+                            <span><strong>Sets:</strong> {exercise.sets}</span>
+                            <span><strong>Reps:</strong> {exercise.reps}</span>
+                            {exercise.weight && <span><strong>Weight:</strong> {exercise.weight}</span>}
+                            {exercise.restSeconds && <span><strong>Rest:</strong> {exercise.restSeconds}s</span>}
+                          </div>
+                          {exercise.notes && (
+                            <p className="text-sm text-gray-600 mt-2 italic">{exercise.notes}</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500 text-center py-4">No exercises added yet</p>
+              )}
+            </div>
+
+            <div className="flex justify-end gap-2 pt-4 border-t">
+              <Button variant="outline" onClick={() => setShowWorkoutDetails(false)}>
+                Close
               </Button>
             </div>
           </div>

@@ -251,6 +251,16 @@ export function ProgramsTab() {
         >
           Movement Essentials
         </button>
+        <button
+          onClick={() => setFilter('CASTELLERS')}
+          className={`px-4 py-2 rounded-md ${
+            filter === 'CASTELLERS'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          🏰 Castellers
+        </button>
         <span className="ml-2 text-sm text-gray-500 flex items-center gap-1"><Filter className="h-4 w-4" /> Equipment:</span>
         {['home','gym','bodyweight'].map((eq) => (
           <button
