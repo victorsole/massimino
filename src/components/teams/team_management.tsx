@@ -109,23 +109,30 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
   // Load team details
   const loadTeamDetails = async (teamId: string) => {
     try {
-      const [teamResponse, applicationsResponse, messagesResponse, workoutsResponse] = await Promise.all([
+      const [teamResponse, membersResponse, applicationsResponse, messagesResponse, workoutsResponse] = await Promise.all([
         fetch(`/api/teams/${teamId}`),
+        fetch(`/api/teams/${teamId}/members/manage`),
         fetch(`/api/teams/${teamId}?action=applications`),
         fetch(`/api/teams/${teamId}?action=messages&limit=10`),
         fetch(`/api/teams/${teamId}?action=workout-logs&limit=5`)
       ]);
 
-      const [teamData, applicationsData, messagesData, workoutsData] = await Promise.all([
+      const [teamData, membersData, applicationsData, messagesData, workoutsData] = await Promise.all([
         teamResponse.json(),
+        membersResponse.json(),
         applicationsResponse.json(),
         messagesResponse.json(),
         workoutsResponse.json()
       ]);
 
       if (teamData.success) {
-        setSelectedTeam(teamData.data);
-        onTeamSelect?.(teamData.data);
+        // Merge members data from the new endpoint
+        const team = teamData.data;
+        if (membersData.members) {
+          team.members = membersData.members;
+        }
+        setSelectedTeam(team);
+        onTeamSelect?.(team);
       }
 
       if (applicationsData.success) {
@@ -255,14 +262,12 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
   };
 
   // Remove team member
-  const removeMember = async (userId: string) => {
+  const removeMember = async (memberId: string) => {
     if (!selectedTeam || !confirm('Are you sure you want to remove this member?')) return;
 
     try {
-      const response = await fetch(`/api/teams/${selectedTeam.id}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'remove-member', userId })
+      const response = await fetch(`/api/teams/${selectedTeam.id}/members/manage?memberId=${memberId}`, {
+        method: 'DELETE',
       });
 
       const data = await response.json();
@@ -799,16 +804,25 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      {selectedTeam.members?.map((member) => (
+                      {selectedTeam.members?.map((member: any) => {
+                        const isPending = member.type === 'PENDING' || !member.userId;
+                        return (
                         <div key={member.id} className="flex items-center justify-between p-3 border rounded-lg">
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-3 flex-1">
                             <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-                              {member.user?.name?.[0]?.toUpperCase() || 'U'}
+                              {(member.user?.name || member.name)?.[0]?.toUpperCase() || 'U'}
                             </div>
-                            <div>
-                              <p className="font-medium">{member.user?.name}</p>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2">
+                                <p className="font-medium">{member.user?.name || member.name || member.email}</p>
+                                {isPending && (
+                                  <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 text-xs">
+                                    ⏳ Pending
+                                  </Badge>
+                                )}
+                              </div>
                               <p className="text-sm text-gray-600">
-                                Joined {new Date(member.joinedAt).toLocaleDateString()}
+                                {isPending ? 'Invited' : 'Joined'} {new Date(member.joinedAt).toLocaleDateString()}
                               </p>
                             </div>
                           </div>
@@ -816,13 +830,14 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => removeMember(member.userId)}
+                              onClick={() => removeMember(member.userId || member.id)}
                             >
                               Remove
                             </Button>
                           )}
                         </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </CardContent>
                 </Card>

@@ -1720,7 +1720,9 @@ model team_challenges {
 model team_members {
   id                                  String               @id
   teamId                              String
-  userId                              String
+  userId                              String?
+  athleteInvitationId                 String?
+  athleteInvitationEmail              String?
   status                              TeamMembershipStatus @default(PENDING)
   joinedAt                            DateTime             @default(now())
   leftAt                              DateTime?
@@ -1730,10 +1732,13 @@ model team_members {
   canViewAllWorkouts                  Boolean              @default(true)
   users_team_members_invitedByTousers users?               @relation("team_members_invitedByTousers", fields: [invitedBy], references: [id])
   teams                               teams                @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  users_team_members_userIdTousers    users                @relation("team_members_userIdTousers", fields: [userId], references: [id], onDelete: Cascade)
+  users_team_members_userIdTousers    users?               @relation("team_members_userIdTousers", fields: [userId], references: [id], onDelete: Cascade)
+  athlete_invitation                  athlete_invitations? @relation(fields: [athleteInvitationId], references: [id], onDelete: Cascade)
 
   @@unique([teamId, userId])
+  @@unique([teamId, athleteInvitationId])
   @@index([userId, status])
+  @@index([athleteInvitationId, status])
 }
 
 model team_message_replies {
@@ -1976,6 +1981,7 @@ model athlete_invitations {
   message         String?          @db.Text
   trainer         users            @relation("trainer_invitations", fields: [trainerId], references: [id], onDelete: Cascade)
   trainer_clients trainer_clients[]
+  team_members    team_members[]
 
   @@index([trainerId])
   @@index([athleteEmail])
