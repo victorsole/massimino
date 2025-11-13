@@ -1,0 +1,207 @@
+{
+  "id": "fodmap_reference",
+  "title": "FODMAP Food List & Assessment",
+  "version": "1.0",
+  "description": "Comprehensive guide to high and low FODMAP foods for digestive health management. The FODMAP diet is used to manage digestive symptoms, particularly for IBS. Elimination phase typically lasts 2-6 weeks, followed by systematic reintroduction. Should be implemented under guidance of a registered dietitian or nutritionist.",
+  "sections": [
+    {
+      "id": "personal_info",
+      "title": "Personal Information",
+      "fields": [
+        {"id": "name", "type": "text", "label": "Name", "required": true},
+        {"id": "date", "type": "date", "label": "Date", "required": true}
+      ]
+    },
+    {
+      "id": "vegetables_legumes",
+      "title": "Vegetables and Legumes",
+      "description": "Track your client's tolerance and notes for different vegetables and legumes",
+      "fields": [
+        {
+          "id": "vegetables_high_fodmap",
+          "type": "info",
+          "label": "High FODMAP Vegetables",
+          "help_text": "Garlic, Onions, Asparagus, Beans (black, broad, kidney, lima), Cauliflower, Cabbage, Peas, Scallions"
+        },
+        {
+          "id": "vegetables_low_fodmap",
+          "type": "info",
+          "label": "Low FODMAP Vegetables",
+          "help_text": "Bamboo Shoots, Bean Sprouts, Broccoli, Cabbage, Carrots, Celery, Chick Peas, Corn, Cucumber, Eggplant, Green Beans, Green Pepper, Kale, Lettuce (butter, iceberg, rocket), Parsnip, Potato, Pumpkin, Red Peppers, Squash, Sweet Potato, Tomatoes, Turnip"
+        },
+        {"id": "vegetables_notes", "type": "textarea", "label": "Notes & Observations", "placeholder": "Document client's tolerance, symptoms, or preferences", "rows": 3}
+      ]
+    },
+    {
+      "id": "fruits",
+      "title": "Fruits",
+      "description": "Track your client's tolerance and notes for different fruits",
+      "fields": [
+        {
+          "id": "fruits_high_fodmap",
+          "type": "info",
+          "label": "High FODMAP Fruits",
+          "help_text": "Apples, Apricot, Avocado, Bananas, Blackberries, Grapefruit, Mango, Peaches, Pears, Plums, Raisins, Sultanas, Watermelon"
+        },
+        {
+          "id": "fruits_low_fodmap",
+          "type": "info",
+          "label": "Low FODMAP Fruits",
+          "help_text": "Bananas, Cantaloupe, Cranberry, Clementine, Grapes, Melons (honeydew), Kiwi, Lemon, Orange, Pineapple, Raspberry, Rhubarb, Strawberry"
+        },
+        {"id": "fruits_notes", "type": "textarea", "label": "Notes & Observations", "placeholder": "Document client's tolerance, symptoms, or preferences", "rows": 3}
+      ]
+    },
+    {
+      "id": "meats",
+      "title": "Meats",
+      "description": "Track your client's tolerance and notes for different meats",
+      "fields": [
+        {
+          "id": "meats_high_fodmap",
+          "type": "info",
+          "label": "High FODMAP Meats",
+          "help_text": "Chorizo Sausage, Processed Meat"
+        },
+        {
+          "id": "meats_low_fodmap",
+          "type": "info",
+          "label": "Low FODMAP Meats",
+          "help_text": "Beef, Chicken, Lamb, Pork, Cold Cuts (ham and turkey breast)"
+        },
+        {"id": "meats_notes", "type": "textarea", "label": "Notes & Observations", "placeholder": "Document client's tolerance, symptoms, or preferences", "rows": 3}
+      ]
+    },
+    {
+      "id": "grains",
+      "title": "Grains",
+      "description": "Track your client's tolerance and notes for different grains",
+      "fields": [
+        {
+          "id": "grains_high_fodmap",
+          "type": "info",
+          "label": "High FODMAP Grains",
+          "help_text": "Barley, Granola, Rye"
+        },
+        {
+          "id": "grains_low_fodmap",
+          "type": "info",
+          "label": "Low FODMAP Grains",
+          "help_text": "Oats, Quinoa, Gluten free foods (breads, pasta), Buckwheat Chips, Corn Flour, Oatmeal, Polenta, Rice, Rice Noodles"
+        },
+        {"id": "grains_notes", "type": "textarea", "label": "Notes & Observations", "placeholder": "Document client's tolerance, symptoms, or preferences", "rows": 3}
+      ]
+    },
+    {
+      "id": "nuts_seeds",
+      "title": "Nuts and Seeds",
+      "description": "Track your client's tolerance and notes for different nuts and seeds",
+      "fields": [
+        {
+          "id": "nuts_high_fodmap",
+          "type": "info",
+          "label": "High FODMAP Nuts/Seeds",
+          "help_text": "Cashews, Pistachio"
+        },
+        {
+          "id": "nuts_low_fodmap",
+          "type": "info",
+          "label": "Low FODMAP Nuts/Seeds",
+          "help_text": "Almonds, Chestnuts, Hazelnuts, Macadamia Nuts, Peanuts, Pecans, Poppy Seeds, Pumpkin Seeds, Sesame Seeds, Sunflower Seeds, Walnuts"
+        },
+        {"id": "nuts_notes", "type": "textarea", "label": "Notes & Observations", "placeholder": "Document client's tolerance, symptoms, or preferences", "rows": 3}
+      ]
+    },
+    {
+      "id": "milk_substitutes",
+      "title": "Milk and Milk Substitutes",
+      "description": "Track your client's tolerance and notes for different milk products",
+      "fields": [
+        {
+          "id": "milk_high_fodmap",
+          "type": "info",
+          "label": "High FODMAP Milk",
+          "help_text": "Cow Milk, Goat Milk, Sheep's Milk, Soy Milk"
+        },
+        {
+          "id": "milk_low_fodmap",
+          "type": "info",
+          "label": "Low FODMAP Milk Substitutes",
+          "help_text": "Almond Milk, Coconut Milk, Hemp Milk, Lactose Free Milk, Oat Milk, Rice Milk, Soy Milk (made with soy protein)"
+        },
+        {"id": "milk_notes", "type": "textarea", "label": "Notes & Observations", "placeholder": "Document client's tolerance, symptoms, or preferences", "rows": 3}
+      ]
+    },
+    {
+      "id": "dairy_eggs",
+      "title": "Dairy and Eggs",
+      "description": "Track your client's tolerance and notes for different dairy products",
+      "fields": [
+        {
+          "id": "dairy_high_fodmap",
+          "type": "info",
+          "label": "High FODMAP Dairy",
+          "help_text": "Buttermilk Cream, Custard, Greek Yoghurt, Ice Cream, Sour Cream, Cream Cheese, Ricotta Cheese"
+        },
+        {
+          "id": "dairy_low_fodmap",
+          "type": "info",
+          "label": "Low FODMAP Dairy",
+          "help_text": "Butter, Eggs, Chocolate (dark, milk, white), Brie, Cheddar, Cottage Cheese, Feta, Mozzarella, Parmesan, Swiss"
+        },
+        {"id": "dairy_notes", "type": "textarea", "label": "Notes & Observations", "placeholder": "Document client's tolerance, symptoms, or preferences", "rows": 3}
+      ]
+    },
+    {
+      "id": "condiments_sweeteners",
+      "title": "Condiments and Sweeteners",
+      "description": "Track your client's tolerance and notes for different condiments and sweeteners",
+      "fields": [
+        {
+          "id": "condiments_high_fodmap",
+          "type": "info",
+          "label": "High FODMAP Condiments/Sweeteners",
+          "help_text": "Hummus Dip, Jam (mixed berries), Pasta Sauce (cream based), Relish, Agave, High Fructose Corn Syrup, Honey, Inulin, Sorbitol, Xylitol"
+        },
+        {
+          "id": "condiments_low_fodmap",
+          "type": "info",
+          "label": "Low FODMAP Condiments/Sweeteners",
+          "help_text": "Barbeque Sauce, Chutney, Strawberry (jam or jelly), Mayonnaise, Mustard, Soy Sauce, Tomato Sauce, Aspartame, Acesulfame K, Glucose, Saccharine, Stevia, Sucralose, Sugar (sucrose)"
+        },
+        {"id": "condiments_notes", "type": "textarea", "label": "Notes & Observations", "placeholder": "Document client's tolerance, symptoms, or preferences", "rows": 3}
+      ]
+    },
+    {
+      "id": "drinks",
+      "title": "Popular Drinks",
+      "description": "Track your client's tolerance and notes for different beverages",
+      "fields": [
+        {
+          "id": "drinks_high_fodmap",
+          "type": "info",
+          "label": "High FODMAP Drinks",
+          "help_text": "Coconut Water, Apple Juice, Pear Juice, Mango Juice, Sodas with HFCS, Fennel Tea, Herbal Tea"
+        },
+        {
+          "id": "drinks_low_fodmap",
+          "type": "info",
+          "label": "Low FODMAP Drinks",
+          "help_text": "Beer (one max), Coffee, Orange juice, Peppermint Tea, Water, Wine (one max)"
+        },
+        {"id": "drinks_notes", "type": "textarea", "label": "Notes & Observations", "placeholder": "Document client's tolerance, symptoms, or preferences", "rows": 3}
+      ]
+    },
+    {
+      "id": "implementation_plan",
+      "title": "Implementation Plan & Summary",
+      "description": "Overall assessment and implementation strategy",
+      "fields": [
+        {"id": "elimination_phase_start", "type": "date", "label": "Elimination Phase Start Date"},
+        {"id": "elimination_phase_duration", "type": "select", "label": "Planned Elimination Duration", "options": ["2 weeks", "3 weeks", "4 weeks", "5 weeks", "6 weeks"]},
+        {"id": "reintroduction_plan", "type": "textarea", "label": "Reintroduction Plan", "placeholder": "Document the systematic reintroduction strategy", "rows": 4},
+        {"id": "overall_notes", "type": "textarea", "label": "Overall Assessment Notes", "placeholder": "General observations, goals, and recommendations", "rows": 5}
+      ]
+    }
+  ]
+}
