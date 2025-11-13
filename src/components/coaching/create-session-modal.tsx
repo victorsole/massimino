@@ -19,7 +19,7 @@ export function CreateSessionModal({
   preselectedAthleteId
 }: CreateSessionModalProps) {
   const router = useRouter();
-  const [clients, setClients] = useState<Array<{id: string; name: string; email?: string}>>([]);
+  const [clients, setClients] = useState<Array<{id: string; name: string | null; email?: string | null; type?: 'client' | 'invitation'}>>([]);
   const [selectedClientId, setSelectedClientId] = useState<string>(preselectedAthleteId || '');
   const [sessionTitle, setSessionTitle] = useState<string>('');
   const [loading, setLoading] = useState(false);
@@ -57,9 +57,9 @@ export function CreateSessionModal({
       const date = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
       const startTime = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
 
-      // Check if this is an invitation ID (starts with different pattern) or a user ID
-      // Invitation IDs are being passed from the pending athletes section
-      const isPendingInvitation = !clients.some(c => c.id === selectedClientId);
+      // Check if this is an invitation ID or a user ID
+      const selectedClient = clients.find((c: any) => c.id === selectedClientId);
+      const isPendingInvitation = selectedClient?.type === 'invitation';
 
       const res = await fetch('/api/workout/sessions', {
         method: 'POST',
@@ -113,11 +113,13 @@ export function CreateSessionModal({
               value={selectedClientId}
               onChange={(e) => setSelectedClientId(e.target.value)}
               className="w-full border rounded-md p-2"
-              disabled={!!preselectedAthleteId}
             >
               <option value="">Select an athlete</option>
-              {clients.map((c) => (
-                <option key={c.id} value={c.id}>{c.name || c.email || c.id}</option>
+              {clients.map((c: any) => (
+                <option key={c.id} value={c.id}>
+                  {c.name || c.email || c.id}
+                  {c.type === 'invitation' ? ' (Pending Invitation)' : ''}
+                </option>
               ))}
             </select>
           </div>
