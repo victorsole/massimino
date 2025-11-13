@@ -99,14 +99,45 @@ export async function GET(request: NextRequest) {
 
     // Trainer/Admin: support listing clients via action=clients
     if (actionParam === 'clients' && (session.user.role === UserRole.TRAINER || session.user.role === UserRole.ADMIN)) {
+      // Get active clients
       const list = await prisma.trainer_clients.findMany({
         where: session.user.role === UserRole.TRAINER ? { trainerId: session.user.id } : {},
-        // TODO: Fix relationship - 'client' doesn't exist on trainer_clients
-        // include: { client: { select: { id: true, name: true, email: true, image: true } } },
+        include: {
+          users: {
+            select: { id: true, name: true, email: true, image: true }
+          }
+        },
         orderBy: { createdAt: 'desc' },
         take: 200
       });
-      const clients = list.map((tc) => ({ id: (tc as any).clientId, name: null, email: null, image: null }));
+
+      // Get pending invitations
+      const invitations = await prisma.athlete_invitations.findMany({
+        where: session.user.role === UserRole.TRAINER
+          ? { trainerId: session.user.id, status: 'PENDING' }
+          : { status: 'PENDING' },
+        orderBy: { sentAt: 'desc' },
+        take: 100
+      });
+
+      // Combine clients and pending invitations
+      const clients = [
+        ...list.map((tc) => ({
+          id: tc.users.id,
+          name: tc.users.name,
+          email: tc.users.email,
+          image: tc.users.image,
+          type: 'client' as const
+        })),
+        ...invitations.map((inv) => ({
+          id: inv.id,
+          name: inv.athleteName || null,
+          email: inv.athleteEmail,
+          image: null,
+          type: 'invitation' as const
+        }))
+      ];
+
       return NextResponse.json({ clients });
     }
 
