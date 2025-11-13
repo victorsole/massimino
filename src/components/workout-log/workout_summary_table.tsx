@@ -126,16 +126,30 @@ export function WorkoutSummaryTable({
 
     // Sort by date descending
     return result.sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      (a, b) => {
+        const dateA = a.date ? new Date(a.date).getTime() : 0;
+        const dateB = b.date ? new Date(b.date).getTime() : 0;
+        return dateB - dateA;
+      }
     );
   }, [grouped_by_date]);
 
-  const format_date = (date_str: string) => {
-    return format(new Date(date_str), 'MMM dd, yyyy');
+  const format_date = (date_str: string | null | undefined) => {
+    if (!date_str) return 'No date';
+    try {
+      return format(new Date(date_str), 'MMM dd, yyyy');
+    } catch {
+      return 'Invalid date';
+    }
   };
 
-  const format_day_of_week = (date_str: string) => {
-    return format(new Date(date_str), 'EEEE');
+  const format_day_of_week = (date_str: string | null | undefined) => {
+    if (!date_str) return '';
+    try {
+      return format(new Date(date_str), 'EEEE');
+    } catch {
+      return '';
+    }
   };
 
   const get_completion_percentage = (summary: WorkoutSummary) => {
