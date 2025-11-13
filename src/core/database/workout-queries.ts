@@ -1893,8 +1893,17 @@ export async function rateProgram(programId: string, userId: string, data: any) 
  * Update program progress
  */
 export async function updateProgramProgress(programId: string, userId: string, data: any) {
+  // Find the subscription first
+  const subscription = await prisma.program_subscriptions.findFirst({
+    where: { userId, programId, isActive: true },
+  });
+
+  if (!subscription) {
+    throw new Error('Program subscription not found');
+  }
+
   return prisma.program_subscriptions.update({
-    where: { userId_programId: { userId, programId } },
+    where: { id: subscription.id },
     data: {
       currentWeek: data.currentWeek,
       currentDay: data.currentDay,

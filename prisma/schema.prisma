@@ -1430,17 +1430,18 @@ model program_ratings {
 }
 
 model program_subscriptions {
-  id           String    @id
-  userId       String
-  programId    String
-  currentWeek  Int       @default(1)
-  currentDay   Int       @default(1)
-  startDate    DateTime  @default(now())
-  endDate      DateTime?
-  isActive     Boolean   @default(true)
-  progressData Json?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime
+  id                  String    @id
+  userId              String?
+  athleteInvitationId String?
+  programId           String
+  currentWeek         Int       @default(1)
+  currentDay          Int       @default(1)
+  startDate           DateTime  @default(now())
+  endDate             DateTime?
+  isActive            Boolean   @default(true)
+  progressData        Json?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime
 
   // NEW: Periodization tracking
   currentPhaseId         String?
@@ -1457,15 +1458,16 @@ model program_subscriptions {
   isCurrentlyActive Boolean   @default(false)
   sessionName       String? // Optional custom name override
 
-  program_templates program_templates @relation(fields: [programId], references: [id])
-  users             users             @relation(fields: [userId], references: [id])
+  program_templates    program_templates     @relation(fields: [programId], references: [id])
+  users                users?                @relation(fields: [userId], references: [id])
+  athlete_invitations  athlete_invitations?  @relation(fields: [athleteInvitationId], references: [id])
 
   // NEW: Periodization relations
   user_exercise_selections user_exercise_selections[]
   workout_performances     workout_performances[]
 
-  @@unique([userId, programId])
   @@index([userId, isActive])
+  @@index([athleteInvitationId])
   @@index([currentPhaseId])
 }
 
@@ -1969,20 +1971,21 @@ model trainer_clients {
 }
 
 model athlete_invitations {
-  id              String           @id @default(uuid())
-  trainerId       String
-  athleteEmail    String
-  athleteName     String?
-  token           String           @unique
-  status          InvitationStatus @default(PENDING)
-  sentAt          DateTime         @default(now())
-  acceptedAt      DateTime?
-  expiresAt       DateTime
-  message         String?          @db.Text
-  trainer         users            @relation("trainer_invitations", fields: [trainerId], references: [id], onDelete: Cascade)
-  trainer_clients trainer_clients[]
-  team_members    team_members[]
-  workout_sessions workout_sessions[]
+  id                    String                  @id @default(uuid())
+  trainerId             String
+  athleteEmail          String
+  athleteName           String?
+  token                 String                  @unique
+  status                InvitationStatus        @default(PENDING)
+  sentAt                DateTime                @default(now())
+  acceptedAt            DateTime?
+  expiresAt             DateTime
+  message               String?                 @db.Text
+  trainer               users                   @relation("trainer_invitations", fields: [trainerId], references: [id], onDelete: Cascade)
+  trainer_clients       trainer_clients[]
+  team_members          team_members[]
+  workout_sessions      workout_sessions[]
+  program_subscriptions program_subscriptions[]
 
   @@index([trainerId])
   @@index([athleteEmail])

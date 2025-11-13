@@ -33,17 +33,31 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Trainer profile not found' }, { status: 404 });
     }
 
-    // Verify trainer-client relationship
-    const relationship = await prisma.trainer_clients.findFirst({
-      where: {
-        trainerId: trainerProfile.id,
-        clientId: athleteId,
-        status: 'ACTIVE',
-      },
+    // Check if this is a pending athlete (invitation) or active athlete
+    let isPendingAthlete = false;
+    const invitation = await prisma.athlete_invitations.findUnique({
+      where: { id: athleteId },
     });
 
-    if (!relationship) {
-      return NextResponse.json({ error: 'No active relationship with this athlete' }, { status: 403 });
+    if (invitation) {
+      // This is a pending athlete - verify trainer owns the invitation
+      if (invitation.trainerId !== trainerProfile.id) {
+        return NextResponse.json({ error: 'Not authorized for this invitation' }, { status: 403 });
+      }
+      isPendingAthlete = true;
+    } else {
+      // Regular athlete - verify trainer-client relationship
+      const relationship = await prisma.trainer_clients.findFirst({
+        where: {
+          trainerId: trainerProfile.id,
+          clientId: athleteId,
+          status: 'ACTIVE',
+        },
+      });
+
+      if (!relationship) {
+        return NextResponse.json({ error: 'No active relationship with this athlete' }, { status: 403 });
+      }
     }
 
     // Get the program template
@@ -63,11 +77,9 @@ export async function POST(request: NextRequest) {
 
     // Check if athlete already subscribed
     const existing = await prisma.program_subscriptions.findFirst({
-      where: {
-        userId: athleteId,
-        programId,
-        isActive: true,
-      },
+      where: isPendingAthlete
+        ? { athleteInvitationId: athleteId, programId, isActive: true }
+        : { userId: athleteId, programId, isActive: true },
     });
 
     if (existing) {
@@ -83,7 +95,8 @@ export async function POST(request: NextRequest) {
     const subscription = await prisma.program_subscriptions.create({
       data: {
         id: crypto.randomUUID(),
-        userId: athleteId,
+        userId: isPendingAthlete ? null : athleteId,
+        athleteInvitationId: isPendingAthlete ? athleteId : null,
         programId,
         currentPhaseId: firstPhase?.id,
         currentWeek: 1,
@@ -95,30 +108,38 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Create notification for athlete
-    await prisma.push_notifications.create({
-      data: {
-        id: nanoid(),
-        userId: athleteId,
-        type: 'GENERAL',
-        title: 'New Program Assigned',
-        body: `Your trainer assigned you to: ${program.name}`,
-        status: 'PENDING',
-        createdAt: new Date(),
-      },
-    });
+    // Create notification for athlete (only if not pending)
+    if (!isPendingAthlete) {
+      await prisma.push_notifications.create({
+        data: {
+          id: nanoid(),
+          userId: athleteId,
+          type: 'GENERAL',
+          title: 'New Program Assigned',
+          body: `Your trainer assigned you to: ${program.name}`,
+          status: 'PENDING',
+          createdAt: new Date(),
+        },
+      });
+    }
 
     // Get athlete details for response
-    const athlete = await prisma.users.findUnique({
-      where: { id: athleteId },
-      select: { name: true, email: true },
-    });
+    let athleteName = 'athlete';
+    if (isPendingAthlete) {
+      athleteName = invitation?.athleteName || invitation?.athleteEmail || 'pending athlete';
+    } else {
+      const athlete = await prisma.users.findUnique({
+        where: { id: athleteId },
+        select: { name: true, email: true },
+      });
+      athleteName = athlete?.name || athlete?.email || 'athlete';
+    }
 
     return NextResponse.json(
       {
         success: true,
         subscription,
-        message: `Successfully assigned ${program.name} to ${athlete?.name || athlete?.email || 'athlete'}`,
+        message: `Successfully assigned ${program.name} to ${athleteName}`,
       },
       { status: 201 }
     );
