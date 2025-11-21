@@ -129,7 +129,8 @@ export default function PartnershipsPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <LeadDialog variant="generic" size="lg" />
-            <KitDownloadButton variant="outline" size="lg" />
+            {/* Download Partnership Kit button - temporarily hidden */}
+            {/* <KitDownloadButton variant="outline" size="lg" /> */}
           </div>
         </section>
 
