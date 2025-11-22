@@ -259,7 +259,17 @@ export function ProgramsTab() {
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
-          🏰 Castellers
+          Colles Castelleres
+        </button>
+        <button
+          onClick={() => setFilter('MEDICAL_CONDITION')}
+          className={`px-4 py-2 rounded-md ${
+            filter === 'MEDICAL_CONDITION'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          Medical Conditions
         </button>
         <span className="ml-2 text-sm text-gray-500 flex items-center gap-1"><Filter className="h-4 w-4" /> Equipment:</span>
         {['home','gym','bodyweight'].map((eq) => (
