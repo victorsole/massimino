@@ -1,0 +1,3389 @@
+{
+    "medical_condition_workouts": [
+      {
+        "id": "hemorrhoid_safe_training",
+        "condition": "Hemorrhoids (Active or Recovery)",
+        "name": "Low-Pressure Strength Training",
+        "description": "A modified training program that avoids exercises increasing intra-abdominal pressure while maintaining strength and fitness during hemorrhoid flare-ups or recovery.",
+        "medical_disclaimer": "This routine avoids Valsalva maneuver and high intra-abdominal pressure. Consult your physician before starting. Stop immediately if you experience pain, bleeding, or increased symptoms.",
+        "key_modifications": [
+          "No heavy squats, deadlifts, or leg presses",
+          "Avoid breath-holding during exercises",
+          "Use lighter weights with controlled breathing",
+          "No exercises that compress the pelvic floor",
+          "Maintain proper hydration"
+        ],
+        "training_frequency": "4 days per week",
+        "session_duration": "35-45 minutes",
+        "safety_guidelines": [
+          "Stop if you feel pressure in the rectal area",
+          "Breathe continuously - exhale on exertion",
+          "Use lighter loads (60-70% typical working weight)",
+          "Avoid straining or bearing down",
+          "Stay hydrated before, during, and after training"
+        ],
+        "workouts": [
+          {
+            "day": "Day 1 - Upper Body Push",
+            "focus": "Chest, shoulders, triceps with controlled breathing",
+            "exercises": [
+              {
+                "exercise_name": "Incline Dumbbell Press",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Use 60-70% of normal working weight. Exhale on press, inhale on descent. Back fully supported."
+              },
+              {
+                "exercise_name": "Cable Chest Fly",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Light weight, focus on continuous breathing and muscle contraction."
+              },
+              {
+                "exercise_name": "Seated Dumbbell Shoulder Press",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2010",
+                "rest_seconds": 90,
+                "notes": "Seated with back support. No heavy overhead pressing. Controlled breathing."
+              },
+              {
+                "exercise_name": "Cable Lateral Raise",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Light weight, strict form, continuous breathing."
+              },
+              {
+                "exercise_name": "Cable Tricep Pushdown",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Moderate weight, exhale on push, inhale on return."
+              },
+              {
+                "exercise_name": "Overhead Cable Tricep Extension",
+                "sets": 2,
+                "reps": "15-20",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Light weight, focus on stretch and contraction."
+              }
+            ]
+          },
+          {
+            "day": "Day 2 - Lower Body (Modified)",
+            "focus": "Legs without heavy loading or intra-abdominal pressure",
+            "exercises": [
+              {
+                "exercise_name": "Seated Leg Curl",
+                "sets": 4,
+                "reps": "15-20",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Seated position reduces abdominal pressure. Moderate weight."
+              },
+              {
+                "exercise_name": "Leg Extension",
+                "sets": 4,
+                "reps": "15-20",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Supported seated position. Focus on quad contraction."
+              },
+              {
+                "exercise_name": "Hip Abduction Machine",
+                "sets": 3,
+                "reps": "20-25",
+                "tempo": "2011",
+                "rest_seconds": 45,
+                "notes": "Light to moderate weight. Targets glute medius without pressure."
+              },
+              {
+                "exercise_name": "Hip Adduction Machine",
+                "sets": 3,
+                "reps": "20-25",
+                "tempo": "2011",
+                "rest_seconds": 45,
+                "notes": "Light to moderate weight. Balanced training."
+              },
+              {
+                "exercise_name": "Standing Calf Raise",
+                "sets": 4,
+                "reps": "20-25",
+                "tempo": "2011",
+                "rest_seconds": 45,
+                "notes": "Machine supported. No heavy loading."
+              },
+              {
+                "exercise_name": "Seated Calf Raise",
+                "sets": 3,
+                "reps": "20-25",
+                "tempo": "2011",
+                "rest_seconds": 45,
+                "notes": "Seated position reduces pressure."
+              }
+            ]
+          },
+          {
+            "day": "Day 3 - Upper Body Pull",
+            "focus": "Back and biceps with supported positions",
+            "exercises": [
+              {
+                "exercise_name": "Chest-Supported Row Machine",
+                "sets": 4,
+                "reps": "12-15",
+                "tempo": "2020",
+                "rest_seconds": 90,
+                "notes": "Chest support prevents straining. Focus on back contraction."
+              },
+              {
+                "exercise_name": "Seated Cable Row",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2020",
+                "rest_seconds": 75,
+                "notes": "Neutral spine, controlled breathing, moderate weight."
+              },
+              {
+                "exercise_name": "Lat Pulldown (Wide Grip)",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2020",
+                "rest_seconds": 75,
+                "notes": "Seated and supported. Pull to upper chest."
+              },
+              {
+                "exercise_name": "Lat Pulldown (Narrow Grip)",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2020",
+                "rest_seconds": 75,
+                "notes": "Focus on mid-back engagement."
+              },
+              {
+                "exercise_name": "Cable Face Pull",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Light weight, rear delt and upper back focus."
+              },
+              {
+                "exercise_name": "Cable Bicep Curl",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Standing or seated, moderate weight."
+              },
+              {
+                "exercise_name": "Cable Hammer Curl",
+                "sets": 2,
+                "reps": "15-20",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Neutral grip variation."
+              }
+            ]
+          },
+          {
+            "day": "Day 4 - Full Body Light",
+            "focus": "Light full-body movement and recovery",
+            "exercises": [
+              {
+                "exercise_name": "Walking (Treadmill or Outdoor)",
+                "sets": 1,
+                "duration_minutes": 20,
+                "intensity": "Light to moderate pace",
+                "notes": "Promotes circulation without straining. Stay upright and relaxed."
+              },
+              {
+                "exercise_name": "Seated Chest Press Machine",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Light weight, back fully supported."
+              },
+              {
+                "exercise_name": "Assisted Pull-Up Machine or Lat Pulldown",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Light resistance, controlled movement."
+              },
+              {
+                "exercise_name": "Leg Curl Machine",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Seated or lying, moderate resistance."
+              },
+              {
+                "exercise_name": "Leg Extension Machine",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Seated, controlled movement."
+              },
+              {
+                "exercise_name": "Cable Wood Chop (Light)",
+                "sets": 2,
+                "reps": "12-15 per side",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Very light weight, focus on rotation not power."
+              }
+            ]
+          }
+        ],
+        "exercises_to_avoid": [
+          "Heavy squats and deadlifts",
+          "Leg press (high intra-abdominal pressure)",
+          "Barbell hip thrusts",
+          "Heavy overhead lifts",
+          "Any exercise requiring Valsalva maneuver",
+          "Plyometric or jumping exercises",
+          "Exercises in prone (face-down) position that compress abdomen"
+        ],
+        "progression_timeline": {
+          "weeks_1_2": "Follow program exactly as written, focus on form and breathing",
+          "weeks_3_4": "If symptoms improve, can increase to 70-75% normal working weight",
+          "weeks_5_plus": "With medical clearance, gradually reintroduce compound movements with light weight"
+        },
+        "additional_recommendations": [
+          "Stay well hydrated (3+ liters water daily)",
+          "Increase fiber intake to prevent straining",
+          "Avoid prolonged sitting between exercises",
+          "Consider using a standing desk or taking breaks",
+          "Apply ice after training if needed"
+        ]
+      },
+      {
+        "id": "post_wisdom_tooth_training",
+        "condition": "Post Wisdom Tooth Extraction (Days 3-14)",
+        "name": "Low-Impact Recovery Training",
+        "description": "Modified training program for the first 2 weeks after wisdom tooth extraction, avoiding activities that increase blood pressure in the head or risk dislodging blood clots.",
+        "medical_disclaimer": "Do NOT train for the first 48 hours post-surgery. This program is for days 3-14 post-extraction. Stop if you experience bleeding, pain, or swelling. Consult your oral surgeon before resuming exercise.",
+        "key_modifications": [
+          "No exercise for first 48 hours post-surgery",
+          "Avoid bending over or inversions",
+          "No Valsalva maneuver or breath-holding",
+          "Keep heart rate below 120 BPM",
+          "Stay upright - no lying flat exercises initially"
+        ],
+        "training_frequency": "3-4 days per week (days 3-14 post-surgery)",
+        "session_duration": "20-30 minutes",
+        "safety_guidelines": [
+          "Stop immediately if bleeding occurs",
+          "Avoid spitting - it can dislodge clots",
+          "Keep head elevated above heart level",
+          "No heavy lifting (nothing over 5-7 kg)",
+          "Stay hydrated but avoid straws",
+          "Take prescribed pain medication before training if needed"
+        ],
+        "workouts": [
+          {
+            "day": "Days 3-5 - Gentle Movement",
+            "focus": "Very light activity to maintain circulation without stress",
+            "exercises": [
+              {
+                "exercise_name": "Slow Walking",
+                "sets": 2,
+                "duration_minutes": 10,
+                "intensity": "Easy pace (can talk comfortably)",
+                "notes": "Indoor or outdoor. Keep head upright. Stop if you feel pressure in jaw."
+              },
+              {
+                "exercise_name": "Seated Marching",
+                "sets": 2,
+                "reps": "20 per leg",
+                "tempo": "Slow and controlled",
+                "rest_seconds": 60,
+                "notes": "Sit upright in chair, lift knees alternately. No straining."
+              },
+              {
+                "exercise_name": "Seated Ankle Circles",
+                "sets": 2,
+                "reps": "10 circles each direction per foot",
+                "tempo": "Slow",
+                "rest_seconds": 30,
+                "notes": "Promotes circulation in lower legs."
+              },
+              {
+                "exercise_name": "Shoulder Rolls",
+                "sets": 2,
+                "reps": "10 forward, 10 backward",
+                "tempo": "Slow and gentle",
+                "rest_seconds": 30,
+                "notes": "Seated, keep neck relaxed."
+              },
+              {
+                "exercise_name": "Gentle Seated Side Bends",
+                "sets": 2,
+                "reps": "8 per side",
+                "tempo": "Slow",
+                "rest_seconds": 30,
+                "notes": "No twisting, just side flexion. Very gentle."
+              }
+            ]
+          },
+          {
+            "day": "Days 6-9 - Light Resistance",
+            "focus": "Introducing very light resistance while staying upright",
+            "exercises": [
+              {
+                "exercise_name": "Walking",
+                "sets": 1,
+                "duration_minutes": 15,
+                "intensity": "Moderate pace",
+                "notes": "Can increase pace slightly if feeling good."
+              },
+              {
+                "exercise_name": "Seated Cable Row (Very Light)",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Use 30-40% of normal weight. Focus on back, not pulling hard."
+              },
+              {
+                "exercise_name": "Seated Chest Press Machine (Very Light)",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Use 30-40% of normal weight. No straining or breath-holding."
+              },
+              {
+                "exercise_name": "Seated Leg Curl (Light)",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Light weight, staying seated keeps head elevated."
+              },
+              {
+                "exercise_name": "Seated Leg Extension (Light)",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Light weight, controlled movement."
+              },
+              {
+                "exercise_name": "Standing Calf Raise (Light)",
+                "sets": 2,
+                "reps": "20-25",
+                "tempo": "2011",
+                "rest_seconds": 45,
+                "notes": "Bodyweight or very light added weight."
+              }
+            ]
+          },
+          {
+            "day": "Days 10-14 - Moderate Activity",
+            "focus": "Gradual return to normal training intensity",
+            "exercises": [
+              {
+                "exercise_name": "Walking or Light Cycling",
+                "sets": 1,
+                "duration_minutes": 20,
+                "intensity": "Moderate",
+                "notes": "Can increase cardiovascular effort if no issues."
+              },
+              {
+                "exercise_name": "Cable Chest Press (Moderate)",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2010",
+                "rest_seconds": 75,
+                "notes": "Can increase to 50-60% of normal weight. Still avoid maximal effort."
+              },
+              {
+                "exercise_name": "Lat Pulldown (Moderate)",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2020",
+                "rest_seconds": 75,
+                "notes": "Seated, moderate weight, controlled breathing."
+              },
+              {
+                "exercise_name": "Seated Dumbbell Shoulder Press (Light-Moderate)",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2010",
+                "rest_seconds": 75,
+                "notes": "Use light dumbbells, stay seated with back support."
+              },
+              {
+                "exercise_name": "Goblet Squat (Light)",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "3010",
+                "rest_seconds": 75,
+                "notes": "Light dumbbell or kettlebell. Keep torso upright. No heavy loading yet."
+              },
+              {
+                "exercise_name": "Romanian Deadlift (Very Light)",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "3020",
+                "rest_seconds": 75,
+                "notes": "Light dumbbells only. Slight hip hinge, don't bend over far. Maintain upright posture."
+              },
+              {
+                "exercise_name": "Cable Bicep Curl",
+                "sets": 2,
+                "reps": "15-20",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Moderate weight, standing upright."
+              },
+              {
+                "exercise_name": "Cable Tricep Pushdown",
+                "sets": 2,
+                "reps": "15-20",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Moderate weight, standing upright."
+              }
+            ]
+          }
+        ],
+        "exercises_to_avoid": [
+          "Inverted exercises (handstands, shoulder stands)",
+          "Heavy deadlifts, squats, or overhead press",
+          "Bench press (lying flat increases blood pressure in head)",
+          "Any exercise where head goes below heart",
+          "Running or high-impact cardio",
+          "Swimming (risk of infection)",
+          "Contact sports",
+          "Any exercise causing facial straining or clenching"
+        ],
+        "progression_timeline": {
+          "days_1_2": "Complete rest",
+          "days_3_5": "Gentle walking only, keep movement minimal",
+          "days_6_9": "Light resistance training, seated exercises only",
+          "days_10_14": "Gradual increase in intensity, still avoiding heavy compounds",
+          "week_3_plus": "With clearance from oral surgeon, return to normal training gradually"
+        },
+        "additional_recommendations": [
+          "Eat soft, nutritious foods (protein shakes, yogurt, mashed potatoes)",
+          "Avoid hot foods/drinks for first few days",
+          "Rinse mouth gently with salt water after eating (but not after exercise - wait 30 minutes)",
+          "Take rest days if feeling fatigued",
+          "Monitor extraction sites for signs of infection",
+          "Avoid protein powder with straws - use spoon or drink carefully"
+        ]
+      },
+      {
+        "id": "lower_back_pain_training",
+        "condition": "Chronic Lower Back Pain / Sciatica",
+        "name": "Spine-Safe Strength Program",
+        "description": "A comprehensive training program designed to build strength while protecting the lower back, focusing on spine-neutral movements and core stability.",
+        "medical_disclaimer": "This program is for chronic, non-acute lower back pain. If you have acute injury, herniated disc, or severe sciatica, consult a physical therapist or physician first. Stop if you experience sharp pain, numbness, or tingling down the legs.",
+        "key_modifications": [
+          "Avoid spinal flexion under load",
+          "Maintain neutral spine in all exercises",
+          "Focus on hip-hinge patterns over spinal movement",
+          "Strengthen core without crunches",
+          "Progress gradually with pain-free range of motion"
+        ],
+        "training_frequency": "4 days per week",
+        "session_duration": "40-50 minutes",
+        "safety_guidelines": [
+          "Pain should not exceed 3/10 during exercise",
+          "Any sharp pain = stop immediately",
+          "Numbness or tingling = stop and rest",
+          "Warm up thoroughly before each session",
+          "Use lighter weights and perfect form",
+          "Progress based on pain-free performance, not ego"
+        ],
+        "workouts": [
+          {
+            "day": "Day 1 - Lower Body (Hip Dominant)",
+            "focus": "Strengthening glutes and hamstrings with neutral spine",
+            "warm_up": [
+              {
+                "exercise_name": "Cat-Cow Stretch",
+                "sets": 2,
+                "reps": "10",
+                "notes": "Gentle spinal mobility, pain-free range only"
+              },
+              {
+                "exercise_name": "Glute Bridge",
+                "sets": 2,
+                "reps": "15",
+                "tempo": "2011",
+                "notes": "Activation warm-up, squeeze glutes at top"
+              },
+              {
+                "exercise_name": "Bird Dog",
+                "sets": 2,
+                "reps": "10 per side",
+                "notes": "Core stability activation"
+              }
+            ],
+            "exercises": [
+              {
+                "exercise_name": "Trap Bar Deadlift",
+                "sets": 4,
+                "reps": "8-10",
+                "tempo": "3010",
+                "rest_seconds": 120,
+                "notes": "Neutral spine throughout. Trap bar allows more upright torso than conventional deadlift. Start light."
+              },
+              {
+                "exercise_name": "Bulgarian Split Squat",
+                "sets": 3,
+                "reps": "10-12 per leg",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Keeps torso more upright than back squat. Focus on front leg."
+              },
+              {
+                "exercise_name": "Lying Leg Curl",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2020",
+                "rest_seconds": 75,
+                "notes": "Hamstring isolation without spinal loading."
+              },
+              {
+                "exercise_name": "Cable Pull-Through",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Hip hinge pattern, teaches posterior chain activation."
+              },
+              {
+                "exercise_name": "Walking Lunges",
+                "sets": 3,
+                "reps": "10 per leg",
+                "tempo": "2010",
+                "rest_seconds": 75,
+                "notes": "Bodyweight or light dumbbells. Keep torso upright."
+              },
+              {
+                "exercise_name": "Standing Calf Raise",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Machine or Smith machine."
+              }
+            ]
+          },
+          {
+            "day": "Day 2 - Upper Body Push + Core",
+            "focus": "Chest, shoulders, triceps with anti-rotation core work",
+            "exercises": [
+              {
+                "exercise_name": "Incline Dumbbell Press",
+                "sets": 4,
+                "reps": "8-12",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Back fully supported on bench. Better for shoulders than flat bench."
+              },
+              {
+                "exercise_name": "Standing Cable Chest Press",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2010",
+                "rest_seconds": 75,
+                "notes": "Standing, split stance, engages core for stability."
+              },
+              {
+                "exercise_name": "Seated Dumbbell Shoulder Press",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Back supported. Avoid arching lower back."
+              },
+              {
+                "exercise_name": "Lateral Raise",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Standing or seated, slight forward lean."
+              },
+              {
+                "exercise_name": "Cable Tricep Pushdown",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Standing, neutral spine."
+              },
+              {
+                "exercise_name": "Pallof Press",
+                "sets": 3,
+                "reps": "12-15 per side",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Anti-rotation core exercise. Critical for back health."
+              },
+              {
+                "exercise_name": "Dead Bug",
+                "sets": 3,
+                "reps": "10 per side",
+                "tempo": "Slow and controlled",
+                "rest_seconds": 45,
+                "notes": "Press lower back into floor. Core stability."
+              }
+            ]
+          },
+          {
+            "day": "Day 3 - Lower Body (Quad Dominant)",
+            "focus": "Quad-focused leg work with minimal spinal loading",
+            "warm_up": [
+              {
+                "exercise_name": "90/90 Hip Stretch",
+                "sets": 2,
+                "duration_seconds": 30,
+                "notes": "Each side, improves hip mobility"
+              },
+              {
+                "exercise_name": "Bodyweight Squat",
+                "sets": 2,
+                "reps": "15",
+                "notes": "Movement prep, pain-free range only"
+              }
+            ],
+            "exercises": [
+              {
+                "exercise_name": "Goblet Squat",
+                "sets": 4,
+                "reps": "10-12",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Front-loaded keeps torso upright. Easier on back than back squat."
+              },
+              {
+                "exercise_name": "Leg Press",
+                "sets": 4,
+                "reps": "12-15",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Back supported. Don't let lower back round at bottom. Feet high on platform."
+              },
+              {
+                "exercise_name": "Step-Ups",
+                "sets": 3,
+                "reps": "10-12 per leg",
+                "tempo": "2010",
+                "rest_seconds": 75,
+                "notes": "Use bench or box. Focus on working leg pushing up."
+              },
+              {
+                "exercise_name": "Leg Extension",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Quad isolation, no spinal loading."
+              },
+              {
+                "exercise_name": "Single-Leg Romanian Deadlift",
+                "sets": 3,
+                "reps": "10-12 per leg",
+                "tempo": "3011",
+                "rest_seconds": 75,
+                "notes": "Light weight or bodyweight. Balance and hamstring work."
+              },
+              {
+                "exercise_name": "Seated Calf Raise",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Targets soleus muscle."
+              }
+            ]
+          },
+          {
+            "day": "Day 4 - Upper Body Pull + Core",
+            "focus": "Back and biceps with spine-neutral positions",
+            "exercises": [
+              {
+                "exercise_name": "Chest-Supported Row",
+                "sets": 4,
+                "reps": "10-12",
+                "tempo": "2011",
+                "rest_seconds": 90,
+                "notes": "Chest support prevents lower back strain. Ideal for back pain."
+              },
+              {
+                "exercise_name": "Lat Pulldown (Neutral Grip)",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "2011",
+                "rest_seconds": 75,
+                "notes": "Seated with thigh support. Pull to upper chest."
+              },
+              {
+                "exercise_name": "Single-Arm Cable Row",
+                "sets": 3,
+                "reps": "12-15 per arm",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Split stance, core engaged. Anti-rotation component."
+              },
+              {
+                "exercise_name": "Face Pull",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Rear delts and upper back. Good posture exercise."
+              },
+              {
+                "exercise_name": "Cable Bicep Curl",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Standing, neutral spine."
+              },
+              {
+                "exercise_name": "Side Plank",
+                "sets": 3,
+                "duration_seconds": "20-30 per side",
+                "rest_seconds": 60,
+                "notes": "Can modify on knees if needed. Builds lateral core strength."
+              },
+              {
+                "exercise_name": "McGill Curl-Up",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "Hold 10 seconds at top",
+                "rest_seconds": 45,
+                "notes": "Hands under lower back, one leg bent. Minimal spinal flexion. Designed by Dr. Stuart McGill for back pain."
+              },
+              {
+                "exercise_name": "Bird Dog",
+                "sets": 3,
+                "reps": "10 per side",
+                "tempo": "Hold 3 seconds each rep",
+                "rest_seconds": 45,
+                "notes": "Core stability and coordination."
+              }
+            ]
+          }
+        ],
+        "exercises_to_avoid": [
+          "Conventional deadlifts (if painful)",
+          "Back squats with heavy load",
+          "Barbell bent-over rows (torso parallel to ground)",
+          "Good mornings",
+          "Sit-ups and crunches (spinal flexion under load)",
+          "Loaded spinal rotation exercises",
+          "Heavy overhead press (if it causes arching)"
+        ],
+        "progression_timeline": {
+          "weeks_1_4": "Learn movement patterns, very conservative loading, focus on form",
+          "weeks_5_8": "Gradually increase loads by 2.5-5% weekly if pain-free",
+          "weeks_9_12": "Continue progressive overload, may introduce previously avoided exercises if tolerated",
+          "weeks_13_plus": "Normal training with continued emphasis on spine-neutral positions"
+        },
+        "additional_recommendations": [
+          "Daily mobility work: cat-cow, hip flexor stretches, 90/90 hip stretch",
+          "Practice bracing technique: breathe into belly, create 360° tension before lifting",
+          "Consider working with a physical therapist for personalized assessment",
+          "Use lifting belt for heavier compounds if it helps you brace better",
+          "Focus on sleep quality and stress management (both affect pain perception)",
+          "Track pain levels and which exercises aggravate symptoms",
+          "Build up core endurance with planks (work toward 60+ seconds)"
+        ]
+      },
+      {
+        "id": "shoulder_impingement_training",
+        "condition": "Shoulder Impingement / Rotator Cuff Issues",
+        "name": "Shoulder-Safe Strength Program",
+        "description": "Modified training program for those with shoulder impingement, rotator cuff strain, or subacromial pain, focusing on proper shoulder mechanics and pain-free ranges of motion.",
+        "medical_disclaimer": "This program is for mild to moderate shoulder issues. If you have a complete rotator cuff tear, severe pain, or limited range of motion, consult an orthopedic specialist or physical therapist first. Stop if you experience sharp pain or catching sensations.",
+        "key_modifications": [
+          "Avoid overhead pressing initially",
+          "Keep elbows below shoulder height during pressing",
+          "Use neutral grip variations",
+          "Strengthen rotator cuff and scapular stabilizers",
+          "Progress shoulder elevation gradually"
+        ],
+        "training_frequency": "4 days per week",
+        "session_duration": "40-50 minutes",
+        "safety_guidelines": [
+          "Pain should not exceed 2/10 during exercise",
+          "No sharp, catching, or pinching sensations",
+          "Warm up shoulders thoroughly before training",
+          "Start with very light weights on shoulder exercises",
+          "Progress range of motion before progressing load",
+          "If an exercise hurts, modify or skip it"
+        ],
+        "workouts": [
+          {
+            "day": "Day 1 - Upper Body Push (Shoulder-Safe)",
+            "focus": "Chest and shoulders with modified angles",
+            "warm_up": [
+              {
+                "exercise_name": "Band Pull-Aparts",
+                "sets": 2,
+                "reps": "15-20",
+                "notes": "Activates rear delts and scapular retractors"
+              },
+              {
+                "exercise_name": "External Rotation with Band",
+                "sets": 2,
+                "reps": "15 per arm",
+                "notes": "Rotator cuff activation"
+              },
+              {
+                "exercise_name": "Wall Slides",
+                "sets": 2,
+                "reps": "10",
+                "notes": "Scapular mobility and control"
+              }
+            ],
+            "exercises": [
+              {
+                "exercise_name": "Low Incline Dumbbell Press (15-30°)",
+                "sets": 4,
+                "reps": "10-12",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Low incline is safer than flat or steep incline. Keep elbows at 45° angle, not flared."
+              },
+              {
+                "exercise_name": "Neutral Grip Dumbbell Press",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "3010",
+                "rest_seconds": 75,
+                "notes": "Palms facing each other. Easier on shoulders than pronated grip."
+              },
+              {
+                "exercise_name": "Cable Chest Fly (Mid to Low)",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Keep cables at or below shoulder height. Don't stretch too far back."
+              },
+              {
+                "exercise_name": "Landmine Press",
+                "sets": 3,
+                "reps": "10-12 per arm",
+                "tempo": "2010",
+                "rest_seconds": 75,
+                "notes": "Natural arc of motion, shoulder-friendly pressing angle."
+              },
+              {
+                "exercise_name": "Cable Lateral Raise (Slight Forward Lean)",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Lean forward 10-15° to reduce impingement. Light weight, thumb slightly up."
+              },
+              {
+                "exercise_name": "Cable Tricep Pushdown (Rope)",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Neutral grip is easier on shoulders than straight bar."
+              }
+            ]
+          },
+          {
+            "day": "Day 2 - Upper Body Pull + Rotator Cuff",
+            "focus": "Back training with extra rotator cuff and rear delt work",
+            "exercises": [
+              {
+                "exercise_name": "Neutral Grip Pull-Up or Lat Pulldown",
+                "sets": 4,
+                "reps": "8-12",
+                "tempo": "2011",
+                "rest_seconds": 90,
+                "notes": "Neutral grip is shoulder-friendly. Full range of motion."
+              },
+              {
+                "exercise_name": "Chest-Supported Row",
+                "sets": 4,
+                "reps": "10-12",
+                "tempo": "2011",
+                "rest_seconds": 90,
+                "notes": "Neutral or pronated grip. Retract scapulae fully at top."
+              },
+              {
+                "exercise_name": "Single-Arm Cable Row",
+                "sets": 3,
+                "reps": "12-15 per arm",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Focus on scapular retraction."
+              },
+              {
+                "exercise_name": "Face Pull (High to Face)",
+                "sets": 4,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Critical for shoulder health. Pull to face, externally rotate at end. Do NOT skip."
+              },
+              {
+                "exercise_name": "Reverse Pec Deck or Cable Reverse Fly",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Isolate rear delts, important for shoulder balance."
+              },
+              {
+                "exercise_name": "External Rotation (Cable or Dumbbell)",
+                "sets": 3,
+                "reps": "15-20 per arm",
+                "tempo": "2020",
+                "rest_seconds": 45,
+                "notes": "Elbow at 90°, tucked to side. Very light weight. Rotator cuff strengthening."
+              },
+              {
+                "exercise_name": "Cable Bicep Curl (Neutral or Hammer Grip)",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Neutral grip easier on shoulders than supinated."
+              }
+            ]
+          },
+          {
+            "day": "Day 3 - Lower Body",
+            "focus": "Full lower body training (shoulders get a break)",
+            "exercises": [
+              {
+                "exercise_name": "Barbell Back Squat or Goblet Squat",
+                "sets": 4,
+                "reps": "8-12",
+                "tempo": "3010",
+                "rest_seconds": 120,
+                "notes": "Use front squat grip if back squat bar position bothers shoulders. Otherwise train normally."
+              },
+              {
+                "exercise_name": "Romanian Deadlift",
+                "sets": 4,
+                "reps": "10-12",
+                "tempo": "3020",
+                "rest_seconds": 90,
+                "notes": "Normal training. Good for posterior chain."
+              },
+              {
+                "exercise_name": "Bulgarian Split Squat",
+                "sets": 3,
+                "reps": "10-12 per leg",
+                "tempo": "3010",
+                "rest_seconds": 75,
+                "notes": "Dumbbells at sides or goblet hold."
+              },
+              {
+                "exercise_name": "Leg Curl",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Hamstring isolation."
+              },
+              {
+                "exercise_name": "Walking Lunges",
+                "sets": 3,
+                "reps": "12 per leg",
+                "tempo": "2010",
+                "rest_seconds": 75,
+                "notes": "Dumbbells at sides."
+              },
+              {
+                "exercise_name": "Calf Raise (Standing or Seated)",
+                "sets": 4,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Normal training."
+              }
+            ]
+          },
+          {
+            "day": "Day 4 - Upper Body Hypertrophy + Rehab",
+            "focus": "Higher volume upper body with emphasis on shoulder health",
+            "warm_up": [
+              {
+                "exercise_name": "YTW Raises",
+                "sets": 2,
+                "reps": "10 of each (Y, T, W)",
+                "notes": "Light dumbbells or bodyweight. Scapular strengthening."
+              },
+              {
+                "exercise_name": "Band Pull-Aparts",
+                "sets": 2,
+                "reps": "20",
+                "notes": "Upper back activation."
+              }
+            ],
+            "exercises": [
+              {
+                "exercise_name": "Neutral Grip Incline Dumbbell Press",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "3010",
+                "rest_seconds": 75,
+                "notes": "Moderate weight, focus on muscle contraction."
+              },
+              {
+                "exercise_name": "Dumbbell Pullover (Slight Decline)",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "3020",
+                "rest_seconds": 75,
+                "notes": "Keep elbows slightly bent. Don't stretch too far if it hurts shoulder."
+              },
+              {
+                "exercise_name": "Seated Cable Row (V-Bar)",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Neutral grip, full scapular retraction."
+              },
+              {
+                "exercise_name": "Lat Pulldown (Wide Grip - to upper chest)",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Pull to upper chest, not behind neck. Stop if shoulder hurts."
+              },
+              {
+                "exercise_name": "Scapular Wall Slides",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "Slow and controlled",
+                "rest_seconds": 45,
+                "notes": "Back against wall, arms slide up and down. Focus on scapular control."
+              },
+              {
+                "exercise_name": "Prone Y Raises",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 45,
+                "notes": "On incline bench. Very light dumbbells. Lower trap strengthening."
+              },
+              {
+                "exercise_name": "Prone T Raises",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 45,
+                "notes": "On incline bench. Very light dumbbells. Mid trap strengthening."
+              },
+              {
+                "exercise_name": "Farmer's Carry",
+                "sets": 3,
+                "duration_seconds": 45,
+                "rest_seconds": 60,
+                "notes": "Heavy dumbbells or kettlebells. Walk with perfect posture. Scapular stability."
+              }
+            ]
+          }
+        ],
+        "exercises_to_avoid": [
+          "Behind-the-neck press or pulldown",
+          "Upright rows (can cause impingement)",
+          "Dips with elbows flared wide",
+          "Heavy barbell bench press (initially - can reintroduce later)",
+          "Barbell overhead press (initially)",
+          "Wide grip bench press with elbows flared",
+          "Any exercise causing sharp pain or pinching"
+        ],
+        "progression_timeline": {
+          "weeks_1_4": "Focus on pain-free exercises, rehab work, build rotator cuff and scapular strength",
+          "weeks_5_8": "Gradually increase pressing angles (low incline → higher incline), add light overhead work",
+          "weeks_9_12": "Reintroduce overhead pressing with light weight, continue progressive overload on all exercises",
+          "weeks_13_plus": "Return to full overhead pressing if pain-free, maintain rear delt and rotator cuff work"
+        },
+        "additional_recommendations": [
+          "Daily band work: pull-aparts, external rotations (2-3 sets of 15-20)",
+          "Do face pulls at least 2x per week - they're critical for shoulder health",
+          "Sleep on your back or non-affected side (sleeping on bad shoulder aggravates impingement)",
+          "Consider getting a professional shoulder assessment to identify specific weaknesses",
+          "Focus on scapular stability - shoulder blade control is crucial",
+          "Ice after training if experiencing inflammation",
+          "Maintain good posture throughout the day (forward head and rounded shoulders worsen impingement)",
+          "Stretch pecs and strengthen upper back to improve shoulder positioning"
+        ]
+      },
+      {
+        "id": "postpartum_training",
+        "condition": "Postpartum Recovery (6 weeks - 6 months)",
+        "name": "Core-Safe Postpartum Strength Program",
+        "description": "A progressive training program for new mothers returning to exercise after 6-week medical clearance, focusing on rebuilding core strength, addressing diastasis recti, and strengthening pelvic floor.",
+        "medical_disclaimer": "DO NOT begin this program until you have received clearance from your OB/GYN or healthcare provider (typically at 6-week postpartum checkup, or 8-12 weeks for C-section). Stop if you experience pelvic pain, excessive bleeding, dizziness, or urinary leakage. Consult a pelvic floor physical therapist if possible.",
+        "key_modifications": [
+          "No traditional crunches or sit-ups",
+          "Avoid exercises that cause 'doming' or coning of abdomen",
+          "Gradually rebuild core before heavy lifting",
+          "Focus on breathing and pelvic floor connection",
+          "Progress based on recovery, not pre-pregnancy strength"
+        ],
+        "training_frequency": "3-4 days per week",
+        "session_duration": "30-40 minutes",
+        "safety_guidelines": [
+          "Get medical clearance before starting (6 weeks vaginal, 8-12 weeks C-section)",
+          "Stop if you experience pelvic pain, urinary leakage, or heavy bleeding",
+          "Learn proper breathing and pelvic floor engagement",
+          "Check for diastasis recti and modify exercises accordingly",
+          "Prioritize recovery over performance",
+          "Start conservatively - you can always progress faster",
+          "Stay hydrated (especially if breastfeeding)"
+        ],
+        "core_exercises_daily": [
+          {
+            "exercise_name": "Diaphragmatic Breathing",
+            "sets": 3,
+            "reps": "10 breaths",
+            "notes": "Lie on back, inhale deeply into belly, exhale fully engaging deep core. Do daily."
+          },
+          {
+            "exercise_name": "Pelvic Floor Activations (Kegels)",
+            "sets": 3,
+            "reps": "10 (5 second hold each)",
+            "notes": "Tighten as if stopping urine flow. Do NOT hold breath. Do daily."
+          },
+          {
+            "exercise_name": "Pelvic Tilts",
+            "sets": 2,
+            "reps": "15",
+            "tempo": "Slow",
+            "notes": "Lie on back, gently tilt pelvis up and down. Core reconnection."
+          }
+        ],
+        "workouts": [
+          {
+            "day": "Phase 1 (Weeks 1-4 Post-Clearance) - Foundation",
+            "focus": "Rebuilding basic strength and core connection",
+            "exercises": [
+              {
+                "exercise_name": "Walking",
+                "sets": 1,
+                "duration_minutes": "15-20",
+                "intensity": "Easy to moderate",
+                "notes": "Start with short walks, gradually increase. Good for recovery and mental health."
+              },
+              {
+                "exercise_name": "Glute Bridge",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Engage pelvic floor as you lift hips. Great for glute activation."
+              },
+              {
+                "exercise_name": "Quadruped Bird Dog",
+                "sets": 3,
+                "reps": "8-10 per side",
+                "tempo": "Hold 3-5 seconds",
+                "rest_seconds": 60,
+                "notes": "Core stability. Keep hips level, no rotation. Exhale as you extend."
+              },
+              {
+                "exercise_name": "Wall Push-Up",
+                "sets": 3,
+                "reps": "10-15",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Hands on wall. Engage core throughout. Regress further if needed."
+              },
+              {
+                "exercise_name": "Bodyweight Squat",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "3010",
+                "rest_seconds": 60,
+                "notes": "Focus on form. Engage pelvic floor as you stand. Box squat if needed."
+              },
+              {
+                "exercise_name": "Standing Calf Raise",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 45,
+                "notes": "Hold wall for balance if needed."
+              },
+              {
+                "exercise_name": "Dead Bug (Modified)",
+                "sets": 3,
+                "reps": "8 per side",
+                "tempo": "Slow and controlled",
+                "rest_seconds": 60,
+                "notes": "Start with bent knee variation. Press lower back to floor. Core rebuilding."
+              },
+              {
+                "exercise_name": "Side-Lying Leg Lift",
+                "sets": 2,
+                "reps": "12-15 per side",
+                "tempo": "2011",
+                "rest_seconds": 45,
+                "notes": "Hip abductor work. Stabilizes pelvis."
+              }
+            ]
+          },
+          {
+            "day": "Phase 2 (Weeks 5-8 Post-Clearance) - Building Strength",
+            "focus": "Progressive loading with continued core focus",
+            "exercises": [
+              {
+                "exercise_name": "Goblet Squat",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "3010",
+                "rest_seconds": 75,
+                "notes": "Light dumbbell or kettlebell. Front load helps with posture."
+              },
+              {
+                "exercise_name": "Romanian Deadlift (Light)",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "3020",
+                "rest_seconds": 75,
+                "notes": "Light dumbbells. Hip hinge pattern. Strengthens posterior chain."
+              },
+              {
+                "exercise_name": "Single-Leg Glute Bridge",
+                "sets": 3,
+                "reps": "10-12 per leg",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Progress from double-leg bridges. Unilateral glute strength."
+              },
+              {
+                "exercise_name": "Dumbbell Chest Press (Incline)",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "3010",
+                "rest_seconds": 75,
+                "notes": "Light dumbbells, incline bench. Start rebuilding upper body strength."
+              },
+              {
+                "exercise_name": "Seated Cable Row",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Good posture exercise. Strengthens upper back."
+              },
+              {
+                "exercise_name": "Lat Pulldown",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Light to moderate weight. Full range of motion."
+              },
+              {
+                "exercise_name": "Pallof Press",
+                "sets": 3,
+                "reps": "10-12 per side",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Anti-rotation core work. Safe for diastasis recti."
+              },
+              {
+                "exercise_name": "Plank (Modified)",
+                "sets": 3,
+                "duration_seconds": "20-30",
+                "rest_seconds": 60,
+                "notes": "On knees if needed. NO doming or coning of belly. Stop if you see this."
+              }
+            ]
+          },
+          {
+            "day": "Phase 3 (Weeks 9-16 Post-Clearance) - Progressive Overload",
+            "focus": "Increased intensity and volume, preparing for normal training",
+            "exercises": [
+              {
+                "exercise_name": "Dumbbell Romanian Deadlift",
+                "sets": 4,
+                "reps": "8-12",
+                "tempo": "3020",
+                "rest_seconds": 90,
+                "notes": "Moderate weight. Focus on hip hinge and glute engagement."
+              },
+              {
+                "exercise_name": "Bulgarian Split Squat",
+                "sets": 3,
+                "reps": "10-12 per leg",
+                "tempo": "3010",
+                "rest_seconds": 75,
+                "notes": "Light dumbbells. Unilateral leg strength."
+              },
+              {
+                "exercise_name": "Leg Curl Machine",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Hamstring isolation."
+              },
+              {
+                "exercise_name": "Hip Thrust",
+                "sets": 4,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 75,
+                "notes": "Barbell or dumbbell. Powerful glute builder. Use pad for comfort."
+              },
+              {
+                "exercise_name": "Dumbbell Incline Press",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "3010",
+                "rest_seconds": 75,
+                "notes": "Moderate weight. Progressive chest development."
+              },
+              {
+                "exercise_name": "Chest-Supported Row",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "2011",
+                "rest_seconds": 75,
+                "notes": "Back work without spinal loading."
+              },
+              {
+                "exercise_name": "Dumbbell Shoulder Press (Seated)",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "2010",
+                "rest_seconds": 75,
+                "notes": "Light to moderate weight. Back supported."
+              },
+              {
+                "exercise_name": "Cable Lateral Raise",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Light weight, shoulder development."
+              },
+              {
+                "exercise_name": "Anti-Rotation Press (Cable)",
+                "sets": 3,
+                "reps": "12 per side",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Advanced core stability work."
+              },
+              {
+                "exercise_name": "Farmer's Carry",
+                "sets": 3,
+                "duration_seconds": "30-45",
+                "rest_seconds": 60,
+                "notes": "Moderate weight. Total body stability and core engagement."
+              }
+            ]
+          },
+          {
+            "day": "Phase 4 (4-6 Months Postpartum) - Return to Normal Training",
+            "focus": "Near-normal training intensity with ongoing core awareness",
+            "note": "At this phase, you can begin following standard training programs, but maintain awareness of:",
+            "ongoing_considerations": [
+              "Continue pelvic floor exercises daily",
+              "Avoid exercises that cause doming/coning",
+              "Progress heavy lifts gradually",
+              "Monitor for any pelvic floor dysfunction",
+              "Consider working with pelvic floor PT for assessment"
+            ],
+            "exercises": [
+              {
+                "exercise_name": "Trap Bar Deadlift or Conventional Deadlift",
+                "sets": 4,
+                "reps": "6-10",
+                "tempo": "3010",
+                "rest_seconds": 120,
+                "notes": "Can begin heavier compounds if cleared and no issues. Start light, progress gradually."
+              },
+              {
+                "exercise_name": "Front Squat or Back Squat",
+                "sets": 4,
+                "reps": "8-10",
+                "tempo": "3010",
+                "rest_seconds": 120,
+                "notes": "Reintroduce barbell squats if comfortable. Engage pelvic floor."
+              },
+              {
+                "exercise_name": "Hip Thrust (Loaded)",
+                "sets": 4,
+                "reps": "10-12",
+                "tempo": "2011",
+                "rest_seconds": 90,
+                "notes": "Progressive overload on glutes."
+              },
+              {
+                "exercise_name": "Walking Lunges",
+                "sets": 3,
+                "reps": "12 per leg",
+                "tempo": "2010",
+                "rest_seconds": 75,
+                "notes": "Dumbbells at sides."
+              },
+              {
+                "exercise_name": "Barbell Bench Press or Dumbbell Press",
+                "sets": 4,
+                "reps": "8-10",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Can return to standard pressing if comfortable."
+              },
+              {
+                "exercise_name": "Barbell Row or Dumbbell Row",
+                "sets": 4,
+                "reps": "8-10",
+                "tempo": "2011",
+                "rest_seconds": 90,
+                "notes": "Standard back training."
+              },
+              {
+                "exercise_name": "Overhead Press (Standing)",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "2010",
+                "rest_seconds": 90,
+                "notes": "Can reintroduce if no core issues. Brace properly."
+              },
+              {
+                "exercise_name": "Pallof Press or Cable Chop",
+                "sets": 3,
+                "reps": "12 per side",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Continue anti-rotation work for core health."
+              }
+            ]
+          }
+        ],
+        "exercises_to_avoid": [
+          "Traditional crunches or sit-ups (until diastasis recti healed)",
+          "V-ups or other extreme flexion exercises",
+          "Heavy overhead carries (initially)",
+          "Exercises causing visible 'doming' or 'coning' of belly",
+          "High-impact exercises until pelvic floor is strong (running, jumping)",
+          "Heavy Valsalva maneuvers until cleared"
+        ],
+        "diastasis_recti_check": {
+          "how_to_check": "Lie on back, knees bent. Lift head and shoulders slightly. Feel along midline of abdomen above and below belly button. If you feel a gap >2 finger widths or if belly domes/cones during movements, you may have DR.",
+          "if_you_have_dr": [
+            "Work with pelvic floor physical therapist",
+            "Avoid exercises that cause doming/coning",
+            "Focus on transverse abdominis engagement",
+            "Do NOT do traditional crunches",
+            "Many women recover with proper exercise progression"
+          ]
+        },
+        "progression_timeline": {
+          "weeks_0_6": "NO exercise (recovery only)",
+          "weeks_6_10": "Phase 1 - Foundation building, light movements",
+          "weeks_10_14": "Phase 2 - Progressive loading, moderate weights",
+          "weeks_14_20": "Phase 3 - Increased intensity, approaching normal training",
+          "weeks_20_plus": "Phase 4 - Return to standard training with ongoing awareness"
+        },
+        "additional_recommendations": [
+          "CRITICAL: See pelvic floor physical therapist if possible - they can assess and guide your recovery",
+          "Do pelvic floor exercises daily throughout recovery",
+          "Stay hydrated, especially if breastfeeding (can affect milk supply)",
+          "Get adequate sleep when possible (affects recovery and milk supply)",
+          "Wear supportive sports bra during exercise (breast support is critical)",
+          "Don't compare yourself to pre-pregnancy strength - you're recovering from major physiological event",
+          "If you experience urinary leakage during exercise, STOP and see pelvic floor PT",
+          "Consider using abdominal binder initially for support (ask doctor)",
+          "Be patient - full recovery can take 6-12 months or longer",
+          "Mental health is part of recovery - don't hesitate to seek support if struggling"
+        ],
+        "red_flags_stop_immediately": [
+          "Heavy vaginal bleeding",
+          "Severe pelvic or abdominal pain",
+          "Urinary or fecal incontinence",
+          "Feeling of 'something falling out' (pelvic organ prolapse)",
+          "Severe doming or coning of abdomen",
+          "Dizziness or extreme fatigue",
+          "Severe headaches",
+          "Chest pain or difficulty breathing"
+        ]
+      }
+    ]
+  }
+
+  {
+    "medical_condition_workouts_part2": [
+      {
+        "id": "knee_pain_training",
+        "condition": "Knee Pain / Patellofemoral Pain Syndrome (Runner's Knee)",
+        "name": "Knee-Safe Strength & Rehab Program",
+        "description": "A modified training program for those with anterior knee pain, patellofemoral syndrome, or general knee discomfort, focusing on strengthening supporting muscles while avoiding painful ranges of motion.",
+        "medical_disclaimer": "This program is for mild to moderate knee pain without structural damage. If you have severe pain, swelling, locking, or recent injury, consult an orthopedic specialist or physical therapist. Stop if you experience sharp pain, grinding, or instability.",
+        "key_modifications": [
+          "Avoid deep knee flexion initially (keep above 90 degrees)",
+          "Strengthen glutes and VMO (vastus medialis oblique)",
+          "Focus on hip and ankle mobility",
+          "Control eccentric loading",
+          "Progress depth gradually as pain decreases"
+        ],
+        "training_frequency": "4 days per week",
+        "session_duration": "40-50 minutes",
+        "safety_guidelines": [
+          "Pain should not exceed 3/10 during exercise",
+          "No sharp, stabbing, or grinding sensations",
+          "Avoid full depth squats and lunges initially",
+          "Ice after training if swelling occurs",
+          "Strengthen hips first - weak glutes often cause knee pain",
+          "If pain persists beyond 2 weeks, see a professional"
+        ],
+        "workouts": [
+          {
+            "day": "Day 1 - Lower Body (Quad Focused)",
+            "focus": "Knee-friendly quad development with controlled ranges",
+            "warm_up": [
+              {
+                "exercise_name": "Foam Roll Quads and IT Band",
+                "sets": 1,
+                "duration_seconds": 60,
+                "notes": "Gentle pressure, don't roll directly on knee joint"
+              },
+              {
+                "exercise_name": "Clamshells",
+                "sets": 2,
+                "reps": "15 per side",
+                "notes": "Glute medius activation - critical for knee health"
+              },
+              {
+                "exercise_name": "Mini Band Walks",
+                "sets": 2,
+                "reps": "10 steps each direction",
+                "notes": "Hip abductor activation"
+              }
+            ],
+            "exercises": [
+              {
+                "exercise_name": "Spanish Squat (Blood Flow Restriction Alternative)",
+                "sets": 4,
+                "reps": "15-20",
+                "tempo": "2020",
+                "rest_seconds": 75,
+                "notes": "Band around back of knees, lean back into band. Minimal knee loading but great quad activation. Game-changer for knee pain."
+              },
+              {
+                "exercise_name": "Leg Press (High Foot Placement, Limited Depth)",
+                "sets": 4,
+                "reps": "12-15",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Feet high on platform, stop at 90° knee flexion. Don't let knees cave inward. Moderate weight."
+              },
+              {
+                "exercise_name": "Terminal Knee Extensions (TKE)",
+                "sets": 3,
+                "reps": "15-20 per leg",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Band around knee, step back, extend knee fully. Targets VMO specifically. Essential for knee rehab."
+              },
+              {
+                "exercise_name": "Step-Ups (Low Box, 4-6 inches)",
+                "sets": 3,
+                "reps": "12-15 per leg",
+                "tempo": "2010",
+                "rest_seconds": 75,
+                "notes": "Very low step initially. Focus on pushing through heel. Control the descent."
+              },
+              {
+                "exercise_name": "Seated Leg Curl",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Hamstrings support knee joint. Strengthen them."
+              },
+              {
+                "exercise_name": "Seated Calf Raise",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Ankle mobility and strength affects knee alignment."
+              },
+              {
+                "exercise_name": "Wall Sit",
+                "sets": 3,
+                "duration_seconds": "30-45",
+                "rest_seconds": 60,
+                "notes": "Knees at 90°, back against wall. Isometric quad strengthening."
+              }
+            ]
+          },
+          {
+            "day": "Day 2 - Upper Body + Hip Strengthening",
+            "focus": "Upper body training with critical hip strengthening for knee health",
+            "exercises": [
+              {
+                "exercise_name": "Barbell Bench Press",
+                "sets": 4,
+                "reps": "8-10",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Normal upper body training - knees are resting."
+              },
+              {
+                "exercise_name": "Incline Dumbbell Press",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "3010",
+                "rest_seconds": 75,
+                "notes": "Upper chest focus."
+              },
+              {
+                "exercise_name": "Cable Chest Fly",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Chest isolation."
+              },
+              {
+                "exercise_name": "Dumbbell Shoulder Press",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "2010",
+                "rest_seconds": 75,
+                "notes": "Seated with back support."
+              },
+              {
+                "exercise_name": "Lateral Raise",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Shoulder development."
+              },
+              {
+                "exercise_name": "Side-Lying Hip Abduction",
+                "sets": 3,
+                "reps": "15-20 per leg",
+                "tempo": "2011",
+                "rest_seconds": 45,
+                "notes": "CRITICAL for knee health. Strengthens glute medius which stabilizes knee."
+              },
+              {
+                "exercise_name": "Fire Hydrants",
+                "sets": 3,
+                "reps": "15-20 per leg",
+                "tempo": "2011",
+                "rest_seconds": 45,
+                "notes": "Hip external rotation and abduction. Knee stability."
+              },
+              {
+                "exercise_name": "Single-Leg Balance",
+                "sets": 3,
+                "duration_seconds": "30 per leg",
+                "rest_seconds": 30,
+                "notes": "Proprioception training. Stand on one leg, maintain balance. Add eyes closed for progression."
+              }
+            ]
+          },
+          {
+            "day": "Day 3 - Lower Body (Hip Dominant)",
+            "focus": "Posterior chain with minimal knee stress",
+            "warm_up": [
+              {
+                "exercise_name": "Hip Circles",
+                "sets": 2,
+                "reps": "10 each direction per leg",
+                "notes": "Hip mobility warm-up"
+              },
+              {
+                "exercise_name": "Glute Bridges",
+                "sets": 2,
+                "reps": "15",
+                "tempo": "2011",
+                "notes": "Glute activation"
+              }
+            ],
+            "exercises": [
+              {
+                "exercise_name": "Romanian Deadlift",
+                "sets": 4,
+                "reps": "10-12",
+                "tempo": "3020",
+                "rest_seconds": 90,
+                "notes": "Minimal knee flexion, all hip hinge. Strengthens hamstrings and glutes."
+              },
+              {
+                "exercise_name": "Hip Thrust",
+                "sets": 4,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 90,
+                "notes": "Barbell or dumbbell. Knees at 90° at top. Excellent for glute development with minimal knee stress."
+              },
+              {
+                "exercise_name": "Single-Leg Romanian Deadlift",
+                "sets": 3,
+                "reps": "10-12 per leg",
+                "tempo": "3011",
+                "rest_seconds": 75,
+                "notes": "Light weight. Balance, stability, and hamstring strength."
+              },
+              {
+                "exercise_name": "Cable Pull-Through",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Hip hinge pattern with constant tension."
+              },
+              {
+                "exercise_name": "Lying Leg Curl",
+                "sets": 4,
+                "reps": "12-15",
+                "tempo": "2020",
+                "rest_seconds": 75,
+                "notes": "Hamstring isolation. Important for knee stability."
+              },
+              {
+                "exercise_name": "Standing Calf Raise",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Ankle strength supports knee alignment."
+              },
+              {
+                "exercise_name": "Copenhagen Plank (Modified)",
+                "sets": 3,
+                "duration_seconds": "15-20 per side",
+                "rest_seconds": 60,
+                "notes": "Hip adductor strength. Can do on lower surface initially. Advanced exercise."
+              }
+            ]
+          },
+          {
+            "day": "Day 4 - Upper Body Pull + Knee Rehab",
+            "focus": "Back training with dedicated knee rehabilitation work",
+            "exercises": [
+              {
+                "exercise_name": "Pull-Ups or Lat Pulldown",
+                "sets": 4,
+                "reps": "8-12",
+                "tempo": "2011",
+                "rest_seconds": 90,
+                "notes": "Normal back training."
+              },
+              {
+                "exercise_name": "Barbell Row or Chest-Supported Row",
+                "sets": 4,
+                "reps": "10-12",
+                "tempo": "2011",
+                "rest_seconds": 90,
+                "notes": "Build strong back."
+              },
+              {
+                "exercise_name": "Seated Cable Row",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 75,
+                "notes": "Mid-back development."
+              },
+              {
+                "exercise_name": "Face Pull",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Rear delts and upper back."
+              },
+              {
+                "exercise_name": "Cable Bicep Curl",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Bicep work."
+              },
+              {
+                "exercise_name": "Petersen Squat (or Reverse Nordic)",
+                "sets": 3,
+                "reps": "8-12",
+                "tempo": "3030",
+                "rest_seconds": 90,
+                "notes": "Advanced: lean back from kneeling position. INCREDIBLE for knee tendon strength. Start with very limited range. Progress slowly."
+              },
+              {
+                "exercise_name": "Step-Downs (Eccentric Focus)",
+                "sets": 3,
+                "reps": "10-12 per leg",
+                "tempo": "0030",
+                "rest_seconds": 75,
+                "notes": "Stand on low box, slowly lower other foot to ground (3 seconds). Eccentric quad strength. Great for patellar tendinopathy."
+              },
+              {
+                "exercise_name": "Straight Leg Raise",
+                "sets": 3,
+                "reps": "15-20 per leg",
+                "tempo": "2011",
+                "rest_seconds": 45,
+                "notes": "Lying on back, lift straight leg. VMO activation without knee stress."
+              }
+            ]
+          }
+        ],
+        "exercises_to_avoid": [
+          "Deep squats (ass-to-grass) until pain-free",
+          "Pistol squats",
+          "Deep lunges (initially)",
+          "Leg extension machine (high weight can irritate patella)",
+          "Running or jumping until pain subsides",
+          "Box jumps or plyometrics",
+          "Kneeling exercises if painful"
+        ],
+        "progression_timeline": {
+          "weeks_1_4": "Limited depth movements (above 90°), focus on hip strengthening, build VMO strength",
+          "weeks_5_8": "Gradually increase depth to 90°, progress loading on basic movements",
+          "weeks_9_12": "Approach full depth if pain-free, reintroduce light plyometrics",
+          "weeks_13_plus": "Return to full depth squats and running if no pain"
+        },
+        "additional_recommendations": [
+          "Hip strengthening is CRITICAL - weak hips cause knee pain",
+          "VMO (inner quad) strengthening prevents patellar tracking issues",
+          "Foam roll quads, IT band, and calves regularly",
+          "Stretch hip flexors and quads daily",
+          "Consider knee sleeves for compression and warmth",
+          "Work on ankle mobility - tight ankles cause knee valgus",
+          "Video your squats - check for knee cave (valgus collapse)",
+          "If pain persists, see physical therapist for gait analysis"
+        ]
+      },
+      {
+        "id": "plantar_fasciitis_training",
+        "condition": "Plantar Fasciitis / Heel Pain",
+        "name": "Foot-Safe Training Program",
+        "description": "A modified training program for those with plantar fasciitis or heel pain, focusing on reducing load on the plantar fascia while maintaining fitness and addressing contributing factors.",
+        "medical_disclaimer": "This program is for plantar fasciitis without complete tear. If you have severe pain that prevents walking, sharp stabbing pain, or recent injury, consult a podiatrist or sports medicine physician. Stop if pain worsens or you develop numbness.",
+        "key_modifications": [
+          "Minimize impact and repetitive foot loading",
+          "Strengthen foot intrinsic muscles",
+          "Address calf tightness and Achilles issues",
+          "Use supportive footwear during all training",
+          "Modify exercises to reduce heel strike and push-off"
+        ],
+        "training_frequency": "4 days per week",
+        "session_duration": "40-50 minutes",
+        "safety_guidelines": [
+          "Always wear supportive shoes - no barefoot training",
+          "Avoid heel impact and push-off movements",
+          "Ice foot after training (frozen water bottle roll)",
+          "Do calf stretches multiple times daily",
+          "Pain should improve with warm-up, worsen with prolonged standing",
+          "Morning pain is normal but should decrease with movement"
+        ],
+        "daily_rehab_protocol": [
+          {
+            "exercise_name": "Plantar Fascia Stretch",
+            "sets": 3,
+            "duration_seconds": 30,
+            "notes": "Pull toes back toward shin. Do morning and night. CRITICAL."
+          },
+          {
+            "exercise_name": "Calf Stretch (Straight Knee)",
+            "sets": 2,
+            "duration_seconds": 30,
+            "notes": "Targets gastrocnemius. Tight calves pull on plantar fascia."
+          },
+          {
+            "exercise_name": "Calf Stretch (Bent Knee)",
+            "sets": 2,
+            "duration_seconds": 30,
+            "notes": "Targets soleus muscle."
+          },
+          {
+            "exercise_name": "Towel Scrunches",
+            "sets": 3,
+            "reps": "20",
+            "notes": "Sit with towel on floor, use toes to scrunch it. Strengthens foot muscles."
+          },
+          {
+            "exercise_name": "Marble Pickups",
+            "sets": 2,
+            "reps": "10-15 marbles",
+            "notes": "Pick up marbles with toes. Foot intrinsic strength."
+          },
+          {
+            "exercise_name": "Ice Bottle Roll",
+            "sets": 1,
+            "duration_minutes": 5,
+            "notes": "Frozen water bottle under foot. Roll back and forth. Ice and massage combined."
+          }
+        ],
+        "workouts": [
+          {
+            "day": "Day 1 - Lower Body (Impact Minimized)",
+            "focus": "Leg strength without heel strike or push-off",
+            "warm_up": [
+              {
+                "exercise_name": "Stationary Bike",
+                "sets": 1,
+                "duration_minutes": 5,
+                "notes": "Low impact cardio warm-up. Seated position takes pressure off feet."
+              },
+              {
+                "exercise_name": "Ankle Circles",
+                "sets": 2,
+                "reps": "10 each direction per foot",
+                "notes": "Ankle mobility"
+              }
+            ],
+            "exercises": [
+              {
+                "exercise_name": "Leg Press",
+                "sets": 4,
+                "reps": "10-12",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Feet flat on platform entire time. Push through mid-foot, not toes. Excellent for leg development without plantar fascia stress."
+              },
+              {
+                "exercise_name": "Seated Leg Curl",
+                "sets": 4,
+                "reps": "12-15",
+                "tempo": "2020",
+                "rest_seconds": 75,
+                "notes": "Seated position - no weight on feet. Hamstring development."
+              },
+              {
+                "exercise_name": "Leg Extension",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Seated - no foot loading. Quad isolation."
+              },
+              {
+                "exercise_name": "Hip Thrust (Feet Flat)",
+                "sets": 4,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 75,
+                "notes": "Keep feet completely flat, push through heels and mid-foot. No rise onto toes. Glute development."
+              },
+              {
+                "exercise_name": "Hip Abduction Machine",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Seated - no foot stress. Glute medius."
+              },
+              {
+                "exercise_name": "Hip Adduction Machine",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Seated - no foot stress. Inner thigh."
+              },
+              {
+                "exercise_name": "Seated Calf Raise",
+                "sets": 4,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Strengthens soleus without heel strike. Control the movement - no bouncing."
+              }
+            ]
+          },
+          {
+            "day": "Day 2 - Upper Body Push",
+            "focus": "Chest, shoulders, triceps - feet are resting",
+            "exercises": [
+              {
+                "exercise_name": "Barbell Bench Press",
+                "sets": 4,
+                "reps": "8-10",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Feet flat on floor or on bench if standing hurts."
+              },
+              {
+                "exercise_name": "Incline Dumbbell Press",
+                "sets": 4,
+                "reps": "10-12",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Upper chest focus."
+              },
+              {
+                "exercise_name": "Cable Chest Fly",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Seated or standing with minimal weight shift."
+              },
+              {
+                "exercise_name": "Seated Dumbbell Shoulder Press",
+                "sets": 4,
+                "reps": "10-12",
+                "tempo": "2010",
+                "rest_seconds": 90,
+                "notes": "Seated - no foot loading."
+              },
+              {
+                "exercise_name": "Lateral Raise",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Can do seated if standing hurts."
+              },
+              {
+                "exercise_name": "Cable Tricep Pushdown",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Standing with minimal weight shift."
+              },
+              {
+                "exercise_name": "Overhead Tricep Extension (Seated)",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Seated to minimize foot stress."
+              }
+            ]
+          },
+          {
+            "day": "Day 3 - Lower Body (Modified Movements)",
+            "focus": "Hip and leg work with careful foot positioning",
+            "warm_up": [
+              {
+                "exercise_name": "Rowing Machine",
+                "sets": 1,
+                "duration_minutes": 5,
+                "notes": "Low impact, feet strapped in. Good warm-up."
+              }
+            ],
+            "exercises": [
+              {
+                "exercise_name": "Goblet Squat (Controlled Depth)",
+                "sets": 4,
+                "reps": "12-15",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Feet flat entire movement. NO rising onto toes. Weight through mid-foot and heels."
+              },
+              {
+                "exercise_name": "Romanian Deadlift",
+                "sets": 4,
+                "reps": "10-12",
+                "tempo": "3020",
+                "rest_seconds": 90,
+                "notes": "Weight through heels and mid-foot. Minimal calf involvement."
+              },
+              {
+                "exercise_name": "Glute Bridge (Single-Leg)",
+                "sets": 3,
+                "reps": "12-15 per leg",
+                "tempo": "2011",
+                "rest_seconds": 75,
+                "notes": "Working foot stays completely flat. Unilateral glute work."
+              },
+              {
+                "exercise_name": "Cable Pull-Through",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Hip hinge, weight through heels."
+              },
+              {
+                "exercise_name": "Lying Leg Curl",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Face down - no weight on feet. Hamstrings."
+              },
+              {
+                "exercise_name": "Tibialis Raise",
+                "sets": 3,
+                "reps": "20-25",
+                "tempo": "2011",
+                "rest_seconds": 45,
+                "notes": "Heels on edge of step, raise toes up. Strengthens anterior compartment. Helps balance calf strength."
+              },
+              {
+                "exercise_name": "Eccentric Calf Raise (Straight Leg)",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "0050",
+                "rest_seconds": 75,
+                "notes": "Rise with both feet, lower on affected foot slowly (5 seconds). Do this ONLY if not in acute pain phase. Excellent for Achilles/plantar fascia healing."
+              }
+            ]
+          },
+          {
+            "day": "Day 4 - Upper Body Pull",
+            "focus": "Back and biceps - minimal foot involvement",
+            "exercises": [
+              {
+                "exercise_name": "Pull-Ups or Lat Pulldown",
+                "sets": 4,
+                "reps": "8-12",
+                "tempo": "2011",
+                "rest_seconds": 90,
+                "notes": "Lat pulldown is seated - no foot stress."
+              },
+              {
+                "exercise_name": "Barbell or Dumbbell Row",
+                "sets": 4,
+                "reps": "10-12",
+                "tempo": "2011",
+                "rest_seconds": 90,
+                "notes": "If standing bent-over row hurts, use chest-supported row instead."
+              },
+              {
+                "exercise_name": "Seated Cable Row",
+                "sets": 4,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 75,
+                "notes": "Seated - no foot loading."
+              },
+              {
+                "exercise_name": "Face Pull",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Upper back and rear delts."
+              },
+              {
+                "exercise_name": "Reverse Pec Deck",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Seated rear delt work."
+              },
+              {
+                "exercise_name": "Cable or Dumbbell Bicep Curl",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Can be seated or standing with minimal shift."
+              },
+              {
+                "exercise_name": "Hammer Curl",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Bicep and forearm work."
+              }
+            ]
+          }
+        ],
+        "exercises_to_avoid": [
+          "Running or jogging (high heel strike impact)",
+          "Jump rope",
+          "Box jumps or any plyometric",
+          "Walking lunges (repetitive push-off)",
+          "Farmers walks or loaded carries (standing)",
+          "Standing calf raises (high load through plantar fascia)",
+          "Barefoot training",
+          "Any exercise causing sharp heel pain"
+        ],
+        "progression_timeline": {
+          "weeks_1_4": "Strict avoidance of impact, daily stretching and strengthening, focus on seated/lying exercises",
+          "weeks_5_8": "If morning pain decreasing, introduce light walking, continue stretching religiously",
+          "weeks_9_12": "Gradually reintroduce standing exercises, light eccentric calf work",
+          "weeks_13_plus": "Can begin running if pain-free, continue preventive stretching forever"
+        },
+        "additional_recommendations": [
+          "CRITICAL: Wear supportive shoes at ALL times, even at home (use Oofos or similar recovery sandals)",
+          "Stretch calves and plantar fascia 3-5 times daily",
+          "Roll frozen water bottle under foot daily (5 minutes)",
+          "Never walk barefoot - especially on hard surfaces or first thing in morning",
+          "Consider night splint to maintain dorsiflexion during sleep",
+          "Replace running shoes every 300-500 miles",
+          "Use orthotic inserts or heel cups if recommended",
+          "Massage calves and feet with lacrosse ball or massage gun",
+          "Lose excess weight if applicable - reduces plantar fascia load",
+          "Consider shockwave therapy if not improving after 3 months",
+          "Anti-inflammatory medication as directed by doctor (not long-term solution)"
+        ],
+        "footwear_recommendations": [
+          "Training: Brooks, ASICS, or New Balance with good arch support",
+          "Recovery: OOFOS, Hoka Recovery Slides",
+          "Avoid: Flat shoes, worn-out shoes, high heels, flip-flops",
+          "At home: Supportive house shoes or recovery sandals, never barefoot"
+        ]
+      },
+      {
+        "id": "pregnancy_training",
+        "condition": "Pregnancy (2nd Trimester Focus, Week 13-28)",
+        "name": "Safe Prenatal Strength Program",
+        "description": "A comprehensive training program for pregnant women in the second trimester, focusing on maintaining strength, preparing for labor, and avoiding positions and exercises contraindicated during pregnancy.",
+        "medical_disclaimer": "Get clearance from your OB/GYN before starting any exercise program during pregnancy. Stop immediately if you experience bleeding, dizziness, contractions, fluid leakage, or sudden swelling. This program is for uncomplicated, low-risk pregnancies only. High-risk pregnancies require individual medical guidance.",
+        "key_modifications": [
+          "No supine (flat on back) exercises after 16 weeks",
+          "Avoid exercises causing abdominal doming or coning",
+          "No heavy Valsalva maneuvers",
+          "Maintain neutral spine - avoid excessive twisting",
+          "Stay within conversational pace (can talk comfortably)"
+        ],
+        "training_frequency": "3-4 days per week",
+        "session_duration": "30-45 minutes",
+        "safety_guidelines": [
+          "STOP if you feel dizzy, short of breath, or nauseated",
+          "Avoid overheating - stay hydrated and cool",
+          "No contact sports or fall-risk activities",
+          "Listen to your body - fatigue is normal",
+          "Modify or skip exercises that feel uncomfortable",
+          "Never exercise to exhaustion",
+          "Heart rate should allow comfortable conversation",
+          "Watch for warning signs: bleeding, contractions, chest pain"
+        ],
+        "pelvic_floor_daily": [
+          {
+            "exercise_name": "Pelvic Floor Breathing",
+            "sets": 3,
+            "reps": "10 breaths",
+            "notes": "Inhale and allow pelvic floor to relax/descend. Exhale and gently lift pelvic floor. Practice connection, don't over-squeeze."
+          },
+          {
+            "exercise_name": "Cat-Cow Stretch",
+            "sets": 2,
+            "reps": "10",
+            "notes": "Spinal mobility and pelvic floor coordination. Good for back relief."
+          }
+        ],
+        "workouts": [
+          {
+            "day": "Day 1 - Lower Body Strength",
+            "focus": "Safe leg and glute training for pregnancy",
+            "warm_up": [
+              {
+                "exercise_name": "Walking or Stationary Bike",
+                "sets": 1,
+                "duration_minutes": 5,
+                "notes": "Gentle cardio warm-up."
+              },
+              {
+                "exercise_name": "Hip Circles",
+                "sets": 2,
+                "reps": "10 each direction",
+                "notes": "Hip mobility"
+              },
+              {
+                "exercise_name": "Bodyweight Squat",
+                "sets": 2,
+                "reps": "10",
+                "notes": "Movement prep"
+              }
+            ],
+            "exercises": [
+              {
+                "exercise_name": "Goblet Squat",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Light to moderate weight. Squat depth as comfortable. Excellent preparation for labor positioning."
+              },
+              {
+                "exercise_name": "Romanian Deadlift (Dumbbell)",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "3020",
+                "rest_seconds": 90,
+                "notes": "Light dumbbells. Hip hinge pattern. Strengthens posterior chain which supports extra weight in front."
+              },
+              {
+                "exercise_name": "Lateral Step-Up",
+                "sets": 3,
+                "reps": "10-12 per leg",
+                "tempo": "2010",
+                "rest_seconds": 75,
+                "notes": "Low box (8-12 inches). Unilateral leg strength."
+              },
+              {
+                "exercise_name": "Side-Lying Hip Abduction",
+                "sets": 3,
+                "reps": "15-20 per leg",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Strengthens glute medius. Important for pelvic stability as belly grows."
+              },
+              {
+                "exercise_name": "Glute Bridge (Incline)",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Upper back elevated on bench (30-45°). After 16 weeks, don't lie flat. Glute activation."
+              },
+              {
+                "exercise_name": "Seated Leg Curl",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Light weight. Hamstring work."
+              },
+              {
+                "exercise_name": "Standing Calf Raise",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 45,
+                "notes": "Helps with ankle swelling and cramping."
+              }
+            ]
+          },
+          {
+            "day": "Day 2 - Upper Body Push + Core Stability",
+            "focus": "Chest, shoulders, and pregnancy-safe core work",
+            "exercises": [
+              {
+                "exercise_name": "Incline Dumbbell Press (45° or higher)",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "3010",
+                "rest_seconds": 75,
+                "notes": "After 16 weeks, use incline bench only (never flat). Moderate weight."
+              },
+              {
+                "exercise_name": "Standing Cable Chest Press",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2010",
+                "rest_seconds": 75,
+                "notes": "Standing, split stance. No lying required."
+              },
+              {
+                "exercise_name": "Lateral Raise",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Light dumbbells. Shoulder development."
+              },
+              {
+                "exercise_name": "Cable Tricep Pushdown",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Standing, neutral spine."
+              },
+              {
+                "exercise_name": "Standing Pallof Press",
+                "sets": 3,
+                "reps": "12-15 per side",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Anti-rotation core work. Safe for pregnancy. Critical for core strength."
+              },
+              {
+                "exercise_name": "Side Plank (Modified)",
+                "sets": 3,
+                "duration_seconds": "20-30 per side",
+                "rest_seconds": 60,
+                "notes": "On knees if needed. Lateral core stability. Stop if you see belly doming."
+              },
+              {
+                "exercise_name": "Quadruped Bird Dog",
+                "sets": 3,
+                "reps": "10 per side",
+                "tempo": "Hold 3-5 seconds",
+                "rest_seconds": 60,
+                "notes": "Core stability and back health. Keep hips level."
+              }
+            ]
+          },
+          {
+            "day": "Day 3 - Lower Body Movement + Mobility",
+            "focus": "Functional movements and hip mobility for labor prep",
+            "exercises": [
+              {
+                "exercise_name": "Walking",
+                "sets": 1,
+                "duration_minutes": 15,
+                "intensity": "Moderate",
+                "notes": "Good for cardiovascular health and pelvic positioning."
+              },
+              {
+                "exercise_name": "Sumo Squat (Bodyweight or Light KB)",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "3010",
+                "rest_seconds": 75,
+                "notes": "Wide stance. Mimics labor position. Opens hips."
+              },
+              {
+                "exercise_name": "Lateral Lunge",
+                "sets": 3,
+                "reps": "10-12 per side",
+                "tempo": "2010",
+                "rest_seconds": 75,
+                "notes": "Hip mobility and adductor flexibility."
+              },
+              {
+                "exercise_name": "Hip Thrust (Elevated Torso)",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 75,
+                "notes": "Upper back on bench. Glute strength for carrying extra weight."
+              },
+              {
+                "exercise_name": "Cable Pull-Through",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Hip hinge practice. Light weight."
+              },
+              {
+                "exercise_name": "Adductor Stretch (Butterfly)",
+                "sets": 3,
+                "duration_seconds": 30,
+                "rest_seconds": 30,
+                "notes": "Seated, soles of feet together. Helps with labor positioning."
+              },
+              {
+                "exercise_name": "Deep Squat Hold",
+                "sets": 3,
+                "duration_seconds": "20-30",
+                "rest_seconds": 60,
+                "notes": "Bodyweight, heels down if possible. Labor preparation position. Use support if needed."
+              },
+              {
+                "exercise_name": "90/90 Hip Stretch",
+                "sets": 2,
+                "duration_seconds": "30 per side",
+                "rest_seconds": 30,
+                "notes": "Hip mobility and pelvic floor relaxation."
+              }
+            ]
+          },
+          {
+            "day": "Day 4 - Upper Body Pull + Posture Work",
+            "focus": "Back strength to counteract postural changes",
+            "exercises": [
+              {
+                "exercise_name": "Seated Cable Row",
+                "sets": 4,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 75,
+                "notes": "Strengthens upper back. Helps with postural compensation from growing belly."
+              },
+              {
+                "exercise_name": "Lat Pulldown",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 75,
+                "notes": "Seated. Good for back strength."
+              },
+              {
+                "exercise_name": "Single-Arm Dumbbell Row (Supported)",
+                "sets": 3,
+                "reps": "12-15 per arm",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Hand and knee on bench for support. Unilateral back work."
+              },
+              {
+                "exercise_name": "Face Pull",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Upper back and posture. Counters forward shoulder position."
+              },
+              {
+                "exercise_name": "Reverse Pec Deck",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Rear delt isolation. Posture support."
+              },
+              {
+                "exercise_name": "Cable Bicep Curl",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Light weight. Arm strength for carrying baby later."
+              },
+              {
+                "exercise_name": "Wall Angels",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "Slow and controlled",
+                "rest_seconds": 45,
+                "notes": "Back against wall, slide arms up and down. Thoracic mobility and posture."
+              },
+              {
+                "exercise_name": "Child's Pose",
+                "sets": 3,
+                "duration_seconds": 30,
+                "rest_seconds": 30,
+                "notes": "Wide knees to accommodate belly. Back and hip stretch. Relaxing."
+              }
+            ]
+          }
+        ],
+        "exercises_to_avoid": [
+          "Any supine (flat back) exercises after 16 weeks (bench press, hip thrusts on floor, etc.)",
+          "Heavy overhead lifts with Valsalva maneuver",
+          "Contact sports or fall-risk activities",
+          "Hot yoga or exercise in excessive heat",
+          "Traditional crunches or sit-ups (abdominal flexion)",
+          "Deep twisting movements",
+          "Jumping or high-impact activities (later in pregnancy)",
+          "Exercises causing visible abdominal coning or doming",
+          "Lying prone (on stomach) once uncomfortable"
+        ],
+        "trimester_specific_notes": {
+          "first_trimester": "If you exercised before pregnancy, you can generally continue. Fatigue and nausea are common. Listen to your body.",
+          "second_trimester": "Often the 'golden period' with most energy. This program is designed for weeks 13-28. After week 16, avoid lying flat on back.",
+          "third_trimester": "Reduce intensity and depth of movements as needed. Focus on mobility and pelvic floor prep. Walking becomes primary cardio."
+        },
+        "progression_timeline": {
+          "weeks_13_20": "Can maintain moderate intensity if feeling good. Focus on technique.",
+          "weeks_20_28": "May need to reduce weight as balance changes and belly grows. Shorter rest periods may be needed.",
+          "weeks_28_36": "Reduce intensity further. Focus on mobility, lighter weights, preparation for labor.",
+          "weeks_36_40": "Walking, gentle stretching, pelvic floor work. Keep active but light."
+        },
+        "additional_recommendations": [
+          "CRITICAL: Stay hydrated - drink water before, during, and after exercise",
+          "Wear supportive sports bra and consider belly support band",
+          "Pelvic floor exercises daily - practice relaxation, not just strengthening",
+          "Practice deep squats regularly - great for labor positioning",
+          "Work on hip mobility - will help with labor and delivery",
+          "Maintain good posture throughout day as belly grows",
+          "Swimming is excellent low-impact option (avoid hot tubs/hot water)",
+          "Walking is perfect safe cardio throughout pregnancy",
+          "Listen to your body - what worked last week may not work this week",
+          "Consider prenatal yoga for flexibility and breathing practice",
+          "Don't exercise to exhaustion - can talk comfortably = good intensity",
+          "Avoid core exercises causing 'doming' - this indicates excessive pressure",
+          "Work with pelvic floor PT if possible for personalized guidance"
+        ],
+        "warning_signs_stop_immediately": [
+          "Vaginal bleeding or fluid leakage",
+          "Contractions or cramping",
+          "Dizziness or feeling faint",
+          "Headache",
+          "Chest pain or palpitations",
+          "Calf pain or swelling (could indicate blood clot)",
+          "Decreased fetal movement",
+          "Shortness of breath before exertion",
+          "Muscle weakness"
+        ],
+        "benefits_of_prenatal_exercise": [
+          "Reduced risk of gestational diabetes",
+          "Better mood and energy levels",
+          "Easier labor and delivery",
+          "Faster postpartum recovery",
+          "Reduced back pain",
+          "Better sleep quality",
+          "Healthy weight gain",
+          "Improved cardiovascular fitness",
+          "Stronger pelvic floor = reduced incontinence risk"
+        ]
+      },
+      {
+        "id": "type2_diabetes_training",
+        "condition": "Type 2 Diabetes",
+        "name": "Metabolic Health Strength Program",
+        "description": "A comprehensive training program optimized for Type 2 diabetes management, focusing on improving insulin sensitivity, glucose control, and overall metabolic health through resistance training and controlled cardiovascular work.",
+        "medical_disclaimer": "Consult your physician before starting, especially if you have complications (neuropathy, retinopathy, nephropathy). Monitor blood glucose before and after exercise. Know signs of hypoglycemia. This program complements, not replaces, medical treatment and dietary management.",
+        "key_modifications": [
+          "Monitor blood glucose before and after training",
+          "Time training appropriately with meals and medication",
+          "Build up intensity gradually to avoid blood sugar spikes/drops",
+          "Emphasize compound movements for maximum glucose uptake",
+          "Include both resistance training and cardiovascular work"
+        ],
+        "training_frequency": "4-5 days per week (resistance + cardio)",
+        "session_duration": "45-60 minutes",
+        "safety_guidelines": [
+          "Check blood glucose before exercise (safe range: 100-250 mg/dL)",
+          "If below 100 mg/dL, eat 15-30g carbs before training",
+          "If above 300 mg/dL, delay training and check ketones",
+          "Always carry fast-acting carbs (glucose tablets, juice)",
+          "Know hypoglycemia signs: shakiness, sweating, confusion, dizziness",
+          "Wear medical ID bracelet",
+          "Train with a partner or in supervised environment when possible",
+          "Inspect feet daily for cuts or sores (especially if neuropathy present)"
+        ],
+        "blood_glucose_management": [
+          {
+            "guideline": "Pre-exercise check",
+            "action": "Test blood glucose 30 minutes before training"
+          },
+          {
+            "guideline": "If BG < 100 mg/dL",
+            "action": "Consume 15-30g quick carbs, wait 15 min, retest"
+          },
+          {
+            "guideline": "If BG 100-250 mg/dL",
+            "action": "Safe to exercise"
+          },
+          {
+            "guideline": "If BG > 250 mg/dL",
+            "action": "Check for ketones. If present, DO NOT exercise. If no ketones, can exercise but monitor closely"
+          },
+          {
+            "guideline": "If BG > 300 mg/dL",
+            "action": "Delay exercise, consult physician"
+          },
+          {
+            "guideline": "Post-exercise check",
+            "action": "Test immediately after and 2 hours post-training to understand response"
+          }
+        ],
+        "workouts": [
+          {
+            "day": "Day 1 - Full Body Strength A",
+            "focus": "Major compound movements for metabolic benefit",
+            "warm_up": [
+              {
+                "exercise_name": "Light Cardio (Walking or Cycling)",
+                "duration_minutes": 5,
+                "notes": "Gentle warm-up. Monitor how you feel."
+              },
+              {
+                "exercise_name": "Dynamic Stretching",
+                "duration_minutes": 5,
+                "notes": "Leg swings, arm circles, torso rotations"
+              }
+            ],
+            "exercises": [
+              {
+                "exercise_name": "Goblet Squat or Leg Press",
+                "sets": 4,
+                "reps": "10-12",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Squats are EXCELLENT for glucose uptake (large muscle mass). Use moderate weight."
+              },
+              {
+                "exercise_name": "Romanian Deadlift",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "3020",
+                "rest_seconds": 90,
+                "notes": "Posterior chain work. Great for metabolic effect."
+              },
+              {
+                "exercise_name": "Chest Press (Machine or Dumbbell)",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "3010",
+                "rest_seconds": 75,
+                "notes": "Upper body push. Builds muscle = better insulin sensitivity."
+              },
+              {
+                "exercise_name": "Seated Cable Row",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "2011",
+                "rest_seconds": 75,
+                "notes": "Upper body pull. Balanced development."
+              },
+              {
+                "exercise_name": "Leg Curl",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2020",
+                "rest_seconds": 60,
+                "notes": "Hamstring isolation. Additional leg work enhances glucose uptake."
+              },
+              {
+                "exercise_name": "Standing Calf Raise",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Important if you have peripheral neuropathy - strengthens lower legs."
+              },
+              {
+                "exercise_name": "Plank",
+                "sets": 3,
+                "duration_seconds": "30-45",
+                "rest_seconds": 60,
+                "notes": "Core stability."
+              }
+            ],
+            "post_workout_cardio": {
+              "exercise_name": "Moderate Intensity Walking",
+              "duration_minutes": 15,
+              "intensity": "Can hold conversation",
+              "notes": "Post-training cardio helps regulate blood sugar. Very effective."
+            }
+          },
+          {
+            "day": "Day 2 - Cardio Focus",
+            "focus": "Cardiovascular health and glucose regulation",
+            "session_type": "Interval or Steady-State Cardio",
+            "options": [
+              {
+                "option": "Steady-State Cardio",
+                "duration_minutes": "30-45",
+                "intensity": "60-70% max heart rate",
+                "notes": "Walking, cycling, rowing, swimming. Good for insulin sensitivity without depleting glucose too fast."
+              },
+              {
+                "option": "Moderate Intensity Intervals",
+                "structure": "5 min warm-up, then 10 rounds of (2 min moderate, 1 min easy), 5 min cool-down",
+                "duration_minutes": 40,
+                "notes": "More time-efficient. Monitor blood sugar closely with intervals."
+              }
+            ]
+          },
+          {
+            "day": "Day 3 - Full Body Strength B",
+            "focus": "Different movement patterns, continued metabolic stimulus",
+            "warm_up": [
+              {
+                "exercise_name": "Light Cardio",
+                "duration_minutes": 5,
+                "notes": "Rowing machine or bike"
+              }
+            ],
+            "exercises": [
+              {
+                "exercise_name": "Bulgarian Split Squat",
+                "sets": 3,
+                "reps": "10-12 per leg",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Unilateral leg work. Excellent for glucose uptake."
+              },
+              {
+                "exercise_name": "Hip Thrust",
+                "sets": 4,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 75,
+                "notes": "Glute-focused. Large muscle group = good metabolic effect."
+              },
+              {
+                "exercise_name": "Lat Pulldown",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "2011",
+                "rest_seconds": 75,
+                "notes": "Back development."
+              },
+              {
+                "exercise_name": "Incline Dumbbell Press",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "3010",
+                "rest_seconds": 75,
+                "notes": "Upper chest focus."
+              },
+              {
+                "exercise_name": "Face Pull",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Rear delts and upper back. Posture support."
+              },
+              {
+                "exercise_name": "Leg Extension",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Quad isolation. More muscle activation = better glucose uptake."
+              },
+              {
+                "exercise_name": "Bicycle Crunches",
+                "sets": 3,
+                "reps": "20 total",
+                "tempo": "Controlled",
+                "rest_seconds": 60,
+                "notes": "Core work with rotation."
+              }
+            ],
+            "post_workout_cardio": {
+              "exercise_name": "Incline Walking on Treadmill",
+              "duration_minutes": 15,
+              "intensity": "3-5% incline, moderate pace",
+              "notes": "Excellent for glucose regulation post-training."
+            }
+          },
+          {
+            "day": "Day 4 - Active Recovery / Light Cardio",
+            "focus": "Movement without depleting glucose, promotes recovery",
+            "options": [
+              {
+                "activity": "Walking",
+                "duration_minutes": "30-45",
+                "intensity": "Easy pace",
+                "notes": "Best option for most. Very effective for blood sugar control."
+              },
+              {
+                "activity": "Swimming",
+                "duration_minutes": 30,
+                "intensity": "Easy to moderate",
+                "notes": "Low impact, full body"
+              },
+              {
+                "activity": "Yoga or Stretching",
+                "duration_minutes": 30,
+                "notes": "Flexibility and stress reduction. Stress affects blood sugar."
+              }
+            ]
+          },
+          {
+            "day": "Day 5 - Upper Body Focus",
+            "focus": "Upper body strength with lighter leg work",
+            "exercises": [
+              {
+                "exercise_name": "Barbell or Dumbbell Bench Press",
+                "sets": 4,
+                "reps": "8-10",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Chest strength. Moderate weight."
+              },
+              {
+                "exercise_name": "Cable or Dumbbell Row",
+                "sets": 4,
+                "reps": "10-12",
+                "tempo": "2011",
+                "rest_seconds": 90,
+                "notes": "Back development."
+              },
+              {
+                "exercise_name": "Overhead Press (Dumbbell or Machine)",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "2010",
+                "rest_seconds": 75,
+                "notes": "Shoulder strength."
+              },
+              {
+                "exercise_name": "Cable Tricep Pushdown",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Tricep isolation."
+              },
+              {
+                "exercise_name": "Cable Bicep Curl",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Bicep work."
+              },
+              {
+                "exercise_name": "Walking Lunges (Light)",
+                "sets": 3,
+                "reps": "10 per leg",
+                "tempo": "2010",
+                "rest_seconds": 75,
+                "notes": "Bodyweight or very light dumbbells. Functional leg work."
+              },
+              {
+                "exercise_name": "Farmer's Carry",
+                "sets": 3,
+                "duration_seconds": 45,
+                "rest_seconds": 75,
+                "notes": "Moderate weight. Total body stability and glucose uptake."
+              }
+            ],
+            "post_workout_cardio": {
+              "exercise_name": "Moderate Walking",
+              "duration_minutes": 15,
+              "notes": "Consistent post-training cardio helps regulate blood sugar response."
+            }
+          }
+        ],
+        "exercise_timing_recommendations": {
+          "optimal_timing": "30-90 minutes after meals (when blood glucose is elevated)",
+          "avoid": "Exercising during peak insulin action (if on insulin)",
+          "morning_training": "May need small snack if fasting overnight",
+          "evening_training": "Monitor for delayed hypoglycemia overnight"
+        },
+        "why_resistance_training_for_diabetes": [
+          "Increases muscle mass = more glucose storage capacity",
+          "Improves insulin sensitivity for 24-72 hours post-training",
+          "Helps control blood sugar better than cardio alone",
+          "Prevents sarcopenia (muscle loss) which worsens diabetes",
+          "Improves HbA1c levels (long-term glucose control)",
+          "Helps with weight management",
+          "Reduces cardiovascular disease risk",
+          "Improves quality of life and independence"
+        ],
+        "progression_timeline": {
+          "weeks_1_4": "Learn movement patterns, establish baseline blood sugar responses, moderate intensity",
+          "weeks_5_8": "Increase loads progressively, monitor glucose patterns, adjust nutrition timing",
+          "weeks_9_12": "Continue progressive overload, may notice improved insulin sensitivity",
+          "weeks_13_plus": "Maintain consistent training, work with healthcare team to potentially adjust medications"
+        },
+        "additional_recommendations": [
+          "CRITICAL: Never exercise alone if prone to hypoglycemia",
+          "Keep glucose tablets or juice with you at ALL times",
+          "Wear diabetic medical ID during training",
+          "Track blood glucose before, after, and 2 hours post-training (at least initially)",
+          "Work with endocrinologist - may need medication adjustments as fitness improves",
+          "Combine exercise with diet management for best results",
+          "Inspect feet daily for any cuts, blisters, or sores (especially with neuropathy)",
+          "Wear proper athletic shoes - diabetic foot care is critical",
+          "Stay hydrated - dehydration affects blood sugar",
+          "Get adequate sleep - affects insulin sensitivity",
+          "Manage stress - cortisol raises blood glucose",
+          "Consistency is more important than intensity - regular moderate exercise beats sporadic intense training",
+          "Consider continuous glucose monitor (CGM) to track exercise responses",
+          "Resistance training 2-3x/week + daily walking = excellent combination"
+        ],
+        "hypoglycemia_management": {
+          "signs": ["Shakiness", "Sweating", "Rapid heartbeat", "Hunger", "Confusion", "Dizziness", "Irritability"],
+          "treatment": "Stop exercise immediately. Consume 15g fast-acting carbs (4 glucose tablets, 4 oz juice, 1 tablespoon honey). Wait 15 min, retest. Repeat if still low. Once stable, eat small meal.",
+          "prevention": "Check blood sugar before training, adjust insulin/medication timing with doctor, always carry fast carbs, train with partner"
+        },
+        "contraindications_modifications": {
+          "severe_retinopathy": "Avoid heavy Valsalva, exercises increasing blood pressure in eyes. No heavy deadlifts or overhead press.",
+          "peripheral_neuropathy": "Avoid exercises requiring balance if severe. Focus on seated/supported exercises. Careful foot inspection essential.",
+          "autonomic_neuropathy": "May have abnormal heart rate response. Use RPE instead of heart rate. Stay well hydrated.",
+          "kidney_disease": "Avoid excessive protein intake. Moderate intensity exercise only. Clear with nephrologist."
+        }
+      },
+      {
+        "id": "osteoarthritis_training",
+        "condition": "Osteoarthritis (Knee and/or Hip)",
+        "name": "Joint-Friendly Strength & Mobility Program",
+        "description": "A comprehensive training program for managing osteoarthritis pain while building strength, improving mobility, and maintaining independence. Focuses on controlled loading, strengthening supporting muscles, and pain-free movement patterns.",
+        "medical_disclaimer": "This program is for mild to moderate osteoarthritis. If you have severe pain, significant joint deformity, or are considering joint replacement, consult your orthopedic specialist first. Exercise should not cause pain beyond 3/10 during activity that subsides after.",
+        "key_modifications": [
+          "Work within pain-free ranges of motion",
+          "Strengthen muscles around affected joints",
+          "Emphasize controlled movements over heavy loading",
+          "Include low-impact cardiovascular work",
+          "Progress gradually - joints need adaptation time"
+        ],
+        "training_frequency": "4-5 days per week (including cardio)",
+        "session_duration": "40-50 minutes",
+        "safety_guidelines": [
+          "Pain should not exceed 3/10 during exercise",
+          "Some discomfort is OK, sharp pain is NOT",
+          "If pain increases or lasts >2 hours post-exercise, reduce intensity",
+          "Warm up thoroughly - cold joints are stiff joints",
+          "Ice if needed post-training (15-20 minutes)",
+          "Don't exercise during flare-ups - rest and gentle movement only",
+          "Movement is medicine - staying active prevents joint stiffening"
+        ],
+        "daily_mobility_work": [
+          {
+            "exercise_name": "Gentle Joint Circles",
+            "sets": 2,
+            "reps": "10 each direction",
+            "notes": "Hips, knees, ankles. Move through pain-free range. Do morning and evening."
+          },
+          {
+            "exercise_name": "Cat-Cow Stretch",
+            "sets": 2,
+            "reps": "10",
+            "notes": "Spinal mobility. Gentle and controlled."
+          },
+          {
+            "exercise_name": "Seated Hip Stretch",
+            "sets": 2,
+            "duration_seconds": 30,
+            "notes": "Figure-4 position. Each side. Maintain hip mobility."
+          }
+        ],
+        "workouts": [
+          {
+            "day": "Day 1 - Lower Body Strength (Joint-Friendly)",
+            "focus": "Leg strength with controlled ranges and minimal joint stress",
+            "warm_up": [
+              {
+                "exercise_name": "Stationary Bike",
+                "duration_minutes": "10",
+                "intensity": "Light",
+                "notes": "Excellent warm-up for arthritic joints. Increases synovial fluid."
+              },
+              {
+                "exercise_name": "Bodyweight Partial Squats",
+                "sets": 2,
+                "reps": "10",
+                "notes": "Small range of motion. Movement prep."
+              }
+            ],
+            "exercises": [
+              {
+                "exercise_name": "Leg Press (Limited Depth)",
+                "sets": 4,
+                "reps": "12-15",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Stop at pain-free depth (usually ~90° knee flexion). Light to moderate weight. Excellent for building leg strength without excessive joint loading."
+              },
+              {
+                "exercise_name": "Seated Leg Curl",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2020",
+                "rest_seconds": 75,
+                "notes": "Hamstring strength supports knee joint. Moderate weight."
+              },
+              {
+                "exercise_name": "Leg Extension (Partial Range)",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Last 30° of extension only (fully extended to slightly bent). Targets VMO. Light weight, high reps. Strengthens without excessive patellar compression."
+              },
+              {
+                "exercise_name": "Hip Abduction Machine",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Glute medius strengthening. Critical for hip and knee stability."
+              },
+              {
+                "exercise_name": "Hip Adduction Machine",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Inner thigh. Balanced hip strength."
+              },
+              {
+                "exercise_name": "Glute Bridge",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Bodyweight or light weight. Glute activation. Minimal knee stress."
+              },
+              {
+                "exercise_name": "Standing Calf Raise",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Light weight. Ankle and lower leg strength."
+              }
+            ]
+          },
+          {
+            "day": "Day 2 - Upper Body + Core",
+            "focus": "Upper body strength while giving joints rest",
+            "exercises": [
+              {
+                "exercise_name": "Chest Press Machine",
+                "sets": 4,
+                "reps": "10-12",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Seated, back supported. Normal upper body training."
+              },
+              {
+                "exercise_name": "Lat Pulldown",
+                "sets": 4,
+                "reps": "10-12",
+                "tempo": "2011",
+                "rest_seconds": 90,
+                "notes": "Back development. Seated position."
+              },
+              {
+                "exercise_name": "Seated Cable Row",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 75,
+                "notes": "Mid-back work."
+              },
+              {
+                "exercise_name": "Shoulder Press Machine",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "2010",
+                "rest_seconds": 75,
+                "notes": "Seated, back supported. Moderate weight."
+              },
+              {
+                "exercise_name": "Lateral Raise",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "2011",
+                "rest_seconds": 60,
+                "notes": "Light weight, controlled movement."
+              },
+              {
+                "exercise_name": "Cable Tricep Pushdown",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Tricep work."
+              },
+              {
+                "exercise_name": "Cable Bicep Curl",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "Bicep isolation."
+              },
+              {
+                "exercise_name": "Plank (Modified if needed)",
+                "sets": 3,
+                "duration_seconds": "30-45",
+                "rest_seconds": 60,
+                "notes": "Core stability. On knees if needed."
+              }
+            ]
+          },
+          {
+            "day": "Day 3 - Aquatic Exercise or Low-Impact Cardio",
+            "focus": "Cardiovascular health with minimal joint stress",
+            "options": [
+              {
+                "option": "Aquatic Exercise / Pool Walking",
+                "duration_minutes": "30-45",
+                "notes": "BEST option for arthritis. Water provides resistance while supporting joints. Excellent for pain relief and mobility."
+              },
+              {
+                "option": "Stationary Bike",
+                "duration_minutes": "30-40",
+                "intensity": "Light to moderate",
+                "notes": "Low impact. Good for maintaining cardiovascular fitness."
+              },
+              {
+                "option": "Elliptical Trainer",
+                "duration_minutes": "20-30",
+                "intensity": "Low resistance",
+                "notes": "Lower impact than treadmill. Good alternative to walking."
+              },
+              {
+                "option": "Walking (Flat Surface)",
+                "duration_minutes": "30",
+                "intensity": "Easy to moderate",
+                "notes": "Weight-bearing is good for bones, but may aggravate hip/knee if severe. Use supportive shoes."
+              }
+            ]
+          },
+          {
+            "day": "Day 4 - Lower Body Functional Work",
+            "focus": "Functional movements for daily living activities",
+            "warm_up": [
+              {
+                "exercise_name": "Bike or Walking",
+                "duration_minutes": 10,
+                "notes": "Warm up joints thoroughly"
+              }
+            ],
+            "exercises": [
+              {
+                "exercise_name": "Goblet Squat (Partial Depth)",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "3010",
+                "rest_seconds": 90,
+                "notes": "Light dumbbell or kettlebell. Squat to pain-free depth only. Functional movement for getting up from chair."
+              },
+              {
+                "exercise_name": "Step-Ups (Low Box, 4-6 inches)",
+                "sets": 3,
+                "reps": "10-12 per leg",
+                "tempo": "2010",
+                "rest_seconds": 75,
+                "notes": "Very low step. Functional for stairs. Control descent."
+              },
+              {
+                "exercise_name": "Single-Leg Stance",
+                "sets": 3,
+                "duration_seconds": "30 per leg",
+                "rest_seconds": 45,
+                "notes": "Hold wall/chair for balance if needed. Balance training prevents falls."
+              },
+              {
+                "exercise_name": "Lateral Step (Side-to-Side)",
+                "sets": 3,
+                "reps": "10 per side",
+                "tempo": "Controlled",
+                "rest_seconds": 60,
+                "notes": "Small steps side to side. Hip stability and lateral movement."
+              },
+              {
+                "exercise_name": "Sit-to-Stand",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2010",
+                "rest_seconds": 60,
+                "notes": "From chair. Use arms minimally. Functional strength for daily living."
+              },
+              {
+                "exercise_name": "Heel Raises",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "2011",
+                "rest_seconds": 45,
+                "notes": "Hold wall for balance. Ankle and calf strength."
+              },
+              {
+                "exercise_name": "Heel-to-Toe Walk",
+                "sets": 3,
+                "duration_seconds": 30,
+                "rest_seconds": 45,
+                "notes": "Balance and coordination. Walk in straight line, heel touches toe."
+              }
+            ]
+          },
+          {
+            "day": "Day 5 - Full Body Light + Mobility",
+            "focus": "Light resistance and flexibility work",
+            "exercises": [
+              {
+                "exercise_name": "Circuit: Chest Press, Row, Leg Press, Shoulder Press",
+                "sets": "3 rounds",
+                "reps": "15 each exercise",
+                "rest_seconds": "60 between rounds",
+                "notes": "Light weight. Move from one exercise to next. Keeps heart rate up with minimal joint stress."
+              },
+              {
+                "exercise_name": "Hip Flexor Stretch",
+                "sets": 3,
+                "duration_seconds": "30 per side",
+                "rest_seconds": 30,
+                "notes": "Lunge position. Important for hip mobility."
+              },
+              {
+                "exercise_name": "Hamstring Stretch",
+                "sets": 3,
+                "duration_seconds": "30 per leg",
+                "rest_seconds": 30,
+                "notes": "Seated or standing. Tight hamstrings stress knees."
+              },
+              {
+                "exercise_name": "Quad Stretch",
+                "sets": 2,
+                "duration_seconds": "30 per leg",
+                "rest_seconds": 30,
+                "notes": "Standing or side-lying. Hold wall for balance."
+              },
+              {
+                "exercise_name": "IT Band Stretch",
+                "sets": 2,
+                "duration_seconds": "30 per side",
+                "rest_seconds": 30,
+                "notes": "Cross leg stretch. Reduces lateral knee stress."
+              },
+              {
+                "exercise_name": "Child's Pose",
+                "sets": 2,
+                "duration_seconds": 45,
+                "rest_seconds": 30,
+                "notes": "Relaxing stretch for back and hips."
+              }
+            ]
+          }
+        ],
+        "exercises_to_avoid": [
+          "Deep squats (past pain point)",
+          "Running or high-impact plyometrics",
+          "Heavy deadlifts or squats if painful",
+          "Lunges with large steps (if knee pain)",
+          "Exercises causing sharp pain or significant swelling",
+          "Long-distance walking on hard surfaces (if painful)",
+          "Kneeling exercises if knee arthritis is severe"
+        ],
+        "progression_timeline": {
+          "weeks_1_4": "Establish baseline pain-free ranges, build work capacity, very gradual loading",
+          "weeks_5_8": "Slowly increase resistance and volume, may notice improved mobility",
+          "weeks_9_12": "Continue progressive overload within pain-free ranges",
+          "weeks_13_plus": "Maintain strength training 2-3x/week indefinitely - consistency is key"
+        },
+        "additional_recommendations": [
+          "CRITICAL: Exercise is one of the best treatments for osteoarthritis - staying active prevents worsening",
+          "Aquatic exercise / swimming is EXCELLENT for arthritis - highly recommended",
+          "Maintain healthy weight - every pound of excess weight puts 4 pounds of pressure on knees",
+          "Consider glucosamine/chondroitin supplements (discuss with doctor - evidence is mixed)",
+          "Heat before exercise (warm-up), ice after if needed",
+          "Use supportive footwear with good cushioning",
+          "Consider knee sleeves or braces for additional support during training",
+          "Physical therapy can provide personalized exercise prescription",
+          "Anti-inflammatory medication as directed by doctor",
+          "Foam rolling and massage can help surrounding muscles",
+          "Walking aids (cane, walker) when needed - no shame in using support",
+          "Resistance training builds muscles that support joints - crucial for arthritis management",
+          "Some discomfort during exercise is normal - pain that persists or worsens is NOT",
+          "Regular exercise can delay or prevent need for joint replacement surgery",
+          "Consistency beats intensity - moderate exercise done regularly is the goal"
+        ],
+        "when_to_see_doctor": [
+          "Pain that doesn't improve with rest and ice",
+          "Significant swelling or warmth in joint",
+          "Joint locking or giving out",
+          "Inability to bear weight",
+          "Significant reduction in range of motion",
+          "Pain that interferes with sleep or daily activities",
+          "If considering injections (corticosteroid, hyaluronic acid) or surgery"
+        ],
+        "benefits_of_exercise_for_arthritis": [
+          "Reduces pain and stiffness",
+          "Increases range of motion",
+          "Strengthens muscles that support joints",
+          "Improves balance and reduces fall risk",
+          "Helps with weight management",
+          "Improves mood and reduces depression",
+          "Increases independence and quality of life",
+          "May slow disease progression",
+          "Reduces need for pain medication",
+          "Improves cardiovascular health"
+        ]
+      }
+    ]
+  }
