@@ -1,0 +1,459 @@
+{
+    "program_info": {
+      "name": "The Colorado Experiment Protocol",
+      "subtitle": "Arthur Jones High-Intensity Training Method",
+      "creator": "Arthur Jones",
+      "year_created": 1973,
+      "duration_weeks": 4,
+      "difficulty_level": "Advanced",
+      "program_type": "High-Intensity Training (HIT)",
+      "description": "Based on the legendary 28-day experiment that produced 63 pounds of muscle gain in Casey Viator. This ultra-high intensity, low-volume protocol emphasizes one set to absolute failure per exercise, brief workouts, and full recovery between sessions.",
+      "warning": "This is an extremely demanding protocol. Only attempt if you have solid training experience and excellent recovery capacity. The original experiment had unique circumstances (muscle memory, pharmaceutical enhancement) that contributed to extraordinary results.",
+      "key_principles": [
+        "One set to absolute muscular failure per exercise",
+        "Brief, intense workouts (30-45 minutes maximum)",
+        "Full-body training 3x per week",
+        "Minimal rest between exercises (30-60 seconds)",
+        "Slow, controlled repetitions (4 seconds up, 4 seconds down)",
+        "Progressive overload every workout",
+        "Complete recovery between training days"
+      ]
+    },
+    "schedule": {
+      "frequency_per_week": 3,
+      "days": ["Monday", "Wednesday", "Friday"],
+      "rest_days": ["Tuesday", "Thursday", "Saturday", "Sunday"],
+      "workout_duration_minutes": "30-45",
+      "notes": "Absolutely no training on rest days. Recovery is critical to this protocol's success."
+    },
+    "workout_phases": [
+      {
+        "phase_number": 1,
+        "phase_name": "Adaptation Phase",
+        "weeks": "1-2",
+        "description": "Introduction to high-intensity training. Focus on learning proper form and intensity level required.",
+        "intensity_level": "90-95% of maximum",
+        "rep_range": "8-12",
+        "workout": {
+          "workout_name": "Full Body HIT - Week 1-2",
+          "exercises": [
+            {
+              "order": 1,
+              "exercise_name": "Leg Press",
+              "muscle_group": "Legs - Quadriceps, Glutes",
+              "sets": 1,
+              "reps": "8-12",
+              "rest_seconds": 45,
+              "tempo": "4-0-4-0",
+              "instructions": "Load weight to reach failure between 8-12 reps. Once you cannot complete another full rep with proper form, the set is over. No partial reps. Focus on controlled descent (4 seconds) and explosive push (4 seconds).",
+              "failure_protocol": "Continue pushing until you cannot move the weight. Have a spotter for safety.",
+              "progression_notes": "If you achieve 12 reps with good form, increase weight by 5-10% next session."
+            },
+            {
+              "order": 2,
+              "exercise_name": "Leg Curl",
+              "muscle_group": "Legs - Hamstrings",
+              "sets": 1,
+              "reps": "8-12",
+              "rest_seconds": 45,
+              "tempo": "4-0-4-0",
+              "instructions": "Focus on the negative (lowering) portion. Control the weight down for 4 full seconds.",
+              "failure_protocol": "When you cannot complete another rep, have partner provide assisted positive (lifting) while you do one more negative rep.",
+              "progression_notes": "Add weight when you hit 12 clean reps."
+            },
+            {
+              "order": 3,
+              "exercise_name": "Leg Extension",
+              "muscle_group": "Legs - Quadriceps",
+              "sets": 1,
+              "reps": "8-12",
+              "rest_seconds": 45,
+              "tempo": "4-0-4-0",
+              "instructions": "Pre-exhaust technique. Keep tension constant - don't lock out at the top.",
+              "failure_protocol": "Push to complete failure. This should burn intensely.",
+              "progression_notes": "Increase weight once 12 reps is achievable."
+            },
+            {
+              "order": 4,
+              "exercise_name": "Pullover Machine (or Dumbbell Pullover)",
+              "muscle_group": "Back - Lats",
+              "sets": 1,
+              "reps": "8-12",
+              "rest_seconds": 45,
+              "tempo": "4-0-4-0",
+              "instructions": "Isolate lats. Keep arms relatively straight. Focus on pulling with back, not arms.",
+              "failure_protocol": "Continue until arms cannot pull weight another inch.",
+              "progression_notes": "Add weight at 12 reps or switch to heavier dumbbell."
+            },
+            {
+              "order": 5,
+              "exercise_name": "Barbell Row or Machine Row",
+              "muscle_group": "Back - Middle Back, Lats",
+              "sets": 1,
+              "reps": "8-12",
+              "rest_seconds": 45,
+              "tempo": "4-0-4-0",
+              "instructions": "Pull to lower chest. Squeeze shoulder blades together. Control the negative.",
+              "failure_protocol": "Row until you cannot maintain form. No cheating.",
+              "progression_notes": "Increase weight when 12 strict reps achieved."
+            },
+            {
+              "order": 6,
+              "exercise_name": "Chest Press Machine or Barbell Bench Press",
+              "muscle_group": "Chest - Pectorals",
+              "sets": 1,
+              "reps": "8-12",
+              "rest_seconds": 45,
+              "tempo": "4-0-4-0",
+              "instructions": "Lower weight slowly (4 seconds). Press explosively but controlled (4 seconds).",
+              "failure_protocol": "Press until arms will not extend. Use spotter for safety with barbell.",
+              "progression_notes": "Add weight at 12 reps. Machine preferred for safety when training to failure."
+            },
+            {
+              "order": 7,
+              "exercise_name": "Shoulder Press Machine or Dumbbell Press",
+              "muscle_group": "Shoulders - Deltoids",
+              "sets": 1,
+              "reps": "8-12",
+              "rest_seconds": 45,
+              "tempo": "4-0-4-0",
+              "instructions": "Full range of motion. Control descent. Press to just before lockout.",
+              "failure_protocol": "Press until shoulders give out completely.",
+              "progression_notes": "Increase resistance at 12 reps."
+            },
+            {
+              "order": 8,
+              "exercise_name": "Lateral Raise Machine or Dumbbell",
+              "muscle_group": "Shoulders - Medial Deltoids",
+              "sets": 1,
+              "reps": "8-12",
+              "rest_seconds": 45,
+              "tempo": "4-0-4-0",
+              "instructions": "Strict form. No swinging. Lead with elbows, not hands.",
+              "failure_protocol": "Raise until you cannot lift arms another degree.",
+              "progression_notes": "Very small weight increases (2.5-5 lbs)."
+            },
+            {
+              "order": 9,
+              "exercise_name": "Tricep Extension Machine or Cable Pushdown",
+              "muscle_group": "Arms - Triceps",
+              "sets": 1,
+              "reps": "8-12",
+              "rest_seconds": 45,
+              "tempo": "4-0-4-0",
+              "instructions": "Keep elbows stationary. Full extension and stretch.",
+              "failure_protocol": "Extend until triceps cannot push weight.",
+              "progression_notes": "Add weight at 12 reps."
+            },
+            {
+              "order": 10,
+              "exercise_name": "Barbell Curl or Machine Curl",
+              "muscle_group": "Arms - Biceps",
+              "sets": 1,
+              "reps": "8-12",
+              "rest_seconds": 45,
+              "tempo": "4-0-4-0",
+              "instructions": "No momentum. Strict curl. Control the negative especially.",
+              "failure_protocol": "Curl until arms cannot bend another inch.",
+              "progression_notes": "Increase weight at 12 reps."
+            },
+            {
+              "order": 11,
+              "exercise_name": "Calf Raise Machine",
+              "muscle_group": "Legs - Calves",
+              "sets": 1,
+              "reps": "12-20",
+              "rest_seconds": 45,
+              "tempo": "4-1-4-1",
+              "instructions": "Full stretch at bottom, full contraction at top. Pause 1 second at top.",
+              "failure_protocol": "Raise until calves are completely exhausted.",
+              "progression_notes": "Calves respond to higher reps. Add weight at 20 reps."
+            },
+            {
+              "order": 12,
+              "exercise_name": "Abdominal Crunch Machine or Weighted Crunch",
+              "muscle_group": "Core - Abdominals",
+              "sets": 1,
+              "reps": "10-15",
+              "rest_seconds": 0,
+              "tempo": "3-1-3-0",
+              "instructions": "Add resistance. Treat abs like any other muscle. Last exercise of workout.",
+              "failure_protocol": "Crunch until abs cannot contract.",
+              "progression_notes": "Increase resistance at 15 reps."
+            }
+          ],
+          "total_exercises": 12,
+          "estimated_duration_minutes": 40,
+          "cool_down": "5 minutes light stretching. No cardio."
+        }
+      },
+      {
+        "phase_number": 2,
+        "phase_name": "Intensification Phase",
+        "weeks": "3-4",
+        "description": "Maximum intensity. Push every set beyond what you think is possible. This is where extraordinary gains occur.",
+        "intensity_level": "100% maximum effort",
+        "rep_range": "6-10",
+        "advanced_techniques": [
+          "Forced reps (2-3 with partner assistance after failure)",
+          "Negative reps (partner lifts, you lower for 6-8 seconds)",
+          "Rest-pause (rest 10 seconds after failure, do 2-3 more reps)",
+          "Static holds (hold weight at hardest point for 10 seconds after failure)"
+        ],
+        "workout": {
+          "workout_name": "Full Body HIT - Week 3-4 (Intensified)",
+          "exercises": [
+            {
+              "order": 1,
+              "exercise_name": "Squat (Barbell or Machine)",
+              "muscle_group": "Legs - Full Lower Body",
+              "sets": 1,
+              "reps": "6-10",
+              "rest_seconds": 30,
+              "tempo": "4-0-4-0",
+              "instructions": "Deep squat. Ass to grass if mobility allows. This replaces leg press for maximum intensity.",
+              "failure_protocol": "Squat to absolute failure. Use safety bars/rack. After failure, do 2 forced reps with spotter.",
+              "progression_notes": "Add weight at 10 reps. This is the king of exercises.",
+              "advanced_technique": "Forced reps"
+            },
+            {
+              "order": 2,
+              "exercise_name": "Stiff-Leg Deadlift",
+              "muscle_group": "Legs - Hamstrings, Glutes, Lower Back",
+              "sets": 1,
+              "reps": "6-10",
+              "rest_seconds": 30,
+              "tempo": "4-0-4-0",
+              "instructions": "Keep legs nearly straight. Feel stretch in hamstrings. Maintain neutral spine.",
+              "failure_protocol": "Continue until hamstrings/lower back cannot support load. Use straps if grip fails first.",
+              "progression_notes": "Add weight at 10 reps.",
+              "advanced_technique": "Static hold at bottom position"
+            },
+            {
+              "order": 3,
+              "exercise_name": "Weighted Pull-up or Lat Pulldown",
+              "muscle_group": "Back - Lats",
+              "sets": 1,
+              "reps": "6-10",
+              "rest_seconds": 30,
+              "tempo": "4-0-4-0",
+              "instructions": "Add weight with belt/vest. Pull to chest. Control negative.",
+              "failure_protocol": "Pull to failure, then have partner assist for 2 more reps. Follow with 8-second negative.",
+              "progression_notes": "Add weight at 10 reps.",
+              "advanced_technique": "Forced reps + negative rep"
+            },
+            {
+              "order": 4,
+              "exercise_name": "Barbell Row or T-Bar Row",
+              "muscle_group": "Back - Middle Back, Lats",
+              "sets": 1,
+              "reps": "6-10",
+              "rest_seconds": 30,
+              "tempo": "4-0-4-0",
+              "instructions": "Heavy weight. Pull to sternum. Squeeze hard at top.",
+              "failure_protocol": "Row to failure. Rest 10 seconds, do 3 more reps (rest-pause).",
+              "progression_notes": "Add weight at 10 reps.",
+              "advanced_technique": "Rest-pause"
+            },
+            {
+              "order": 5,
+              "exercise_name": "Incline Barbell or Dumbbell Press",
+              "muscle_group": "Chest - Upper Pectorals",
+              "sets": 1,
+              "reps": "6-10",
+              "rest_seconds": 30,
+              "tempo": "4-0-4-0",
+              "instructions": "30-45 degree incline. Lower to upper chest. Press to lockout.",
+              "failure_protocol": "Press to failure. Spotter assists for 3 more forced reps.",
+              "progression_notes": "Add weight at 10 reps.",
+              "advanced_technique": "Forced reps"
+            },
+            {
+              "order": 6,
+              "exercise_name": "Dip (Weighted if possible)",
+              "muscle_group": "Chest - Lower Pecs, Triceps",
+              "sets": 1,
+              "reps": "6-10",
+              "rest_seconds": 30,
+              "tempo": "4-0-4-0",
+              "instructions": "Lean forward for chest emphasis. Full depth. Add weight with belt.",
+              "failure_protocol": "Dip to failure. Partner assists for 2 more reps, then hold top position 10 seconds.",
+              "progression_notes": "Add weight at 10 reps.",
+              "advanced_technique": "Forced reps + static hold"
+            },
+            {
+              "order": 7,
+              "exercise_name": "Standing Military Press (Barbell)",
+              "muscle_group": "Shoulders - Deltoids",
+              "sets": 1,
+              "reps": "6-10",
+              "rest_seconds": 30,
+              "tempo": "4-0-4-0",
+              "instructions": "Strict press from clavicle to overhead. No leg drive. Core tight.",
+              "failure_protocol": "Press to failure. Do one 8-second negative rep with heavier weight.",
+              "progression_notes": "Add weight at 10 reps.",
+              "advanced_technique": "Negative rep"
+            },
+            {
+              "order": 8,
+              "exercise_name": "Close-Grip Bench Press",
+              "muscle_group": "Arms - Triceps, Chest",
+              "sets": 1,
+              "reps": "6-10",
+              "rest_seconds": 30,
+              "tempo": "4-0-4-0",
+              "instructions": "Hands shoulder-width. Keep elbows close to body. Lower to lower chest.",
+              "failure_protocol": "Press to failure. Spotter helps for 3 forced reps.",
+              "progression_notes": "Add weight at 10 reps.",
+              "advanced_technique": "Forced reps"
+            },
+            {
+              "order": 9,
+              "exercise_name": "Barbell Curl (Heavy)",
+              "muscle_group": "Arms - Biceps",
+              "sets": 1,
+              "reps": "6-10",
+              "rest_seconds": 30,
+              "tempo": "4-0-4-0",
+              "instructions": "No swinging. Strict form. Use EZ-bar if wrist strain.",
+              "failure_protocol": "Curl to failure. Rest 10 seconds, do 3 more reps. Then one 8-second negative.",
+              "progression_notes": "Add weight at 10 reps.",
+              "advanced_technique": "Rest-pause + negative rep"
+            },
+            {
+              "order": 10,
+              "exercise_name": "Standing Calf Raise (Heavy)",
+              "muscle_group": "Legs - Calves",
+              "sets": 1,
+              "reps": "8-15",
+              "rest_seconds": 30,
+              "tempo": "4-1-4-1",
+              "instructions": "Full stretch, full contraction. Pause at top.",
+              "failure_protocol": "Raise to complete failure. Hold top position for 15 seconds.",
+              "progression_notes": "Add weight at 15 reps.",
+              "advanced_technique": "Static hold"
+            },
+            {
+              "order": 11,
+              "exercise_name": "Weighted Ab Crunch or Cable Crunch",
+              "muscle_group": "Core - Abdominals",
+              "sets": 1,
+              "reps": "8-12",
+              "rest_seconds": 0,
+              "tempo": "3-1-3-0",
+              "instructions": "Heavy resistance. Treat abs as strength muscle.",
+              "failure_protocol": "Crunch to failure. Hold contraction 10 seconds.",
+              "progression_notes": "Increase weight at 12 reps.",
+              "advanced_technique": "Static hold"
+            }
+          ],
+          "total_exercises": 11,
+          "estimated_duration_minutes": 35,
+          "cool_down": "5 minutes light stretching. Immediate post-workout nutrition critical."
+        }
+      }
+    ],
+    "nutrition_protocol": {
+      "description": "The Colorado Experiment used extremely high protein intake and controlled calorie surplus to support rapid muscle growth.",
+      "daily_requirements": {
+        "protein_grams_per_lb_bodyweight": 1.5,
+        "carbohydrates_grams_per_lb_bodyweight": 2.0,
+        "fats_grams_per_lb_bodyweight": 0.5,
+        "calorie_surplus": 500,
+        "meal_frequency": "5-6 meals per day",
+        "hydration_liters": "4-5L minimum"
+      },
+      "meal_timing": {
+        "pre_workout": "Complex carbs + moderate protein 90 minutes before",
+        "intra_workout": "BCAAs optional",
+        "post_workout": "Fast protein (whey) + simple carbs within 30 minutes",
+        "before_bed": "Slow protein (casein) + healthy fats"
+      },
+      "supplements_used_original": [
+        "High-quality protein powder",
+        "Vitamin/mineral complex",
+        "Note: The original experiment likely included performance-enhancing drugs, which contributed to the extraordinary results"
+      ]
+    },
+    "recovery_protocol": {
+      "sleep_hours_minimum": 8,
+      "active_recovery": "Light walking only on rest days. No cardio, no sports.",
+      "stress_management": "Critical - high cortisol inhibits muscle growth",
+      "massage_stretching": "Optional but beneficial",
+      "ice_baths_contrast_therapy": "Optional",
+      "deload_weeks": "None - this is only 4 weeks. If continuing beyond, take full week off every 4-6 weeks."
+    },
+    "progression_rules": {
+      "weight_increase_criteria": "When you achieve the upper rep range with perfect form",
+      "weight_increase_amount": "5-10% for compound movements, 2.5-5% for isolation",
+      "failure_to_progress": "If you fail to add weight/reps for 2 consecutive workouts, take 3 days off, then retry with same weight",
+      "overtraining_signs": [
+        "Persistent fatigue",
+        "Loss of appetite",
+        "Mood changes",
+        "Sleep disruption",
+        "Elevated resting heart rate",
+        "Strength decrease"
+      ],
+      "action_if_overtrained": "Take full week off. Resume at 80% intensity for one week before returning to full protocol."
+    },
+    "safety_warnings": [
+      "This protocol requires perfect form. Sacrifice weight for technique.",
+      "Training to failure requires spotters for most exercises.",
+      "Do not attempt this protocol if you're a beginner. Minimum 2 years consistent training experience required.",
+      "The original experiment had unique circumstances (muscle memory, pharmaceutical enhancement) that cannot be replicated naturally.",
+      "If you experience joint pain, reduce intensity immediately.",
+      "This is not sustainable long-term. Maximum 4-6 weeks before switching to different protocol."
+    ],
+    "expected_results": {
+      "realistic_natural_results": {
+        "muscle_gain_lbs": "2-4",
+        "fat_loss_lbs": "0-2",
+        "strength_increase_percentage": "10-20%"
+      },
+      "optimal_conditions": {
+        "muscle_gain_lbs": "4-8",
+        "fat_loss_lbs": "2-4",
+        "strength_increase_percentage": "20-30%"
+      },
+      "note": "The original 63 lbs in 28 days is not realistic for natural athletes without muscle memory from significant prior development. Casey Viator was an elite bodybuilder regaining lost mass after an accident."
+    },
+    "assessment_protocol": {
+      "before_starting": {
+        "body_weight_lbs": null,
+        "body_fat_percentage": null,
+        "measurements": {
+          "chest_inches": null,
+          "arms_inches": null,
+          "thighs_inches": null,
+          "waist_inches": null,
+          "calves_inches": null
+        },
+        "strength_tests": {
+          "squat_1rm_lbs": null,
+          "bench_press_1rm_lbs": null,
+          "deadlift_1rm_lbs": null,
+          "overhead_press_1rm_lbs": null
+        }
+      },
+      "weekly_tracking": {
+        "body_weight": "Daily morning weigh-in",
+        "workout_performance": "Log all weights and reps achieved",
+        "recovery_quality": "Rate 1-10",
+        "energy_levels": "Rate 1-10",
+        "hunger_levels": "Rate 1-10"
+      },
+      "after_completion": {
+        "compare_all_metrics": true,
+        "progress_photos": "Same lighting, angles, time of day",
+        "strength_retest": "Test 1RM on main lifts after 3-5 day rest"
+      }
+    },
+    "references": {
+      "original_study": "Colorado Experiment, May 1973, Colorado State University",
+      "subject": "Casey Viator, supervised by Arthur Jones",
+      "documentation": "Published in Athletic Journal and Ironman Magazine",
+      "equipment_used": "Nautilus machines (Arthur Jones' company)",
+      "scientific_validity": "Not peer-reviewed, anecdotal case study, numerous confounding variables"
+    }
+  }
