@@ -2299,7 +2299,7 @@ model users {
   suspendedUntil                                              DateTime?
   city                                                        String?
   country                                                     String?
-  enableDiscovery                                             Boolean                          @default(false)
+  enableDiscovery                                             Boolean                          @default(true)
   latitude                                                    Float?
   locationVisibility                                          String                           @default("NONE")
   longitude                                                   Float?
