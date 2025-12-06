@@ -17,7 +17,7 @@ const nextConfig = {
         "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
         "img-src 'self' data: https: https://i.ytimg.com",
         "font-src 'self' https://cdn.jsdelivr.net",
-        "connect-src 'self' https://api.openai.com https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://www.facebook.com https://graph.facebook.com https://www.linkedin.com https://api.linkedin.com",
+        "connect-src 'self' https://api.openai.com https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://www.facebook.com https://graph.facebook.com https://www.linkedin.com https://api.linkedin.com https://cdn.jsdelivr.net",
         "frame-src 'self' https://accounts.google.com https://www.facebook.com https://staticxx.facebook.com https://www.linkedin.com",
         "form-action 'self' https://accounts.google.com https://www.facebook.com https://www.linkedin.com",
       ].join('; ')
