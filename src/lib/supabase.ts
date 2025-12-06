@@ -1,29 +1,61 @@
 // src/lib/supabase.ts
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 // Server-side Supabase client for storage operations
-// Extract project ref from service key or use env variable
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://uzuilceoxsxzkdsfvqtc.supabase.co';
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
+// Lazy initialization to avoid build-time errors when env vars aren't set
+let _supabaseAdmin: SupabaseClient | null = null;
+let _supabaseClient: SupabaseClient | null = null;
+
 // Server-side client with service role (for admin operations)
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false,
+export function getSupabaseAdmin(): SupabaseClient {
+  if (!_supabaseAdmin) {
+    if (!supabaseServiceKey) {
+      throw new Error('SUPABASE_SERVICE_ROLE_KEY is not configured');
+    }
+    _supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    });
+  }
+  return _supabaseAdmin;
+}
+
+// Client-side client with anon key (for public operations)
+export function getSupabaseClient(): SupabaseClient {
+  if (!_supabaseClient) {
+    if (!supabaseAnonKey) {
+      throw new Error('NEXT_PUBLIC_SUPABASE_ANON_KEY is not configured');
+    }
+    _supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
+  }
+  return _supabaseClient;
+}
+
+// Legacy exports for backward compatibility (lazy initialized)
+export const supabaseAdmin = new Proxy({} as SupabaseClient, {
+  get(_, prop) {
+    return (getSupabaseAdmin() as any)[prop];
   },
 });
 
-// Client-side client with anon key (for public operations)
-export const supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
+export const supabaseClient = new Proxy({} as SupabaseClient, {
+  get(_, prop) {
+    return (getSupabaseClient() as any)[prop];
+  },
+});
 
 // Storage bucket name for exercise media
 export const EXERCISE_MEDIA_BUCKET = 'exercise-media';
 
 // Helper to get public URL for uploaded media
 export function getPublicUrl(filePath: string): string {
-  const { data } = supabaseAdmin.storage
+  const { data } = getSupabaseAdmin().storage
     .from(EXERCISE_MEDIA_BUCKET)
     .getPublicUrl(filePath);
   return data.publicUrl;
