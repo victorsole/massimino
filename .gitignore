@@ -28,3 +28,6 @@ tsconfig 2.tsbuildinfo
 public/uploads/credentials/
 .next*
 .env local
+
+# Mockups (design prototypes, not production code)
+mockups/
