@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -19,7 +19,63 @@ import {
   AthleteInfo,
   ProgramCategory,
   getProgramCategory,
+  ProgramExercise,
 } from '@/types/program';
+
+// Type for enriched exercise data from the API
+type EnrichedExercise = {
+  id: string;
+  name: string;
+  coverUrl: string | null;
+  hasMedia: boolean;
+  mediaCount: number;
+  hasVideo: boolean;
+} | null;
+
+// Extract all unique exercise names from workout sessions
+function extractExerciseNames(sessions: WorkoutSession[]): string[] {
+  const names = new Set<string>();
+  for (const session of sessions) {
+    for (const section of session.sections || []) {
+      for (const exercise of section.exercises || []) {
+        if (exercise.exercise_name) {
+          names.add(exercise.exercise_name);
+        }
+      }
+    }
+  }
+  return Array.from(names);
+}
+
+// Enrich workout sessions with exercise media data
+function enrichSessionsWithMedia(
+  sessions: WorkoutSession[],
+  exerciseMediaMap: Record<string, EnrichedExercise>
+): WorkoutSession[] {
+  return sessions.map(session => ({
+    ...session,
+    sections: (session.sections || []).map(section => ({
+      ...section,
+      exercises: (section.exercises || []).map(exercise => {
+        const enriched = exerciseMediaMap[exercise.exercise_name];
+        if (enriched) {
+          return {
+            ...exercise,
+            massimino_exercise_id: enriched.id,
+            hasMedia: enriched.hasMedia,
+            mediaCount: enriched.mediaCount,
+            media: {
+              thumbnail_url: enriched.coverUrl || undefined,
+              image_url: enriched.coverUrl || undefined,
+              video_url: enriched.hasVideo ? 'has-video' : undefined,
+            },
+          };
+        }
+        return exercise;
+      }),
+    })),
+  }));
+}
 
 // Transform API response to our types
 function transformApiResponse(apiData: any): {
@@ -95,6 +151,42 @@ function transformApiResponse(apiData: any): {
 
   if (templateData.workout_sessions) {
     workoutSessions = templateData.workout_sessions;
+  } else if (Array.isArray(templateData.training_days)) {
+    // Handle standardized training_days format (i_dont_have_much_time, flexibility, balance, plyometric, cardio workouts)
+    workoutSessions = templateData.training_days.map((day: any, index: number) => {
+      // Build a single section from the exercises array
+      const sections: any[] = [];
+
+      if (day.exercises && day.exercises.length > 0) {
+        sections.push({
+          section_name: day.focus || day.day_name || 'Workout',
+          description: day.format || '',
+          exercises: day.exercises.map((ex: any) => ({
+            exercise_name: ex.exercise_name,
+            exercise_id: ex.exercise_id,
+            sets: ex.sets || 3,
+            reps: ex.reps,
+            tempo: ex.tempo,
+            rest_seconds: ex.rest_seconds || 60,
+            work_seconds: ex.work_seconds,
+            notes: ex.notes || '',
+            primary_muscle_groups: ex.primary_muscle_groups,
+            equipment: ex.equipment,
+          })),
+        });
+      }
+
+      return {
+        workout_id: `day-${day.day || index + 1}`,
+        name: day.day_name || `Day ${day.day || index + 1}`,
+        day: day.day || index + 1,
+        focus: day.focus || '',
+        duration_minutes: typeof day.duration_minutes === 'string'
+          ? parseInt(day.duration_minutes.split('-')[1] || day.duration_minutes)
+          : day.duration_minutes || metadata.session_duration_minutes?.max || 30,
+        sections,
+      };
+    });
   } else if (Array.isArray(templateData.workout_programs)) {
     // Handle Castellers-style format with workout_programs array
     workoutSessions = templateData.workout_programs.map((workout: any, index: number) => {
@@ -155,9 +247,20 @@ function transformApiResponse(apiData: any): {
     });
   } else if (Array.isArray(templateData.weekly_schedule)) {
     // Handle JSON templates with day_X_xxx format
+    // First, find all day_X_ keys in the template data
+    const dayKeyMap: Record<number, string> = {};
+    for (const key of Object.keys(templateData)) {
+      const match = key.match(/^day_(\d+)_/);
+      if (match) {
+        dayKeyMap[parseInt(match[1])] = key;
+      }
+    }
+
     workoutSessions = templateData.weekly_schedule.map((dayInfo: any, index: number) => {
-      const dayKey = `day_${dayInfo.day}_${dayInfo.focus.toLowerCase().replace(/[^a-z]/g, '_').replace(/_+/g, '_').replace(/_$/, '')}`;
-      const dayData = templateData[dayKey] || templateData[`day_${dayInfo.day}`];
+      // Use the pre-built day key map to find the matching key
+      const dayNumber = dayInfo.day;
+      const dayKey = dayKeyMap[dayNumber];
+      const dayData = dayKey ? templateData[dayKey] : templateData[`day_${dayNumber}`];
 
       // Build sections from the day data if it exists
       let sections: any[] = [];
@@ -196,6 +299,290 @@ function transformApiResponse(apiData: any): {
       duration_minutes: metadata.session_duration_minutes.max,
       sections: [],
     }));
+  } else if (Array.isArray(templateData.variations)) {
+    // Handle Arnold Volume format - variations with workouts containing muscle groups
+    const firstVariation = templateData.variations[0];
+    if (firstVariation?.workouts) {
+      workoutSessions = firstVariation.workouts.map((workout: any, index: number) => {
+        const sections: any[] = [];
+
+        // Each muscle_group becomes a section
+        if (workout.muscle_groups) {
+          for (const group of workout.muscle_groups) {
+            if (group.exercises && group.exercises.length > 0) {
+              sections.push({
+                section_name: group.muscle_group,
+                description: '',
+                exercises: group.exercises.map((ex: any) => ({
+                  exercise_name: ex.exercise_name,
+                  sets: typeof ex.sets === 'string' ? parseInt(ex.sets.split('-')[0]) : ex.sets || 3,
+                  reps: ex.reps,
+                  rest_seconds: 90,
+                  notes: ex.notes || '',
+                })),
+              });
+            }
+          }
+        }
+
+        return {
+          workout_id: `workout-${index + 1}`,
+          name: workout.workout_name || `Day ${workout.days?.[0] || index + 1}`,
+          day: workout.days?.[0] || index + 1,
+          focus: workout.workout_name || '',
+          duration_minutes: parseInt(templateData.program?.time_per_workout) || 60,
+          sections,
+        };
+      });
+    }
+  } else if (Array.isArray(templateData.the_six_exercises)) {
+    // Handle Arnold Golden Six format - same exercises repeated each workout
+    const exercises = templateData.the_six_exercises.map((ex: any) => ({
+      exercise_name: ex.exercise_name,
+      sets: ex.sets || 3,
+      reps: ex.reps,
+      tempo: ex.tempo,
+      rest_seconds: ex.rest_seconds || 90,
+      notes: ex.form_cues?.join('. ') || ex.progression_notes || '',
+    }));
+
+    // Create 3 sessions per week based on training_schedule
+    const schedule = templateData.training_schedule;
+    const workoutDays = schedule
+      ? Object.entries(schedule)
+          .filter(([_, value]) => typeof value === 'string' && (value as string).includes('Golden Six'))
+          .map(([day]) => day)
+      : ['Monday', 'Wednesday', 'Friday'];
+
+    workoutSessions = workoutDays.map((day, index) => ({
+      workout_id: `golden-six-${index + 1}`,
+      name: `Full Body - Golden Six`,
+      day: index + 1,
+      focus: `${day} - Full Body Training`,
+      duration_minutes: metadata.session_duration_minutes?.max || 60,
+      sections: [{
+        section_name: 'The Golden Six',
+        description: 'Arnold\'s foundational full-body workout',
+        exercises,
+      }],
+    }));
+  } else if (Array.isArray(templateData.workout_phases)) {
+    // Handle Colorado Experiment format - phases with workouts
+    workoutSessions = templateData.workout_phases.map((phase: any, index: number) => {
+      const sections: any[] = [];
+
+      if (phase.workout?.exercises) {
+        sections.push({
+          section_name: phase.phase_name || `Phase ${phase.phase_number}`,
+          description: phase.description || '',
+          exercises: phase.workout.exercises.map((ex: any) => ({
+            exercise_name: ex.exercise_name,
+            sets: ex.sets || 1,
+            reps: ex.reps,
+            tempo: ex.tempo,
+            rest_seconds: ex.rest_seconds || 45,
+            notes: ex.instructions || ex.failure_protocol || '',
+          })),
+        });
+      }
+
+      return {
+        workout_id: `phase-${phase.phase_number || index + 1}`,
+        name: phase.workout?.workout_name || phase.phase_name || `Phase ${phase.phase_number}`,
+        day: index + 1,
+        focus: phase.description || phase.focus || '',
+        duration_minutes: parseInt(templateData.schedule?.workout_duration_minutes) || 45,
+        sections,
+      };
+    });
+  } else if (Array.isArray(templateData.workouts)) {
+    // Handle NASM format - workouts array with workout_structure
+    workoutSessions = templateData.workouts.map((workout: any, index: number) => {
+      const sections: any[] = [];
+      const structure = workout.workout_structure || workout;
+
+      // Add warm-up section
+      if (structure.warm_up?.exercises) {
+        sections.push({
+          section_name: 'Warm Up',
+          description: '',
+          exercises: structure.warm_up.exercises.map((ex: any) => ({
+            exercise_name: ex.exercise_name,
+            sets: ex.sets || 1,
+            reps: ex.reps || ex.tempo,
+            rest_seconds: ex.rest_seconds || 0,
+            notes: ex.notes || '',
+          })),
+        });
+      }
+
+      // Add activation section
+      if (structure.activation?.exercises) {
+        sections.push({
+          section_name: 'Activation',
+          description: structure.activation.category || '',
+          exercises: structure.activation.exercises.map((ex: any) => ({
+            exercise_name: ex.exercise_name,
+            sets: ex.sets || 1,
+            reps: ex.reps,
+            tempo: ex.tempo,
+            rest_seconds: ex.rest_seconds || 60,
+            notes: ex.notes || '',
+          })),
+        });
+      }
+
+      // Add skill development section
+      if (structure.skill_development?.exercises) {
+        sections.push({
+          section_name: 'Skill Development',
+          description: structure.skill_development.category || '',
+          exercises: structure.skill_development.exercises.map((ex: any) => ({
+            exercise_name: ex.exercise_name,
+            sets: ex.sets || 1,
+            reps: ex.reps,
+            tempo: ex.tempo,
+            rest_seconds: ex.rest_seconds || 60,
+            notes: ex.notes || '',
+          })),
+        });
+      }
+
+      // Add resistance training section
+      if (structure.resistance?.exercises) {
+        sections.push({
+          section_name: 'Resistance Training',
+          description: structure.resistance.category || '',
+          exercises: structure.resistance.exercises.map((ex: any) => ({
+            exercise_name: ex.exercise_name,
+            sets: ex.sets || 3,
+            reps: ex.reps,
+            tempo: ex.tempo,
+            rest_seconds: ex.rest_seconds || 90,
+            notes: ex.notes || '',
+          })),
+        });
+      }
+
+      // Add cool-down section
+      if (structure.cool_down?.exercises) {
+        sections.push({
+          section_name: 'Cool Down',
+          description: '',
+          exercises: structure.cool_down.exercises.map((ex: any) => ({
+            exercise_name: ex.exercise_name,
+            sets: ex.sets || 1,
+            reps: ex.reps || ex.tempo,
+            rest_seconds: ex.rest_seconds || 0,
+            notes: ex.notes || '',
+          })),
+        });
+      }
+
+      return {
+        workout_id: workout.workout_id || `workout-${workout.workout_number || index + 1}`,
+        name: `Workout ${workout.workout_number || index + 1}`,
+        day: workout.workout_number || index + 1,
+        focus: `${workout.phase_name || ''} - ${workout.coaching_tips || ''}`.trim(),
+        duration_minutes: metadata.session_duration_minutes?.max || 60,
+        sections,
+      };
+    });
+  } else if (Array.isArray(templateData.medical_condition_workouts)) {
+    // Handle medical conditions format - each condition has workouts with exercises
+    // Find the first condition that has workouts
+    const condition = templateData.medical_condition_workouts[0];
+    if (condition?.workouts) {
+      workoutSessions = condition.workouts.map((workout: any, index: number) => {
+        const sections: any[] = [];
+
+        if (workout.exercises && workout.exercises.length > 0) {
+          sections.push({
+            section_name: workout.focus || workout.day || 'Workout',
+            description: '',
+            exercises: workout.exercises.map((ex: any) => ({
+              exercise_name: ex.exercise_name,
+              exercise_id: ex.exercise_name?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+              sets: ex.sets || 3,
+              reps: ex.reps,
+              tempo: ex.tempo,
+              rest_seconds: ex.rest_seconds || 60,
+              notes: ex.notes || '',
+            })),
+          });
+        }
+
+        return {
+          workout_id: `day-${index + 1}`,
+          name: workout.day || `Day ${index + 1}`,
+          day: index + 1,
+          focus: workout.focus || '',
+          duration_minutes: parseInt(condition.session_duration?.replace(/[^\d]/g, '')) || 45,
+          sections,
+        };
+      });
+    }
+  } else if (templateData.warm_up?.exercises || templateData.main_workout?.exercises || templateData.cool_down?.exercises) {
+    // Handle flat structure with warm_up, main_workout, cool_down directly on templateData
+    // This is used by database programs created from castellers template
+    const sections: any[] = [];
+
+    // Add warm-up section if exists
+    if (templateData.warm_up?.exercises) {
+      sections.push({
+        section_name: 'Warm Up',
+        description: `${templateData.warm_up.duration_minutes || 10} minutes`,
+        exercises: templateData.warm_up.exercises.map((ex: any) => ({
+          exercise_name: ex.name || ex.exercise_name,
+          exercise_id: ex.exercise_id || ex.name?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+          sets: ex.sets || 1,
+          reps: ex.reps || (ex.duration_seconds ? `${ex.duration_seconds}s` : undefined),
+          notes: ex.notes || (ex.per_side ? 'Per side' : undefined),
+        })),
+      });
+    }
+
+    // Add main workout section
+    if (templateData.main_workout?.exercises) {
+      sections.push({
+        section_name: 'Main Workout',
+        description: '',
+        exercises: templateData.main_workout.exercises.map((ex: any) => ({
+          exercise_name: ex.name || ex.exercise_name,
+          exercise_id: ex.exercise_id || ex.name?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+          sets: ex.sets || 3,
+          reps: ex.reps || (ex.duration_seconds ? `${ex.duration_seconds}s` : (ex.distance_meters ? `${ex.distance_meters}m` : undefined)),
+          tempo: ex.tempo,
+          rest_seconds: ex.rest_seconds || 90,
+          notes: ex.notes || (ex.per_side ? 'Per side' : undefined),
+        })),
+      });
+    }
+
+    // Add cool-down section if exists
+    if (templateData.cool_down?.exercises) {
+      sections.push({
+        section_name: 'Cool Down',
+        description: `${templateData.cool_down.duration_minutes || 10} minutes`,
+        exercises: templateData.cool_down.exercises.map((ex: any) => ({
+          exercise_name: ex.name || ex.exercise_name,
+          exercise_id: ex.exercise_id || ex.name?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+          sets: ex.sets || 1,
+          reps: ex.duration_seconds ? `${ex.duration_seconds}s` : undefined,
+          notes: ex.per_side ? 'Per side' : undefined,
+        })),
+      });
+    }
+
+    // Create a single workout session with all sections
+    workoutSessions = [{
+      workout_id: apiData.id || 'workout-1',
+      name: templateData.name || apiData.name || 'Workout',
+      day: 1,
+      focus: templateData.position || templateData.difficulty || '',
+      duration_minutes: metadata.session_duration_minutes?.max || 60,
+      sections,
+    }];
   } else if (apiData.program_phases?.length > 0) {
     // Create basic sessions from phases
     workoutSessions = apiData.program_phases.map((phase: any, index: number) => ({
@@ -245,6 +632,29 @@ export default function ProgramDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [programData, setProgramData] = useState<ReturnType<typeof transformApiResponse> | null>(null);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [enrichedSessions, setEnrichedSessions] = useState<WorkoutSession[] | null>(null);
+
+  // Fetch exercise media for all exercises in the program
+  const fetchExerciseMedia = useCallback(async (sessions: WorkoutSession[]) => {
+    try {
+      const exerciseNames = extractExerciseNames(sessions);
+      if (exerciseNames.length === 0) return sessions;
+
+      const res = await fetch('/api/workout/exercises/enrich', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ exerciseNames }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        return enrichSessionsWithMedia(sessions, data.exercises || {});
+      }
+    } catch (err) {
+      console.error('Failed to fetch exercise media:', err);
+    }
+    return sessions;
+  }, []);
 
   useEffect(() => {
     if (programId) {
@@ -252,6 +662,13 @@ export default function ProgramDetailPage() {
       checkFollowingStatus();
     }
   }, [programId]);
+
+  // Enrich sessions with media when program data is loaded
+  useEffect(() => {
+    if (programData?.workoutSessions && programData.workoutSessions.length > 0) {
+      fetchExerciseMedia(programData.workoutSessions).then(setEnrichedSessions);
+    }
+  }, [programData, fetchExerciseMedia]);
 
   const fetchProgram = async () => {
     try {
@@ -325,9 +742,12 @@ export default function ProgramDetailPage() {
     prerequisites,
     redFlagsToStop,
     athleteInfo,
-    workoutSessions,
+    workoutSessions: rawWorkoutSessions,
     category,
   } = programData;
+
+  // Use enriched sessions if available, otherwise fall back to raw sessions
+  const workoutSessions = enrichedSessions || rawWorkoutSessions;
 
   const programUrl = typeof window !== 'undefined'
     ? window.location.href

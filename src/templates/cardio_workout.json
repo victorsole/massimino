@@ -1,147 +1,476 @@
 {
-    "program": "Cardio Workout",
-    "author": "Victor Solé Ferioli",
-    "duration_weeks": 3,
-    "session_duration": {
-      "min_minutes": 30,
-      "max_minutes": 60
-    },
-    "frequency_per_week": 4,
-    "goal": {
-      "outcome_goal": "Jog 5 km in under 35 min by end of Week 3",
-      "progress_goals": [
-        "Improve recovery HR by 10 bpm after 3-min step test by end of Week 3",
-        "Complete 2 stair climbs without rest by end of Week 3"
+  "program": "Cardio Workout",
+  "program_id": "cardio-workout",
+  "author": "Victor Solé Ferioli",
+  "version": "2.0_standardized",
+  "duration_weeks": 3,
+  "session_duration": {
+    "min_minutes": 30,
+    "max_minutes": 60
+  },
+  "frequency_per_week": 4,
+  "level": "Beginner to Intermediate",
+  "goal": {
+    "outcome_goal": "Jog 5 km in under 35 min by end of Week 3",
+    "progress_goals": [
+      "Improve recovery HR by 10 bpm after 3-min step test by end of Week 3",
+      "Complete 2 stair climbs without rest by end of Week 3"
+    ]
+  },
+
+  "training_days": [
+    {
+      "day": 1,
+      "day_name": "Week 1 - Session 1: Walk-Jog Intervals",
+      "focus": "Build the Base - Zone 2 Endurance",
+      "exercises": [
+        {
+          "exercise_id": "warmup-walk",
+          "exercise_name": "Warm-Up Walk",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Easy pace, prepare body for movement",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "jog-interval",
+          "exercise_name": "Jog Interval",
+          "order": 2,
+          "sets": 7,
+          "reps": "1 min",
+          "rest_seconds": 0,
+          "notes": "Maintain nasal breathing (Zone 2)",
+          "primary_muscle_groups": ["cardiovascular", "quadriceps", "calves"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "brisk-walk",
+          "exercise_name": "Brisk Walk Recovery",
+          "order": 3,
+          "sets": 7,
+          "reps": "2 min",
+          "rest_seconds": 0,
+          "notes": "Active recovery between jog intervals",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-walk-stretch",
+          "exercise_name": "Cooldown Walk & Stretch",
+          "order": 4,
+          "sets": 1,
+          "reps": "5-10 min",
+          "rest_seconds": 0,
+          "notes": "Easy walking followed by light stretching",
+          "primary_muscle_groups": ["cardiovascular", "full_body"],
+          "equipment": ["bodyweight"]
+        }
       ]
     },
-    "weekly_structure": [
-      {
-        "week": 1,
-        "theme": "Build the Base",
-        "focus": "Zone 2 (steady-state endurance)",
-        "sessions": [
-          {
-            "name": "Outdoor Walk-Jog Intervals",
-            "details": [
-              "5 min warm-up walk",
-              "20 min alternating 1-min jog / 2-min brisk walk",
-              "5–10 min cooldown walk/stretch"
-            ],
-            "goal": "Maintain nasal breathing (Zone 2)"
-          },
-          {
-            "name": "Indoor Bike / Treadmill Steady State",
-            "details": [
-              "5 min warm-up",
-              "30 min steady cardio at RPE 5/10",
-              "5 min cooldown"
-            ],
-            "goal": "Monitor HR recovery post-exercise"
-          },
-          {
-            "name": "Outdoor Steady Walk or Hike",
-            "details": [
-              "45–60 min brisk walk or hike"
-            ],
-            "goal": "Low impact, long duration"
-          },
-          {
-            "name": "Optional Bonus – Bodyweight Circuit",
-            "details": [
-              "3 rounds:",
-              "30s jumping jacks",
-              "30s high knees",
-              "30s rest",
-              "5 min walk to warm down"
-            ]
-          }
-        ]
-      },
-      {
-        "week": 2,
-        "theme": "Aerobic Conditioning",
-        "focus": "Zone 2–3 (intervals + hills)",
-        "sessions": [
-          {
-            "name": "Fartlek Run – Speed Play",
-            "details": [
-              "5 min jog",
-              "20 min: alternate between 1 min fast / 2 min slow jog",
-              "5–10 min cooldown"
-            ],
-            "goal": "Push RPE to 6–7 briefly"
-          },
-          {
-            "name": "Indoor Bike / Elliptical Intervals",
-            "details": [
-              "5 min warm-up",
-              "10 rounds: 1 min hard effort / 1 min easy",
-              "5 min cooldown"
-            ]
-          },
-          {
-            "name": "Hill/Incline Walking or Stair Climb",
-            "details": [
-              "40–60 min total"
-            ],
-            "goal": "Focus on rhythmic breathing, steady output"
-          },
-          {
-            "name": "Dynamic Bodyweight Combo",
-            "details": [
-              "4 rounds:",
-              "1 min squat to overhead reach",
-              "30s mountain climbers",
-              "30s jog in place",
-              "1 min rest"
-            ]
-          }
-        ]
-      },
-      {
-        "week": 3,
-        "theme": "Power + Threshold Push",
-        "focus": "Zone 3–4 (tempo + HIIT blocks)",
-        "sessions": [
-          {
-            "name": "Tempo Run or Power Walk Intervals",
-            "details": [
-              "5 min warm-up",
-              "20 min at sustained pace (RPE 7/10)",
-              "5 min cooldown"
-            ],
-            "goal": "Complete 3k without stopping"
-          },
-          {
-            "name": "HIIT Treadmill / Stationary Bike",
-            "details": [
-              "5 min warm-up",
-              "8 x 30s sprint / 90s rest",
-              "5 min cooldown"
-            ]
-          },
-          {
-            "name": "Outdoor Challenge – 'Run the City'",
-            "details": [
-              "Map a 5k route",
-              "Walk/run it with minimal stops",
-              "Track time for outcome goal"
-            ]
-          },
-          {
-            "name": "Recovery & Mobility Walk",
-            "details": [
-              "30 min gentle walk",
-              "10 min foam rolling or stretching"
-            ]
-          }
-        ]
-      }
-    ],
-    "tracking_tools": [
-      "Heart Rate Recovery (3-min YMCA step test or wearable)",
-      "Distance & Time Logs (Strava, Nike Run Club, Apple Health)",
-      "Mood/Energy Journaling post-session"
-    ]
-  }
-  
+    {
+      "day": 2,
+      "day_name": "Week 1 - Session 2: Steady State Cardio",
+      "focus": "Indoor Bike / Treadmill",
+      "exercises": [
+        {
+          "exercise_id": "warmup-cardio",
+          "exercise_name": "Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Light cycling or walking",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bike", "treadmill"]
+        },
+        {
+          "exercise_id": "steady-state-cardio",
+          "exercise_name": "Steady State Cardio",
+          "order": 2,
+          "sets": 1,
+          "reps": "30 min",
+          "rest_seconds": 0,
+          "notes": "Maintain RPE 5/10, monitor HR recovery post-exercise",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bike", "treadmill"]
+        },
+        {
+          "exercise_id": "cooldown-easy",
+          "exercise_name": "Cooldown",
+          "order": 3,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Easy pace, lower heart rate gradually",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bike", "treadmill"]
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "day_name": "Week 1 - Session 3: Long Steady Walk/Hike",
+      "focus": "Low Impact Endurance",
+      "exercises": [
+        {
+          "exercise_id": "brisk-walk-hike",
+          "exercise_name": "Brisk Walk or Hike",
+          "order": 1,
+          "sets": 1,
+          "reps": "45-60 min",
+          "rest_seconds": 0,
+          "notes": "Low impact, long duration - maintain conversation pace",
+          "primary_muscle_groups": ["cardiovascular", "glutes", "calves"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "day_name": "Week 1 - Session 4: Bodyweight Circuit (Optional)",
+      "focus": "Active Recovery / Bonus Workout",
+      "exercises": [
+        {
+          "exercise_id": "jumping-jacks",
+          "exercise_name": "Jumping Jacks",
+          "order": 1,
+          "sets": 3,
+          "reps": "30 sec",
+          "rest_seconds": 30,
+          "notes": "Moderate pace, get heart rate up",
+          "primary_muscle_groups": ["cardiovascular", "shoulders", "calves"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "high-knees",
+          "exercise_name": "High Knees",
+          "order": 2,
+          "sets": 3,
+          "reps": "30 sec",
+          "rest_seconds": 30,
+          "notes": "Drive knees up, pump arms",
+          "primary_muscle_groups": ["hip_flexors", "calves", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-walk",
+          "exercise_name": "Walk to Cool Down",
+          "order": 3,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Easy walking",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 5,
+      "day_name": "Week 2 - Session 1: Fartlek Run",
+      "focus": "Aerobic Conditioning - Zone 2-3",
+      "exercises": [
+        {
+          "exercise_id": "jog-warmup",
+          "exercise_name": "Jog Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Easy jogging to warm up",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "fast-jog-interval",
+          "exercise_name": "Fast Jog Interval",
+          "order": 2,
+          "sets": 7,
+          "reps": "1 min",
+          "rest_seconds": 0,
+          "notes": "Push RPE to 6-7 briefly",
+          "primary_muscle_groups": ["cardiovascular", "quadriceps", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "slow-jog-recovery",
+          "exercise_name": "Slow Jog Recovery",
+          "order": 3,
+          "sets": 7,
+          "reps": "2 min",
+          "rest_seconds": 0,
+          "notes": "Easy pace between fast intervals",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-jog",
+          "exercise_name": "Cooldown Jog/Walk",
+          "order": 4,
+          "sets": 1,
+          "reps": "5-10 min",
+          "rest_seconds": 0,
+          "notes": "Gradually reduce pace",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 6,
+      "day_name": "Week 2 - Session 2: Bike/Elliptical Intervals",
+      "focus": "Indoor Interval Training",
+      "exercises": [
+        {
+          "exercise_id": "warmup-cardio",
+          "exercise_name": "Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Light pace on equipment",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bike", "elliptical"]
+        },
+        {
+          "exercise_id": "hard-effort-interval",
+          "exercise_name": "Hard Effort Interval",
+          "order": 2,
+          "sets": 10,
+          "reps": "1 min",
+          "rest_seconds": 0,
+          "notes": "High resistance/speed, RPE 7-8",
+          "primary_muscle_groups": ["cardiovascular", "quadriceps", "glutes"],
+          "equipment": ["bike", "elliptical"]
+        },
+        {
+          "exercise_id": "easy-recovery",
+          "exercise_name": "Easy Recovery",
+          "order": 3,
+          "sets": 10,
+          "reps": "1 min",
+          "rest_seconds": 0,
+          "notes": "Low resistance, active recovery",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bike", "elliptical"]
+        },
+        {
+          "exercise_id": "cooldown-easy",
+          "exercise_name": "Cooldown",
+          "order": 4,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Easy pace to lower heart rate",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bike", "elliptical"]
+        }
+      ]
+    },
+    {
+      "day": 7,
+      "day_name": "Week 2 - Session 3: Hill/Stair Climb",
+      "focus": "Incline Endurance",
+      "exercises": [
+        {
+          "exercise_id": "hill-walk-climb",
+          "exercise_name": "Hill Walking or Stair Climb",
+          "order": 1,
+          "sets": 1,
+          "reps": "40-60 min",
+          "rest_seconds": 0,
+          "notes": "Rhythmic breathing, steady output, incline work",
+          "primary_muscle_groups": ["glutes", "quadriceps", "calves", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 8,
+      "day_name": "Week 2 - Session 4: Dynamic Bodyweight Combo",
+      "focus": "Active Recovery Circuit",
+      "exercises": [
+        {
+          "exercise_id": "squat-overhead-reach",
+          "exercise_name": "Squat to Overhead Reach",
+          "order": 1,
+          "sets": 4,
+          "reps": "1 min",
+          "rest_seconds": 30,
+          "notes": "Full squat, reach arms overhead at top",
+          "primary_muscle_groups": ["quadriceps", "glutes", "shoulders"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "mountain-climber",
+          "exercise_name": "Mountain Climbers",
+          "order": 2,
+          "sets": 4,
+          "reps": "30 sec",
+          "rest_seconds": 30,
+          "notes": "Moderate pace, controlled movement",
+          "primary_muscle_groups": ["core", "hip_flexors", "shoulders"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "jog-in-place",
+          "exercise_name": "Jog in Place",
+          "order": 3,
+          "sets": 4,
+          "reps": "30 sec",
+          "rest_seconds": 60,
+          "notes": "Light jogging, active recovery",
+          "primary_muscle_groups": ["cardiovascular", "calves"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 9,
+      "day_name": "Week 3 - Session 1: Tempo Run",
+      "focus": "Power & Threshold - Zone 3-4",
+      "exercises": [
+        {
+          "exercise_id": "warmup-jog",
+          "exercise_name": "Warm-Up Jog",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Easy pace",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "tempo-run",
+          "exercise_name": "Tempo Run",
+          "order": 2,
+          "sets": 1,
+          "reps": "20 min",
+          "rest_seconds": 0,
+          "notes": "Sustained pace at RPE 7/10 - goal is complete 3k without stopping",
+          "primary_muscle_groups": ["cardiovascular", "quadriceps", "hamstrings", "calves"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-walk",
+          "exercise_name": "Cooldown Walk",
+          "order": 3,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Gradually slow down",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 10,
+      "day_name": "Week 3 - Session 2: HIIT Sprints",
+      "focus": "High Intensity Intervals",
+      "exercises": [
+        {
+          "exercise_id": "warmup-cardio",
+          "exercise_name": "Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Light jogging or cycling",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["treadmill", "bike"]
+        },
+        {
+          "exercise_id": "sprint-interval",
+          "exercise_name": "Sprint Interval",
+          "order": 2,
+          "sets": 8,
+          "reps": "30 sec",
+          "rest_seconds": 90,
+          "notes": "Maximum effort sprint",
+          "primary_muscle_groups": ["cardiovascular", "quadriceps", "hamstrings", "glutes"],
+          "equipment": ["treadmill", "bike"]
+        },
+        {
+          "exercise_id": "cooldown-easy",
+          "exercise_name": "Cooldown",
+          "order": 3,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Easy pace to lower heart rate",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["treadmill", "bike"]
+        }
+      ]
+    },
+    {
+      "day": 11,
+      "day_name": "Week 3 - Session 3: 5K Challenge",
+      "focus": "Outdoor Challenge - Run the City",
+      "exercises": [
+        {
+          "exercise_id": "5k-run",
+          "exercise_name": "5K Run/Walk",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 km",
+          "rest_seconds": 0,
+          "notes": "Map a 5k route, walk/run with minimal stops - track time for outcome goal",
+          "primary_muscle_groups": ["cardiovascular", "quadriceps", "hamstrings", "calves"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 12,
+      "day_name": "Week 3 - Session 4: Recovery & Mobility",
+      "focus": "Active Recovery",
+      "exercises": [
+        {
+          "exercise_id": "gentle-walk",
+          "exercise_name": "Gentle Walk",
+          "order": 1,
+          "sets": 1,
+          "reps": "30 min",
+          "rest_seconds": 0,
+          "notes": "Easy pace, enjoy the movement",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "foam-rolling",
+          "exercise_name": "Foam Rolling",
+          "order": 2,
+          "sets": 1,
+          "reps": "10 min",
+          "rest_seconds": 0,
+          "notes": "Roll quads, hamstrings, calves, IT band",
+          "primary_muscle_groups": ["quadriceps", "hamstrings", "calves"],
+          "equipment": ["foam_roller"]
+        },
+        {
+          "exercise_id": "static-stretching",
+          "exercise_name": "Static Stretching",
+          "order": 3,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Hold stretches 30 sec each - quads, hamstrings, hip flexors, calves",
+          "primary_muscle_groups": ["quadriceps", "hamstrings", "hip_flexors", "calves"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    }
+  ],
+
+  "tracking_tools": [
+    "Heart Rate Recovery (3-min YMCA step test or wearable)",
+    "Distance & Time Logs (Strava, Nike Run Club, Apple Health)",
+    "Mood/Energy Journaling post-session"
+  ]
+}

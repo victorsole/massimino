@@ -149,7 +149,6 @@ Tomorrow I'll recruit as many people as possible to become users in Massimino: I
   These recommendations maintain brand consistency with brand-primary (#254967) and brand-secondary (#fcf8f2) while optimizing for mobile-first interaction patterns.
 
 
-
   # Migrating from IONOS + Vercel to SiteGround
 
   Here's how to migrate your domain and hosting:
@@ -246,3 +245,49 @@ Tomorrow I'll recruit as many people as possible to become users in Massimino: I
   - Domain registration contract (cancel AFTER transfer completes)
   - Any hosting/webspace contracts
   - Email contracts (if applicable)
+
+
+1. The user should be able to click on a any exercise in any program and see how the exercise has to be done. This does not happen in these programs:
+http://localhost:3000/workout-log/programs/arnold-golden-six
+http://localhost:3000/workout-log/programs/colorado-experiment-hit
+http://localhost:3000/workout-log/programs/nasm-fat-loss-program
+http://localhost:3000/workout-log/programs/nasm-muscle-gain-program
+http://localhost:3000/workout-log/programs/nasm-performance-program
+http://localhost:3000/workout-log/programs/cbum-classic-physique
+http://localhost:3000/workout-log/programs/arnold-volume-workout
+
+2. No media in these programs:
+http://localhost:3000/workout-log/programs/arnold-golden-six
+http://localhost:3000/workout-log/programs/colorado-experiment-hit
+http://localhost:3000/workout-log/programs/nasm-fat-loss-program
+http://localhost:3000/workout-log/programs/nasm-performance-program
+http://localhost:3000/workout-log/programs/cbum-classic-physique
+
+3. Exercises are still missing in:
+http://localhost:3000/workout-log/programs/linear-periodization-12week
+http://localhost:3000/workout-log/programs/mike-mentzer-heavy-duty
+http://localhost:3000/workout-log/programs/ronnie-coleman-mass-builder
+http://localhost:3000/workout-log/programs/aesthetics-hunter
+http://localhost:3000/workout-log/programs/bye-stress-bye
+http://localhost:3000/workout-log/programs/i-just-became-a-dad
+http://localhost:3000/workout-log/programs/i-just-became-a-mum
+http://localhost:3000/workout-log/programs/i-dont-have-much-time
+http://localhost:3000/workout-log/programs/wanna-lose-beer-belly
+http://localhost:3000/workout-log/programs/flexibility-workout
+http://localhost:3000/workout-log/programs/plyometric-workout
+http://localhost:3000/workout-log/programs/balance-workout
+http://localhost:3000/workout-log/programs/cardio-workout
+
+4. Workouts without:
+http://localhost:3000/workout-log/programs/7fc24d91-bfc4-4891-88d9-d16f6ef847a0
+http://localhost:3000/workout-log/programs/e1ca9441-592d-4b77-b2c0-cd9d145aa978
+http://localhost:3000/workout-log/programs/16f26199-cc6b-406e-b5d9-c2f875009a59
+http://localhost:3000/workout-log/programs/a40f0651-c71d-41d2-89d9-39aee51f2de7
+http://localhost:3000/workout-log/programs/5fa59907-0539-4b4e-a672-9436952bf83b
+http://localhost:3000/workout-log/programs/cf536aed-36cb-4910-9779-883468e83fb5
+http://localhost:3000/workout-log/programs/7919c860-8142-4b09-b2c7-15d58eca9ac0
+http://localhost:3000/workout-log/programs/446d2007-9dcc-4677-97c7-91fdc8be3c28
+http://localhost:3000/workout-log/programs/c36ed938-5b00-42e3-bfa0-5cb9acb73b16
+http://localhost:3000/workout-log/programs/17c68871-e476-44d7-b06a-e91830d3ab3b
+http://localhost:3000/workout-log/programs/385967f9-3435-449f-9302-5777192d17ec
+http://localhost:3000/workout-log/programs/7676e9ea-e2fb-4156-9a08-2cf26963b84f

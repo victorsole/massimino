@@ -92,10 +92,15 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type') || undefined;
     const tags = searchParams.get('tags')?.split(',').filter(Boolean);
     const curatedParam = searchParams.get('curated');
+    // Media filter
+    const hasMediaParam = searchParams.get('hasMedia');
+    // Sorting options
+    const sortBy = searchParams.get('sortBy') as 'name' | 'mediaCount' | 'usageCount' | null;
+    const sortOrder = searchParams.get('sortOrder') as 'asc' | 'desc' | null;
 
     // Build search options
     const searchOptions: any = {};
-    
+
     if (category) searchOptions.category = category;
     if (muscleGroups && muscleGroups.length > 0) searchOptions.muscleGroups = muscleGroups;
     if (equipment && equipment.length > 0) searchOptions.equipment = equipment;
@@ -118,6 +123,17 @@ export async function GET(request: NextRequest) {
       if (process.env.NEXT_PUBLIC_EXERCISES_CURATED_ENABLED === 'true') {
         searchOptions.curated = true;
       }
+    }
+    // Media filter - filter exercises with/without media
+    if (hasMediaParam !== null) {
+      searchOptions.hasMedia = hasMediaParam === 'true';
+    }
+    // Sorting options
+    if (sortBy && ['name', 'mediaCount', 'usageCount'].includes(sortBy)) {
+      searchOptions.sortBy = sortBy;
+    }
+    if (sortOrder && ['asc', 'desc'].includes(sortOrder)) {
+      searchOptions.sortOrder = sortOrder;
     }
 
     // Validate search options
