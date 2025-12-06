@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { SessionHistoryTable, WorkoutCalendar, CommentsPanel } from '@/components/workout-log/WorkoutLogTable';
 import { WorkoutSummaryTable } from '@/components/workout-log/workout_summary_table';
 import { WorkoutDetailsModal } from '@/components/workout-log/workout_details_modal';
+import { WorkoutCard, type WorkoutEntry as WorkoutCardEntry, type EditFormData } from '@/components/workout-log/workout_card';
 import { startOfMonth, endOfMonth, format, subMonths, addMonths } from 'date-fns';
 import { Plus, Calendar, Dumbbell, Clock, Weight, MessageCircle, Edit, Trash2, Search, Info, Target, Zap, ChevronLeft, ChevronRight, Sparkles, Trophy, ListChecks, LineChart, Users, LayoutGrid, TableIcon } from 'lucide-react';
 import Link from 'next/link';
@@ -20,6 +21,8 @@ import { BodyMetricsTab } from '@/components/workout-log/body_metrics_tab';
 import { ProgressTab } from '@/components/workout-log/progress_tab';
 import { HabitsTab } from '@/components/workout-log/habits_tab';
 import { ProgramsTab } from '@/components/workout-log/programs_tab';
+import { MyPrograms } from '@/components/programs/my_programs';
+import { UserProgram } from '@/types/program';
 import { AthleteGallery } from '@/components/periodization/athlete_gallery';
 // Use a relaxed exercise type matching what the UI actually uses
 type ExerciseListItem = {
@@ -140,8 +143,12 @@ export default function WorkoutLogPage() {
   const [restDuration, setRestDuration] = useState<number>(90);
 
   // Tab navigation
-  const [activeTab, setActiveTab] = useState<'today' | 'programs' | 'athletes' | 'history' | 'metrics' | 'progress' | 'habits'>('today');
+  const [activeTab, setActiveTab] = useState<'today' | 'my-programs' | 'programs' | 'athletes' | 'history' | 'metrics' | 'progress' | 'habits'>('today');
   const [, setSessions] = useState<any[]>([]);
+
+  // My Programs state
+  const [myProgramsData, setMyProgramsData] = useState<UserProgram[]>([]);
+  const [loadingMyPrograms, setLoadingMyPrograms] = useState(false);
 
   // Calendar state
   const [calendarMonth, setCalendarMonth] = useState(new Date());
@@ -195,6 +202,11 @@ export default function WorkoutLogPage() {
   const [selectedProgram, setSelectedProgram] = useState<any | null>(null);
   const [plannedExercises, setPlannedExercises] = useState<Array<{ id: string; name: string; sets: number; reps: string }>>([]);
 
+  // UI improvements state
+  const [showAdvancedFields, setShowAdvancedFields] = useState(false);
+  const [exerciseMedia, setExerciseMedia] = useState<any[]>([]);
+  const [recentExercises, setRecentExercises] = useState<Array<{ id: string; name: string }>>([]);
+
   // Fetch exercises and workout entries on component mount
   useEffect(() => {
     fetchExercises();
@@ -212,6 +224,78 @@ export default function WorkoutLogPage() {
             setProgramSubscriptions(Array.isArray(subs) ? subs : []);
           }
         } catch {}
+      })();
+    }
+    if (activeTab === 'my-programs') {
+      // Load user's program subscriptions
+      (async () => {
+        setLoadingMyPrograms(true);
+        try {
+          const r = await fetch('/api/workout/programs?subscriptions=true');
+          if (r.ok) {
+            const rawSubs = await r.json();
+            // Transform raw Prisma data to UserProgram format
+            const transformed: UserProgram[] = (Array.isArray(rawSubs) ? rawSubs : [])
+              .filter((sub: any) => sub && sub.program_templates)
+              .map((sub: any) => {
+                const template = sub.program_templates;
+                const programData = template.programData || {};
+                return {
+                  subscription: {
+                    id: sub.id,
+                    user_id: sub.userId,
+                    program_id: sub.programId,
+                    started_at: sub.startedAt || sub.createdAt,
+                    current_week: sub.currentWeek || 1,
+                    current_day: sub.currentDay || 1,
+                    progress_percentage: sub.progressPercentage || 0,
+                    is_active: sub.isActive,
+                    completed_workouts: sub.completedWorkouts || 0,
+                    total_workouts: programData.metadata?.total_workouts || template.totalWorkouts || 0,
+                  },
+                  program: {
+                    metadata: {
+                      program_name: template.name || programData.metadata?.program_name || 'Unknown Program',
+                      program_id: template.id || sub.programId,
+                      author: programData.metadata?.author || 'Massimino',
+                      version: programData.metadata?.version || '1.0',
+                      creation_date: template.createdAt,
+                      last_updated: template.updatedAt,
+                      description: template.description || programData.metadata?.description || '',
+                      goal: programData.metadata?.goal || template.category || '',
+                      methodology: programData.metadata?.methodology || '',
+                      target_audience: programData.metadata?.target_audience || '',
+                      level: programData.metadata?.level || template.difficulty || 'Intermediate',
+                      settings: programData.metadata?.settings || [],
+                      duration_weeks: template.durationWeeks || programData.metadata?.duration_weeks || 0,
+                      total_workouts: programData.metadata?.total_workouts || template.totalWorkouts || 0,
+                      frequency_per_week: template.frequencyPerWeek || programData.metadata?.frequency_per_week || 0,
+                      session_duration_minutes: programData.metadata?.session_duration_minutes || { min: 45, max: 60 },
+                      equipment: programData.metadata?.equipment || { required: [] },
+                      tags: programData.metadata?.tags || [],
+                    },
+                    program_philosophy: programData.program_philosophy || { origin: '', core_principles: [], training_approach: '', differentiator: '' },
+                    prerequisites: programData.prerequisites || { required: [] },
+                    red_flags_to_stop: programData.red_flags_to_stop || [],
+                    goals: programData.goals || { primary_goal: '', outcome_goals: [], what_program_can_do: [], what_program_cannot_do: [] },
+                    workout_sessions: programData.workout_sessions || [],
+                    progression_strategy: programData.progression_strategy || { primary_method: '', when_to_progress: '', how_to_progress: [] },
+                    progress_tracking: programData.progress_tracking || { tracking_metrics: [], check_in_frequency: '', success_criteria: '' },
+                    implementation_for_massimino: programData.implementation_for_massimino || { usage: '', customization_points: [] },
+                    sport_demands: programData.sport_demands,
+                  },
+                  next_workout: null, // Could be computed from program phases
+                };
+              });
+            console.log('Raw subs from API:', rawSubs);
+            console.log('Transformed programs:', transformed);
+            setMyProgramsData(transformed);
+          }
+        } catch (err) {
+          console.error('Failed to load my programs:', err);
+        } finally {
+          setLoadingMyPrograms(false);
+        }
       })();
     }
   }, [activeTab]);
@@ -293,6 +377,7 @@ export default function WorkoutLogPage() {
   useEffect(() => {
     if (newEntry.exerciseId) {
       load_coaching_cues();
+      load_exercise_media();
     }
   }, [newEntry.exerciseId]);
 
@@ -308,10 +393,44 @@ export default function WorkoutLogPage() {
     }
   }
 
+  async function load_exercise_media() {
+    try {
+      const response = await fetch(
+        `/api/workout/exercises/${newEntry.exerciseId}/media`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setExerciseMedia(Array.isArray(data) ? data : []);
+      } else {
+        setExerciseMedia([]);
+      }
+    } catch (error) {
+      console.error('Failed to load exercise media:', error);
+      setExerciseMedia([]);
+    }
+  }
+
   // Load recommendations on mount
   useEffect(() => {
     load_recommendations();
   }, []);
+
+  // Update recent exercises when workout entries change
+  useEffect(() => {
+    if (workoutEntries.length > 0) {
+      // Get unique exercises from today's entries
+      const uniqueExercises = new Map<string, { id: string; name: string }>();
+      for (const entry of workoutEntries) {
+        if (entry.exercise && entry.exerciseId) {
+          uniqueExercises.set(entry.exerciseId, {
+            id: entry.exerciseId,
+            name: entry.exercise.name
+          });
+        }
+      }
+      setRecentExercises(Array.from(uniqueExercises.values()).slice(0, 5));
+    }
+  }, [workoutEntries]);
 
   // Load saved pyramid settings (if opted-in)
   useEffect(() => {
@@ -1223,8 +1342,11 @@ export default function WorkoutLogPage() {
             <button onClick={() => setActiveTab('today')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='today'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
               <Dumbbell className="inline h-4 w-4 mr-2" /> Today
             </button>
+            <button onClick={() => setActiveTab('my-programs')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='my-programs'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
+              <Target className="inline h-4 w-4 mr-2" /> My Programs
+            </button>
             <button onClick={() => setActiveTab('programs')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='programs'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
-              <Target className="inline h-4 w-4 mr-2" /> Programs
+              <Search className="inline h-4 w-4 mr-2" /> Browse Programs
             </button>
             <button onClick={() => setActiveTab('athletes')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='athletes'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
               <Trophy className="inline h-4 w-4 mr-2" /> Athletes
@@ -1483,12 +1605,38 @@ export default function WorkoutLogPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="md:col-span-2 lg:col-span-3">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+              {/* Recent Exercises Chips */}
+              {recentExercises.length > 0 && (
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-brand-primary mb-2">
+                    Recent Exercises
+                  </label>
+                  <div className="flex gap-2 flex-wrap">
+                    {recentExercises.map((ex) => (
+                      <button
+                        key={ex.id}
+                        type="button"
+                        onClick={() => {
+                          const exercise = exercises.find(e => e.id === ex.id);
+                          if (exercise) {
+                            handleExerciseSelect(exercise);
+                          }
+                        }}
+                        className="px-4 py-2 bg-white border-2 border-gray-300 rounded-full text-sm font-medium text-gray-700 hover:border-brand-primary hover:bg-brand-secondary transition-all"
+                      >
+                        {ex.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-brand-primary mb-1">
                     Exercise
                   </label>
-                  
+
                   {/* Exercise Search */}
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -1593,6 +1741,33 @@ export default function WorkoutLogPage() {
                     </div>
                   )}
 
+                  {/* Exercise Media Card */}
+                  {selectedExercise && exerciseMedia.length > 0 && (
+                    <div
+                      className="mt-3 cursor-pointer transition-all hover:shadow-md"
+                      onClick={() => {
+                        // TODO: Open media gallery modal
+                        console.log('Open media gallery for:', selectedExercise.name);
+                      }}
+                    >
+                      <div className="border-2 border-gray-200 rounded-lg overflow-hidden hover:border-brand-primary">
+                        <div className="relative aspect-video bg-gradient-to-br from-brand-primary to-brand-primary-dark flex items-center justify-center">
+                          <div className="text-center text-white">
+                            <div className="text-4xl mb-2">🎥</div>
+                            <div className="font-semibold text-lg">{selectedExercise.name}</div>
+                            <div className="text-sm opacity-90 mt-1">Tap to view form videos</div>
+                          </div>
+                        </div>
+                        <div className="bg-brand-secondary px-4 py-3 flex items-center justify-between">
+                          <span className="text-sm font-semibold text-brand-primary">
+                            👁️ {exerciseMedia.length} {exerciseMedia.length === 1 ? 'video' : 'videos'}
+                          </span>
+                          <span className="text-xs text-gray-600">Community contributed</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Coaching Cues */}
                   {coaching_cues.length > 0 && (
                     <div className="mt-3 bg-blue-50 border border-blue-200 rounded-md p-3">
@@ -1612,20 +1787,21 @@ export default function WorkoutLogPage() {
                   )}
                 </div>
 
+                {/* Core Fields - Always Visible */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Sets
+                  <label className="block text-sm font-medium text-brand-primary mb-1">
+                    Weight (kg)
                   </label>
                   <Input
-                    type="number"
-                    value={newEntry.sets}
-                    onChange={(e) => setNewEntry({...newEntry, sets: e.target.value})}
-                    placeholder="3"
+                    value={newEntry.weight}
+                    onChange={(e) => setNewEntry({...newEntry, weight: e.target.value})}
+                    placeholder="e.g. 60"
+                    className="text-lg font-semibold"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-brand-primary mb-1">
                     Reps
                   </label>
                   <Input
@@ -1633,37 +1809,106 @@ export default function WorkoutLogPage() {
                     value={newEntry.reps}
                     onChange={(e) => setNewEntry({...newEntry, reps: e.target.value})}
                     placeholder="8"
+                    className="text-lg font-semibold"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Weight (kg)
-                  </label>
-                  <Input
-                    value={newEntry.weight}
-                    onChange={(e) => setNewEntry({...newEntry, weight: e.target.value})}
-                    placeholder="e.g. 60"
-                  />
+                {/* Big Add Button */}
+                <Button
+                  onClick={handleAddEntry}
+                  disabled={!selectedExercise || !newEntry.reps || !newEntry.weight}
+                  className="w-full py-6 text-xl font-bold bg-brand-primary hover:bg-brand-primary-dark text-white shadow-lg"
+                >
+                  LOG SET {newEntry.sets || '1'}/{newEntry.sets || '1'}
+                </Button>
+
+                {/* Quick Actions */}
+                <div className="grid grid-cols-3 gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white font-semibold"
+                    onClick={() => {
+                      // TODO: Implement "Same as Last" logic
+                      console.log('Same as last set');
+                    }}
+                  >
+                    Same as Last
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white font-semibold"
+                    onClick={() => {
+                      const currentWeight = parseFloat(newEntry.weight || '0');
+                      if (currentWeight > 0) {
+                        setNewEntry({...newEntry, weight: String(currentWeight + 2.5)});
+                      }
+                    }}
+                  >
+                    +2.5kg
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white font-semibold"
+                    onClick={() => {
+                      const currentReps = parseInt(newEntry.reps || '0');
+                      if (currentReps > 1) {
+                        setNewEntry({...newEntry, reps: String(currentReps - 1)});
+                      }
+                    }}
+                  >
+                    -1 Rep
+                  </Button>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Set Type
-                  </label>
-                  <Select value={newEntry.setType} onValueChange={(value) => setNewEntry({...newEntry, setType: value})}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="STRAIGHT">Straight</SelectItem>
-                      <SelectItem value="SUPERSET">Superset</SelectItem>
-                      <SelectItem value="PYRAMID">Pyramid</SelectItem>
-                      <SelectItem value="DROP_SET">Drop Set</SelectItem>
-                      <SelectItem value="REST_PAUSE">Rest Pause</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                {/* More Options Toggle */}
+                <button
+                  type="button"
+                  onClick={() => setShowAdvancedFields(!showAdvancedFields)}
+                  className="w-full py-3 text-center text-brand-primary font-semibold rounded-lg hover:bg-brand-secondary transition-all flex items-center justify-center gap-2"
+                >
+                  <span>⚙️ More Options</span>
+                  <span className="text-xs">{showAdvancedFields ? '▲' : '▼'}</span>
+                </button>
+
+                {/* Advanced Fields (Collapsible) */}
+                {showAdvancedFields && (
+                  <div className="space-y-4 p-4 bg-brand-secondary rounded-lg border-2 border-dashed border-gray-300">
+                    <div className="text-center font-bold text-brand-primary mb-3">
+                      🎯 Acute Variables
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Sets
+                      </label>
+                      <Input
+                        type="number"
+                        value={newEntry.sets}
+                        onChange={(e) => setNewEntry({...newEntry, sets: e.target.value})}
+                        placeholder="3"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Set Type
+                      </label>
+                      <Select value={newEntry.setType} onValueChange={(value) => setNewEntry({...newEntry, setType: value})}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="STRAIGHT">Straight</SelectItem>
+                          <SelectItem value="SUPERSET">Superset</SelectItem>
+                          <SelectItem value="PYRAMID">Pyramid</SelectItem>
+                          <SelectItem value="DROP_SET">Drop Set</SelectItem>
+                          <SelectItem value="REST_PAUSE">Rest Pause</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
 
                 {/* Contextual help for special set types */}
                 {newEntry.setType === 'SUPERSET' && (
@@ -1942,151 +2187,117 @@ export default function WorkoutLogPage() {
                   ) : null;
                 })()}
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Intensity
-                  </label>
-                  <Input
-                    value={newEntry.intensity}
-                    onChange={(e) => setNewEntry({...newEntry, intensity: e.target.value})}
-                    placeholder="75% or RPE 8"
-                  />
-                </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Tempo (e.g., 3-1-1-0)
+                      </label>
+                      <Input
+                        value={newEntry.tempo}
+                        onChange={(e) => setNewEntry({...newEntry, tempo: e.target.value})}
+                        placeholder="3-1-1-0"
+                      />
+                    </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Tempo
-                  </label>
-                  <Input
-                    value={newEntry.tempo}
-                    onChange={(e) => setNewEntry({...newEntry, tempo: e.target.value})}
-                    placeholder="3-1-1-0"
-                  />
-                </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Intensity
+                      </label>
+                      <Input
+                        value={newEntry.intensity}
+                        onChange={(e) => setNewEntry({...newEntry, intensity: e.target.value})}
+                        placeholder="75% or RPE 8"
+                      />
+                    </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Rest (seconds)
-                  </label>
-                  <Input
-                    type="number"
-                    value={newEntry.restSeconds}
-                    onChange={(e) => setNewEntry({...newEntry, restSeconds: e.target.value})}
-                    placeholder="120"
-                  />
-                </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Rest Between Sets (seconds)
+                      </label>
+                      <Input
+                        type="number"
+                        value={newEntry.restSeconds}
+                        onChange={(e) => setNewEntry({...newEntry, restSeconds: e.target.value})}
+                        placeholder="90"
+                      />
+                    </div>
 
-                {/* Advanced Tracking Fields */}
-                <div className="md:col-span-2 lg:col-span-3">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    RPE (Rate of Perceived Exertion) 1-10
-                    <span className="text-gray-500 ml-2 font-normal text-xs">Optional</span>
-                  </label>
-                  <input
-                    type="range"
-                    min="1"
-                    max="10"
-                    value={actualRPE}
-                    onChange={(e) => setActualRPE(parseInt(e.target.value))}
-                    className="w-full"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500 mt-1">
-                    <span>Very Easy (1)</span>
-                    <span className="font-semibold text-gray-900">{actualRPE}</span>
-                    <span>Maximum Effort (10)</span>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        RPE (Rate of Perceived Exertion) 1-10
+                      </label>
+                      <input
+                        type="range"
+                        min="1"
+                        max="10"
+                        value={actualRPE}
+                        onChange={(e) => setActualRPE(parseInt(e.target.value))}
+                        className="w-full"
+                      />
+                      <div className="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>Easy (1)</span>
+                        <span className="font-semibold text-brand-primary">{actualRPE}</span>
+                        <span>Max (10)</span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Form Quality (1-5)
+                      </label>
+                      <div className="flex gap-2">
+                        {[1, 2, 3, 4, 5].map(rating => (
+                          <button
+                            key={rating}
+                            type="button"
+                            onClick={() => setFormQuality(rating)}
+                            className={`flex-1 py-2 px-3 rounded-md border-2 transition-all ${
+                              formQuality === rating
+                                ? 'border-brand-primary bg-brand-primary text-white font-semibold'
+                                : 'border-gray-300 hover:border-brand-primary'
+                            }`}
+                          >
+                            {rating}
+                          </button>
+                        ))}
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">
+                        1 = Poor form, 5 = Perfect technique
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Personal Notes (for your coach)
+                      </label>
+                      <Textarea
+                        value={newEntry.userComment}
+                        onChange={(e) => setNewEntry({...newEntry, userComment: e.target.value})}
+                        placeholder="How did this exercise feel? Any notes for your coach?"
+                        rows={2}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <div className="md:col-span-2 lg:col-span-3">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Form Quality (1-5)
-                    <span className="text-gray-500 ml-2 font-normal text-xs">Optional</span>
-                  </label>
-                  <div className="flex gap-2">
-                    {[1, 2, 3, 4, 5].map(rating => (
-                      <button
-                        key={rating}
-                        type="button"
-                        onClick={() => setFormQuality(rating)}
-                        className={`flex-1 py-2 px-3 rounded-md border-2 transition-all ${
-                          formQuality === rating
-                            ? 'border-blue-500 bg-blue-50 text-blue-700 font-semibold'
-                            : 'border-gray-300 hover:border-gray-400'
-                        }`}
-                      >
-                        {rating}
-                      </button>
-                    ))}
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    1 = Poor form, 5 = Perfect technique
-                  </p>
-                </div>
-
-                <div className="md:col-span-2 lg:col-span-3">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Rest Duration (seconds)
-                    <span className="text-gray-500 ml-2 font-normal text-xs">Optional</span>
-                  </label>
-                  <select
-                    value={restDuration}
-                    onChange={(e) => setRestDuration(parseInt(e.target.value))}
-                    className="w-full border rounded-md p-2"
+                {/* Form Bottom Actions */}
+                <div className="flex justify-between items-center mt-4 pt-4 border-t">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setIsAddingEntry(false)}
+                    className="text-gray-600"
                   >
-                    <option value={30}>30s - Active recovery</option>
-                    <option value={60}>60s - Endurance/hypertrophy</option>
-                    <option value={90}>90s - Moderate rest</option>
-                    <option value={120}>120s - Strength training</option>
-                    <option value={180}>180s - Power/heavy lifting</option>
-                    <option value={240}>240s - Maximum strength</option>
-                  </select>
-                </div>
+                    Cancel
+                  </Button>
 
-                <div className="md:col-span-2 lg:col-span-3">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Personal Notes
-                  </label>
-                  <Textarea
-                    value={newEntry.userComment}
-                    onChange={(e) => setNewEntry({...newEntry, userComment: e.target.value})}
-                    placeholder="How did this exercise feel? Any notes for your coach?"
-                    rows={3}
-                  />
+                  {/* Form Validation Messages */}
+                  {!selectedExercise && (
+                    <div className="text-sm text-red-600">
+                      Please select an exercise
+                    </div>
+                  )}
                 </div>
               </div>
-
-              {/* Allow Comments Toggle */}
-              <div className="flex items-center space-x-2 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <input
-                  type="checkbox"
-                  id="allowComments"
-                  name="allowComments"
-                  defaultChecked={true}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <label htmlFor="allowComments" className="text-sm font-medium text-blue-900">
-                  Allow others to comment on this workout entry
-                </label>
-              </div>
-
-              <div className="flex justify-end space-x-2 mt-6">
-                <Button variant="outline" onClick={() => setIsAddingEntry(false)}>
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleAddEntry}
-                  disabled={!selectedExercise || !newEntry.sets || !newEntry.reps}
-                >
-                  Add Entry
-                </Button>
-              </div>
-              
-              {/* Form Validation Messages */}
-              {!selectedExercise && (
-                <div className="mt-2 text-sm text-red-600">
-                  Please select an exercise from the database
-                </div>
-              )}
             </CardContent>
           </Card>
         )}
@@ -2189,233 +2400,23 @@ export default function WorkoutLogPage() {
 
             {/* Cards View */}
             {view_mode === 'cards' && (
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {workoutEntries.map((entry: WorkoutEntry) => (
-                  <Card key={entry.id}>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <input
-                      type="checkbox"
-                      checked={selectedEntries.has(entry.id)}
-                      onChange={() => toggleEntrySelection(entry.id)}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
-                      title="Select for template"
-                    />
-                    <div className="flex items-center text-sm text-gray-500">
-                      <Calendar className="h-4 w-4 mr-1" />
-                      {entry.date ? new Date(entry.date).toLocaleDateString() : 'No date'}
-                    </div>
-                    <Badge variant="outline">{entry.setType}</Badge>
-                  </div>
-                  <div className="flex space-x-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => startEditing(entry)}
-                      disabled={loading}
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleDeleteEntry(entry.id)}
-                      disabled={loading}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-                <CardTitle className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Dumbbell className="h-5 w-5 mr-2" />
-                    {entry.exercise.name}
-                    {entry.personalRecord && (
-                      <Badge className="bg-yellow-400 text-yellow-900 hover:bg-yellow-500 border-yellow-600">
-                        <Trophy className="h-3 w-3 mr-1" />
-                        PR!
-                      </Badge>
-                    )}
-                  </div>
-                  {entry.exercise && (
-                    <div className="flex space-x-2">
-                      <Badge variant="outline" className="text-xs">
-                        {entry.exercise.category}
-                      </Badge>
-                      <Badge variant="outline" className="text-xs">
-                        {entry.exercise.difficulty}
-                      </Badge>
-                    </div>
-                  )}
-                </CardTitle>
-
-                {/* Exercise Details */}
-                {entry.exercise && (
-                  <div className="mt-2 grid grid-cols-2 gap-2 text-sm text-gray-600">
-                    <div className="flex items-center">
-                      <Target className="h-4 w-4 mr-1" />
-                      <span>{entry.exercise.muscleGroups.slice(0, 2).join(', ')}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Dumbbell className="h-4 w-4 mr-1" />
-                      <span>{entry.exercise.equipment.join(', ')}</span>
-                    </div>
-                  </div>
-                )}
-              </CardHeader>
-              <CardContent>
-                {editingEntry === entry.id && (
-                  <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <h4 className="font-medium text-blue-900 mb-4">Edit Entry</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Reps
-                        </label>
-                        <Input
-                          type="number"
-                          value={editFormData.reps}
-                          onChange={(e) => setEditFormData({...editFormData, reps: e.target.value})}
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Weight
-                        </label>
-                        <Input
-                          value={editFormData.weight}
-                          onChange={(e) => setEditFormData({...editFormData, weight: e.target.value})}
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Intensity
-                        </label>
-                        <Input
-                          value={editFormData.intensity}
-                          onChange={(e) => setEditFormData({...editFormData, intensity: e.target.value})}
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Tempo
-                        </label>
-                        <Input
-                          value={editFormData.tempo}
-                          onChange={(e) => setEditFormData({...editFormData, tempo: e.target.value})}
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Rest (seconds)
-                        </label>
-                        <Input
-                          type="number"
-                          value={editFormData.restSeconds}
-                          onChange={(e) => setEditFormData({...editFormData, restSeconds: e.target.value})}
-                        />
-                      </div>
-                      <div className="md:col-span-2 lg:col-span-3">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Personal Notes
-                        </label>
-                        <Textarea
-                          value={editFormData.userComments}
-                          onChange={(e) => setEditFormData({...editFormData, userComments: e.target.value})}
-                          rows={2}
-                        />
-                      </div>
-                    </div>
-                    <div className="flex justify-end space-x-2 mt-4">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setEditingEntry(null)}
-                        disabled={loading}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        size="sm"
-                        onClick={() => handleEditEntry(entry.id)}
-                        disabled={loading}
-                      >
-                        Save Changes
-                      </Button>
-                    </div>
-                  </div>
-                )}
-
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                  <div className="flex items-center text-sm">
-                    <Weight className="h-4 w-4 mr-2 text-gray-500" />
-                    <span className="font-medium">Weight:</span>
-                    <span className="ml-1">{entry.weight}</span>
-                  </div>
-                  <div className="flex items-center text-sm">
-                    <span className="font-medium">Set #:</span>
-                    <span className="ml-1">{entry.setNumber}</span>
-                  </div>
-                  <div className="flex items-center text-sm">
-                    <span className="font-medium">Reps:</span>
-                    <span className="ml-1">{entry.reps}</span>
-                  </div>
-                  <div className="flex items-center text-sm">
-                    <Clock className="h-4 w-4 mr-2 text-gray-500" />
-                    <span className="font-medium">Rest:</span>
-                    <span className="ml-1">{entry.restSeconds}s</span>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                  <div>
-                    <span className="text-sm font-medium text-gray-700">Intensity:</span>
-                    <span className="ml-2 text-sm">{entry.intensity}</span>
-                  </div>
-                  <div>
-                    <span className="text-sm font-medium text-gray-700">Tempo:</span>
-                    <span className="ml-2 text-sm">{entry.tempo}</span>
-                  </div>
-                </div>
-
-
-                {/* Comments */}
-                <div className="space-y-4">
-                  {entry.coachFeedback && (
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                      <div className="flex items-center mb-2">
-                        <MessageCircle className="h-4 w-4 mr-2 text-blue-600" />
-                        <span className="text-sm font-medium text-blue-800">Coach Feedback</span>
-                      </div>
-                      <p className="text-sm text-blue-700">{entry.coachFeedback}</p>
-                    </div>
-                  )}
-
-                  {entry.userComments && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <div className="flex items-center mb-2">
-                        <MessageCircle className="h-4 w-4 mr-2 text-gray-600" />
-                        <span className="text-sm font-medium text-gray-800">Your Notes</span>
-                      </div>
-                      <p className="text-sm text-gray-700">{entry.userComments}</p>
-                    </div>
-                  )}
-
-                  {/* Comments Section */}
-                  <div className="mt-6 pt-6 border-t">
-                    <h4 className="font-semibold mb-3 flex items-center gap-2">
-                      <MessageCircle className="h-4 w-4" />
-                      Comments
-                    </h4>
-                    <CommentsPanel
-                      commentable_type="ENTRY"
-                      commentable_id={entry.id}
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                  <WorkoutCard
+                    key={entry.id}
+                    entry={entry}
+                    isSelected={selectedEntries.has(entry.id)}
+                    isEditing={editingEntry === entry.id}
+                    editFormData={editFormData}
+                    loading={loading}
+                    onSelect={toggleEntrySelection}
+                    onStartEdit={startEditing}
+                    onDelete={handleDeleteEntry}
+                    onSaveEdit={handleEditEntry}
+                    onCancelEdit={() => setEditingEntry(null)}
+                    onEditFormChange={(data) => setEditFormData({ ...editFormData, ...data })}
+                    isTrainer={isTrainerOrAdmin}
+                  />
                 ))}
               </div>
             )}
@@ -2493,6 +2494,22 @@ export default function WorkoutLogPage() {
               <WorkoutCalendar month={calendarMonth} sessions={monthSessions} />
             </div>
           </div>
+        )}
+
+        {activeTab === 'my-programs' && (
+          loadingMyPrograms ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <p className="text-gray-500">Loading your programs...</p>
+              </div>
+            </div>
+          ) : (
+            <MyPrograms
+              programs={myProgramsData}
+              onAddProgram={() => setActiveTab('programs')}
+            />
+          )
         )}
 
         {activeTab === 'programs' && (
