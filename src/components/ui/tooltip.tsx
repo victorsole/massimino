@@ -1,3 +1,5 @@
+"use client";
+
 // src/components/ui/tooltip.tsx
 "use client"
 

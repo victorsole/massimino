@@ -1,10 +1,12 @@
 "use client";
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Users, Dumbbell, Calendar, Target, TrendingUp, Filter, SortAsc } from 'lucide-react';
+import { Users, Dumbbell, Calendar, Target, TrendingUp, Filter, SortAsc, ChevronRight } from 'lucide-react';
+import { MyPrograms } from '@/components/programs/my_programs';
+import { UserProgram } from '@/types/program';
 
 type ProgramTemplate = {
   id: string;
@@ -39,10 +41,31 @@ type ProgramTemplate = {
 
 export function ProgramsTab() {
   const [programs, setPrograms] = useState<ProgramTemplate[]>([]);
+  const [userPrograms, setUserPrograms] = useState<UserProgram[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingUserPrograms, setLoadingUserPrograms] = useState(true);
   const [filter, setFilter] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'popularity' | 'duration' | 'difficulty' | 'new'>('popularity');
   const [equipmentFilters, setEquipmentFilters] = useState<string[]>([]);
+  const browseRef = useRef<HTMLDivElement>(null);
+
+  // Fetch user's program subscriptions
+  useEffect(() => {
+    async function fetchUserPrograms() {
+      try {
+        const res = await fetch('/api/workout/programs?subscriptions=true');
+        if (res.ok) {
+          const data = await res.json();
+          setUserPrograms(Array.isArray(data) ? data : []);
+        }
+      } catch (error) {
+        console.error('Failed to fetch user programs:', error);
+      } finally {
+        setLoadingUserPrograms(false);
+      }
+    }
+    fetchUserPrograms();
+  }, []);
 
   // Initialize state from URL
   useEffect(() => {
@@ -62,6 +85,11 @@ export function ProgramsTab() {
   useEffect(() => {
     fetchPrograms();
   }, [filter]);
+
+  // Scroll to browse section when user clicks "Add Another Program"
+  const scrollToBrowse = () => {
+    browseRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   const fetchPrograms = async () => {
     try {
@@ -184,19 +212,48 @@ export function ProgramsTab() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">Training Programs</h2>
-          <p className="text-gray-600">Choose a program and start your journey</p>
+    <div className="space-y-8">
+      {/* My Programs Section */}
+      {!loadingUserPrograms && (
+        <div className="mb-8">
+          {userPrograms.length > 0 ? (
+            <MyPrograms programs={userPrograms} onAddProgram={scrollToBrowse} />
+          ) : (
+            <div className="max-w-[1400px] mx-auto px-5 py-10">
+              <div className="mb-8">
+                <h1 className="text-3xl font-extrabold text-gray-900 mb-2">My Programs</h1>
+                <p className="text-gray-500">
+                  Start your fitness journey by choosing a program below.
+                </p>
+              </div>
+              <button
+                onClick={scrollToBrowse}
+                className="bg-white border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center min-h-[180px] w-full max-w-[340px] transition-all hover:border-[#254967] hover:bg-[#fcf8f2] cursor-pointer"
+              >
+                <span className="mdi mdi-plus-circle-outline text-5xl text-gray-400 mb-3" />
+                <span className="text-base font-semibold text-gray-400">Browse Programs</span>
+              </button>
+            </div>
+          )}
         </div>
-        <Link href="/workout-log/athletes">
-          <Button variant="outline">
-            <Users className="h-4 w-4 mr-2" />
-            View All Athletes
-          </Button>
-        </Link>
+      )}
+
+      {/* Separator */}
+      <div className="border-t border-gray-200 pt-8" ref={browseRef}>
+        <div className="max-w-[1400px] mx-auto px-5">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Browse Programs</h2>
+              <p className="text-gray-600">Discover new training programs to follow</p>
+            </div>
+            <Link href="/workout-log/athletes">
+              <Button variant="outline">
+                <Users className="h-4 w-4 mr-2" />
+                View All Athletes
+              </Button>
+            </Link>
+          </div>
+        </div>
       </div>
 
       {/* Filters */}

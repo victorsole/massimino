@@ -1,0 +1,1113 @@
+{
+    "program_info": {
+      "name": "IFBB Classic Physique Builder",
+      "subtitle": "Competition-Ready Aesthetic Development Program",
+      "competition_division": "IFBB Classic Physique (Men & Women)",
+      "difficulty_level": "Advanced",
+      "program_type": "Hypertrophy/Bodybuilding Split",
+      "duration_weeks": 16,
+      "description": "A comprehensive 16-week program designed to build the classic aesthetic physique required for IFBB Classic Physique competition. Emphasizes V-taper, symmetry, proportion, and conditioning. Based on training principles used by champions like Chris Bumstead, Breon Ansley, and Terrence Ruffin.",
+      "division_requirements": {
+        "men": {
+          "focus": "V-taper, shoulder-to-waist ratio, overall symmetry, classic proportions",
+          "height_weight_class": "Height-specific weight limits apply (e.g., 5'10\" max 212 lbs)",
+          "conditioning": "Lean but not shredded like open bodybuilding",
+          "poses": "Classic poses emphasizing flow and aesthetics"
+        },
+        "women": {
+          "equivalent_divisions": "Figure, Wellness (similar aesthetic goals)",
+          "focus": "Balanced physique, feminine lines, athletic development, conditioning",
+          "conditioning": "Lean with muscle definition, not overly dry",
+          "poses": "Quarter turns, emphasis on shape and proportion"
+        }
+      },
+      "key_principles": [
+        "Prioritize shoulder and back width for V-taper",
+        "Maintain small waist through core control and diet",
+        "Build proportionate legs without overwhelming upper body",
+        "Emphasize muscle shape and detail over pure size",
+        "Progressive overload with moderate-to-high volume",
+        "Structured periodization: mass phase → strength phase → conditioning phase",
+        "Weekly posing practice (30-60 minutes)",
+        "Consistent conditioning cardio throughout"
+      ]
+    },
+    "program_structure": {
+      "training_split": "5-Day Body Part Split with optional 6th day",
+      "training_days": {
+        "day_1": "Chest & Calves",
+        "day_2": "Back & Abs",
+        "day_3": "Rest or Active Recovery",
+        "day_4": "Shoulders & Abs",
+        "day_5": "Legs (Quads focus)",
+        "day_6": "Arms & Calves",
+        "day_7": "Rest or Legs (Hamstrings/Glutes focus) for advanced"
+      },
+      "cardio_protocol": {
+        "off_season_weeks_1_8": "3x per week, 20-30 min LISS (Low Intensity Steady State)",
+        "pre_contest_weeks_9_12": "4x per week, 30-40 min LISS + 2x HIIT sessions",
+        "contest_prep_weeks_13_16": "5-6x per week, 40-50 min LISS + 2-3x HIIT sessions",
+        "best_times": "Morning fasted or post-workout"
+      },
+      "posing_practice": {
+        "frequency": "2-3x per week minimum",
+        "duration": "30-60 minutes",
+        "focus": "Classic poses: Front/Back Double Bicep, Side Chest, Front/Back Lat Spread, Abdominal & Thigh, Most Muscular (optional)",
+        "importance": "Critical for stage presence and muscle control"
+      }
+    },
+    "training_phases": [
+      {
+        "phase_number": 1,
+        "phase_name": "Mass Building Phase",
+        "weeks": "1-8",
+        "description": "Focus on adding quality muscle mass while maintaining proportion. Higher calories, moderate-to-high volume, progressive overload.",
+        "rep_ranges": {
+          "compound_exercises": "6-10 reps",
+          "secondary_compounds": "8-12 reps",
+          "isolation_exercises": "12-15 reps"
+        },
+        "sets_per_exercise": "3-4 working sets",
+        "rest_periods": {
+          "compound": "90-120 seconds",
+          "isolation": "60-90 seconds"
+        },
+        "intensity": "75-85% 1RM for compounds",
+        "workouts": [
+          {
+            "day": "Day 1",
+            "workout_name": "Chest & Calves",
+            "focus": "Full chest development with emphasis on upper chest",
+            "exercises": [
+              {
+                "order": 1,
+                "exercise_name": "Incline Barbell Bench Press",
+                "muscle_group": "Chest - Upper Pectorals",
+                "sets": 4,
+                "reps": "6-10",
+                "rest_seconds": 120,
+                "tempo": "3-0-1-0",
+                "instructions": "30-45 degree incline. Lower to upper chest. This is your strength builder.",
+                "form_cues": "Retract scapula, arch lower back slightly, drive through floor with feet",
+                "progression": "Add weight when you hit 10 clean reps on all sets"
+              },
+              {
+                "order": 2,
+                "exercise_name": "Flat Dumbbell Press",
+                "muscle_group": "Chest - Middle Pectorals",
+                "sets": 4,
+                "reps": "8-12",
+                "rest_seconds": 90,
+                "tempo": "3-0-1-1",
+                "instructions": "Deep stretch at bottom, squeeze at top. Dumbbells allow greater ROM than barbell.",
+                "form_cues": "Lower until you feel deep stretch in chest, don't let dumbbells touch",
+                "progression": "Add weight or reps each week"
+              },
+              {
+                "order": 3,
+                "exercise_name": "Incline Dumbbell Flyes",
+                "muscle_group": "Chest - Upper/Outer Pectorals",
+                "sets": 3,
+                "reps": "12-15",
+                "rest_seconds": 75,
+                "tempo": "3-1-1-1",
+                "instructions": "Slight bend in elbows throughout. Focus on stretch and squeeze.",
+                "form_cues": "Think of hugging a tree. Pause and squeeze at top.",
+                "progression": "Increase reps before adding weight"
+              },
+              {
+                "order": 4,
+                "exercise_name": "Cable Crossover (High to Low)",
+                "muscle_group": "Chest - Lower Pectorals",
+                "sets": 3,
+                "reps": "12-15",
+                "rest_seconds": 60,
+                "tempo": "2-1-1-1",
+                "instructions": "Cables at upper position, cross over at waist level. Targets lower chest.",
+                "form_cues": "Lean slightly forward, cross hands over each other at bottom",
+                "progression": "Add weight in small increments (5-10 lbs)"
+              },
+              {
+                "order": 5,
+                "exercise_name": "Dips (Chest Variation)",
+                "muscle_group": "Chest - Lower Pectorals, Triceps",
+                "sets": 3,
+                "reps": "10-15",
+                "rest_seconds": 90,
+                "tempo": "3-0-1-0",
+                "instructions": "Lean forward 30 degrees, go deep. Add weight with belt when bodyweight is easy.",
+                "form_cues": "Keep elbows flared slightly, chest out",
+                "progression": "Add weight via dip belt when bodyweight × 15 is achieved"
+              },
+              {
+                "order": 6,
+                "exercise_name": "Standing Calf Raise",
+                "muscle_group": "Calves - Gastrocnemius",
+                "sets": 4,
+                "reps": "12-20",
+                "rest_seconds": 60,
+                "tempo": "2-2-1-1",
+                "instructions": "Full stretch at bottom, full contraction at top. Pause 2 seconds at top.",
+                "form_cues": "Control the negative, explode up, squeeze hard at top",
+                "progression": "Add weight when you hit 20 reps with squeeze"
+              },
+              {
+                "order": 7,
+                "exercise_name": "Seated Calf Raise",
+                "muscle_group": "Calves - Soleus",
+                "sets": 4,
+                "reps": "15-25",
+                "rest_seconds": 45,
+                "tempo": "2-2-1-1",
+                "instructions": "Higher reps for soleus development. Soleus works when knee is bent.",
+                "form_cues": "Full ROM, squeeze at top",
+                "progression": "Progressive overload with weight and reps"
+              }
+            ],
+            "total_exercises": 7,
+            "estimated_duration_minutes": 75,
+            "notes": "Upper chest priority for classic physique aesthetic. Calves respond to high volume."
+          },
+          {
+            "day": "Day 2",
+            "workout_name": "Back & Abs",
+            "focus": "Width and thickness for V-taper. Critical for Classic Physique.",
+            "exercises": [
+              {
+                "order": 1,
+                "exercise_name": "Deadlift (Conventional or Romanian)",
+                "muscle_group": "Back - Full Back, Hamstrings, Glutes",
+                "sets": 4,
+                "reps": "6-8",
+                "rest_seconds": 180,
+                "tempo": "3-0-1-0",
+                "instructions": "Primary mass and strength builder. Use straps if needed to focus on back vs. grip.",
+                "form_cues": "Neutral spine, drive through heels, squeeze glutes at top",
+                "progression": "Primary strength exercise. Add weight conservatively."
+              },
+              {
+                "order": 2,
+                "exercise_name": "Wide-Grip Pull-Ups or Lat Pulldown",
+                "muscle_group": "Back - Lats (Width)",
+                "sets": 4,
+                "reps": "8-12",
+                "rest_seconds": 90,
+                "tempo": "3-0-1-1",
+                "instructions": "Wider grip emphasizes lat width. Pull to upper chest, squeeze lats.",
+                "form_cues": "Lead with elbows, think 'elbows to pockets', arch upper back",
+                "progression": "Add weight with belt for pull-ups, or increase weight on pulldown"
+              },
+              {
+                "order": 3,
+                "exercise_name": "Barbell Row (Overhand Grip)",
+                "muscle_group": "Back - Middle Back, Lats (Thickness)",
+                "sets": 4,
+                "reps": "8-12",
+                "rest_seconds": 90,
+                "tempo": "3-1-1-0",
+                "instructions": "Bent over 45 degrees, row to lower chest. Build thickness.",
+                "form_cues": "Pull with elbows, not arms. Squeeze shoulder blades together.",
+                "progression": "Add weight or reps progressively"
+              },
+              {
+                "order": 4,
+                "exercise_name": "Single-Arm Dumbbell Row",
+                "muscle_group": "Back - Lats, Middle Back",
+                "sets": 3,
+                "reps": "10-12 per arm",
+                "rest_seconds": 60,
+                "tempo": "3-1-1-1",
+                "instructions": "Support on bench. Row to hip, full stretch at bottom.",
+                "form_cues": "Don't rotate torso. Pull elbow straight back.",
+                "progression": "Increase weight when form is perfect at 12 reps"
+              },
+              {
+                "order": 5,
+                "exercise_name": "Seated Cable Row (Close Grip)",
+                "muscle_group": "Back - Middle Back, Lats (Lower)",
+                "sets": 3,
+                "reps": "10-12",
+                "rest_seconds": 75,
+                "tempo": "3-1-1-1",
+                "instructions": "Pull to lower abdomen. Stretch forward, squeeze back.",
+                "form_cues": "Keep chest up, don't round back on stretch",
+                "progression": "Add weight in 10-20 lb increments"
+              },
+              {
+                "order": 6,
+                "exercise_name": "Straight-Arm Pulldown",
+                "muscle_group": "Back - Lats (Lower)",
+                "sets": 3,
+                "reps": "12-15",
+                "rest_seconds": 60,
+                "tempo": "2-1-1-1",
+                "instructions": "Arms nearly straight throughout. Feel lats stretch and contract.",
+                "form_cues": "Slight forward lean, pull to thighs, squeeze lats",
+                "progression": "Focus on mind-muscle connection, then add weight"
+              },
+              {
+                "order": 7,
+                "exercise_name": "Face Pulls",
+                "muscle_group": "Back - Rear Delts, Upper Back",
+                "sets": 3,
+                "reps": "15-20",
+                "rest_seconds": 45,
+                "tempo": "2-1-1-0",
+                "instructions": "Pull to face level, external rotation at peak. Critical for shoulder health.",
+                "form_cues": "Pull apart at face level, rotate hands back",
+                "progression": "Higher reps for rear delt development"
+              },
+              {
+                "order": 8,
+                "exercise_name": "Hanging Leg Raises",
+                "muscle_group": "Abs - Lower Abdominals",
+                "sets": 4,
+                "reps": "12-20",
+                "rest_seconds": 60,
+                "tempo": "2-1-1-0",
+                "instructions": "Raise legs to 90 degrees minimum. Add ankle weights when bodyweight is easy.",
+                "form_cues": "Control the swing, don't use momentum",
+                "progression": "Add reps, then ankle weights, then weight between feet"
+              },
+              {
+                "order": 9,
+                "exercise_name": "Cable Crunches",
+                "muscle_group": "Abs - Upper Abdominals",
+                "sets": 3,
+                "reps": "15-20",
+                "rest_seconds": 45,
+                "tempo": "2-1-1-0",
+                "instructions": "Kneel, crunch down, squeeze abs hard. Don't pull with arms.",
+                "form_cues": "Round spine, pull with abs not arms",
+                "progression": "Add weight progressively"
+              }
+            ],
+            "total_exercises": 9,
+            "estimated_duration_minutes": 90,
+            "notes": "Width exercises (pull-ups, pulldowns) are critical for V-taper. High volume for back in classic physique."
+          },
+          {
+            "day": "Day 4",
+            "workout_name": "Shoulders & Abs",
+            "focus": "3D delt development - CRITICAL for classic physique. Wide shoulders create V-taper.",
+            "exercises": [
+              {
+                "order": 1,
+                "exercise_name": "Standing Overhead Press (Barbell or Dumbbell)",
+                "muscle_group": "Shoulders - Front/Middle Deltoids",
+                "sets": 4,
+                "reps": "6-10",
+                "rest_seconds": 120,
+                "tempo": "3-0-1-0",
+                "instructions": "Primary shoulder mass builder. Press from clavicle to overhead.",
+                "form_cues": "Core tight, don't overarch back, full lockout overhead",
+                "progression": "Main strength exercise for shoulders"
+              },
+              {
+                "order": 2,
+                "exercise_name": "Dumbbell Lateral Raise",
+                "muscle_group": "Shoulders - Medial Deltoids",
+                "sets": 4,
+                "reps": "12-15",
+                "rest_seconds": 75,
+                "tempo": "2-1-1-1",
+                "instructions": "THE most important exercise for shoulder width. Strict form essential.",
+                "form_cues": "Lead with elbows, slight forward lean, raise to shoulder height",
+                "progression": "Perfect form over heavy weight. Add weight in 2.5-5 lb increments."
+              },
+              {
+                "order": 3,
+                "exercise_name": "Seated Dumbbell Shoulder Press",
+                "muscle_group": "Shoulders - Front/Middle Deltoids",
+                "sets": 4,
+                "reps": "8-12",
+                "rest_seconds": 90,
+                "tempo": "3-0-1-0",
+                "instructions": "Seated for stricter form. Press from shoulder level to overhead.",
+                "form_cues": "Back against bench, press straight up, don't let dumbbells touch",
+                "progression": "Add weight when 12 reps achieved"
+              },
+              {
+                "order": 4,
+                "exercise_name": "Cable Lateral Raise (Single Arm)",
+                "muscle_group": "Shoulders - Medial Deltoids",
+                "sets": 3,
+                "reps": "12-15 per arm",
+                "rest_seconds": 60,
+                "tempo": "2-1-1-1",
+                "instructions": "Cable provides constant tension. Cross cable behind body.",
+                "form_cues": "Raise across body, keep tension throughout ROM",
+                "progression": "Add weight in small increments"
+              },
+              {
+                "order": 5,
+                "exercise_name": "Reverse Pec Deck or Rear Delt Flyes",
+                "muscle_group": "Shoulders - Rear Deltoids",
+                "sets": 4,
+                "reps": "12-15",
+                "rest_seconds": 60,
+                "tempo": "2-1-1-1",
+                "instructions": "Critical for 3D shoulders and posing. Often undertrained.",
+                "form_cues": "Lead with elbows, squeeze shoulder blades together",
+                "progression": "Focus on contraction quality, then add weight"
+              },
+              {
+                "order": 6,
+                "exercise_name": "Front Raise (Plate or Barbell)",
+                "muscle_group": "Shoulders - Front Deltoids",
+                "sets": 3,
+                "reps": "12-15",
+                "rest_seconds": 60,
+                "tempo": "2-1-1-0",
+                "instructions": "Raise to eye level. Front delts get work from pressing, so less volume needed.",
+                "form_cues": "Don't swing, controlled raise, squeeze at top",
+                "progression": "Add weight in small increments"
+              },
+              {
+                "order": 7,
+                "exercise_name": "Dumbbell Shrugs",
+                "muscle_group": "Traps - Upper Trapezius",
+                "sets": 4,
+                "reps": "12-20",
+                "rest_seconds": 75,
+                "tempo": "2-2-1-0",
+                "instructions": "Straight up and down. Don't roll shoulders. Squeeze hard at top.",
+                "form_cues": "Think 'ears to shoulders', hold squeeze 2 seconds",
+                "progression": "Heavy weight, progressive overload"
+              },
+              {
+                "order": 8,
+                "exercise_name": "Ab Wheel Rollouts",
+                "muscle_group": "Abs - Full Core",
+                "sets": 3,
+                "reps": "10-15",
+                "rest_seconds": 60,
+                "tempo": "3-0-1-0",
+                "instructions": "From knees or standing (advanced). Maintain neutral spine.",
+                "form_cues": "Don't let hips sag, pull back with abs",
+                "progression": "Add reps, then progress to standing variation"
+              },
+              {
+                "order": 9,
+                "exercise_name": "Plank (Weighted if needed)",
+                "muscle_group": "Abs - Core Stability",
+                "sets": 3,
+                "reps": "60-90 seconds",
+                "rest_seconds": 60,
+                "tempo": "N/A",
+                "instructions": "Hold perfect position. Add weight plate on back when needed.",
+                "form_cues": "Straight line from head to heels, squeeze glutes and abs",
+                "progression": "Increase time, then add weight"
+              }
+            ],
+            "total_exercises": 9,
+            "estimated_duration_minutes": 80,
+            "notes": "Shoulder width is THE defining feature of classic physique. High volume for medial delts."
+          },
+          {
+            "day": "Day 5",
+            "workout_name": "Legs (Quad Focus)",
+            "focus": "Balanced leg development without overwhelming upper body proportions",
+            "exercises": [
+              {
+                "order": 1,
+                "exercise_name": "Barbell Back Squat",
+                "muscle_group": "Legs - Quadriceps, Glutes",
+                "sets": 4,
+                "reps": "6-10",
+                "rest_seconds": 180,
+                "tempo": "3-0-1-0",
+                "instructions": "King of leg exercises. Deep squat, drive through heels.",
+                "form_cues": "Chest up, knees track over toes, sit back and down",
+                "progression": "Primary leg strength builder"
+              },
+              {
+                "order": 2,
+                "exercise_name": "Front Squat or Hack Squat",
+                "muscle_group": "Legs - Quadriceps",
+                "sets": 4,
+                "reps": "8-12",
+                "rest_seconds": 120,
+                "tempo": "3-0-1-0",
+                "instructions": "More quad-focused than back squat. Front squat = more upright, Hack = machine.",
+                "form_cues": "Keep torso upright, full depth",
+                "progression": "Add weight progressively"
+              },
+              {
+                "order": 3,
+                "exercise_name": "Leg Press",
+                "muscle_group": "Legs - Quadriceps, Glutes",
+                "sets": 3,
+                "reps": "10-15",
+                "rest_seconds": 90,
+                "tempo": "3-0-1-0",
+                "instructions": "Deep ROM. Control the negative. Heavy weight possible safely.",
+                "form_cues": "Don't let lower back round at bottom, full extension at top",
+                "progression": "Add plates progressively, focus on deep ROM"
+              },
+              {
+                "order": 4,
+                "exercise_name": "Walking Lunges or Bulgarian Split Squats",
+                "muscle_group": "Legs - Quadriceps, Glutes (unilateral)",
+                "sets": 3,
+                "reps": "10-12 per leg",
+                "rest_seconds": 75,
+                "tempo": "3-0-1-0",
+                "instructions": "Unilateral work for balance and symmetry. Hold dumbbells.",
+                "form_cues": "Keep front knee behind toes, upright torso",
+                "progression": "Add weight with dumbbells"
+              },
+              {
+                "order": 5,
+                "exercise_name": "Leg Extension",
+                "muscle_group": "Legs - Quadriceps",
+                "sets": 3,
+                "reps": "12-15",
+                "rest_seconds": 60,
+                "tempo": "2-1-1-1",
+                "instructions": "Isolation for quad sweep. Squeeze hard at top.",
+                "form_cues": "Point toes up, squeeze at peak contraction",
+                "progression": "Add weight, focus on quality contraction"
+              },
+              {
+                "order": 6,
+                "exercise_name": "Romanian Deadlift",
+                "muscle_group": "Legs - Hamstrings, Glutes",
+                "sets": 3,
+                "reps": "10-12",
+                "rest_seconds": 90,
+                "tempo": "3-1-1-0",
+                "instructions": "Feel stretch in hamstrings. Don't round back.",
+                "form_cues": "Push hips back, slight knee bend, feel hamstring stretch",
+                "progression": "Progressive overload with barbell"
+              },
+              {
+                "order": 7,
+                "exercise_name": "Lying Leg Curl",
+                "muscle_group": "Legs - Hamstrings",
+                "sets": 3,
+                "reps": "12-15",
+                "rest_seconds": 60,
+                "tempo": "2-1-1-1",
+                "instructions": "Curl heels to glutes. Squeeze at top.",
+                "form_cues": "Don't let hips rise, squeeze hamstrings",
+                "progression": "Add weight progressively"
+              },
+              {
+                "order": 8,
+                "exercise_name": "Standing Calf Raise",
+                "muscle_group": "Calves - Gastrocnemius",
+                "sets": 4,
+                "reps": "15-20",
+                "rest_seconds": 60,
+                "tempo": "2-2-1-1",
+                "instructions": "Full ROM. Pause at top.",
+                "form_cues": "Deep stretch, explosive raise, 2-second squeeze",
+                "progression": "Add weight when you hit 20 reps"
+              }
+            ],
+            "total_exercises": 8,
+            "estimated_duration_minutes": 90,
+            "notes": "Legs should be developed but not overpower upper body in classic physique. Balance is key."
+          },
+          {
+            "day": "Day 6",
+            "workout_name": "Arms & Calves",
+            "focus": "Proportionate arm development - biceps peak, triceps sweep, forearms",
+            "exercises": [
+              {
+                "order": 1,
+                "exercise_name": "Close-Grip Bench Press",
+                "muscle_group": "Arms - Triceps (Mass)",
+                "sets": 4,
+                "reps": "6-10",
+                "rest_seconds": 120,
+                "tempo": "3-0-1-0",
+                "instructions": "Primary triceps mass builder. Hands shoulder-width apart.",
+                "form_cues": "Elbows close to body, lower to lower chest",
+                "progression": "Strength exercise for triceps"
+              },
+              {
+                "order": 2,
+                "exercise_name": "Barbell Curl (Straight or EZ-Bar)",
+                "muscle_group": "Arms - Biceps (Mass)",
+                "sets": 4,
+                "reps": "8-12",
+                "rest_seconds": 90,
+                "tempo": "3-0-1-0",
+                "instructions": "Primary biceps mass builder. Strict form, no swinging.",
+                "form_cues": "Elbows stationary, full ROM, squeeze at top",
+                "progression": "Add weight progressively"
+              },
+              {
+                "order": 3,
+                "exercise_name": "Overhead Triceps Extension (Rope or Dumbbell)",
+                "muscle_group": "Arms - Triceps (Long Head)",
+                "sets": 3,
+                "reps": "10-12",
+                "rest_seconds": 75,
+                "tempo": "3-1-1-0",
+                "instructions": "Stretches long head of triceps. Keep elbows pointing up.",
+                "form_cues": "Elbows stay pointed toward ceiling, deep stretch",
+                "progression": "Add weight when form is perfect"
+              },
+              {
+                "order": 4,
+                "exercise_name": "Incline Dumbbell Curl",
+                "muscle_group": "Arms - Biceps (Long Head/Peak)",
+                "sets": 3,
+                "reps": "10-12",
+                "rest_seconds": 75,
+                "tempo": "3-0-1-1",
+                "instructions": "45-degree incline. Emphasizes biceps peak and long head stretch.",
+                "form_cues": "Let arms hang, full stretch, curl without moving upper arm",
+                "progression": "Add weight in small increments"
+              },
+              {
+                "order": 5,
+                "exercise_name": "Triceps Pushdown (Cable, Rope or Bar)",
+                "muscle_group": "Arms - Triceps (Lateral Head)",
+                "sets": 3,
+                "reps": "12-15",
+                "rest_seconds": 60,
+                "tempo": "2-1-1-0",
+                "instructions": "Full extension, squeeze at bottom. Rope allows pronation for extra contraction.",
+                "form_cues": "Elbows pinned, extend fully, squeeze",
+                "progression": "Add weight, focus on contraction"
+              },
+              {
+                "order": 6,
+                "exercise_name": "Hammer Curl",
+                "muscle_group": "Arms - Biceps, Brachialis, Forearms",
+                "sets": 3,
+                "reps": "10-12",
+                "rest_seconds": 60,
+                "tempo": "3-0-1-0",
+                "instructions": "Neutral grip (palms facing each other). Builds arm thickness.",
+                "form_cues": "Keep palms facing each other throughout, no rotation",
+                "progression": "Add weight progressively"
+              },
+              {
+                "order": 7,
+                "exercise_name": "Dips (Triceps Variation)",
+                "muscle_group": "Arms - Triceps",
+                "sets": 3,
+                "reps": "10-15",
+                "rest_seconds": 90,
+                "tempo": "3-0-1-0",
+                "instructions": "Stay upright for triceps focus (vs. leaning forward for chest).",
+                "form_cues": "Body vertical, elbows back, full extension",
+                "progression": "Add weight with belt when bodyweight is easy"
+              },
+              {
+                "order": 8,
+                "exercise_name": "Concentration Curl",
+                "muscle_group": "Arms - Biceps (Peak)",
+                "sets": 3,
+                "reps": "12-15 per arm",
+                "rest_seconds": 45,
+                "tempo": "2-1-1-1",
+                "instructions": "Seated, elbow braced on inner thigh. Peak contraction exercise.",
+                "form_cues": "Squeeze hard at top, slow negative",
+                "progression": "Focus on peak contraction, then add weight"
+              },
+              {
+                "order": 9,
+                "exercise_name": "Wrist Curl (Barbell or Dumbbell)",
+                "muscle_group": "Forearms - Flexors",
+                "sets": 3,
+                "reps": "15-20",
+                "rest_seconds": 45,
+                "tempo": "2-0-1-0",
+                "instructions": "Forearms on bench or thighs, palms up. Full ROM.",
+                "form_cues": "Let weight roll to fingers, curl back up",
+                "progression": "Add weight or reps"
+              },
+              {
+                "order": 10,
+                "exercise_name": "Reverse Wrist Curl",
+                "muscle_group": "Forearms - Extensors",
+                "sets": 3,
+                "reps": "15-20",
+                "rest_seconds": 45,
+                "tempo": "2-0-1-0",
+                "instructions": "Palms down variation. Balances forearm development.",
+                "form_cues": "Control the weight, full ROM",
+                "progression": "Add weight or reps"
+              },
+              {
+                "order": 11,
+                "exercise_name": "Seated Calf Raise",
+                "muscle_group": "Calves - Soleus",
+                "sets": 4,
+                "reps": "15-25",
+                "rest_seconds": 45,
+                "tempo": "2-2-1-1",
+                "instructions": "Higher volume for soleus. Knee bent targets soleus.",
+                "form_cues": "Full ROM, squeeze at top",
+                "progression": "Progressive overload"
+              }
+            ],
+            "total_exercises": 11,
+            "estimated_duration_minutes": 75,
+            "notes": "Arms should be proportionate, not overpowering. Focus on shape and detail."
+          },
+          {
+            "day": "Day 7 (Optional Advanced)",
+            "workout_name": "Hamstrings, Glutes & Posterior Chain",
+            "focus": "Optional second leg day focusing on hamstrings and glutes. For advanced athletes or those needing more posterior development.",
+            "exercises": [
+              {
+                "order": 1,
+                "exercise_name": "Romanian Deadlift",
+                "muscle_group": "Hamstrings, Glutes, Lower Back",
+                "sets": 4,
+                "reps": "8-12",
+                "rest_seconds": 120,
+                "tempo": "3-1-1-0",
+                "instructions": "Primary hamstring mass builder. Feel the stretch.",
+                "form_cues": "Hips back, slight knee bend, chest up",
+                "progression": "Add weight progressively"
+              },
+              {
+                "order": 2,
+                "exercise_name": "Lying Leg Curl",
+                "muscle_group": "Hamstrings",
+                "sets": 4,
+                "reps": "10-15",
+                "rest_seconds": 75,
+                "tempo": "2-1-1-1",
+                "instructions": "Isolation for hamstring development.",
+                "form_cues": "Squeeze at top, control negative",
+                "progression": "Add weight progressively"
+              },
+              {
+                "order": 3,
+                "exercise_name": "Hip Thrust or Glute Bridge",
+                "muscle_group": "Glutes",
+                "sets": 4,
+                "reps": "12-15",
+                "rest_seconds": 90,
+                "tempo": "2-2-1-0",
+                "instructions": "Barbell across hips. Squeeze glutes hard at top.",
+                "form_cues": "Drive through heels, squeeze glutes, hold at top",
+                "progression": "Add weight with barbell"
+              },
+              {
+                "order": 4,
+                "exercise_name": "Walking Lunges",
+                "muscle_group": "Glutes, Quadriceps, Hamstrings",
+                "sets": 3,
+                "reps": "12-15 per leg",
+                "rest_seconds": 60,
+                "tempo": "3-0-1-0",
+                "instructions": "Hold dumbbells. Long strides emphasize glutes/hamstrings.",
+                "form_cues": "Long stride, upright torso, push through heel",
+                "progression": "Add weight with dumbbells"
+              },
+              {
+                "order": 5,
+                "exercise_name": "Seated Leg Curl",
+                "muscle_group": "Hamstrings",
+                "sets": 3,
+                "reps": "12-15",
+                "rest_seconds": 60,
+                "tempo": "2-1-1-1",
+                "instructions": "Different angle than lying variation. Hits hamstrings differently.",
+                "form_cues": "Squeeze at contraction, slow negative",
+                "progression": "Add weight progressively"
+              },
+              {
+                "order": 6,
+                "exercise_name": "Back Extension or Good Morning",
+                "muscle_group": "Lower Back, Glutes, Hamstrings",
+                "sets": 3,
+                "reps": "12-15",
+                "rest_seconds": 60,
+                "tempo": "3-1-1-0",
+                "instructions": "Posterior chain finisher. Hold weight plate or barbell.",
+                "form_cues": "Hinge at hips, maintain neutral spine",
+                "progression": "Add weight gradually"
+              }
+            ],
+            "total_exercises": 6,
+            "estimated_duration_minutes": 60,
+            "notes": "Optional for advanced athletes or those needing extra hamstring/glute work. Can replace rest day."
+          }
+        ]
+      },
+      {
+        "phase_number": 2,
+        "phase_name": "Strength & Power Phase",
+        "weeks": "9-12",
+        "description": "Lower rep ranges with heavier weight. Build strength while maintaining muscle mass. Begin increasing conditioning work.",
+        "rep_ranges": {
+          "compound_exercises": "4-6 reps",
+          "secondary_compounds": "6-8 reps",
+          "isolation_exercises": "10-12 reps"
+        },
+        "sets_per_exercise": "4-5 working sets for compounds, 3-4 for isolation",
+        "rest_periods": {
+          "compound": "120-180 seconds",
+          "isolation": "75-90 seconds"
+        },
+        "intensity": "85-90% 1RM for main lifts",
+        "modifications": "Same exercise selection as Phase 1, but adjust rep ranges and intensity as specified. Add 1-2 extra sets to main compound movements.",
+        "cardio_increase": "Add 4th day of LISS, introduce 2x per week HIIT (15-20 min)",
+        "nutrition": "Begin slight calorie reduction if needed for conditioning"
+      },
+      {
+        "phase_number": 3,
+        "phase_name": "Pre-Contest Conditioning Phase",
+        "weeks": "13-16",
+        "description": "Final conditioning for competition. Higher reps, shorter rest, increased cardio. Maintain muscle while dropping body fat.",
+        "rep_ranges": {
+          "compound_exercises": "8-10 reps",
+          "secondary_compounds": "10-12 reps",
+          "isolation_exercises": "15-20 reps"
+        },
+        "sets_per_exercise": "3-4 working sets",
+        "rest_periods": {
+          "compound": "60-90 seconds",
+          "isolation": "45-60 seconds"
+        },
+        "intensity": "70-80% 1RM, focus on muscle contraction quality",
+        "training_techniques": [
+          "Supersets for opposing muscle groups",
+          "Drop sets on final set of isolation exercises",
+          "Tempo manipulation (slower negatives)",
+          "Partial reps at end of sets for pump"
+        ],
+        "cardio_peak": "5-6 days per week LISS (40-50 min) + 2-3 days HIIT (20 min)",
+        "posing_priority": "Daily posing practice (45-60 min)",
+        "water_manipulation": "Peak week only - consult coach",
+        "carb_cycling": "Implement during final 4 weeks",
+        "nutrition": "Caloric deficit, high protein, strategic refeeds"
+      }
+    ],
+    "nutrition_plan": {
+      "overview": "Nutrition periodization matches training phases. Off-season surplus for growth, pre-contest deficit for conditioning.",
+      "phases": [
+        {
+          "phase": "Off-Season / Mass Building (Weeks 1-8)",
+          "goal": "Muscle growth in caloric surplus while minimizing fat gain",
+          "calories": {
+            "calculation": "Bodyweight (lbs) × 16-18",
+            "example_180lb": "2880-3240 calories per day",
+            "adjustment": "Track weight weekly. Aim for 0.5-1 lb gain per week. Adjust calories if needed."
+          },
+          "macronutrients": {
+            "protein": {
+              "grams_per_lb": 1.2,
+              "percentage": "30-35%",
+              "sources": "Chicken breast, turkey, lean beef, fish (salmon, tilapia), eggs, egg whites, Greek yogurt, whey protein, casein protein",
+              "timing": "Every meal, especially pre/post workout"
+            },
+            "carbohydrates": {
+              "grams_per_lb": 2.0,
+              "percentage": "45-50%",
+              "sources": "White rice, brown rice, jasmine rice, sweet potato, regular potato, oatmeal, cream of rice, pasta, quinoa, fruits (bananas, berries)",
+              "timing": "Concentrated around training (before/after), moderate at other meals"
+            },
+            "fats": {
+              "grams_per_lb": 0.4,
+              "percentage": "20-25%",
+              "sources": "Avocado, olive oil, coconut oil, nuts (almonds, cashews), nut butter, fatty fish (salmon), whole eggs, MCT oil",
+              "timing": "Distributed throughout day, lower around workout"
+            }
+          },
+          "meal_frequency": "5-6 meals per day, eating every 2.5-3 hours",
+          "sample_day_180lb": {
+            "meal_1_breakfast": {
+              "time": "7:00 AM",
+              "foods": "6 whole eggs, 1 cup oatmeal, 1 banana, 1 tbsp almond butter",
+              "macros": "P: 45g, C: 75g, F: 35g = 755 cal"
+            },
+            "meal_2_mid_morning": {
+              "time": "10:00 AM",
+              "foods": "8 oz chicken breast, 1.5 cups white rice, 1 cup broccoli, 1 tsp olive oil",
+              "macros": "P: 55g, C: 75g, F: 8g = 596 cal"
+            },
+            "meal_3_pre_workout": {
+              "time": "1:00 PM (1.5 hours before training)",
+              "foods": "8 oz ground turkey (93% lean), 2 medium sweet potatoes, green beans",
+              "macros": "P: 50g, C: 60g, F: 10g = 530 cal"
+            },
+            "intra_workout": {
+              "time": "During training (3:00 PM)",
+              "foods": "Optional: 20g EAAs or BCAAs, 50g carbs from Gatorade/dextrose (if training >90 min)",
+              "macros": "P: 20g, C: 50g = 280 cal (optional)"
+            },
+            "meal_4_post_workout": {
+              "time": "5:00 PM (within 30-60 min after training)",
+              "foods": "2 scoops whey protein, 100g cream of rice, 1 banana, honey",
+              "macros": "P: 50g, C: 100g, F: 3g = 620 cal"
+            },
+            "meal_5_dinner": {
+              "time": "8:00 PM",
+              "foods": "10 oz salmon, 2 cups jasmine rice, asparagus, 1/2 avocado",
+              "macros": "P: 60g, C: 90g, F: 25g = 805 cal"
+            },
+            "meal_6_before_bed": {
+              "time": "11:00 PM",
+              "foods": "2 scoops casein protein, 2 tbsp natural peanut butter, small apple",
+              "macros": "P: 50g, C: 30g, F: 18g = 466 cal"
+            },
+            "daily_totals": "P: 330g (26%), C: 480g (48%), F: 99g (23%) = 4,052 cal (with intra)"
+          },
+          "hydration": "1-1.5 gallons per day minimum",
+          "supplements": [
+            "Whey Protein: Post-workout",
+            "Casein Protein: Before bed",
+            "Creatine Monohydrate: 5g daily (any time)",
+            "Essential Amino Acids (EAAs): Intra-workout (optional)",
+            "Multivitamin: Daily",
+            "Fish Oil (Omega-3): 2-4g daily",
+            "Vitamin D3: 2000-5000 IU daily",
+            "Pre-workout: Caffeine + Citrulline + Beta-Alanine (optional)"
+          ]
+        },
+        {
+          "phase": "Strength Phase (Weeks 9-12)",
+          "goal": "Maintain muscle mass, build strength, begin conditioning",
+          "calories": {
+            "calculation": "Bodyweight (lbs) × 15-16",
+            "example_180lb": "2700-2880 calories per day",
+            "adjustment": "Maintenance to slight surplus. Aim for steady weight."
+          },
+          "macronutrients": {
+            "protein": {
+              "grams_per_lb": 1.3,
+              "percentage": "35-40%",
+              "note": "Protein stays high or increases as calories drop"
+            },
+            "carbohydrates": {
+              "grams_per_lb": 1.5,
+              "percentage": "40-45%",
+              "note": "Moderate reduction to accommodate increased cardio"
+            },
+            "fats": {
+              "grams_per_lb": 0.4,
+              "percentage": "20-25%",
+              "note": "Maintain for hormone production"
+            }
+          },
+          "meal_frequency": "5-6 meals per day",
+          "adjustments": "Reduce portions slightly from Phase 1. Keep protein high. Time carbs around workouts."
+        },
+        {
+          "phase": "Pre-Contest / Conditioning (Weeks 13-16)",
+          "goal": "Maximum conditioning and muscle definition while preserving mass",
+          "calories": {
+            "calculation": "Bodyweight (lbs) × 12-14",
+            "example_180lb": "2160-2520 calories per day",
+            "adjustment": "Aim for 1-2 lbs loss per week. Weekly adjustments based on progress.",
+            "final_week": "Consult with coach for peak week protocols"
+          },
+          "macronutrients": {
+            "protein": {
+              "grams_per_lb": 1.4,
+              "percentage": "40-45%",
+              "note": "Highest protein phase to preserve muscle in deficit"
+            },
+            "carbohydrates": {
+              "grams_per_lb": 1.0,
+              "percentage": "35-40%",
+              "note": "Lower overall, but implement strategic refeeds",
+              "carb_cycling": "Low days: 0.8g/lb, High days: 1.5g/lb, rotate based on training"
+            },
+            "fats": {
+              "grams_per_lb": 0.3,
+              "percentage": "20-25%",
+              "note": "Lowest fat phase, never below 0.25g/lb for hormones"
+            }
+          },
+          "meal_frequency": "6-7 smaller meals to manage hunger and maintain metabolism",
+          "refeed_strategy": {
+            "frequency": "Every 5-7 days",
+            "implementation": "Increase carbs to 2.5-3g/lb for 1 day, reduce fats slightly, keep protein same",
+            "purpose": "Replenish glycogen, boost leptin, psychological break"
+          },
+          "sample_day_contest_prep_180lb": {
+            "meal_1": {
+              "foods": "10 egg whites, 1 whole egg, 1 cup oatmeal, berries",
+              "macros": "P: 45g, C: 50g, F: 8g = 448 cal"
+            },
+            "meal_2": {
+              "foods": "6 oz chicken breast, 1 cup white rice, green beans",
+              "macros": "P: 42g, C: 45g, F: 3g = 375 cal"
+            },
+            "meal_3_pre_workout": {
+              "foods": "6 oz ground turkey (93%), 1 medium sweet potato, spinach",
+              "macros": "P: 38g, C: 30g, F: 8g = 340 cal"
+            },
+            "meal_4_post_workout": {
+              "foods": "2 scoops whey protein, 80g cream of rice, blueberries",
+              "macros": "P: 50g, C: 70g, F: 2g = 490 cal"
+            },
+            "meal_5": {
+              "foods": "8 oz tilapia, 1 cup jasmine rice, asparagus",
+              "macros": "P: 48g, C: 45g, F: 4g = 408 cal"
+            },
+            "meal_6": {
+              "foods": "6 oz chicken breast, large salad, 2 tsp olive oil, veggies",
+              "macros": "P: 42g, C: 15g, F: 10g = 326 cal"
+            },
+            "meal_7_before_bed": {
+              "foods": "2 scoops casein protein, 1 tbsp peanut butter",
+              "macros": "P: 50g, C: 8g, F: 10g = 326 cal"
+            },
+            "daily_totals": "P: 315g (43%), C: 263g (36%), F: 45g (17%) = 2,713 cal"
+          },
+          "peak_week_overview": {
+            "description": "Final 7 days before competition. Highly individual. MUST work with experienced coach.",
+            "common_strategies": [
+              "Water loading days 7-3 (2+ gallons), then taper days 2-1",
+              "Carb depletion days 6-4, carb load days 3-1",
+              "Sodium manipulation (optional, controversial)",
+              "Timing of final meals and water before stage",
+              "Practice posing daily with pump-up routine"
+            ],
+            "warning": "Peak week can make or break a physique. Never experiment for the first time on show week."
+          },
+          "supplements_contest_prep": [
+            "All Phase 1 supplements PLUS:",
+            "L-Carnitine: 2-3g daily (fat metabolism support)",
+            "Caffeine: Strategic use for energy and thermogenesis",
+            "Yohimbine: Optional for stubborn fat (use carefully)",
+            "Glycerol: Peak week for muscle fullness (under coach guidance)",
+            "Electrolytes: Critical during water manipulation"
+          ]
+        }
+      ],
+      "general_nutrition_principles": {
+        "food_quality": "80% whole foods, 20% flexible. Prioritize micronutrient-dense choices.",
+        "meal_timing": "Pre-workout meal 1.5-2 hours before training. Post-workout nutrition within 30-60 minutes.",
+        "hydration": "Minimum 1 gallon daily, more during contest prep. Monitor urine color.",
+        "fiber": "25-35g daily from vegetables, fruits, whole grains. Critical for digestion and satiety.",
+        "sodium": "Don't restrict unnecessarily until final peak week (if at all). Needed for muscle pumps and performance.",
+        "alcohol": "Minimize or eliminate, especially weeks 9-16. Empty calories, impairs recovery.",
+        "cheat_meals": "Phase 1: 1-2 per week. Phase 2: 1 per week. Phase 3: Strategic refeeds only, no 'cheat meals'.",
+        "tracking": "Use app like MyFitnessPal. Weigh food for accuracy. Weekly progress photos and measurements."
+      },
+      "contest_day_nutrition": {
+        "morning_of_show": "Small easily digestible meals every 2-3 hours. Example: Rice cakes with nut butter, Gatorade, simple carbs.",
+        "backstage": "Sip water as needed (don't chug). Rice cakes, candy (pixie sticks, gummy bears) for quick pump.",
+        "pump_up_foods": "Fast-digesting carbs 20-30 min before stage. Avoid fats.",
+        "timing": "Last substantial meal 3-4 hours before prejudging.",
+        "practice": "Rehearse entire day during peak week practice run."
+      }
+    },
+    "posing_routine": {
+      "importance": "Posing can make or break your placement. Practice is NON-NEGOTIABLE.",
+      "practice_frequency": {
+        "weeks_1_8": "2x per week, 20-30 minutes",
+        "weeks_9_12": "3x per week, 30-45 minutes",
+        "weeks_13_16": "Daily, 45-60 minutes"
+      },
+      "mandatory_poses_men": [
+        "Front Double Biceps",
+        "Front Lat Spread",
+        "Side Chest (both sides)",
+        "Back Double Biceps",
+        "Back Lat Spread",
+        "Side Triceps (both sides)",
+        "Abdominals and Thighs",
+        "Most Muscular (optional in classic physique, but often done)"
+      ],
+      "mandatory_poses_women_figure": [
+        "Front Quarter Turn",
+        "Quarter Turn Right",
+        "Back Quarter Turn",
+        "Quarter Turn Left"
+      ],
+      "practice_tips": [
+        "Practice in front of mirror",
+        "Film yourself to analyze",
+        "Practice transitions between poses",
+        "Hold each pose for 30-60 seconds (builds endurance)",
+        "Practice with pump (after training)",
+        "Practice without pump (to see real conditioning)",
+        "Hire a posing coach (highly recommended)",
+        "Practice in your competition suit",
+        "Work on facial expressions and stage presence"
+      ],
+      "posing_as_workout": "Holding poses is isometric training. Burns calories, improves muscle control and conditioning."
+    },
+    "tanning_and_presentation": {
+      "tanning": "Mandatory for stage. Options: Professional spray tan (recommended), self-tanning products. Apply 24-48 hours before show.",
+      "suits": "Men: Board shorts or posing trunks (depends on federation). Women: Figure suit (two-piece). Must fit perfectly.",
+      "grooming": "Men: Chest, back, legs fully waxed/shaved. Clean haircut. Women: Hair, makeup professionally done.",
+      "practice_in_suit": "Wear suit during posing practice final 2-3 weeks to ensure comfort and fit."
+    },
+    "recovery_and_lifestyle": {
+      "sleep": {
+        "target": "7-9 hours per night",
+        "importance": "Critical for muscle growth, recovery, hormone production",
+        "contest_prep": "Even more important during deficit. May need 8-9 hours."
+      },
+      "stress_management": {
+        "cortisol": "High stress = high cortisol = muscle loss + fat retention",
+        "strategies": "Meditation, breathing exercises, adequate sleep, time management",
+        "contest_prep": "Mental stress is high. Have support system."
+      },
+      "injury_prevention": {
+        "warm_up": "10-15 minutes dynamic warm-up + exercise-specific warm-up sets",
+        "mobility": "Daily stretching, foam rolling, mobility work",
+        "listen_to_body": "Back off if joints hurt. Ego lifting leads to injury.",
+        "deload": "Week 8 and Week 12 consider deload week (50-60% normal volume)"
+      },
+      "social_life": "Will be restricted during contest prep. Plan accordingly. Support from family/friends critical."
+    },
+    "competition_preparation_checklist": {
+      "12_weeks_out": [
+        "Register for competition",
+        "Hire coach (optional but recommended)",
+        "Get competition suit",
+        "Begin diet adjustments",
+        "Increase cardio frequency"
+      ],
+      "8_weeks_out": [
+        "Book tanning appointment",
+        "Begin serious posing practice",
+        "Progress photos weekly",
+        "Fine-tune nutrition based on progress"
+      ],
+      "4_weeks_out": [
+        "Peak week protocol planned with coach",
+        "Practice run-through of entire show day",
+        "Suit alterations if needed",
+        "Mental preparation"
+      ],
+      "1_week_out": [
+        "Execute peak week protocol",
+        "Daily posing practice with pump-up",
+        "Confirm tanning appointment",
+        "Pack show day bag",
+        "Relax and trust the process"
+      ],
+      "show_day": [
+        "Arrive early",
+        "Check-in and registration",
+        "Backstage prep area setup",
+        "Pump up routine 20 min before stage",
+        "Execute posing with confidence",
+        "Enjoy the experience!"
+      ]
+    },
+    "realistic_expectations": {
+      "first_show": "Goal is to gain experience, learn, and establish baseline. Winning is bonus.",
+      "physique_development": "Takes years to develop classic physique. 16 weeks prepares what you've built.",
+      "placings": "Judging is subjective. Focus on being your best, not comparing to others.",
+      "post_show": "Plan for post-show nutrition. Reverse diet to maintenance, don't binge.",
+      "long_term": "Most champions compete multiple times before winning. Learn from each show."
+    },
+    "final_notes": {
+      "coaching": "Hiring experienced prep coach highly recommended, especially for first show.",
+      "blood_work": "Get blood work done before prep and mid-prep to monitor health markers.",
+      "mental_health": "Contest prep is mentally challenging. Have support system. Don't sacrifice mental health.",
+      "sustainable": "Classic Physique is aesthetic but still extreme. Can't stay stage-lean year-round.",
+      "enjoy_process": "This is your journey. Document it. Enjoy the transformation.",
+      "federation_rules": "Study your federation's rules (NPC, IFBB, etc.). Posing, attire, weight limits vary."
+    }
+  }
