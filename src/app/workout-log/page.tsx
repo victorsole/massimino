@@ -22,7 +22,7 @@ import { WorkoutEmptyState } from '@/components/workout-log/workout_empty_state'
 import { FloatingActionButton } from '@/components/workout-log/floating_action_button';
 import { SessionStatusBar, SessionTimerBadge } from '@/components/workout-log/session_status_bar';
 import { startOfMonth, endOfMonth, format, subMonths, addMonths } from 'date-fns';
-import { Plus, Calendar, Dumbbell, Clock, Weight, MessageCircle, Edit, Trash2, Search, Info, Target, Zap, ChevronLeft, ChevronRight, Sparkles, Trophy, ListChecks, LineChart, Users, LayoutGrid, TableIcon } from 'lucide-react';
+import { Plus, Calendar, Dumbbell, Clock, Weight, MessageCircle, Edit, Trash2, Search, Info, Target, Zap, ChevronLeft, ChevronRight, ChevronDown, Sparkles, Trophy, ListChecks, LineChart, Users, LayoutGrid, TableIcon } from 'lucide-react';
 import Link from 'next/link';
 import { RestTimerBar } from '@/components/workout-log/rest_timer_bar';
 import { BodyMetricsTab } from '@/components/workout-log/body_metrics_tab';
@@ -165,6 +165,12 @@ export default function WorkoutLogPage() {
   // My Programs state
   const [myProgramsData, setMyProgramsData] = useState<UserProgram[]>([]);
   const [loadingMyPrograms, setLoadingMyPrograms] = useState(false);
+
+  // Recommendations collapsed state (collapsed by default on mobile)
+  const [recommendationsExpanded, setRecommendationsExpanded] = useState(false);
+
+  // Dismissed today's workout (hides the card for that day)
+  const [dismissedTodayWorkout, setDismissedTodayWorkout] = useState(false);
 
   // Calendar state
   const [calendarMonth, setCalendarMonth] = useState(new Date());
@@ -1314,39 +1320,45 @@ export default function WorkoutLogPage() {
     <>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Workout Log</h1>
             <p className="text-gray-600 mt-2">Track your workouts and see coach feedback</p>
           </div>
-          <div className="flex space-x-2">
+          <div className="flex flex-wrap gap-2">
             {selectedEntries.size > 0 && (
-              <Button onClick={() => setShowSaveTemplateModal(true)} variant="outline">
-                <Plus className="h-4 w-4 mr-2" />
-                Save as Template ({selectedEntries.size})
+              <Button onClick={() => setShowSaveTemplateModal(true)} variant="outline" size="sm" className="text-xs sm:text-sm">
+                <Plus className="h-4 w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Save as Template</span>
+                <span className="sm:hidden">Template</span>
+                <span className="ml-1">({selectedEntries.size})</span>
               </Button>
             )}
             {!activeSession && (
-              <Button onClick={() => setShowSessionCreationModal(true)} variant="outline" className="bg-green-50 border-green-500 text-green-700 hover:bg-green-100">
-                <Zap className="h-4 w-4 mr-2" />
-                Start Session
+              <Button onClick={() => setShowSessionCreationModal(true)} variant="outline" size="sm" className="bg-green-50 border-green-500 text-green-700 hover:bg-green-100 text-xs sm:text-sm">
+                <Zap className="h-4 w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Start Session</span>
+                <span className="sm:hidden">Session</span>
               </Button>
             )}
             {isTrainerOrAdmin && !activeSession ? (
-              <Button disabled title="Start a session first" onClick={() => {}}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Workout Entry
+              <Button disabled title="Start a session first" onClick={() => {}} size="sm" className="text-xs sm:text-sm">
+                <Plus className="h-4 w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Add Workout Entry</span>
+                <span className="sm:hidden">Add</span>
               </Button>
             ) : (
-              <Button onClick={() => setIsAddingEntry(true)}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Workout Entry
+              <Button onClick={() => setIsAddingEntry(true)} size="sm" className="text-xs sm:text-sm">
+                <Plus className="h-4 w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Add Workout Entry</span>
+                <span className="sm:hidden">Add</span>
               </Button>
             )}
             {isTrainerOrAdmin && (
-              <Button variant="outline" onClick={() => setShowCreateForClient(true)}>
-                <Zap className="h-4 w-4 mr-2" />
-                Create Session for Athlete
+              <Button variant="outline" onClick={() => setShowCreateForClient(true)} size="sm" className="text-xs sm:text-sm">
+                <Zap className="h-4 w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Create Session for Athlete</span>
+                <span className="sm:hidden">For Athlete</span>
               </Button>
             )}
           </div>
@@ -1383,64 +1395,79 @@ export default function WorkoutLogPage() {
           </div>
         )}
 
-        {/* Workout Recommendations Panel */}
+        {/* Workout Recommendations Panel - Collapsible on mobile */}
         {recommendations && (
           <Card className="mb-6 bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-purple-600" />
-                Your Personalised Recommendations
-              </CardTitle>
+            <CardHeader
+              className="cursor-pointer select-none"
+              onClick={() => setRecommendationsExpanded(!recommendationsExpanded)}
+            >
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-purple-600" />
+                  Your Personalised Recommendations
+                </CardTitle>
+                <ChevronDown
+                  className={`h-5 w-5 text-purple-600 transition-transform duration-200 ${
+                    recommendationsExpanded ? 'rotate-180' : ''
+                  }`}
+                />
+              </div>
               <CardDescription>
                 Based on your {recommendations.fitness_level.toLowerCase()} fitness level
+                {!recommendationsExpanded && (
+                  <span className="ml-2 text-purple-600 font-medium">(tap to expand)</span>
+                )}
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-3 gap-4">
-                <div>
-                  <p className="text-sm font-medium text-gray-700 mb-1">
-                    Recommended Volume
-                  </p>
-                  <p className="text-2xl font-bold text-purple-600">
-                    {recommendations.recommended_volume} sets
-                  </p>
-                  <p className="text-xs text-gray-500">per session</p>
-                </div>
+            {recommendationsExpanded && (
+              <CardContent className="pt-0">
+                <div className="grid md:grid-cols-3 gap-4">
+                  <div>
+                    <p className="text-sm font-medium text-gray-700 mb-1">
+                      Recommended Volume
+                    </p>
+                    <p className="text-2xl font-bold text-purple-600">
+                      {recommendations.recommended_volume} sets
+                    </p>
+                    <p className="text-xs text-gray-500">per session</p>
+                  </div>
 
-                <div>
-                  <p className="text-sm font-medium text-gray-700 mb-1">
-                    Training Frequency
-                  </p>
-                  <p className="text-2xl font-bold text-blue-600">
-                    {recommendations.recommended_frequency}x
-                  </p>
-                  <p className="text-xs text-gray-500">per week</p>
-                </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-700 mb-1">
+                      Training Frequency
+                    </p>
+                    <p className="text-2xl font-bold text-blue-600">
+                      {recommendations.recommended_frequency}x
+                    </p>
+                    <p className="text-xs text-gray-500">per week</p>
+                  </div>
 
-                <div>
-                  <p className="text-sm font-medium text-gray-700 mb-1">
-                    Training Phase
-                  </p>
-                  <p className="text-2xl font-bold text-green-600">
-                    {recommendations.training_phase}
-                  </p>
-                  <p className="text-xs text-gray-500">training focus</p>
-                </div>
-              </div>
-
-              {recommendations.coaching_cues?.length > 0 && (
-                <div className="mt-4 pt-4 border-t border-purple-200">
-                  <p className="text-sm font-semibold mb-2">Focus Areas:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {recommendations.coaching_cues.map((cue: string, index: number) => (
-                      <Badge key={index} variant="secondary">
-                        {cue}
-                      </Badge>
-                    ))}
+                  <div>
+                    <p className="text-sm font-medium text-gray-700 mb-1">
+                      Training Phase
+                    </p>
+                    <p className="text-2xl font-bold text-green-600">
+                      {recommendations.training_phase}
+                    </p>
+                    <p className="text-xs text-gray-500">training focus</p>
                   </div>
                 </div>
-              )}
-            </CardContent>
+
+                {recommendations.coaching_cues?.length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-purple-200">
+                    <p className="text-sm font-semibold mb-2">Focus Areas:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {recommendations.coaching_cues.map((cue: string, index: number) => (
+                        <Badge key={index} variant="secondary">
+                          {cue}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            )}
           </Card>
         )}
 
@@ -1450,7 +1477,7 @@ export default function WorkoutLogPage() {
             {/* Active Program Workout */}
             {(() => {
               const currentWorkout = getCurrentProgramWorkout();
-              if (!currentWorkout) return null;
+              if (!currentWorkout || dismissedTodayWorkout) return null;
 
               const { subscription, program, phase, workout, exercises } = currentWorkout;
               const athleteName = program.legendary_athlete?.name || 'Program';
@@ -1473,45 +1500,60 @@ export default function WorkoutLogPage() {
                             {phase.title} • {phase.description}
                           </div>
                         </div>
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            // Auto-populate first exercise when starting workout
-                            if (exercises.length > 0) {
-                              const firstEx = exercises[0];
-                              const exercise = firstEx.exercises;
-
-                              if (exercise) {
-                                // Set the selected exercise
-                                setSelectedExercise({
-                                  id: exercise.id,
-                                  name: exercise.name,
-                                  category: exercise.category,
-                                  muscleGroups: exercise.muscleGroups || [],
-                                  equipment: exercise.equipment || []
-                                });
-
-                                // Pre-fill sets and reps from program
-                                setNewEntry({
-                                  ...newEntry,
-                                  exerciseId: exercise.id,
-                                  sets: String(firstEx.sets || 3),
-                                  reps: String(firstEx.repsMin || firstEx.repsMax || 10),
-                                  setType: 'REGULAR'
-                                });
+                        <div className="flex items-center gap-2">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-gray-400 hover:text-red-500 hover:bg-red-50 p-2"
+                            onClick={() => {
+                              if (confirm('Dismiss today\'s workout? You can still access it from My Programs.')) {
+                                setDismissedTodayWorkout(true);
                               }
-                            }
+                            }}
+                            title="Dismiss today's workout"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            onClick={() => {
+                              // Auto-populate first exercise when starting workout
+                              if (exercises.length > 0) {
+                                const firstEx = exercises[0];
+                                const exercise = firstEx.exercises;
 
-                            setIsAddingEntry(true);
+                                if (exercise) {
+                                  // Set the selected exercise
+                                  setSelectedExercise({
+                                    id: exercise.id,
+                                    name: exercise.name,
+                                    category: exercise.category,
+                                    muscleGroups: exercise.muscleGroups || [],
+                                    equipment: exercise.equipment || []
+                                  });
 
-                            // Scroll to form
-                            setTimeout(() => {
-                              document.querySelector('[data-workout-form]')?.scrollIntoView({ behavior: 'smooth' });
-                            }, 100);
-                          }}
-                        >
-                          Start Workout
-                        </Button>
+                                  // Pre-fill sets and reps from program
+                                  setNewEntry({
+                                    ...newEntry,
+                                    exerciseId: exercise.id,
+                                    sets: String(firstEx.sets || 3),
+                                    reps: String(firstEx.repsMin || firstEx.repsMax || 10),
+                                    setType: 'REGULAR'
+                                  });
+                                }
+                              }
+
+                              setIsAddingEntry(true);
+
+                              // Scroll to form
+                              setTimeout(() => {
+                                document.querySelector('[data-workout-form]')?.scrollIntoView({ behavior: 'smooth' });
+                              }, 100);
+                            }}
+                          >
+                            Start Workout
+                          </Button>
+                        </div>
                       </div>
 
                       {/* Exercise List */}
@@ -2368,28 +2410,67 @@ export default function WorkoutLogPage() {
         {!fetchingEntries && !error && workoutEntries.length > 0 && (
           <>
             {/* View Toggle */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Button
-                  variant={view_mode === 'cards' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => set_view_mode('cards')}
-                >
-                  <LayoutGrid className="h-4 w-4 mr-2" />
-                  Cards
-                </Button>
-                <Button
-                  variant={view_mode === 'table' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => set_view_mode('table')}
-                >
-                  <TableIcon className="h-4 w-4 mr-2" />
-                  Table
-                </Button>
+            <div className="flex flex-col gap-2 mb-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant={view_mode === 'cards' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => set_view_mode('cards')}
+                  >
+                    <LayoutGrid className="h-4 w-4 mr-2" />
+                    Cards
+                  </Button>
+                  <Button
+                    variant={view_mode === 'table' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => set_view_mode('table')}
+                  >
+                    <TableIcon className="h-4 w-4 mr-2" />
+                    Table
+                  </Button>
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  {workoutEntries.length} {workoutEntries.length === 1 ? 'entry' : 'entries'}
+                </div>
               </div>
-              <div className="text-sm text-muted-foreground">
-                {workoutEntries.length} {workoutEntries.length === 1 ? 'entry' : 'entries'}
-              </div>
+              {/* Delete All Button */}
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 w-fit"
+                onClick={async () => {
+                  if (!confirm(`Are you sure you want to delete all ${workoutEntries.length} entries? This action cannot be undone.`)) {
+                    return;
+                  }
+                  setLoading(true);
+                  let deleted = 0;
+                  let failed = 0;
+                  try {
+                    for (const entry of workoutEntries) {
+                      const response = await fetch(`/api/workout/entries/${entry.id}`, { method: 'DELETE' });
+                      if (response.ok) {
+                        deleted++;
+                      } else {
+                        failed++;
+                      }
+                    }
+                    await fetchWorkoutEntries();
+                    if (failed > 0) {
+                      alert(`Deleted ${deleted} entries. ${failed} entries could not be deleted (they may belong to another user or were already deleted).`);
+                    }
+                  } catch (error) {
+                    console.error('Error deleting entries:', error);
+                    alert('Failed to delete some entries. Please try again.');
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                disabled={loading}
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete All
+              </Button>
             </div>
 
             {/* Cards View */}

@@ -6,7 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Search, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { ArrowLeft, Search, CheckCircle2, AlertCircle, Loader2, Play, Video } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
 
 type ExerciseSlot = {
@@ -28,6 +29,10 @@ type Exercise = {
   muscleGroups: string[];
   equipment: string[];
   difficulty: string;
+  // Media info
+  hasMedia?: boolean;
+  mediaCount?: number;
+  coverUrl?: string;
 };
 
 type Props = {
@@ -43,6 +48,7 @@ export function ExerciseSelectionWizard({ programId, programName, slots }: Props
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [filteredExercises, setFilteredExercises] = useState<Exercise[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [withVideoOnly, setWithVideoOnly] = useState(false);
   const [loading, setLoading] = useState(false);
   const [joining, setJoining] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -68,12 +74,13 @@ export function ExerciseSelectionWizard({ programId, programName, slots }: Props
     if (currentSlot && exercises.length > 0) {
       filterExercisesForSlot();
     }
-  }, [currentSlot, exercises, searchQuery]);
+  }, [currentSlot, exercises, searchQuery, withVideoOnly]);
 
   const fetchExercises = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/workout/exercises?active=true');
+      // Include media info for filtering and display
+      const res = await fetch('/api/workout/exercises?active=true&include=cover,mediaCount');
       if (res.ok) {
         const data = await res.json();
         setExercises(data);
@@ -118,6 +125,19 @@ export function ExerciseSelectionWizard({ programId, programName, slots }: Props
         ex.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
+
+    // Apply "with video only" filter
+    if (withVideoOnly) {
+      filtered = filtered.filter(ex => (ex.mediaCount ?? 0) > 0);
+    }
+
+    // Sort: exercises with media first, then by name
+    filtered = filtered.sort((a, b) => {
+      const aMedia = a.mediaCount ?? 0;
+      const bMedia = b.mediaCount ?? 0;
+      if (bMedia !== aMedia) return bMedia - aMedia;
+      return a.name.localeCompare(b.name);
+    });
 
     setFilteredExercises(filtered);
   };
@@ -278,15 +298,31 @@ export function ExerciseSelectionWizard({ programId, programName, slots }: Props
               <span className="text-gray-600">{currentSlot.equipmentOptions.join(', ')}</span>
             </div>
 
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
-                placeholder="Search exercises..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
+            {/* Search and Filter */}
+            <div className="space-y-3">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Search exercises..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="withVideoOnly"
+                  checked={withVideoOnly}
+                  onCheckedChange={(checked) => setWithVideoOnly(checked === true)}
+                />
+                <label
+                  htmlFor="withVideoOnly"
+                  className="text-sm font-medium text-gray-700 cursor-pointer flex items-center gap-1"
+                >
+                  <Video className="h-4 w-4 text-green-600" />
+                  Show only exercises with form videos
+                </label>
+              </div>
             </div>
 
             {/* Exercise List */}
@@ -317,7 +353,7 @@ export function ExerciseSelectionWizard({ programId, programName, slots }: Props
                         <div className="text-sm text-gray-600 mt-1">
                           {exercise.muscleGroups.join(', ')}
                         </div>
-                        <div className="flex gap-2 mt-2">
+                        <div className="flex flex-wrap gap-2 mt-2">
                           <Badge variant="outline" className="text-xs">
                             {exercise.difficulty}
                           </Badge>
@@ -326,11 +362,19 @@ export function ExerciseSelectionWizard({ programId, programName, slots }: Props
                               {eq}
                             </Badge>
                           ))}
+                          {(exercise.mediaCount ?? 0) > 0 && (
+                            <Badge className="bg-green-100 text-green-700 text-xs flex items-center gap-1">
+                              <Play className="h-3 w-3" />
+                              {exercise.mediaCount} {exercise.mediaCount === 1 ? 'video' : 'videos'}
+                            </Badge>
+                          )}
                         </div>
                       </div>
-                      {isSelected && (
-                        <CheckCircle2 className="h-6 w-6 text-green-600" />
-                      )}
+                      <div className="flex flex-col items-end gap-1">
+                        {isSelected && (
+                          <CheckCircle2 className="h-6 w-6 text-green-600" />
+                        )}
+                      </div>
                     </div>
                   </button>
                 );

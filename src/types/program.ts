@@ -144,11 +144,14 @@ export interface ProgramExercise {
   notes?: string;
   modification?: string;
   progression?: string;
+  // Media enrichment from exercise database
   media?: {
     thumbnail_url?: string;
     video_url?: string;
     image_url?: string;
   };
+  hasMedia?: boolean;
+  mediaCount?: number;
 }
 
 // Workout Section

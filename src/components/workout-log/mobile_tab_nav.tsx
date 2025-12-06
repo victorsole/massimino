@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useRef, useEffect } from 'react';
 import { cn } from '@/core/utils/common';
 import {
   Zap,
@@ -56,18 +57,35 @@ export function MobileTabNav({ activeTab, onTabChange, className }: MobileTabNav
   // Check if active tab is a secondary tab
   const isSecondaryActive = secondaryTabs.some(t => t.id === activeTab);
 
+  // State for More dropdown
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (moreRef.current && !moreRef.current.contains(event.target as Node)) {
+        setMoreOpen(false);
+      }
+    }
+
+    if (moreOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside as any);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside as any);
+    };
+  }, [moreOpen]);
+
   return (
     <nav
       className={cn(
-        'flex overflow-x-auto border-t border-gray-100 bg-white',
-        'scrollbar-hide', // Hide scrollbar but allow scroll
+        'flex justify-between border-t border-gray-100 bg-white',
         className
       )}
-      style={{
-        scrollbarWidth: 'none',
-        msOverflowStyle: 'none',
-        WebkitOverflowScrolling: 'touch'
-      }}
     >
       {/* Primary Tabs */}
       {primaryTabs.map((tab) => {
@@ -77,10 +95,13 @@ export function MobileTabNav({ activeTab, onTabChange, className }: MobileTabNav
         return (
           <button
             key={tab.id}
-            onClick={() => onTabChange(tab.id)}
+            onClick={() => {
+              onTabChange(tab.id);
+              setMoreOpen(false);
+            }}
             className={cn(
-              'flex-shrink-0 flex flex-col items-center justify-center',
-              'px-4 py-2.5 min-w-[72px]',
+              'flex-1 flex flex-col items-center justify-center',
+              'px-2 py-2.5',
               'border-b-2 transition-colors duration-200',
               'touch-manipulation', // Optimize for touch
               isActive
@@ -108,30 +129,31 @@ export function MobileTabNav({ activeTab, onTabChange, className }: MobileTabNav
       })}
 
       {/* More Menu for Secondary Tabs */}
-      <div className="relative flex-shrink-0 group">
+      <div className="relative flex-1" ref={moreRef}>
         <button
+          onClick={() => setMoreOpen(!moreOpen)}
           className={cn(
-            'flex flex-col items-center justify-center',
-            'px-4 py-2.5 min-w-[72px]',
+            'w-full flex flex-col items-center justify-center',
+            'px-2 py-2.5',
             'border-b-2 transition-colors duration-200',
             'touch-manipulation',
-            isSecondaryActive
+            isSecondaryActive || moreOpen
               ? 'border-brand-primary bg-brand-secondary/50'
               : 'border-transparent hover:bg-gray-50'
           )}
           aria-haspopup="true"
-          aria-expanded="false"
+          aria-expanded={moreOpen}
         >
           <MoreHorizontal
             className={cn(
               'w-5 h-5 transition-colors',
-              isSecondaryActive ? 'text-brand-primary' : 'text-gray-400'
+              isSecondaryActive || moreOpen ? 'text-brand-primary' : 'text-gray-400'
             )}
           />
           <span
             className={cn(
               'text-xs mt-1 font-medium transition-colors',
-              isSecondaryActive ? 'text-brand-primary' : 'text-gray-500'
+              isSecondaryActive || moreOpen ? 'text-brand-primary' : 'text-gray-500'
             )}
           >
             More
@@ -139,38 +161,41 @@ export function MobileTabNav({ activeTab, onTabChange, className }: MobileTabNav
         </button>
 
         {/* Dropdown Menu */}
-        <div
-          className={cn(
-            'absolute right-0 top-full mt-1 z-50',
-            'bg-white rounded-lg shadow-lg border border-gray-100',
-            'min-w-[180px] py-1',
-            'opacity-0 invisible group-hover:opacity-100 group-hover:visible',
-            'transition-all duration-200'
-          )}
-        >
-          {secondaryTabs.map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
+        {moreOpen && (
+          <div
+            className={cn(
+              'absolute right-0 top-full mt-1 z-50',
+              'bg-white rounded-lg shadow-lg border border-gray-100',
+              'min-w-[180px] py-1'
+            )}
+          >
+            {secondaryTabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
 
-            return (
-              <button
-                key={tab.id}
-                onClick={() => onTabChange(tab.id)}
-                className={cn(
-                  'w-full flex items-center gap-3 px-4 py-3',
-                  'text-left transition-colors',
-                  'touch-manipulation',
-                  isActive
-                    ? 'bg-brand-secondary text-brand-primary'
-                    : 'text-gray-700 hover:bg-gray-50'
-                )}
-              >
-                <Icon className={cn('w-5 h-5', isActive ? 'text-brand-primary' : 'text-gray-400')} />
-                <span className="text-sm font-medium">{tab.label}</span>
-              </button>
-            );
-          })}
-        </div>
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => {
+                    onTabChange(tab.id);
+                    setMoreOpen(false);
+                  }}
+                  className={cn(
+                    'w-full flex items-center gap-3 px-4 py-3',
+                    'text-left transition-colors',
+                    'touch-manipulation',
+                    isActive
+                      ? 'bg-brand-secondary text-brand-primary'
+                      : 'text-gray-700 hover:bg-gray-50'
+                  )}
+                >
+                  <Icon className={cn('w-5 h-5', isActive ? 'text-brand-primary' : 'text-gray-400')} />
+                  <span className="text-sm font-medium">{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
     </nav>
   );

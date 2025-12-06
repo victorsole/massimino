@@ -318,6 +318,11 @@ export const exerciseSearchOptionsSchema = z.object({
   type: z.string().optional(),
   tags: z.array(z.string()).optional(),
   curated: z.boolean().optional(),
+  // Media filter
+  hasMedia: z.boolean().optional(),
+  // Sorting options
+  sortBy: z.enum(['name', 'mediaCount', 'usageCount']).optional(),
+  sortOrder: z.enum(['asc', 'desc']).optional(),
 });
 
 /**
