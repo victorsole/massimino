@@ -147,3 +147,102 @@ Tomorrow I'll recruit as many people as possible to become users in Massimino: I
 
   ---
   These recommendations maintain brand consistency with brand-primary (#254967) and brand-secondary (#fcf8f2) while optimizing for mobile-first interaction patterns.
+
+
+
+  # Migrating from IONOS + Vercel to SiteGround
+
+  Here's how to migrate your domain and hosting:
+
+  1. Prepare Your SiteGround Account
+
+  - Sign up for a SiteGround hosting plan that supports Node.js (you'll need at least their GoGeek plan or Cloud hosting for Next.js apps)
+  - Note: SiteGround is primarily optimized for PHP/WordPress. Next.js apps require Node.js support, which is limited on SiteGround's shared
+  hosting
+
+  2. Domain Transfer (IONOS → SiteGround)
+
+  1. Unlock the domain at IONOS: Go to IONOS domain settings and disable domain lock
+  2. Get the authorization/EPP code from IONOS
+  3. Initiate transfer at SiteGround: Go to SiteGround > Services > Domains > Transfer Domain
+  4. Enter the EPP code when prompted
+  5. Approve the transfer via email (usually takes 5-7 days)
+
+  3. Hosting Migration Considerations
+
+  Important caveat: SiteGround doesn't natively support Next.js/Vercel-style deployments. Your options:
+
+  Option A: Static Export (if your app allows)
+
+  - Export your Next.js app as static HTML (next export)
+  - Upload to SiteGround via FTP/File Manager
+  - Limited functionality (no API routes, no SSR)
+
+  Option B: Use SiteGround's Cloud Hosting
+
+  - Get their cloud hosting plan
+  - Set up Node.js environment manually
+  - Deploy via SSH/Git
+  - More complex, requires server management
+
+  Option C: Keep a Separate Node.js Host
+
+  - Transfer domain to SiteGround
+  - Point DNS to a Node.js-friendly platform (Railway, Render, Fly.io - all cheaper than Vercel)
+  - Use SiteGround just for domain management
+
+  4. DNS Configuration
+
+  - After domain transfer, update DNS records at SiteGround to point to wherever your app is hosted
+  - Update nameservers if needed
+
+  My Recommendation
+
+  Given that Massimino is a Next.js app with API routes and likely uses SSR features, SiteGround may not be the best fit for hosting the
+  application itself. Consider:
+
+  1. Transfer domain to SiteGround (or Cloudflare, which offers free domain management)
+  2. Host the app on: Railway, Render, or Fly.io - all significantly cheaper than Vercel and properly support Next.js
+
+  This gives you cost savings without losing Next.js functionality.
+
+
+  Cancelling IONOS Contracts
+
+  Steps to Cancel
+
+  1. Log into IONOS Control Panel
+    - Go to https://my.ionos.com
+    - Sign in with your account
+  2. Navigate to Contracts
+    - Click on "Contracts & Billing" or "My Contracts" in the menu
+    - You'll see a list of all your active services
+  3. Cancel Each Contract
+    - Click on the contract you want to cancel
+    - Look for "Cancel Contract" or "Terminate" option (usually under contract details or a gear/settings icon)
+    - Follow the cancellation wizard
+  4. Important Before Cancelling
+    - Make sure your domain transfer is complete before cancelling the domain contract
+    - Download any emails, files, or backups you need
+    - Note any renewal dates - you may need to cancel before a specific date to avoid charges
+
+  Things to Watch Out For
+
+  - Cancellation notice periods: IONOS often requires 30 days notice
+  - Auto-renewal: Disable auto-renewal immediately if you can't cancel right away
+  - Confirmation email: Keep the cancellation confirmation for your records
+  - Refunds: Check if you're eligible for a prorated refund for unused time
+
+  If You Have Trouble
+
+  IONOS cancellation can sometimes be buried in menus. You can also:
+  - Call IONOS support directly
+  - Use their live chat
+  - Send a written cancellation request via email to their support
+
+  Contracts You Likely Have
+
+  Based on your setup, look for:
+  - Domain registration contract (cancel AFTER transfer completes)
+  - Any hosting/webspace contracts
+  - Email contracts (if applicable)

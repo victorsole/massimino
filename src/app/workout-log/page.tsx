@@ -13,6 +13,14 @@ import { SessionHistoryTable, WorkoutCalendar, CommentsPanel } from '@/component
 import { WorkoutSummaryTable } from '@/components/workout-log/workout_summary_table';
 import { WorkoutDetailsModal } from '@/components/workout-log/workout_details_modal';
 import { WorkoutCard, type WorkoutEntry as WorkoutCardEntry, type EditFormData } from '@/components/workout-log/workout_card';
+// New mobile-optimized components
+import { ResponsiveTabNav, type WorkoutTab } from '@/components/workout-log/mobile_tab_nav';
+import { WorkoutEntryCardV2 } from '@/components/workout-log/workout_entry_card_v2';
+import { AddEntryModal, type AddEntryData, type ExerciseOption } from '@/components/workout-log/add_entry_modal';
+import { RestTimerOverlay } from '@/components/workout-log/rest_timer_overlay';
+import { WorkoutEmptyState } from '@/components/workout-log/workout_empty_state';
+import { FloatingActionButton } from '@/components/workout-log/floating_action_button';
+import { SessionStatusBar, SessionTimerBadge } from '@/components/workout-log/session_status_bar';
 import { startOfMonth, endOfMonth, format, subMonths, addMonths } from 'date-fns';
 import { Plus, Calendar, Dumbbell, Clock, Weight, MessageCircle, Edit, Trash2, Search, Info, Target, Zap, ChevronLeft, ChevronRight, Sparkles, Trophy, ListChecks, LineChart, Users, LayoutGrid, TableIcon } from 'lucide-react';
 import Link from 'next/link';
@@ -142,9 +150,17 @@ export default function WorkoutLogPage() {
   const [formQuality, setFormQuality] = useState<number>(3);
   const [restDuration, setRestDuration] = useState<number>(90);
 
-  // Tab navigation
-  const [activeTab, setActiveTab] = useState<'today' | 'my-programs' | 'programs' | 'athletes' | 'history' | 'metrics' | 'progress' | 'habits'>('today');
+  // Tab navigation (using WorkoutTab type for consistency)
+  const [activeTab, setActiveTab] = useState<WorkoutTab>('today');
   const [, setSessions] = useState<any[]>([]);
+
+  // New mobile UI state
+  const [showAddEntryModal, setShowAddEntryModal] = useState(false);
+  const [showRestTimerOverlay, setShowRestTimerOverlay] = useState(false);
+  const [restTimerSeconds, setRestTimerSeconds] = useState(90);
+  const [currentSetNumber, setCurrentSetNumber] = useState(1);
+  const [totalSetsCount, setTotalSetsCount] = useState(3);
+  const [lastLoggedEntry, setLastLoggedEntry] = useState<{ weight: number; reps: number } | null>(null);
 
   // My Programs state
   const [myProgramsData, setMyProgramsData] = useState<UserProgram[]>([]);
@@ -1336,34 +1352,12 @@ export default function WorkoutLogPage() {
           </div>
         </div>
 
-        {/* Tab Navigation (Excel-inspired, on-brand) */}
-        <div className="border-b border-gray-200 mb-6">
-          <nav className="-mb-px flex space-x-6 overflow-x-auto">
-            <button onClick={() => setActiveTab('today')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='today'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
-              <Dumbbell className="inline h-4 w-4 mr-2" /> Today
-            </button>
-            <button onClick={() => setActiveTab('my-programs')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='my-programs'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
-              <Target className="inline h-4 w-4 mr-2" /> My Programs
-            </button>
-            <button onClick={() => setActiveTab('programs')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='programs'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
-              <Search className="inline h-4 w-4 mr-2" /> Browse Programs
-            </button>
-            <button onClick={() => setActiveTab('athletes')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='athletes'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
-              <Trophy className="inline h-4 w-4 mr-2" /> Athletes
-            </button>
-            <button onClick={() => setActiveTab('history')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='history'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
-              <Calendar className="inline h-4 w-4 mr-2" /> History
-            </button>
-            <button onClick={() => setActiveTab('metrics')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='metrics'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
-              <Weight className="inline h-4 w-4 mr-2" /> Body Metrics
-            </button>
-            <button onClick={() => setActiveTab('progress')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='progress'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
-              <LineChart className="inline h-4 w-4 mr-2" /> Progress
-            </button>
-            <button onClick={() => setActiveTab('habits')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='habits'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
-              <ListChecks className="inline h-4 w-4 mr-2" /> Habits
-            </button>
-          </nav>
+        {/* Tab Navigation - Responsive (mobile-optimized icons, desktop full labels) */}
+        <div className="mb-6">
+          <ResponsiveTabNav
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+          />
         </div>
 
         {/* Active Session Banner */}
@@ -2945,6 +2939,115 @@ export default function WorkoutLogPage() {
         onDone={() => { setRestVisible(false); setRestRemaining(0); }}
         exerciseId={selectedExercise?.id}
         sessionId={activeSession?.id}
+      />
+
+      {/* Floating Action Button - Mobile only, for quick add */}
+      {activeTab === 'today' && !isAddingEntry && (
+        <div className="md:hidden">
+          <FloatingActionButton
+            onClick={() => setShowAddEntryModal(true)}
+            label="Add workout entry"
+          />
+        </div>
+      )}
+
+      {/* Add Entry Modal - Full screen on mobile */}
+      <AddEntryModal
+        isOpen={showAddEntryModal}
+        onClose={() => setShowAddEntryModal(false)}
+        onSubmit={async (data: AddEntryData) => {
+          // Use the existing handleAddEntry logic but adapted for modal data
+          const today = new Date().toISOString().split('T')[0];
+          try {
+            const response = await fetch('/api/workout/entries', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                date: today,
+                exerciseId: data.exerciseId,
+                setNumber: currentSetNumber,
+                setType: data.setType,
+                reps: data.reps,
+                weight: String(data.weight),
+                unit: 'KG',
+                sessionId: activeSession?.id,
+                intensity: data.rpe ? `RPE ${data.rpe}` : undefined,
+                restSeconds: data.restSeconds,
+                userComments: data.notes
+              })
+            });
+
+            if (response.ok) {
+              // Update state for next set
+              setLastLoggedEntry({ weight: data.weight, reps: data.reps });
+              setCurrentSetNumber(prev => prev + 1);
+
+              // Refresh entries
+              fetchWorkoutEntries();
+
+              // Start rest timer if configured
+              if (data.restSeconds && data.restSeconds > 0) {
+                setRestTimerSeconds(data.restSeconds);
+                setShowRestTimerOverlay(true);
+                setShowAddEntryModal(false);
+              }
+
+              // Keep modal open for next set or close if done
+              if (currentSetNumber >= totalSetsCount) {
+                setShowAddEntryModal(false);
+                setCurrentSetNumber(1);
+              }
+            }
+          } catch (error) {
+            console.error('Failed to add entry:', error);
+          }
+        }}
+        exercises={exercises.map(e => ({
+          id: e.id,
+          name: e.name,
+          category: e.category,
+          muscleGroups: e.muscleGroups,
+          equipment: e.equipment
+        }))}
+        recentExercises={recentExercises.map(e => {
+          const full = exercises.find(ex => ex.id === e.id);
+          return {
+            id: e.id,
+            name: e.name,
+            category: full?.category || 'General',
+            muscleGroups: full?.muscleGroups || [],
+            equipment: full?.equipment || []
+          };
+        })}
+        initialExercise={selectedExercise ? {
+          id: selectedExercise.id,
+          name: selectedExercise.name,
+          category: selectedExercise.category,
+          muscleGroups: selectedExercise.muscleGroups,
+          equipment: selectedExercise.equipment
+        } : null}
+        currentSet={currentSetNumber}
+        totalSets={totalSetsCount}
+        lastEntry={lastLoggedEntry}
+      />
+
+      {/* Rest Timer Overlay - Full screen */}
+      <RestTimerOverlay
+        isOpen={showRestTimerOverlay}
+        initialSeconds={restTimerSeconds}
+        onComplete={() => {
+          setShowRestTimerOverlay(false);
+          setShowAddEntryModal(true); // Re-open add modal for next set
+        }}
+        onSkip={() => {
+          setShowRestTimerOverlay(false);
+          setShowAddEntryModal(true);
+        }}
+        nextExercise={selectedExercise ? {
+          name: selectedExercise.name,
+          weight: lastLoggedEntry?.weight || 0,
+          reps: lastLoggedEntry?.reps || 8
+        } : undefined}
       />
     </>
   );
