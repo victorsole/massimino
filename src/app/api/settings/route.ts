@@ -1,9 +1,11 @@
 // src/app/api/settings/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/config';
+import { authOptions } from '@/core/auth/config';
 import { prisma } from '@/core/database/client';
 import { randomUUID } from 'crypto';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
