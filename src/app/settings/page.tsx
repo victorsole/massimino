@@ -60,6 +60,11 @@ export default function SettingsPage() {
   const fetchSettings = async () => {
     try {
       const response = await fetch('/api/settings');
+      if (response.status === 401) {
+        // Session expired or not authenticated
+        router.push('/login');
+        return;
+      }
       if (!response.ok) throw new Error('Failed to fetch settings');
       const data = await response.json();
       setSettings(data.settings);
