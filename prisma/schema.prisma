@@ -883,6 +883,11 @@ model exercises {
   curated                    Boolean                      @default(false)
   source                     String?
   sourceId                   String?
+  // Media tracking fields
+  hasMedia                   Boolean                      @default(false)
+  mediaCount                 Int                          @default(0)
+  mediaCoverageScore         Float                        @default(0)
+  lastMediaAddedAt           DateTime?
   exercise_variations        exercise_variations[]
   personal_records           personal_records[]
   team_workout_exercises     team_workout_exercises[]
@@ -903,6 +908,8 @@ model exercises {
   @@index([createdBy, isCustom])
   @@index([isActive, difficulty])
   @@index([name])
+  @@index([isActive, hasMedia])
+  @@index([hasMedia, mediaCount])
 }
 
 model group_classes {
@@ -2596,6 +2603,10 @@ model exercise_media {
   featured         Boolean  @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime
+  // Analytics fields
+  viewCount        Int      @default(0)
+  attachmentCount  Int      @default(0) // How many workout entries used this media
+  rejectionReason  String?
 
   users               users                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   exercises           exercises?            @relation(fields: [globalExerciseId], references: [id])

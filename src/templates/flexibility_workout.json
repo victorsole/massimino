@@ -1,119 +1,747 @@
 {
-    "program": "Flexibility Workout",
-    "author": "Victor Solé Ferioli",
-    "duration_weeks": 3,
-    "session_duration_minutes": {
-      "min": 20,
-      "max": 30
-    },
-    "frequency_per_week": 3,
-    "goal": {
-      "outcome_goal": "Touch toes with knees extended by end of Week 3",
-      "progress_goals": [
-        "Increase hip and shoulder mobility by 10° using mobility benchmarks",
-        "Reduce DOMS by at least 30% through consistent stretching and rolling"
+  "program": "Flexibility Workout",
+  "program_id": "flexibility-workout",
+  "author": "Victor Solé Ferioli",
+  "version": "2.0_standardized",
+  "duration_weeks": 3,
+  "session_duration_minutes": {
+    "min": 20,
+    "max": 30
+  },
+  "frequency_per_week": 3,
+  "level": "All Levels",
+  "goal": {
+    "outcome_goal": "Touch toes with knees extended by end of Week 3",
+    "progress_goals": [
+      "Increase hip and shoulder mobility by 10° using mobility benchmarks",
+      "Reduce DOMS by at least 30% through consistent stretching and rolling"
+    ]
+  },
+  "focus": "Mobility, Recovery, Injury Prevention",
+  "flexibility_methods": [
+    "SMR (foam rolling)",
+    "Static stretching",
+    "Active-isolated stretching",
+    "Dynamic warm-up"
+  ],
+  "equipment": [
+    "Foam roller",
+    "Yoga mat",
+    "Optional resistance band"
+  ],
+
+  "training_days": [
+    {
+      "day": 1,
+      "day_name": "Week 1 - Session 1: Restore & Relax",
+      "focus": "Foam Rolling & Static Stretching",
+      "exercises": [
+        {
+          "exercise_id": "foam-roll-calves",
+          "exercise_name": "Foam Roll Calves",
+          "order": 1,
+          "sets": 1,
+          "reps": "30 sec each leg",
+          "rest_seconds": 0,
+          "notes": "Roll slowly, pause on tender spots",
+          "primary_muscle_groups": ["calves"],
+          "equipment": ["foam_roller"]
+        },
+        {
+          "exercise_id": "foam-roll-quads",
+          "exercise_name": "Foam Roll Quads",
+          "order": 2,
+          "sets": 1,
+          "reps": "30 sec each leg",
+          "rest_seconds": 0,
+          "notes": "Roll from hip to knee",
+          "primary_muscle_groups": ["quadriceps"],
+          "equipment": ["foam_roller"]
+        },
+        {
+          "exercise_id": "foam-roll-lats",
+          "exercise_name": "Foam Roll Lats",
+          "order": 3,
+          "sets": 1,
+          "reps": "30 sec each side",
+          "rest_seconds": 0,
+          "notes": "Arm extended overhead, roll side body",
+          "primary_muscle_groups": ["lats"],
+          "equipment": ["foam_roller"]
+        },
+        {
+          "exercise_id": "static-hamstring-stretch",
+          "exercise_name": "Static Hamstring Stretch",
+          "order": 4,
+          "sets": 2,
+          "reps": "30 sec each leg",
+          "rest_seconds": 10,
+          "notes": "Seated or lying, reach for toes",
+          "primary_muscle_groups": ["hamstrings"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "hip-flexor-stretch",
+          "exercise_name": "Hip Flexor Stretch",
+          "order": 5,
+          "sets": 2,
+          "reps": "30 sec each side",
+          "rest_seconds": 10,
+          "notes": "Kneeling lunge position, squeeze glute",
+          "primary_muscle_groups": ["hip_flexors"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "chest-stretch",
+          "exercise_name": "Chest Stretch",
+          "order": 6,
+          "sets": 2,
+          "reps": "30 sec each side",
+          "rest_seconds": 10,
+          "notes": "Doorway or wall stretch",
+          "primary_muscle_groups": ["chest", "front_deltoids"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "lat-stretch",
+          "exercise_name": "Lat Stretch",
+          "order": 7,
+          "sets": 2,
+          "reps": "30 sec each side",
+          "rest_seconds": 10,
+          "notes": "Side bend with arm overhead",
+          "primary_muscle_groups": ["lats"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "diaphragmatic-breathing",
+          "exercise_name": "Deep Belly Breathing",
+          "order": 8,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Supine position, breathe into belly",
+          "primary_muscle_groups": ["core", "diaphragm"],
+          "equipment": ["yoga_mat"]
+        }
       ]
     },
-    "focus": "Mobility, Recovery, Injury Prevention",
-    "flexibility_methods": [
-      "SMR (foam rolling)",
-      "Static stretching",
-      "Active-isolated stretching",
-      "Dynamic warm-up"
-    ],
-    "equipment": [
-      "Foam roller",
-      "Yoga mat",
-      "Optional resistance band"
-    ],
-    "weekly_structure": [
-      {
-        "week": 1,
-        "theme": "Restore + Relax",
-        "sessions": [
-          {
-            "name": "Session 1",
-            "components": [
-              "Foam Roll: Calves, Quads, Lats (30 sec each)",
-              "Static Stretch: Hamstring, Hip Flexor, Chest, Lat (30 sec x 2 rounds)",
-              "Breathing: 5 min deep belly breathing in supine position"
-            ]
-          },
-          {
-            "name": "Session 2",
-            "components": [
-              "Foam Roll: Glutes, IT Band, Thoracic Spine",
-              "Static Stretch: Glute Figure-4, Adductors, Neck",
-              "Seated forward fold (2 mins)"
-            ]
-          },
-          {
-            "name": "Session 3",
-            "components": [
-              "Yoga Flow: Child’s pose, Cobra, Downward Dog, Seated Twist",
-              "Static Hold: Pigeon pose (1 min each leg), Supine Twist",
-              "Diaphragmatic breathing to finish"
-            ]
-          }
-        ]
-      },
-      {
-        "week": 2,
-        "theme": "Active Recovery",
-        "sessions": [
-          {
-            "name": "Session 1",
-            "components": [
-              "Foam Roll: Calves, Quads",
-              "Active-Isolated Stretch: Hamstring, Hip Flexor, Chest (8–10 reps each)",
-              "Static hold for tightest areas (30 sec)"
-            ]
-          },
-          {
-            "name": "Session 2",
-            "components": [
-              "Band-assisted active stretches: Shoulders, Hip Flexors",
-              "Supine Leg Swings + Standing Arm Circles",
-              "Supine knees-to-chest hold (2 min)"
-            ]
-          },
-          {
-            "name": "Session 3",
-            "components": [
-              "Mobility Circuit: Cat-Cow, 90/90 Transitions, World’s Greatest Stretch",
-              "Static: Standing Forward Bend, Shoulder Thread-the-Needle"
-            ]
-          }
-        ]
-      },
-      {
-        "week": 3,
-        "theme": "Pre-Performance & Flow",
-        "sessions": [
-          {
-            "name": "Session 1",
-            "components": [
-              "Dynamic Warm-Up: Leg Swings, Arm Circles, Inchworms, Hip Openers",
-              "Static Post-Workout: Hamstrings, Adductors, Triceps, Neck"
-            ]
-          },
-          {
-            "name": "Session 2",
-            "components": [
-              "Foam Rolling (short): Quads and Lats",
-              "Dynamic: Spinal rolls, Deep squats with hold, Arm crosses",
-              "Yoga Flow: 3 rounds of Sun Salutation A"
-            ]
-          },
-          {
-            "name": "Session 3",
-            "components": [
-              "Full Body Flow: Downward Dog to Lunge, Cobra to Child’s Pose, Supine Leg Raise to Seated Twist",
-              "5 min relaxed breathing"
-            ]
-          }
-        ]
-      }
-    ]
-  }
-  
+    {
+      "day": 2,
+      "day_name": "Week 1 - Session 2: Lower Body Focus",
+      "focus": "Glutes, IT Band, Spine Mobility",
+      "exercises": [
+        {
+          "exercise_id": "foam-roll-glutes",
+          "exercise_name": "Foam Roll Glutes",
+          "order": 1,
+          "sets": 1,
+          "reps": "30 sec each side",
+          "rest_seconds": 0,
+          "notes": "Sit on roller, cross one ankle over knee",
+          "primary_muscle_groups": ["glutes"],
+          "equipment": ["foam_roller"]
+        },
+        {
+          "exercise_id": "foam-roll-it-band",
+          "exercise_name": "Foam Roll IT Band",
+          "order": 2,
+          "sets": 1,
+          "reps": "30 sec each side",
+          "rest_seconds": 0,
+          "notes": "Roll outer thigh from hip to knee",
+          "primary_muscle_groups": ["it_band"],
+          "equipment": ["foam_roller"]
+        },
+        {
+          "exercise_id": "foam-roll-thoracic-spine",
+          "exercise_name": "Foam Roll Thoracic Spine",
+          "order": 3,
+          "sets": 1,
+          "reps": "60 sec",
+          "rest_seconds": 0,
+          "notes": "Roll upper back, extend over roller",
+          "primary_muscle_groups": ["upper_back"],
+          "equipment": ["foam_roller"]
+        },
+        {
+          "exercise_id": "figure-four-stretch",
+          "exercise_name": "Glute Figure-4 Stretch",
+          "order": 4,
+          "sets": 2,
+          "reps": "30 sec each side",
+          "rest_seconds": 10,
+          "notes": "Supine, ankle over knee, pull knee to chest",
+          "primary_muscle_groups": ["glutes", "piriformis"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "adductor-stretch",
+          "exercise_name": "Adductor Stretch",
+          "order": 5,
+          "sets": 2,
+          "reps": "30 sec",
+          "rest_seconds": 10,
+          "notes": "Butterfly or side lunge position",
+          "primary_muscle_groups": ["adductors"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "neck-stretch",
+          "exercise_name": "Neck Stretch",
+          "order": 6,
+          "sets": 2,
+          "reps": "30 sec each side",
+          "rest_seconds": 10,
+          "notes": "Gentle ear to shoulder, hold",
+          "primary_muscle_groups": ["neck", "traps"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "seated-forward-fold",
+          "exercise_name": "Seated Forward Fold",
+          "order": 7,
+          "sets": 1,
+          "reps": "2 min",
+          "rest_seconds": 0,
+          "notes": "Relax into stretch, breathe deeply",
+          "primary_muscle_groups": ["hamstrings", "lower_back"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "day_name": "Week 1 - Session 3: Yoga Flow",
+      "focus": "Full Body Flow & Deep Stretches",
+      "exercises": [
+        {
+          "exercise_id": "child-pose",
+          "exercise_name": "Child's Pose",
+          "order": 1,
+          "sets": 1,
+          "reps": "60 sec",
+          "rest_seconds": 0,
+          "notes": "Arms extended, forehead to floor",
+          "primary_muscle_groups": ["back", "shoulders", "hips"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "cobra-pose",
+          "exercise_name": "Cobra Pose",
+          "order": 2,
+          "sets": 1,
+          "reps": "30 sec",
+          "rest_seconds": 0,
+          "notes": "Gentle back extension, shoulders down",
+          "primary_muscle_groups": ["core", "hip_flexors", "chest"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "downward-dog",
+          "exercise_name": "Downward Dog",
+          "order": 3,
+          "sets": 1,
+          "reps": "60 sec",
+          "rest_seconds": 0,
+          "notes": "Pedal heels, press chest toward thighs",
+          "primary_muscle_groups": ["hamstrings", "calves", "shoulders"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "seated-twist",
+          "exercise_name": "Seated Twist",
+          "order": 4,
+          "sets": 2,
+          "reps": "30 sec each side",
+          "rest_seconds": 0,
+          "notes": "Spine tall, twist from core",
+          "primary_muscle_groups": ["spine", "obliques"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "pigeon-pose",
+          "exercise_name": "Pigeon Pose",
+          "order": 5,
+          "sets": 1,
+          "reps": "60 sec each leg",
+          "rest_seconds": 0,
+          "notes": "Deep hip opener, fold forward if comfortable",
+          "primary_muscle_groups": ["glutes", "hip_flexors", "piriformis"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "supine-twist",
+          "exercise_name": "Supine Twist",
+          "order": 6,
+          "sets": 2,
+          "reps": "30 sec each side",
+          "rest_seconds": 0,
+          "notes": "Shoulders flat, let gravity pull knee down",
+          "primary_muscle_groups": ["spine", "glutes", "lower_back"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "diaphragmatic-breathing",
+          "exercise_name": "Diaphragmatic Breathing",
+          "order": 7,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Final relaxation and recovery",
+          "primary_muscle_groups": ["core", "diaphragm"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "day_name": "Week 2 - Session 1: Active Recovery",
+      "focus": "Active-Isolated Stretching",
+      "exercises": [
+        {
+          "exercise_id": "foam-roll-calves",
+          "exercise_name": "Foam Roll Calves",
+          "order": 1,
+          "sets": 1,
+          "reps": "30 sec each",
+          "rest_seconds": 0,
+          "notes": "Quick release work",
+          "primary_muscle_groups": ["calves"],
+          "equipment": ["foam_roller"]
+        },
+        {
+          "exercise_id": "foam-roll-quads",
+          "exercise_name": "Foam Roll Quads",
+          "order": 2,
+          "sets": 1,
+          "reps": "30 sec each",
+          "rest_seconds": 0,
+          "notes": "Quick release work",
+          "primary_muscle_groups": ["quadriceps"],
+          "equipment": ["foam_roller"]
+        },
+        {
+          "exercise_id": "active-hamstring-stretch",
+          "exercise_name": "Active-Isolated Hamstring Stretch",
+          "order": 3,
+          "sets": 1,
+          "reps": "8-10 each leg",
+          "rest_seconds": 0,
+          "notes": "2 sec hold, release, repeat",
+          "primary_muscle_groups": ["hamstrings"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "active-hip-flexor-stretch",
+          "exercise_name": "Active-Isolated Hip Flexor Stretch",
+          "order": 4,
+          "sets": 1,
+          "reps": "8-10 each side",
+          "rest_seconds": 0,
+          "notes": "2 sec hold, release, repeat",
+          "primary_muscle_groups": ["hip_flexors"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "active-chest-stretch",
+          "exercise_name": "Active-Isolated Chest Stretch",
+          "order": 5,
+          "sets": 1,
+          "reps": "8-10 each side",
+          "rest_seconds": 0,
+          "notes": "2 sec hold, release, repeat",
+          "primary_muscle_groups": ["chest", "front_deltoids"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "static-hold-tightest",
+          "exercise_name": "Static Hold - Tightest Area",
+          "order": 6,
+          "sets": 2,
+          "reps": "30 sec",
+          "rest_seconds": 10,
+          "notes": "Focus on your personal problem area",
+          "primary_muscle_groups": ["varies"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 5,
+      "day_name": "Week 2 - Session 2: Band-Assisted",
+      "focus": "Band-Assisted Active Stretches",
+      "exercises": [
+        {
+          "exercise_id": "band-shoulder-stretch",
+          "exercise_name": "Band-Assisted Shoulder Stretch",
+          "order": 1,
+          "sets": 2,
+          "reps": "30 sec each direction",
+          "rest_seconds": 10,
+          "notes": "Pass-throughs and overhead stretches",
+          "primary_muscle_groups": ["shoulders", "chest"],
+          "equipment": ["resistance_band"]
+        },
+        {
+          "exercise_id": "band-hip-flexor-stretch",
+          "exercise_name": "Band-Assisted Hip Flexor Stretch",
+          "order": 2,
+          "sets": 2,
+          "reps": "30 sec each side",
+          "rest_seconds": 10,
+          "notes": "Loop band around foot for deeper stretch",
+          "primary_muscle_groups": ["hip_flexors"],
+          "equipment": ["resistance_band", "yoga_mat"]
+        },
+        {
+          "exercise_id": "supine-leg-swing",
+          "exercise_name": "Supine Leg Swings",
+          "order": 3,
+          "sets": 2,
+          "reps": "10 each direction, each leg",
+          "rest_seconds": 0,
+          "notes": "Controlled swings, increasing range",
+          "primary_muscle_groups": ["hip_flexors", "hamstrings"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "standing-arm-circles",
+          "exercise_name": "Standing Arm Circles",
+          "order": 4,
+          "sets": 2,
+          "reps": "10 each direction",
+          "rest_seconds": 0,
+          "notes": "Small to large circles",
+          "primary_muscle_groups": ["shoulders", "rotator_cuff"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "knees-to-chest",
+          "exercise_name": "Supine Knees-to-Chest Hold",
+          "order": 5,
+          "sets": 1,
+          "reps": "2 min",
+          "rest_seconds": 0,
+          "notes": "Gentle rock side to side",
+          "primary_muscle_groups": ["lower_back", "glutes"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 6,
+      "day_name": "Week 2 - Session 3: Mobility Circuit",
+      "focus": "Dynamic Mobility Work",
+      "exercises": [
+        {
+          "exercise_id": "cat-cow",
+          "exercise_name": "Cat-Cow",
+          "order": 1,
+          "sets": 2,
+          "reps": "10 cycles",
+          "rest_seconds": 0,
+          "notes": "Slow, coordinated breath and movement",
+          "primary_muscle_groups": ["spine", "core"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "90-90-transitions",
+          "exercise_name": "90/90 Transitions",
+          "order": 2,
+          "sets": 2,
+          "reps": "8 each side",
+          "rest_seconds": 0,
+          "notes": "Windshield wiper legs, keep back tall",
+          "primary_muscle_groups": ["hips", "glutes"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "worlds-greatest-stretch",
+          "exercise_name": "World's Greatest Stretch",
+          "order": 3,
+          "sets": 2,
+          "reps": "5 each side",
+          "rest_seconds": 0,
+          "notes": "Lunge with rotation and reach",
+          "primary_muscle_groups": ["hip_flexors", "thoracic_spine", "hamstrings"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "standing-forward-bend",
+          "exercise_name": "Standing Forward Bend",
+          "order": 4,
+          "sets": 2,
+          "reps": "30 sec",
+          "rest_seconds": 10,
+          "notes": "Soft knees, fold from hips",
+          "primary_muscle_groups": ["hamstrings", "lower_back"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "thread-the-needle",
+          "exercise_name": "Thread-the-Needle",
+          "order": 5,
+          "sets": 2,
+          "reps": "30 sec each side",
+          "rest_seconds": 0,
+          "notes": "Thoracic rotation stretch",
+          "primary_muscle_groups": ["thoracic_spine", "shoulders"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 7,
+      "day_name": "Week 3 - Session 1: Pre-Performance",
+      "focus": "Dynamic Warm-Up & Static Post",
+      "exercises": [
+        {
+          "exercise_id": "leg-swings",
+          "exercise_name": "Leg Swings",
+          "order": 1,
+          "sets": 2,
+          "reps": "10 each direction, each leg",
+          "rest_seconds": 0,
+          "notes": "Forward/back and side to side",
+          "primary_muscle_groups": ["hip_flexors", "hamstrings", "adductors"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "arm-circles",
+          "exercise_name": "Arm Circles",
+          "order": 2,
+          "sets": 2,
+          "reps": "10 each direction",
+          "rest_seconds": 0,
+          "notes": "Small to large",
+          "primary_muscle_groups": ["shoulders", "rotator_cuff"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "inchworm",
+          "exercise_name": "Inchworms",
+          "order": 3,
+          "sets": 2,
+          "reps": "5",
+          "rest_seconds": 0,
+          "notes": "Walk hands out to plank, walk back",
+          "primary_muscle_groups": ["hamstrings", "core", "shoulders"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "hip-openers",
+          "exercise_name": "Hip Openers",
+          "order": 4,
+          "sets": 2,
+          "reps": "10 each leg",
+          "rest_seconds": 0,
+          "notes": "Knee circles, fire hydrants",
+          "primary_muscle_groups": ["hips", "glutes"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "static-hamstring-stretch",
+          "exercise_name": "Static Hamstring Stretch",
+          "order": 5,
+          "sets": 2,
+          "reps": "30 sec each",
+          "rest_seconds": 10,
+          "notes": "Post-workout static hold",
+          "primary_muscle_groups": ["hamstrings"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "adductor-stretch",
+          "exercise_name": "Adductor Stretch",
+          "order": 6,
+          "sets": 2,
+          "reps": "30 sec",
+          "rest_seconds": 10,
+          "notes": "Post-workout static hold",
+          "primary_muscle_groups": ["adductors"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "tricep-stretch",
+          "exercise_name": "Tricep Stretch",
+          "order": 7,
+          "sets": 2,
+          "reps": "30 sec each arm",
+          "rest_seconds": 10,
+          "notes": "Overhead tricep stretch",
+          "primary_muscle_groups": ["triceps"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "neck-stretch",
+          "exercise_name": "Neck Stretch",
+          "order": 8,
+          "sets": 2,
+          "reps": "30 sec each side",
+          "rest_seconds": 10,
+          "notes": "Gentle ear to shoulder",
+          "primary_muscle_groups": ["neck", "traps"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 8,
+      "day_name": "Week 3 - Session 2: Dynamic Flow",
+      "focus": "Movement Flow & Sun Salutations",
+      "exercises": [
+        {
+          "exercise_id": "foam-roll-quads",
+          "exercise_name": "Foam Roll Quads",
+          "order": 1,
+          "sets": 1,
+          "reps": "30 sec each",
+          "rest_seconds": 0,
+          "notes": "Quick release",
+          "primary_muscle_groups": ["quadriceps"],
+          "equipment": ["foam_roller"]
+        },
+        {
+          "exercise_id": "foam-roll-lats",
+          "exercise_name": "Foam Roll Lats",
+          "order": 2,
+          "sets": 1,
+          "reps": "30 sec each side",
+          "rest_seconds": 0,
+          "notes": "Quick release",
+          "primary_muscle_groups": ["lats"],
+          "equipment": ["foam_roller"]
+        },
+        {
+          "exercise_id": "spinal-rolls",
+          "exercise_name": "Spinal Rolls",
+          "order": 3,
+          "sets": 2,
+          "reps": "5",
+          "rest_seconds": 0,
+          "notes": "Roll up and down through spine",
+          "primary_muscle_groups": ["spine", "core"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "deep-squat-hold",
+          "exercise_name": "Deep Squat Hold",
+          "order": 4,
+          "sets": 2,
+          "reps": "30 sec",
+          "rest_seconds": 10,
+          "notes": "Heels down if possible, chest up",
+          "primary_muscle_groups": ["hips", "ankles", "lower_back"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "arm-crosses",
+          "exercise_name": "Arm Crosses",
+          "order": 5,
+          "sets": 2,
+          "reps": "10 alternating",
+          "rest_seconds": 0,
+          "notes": "Cross arms in front of chest",
+          "primary_muscle_groups": ["shoulders", "chest"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "sun-salutation-a",
+          "exercise_name": "Sun Salutation A",
+          "order": 6,
+          "sets": 3,
+          "reps": "1 full round",
+          "rest_seconds": 0,
+          "notes": "Mountain pose → Forward fold → Plank → Chaturanga → Updog → Downdog → Forward fold → Mountain",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 9,
+      "day_name": "Week 3 - Session 3: Full Body Flow",
+      "focus": "Complete Integration & Final Flow",
+      "exercises": [
+        {
+          "exercise_id": "downward-dog",
+          "exercise_name": "Downward Dog",
+          "order": 1,
+          "sets": 1,
+          "reps": "30 sec",
+          "rest_seconds": 0,
+          "notes": "Starting position",
+          "primary_muscle_groups": ["hamstrings", "calves", "shoulders"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "lunge-flow",
+          "exercise_name": "Downward Dog to Lunge",
+          "order": 2,
+          "sets": 2,
+          "reps": "5 each side",
+          "rest_seconds": 0,
+          "notes": "Step foot forward into deep lunge",
+          "primary_muscle_groups": ["hip_flexors", "hamstrings"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "cobra-pose",
+          "exercise_name": "Cobra Pose",
+          "order": 3,
+          "sets": 2,
+          "reps": "30 sec",
+          "rest_seconds": 0,
+          "notes": "Gentle backbend",
+          "primary_muscle_groups": ["core", "hip_flexors", "chest"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "child-pose",
+          "exercise_name": "Child's Pose",
+          "order": 4,
+          "sets": 2,
+          "reps": "30 sec",
+          "rest_seconds": 0,
+          "notes": "Rest and breathe",
+          "primary_muscle_groups": ["back", "shoulders", "hips"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "supine-leg-raise",
+          "exercise_name": "Supine Leg Raise to Stretch",
+          "order": 5,
+          "sets": 2,
+          "reps": "5 each leg with 10 sec hold",
+          "rest_seconds": 0,
+          "notes": "Raise leg, hold at top",
+          "primary_muscle_groups": ["hamstrings", "hip_flexors"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "seated-twist",
+          "exercise_name": "Seated Twist",
+          "order": 6,
+          "sets": 2,
+          "reps": "30 sec each side",
+          "rest_seconds": 0,
+          "notes": "Final spinal rotation",
+          "primary_muscle_groups": ["spine", "obliques"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "relaxed-breathing",
+          "exercise_name": "Relaxed Breathing",
+          "order": 7,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Final relaxation, savasana or comfortable seated position",
+          "primary_muscle_groups": ["diaphragm"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    }
+  ]
+}

@@ -19,9 +19,12 @@ import {
   Target,
   Trophy,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Video,
+  Play
 } from 'lucide-react';
 import { cn } from '@/core/utils/common';
+import { FormGuideModal } from './form_guide_modal';
 
 // Types
 export type WorkoutEntry = {
@@ -137,6 +140,8 @@ export function WorkoutCard({
 }: WorkoutCardProps) {
   const [showComments, setShowComments] = useState(false);
   const [exerciseMedia, setExerciseMedia] = useState<{ thumbnailUrl?: string; url?: string } | null>(null);
+  const [showFormGuide, setShowFormGuide] = useState(false);
+  const [hasMediaAvailable, setHasMediaAvailable] = useState(false);
 
   // Fetch exercise media on mount
   useEffect(() => {
@@ -146,13 +151,17 @@ export function WorkoutCard({
         if (response.ok) {
           const data = await response.json();
           if (data.media && data.media.length > 0) {
+            setHasMediaAvailable(true);
             // Get the featured one or first one
             const featured = data.media.find((m: any) => m.featured) || data.media[0];
             setExerciseMedia(featured);
+          } else {
+            setHasMediaAvailable(false);
           }
         }
       } catch (error) {
         // Silently fail - media is optional
+        setHasMediaAvailable(false);
       }
     };
 
@@ -280,17 +289,40 @@ export function WorkoutCard({
               )}
             </div>
 
-            {/* Exercise Media Thumbnail */}
-            {exerciseMedia?.thumbnailUrl && (
-              <div className="mt-3">
-                <img
-                  src={exerciseMedia.thumbnailUrl}
-                  alt={`${entry.exercise.name} demonstration`}
-                  className="w-full h-32 object-cover rounded-lg border border-gray-200"
-                  loading="lazy"
-                />
-              </div>
-            )}
+            {/* Exercise Media Thumbnail with Form Guide Button */}
+            <div className="mt-3">
+              {exerciseMedia?.thumbnailUrl ? (
+                <div className="relative group">
+                  <img
+                    src={exerciseMedia.thumbnailUrl}
+                    alt={`${entry.exercise.name} demonstration`}
+                    className="w-full h-32 object-cover rounded-lg border border-gray-200"
+                    loading="lazy"
+                  />
+                  {/* Form Guide overlay button */}
+                  <button
+                    onClick={() => setShowFormGuide(true)}
+                    className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
+                    aria-label="View form guide"
+                  >
+                    <div className="flex items-center gap-2 bg-white/90 px-3 py-2 rounded-full shadow-lg">
+                      <Play className="h-4 w-4 text-green-600" />
+                      <span className="text-sm font-medium text-gray-800">Form Guide</span>
+                    </div>
+                  </button>
+                </div>
+              ) : hasMediaAvailable ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowFormGuide(true)}
+                  className="w-full flex items-center justify-center gap-2 text-green-700 border-green-200 hover:bg-green-50"
+                >
+                  <Video className="h-4 w-4" />
+                  View Form Guide
+                </Button>
+              ) : null}
+            </div>
 
             {/* Trainer Badge (if viewing athlete's workout) */}
             {isTrainer && athleteName && (
@@ -473,6 +505,14 @@ export function WorkoutCard({
           </div>
         </CardContent>
       </Card>
+
+      {/* Form Guide Modal */}
+      <FormGuideModal
+        exerciseId={entry.exercise.id}
+        exerciseName={entry.exercise.name}
+        isOpen={showFormGuide}
+        onClose={() => setShowFormGuide(false)}
+      />
     </article>
   );
 }

@@ -1,7 +1,8 @@
 {
     "program": "I Don't Have Much Time - High-Efficiency Training",
+    "program_id": "i-dont-have-much-time",
     "author": "Victor Solé Ferioli",
-    "version": "2.0_corrected",
+    "version": "3.0_standardized",
     "target_population": "Busy individuals with 20-30 minutes available, intermediate fitness level",
     "duration_weeks": 3,
     "session_duration_minutes": {
@@ -25,7 +26,7 @@
       "required": ["Timer", "Water"],
       "optional": ["Yoga mat", "Interval timer app"]
     },
-    
+
     "prerequisites": {
       "do_not_start_if": [
         "No exercise in 6+ months (do beginner program first)",
@@ -39,7 +40,7 @@
         "Any cardiovascular concerns"
       ]
     },
-    
+
     "red_flags_stop": [
       "Sharp joint pain",
       "Chest pain or pressure",
@@ -47,7 +48,7 @@
       "Nausea or faintness",
       "Inability to catch breath"
     ],
-    
+
     "goals": {
       "what_program_can_do": [
         "Build cardiovascular endurance rapidly",
@@ -71,143 +72,388 @@
         "Increased energy levels"
       ]
     },
-    
-    "weekly_structure": [
+
+    "training_days": [
       {
-        "week": 1,
-        "theme": "Foundation & Adaptation",
-        "focus": "Learn movements, establish baseline, prioritize FORM over speed",
-        "workout_a": {
-          "name": "Full-Body Circuit",
-          "duration_minutes": "20-25",
-          "format": "30 sec work / 15 sec rest, 3-4 rounds",
-          "warm_up_minutes": 5,
-          "main_work_minutes": "12-15",
-          "cool_down_minutes": "3-5",
-          "exercises": [
-            {
-              "name": "Bodyweight Squats",
-              "goal_reps": "10-15",
-              "modification": "Hold chair for balance"
-            },
-            {
-              "name": "Push-Ups",
-              "goal_reps": "6-12",
-              "levels": ["Wall", "Counter", "Couch", "Knee", "Floor"],
-              "cue": "Elbows 45°, core tight"
-            },
-            {
-              "name": "Alternating Reverse Lunges",
-              "goal_reps": "10-14 total",
-              "modification": "Hold chair, step-back only"
-            },
-            {
-              "name": "Mountain Climbers",
-              "goal_reps": "20-30",
-              "modification": "Hands elevated, slower pace, step version"
-            },
-            {
-              "name": "Glute Bridges",
-              "goal_reps": "15-20",
-              "cue": "Squeeze glutes NOT lower back"
-            }
-          ]
-        },
-        "workout_b": {
-          "name": "Strength-Endurance EMOM",
-          "duration_minutes": "20-25",
-          "format": "Every Minute On the Minute for 15 minutes",
-          "pattern": [
-            "Minute 1: 12-15 squats",
-            "Minute 2: 8-12 push-ups",
-            "Minute 3: 30 sec high knees (or march)"
-          ],
-          "rounds": 5,
-          "finisher": "Plank hold: 20 sec × 3 sets"
+        "day": 1,
+        "day_name": "Week 1 - Workout A",
+        "focus": "Full-Body Circuit - Foundation",
+        "format": "30 sec work / 15 sec rest, 3-4 rounds",
+        "duration_minutes": "20-25",
+        "warm_up_minutes": 5,
+        "main_work_minutes": "12-15",
+        "cool_down_minutes": "3-5",
+        "exercises": [
+          {
+            "exercise_id": "bodyweight-squat",
+            "exercise_name": "Bodyweight Squats",
+            "order": 1,
+            "sets": 4,
+            "reps": "10-15",
+            "rest_seconds": 15,
+            "work_seconds": 30,
+            "notes": "Hold chair for balance if needed",
+            "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "push-up",
+            "exercise_name": "Push-Ups",
+            "order": 2,
+            "sets": 4,
+            "reps": "6-12",
+            "rest_seconds": 15,
+            "work_seconds": 30,
+            "notes": "Elbows 45°, core tight. Levels: Wall, Counter, Couch, Knee, Floor",
+            "primary_muscle_groups": ["chest", "triceps", "front_deltoids"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "reverse-lunge",
+            "exercise_name": "Alternating Reverse Lunges",
+            "order": 3,
+            "sets": 4,
+            "reps": "10-14 total",
+            "rest_seconds": 15,
+            "work_seconds": 30,
+            "notes": "Hold chair, step-back only if needed",
+            "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "mountain-climber",
+            "exercise_name": "Mountain Climbers",
+            "order": 4,
+            "sets": 4,
+            "reps": "20-30",
+            "rest_seconds": 15,
+            "work_seconds": 30,
+            "notes": "Hands elevated, slower pace, or step version for modification",
+            "primary_muscle_groups": ["core", "hip_flexors", "shoulders"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "glute-bridge",
+            "exercise_name": "Glute Bridges",
+            "order": 5,
+            "sets": 4,
+            "reps": "15-20",
+            "rest_seconds": 15,
+            "work_seconds": 30,
+            "notes": "Squeeze glutes NOT lower back",
+            "primary_muscle_groups": ["glutes", "hamstrings"],
+            "equipment": ["bodyweight"]
+          }
+        ]
+      },
+      {
+        "day": 2,
+        "day_name": "Week 1 - Workout B",
+        "focus": "Strength-Endurance EMOM",
+        "format": "Every Minute On the Minute for 15 minutes",
+        "duration_minutes": "20-25",
+        "rounds": 5,
+        "exercises": [
+          {
+            "exercise_id": "bodyweight-squat",
+            "exercise_name": "Bodyweight Squats",
+            "order": 1,
+            "sets": 5,
+            "reps": "12-15",
+            "rest_seconds": 0,
+            "notes": "Minute 1 of each round",
+            "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "push-up",
+            "exercise_name": "Push-Ups",
+            "order": 2,
+            "sets": 5,
+            "reps": "8-12",
+            "rest_seconds": 0,
+            "notes": "Minute 2 of each round",
+            "primary_muscle_groups": ["chest", "triceps", "front_deltoids"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "high-knees",
+            "exercise_name": "High Knees",
+            "order": 3,
+            "sets": 5,
+            "reps": "30 sec",
+            "rest_seconds": 0,
+            "notes": "Minute 3 of each round. Alternative: High marching",
+            "primary_muscle_groups": ["hip_flexors", "quadriceps", "calves"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "plank",
+            "exercise_name": "Plank Hold",
+            "order": 4,
+            "sets": 3,
+            "reps": "20 sec",
+            "rest_seconds": 30,
+            "notes": "Finisher - 20 sec × 3 sets",
+            "primary_muscle_groups": ["core", "shoulders"],
+            "equipment": ["bodyweight"]
+          }
+        ]
+      },
+      {
+        "day": 3,
+        "day_name": "Week 2 - Workout A",
+        "focus": "Full-Body Circuit - Intensity Increase",
+        "format": "40 sec work / 20 sec rest, 3-4 rounds",
+        "duration_minutes": "22-28",
+        "exercises": [
+          {
+            "exercise_id": "jump-squat",
+            "exercise_name": "Jump Squats",
+            "order": 1,
+            "sets": 4,
+            "reps": "10-15",
+            "rest_seconds": 20,
+            "work_seconds": 40,
+            "notes": "Land softly with bent knees. Modification: Fast air squats (no jump)",
+            "primary_muscle_groups": ["quadriceps", "glutes", "calves"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "push-up-shoulder-tap",
+            "exercise_name": "Push-Ups with Shoulder Tap",
+            "order": 2,
+            "sets": 4,
+            "reps": "8-12",
+            "rest_seconds": 20,
+            "work_seconds": 40,
+            "notes": "Modification: Elevated, or skip taps",
+            "primary_muscle_groups": ["chest", "triceps", "core"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "forward-lunge",
+            "exercise_name": "Alternating Forward Lunges",
+            "order": 3,
+            "sets": 4,
+            "reps": "12-16 total",
+            "rest_seconds": 20,
+            "work_seconds": 40,
+            "notes": "Step forward, return to standing",
+            "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "burpee",
+            "exercise_name": "Burpees",
+            "order": 4,
+            "sets": 4,
+            "reps": "6-10",
+            "rest_seconds": 20,
+            "work_seconds": 40,
+            "notes": "Levels: Full with push-up, Step-back, No jump up. Modification: Step version",
+            "primary_muscle_groups": ["full_body", "chest", "legs"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "flutter-kick",
+            "exercise_name": "Flutter Kicks",
+            "order": 5,
+            "sets": 4,
+            "reps": "30-40",
+            "rest_seconds": 20,
+            "work_seconds": 40,
+            "notes": "Press lower back into floor",
+            "primary_muscle_groups": ["core", "hip_flexors"],
+            "equipment": ["bodyweight"]
+          }
+        ]
+      },
+      {
+        "day": 4,
+        "day_name": "Week 2 - Workout B",
+        "focus": "Tabata-Style Intervals",
+        "format": "20 sec max effort / 10 sec rest, 8 rounds per exercise",
+        "duration_minutes": "20-25",
+        "rest_between_exercises": "60 seconds",
+        "exercises": [
+          {
+            "exercise_id": "bodyweight-squat",
+            "exercise_name": "Squats",
+            "order": 1,
+            "sets": 8,
+            "reps": "max",
+            "work_seconds": 20,
+            "rest_seconds": 10,
+            "notes": "4 min total - Tabata style",
+            "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "push-up",
+            "exercise_name": "Push-Ups",
+            "order": 2,
+            "sets": 8,
+            "reps": "max",
+            "work_seconds": 20,
+            "rest_seconds": 10,
+            "notes": "4 min total - Tabata style",
+            "primary_muscle_groups": ["chest", "triceps", "front_deltoids"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "mountain-climber",
+            "exercise_name": "Mountain Climbers",
+            "order": 3,
+            "sets": 8,
+            "reps": "max",
+            "work_seconds": 20,
+            "rest_seconds": 10,
+            "notes": "4 min total - Tabata style",
+            "primary_muscle_groups": ["core", "hip_flexors", "shoulders"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "plank-jack",
+            "exercise_name": "Plank Jacks",
+            "order": 4,
+            "sets": 8,
+            "reps": "max",
+            "work_seconds": 20,
+            "rest_seconds": 10,
+            "notes": "4 min total - Tabata style. Alternative: Plank Hold",
+            "primary_muscle_groups": ["core", "shoulders", "legs"],
+            "equipment": ["bodyweight"]
+          }
+        ]
+      },
+      {
+        "day": 5,
+        "day_name": "Week 3 - Workout A",
+        "focus": "Ascending Ladder - Peak Performance",
+        "format": "6-8-10-12 reps ladder",
+        "duration_minutes": "22-28",
+        "rest_between_rounds": "60 seconds",
+        "exercises": [
+          {
+            "exercise_id": "jump-squat",
+            "exercise_name": "Jump Squats",
+            "order": 1,
+            "sets": 4,
+            "reps": "6-8-10-12",
+            "rest_seconds": 60,
+            "notes": "Or fast squats if needed",
+            "primary_muscle_groups": ["quadriceps", "glutes", "calves"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "push-up",
+            "exercise_name": "Push-Ups",
+            "order": 2,
+            "sets": 4,
+            "reps": "6-8-10-12",
+            "rest_seconds": 60,
+            "notes": "Ascending ladder pattern",
+            "primary_muscle_groups": ["chest", "triceps", "front_deltoids"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "v-up",
+            "exercise_name": "V-Ups",
+            "order": 3,
+            "sets": 4,
+            "reps": "6-8-10-12",
+            "rest_seconds": 60,
+            "notes": "Or knee tucks for modification",
+            "primary_muscle_groups": ["core", "hip_flexors"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "plank-shoulder-tap",
+            "exercise_name": "Plank Shoulder Taps",
+            "order": 4,
+            "sets": 4,
+            "reps": "6-8-10-12",
+            "rest_seconds": 60,
+            "notes": "Maintain stable hips throughout",
+            "primary_muscle_groups": ["core", "shoulders"],
+            "equipment": ["bodyweight"]
+          }
+        ],
+        "finisher": {
+          "exercise_id": "diaphragmatic-breathing",
+          "exercise_name": "Diaphragmatic Breathing",
+          "duration_minutes": 2,
+          "pattern": "4 sec in / 6 sec out",
+          "notes": "Cool-down and recovery"
         }
       },
       {
-        "week": 2,
-        "theme": "Intensity Increase",
-        "focus": "Longer work intervals (40 sec), less rest (20 sec), challenging variations",
-        "workout_a": {
-          "name": "Full-Body Circuit",
-          "duration_minutes": "22-28",
-          "format": "40 sec work / 20 sec rest, 3-4 rounds",
-          "exercises": [
-            {
-              "name": "Jump Squats",
-              "goal_reps": "10-15",
-              "modification": "Fast air squats (no jump)",
-              "cue": "Land softly with bent knees"
-            },
-            {
-              "name": "Push-Ups with Shoulder Tap",
-              "goal_reps": "8-12 reps total",
-              "modification": "Elevated, or skip taps"
-            },
-            {
-              "name": "Alternating Forward Lunges",
-              "goal_reps": "12-16 total"
-            },
-            {
-              "name": "Burpees",
-              "goal_reps": "6-10",
-              "levels": ["Full with push-up", "Step-back", "No jump up"],
-              "modification": "Step version for all phases"
-            },
-            {
-              "name": "Flutter Kicks",
-              "goal_reps": "30-40",
-              "cue": "Press lower back into floor"
-            }
-          ]
-        },
-        "workout_b": {
-          "name": "Tabata-Style Intervals",
-          "duration_minutes": "20-25",
-          "format": "20 sec max effort / 10 sec rest, 8 rounds per exercise",
-          "exercises": [
-            "Squats (4 min total)",
-            "Push-Ups (4 min total)",
-            "Mountain Climbers (4 min total)",
-            "Plank Jacks or Hold (4 min total)"
-          ],
-          "rest_between_exercises": "60 seconds"
-        }
-      },
-      {
-        "week": 3,
-        "theme": "Peak Performance",
-        "focus": "Maximum effort, complex movements, testing capacity",
-        "workout_a": {
-          "name": "Ascending Ladder",
-          "duration_minutes": "22-28",
-          "format": "6-8-10-12 reps ladder",
-          "exercises": [
-            "Jump Squats (or fast squats)",
-            "Push-Ups",
-            "V-Ups (or knee tucks)",
-            "Plank Shoulder Taps"
-          ],
-          "rest_between_rounds": "60 seconds",
-          "finisher": "Diaphragmatic breathing: 2 min (4 sec in / 6 sec out)"
-        },
-        "workout_b": {
-          "name": "HIIT Pyramid",
-          "duration_minutes": "20-28",
-          "format": "Pyramid: 20-30-40-30-20 sec work, 15 sec rest",
-          "exercises": [
-            "Fast Feet (high-speed running in place)",
-            "Jumping Lunges (or alternating lunges)",
-            "Push-Up to Down Dog",
-            "Bicycle Crunches",
-            "Burpees"
-          ]
-        }
+        "day": 6,
+        "day_name": "Week 3 - Workout B",
+        "focus": "HIIT Pyramid",
+        "format": "Pyramid: 20-30-40-30-20 sec work, 15 sec rest",
+        "duration_minutes": "20-28",
+        "exercises": [
+          {
+            "exercise_id": "high-knees",
+            "exercise_name": "Fast Feet",
+            "order": 1,
+            "sets": 5,
+            "reps": "20-30-40-30-20 sec",
+            "rest_seconds": 15,
+            "notes": "High-speed running in place",
+            "primary_muscle_groups": ["calves", "hip_flexors", "quadriceps"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "jump-lunge",
+            "exercise_name": "Jumping Lunges",
+            "order": 2,
+            "sets": 5,
+            "reps": "20-30-40-30-20 sec",
+            "rest_seconds": 15,
+            "notes": "Or alternating lunges for modification",
+            "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "push-up-downdog",
+            "exercise_name": "Push-Up to Down Dog",
+            "order": 3,
+            "sets": 5,
+            "reps": "20-30-40-30-20 sec",
+            "rest_seconds": 15,
+            "notes": "Combines push-up with downward dog stretch",
+            "primary_muscle_groups": ["chest", "shoulders", "hamstrings"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "bicycle-crunch",
+            "exercise_name": "Bicycle Crunches",
+            "order": 4,
+            "sets": 5,
+            "reps": "20-30-40-30-20 sec",
+            "rest_seconds": 15,
+            "notes": "Control the movement, don't rush",
+            "primary_muscle_groups": ["core", "obliques"],
+            "equipment": ["bodyweight"]
+          },
+          {
+            "exercise_id": "burpee",
+            "exercise_name": "Burpees",
+            "order": 5,
+            "sets": 5,
+            "reps": "20-30-40-30-20 sec",
+            "rest_seconds": 15,
+            "notes": "Full effort - this is the peak!",
+            "primary_muscle_groups": ["full_body", "chest", "legs"],
+            "equipment": ["bodyweight"]
+          }
+        ]
       }
     ],
-    
+
     "exercise_modifications": {
       "push_ups": {
         "level_1": "Wall push-ups",
@@ -230,7 +476,7 @@
         "principle": "Multiple short holds > one long hold with bad form"
       }
     },
-    
+
     "time_saving_strategies": [
       "Pre-set space: mat, timer, water ready",
       "Use interval timer apps (Interval Timer iOS/Android)",
@@ -239,14 +485,14 @@
       "Clothes ready night before",
       "Emergency 10-min backup workout available"
     ],
-    
+
     "emergency_10_min_workout": {
       "warm_up": "2 min jog in place + arm circles",
       "main": "6 min: 30 sec work / 15 sec rest - Squats, Push-ups, Mountain Climbers (repeat 4x)",
       "cool_down": "2 min stretching",
       "purpose": "Better than skipping entirely"
     },
-    
+
     "progress_tracking": {
       "week_1_baseline": [
         "Total push-ups across all rounds",
@@ -267,7 +513,7 @@
       ],
       "goal": "25-50% increase in total reps from Week 1 to Week 3"
     },
-    
+
     "post_program_options": {
       "option_1": "Repeat with harder variations, less rest, extra rounds",
       "option_2": "Extend to 6 weeks with Week 3 structure",
@@ -275,7 +521,7 @@
       "option_4": "Maintain with Week 2-3 workouts indefinitely",
       "long_term_principle": "Consistency beats duration"
     },
-    
+
     "critical_form_cues": {
       "squat": "Chest up, weight in heels, knees track over toes, hip crease below knee",
       "push_up": "Straight line head to heels, elbows 45°, chest to floor, exhale on push",
@@ -284,7 +530,7 @@
       "burpee": "Land softly, solid plank, stand fully, breathe (exhale on jump)",
       "plank": "Neutral spine, shoulders over elbows/wrists, squeeze glutes and core, breathe, STOP if hips sag"
     },
-    
+
     "safety_reminders": {
       "never_skip_warmup": "Injury risk too high without warm-up",
       "rest_days_mandatory": "Recovery is when body improves",
