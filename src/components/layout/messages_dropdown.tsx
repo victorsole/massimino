@@ -138,7 +138,7 @@ export function MessagesDropdown({ userId }: MessagesDropdownProps) {
       </Button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-h-96 overflow-hidden sm:right-0 -right-2">
+        <div className="fixed sm:absolute left-4 right-4 sm:left-auto sm:right-0 top-16 sm:top-auto sm:mt-2 w-auto sm:w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-h-96 overflow-hidden">
           <div className="p-4 border-b border-gray-200 flex items-center justify-between">
             <h3 className="font-semibold text-gray-900">Messages</h3>
             <Button
