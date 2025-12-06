@@ -19,13 +19,13 @@ export async function GET() {
     });
 
     if (!settings) {
-      // Return default settings if none exist
+      // Return default settings if none exist - profile is PUBLIC by default
       return NextResponse.json({
         settings: {
+          profileVisibility: 'PUBLIC',
           allowDirectMessages: false,
           allowTrainerMessages: true,
           allowGroupMessages: true,
-          profileVisibility: 'PUBLIC',
           showOnlineStatus: false,
           showLastSeen: false,
           autoBlockFlaggedUsers: true,
@@ -39,10 +39,10 @@ export async function GET() {
 
     return NextResponse.json({
       settings: {
+        profileVisibility: settings.profileVisibility,
         allowDirectMessages: settings.allowDirectMessages,
         allowTrainerMessages: settings.allowTrainerMessages,
         allowGroupMessages: settings.allowGroupMessages,
-        profileVisibility: settings.profileVisibility,
         showOnlineStatus: settings.showOnlineStatus,
         showLastSeen: settings.showLastSeen,
         autoBlockFlaggedUsers: settings.autoBlockFlaggedUsers,
