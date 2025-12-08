@@ -1,6 +1,8 @@
-Read docs/dashboard_improvements.md and assess how to make those UX/UI improvements in the dashboard. Compare it with Massimino's aesthetics, laid down in docs/aesthetics.md. Then make a mockup html to assess them together. Don't code further.
+Analyse the whole project structure and when you're done just say "I'm ready". Don't code.
 
+Read docs/aesthetics.md.
 
+Implement everything you just did in the team called Mannekes, belonging to me (vsoleferioli@gmail.com). Check that all these changes will apply seemlessly and easily to the team Mannekes.
 
 Tomorrow I'll recruit as many people as possible to become users in Massimino: I'll introduce their emails in the team Mannekes through the miodal "Invite". Check that everything works properly and that they'll be able to receive an email from Massimino, then sign up to Massimino, and be able to create their own profile and see the workouts at the team Mannekes.
 

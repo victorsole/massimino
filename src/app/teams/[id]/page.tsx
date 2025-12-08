@@ -1,7 +1,25 @@
 // src/app/teams/[id]/page.tsx
 import React from 'react';
 import Link from 'next/link';
-import { TeamMembersLogs } from '@/components/teams/team_members_logs';
+import dynamic from 'next/dynamic';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/core';
+
+// Dynamic imports for client components
+const TeamMembersLogs = dynamic(
+  () => import('@/components/teams/team_members_logs').then(mod => mod.TeamMembersLogs),
+  { ssr: false, loading: () => <div className="p-4 text-gray-500">Loading...</div> }
+);
+
+const TeamJoinButton = dynamic(
+  () => import('@/components/teams/team_join_button').then(mod => mod.TeamJoinButton),
+  { ssr: false, loading: () => <div className="h-10 w-24 bg-gray-200 animate-pulse rounded"></div> }
+);
+
+const TeamShareButton = dynamic(
+  () => import('@/components/teams/team_share_button').then(mod => mod.TeamShareButton),
+  { ssr: false, loading: () => <div className="h-10 w-24 bg-gray-200 animate-pulse rounded"></div> }
+);
 
 async function get_team_details(team_id: string) {
   try {
@@ -16,14 +34,16 @@ async function get_team_details(team_id: string) {
   }
 }
 
-export default async function TeamPage({ params }: { params: { id: string } }) {
-  const team = await get_team_details(params.id);
+export default async function TeamPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const session = await getServerSession(authOptions);
+  const team = await get_team_details(id);
 
   if (!team) {
     return (
       <div className="max-w-5xl mx-auto p-6">
         <div className="mb-4">
-          <Link href="/teams/discover" className="text-blue-600 underline">← Back to team discovery</Link>
+          <Link href="/teams/discover" className="text-blue-600 underline">&larr; Back to team discovery</Link>
         </div>
         <p className="text-gray-600">Team not found.</p>
       </div>
@@ -38,13 +58,29 @@ export default async function TeamPage({ params }: { params: { id: string } }) {
   const gallery: Array<{ type: string; url: string }> = aesthetic.gallery || [];
   const trainer = team.trainer || {};
 
+  // Check if user is already a member
+  const userId = session?.user?.id;
+  const isMember = team.members?.some((m: any) => m.userId === userId || m.user?.id === userId);
+  const isTrainer = team.trainerId === userId;
+  const isFull = team.memberCount >= team.maxMembers;
+
+  // Format visibility for display
+  const formatVisibility = (visibility: string) => {
+    const map: Record<string, string> = {
+      'PUBLIC': 'Public',
+      'PRIVATE': 'Private',
+      'INVITE_ONLY': 'Invite Only'
+    };
+    return map[visibility] || visibility.toLowerCase().replace(/_/g, ' ');
+  };
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f8fafc' }}>
       <div className="w-full" style={{ background: `linear-gradient(90deg, ${secondary}22, #ffffff)` }}>
         <div className="h-1 w-full" style={{ backgroundColor: primary }} />
         <div className="max-w-5xl mx-auto p-6">
-          <div className="flex items-start justify-between">
-            <div>
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+            <div className="flex-1">
               <h1 className="text-2xl font-bold" style={{ color: primary }}>{team.name}</h1>
               <p className="text-gray-600 mt-1">{team.description || 'No description provided.'}</p>
               <div className="mt-2 flex items-center gap-2 text-sm text-gray-600">
@@ -54,8 +90,10 @@ export default async function TeamPage({ params }: { params: { id: string } }) {
                   className="w-6 h-6 rounded-full border"
                 />
                 <span>{trainer.name || 'Trainer'}</span>
-                <span>•</span>
-                <span className="uppercase">{team.visibility}</span>
+                <span>&bull;</span>
+                <span>{formatVisibility(team.visibility)}</span>
+                <span>&bull;</span>
+                <span>{team.memberCount}/{team.maxMembers} members</span>
               </div>
               {team.spotifyPlaylistUrl && (
                 <div className="mt-3">
@@ -65,8 +103,32 @@ export default async function TeamPage({ params }: { params: { id: string } }) {
                 </div>
               )}
             </div>
-            <div className="text-right">
-              <Link href="/teams/discover" className="text-sm underline text-blue-600">Back to discovery</Link>
+            <div className="flex flex-col gap-2 sm:text-right">
+              <Link href="/teams/discover" className="text-sm underline text-blue-600">&larr; Back to discovery</Link>
+              {/* Join Button for non-members */}
+              {!isTrainer && !isMember && (
+                <TeamJoinButton
+                  teamId={team.id}
+                  teamName={team.name}
+                  isLoggedIn={!!session?.user}
+                  isFull={isFull}
+                  visibility={team.visibility}
+                  accentColor={primary}
+                />
+              )}
+              {isMember && (
+                <span className="text-sm text-green-600 font-medium">You&apos;re a member</span>
+              )}
+              {isTrainer && (
+                <div className="flex flex-col gap-2 items-end">
+                  <span className="text-sm text-blue-600 font-medium">You&apos;re the trainer</span>
+                  <TeamShareButton
+                    teamId={team.id}
+                    teamName={team.name}
+                    accentColor={primary}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -87,7 +149,7 @@ export default async function TeamPage({ params }: { params: { id: string } }) {
               </div>
               <div>
                 <p className="text-gray-500">Visibility</p>
-                <p className="font-medium uppercase">{team.visibility}</p>
+                <p className="font-medium">{formatVisibility(team.visibility)}</p>
               </div>
               <div>
                 <p className="text-gray-500">Trainer</p>

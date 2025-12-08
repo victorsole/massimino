@@ -15,17 +15,6 @@ export default function Footer() {
   const pathname = usePathname();
   const isLandingPage = pathname === '/';
   const [isExpanded, setIsExpanded] = useState(false);
-  const getOrigin = () => {
-    if (typeof window !== 'undefined' && window.location?.origin) return window.location.origin
-    // Fallback to public env if available at build time
-    if (process.env.NEXT_PUBLIC_APP_URL) return process.env.NEXT_PUBLIC_APP_URL
-    return ''
-  }
-  const origin = getOrigin()
-  const abs = (path: string) => {
-    if (!path.startsWith('/')) return path
-    return origin ? `${origin}${path}` : path
-  }
   const [open, setOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [type, setType] = useState<'BUG' | 'FEATURE' | 'GENERAL' | 'NPS'>('GENERAL');
@@ -176,19 +165,19 @@ export default function Footer() {
                 © 2025 Beresol BV. All rights reserved.
               </p>
               <div className="flex flex-wrap justify-center gap-4 md:gap-6 mt-4 md:mt-0">
-                <Link href={abs('/privacy')} className="text-sm text-gray-500 hover:text-gray-700">
+                <Link href="/privacy" className="text-sm text-gray-500 hover:text-gray-700">
                   Privacy Policy
                 </Link>
-                <Link href={abs('/terms')} className="text-sm text-gray-500 hover:text-gray-700">
+                <Link href="/terms" className="text-sm text-gray-500 hover:text-gray-700">
                   Terms of Service
                 </Link>
-                <Link href={abs('/safety')} className="text-sm text-gray-500 hover:text-gray-700">
+                <Link href="/safety" className="text-sm text-gray-500 hover:text-gray-700">
                   Safety Guidelines
                 </Link>
-                <Link href={abs('/cookies')} className="text-sm text-gray-500 hover:text-gray-700">
+                <Link href="/cookies" className="text-sm text-gray-500 hover:text-gray-700">
                   Cookies
                 </Link>
-                <Link href={abs('/legal/subprocessors')} className="text-sm text-gray-500 hover:text-gray-700">
+                <Link href="/legal/subprocessors" className="text-sm text-gray-500 hover:text-gray-700">
                   Subprocessors
                 </Link>
               </div>
