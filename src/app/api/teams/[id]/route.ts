@@ -458,6 +458,40 @@ export async function POST(
       });
     }
 
+    if (action === 'create-invite-link') {
+      // Create shareable invite link (trainer only) - no email required
+      if (!TeamService.canManage(team, session.user.id)) {
+        return NextResponse.json(
+          { success: false, error: 'Only team owner can create invite links' },
+          { status: 403 }
+        );
+      }
+
+      const { expiresInDays } = body;
+      const { TeamInvitationService } = await import('@/services/teams/team_service');
+      const result = await TeamInvitationService.createShareableInviteLink({
+        teamId,
+        invitedBy: session.user.id,
+        expiresInDays: expiresInDays || 30
+      });
+
+      if (!result.success) {
+        return NextResponse.json(
+          { success: false, error: result.error || 'Failed to create invite link' },
+          { status: 400 }
+        );
+      }
+
+      return NextResponse.json({
+        success: true,
+        data: {
+          invite: result.invite,
+          inviteUrl: result.inviteUrl
+        },
+        message: 'Invite link created successfully'
+      });
+    }
+
     if (action === 'cancel-invite') {
       // Cancel email invitation (trainer only)
       if (!TeamService.canManage(team, session.user.id)) {
@@ -538,6 +572,72 @@ export async function POST(
       return NextResponse.json({
         success: true,
         message: 'Application rejected successfully'
+      });
+    }
+
+    if (action === 'join') {
+      // Join a PUBLIC team directly (no invite required)
+      if (team.visibility !== 'PUBLIC') {
+        return NextResponse.json(
+          { success: false, error: 'This team requires an invitation or application to join' },
+          { status: 403 }
+        );
+      }
+
+      // Check if already a member
+      if (TeamService.isMember(team, session.user.id) || TeamService.canManage(team, session.user.id)) {
+        return NextResponse.json(
+          { success: false, error: 'You are already a member of this team' },
+          { status: 400 }
+        );
+      }
+
+      // Check team capacity
+      if (team.memberCount >= team.maxMembers) {
+        return NextResponse.json(
+          { success: false, error: 'Team is full' },
+          { status: 400 }
+        );
+      }
+
+      // Add user as member (using inviteToTeam with self as inviter for direct joins)
+      const member = await TeamService.inviteToTeam(teamId, session.user.id, team.trainerId);
+
+      return NextResponse.json({
+        success: true,
+        data: member,
+        message: 'You have joined the team!'
+      });
+    }
+
+    if (action === 'apply') {
+      // Apply to join a PRIVATE team (requires trainer approval)
+
+      // Check if already a member
+      if (TeamService.isMember(team, session.user.id) || TeamService.canManage(team, session.user.id)) {
+        return NextResponse.json(
+          { success: false, error: 'You are already a member of this team' },
+          { status: 400 }
+        );
+      }
+
+      // Check team capacity
+      if (team.memberCount >= team.maxMembers) {
+        return NextResponse.json(
+          { success: false, error: 'Team is full' },
+          { status: 400 }
+        );
+      }
+
+      const { message } = body;
+
+      // Create application
+      const application = await TeamService.applyToJoinTeam(teamId, session.user.id, message);
+
+      return NextResponse.json({
+        success: true,
+        data: application,
+        message: 'Your application has been submitted!'
       });
     }
 
