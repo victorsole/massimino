@@ -600,8 +600,8 @@ export async function POST(
         );
       }
 
-      // Add user as member (using inviteToTeam with self as inviter for direct joins)
-      const member = await TeamService.inviteToTeam(teamId, session.user.id, team.trainerId);
+      // Add user as member (using invite with self as inviter for direct joins)
+      const member = await TeamService.invite(teamId, session.user.id, team.trainerId);
 
       return NextResponse.json({
         success: true,
@@ -632,7 +632,7 @@ export async function POST(
       const { message } = body;
 
       // Create application
-      const application = await TeamService.applyToJoinTeam(teamId, session.user.id, message);
+      const application = await TeamService.applyToJoin(teamId, session.user.id, message);
 
       return NextResponse.json({
         success: true,
