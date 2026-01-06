@@ -656,8 +656,16 @@ export default function ExercisesPage() {
                           <div className="absolute inset-0 flex items-center justify-center text-gray-400">No image</div>
                         )}
                         <div className="absolute top-2 right-2 flex items-center gap-1">
-                          {mediaCount !== undefined && (
-                            <span className="rounded bg-black/60 text-white text-xs px-2 py-0.5">{mediaCount} media</span>
+                          {mediaCount !== undefined && mediaCount > 0 && (
+                            <span className="rounded bg-green-600 text-white text-xs px-2 py-0.5 flex items-center gap-1">
+                              <Play className="h-3 w-3" />
+                              {mediaCount} {mediaCount === 1 ? 'video' : 'videos'}
+                            </span>
+                          )}
+                          {mediaCount === 0 && (
+                            <span className="rounded bg-gray-500/70 text-white text-xs px-2 py-0.5">
+                              No media
+                            </span>
                           )}
                         </div>
                       </div>

@@ -1,215 +1,1440 @@
 {
-    "program": "I Just Became a Mum - Postpartum Recovery & Empowerment",
-    "author": "Victor Solé Ferioli",
-    "version": "2.0_corrected",
-    "duration_weeks": 6,
-    "session_duration_minutes": {
-      "min": 30,
-      "max": 50
-    },
-    "frequency_per_week": 3,
-    "optional_activity": {
-      "name": "Freedom Flow",
-      "frequency": "1x per week",
-      "duration_minutes": "20-30",
-      "examples": ["nature walk", "gentle yoga", "stretching with affirmations", "swimming (if cleared)"]
-    },
-    "level": "Postpartum Beginner",
-    "settings": ["Home", "Outdoor", "Gym"],
-    "equipment": ["Yoga mat", "Light resistance band", "Sturdy chair or wall", "Low step or bench"],
-    
-    "prerequisites": {
-      "required": [
-        "Medical clearance from healthcare provider (6-8 weeks vaginal, 8-12 weeks C-section)",
-        "Diastasis recti assessment",
-        "Pelvic floor evaluation"
-      ]
-    },
-    
-    "red_flags_to_stop": [
-      "Urinary leaking during exercise",
-      "Pelvic heaviness or dragging sensation",
-      "Pain in abdomen, pelvis, or back",
-      "Vaginal bleeding (beyond normal lochia)",
-      "Visible doming/coning along abdomen midline",
-      "Feeling of 'something falling out'",
-      "Severe exhaustion beyond normal fatigue"
-    ],
-    
-    "goals": {
-      "safety_goal": "Master pelvic floor coordination and core breathing to prevent injury",
-      "outcome_goal": "Rebuild foundational core and pelvic stability to safely perform squats, lunges, and modified planks",
-      "progress_goal": "Walk continuously for 30 minutes by Week 6",
-      "empowerment_goal": "Reclaim 90-135 minutes per week of intentional self-care"
-    },
-    
-    "progressive_overload": {
-      "week_1": "Learn movements and form",
-      "week_2": "Full range of motion",
-      "week_3": "Add 2 reps per exercise",
-      "week_4": "Add 1 extra round to circuits",
-      "week_5": "Slower tempo (3-second lowering phase)",
-      "week_6": "Normal tempo, maximum reps with good form"
-    },
-    
-    "weekly_structure": [
-      {
-        "week": 1,
-        "theme": "Awaken & Reconnect",
-        "focus": [
-          "Pelvic floor awakening with diaphragmatic breathing",
-          "Gentle mobility (cat-cow, child's pose, chest openers)",
-          "Basic balance drills (heel-to-toe, single-leg stand with support)",
-          "Introduction to glute bridges, wall push-ups"
-        ],
-        "session_duration_minutes": "20-30",
-        "key_exercises": [
-          "Pelvic floor activation (3 sets × 10 reps)",
-          "Glute bridges (8 reps × 2 sets)",
-          "Wall push-ups (6 reps × 2 sets)",
-          "Wall sit hold (15 seconds × 3 reps)"
-        ]
-      },
-      {
-        "week": 2,
-        "theme": "Activate & Stabilize",
-        "focus": [
-          "Pelvic floor + breath coordination (3 sets × 10 reps)",
-          "Strength circuit: glute bridges, wall sits, bodyweight squats, incline push-ups, band pull-aparts, heel slides",
-          "Balance challenge: single-leg stands, heel-to-toe walk",
-          "Full range of motion emphasis"
-        ],
-        "session_duration_minutes": "35-40",
-        "key_exercises": [
-          "Glute bridges (12 reps, 2-sec hold at top)",
-          "Bodyweight squats (10 reps)",
-          "Incline push-ups (6-8 reps)",
-          "Heel slides (8 each leg)"
-        ]
-      },
-      {
-        "week": 3,
-        "theme": "Rebuild & Align",
-        "focus": [
-          "Pelvic floor with longer holds (3 sets × 12 reps)",
-          "Circuit format introduction: 3 rounds",
-          "Added reps: +2 per exercise from Week 2",
-          "Core engagement with dead bugs (if no doming)"
-        ],
-        "session_duration_minutes": "40-45",
-        "key_exercises": [
-          "Bodyweight squats (14 reps)",
-          "Glute bridges (17 reps)",
-          "Dead bugs (6 each side) - STOP if belly domes",
-          "Lateral band steps (8 steps each direction)"
-        ],
-        "c_section_modification": "Replace dead bugs with additional glute bridges"
-      },
-      {
-        "week": 4,
-        "theme": "Flow & Function",
-        "focus": [
-          "Cardio-strength combinations (step-ups + band press intervals)",
-          "Stability work: single-leg toe taps, hip abduction",
-          "Wall planks with strict form cues",
-          "Added circuit round (now 3-4 rounds)"
-        ],
-        "session_duration_minutes": "42-45",
-        "key_exercises": [
-          "Step-ups (30 seconds × 4 rounds)",
-          "Band chest press (30 seconds × 4 rounds)",
-          "Wall planks (15-20 seconds × 3 sets)",
-          "Glute bridge march (8 each leg)"
-        ]
-      },
-      {
-        "week": 5,
-        "theme": "Strengthen & Restore",
-        "focus": [
-          "Outdoor functional flow (walking lunges, elevated push-ups, glute kickbacks)",
-          "Resistance band integration",
-          "Slow tempo emphasis: 3-second lowering phase",
-          "Balance blast with clock reaches",
-          "Empowerment meditation (5 minutes)"
-        ],
-        "session_duration_minutes": "45",
-        "key_exercises": [
-          "Walking lunges (8 each leg, 3-sec lower)",
-          "Elevated push-ups (12 reps)",
-          "Bodyweight squats (15 reps, 3-sec lower)",
-          "Clock reaches (2 full clocks each leg)"
-        ]
-      },
-      {
-        "week": 6,
-        "theme": "Reclaim & Empower",
-        "focus": [
-          "Full circuit training: 4 rounds",
-          "Cardio progression: brisk marching (NOT jogging yet)",
-          "Core finisher: dead bugs + glute bridge march + bird dogs",
-          "Celebrating strength and progress"
-        ],
-        "session_duration_minutes": "45-50",
-        "key_exercises": [
-          "Step-ups (12 total)",
-          "Air squats (18 reps)",
-          "Push-ups (12 reps - incline or knee)",
-          "Side planks (20 seconds each)",
-          "Brisk march in place (40 seconds)"
-        ],
-        "note": "Most women need 3-6+ months postpartum before running is safe"
-      }
-    ],
-    
-    "special_populations": {
-      "c_section_modifications": {
-        "weeks_1_4": [
-          "Avoid all core flexion exercises",
-          "Focus on glutes, upper back, arms",
-          "Add scar massage once cleared (6-8 weeks)"
-        ],
-        "weeks_5_6": [
-          "Introduce wall planks only if comfortable",
-          "Still avoid full planks",
-          "May need 8-12 weeks total before full core work"
-        ]
-      }
-    },
-    
-    "progress_tracking": {
-      "week_1_baseline": [
-        "8 glute bridges with good form",
-        "10-second single-leg balance",
-        "15-minute comfortable walk"
-      ],
-      "week_3_check_in": [
-        "15 glute bridges",
-        "Squat to parallel without pelvic pressure",
-        "20-minute comfortable walk"
-      ],
-      "week_6_goals": [
-        "20+ glute bridges",
-        "Complete full circuit 3 times",
-        "30-minute walk with good posture",
-        "Leak-free during exercise",
-        "Feel strong and confident"
-      ]
-    },
-    
-    "critical_form_cues": {
-      "glute_bridges": "Exhale on lift, squeeze glutes not lower back, 2-second hold at top",
-      "squats": "Inhale down, exhale up, stop if any pelvic pressure",
-      "dead_bugs": "STOP immediately if belly domes/cones, exhale on extension",
-      "planks": "Exhale and draw belly in WITHOUT breath-holding, stop if doming visible",
-      "bird_dogs": "Move only as far as lower back stays still, exhale on extension",
-      "all_exercises": "Never hold breath, exhale on exertion"
-    },
-    
-    "what_comes_next": [
-      "Progress to intermediate programs",
-      "Add light weights (3-5 kg dumbbells)",
-      "Join postpartum fitness classes",
-      "Consider return to running with pelvic floor assessment",
-      "Continue building on foundation"
+  "program": "I Just Became a Mum - Postpartum Recovery & Empowerment",
+  "program_id": "i-just-became-a-mum",
+  "author": "Victor Solé Ferioli",
+  "version": "2.0_standardized",
+  "duration_weeks": 6,
+  "session_duration_minutes": {
+    "min": 30,
+    "max": 50
+  },
+  "frequency_per_week": 3,
+  "optional_activity": {
+    "name": "Freedom Flow",
+    "frequency": "1x per week",
+    "duration_minutes": "20-30",
+    "examples": ["nature walk", "gentle yoga", "stretching with affirmations", "swimming (if cleared)"]
+  },
+  "level": "Postpartum Beginner",
+  "settings": ["Home", "Outdoor", "Gym"],
+  "equipment": ["Yoga mat", "Light resistance band", "Sturdy chair or wall", "Low step or bench"],
+
+  "prerequisites": {
+    "required": [
+      "Medical clearance from healthcare provider (6-8 weeks vaginal, 8-12 weeks C-section)",
+      "Diastasis recti assessment",
+      "Pelvic floor evaluation"
     ]
-  }
+  },
+
+  "red_flags_to_stop": [
+    "Urinary leaking during exercise",
+    "Pelvic heaviness or dragging sensation",
+    "Pain in abdomen, pelvis, or back",
+    "Vaginal bleeding (beyond normal lochia)",
+    "Visible doming/coning along abdomen midline",
+    "Feeling of 'something falling out'",
+    "Severe exhaustion beyond normal fatigue"
+  ],
+
+  "goals": {
+    "safety_goal": "Master pelvic floor coordination and core breathing to prevent injury",
+    "outcome_goal": "Rebuild foundational core and pelvic stability to safely perform squats, lunges, and modified planks",
+    "progress_goal": "Walk continuously for 30 minutes by Week 6",
+    "empowerment_goal": "Reclaim 90-135 minutes per week of intentional self-care"
+  },
+
+  "progressive_overload": {
+    "week_1": "Learn movements and form",
+    "week_2": "Full range of motion",
+    "week_3": "Add 2 reps per exercise",
+    "week_4": "Add 1 extra round to circuits",
+    "week_5": "Slower tempo (3-second lowering phase)",
+    "week_6": "Normal tempo, maximum reps with good form"
+  },
+
+  "training_days": [
+    {
+      "day": 1,
+      "day_name": "Week 1 - Session 1: Awaken & Reconnect",
+      "focus": "Pelvic Floor Awakening",
+      "exercises": [
+        {
+          "exercise_id": "diaphragmatic-breathing",
+          "exercise_name": "Diaphragmatic Breathing",
+          "order": 1,
+          "sets": 3,
+          "reps": "10 breaths",
+          "rest_seconds": 30,
+          "notes": "Lie on back, knees bent. Inhale expand belly, exhale gently draw navel in. Connect breath to pelvic floor.",
+          "primary_muscle_groups": ["diaphragm", "core", "pelvic_floor"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "pelvic-floor-activation",
+          "exercise_name": "Pelvic Floor Activation",
+          "order": 2,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 30,
+          "notes": "Gentle lift and hold (2 sec) on exhale. Imagine picking up a blueberry. Fully release on inhale.",
+          "primary_muscle_groups": ["pelvic_floor"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "cat-cow",
+          "exercise_name": "Cat-Cow Stretch",
+          "order": 3,
+          "sets": 2,
+          "reps": "8",
+          "rest_seconds": 30,
+          "notes": "Gentle spinal movement. Inhale arch (cow), exhale round (cat). Move slowly.",
+          "primary_muscle_groups": ["spine", "core"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "childs-pose",
+          "exercise_name": "Child's Pose",
+          "order": 4,
+          "sets": 2,
+          "reps": "30 sec hold",
+          "rest_seconds": 15,
+          "notes": "Knees wide, sink hips back, arms extended. Breathe deeply into back.",
+          "primary_muscle_groups": ["lower_back", "hips"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "glute-bridge",
+          "exercise_name": "Glute Bridge",
+          "order": 5,
+          "sets": 2,
+          "reps": "8",
+          "rest_seconds": 45,
+          "notes": "Exhale on lift, squeeze glutes not lower back, 2-second hold at top. Keep ribs down.",
+          "primary_muscle_groups": ["glutes", "hamstrings", "core"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "wall-push-up",
+          "exercise_name": "Wall Push-Up",
+          "order": 6,
+          "sets": 2,
+          "reps": "6",
+          "rest_seconds": 45,
+          "notes": "Hands shoulder width on wall. Keep body straight, exhale on push. Engage core gently.",
+          "primary_muscle_groups": ["chest", "shoulders", "triceps"],
+          "equipment": ["wall"]
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "day_name": "Week 1 - Session 2: Mobility Focus",
+      "focus": "Gentle Mobility & Balance",
+      "exercises": [
+        {
+          "exercise_id": "diaphragmatic-breathing",
+          "exercise_name": "Diaphragmatic Breathing",
+          "order": 1,
+          "sets": 2,
+          "reps": "10 breaths",
+          "rest_seconds": 30,
+          "notes": "Reconnect breath to movement. Foundation for all exercises.",
+          "primary_muscle_groups": ["diaphragm", "core", "pelvic_floor"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "pelvic-floor-activation",
+          "exercise_name": "Pelvic Floor Activation",
+          "order": 2,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 30,
+          "notes": "Gentle lift and hold on exhale. Full release on inhale.",
+          "primary_muscle_groups": ["pelvic_floor"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "chest-opener-doorway",
+          "exercise_name": "Doorway Chest Opener",
+          "order": 3,
+          "sets": 2,
+          "reps": "30 sec hold",
+          "rest_seconds": 15,
+          "notes": "Stand in doorway, forearms on frame. Lean forward gently. Opens chest after feeding.",
+          "primary_muscle_groups": ["chest", "shoulders"],
+          "equipment": ["doorway"]
+        },
+        {
+          "exercise_id": "heel-to-toe-walk",
+          "exercise_name": "Heel-to-Toe Walk",
+          "order": 4,
+          "sets": 2,
+          "reps": "10 steps",
+          "rest_seconds": 30,
+          "notes": "Use wall for support. Place heel directly in front of toes. Focus on balance.",
+          "primary_muscle_groups": ["core", "ankles", "calves"],
+          "equipment": ["wall"]
+        },
+        {
+          "exercise_id": "single-leg-balance",
+          "exercise_name": "Single-Leg Balance (Supported)",
+          "order": 5,
+          "sets": 2,
+          "reps": "10 sec each leg",
+          "rest_seconds": 30,
+          "notes": "Hold wall or chair. Lift one foot slightly. Build to unsupported.",
+          "primary_muscle_groups": ["core", "glutes", "ankles"],
+          "equipment": ["chair"]
+        },
+        {
+          "exercise_id": "wall-sit",
+          "exercise_name": "Wall Sit",
+          "order": 6,
+          "sets": 3,
+          "reps": "15 sec",
+          "rest_seconds": 45,
+          "notes": "Back flat against wall, knees at 90°. Breathe normally, don't hold breath.",
+          "primary_muscle_groups": ["quadriceps", "glutes"],
+          "equipment": ["wall"]
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "day_name": "Week 1 - Session 3: Foundation Strength",
+      "focus": "Building Base Strength",
+      "exercises": [
+        {
+          "exercise_id": "pelvic-floor-activation",
+          "exercise_name": "Pelvic Floor Activation",
+          "order": 1,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 30,
+          "notes": "Warm up pelvic floor before movement. Exhale to engage, inhale to release.",
+          "primary_muscle_groups": ["pelvic_floor"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "cat-cow",
+          "exercise_name": "Cat-Cow Stretch",
+          "order": 2,
+          "sets": 2,
+          "reps": "8",
+          "rest_seconds": 30,
+          "notes": "Warm up spine gently before exercises.",
+          "primary_muscle_groups": ["spine", "core"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "glute-bridge",
+          "exercise_name": "Glute Bridge",
+          "order": 3,
+          "sets": 3,
+          "reps": "8",
+          "rest_seconds": 45,
+          "notes": "Exhale on lift, squeeze glutes, 2-second hold at top.",
+          "primary_muscle_groups": ["glutes", "hamstrings", "core"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "wall-push-up",
+          "exercise_name": "Wall Push-Up",
+          "order": 4,
+          "sets": 2,
+          "reps": "6",
+          "rest_seconds": 45,
+          "notes": "Keep body in straight line. Exhale on push phase.",
+          "primary_muscle_groups": ["chest", "shoulders", "triceps"],
+          "equipment": ["wall"]
+        },
+        {
+          "exercise_id": "wall-sit",
+          "exercise_name": "Wall Sit",
+          "order": 5,
+          "sets": 3,
+          "reps": "15 sec",
+          "rest_seconds": 45,
+          "notes": "Maintain breathing throughout. Don't hold breath.",
+          "primary_muscle_groups": ["quadriceps", "glutes"],
+          "equipment": ["wall"]
+        },
+        {
+          "exercise_id": "childs-pose",
+          "exercise_name": "Child's Pose",
+          "order": 6,
+          "sets": 1,
+          "reps": "60 sec hold",
+          "rest_seconds": 0,
+          "notes": "Relaxation and recovery. Deep breathing.",
+          "primary_muscle_groups": ["lower_back", "hips"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "day_name": "Week 2 - Session 1: Activate & Stabilize",
+      "focus": "Full Range of Motion",
+      "exercises": [
+        {
+          "exercise_id": "pelvic-floor-activation",
+          "exercise_name": "Pelvic Floor + Breath Coordination",
+          "order": 1,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 30,
+          "notes": "Exhale and engage pelvic floor together. Full release on inhale.",
+          "primary_muscle_groups": ["pelvic_floor", "core"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "glute-bridge",
+          "exercise_name": "Glute Bridge",
+          "order": 2,
+          "sets": 2,
+          "reps": "12",
+          "rest_seconds": 45,
+          "notes": "2-second hold at top. Full range of motion focus.",
+          "primary_muscle_groups": ["glutes", "hamstrings", "core"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "wall-sit",
+          "exercise_name": "Wall Sit",
+          "order": 3,
+          "sets": 3,
+          "reps": "20 sec",
+          "rest_seconds": 45,
+          "notes": "Sink deeper this week. Keep breathing steady.",
+          "primary_muscle_groups": ["quadriceps", "glutes"],
+          "equipment": ["wall"]
+        },
+        {
+          "exercise_id": "bodyweight-squat",
+          "exercise_name": "Bodyweight Squat",
+          "order": 4,
+          "sets": 2,
+          "reps": "10",
+          "rest_seconds": 45,
+          "notes": "Inhale down, exhale up. Stop if any pelvic pressure. Hold chair for support if needed.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "incline-push-up",
+          "exercise_name": "Incline Push-Up",
+          "order": 5,
+          "sets": 2,
+          "reps": "6-8",
+          "rest_seconds": 45,
+          "notes": "Hands on bench or stairs. Keep core engaged, exhale on push.",
+          "primary_muscle_groups": ["chest", "shoulders", "triceps"],
+          "equipment": ["bench"]
+        },
+        {
+          "exercise_id": "band-pull-apart",
+          "exercise_name": "Band Pull-Apart",
+          "order": 6,
+          "sets": 2,
+          "reps": "10",
+          "rest_seconds": 30,
+          "notes": "Light resistance. Squeeze shoulder blades together. Opens chest.",
+          "primary_muscle_groups": ["upper_back", "rear_delts"],
+          "equipment": ["resistance_band"]
+        },
+        {
+          "exercise_id": "heel-slide",
+          "exercise_name": "Heel Slides",
+          "order": 7,
+          "sets": 2,
+          "reps": "8 each leg",
+          "rest_seconds": 30,
+          "notes": "Lie on back, slide heel out and back. Keep lower back neutral.",
+          "primary_muscle_groups": ["core", "hip_flexors"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 5,
+      "day_name": "Week 2 - Session 2: Balance Challenge",
+      "focus": "Stability & Coordination",
+      "exercises": [
+        {
+          "exercise_id": "pelvic-floor-activation",
+          "exercise_name": "Pelvic Floor + Breath",
+          "order": 1,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 30,
+          "notes": "Foundation breathing before balance work.",
+          "primary_muscle_groups": ["pelvic_floor", "core"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "single-leg-balance",
+          "exercise_name": "Single-Leg Stand",
+          "order": 2,
+          "sets": 3,
+          "reps": "15 sec each leg",
+          "rest_seconds": 30,
+          "notes": "Light fingertip touch on wall. Progress to unsupported.",
+          "primary_muscle_groups": ["core", "glutes", "ankles"],
+          "equipment": ["wall"]
+        },
+        {
+          "exercise_id": "heel-to-toe-walk",
+          "exercise_name": "Heel-to-Toe Walk",
+          "order": 3,
+          "sets": 3,
+          "reps": "12 steps",
+          "rest_seconds": 30,
+          "notes": "Use wall for support. Focus on controlled movement.",
+          "primary_muscle_groups": ["core", "ankles", "calves"],
+          "equipment": ["wall"]
+        },
+        {
+          "exercise_id": "glute-bridge",
+          "exercise_name": "Glute Bridge",
+          "order": 4,
+          "sets": 2,
+          "reps": "12",
+          "rest_seconds": 45,
+          "notes": "Focus on form and full range of motion.",
+          "primary_muscle_groups": ["glutes", "hamstrings", "core"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "bodyweight-squat",
+          "exercise_name": "Bodyweight Squat",
+          "order": 5,
+          "sets": 2,
+          "reps": "10",
+          "rest_seconds": 45,
+          "notes": "Full range of motion. Stop if pelvic pressure.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "heel-slide",
+          "exercise_name": "Heel Slides",
+          "order": 6,
+          "sets": 2,
+          "reps": "8 each leg",
+          "rest_seconds": 30,
+          "notes": "Core engagement without holding breath.",
+          "primary_muscle_groups": ["core", "hip_flexors"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 6,
+      "day_name": "Week 2 - Session 3: Strength Circuit",
+      "focus": "Building Endurance",
+      "exercises": [
+        {
+          "exercise_id": "pelvic-floor-activation",
+          "exercise_name": "Pelvic Floor Activation",
+          "order": 1,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 30,
+          "notes": "Warm up pelvic floor before strength work.",
+          "primary_muscle_groups": ["pelvic_floor"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "glute-bridge",
+          "exercise_name": "Glute Bridge",
+          "order": 2,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 45,
+          "notes": "2-second hold at top. Full hip extension.",
+          "primary_muscle_groups": ["glutes", "hamstrings", "core"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "bodyweight-squat",
+          "exercise_name": "Bodyweight Squat",
+          "order": 3,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 45,
+          "notes": "Chest up, weight in heels. Exhale standing up.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "incline-push-up",
+          "exercise_name": "Incline Push-Up",
+          "order": 4,
+          "sets": 3,
+          "reps": "8",
+          "rest_seconds": 45,
+          "notes": "Full range of motion. Keep core tight.",
+          "primary_muscle_groups": ["chest", "shoulders", "triceps"],
+          "equipment": ["bench"]
+        },
+        {
+          "exercise_id": "band-pull-apart",
+          "exercise_name": "Band Pull-Apart",
+          "order": 5,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 30,
+          "notes": "Squeeze shoulder blades at end range.",
+          "primary_muscle_groups": ["upper_back", "rear_delts"],
+          "equipment": ["resistance_band"]
+        },
+        {
+          "exercise_id": "heel-slide",
+          "exercise_name": "Heel Slides",
+          "order": 6,
+          "sets": 2,
+          "reps": "10 each leg",
+          "rest_seconds": 30,
+          "notes": "Maintain neutral spine throughout.",
+          "primary_muscle_groups": ["core", "hip_flexors"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 7,
+      "day_name": "Week 3 - Session 1: Rebuild & Align",
+      "focus": "Circuit Introduction (3 Rounds)",
+      "exercises": [
+        {
+          "exercise_id": "pelvic-floor-activation",
+          "exercise_name": "Pelvic Floor + Long Holds",
+          "order": 1,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 30,
+          "notes": "Longer holds (3-4 seconds). Focus on full engagement and release.",
+          "primary_muscle_groups": ["pelvic_floor"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "bodyweight-squat",
+          "exercise_name": "Bodyweight Squat",
+          "order": 2,
+          "sets": 3,
+          "reps": "14",
+          "rest_seconds": 45,
+          "notes": "Added 2 reps from Week 2. Maintain form throughout.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "glute-bridge",
+          "exercise_name": "Glute Bridge",
+          "order": 3,
+          "sets": 3,
+          "reps": "17",
+          "rest_seconds": 45,
+          "notes": "Added reps. Keep 2-second hold at top.",
+          "primary_muscle_groups": ["glutes", "hamstrings", "core"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "dead-bug",
+          "exercise_name": "Dead Bug",
+          "order": 4,
+          "sets": 3,
+          "reps": "6 each side",
+          "rest_seconds": 45,
+          "notes": "STOP IMMEDIATELY if belly domes/cones. Exhale on extension. C-section: replace with extra glute bridges.",
+          "primary_muscle_groups": ["core", "hip_flexors"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "incline-push-up",
+          "exercise_name": "Incline Push-Up",
+          "order": 5,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 45,
+          "notes": "Full range of motion. Added 2 reps.",
+          "primary_muscle_groups": ["chest", "shoulders", "triceps"],
+          "equipment": ["bench"]
+        },
+        {
+          "exercise_id": "lateral-band-walk",
+          "exercise_name": "Lateral Band Steps",
+          "order": 6,
+          "sets": 3,
+          "reps": "8 each direction",
+          "rest_seconds": 30,
+          "notes": "Band above knees. Stay low, controlled steps.",
+          "primary_muscle_groups": ["glutes", "hip_abductors"],
+          "equipment": ["resistance_band"]
+        }
+      ]
+    },
+    {
+      "day": 8,
+      "day_name": "Week 3 - Session 2: Core Focus",
+      "focus": "Safe Core Engagement",
+      "exercises": [
+        {
+          "exercise_id": "pelvic-floor-activation",
+          "exercise_name": "Pelvic Floor Activation",
+          "order": 1,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 30,
+          "notes": "Longer holds this week.",
+          "primary_muscle_groups": ["pelvic_floor"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "heel-slide",
+          "exercise_name": "Heel Slides",
+          "order": 2,
+          "sets": 3,
+          "reps": "10 each leg",
+          "rest_seconds": 30,
+          "notes": "Core engagement throughout. No breath holding.",
+          "primary_muscle_groups": ["core", "hip_flexors"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "dead-bug",
+          "exercise_name": "Dead Bug",
+          "order": 3,
+          "sets": 3,
+          "reps": "6 each side",
+          "rest_seconds": 45,
+          "notes": "STOP if belly domes. Exhale on extension. C-section: skip this exercise.",
+          "primary_muscle_groups": ["core", "hip_flexors"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "glute-bridge",
+          "exercise_name": "Glute Bridge",
+          "order": 4,
+          "sets": 3,
+          "reps": "17",
+          "rest_seconds": 45,
+          "notes": "Core engaged throughout lift.",
+          "primary_muscle_groups": ["glutes", "hamstrings", "core"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "bodyweight-squat",
+          "exercise_name": "Bodyweight Squat",
+          "order": 5,
+          "sets": 3,
+          "reps": "14",
+          "rest_seconds": 45,
+          "notes": "Exhale on standing. Core braced.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "childs-pose",
+          "exercise_name": "Child's Pose",
+          "order": 6,
+          "sets": 1,
+          "reps": "60 sec",
+          "rest_seconds": 0,
+          "notes": "Recovery stretch. Deep breathing.",
+          "primary_muscle_groups": ["lower_back", "hips"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 9,
+      "day_name": "Week 3 - Session 3: Full Circuit",
+      "focus": "3 Complete Rounds",
+      "exercises": [
+        {
+          "exercise_id": "pelvic-floor-activation",
+          "exercise_name": "Pelvic Floor Activation",
+          "order": 1,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 30,
+          "notes": "Prepare for circuit work.",
+          "primary_muscle_groups": ["pelvic_floor"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "bodyweight-squat",
+          "exercise_name": "Bodyweight Squat",
+          "order": 2,
+          "sets": 3,
+          "reps": "14",
+          "rest_seconds": 30,
+          "notes": "Circuit format - minimal rest between exercises.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "glute-bridge",
+          "exercise_name": "Glute Bridge",
+          "order": 3,
+          "sets": 3,
+          "reps": "17",
+          "rest_seconds": 30,
+          "notes": "Keep moving through circuit.",
+          "primary_muscle_groups": ["glutes", "hamstrings", "core"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "incline-push-up",
+          "exercise_name": "Incline Push-Up",
+          "order": 4,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 30,
+          "notes": "Maintain form even when fatigued.",
+          "primary_muscle_groups": ["chest", "shoulders", "triceps"],
+          "equipment": ["bench"]
+        },
+        {
+          "exercise_id": "lateral-band-walk",
+          "exercise_name": "Lateral Band Steps",
+          "order": 5,
+          "sets": 3,
+          "reps": "8 each direction",
+          "rest_seconds": 30,
+          "notes": "Stay low, control the movement.",
+          "primary_muscle_groups": ["glutes", "hip_abductors"],
+          "equipment": ["resistance_band"]
+        },
+        {
+          "exercise_id": "dead-bug",
+          "exercise_name": "Dead Bug",
+          "order": 6,
+          "sets": 3,
+          "reps": "6 each side",
+          "rest_seconds": 60,
+          "notes": "Rest 60 sec between rounds. STOP if doming. C-section: skip.",
+          "primary_muscle_groups": ["core", "hip_flexors"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 10,
+      "day_name": "Week 4 - Session 1: Flow & Function",
+      "focus": "Cardio-Strength Combinations",
+      "exercises": [
+        {
+          "exercise_id": "pelvic-floor-activation",
+          "exercise_name": "Pelvic Floor Activation",
+          "order": 1,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 30,
+          "notes": "Prepare for increased intensity.",
+          "primary_muscle_groups": ["pelvic_floor"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "step-up",
+          "exercise_name": "Step-Ups",
+          "order": 2,
+          "sets": 4,
+          "reps": "30 sec",
+          "rest_seconds": 30,
+          "notes": "Low step or stairs. Alternate legs. Exhale on step up.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["step"]
+        },
+        {
+          "exercise_id": "band-chest-press",
+          "exercise_name": "Band Chest Press",
+          "order": 3,
+          "sets": 4,
+          "reps": "30 sec",
+          "rest_seconds": 30,
+          "notes": "Anchor band behind you. Press forward, exhale on push.",
+          "primary_muscle_groups": ["chest", "shoulders", "triceps"],
+          "equipment": ["resistance_band"]
+        },
+        {
+          "exercise_id": "single-leg-toe-tap",
+          "exercise_name": "Single-Leg Toe Taps",
+          "order": 4,
+          "sets": 3,
+          "reps": "8 each leg",
+          "rest_seconds": 30,
+          "notes": "Stand on one leg, tap other toe forward/side/back. Use support if needed.",
+          "primary_muscle_groups": ["glutes", "core", "hip_abductors"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "wall-plank",
+          "exercise_name": "Wall Plank",
+          "order": 5,
+          "sets": 3,
+          "reps": "15-20 sec",
+          "rest_seconds": 45,
+          "notes": "Hands on wall, body straight. Exhale and draw belly in WITHOUT breath-holding. STOP if doming.",
+          "primary_muscle_groups": ["core", "shoulders"],
+          "equipment": ["wall"]
+        },
+        {
+          "exercise_id": "glute-bridge-march",
+          "exercise_name": "Glute Bridge March",
+          "order": 6,
+          "sets": 3,
+          "reps": "8 each leg",
+          "rest_seconds": 45,
+          "notes": "Hold bridge position, alternate lifting feet slightly. Keep hips level.",
+          "primary_muscle_groups": ["glutes", "core", "hip_flexors"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 11,
+      "day_name": "Week 4 - Session 2: Stability & Intervals",
+      "focus": "4 Rounds Circuit",
+      "exercises": [
+        {
+          "exercise_id": "pelvic-floor-activation",
+          "exercise_name": "Pelvic Floor Activation",
+          "order": 1,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 30,
+          "notes": "Warm up for circuit work.",
+          "primary_muscle_groups": ["pelvic_floor"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "bodyweight-squat",
+          "exercise_name": "Bodyweight Squat",
+          "order": 2,
+          "sets": 4,
+          "reps": "14",
+          "rest_seconds": 30,
+          "notes": "Added round this week. 4 total rounds.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "step-up",
+          "exercise_name": "Step-Ups",
+          "order": 3,
+          "sets": 4,
+          "reps": "30 sec",
+          "rest_seconds": 30,
+          "notes": "Keep moving through intervals.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["step"]
+        },
+        {
+          "exercise_id": "incline-push-up",
+          "exercise_name": "Incline Push-Up",
+          "order": 4,
+          "sets": 4,
+          "reps": "10",
+          "rest_seconds": 30,
+          "notes": "4 rounds total.",
+          "primary_muscle_groups": ["chest", "shoulders", "triceps"],
+          "equipment": ["bench"]
+        },
+        {
+          "exercise_id": "hip-abduction-standing",
+          "exercise_name": "Standing Hip Abduction",
+          "order": 5,
+          "sets": 3,
+          "reps": "10 each leg",
+          "rest_seconds": 30,
+          "notes": "Hold wall for support. Lift leg to side, controlled return.",
+          "primary_muscle_groups": ["hip_abductors", "glutes"],
+          "equipment": ["wall"]
+        },
+        {
+          "exercise_id": "wall-plank",
+          "exercise_name": "Wall Plank",
+          "order": 6,
+          "sets": 3,
+          "reps": "20 sec",
+          "rest_seconds": 45,
+          "notes": "Maintain breathing. Stop if any doming.",
+          "primary_muscle_groups": ["core", "shoulders"],
+          "equipment": ["wall"]
+        }
+      ]
+    },
+    {
+      "day": 12,
+      "day_name": "Week 4 - Session 3: Full Flow",
+      "focus": "Cardio + Strength Integration",
+      "exercises": [
+        {
+          "exercise_id": "pelvic-floor-activation",
+          "exercise_name": "Pelvic Floor Activation",
+          "order": 1,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 30,
+          "notes": "Foundation before full circuit.",
+          "primary_muscle_groups": ["pelvic_floor"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "step-up",
+          "exercise_name": "Step-Ups",
+          "order": 2,
+          "sets": 4,
+          "reps": "12 total",
+          "rest_seconds": 30,
+          "notes": "Cardio component.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["step"]
+        },
+        {
+          "exercise_id": "glute-bridge-march",
+          "exercise_name": "Glute Bridge March",
+          "order": 3,
+          "sets": 4,
+          "reps": "8 each leg",
+          "rest_seconds": 30,
+          "notes": "Keep hips level throughout.",
+          "primary_muscle_groups": ["glutes", "core", "hip_flexors"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "band-chest-press",
+          "exercise_name": "Band Chest Press",
+          "order": 4,
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 30,
+          "notes": "Full range of motion.",
+          "primary_muscle_groups": ["chest", "shoulders", "triceps"],
+          "equipment": ["resistance_band"]
+        },
+        {
+          "exercise_id": "single-leg-toe-tap",
+          "exercise_name": "Single-Leg Toe Taps",
+          "order": 5,
+          "sets": 3,
+          "reps": "8 each leg",
+          "rest_seconds": 30,
+          "notes": "Balance challenge with stability.",
+          "primary_muscle_groups": ["glutes", "core", "hip_abductors"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "wall-plank",
+          "exercise_name": "Wall Plank",
+          "order": 6,
+          "sets": 3,
+          "reps": "20 sec",
+          "rest_seconds": 60,
+          "notes": "Rest between rounds. Focus on form.",
+          "primary_muscle_groups": ["core", "shoulders"],
+          "equipment": ["wall"]
+        }
+      ]
+    },
+    {
+      "day": 13,
+      "day_name": "Week 5 - Session 1: Strengthen & Restore",
+      "focus": "Slow Tempo Emphasis",
+      "exercises": [
+        {
+          "exercise_id": "pelvic-floor-activation",
+          "exercise_name": "Pelvic Floor Activation",
+          "order": 1,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 30,
+          "notes": "Prepare for tempo work.",
+          "primary_muscle_groups": ["pelvic_floor"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "walking-lunge",
+          "exercise_name": "Walking Lunges",
+          "order": 2,
+          "sets": 3,
+          "reps": "8 each leg",
+          "rest_seconds": 60,
+          "tempo": "3-0-1-0",
+          "notes": "3-second lowering phase. Control the descent. Stop if any pelvic pressure.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "elevated-push-up",
+          "exercise_name": "Elevated Push-Up",
+          "order": 3,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 45,
+          "notes": "Hands on bench. Full range of motion.",
+          "primary_muscle_groups": ["chest", "shoulders", "triceps"],
+          "equipment": ["bench"]
+        },
+        {
+          "exercise_id": "bodyweight-squat",
+          "exercise_name": "Bodyweight Squat",
+          "order": 4,
+          "sets": 3,
+          "reps": "15",
+          "rest_seconds": 45,
+          "tempo": "3-0-1-0",
+          "notes": "3-second lowering. Control throughout.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "glute-kickback",
+          "exercise_name": "Glute Kickback",
+          "order": 5,
+          "sets": 3,
+          "reps": "10 each leg",
+          "rest_seconds": 30,
+          "notes": "All fours position. Extend leg back, squeeze glute at top.",
+          "primary_muscle_groups": ["glutes", "hamstrings"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "clock-reach",
+          "exercise_name": "Clock Reaches",
+          "order": 6,
+          "sets": 2,
+          "reps": "2 clocks each leg",
+          "rest_seconds": 45,
+          "notes": "Stand on one leg, reach other foot to 12, 3, 6, 9 o'clock positions.",
+          "primary_muscle_groups": ["glutes", "core", "ankles"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 14,
+      "day_name": "Week 5 - Session 2: Outdoor Functional Flow",
+      "focus": "Outdoor Movement",
+      "exercises": [
+        {
+          "exercise_id": "brisk-walk",
+          "exercise_name": "Brisk Walk Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Get moving outdoors. Enjoy fresh air.",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "walking-lunge",
+          "exercise_name": "Walking Lunges",
+          "order": 2,
+          "sets": 3,
+          "reps": "8 each leg",
+          "rest_seconds": 45,
+          "tempo": "3-0-1-0",
+          "notes": "3-second lowering phase.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "elevated-push-up",
+          "exercise_name": "Elevated Push-Up (Park Bench)",
+          "order": 3,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 45,
+          "notes": "Use park bench or sturdy surface.",
+          "primary_muscle_groups": ["chest", "shoulders", "triceps"],
+          "equipment": ["bench"]
+        },
+        {
+          "exercise_id": "bodyweight-squat",
+          "exercise_name": "Bodyweight Squat",
+          "order": 4,
+          "sets": 3,
+          "reps": "15",
+          "rest_seconds": 45,
+          "tempo": "3-0-1-0",
+          "notes": "Slow tempo squats.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "glute-kickback",
+          "exercise_name": "Standing Glute Kickback",
+          "order": 5,
+          "sets": 3,
+          "reps": "10 each leg",
+          "rest_seconds": 30,
+          "notes": "Hold onto bench for balance. Kick leg back.",
+          "primary_muscle_groups": ["glutes", "hamstrings"],
+          "equipment": ["bench"]
+        },
+        {
+          "exercise_id": "brisk-walk",
+          "exercise_name": "Brisk Walk Cooldown",
+          "order": 6,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Easy pace to finish.",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 15,
+      "day_name": "Week 5 - Session 3: Balance Blast",
+      "focus": "Balance + Meditation",
+      "exercises": [
+        {
+          "exercise_id": "pelvic-floor-activation",
+          "exercise_name": "Pelvic Floor Activation",
+          "order": 1,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 30,
+          "notes": "Center yourself before balance work.",
+          "primary_muscle_groups": ["pelvic_floor"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "clock-reach",
+          "exercise_name": "Clock Reaches",
+          "order": 2,
+          "sets": 3,
+          "reps": "2 clocks each leg",
+          "rest_seconds": 45,
+          "notes": "Full clock pattern. Focus on stability.",
+          "primary_muscle_groups": ["glutes", "core", "ankles"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "single-leg-balance",
+          "exercise_name": "Single-Leg Balance",
+          "order": 3,
+          "sets": 3,
+          "reps": "30 sec each leg",
+          "rest_seconds": 30,
+          "notes": "Progress to eyes closed if stable.",
+          "primary_muscle_groups": ["core", "glutes", "ankles"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "walking-lunge",
+          "exercise_name": "Walking Lunges",
+          "order": 4,
+          "sets": 3,
+          "reps": "8 each leg",
+          "rest_seconds": 45,
+          "tempo": "3-0-1-0",
+          "notes": "Slow, controlled movement.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "glute-bridge",
+          "exercise_name": "Glute Bridge",
+          "order": 5,
+          "sets": 3,
+          "reps": "15",
+          "rest_seconds": 45,
+          "notes": "Strong glute squeeze at top.",
+          "primary_muscle_groups": ["glutes", "hamstrings", "core"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "diaphragmatic-breathing",
+          "exercise_name": "Empowerment Meditation",
+          "order": 6,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Seated or lying. Deep breathing. Appreciate your strength and progress.",
+          "primary_muscle_groups": ["diaphragm", "core"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 16,
+      "day_name": "Week 6 - Session 1: Reclaim & Empower",
+      "focus": "Full Circuit (4 Rounds)",
+      "exercises": [
+        {
+          "exercise_id": "pelvic-floor-activation",
+          "exercise_name": "Pelvic Floor Activation",
+          "order": 1,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 30,
+          "notes": "Final week preparation.",
+          "primary_muscle_groups": ["pelvic_floor"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "step-up",
+          "exercise_name": "Step-Ups",
+          "order": 2,
+          "sets": 4,
+          "reps": "12 total",
+          "rest_seconds": 30,
+          "notes": "Strong pushes. Full hip extension at top.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["step"]
+        },
+        {
+          "exercise_id": "air-squat",
+          "exercise_name": "Air Squats",
+          "order": 3,
+          "sets": 4,
+          "reps": "18",
+          "rest_seconds": 30,
+          "notes": "Maximum reps with good form. Normal tempo.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "push-up",
+          "exercise_name": "Push-Ups",
+          "order": 4,
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 30,
+          "notes": "Incline or knee variation as needed. Full range of motion.",
+          "primary_muscle_groups": ["chest", "shoulders", "triceps"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "side-plank",
+          "exercise_name": "Side Plank",
+          "order": 5,
+          "sets": 3,
+          "reps": "20 sec each side",
+          "rest_seconds": 30,
+          "notes": "Knee down modification available. Keep hips lifted.",
+          "primary_muscle_groups": ["obliques", "core", "shoulders"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "marching-in-place",
+          "exercise_name": "Brisk March in Place",
+          "order": 6,
+          "sets": 4,
+          "reps": "40 sec",
+          "rest_seconds": 20,
+          "notes": "NOT jogging - brisk marching only. High knees, pump arms.",
+          "primary_muscle_groups": ["cardiovascular", "hip_flexors"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 17,
+      "day_name": "Week 6 - Session 2: Core Finisher",
+      "focus": "Core Integration",
+      "exercises": [
+        {
+          "exercise_id": "pelvic-floor-activation",
+          "exercise_name": "Pelvic Floor Activation",
+          "order": 1,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 30,
+          "notes": "Core-focused session warm-up.",
+          "primary_muscle_groups": ["pelvic_floor"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "dead-bug",
+          "exercise_name": "Dead Bug",
+          "order": 2,
+          "sets": 3,
+          "reps": "8 each side",
+          "rest_seconds": 45,
+          "notes": "STOP if doming. Exhale on extension. C-section: modify or skip.",
+          "primary_muscle_groups": ["core", "hip_flexors"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "glute-bridge-march",
+          "exercise_name": "Glute Bridge March",
+          "order": 3,
+          "sets": 3,
+          "reps": "10 each leg",
+          "rest_seconds": 45,
+          "notes": "Keep hips level. Core engaged.",
+          "primary_muscle_groups": ["glutes", "core", "hip_flexors"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "bird-dog",
+          "exercise_name": "Bird Dog",
+          "order": 4,
+          "sets": 3,
+          "reps": "8 each side",
+          "rest_seconds": 45,
+          "notes": "Move only as far as lower back stays still. Exhale on extension.",
+          "primary_muscle_groups": ["core", "glutes", "lower_back"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "air-squat",
+          "exercise_name": "Air Squats",
+          "order": 5,
+          "sets": 4,
+          "reps": "18",
+          "rest_seconds": 30,
+          "notes": "Full range. Strong exhale standing.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "side-plank",
+          "exercise_name": "Side Plank",
+          "order": 6,
+          "sets": 3,
+          "reps": "20 sec each side",
+          "rest_seconds": 30,
+          "notes": "Strong oblique engagement.",
+          "primary_muscle_groups": ["obliques", "core", "shoulders"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 18,
+      "day_name": "Week 6 - Session 3: Celebration & Strength",
+      "focus": "Celebrating Your Progress",
+      "exercises": [
+        {
+          "exercise_id": "pelvic-floor-activation",
+          "exercise_name": "Pelvic Floor Activation",
+          "order": 1,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 30,
+          "notes": "Final session. You've come so far!",
+          "primary_muscle_groups": ["pelvic_floor"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "air-squat",
+          "exercise_name": "Air Squats",
+          "order": 2,
+          "sets": 4,
+          "reps": "20",
+          "rest_seconds": 30,
+          "notes": "Maximum effort. Show your strength!",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "glute-bridge",
+          "exercise_name": "Glute Bridge",
+          "order": 3,
+          "sets": 4,
+          "reps": "20+",
+          "rest_seconds": 30,
+          "notes": "As many as you can with good form. Compare to Week 1!",
+          "primary_muscle_groups": ["glutes", "hamstrings", "core"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "push-up",
+          "exercise_name": "Push-Ups",
+          "order": 4,
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 30,
+          "notes": "Full range. Celebrate each rep.",
+          "primary_muscle_groups": ["chest", "shoulders", "triceps"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "step-up",
+          "exercise_name": "Step-Ups",
+          "order": 5,
+          "sets": 4,
+          "reps": "12 total",
+          "rest_seconds": 30,
+          "notes": "Strong finish to circuit.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["step"]
+        },
+        {
+          "exercise_id": "brisk-walk",
+          "exercise_name": "30-Minute Victory Walk",
+          "order": 6,
+          "sets": 1,
+          "reps": "30 min",
+          "rest_seconds": 0,
+          "notes": "Walk continuously with good posture. You achieved your goal! Leak-free, strong, confident.",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    }
+  ],
+
+  "special_populations": {
+    "c_section_modifications": {
+      "weeks_1_4": [
+        "Avoid all core flexion exercises",
+        "Focus on glutes, upper back, arms",
+        "Add scar massage once cleared (6-8 weeks)"
+      ],
+      "weeks_5_6": [
+        "Introduce wall planks only if comfortable",
+        "Still avoid full planks",
+        "May need 8-12 weeks total before full core work"
+      ]
+    }
+  },
+
+  "progress_tracking": {
+    "week_1_baseline": [
+      "8 glute bridges with good form",
+      "10-second single-leg balance",
+      "15-minute comfortable walk"
+    ],
+    "week_3_check_in": [
+      "15 glute bridges",
+      "Squat to parallel without pelvic pressure",
+      "20-minute comfortable walk"
+    ],
+    "week_6_goals": [
+      "20+ glute bridges",
+      "Complete full circuit 3 times",
+      "30-minute walk with good posture",
+      "Leak-free during exercise",
+      "Feel strong and confident"
+    ]
+  },
+
+  "critical_form_cues": {
+    "glute_bridges": "Exhale on lift, squeeze glutes not lower back, 2-second hold at top",
+    "squats": "Inhale down, exhale up, stop if any pelvic pressure",
+    "dead_bugs": "STOP immediately if belly domes/cones, exhale on extension",
+    "planks": "Exhale and draw belly in WITHOUT breath-holding, stop if doming visible",
+    "bird_dogs": "Move only as far as lower back stays still, exhale on extension",
+    "all_exercises": "Never hold breath, exhale on exertion"
+  },
+
+  "what_comes_next": [
+    "Progress to intermediate programs",
+    "Add light weights (3-5 kg dumbbells)",
+    "Join postpartum fitness classes",
+    "Consider return to running with pelvic floor assessment",
+    "Continue building on foundation"
+  ]
+}

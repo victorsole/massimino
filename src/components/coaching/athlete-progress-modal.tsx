@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { X, Calendar, Dumbbell, Trophy, TrendingUp, Activity, MessageCircle, Play, Pause, Archive, ListChecks, ExternalLink } from 'lucide-react';
+import { X, Calendar, Dumbbell, Trophy, TrendingUp, Activity, MessageCircle, Play, Pause, Archive, ListChecks, ExternalLink, Video } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -314,7 +314,16 @@ export function AthleteProgressModal({
                           <div className="flex items-center space-x-3">
                             <Trophy className="h-4 w-4 text-yellow-600" />
                             <div>
-                              <p className="font-medium">{pr.exercises.name}</p>
+                              <div className="flex items-center gap-1.5">
+                                <p className="font-medium">{pr.exercises.name}</p>
+                                {/* Media indicator for exercise */}
+                                {pr.exercises.hasMedia && (
+                                  <span className="inline-flex items-center gap-0.5 px-1 py-0.5 bg-green-100 text-green-700 rounded text-[10px]">
+                                    <Video className="h-2.5 w-2.5" />
+                                    {pr.exercises.mediaCount || 'Form'}
+                                  </span>
+                                )}
+                              </div>
                               <p className="text-sm text-gray-600">
                                 {new Date(pr.achievedAt).toLocaleDateString()}
                               </p>

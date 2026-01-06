@@ -1,85 +1,317 @@
 {
-    "program": "Plyometric Workout",
-    "author": "Victor Solé Ferioli",
-    "duration_weeks": 2,
-    "session_duration_minutes": {
-      "min": 20,
-      "max": 30
-    },
-    "frequency_per_week": 2,
-    "level": "Intermediate",
-    "settings": ["Indoor", "Outdoor"],
-    "goal": {
-      "outcome_goal": "Improve vertical jump height by 2–4 cm",
-      "progress_goals": [
-        "Increase number of successful landing reps with proper form",
-        "Reduce ground contact time on repeated hops"
+  "program": "Plyometric Workout",
+  "program_id": "plyometric-workout",
+  "author": "Victor Solé Ferioli",
+  "version": "2.0_standardized",
+  "duration_weeks": 2,
+  "session_duration_minutes": {
+    "min": 20,
+    "max": 30
+  },
+  "frequency_per_week": 2,
+  "level": "Intermediate",
+  "settings": ["Indoor", "Outdoor"],
+  "goal": {
+    "outcome_goal": "Improve vertical jump height by 2–4 cm",
+    "progress_goals": [
+      "Increase number of successful landing reps with proper form",
+      "Reduce ground contact time on repeated hops"
+    ]
+  },
+  "equipment": [
+    "Plyo box",
+    "Mat",
+    "Cone",
+    "Line or marker"
+  ],
+
+  "training_days": [
+    {
+      "day": 1,
+      "day_name": "Week 1 - Session 1: Form & Control",
+      "focus": "Landing Mechanics & Controlled Power",
+      "exercises": [
+        {
+          "exercise_id": "jump-squat",
+          "exercise_name": "Jump Squats",
+          "order": 1,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 60,
+          "notes": "Land softly, knees tracking over toes",
+          "primary_muscle_groups": ["quadriceps", "glutes", "calves"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "lateral-line-hops",
+          "exercise_name": "Lateral Line Hops",
+          "order": 2,
+          "sets": 3,
+          "reps": "20 sec",
+          "rest_seconds": 45,
+          "notes": "Quick side-to-side hops over line",
+          "primary_muscle_groups": ["calves", "ankles", "hip_abductors"],
+          "equipment": ["line_marker"]
+        },
+        {
+          "exercise_id": "box-jump-low",
+          "exercise_name": "Box Jumps (Low Height)",
+          "order": 3,
+          "sets": 3,
+          "reps": "6",
+          "rest_seconds": 90,
+          "notes": "Start with low box, focus on soft landing",
+          "primary_muscle_groups": ["quadriceps", "glutes", "calves"],
+          "equipment": ["plyo_box"]
+        },
+        {
+          "exercise_id": "broad-jump-stick",
+          "exercise_name": "Broad Jump with Stick Landing",
+          "order": 4,
+          "sets": 3,
+          "reps": "5",
+          "rest_seconds": 90,
+          "notes": "Jump forward, land and hold 2 sec",
+          "primary_muscle_groups": ["glutes", "quadriceps", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "plank-to-pushup",
+          "exercise_name": "Plank to Push-Up",
+          "order": 5,
+          "sets": 3,
+          "reps": "30 sec",
+          "rest_seconds": 45,
+          "notes": "Core finisher - alternate arms up and down",
+          "primary_muscle_groups": ["core", "shoulders", "triceps"],
+          "equipment": ["yoga_mat"]
+        }
       ]
     },
-    "equipment": [
-      "Plyo box",
-      "Mat",
-      "Cone",
-      "Line or marker"
-    ],
-    "weekly_structure": [
-      {
-        "week": 1,
-        "theme": "Form & Control",
-        "sessions": [
-          {
-            "name": "Session 1",
-            "components": [
-              "Jump Squats – 3x10",
-              "Lateral Line Hops – 3x20 sec",
-              "Box Jumps (low height) – 3x6",
-              "Broad Jump with Stick Landing – 3x5",
-              "Core Finisher: Plank to Push-up – 3x30 sec"
-            ]
-          },
-          {
-            "name": "Session 2",
-            "components": [
-              "Tuck Jumps – 3x8",
-              "Skater Bounds – 3x10/side",
-              "Cone Jumps (forward/backward) – 3x12",
-              "Depth Jump + Stabilize (from small step) – 3x4",
-              "Mobility Cooldown: Hip flexor + Hamstring + Calf stretch"
-            ]
-          }
-        ]
-      },
-      {
-        "week": 2,
-        "theme": "Speed & Agility Load",
-        "sessions": [
-          {
-            "name": "Session 1",
-            "components": [
-              "Single-leg Lateral Hops – 3x8/leg",
-              "Reactive Box Jump (with clap cue) – 3x5",
-              "Jump Lunges – 3x12",
-              "Side-to-Side Skater + Pause – 3x8/side",
-              "Core Finisher: V-sit flutter kicks – 3x20 sec"
-            ]
-          },
-          {
-            "name": "Session 2",
-            "components": [
-              "Line Hops 3-way (front/back/side) – 3x15 sec each",
-              "Bounding Sprints (20m x 4)",
-              "Frog Jumps – 3x6",
-              "Burpee + Jump – 3x10",
-              "Cooldown Walk + Diaphragmatic Breathing"
-            ]
-          }
-        ]
-      }
-    ],
-    "notes": [
-      "Warm-up before each session (e.g., jogging, dynamic stretches)",
-      "Focus on soft landings & knee alignment",
-      "Rest 48 hours between sessions"
-    ]
-  }
-  
+    {
+      "day": 2,
+      "day_name": "Week 1 - Session 2: Reactive Training",
+      "focus": "Reactive Jumps & Bounds",
+      "exercises": [
+        {
+          "exercise_id": "tuck-jump",
+          "exercise_name": "Tuck Jumps",
+          "order": 1,
+          "sets": 3,
+          "reps": "8",
+          "rest_seconds": 60,
+          "notes": "Jump and bring knees to chest, land soft",
+          "primary_muscle_groups": ["quadriceps", "hip_flexors", "calves"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "skater-bounds",
+          "exercise_name": "Skater Bounds",
+          "order": 2,
+          "sets": 3,
+          "reps": "10 each side",
+          "rest_seconds": 60,
+          "notes": "Lateral leap, land on one leg, hold briefly",
+          "primary_muscle_groups": ["glutes", "quadriceps", "hip_abductors"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cone-jumps",
+          "exercise_name": "Cone Jumps (Forward/Backward)",
+          "order": 3,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 60,
+          "notes": "Jump over cone forward and backward",
+          "primary_muscle_groups": ["calves", "quadriceps", "core"],
+          "equipment": ["cone"]
+        },
+        {
+          "exercise_id": "depth-jump-stabilize",
+          "exercise_name": "Depth Jump + Stabilize",
+          "order": 4,
+          "sets": 3,
+          "reps": "4",
+          "rest_seconds": 90,
+          "notes": "Step off small step, land and immediately jump up, stabilize",
+          "primary_muscle_groups": ["quadriceps", "glutes", "calves"],
+          "equipment": ["step"]
+        },
+        {
+          "exercise_id": "hip-flexor-stretch",
+          "exercise_name": "Hip Flexor Stretch",
+          "order": 5,
+          "sets": 2,
+          "reps": "30 sec each side",
+          "rest_seconds": 0,
+          "notes": "Mobility cooldown",
+          "primary_muscle_groups": ["hip_flexors"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "hamstring-stretch",
+          "exercise_name": "Hamstring Stretch",
+          "order": 6,
+          "sets": 2,
+          "reps": "30 sec each side",
+          "rest_seconds": 0,
+          "notes": "Mobility cooldown",
+          "primary_muscle_groups": ["hamstrings"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "calf-stretch",
+          "exercise_name": "Calf Stretch",
+          "order": 7,
+          "sets": 2,
+          "reps": "30 sec each side",
+          "rest_seconds": 0,
+          "notes": "Mobility cooldown - wall stretch",
+          "primary_muscle_groups": ["calves"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "day_name": "Week 2 - Session 1: Speed & Agility Load",
+      "focus": "Single-Leg Power & Reaction",
+      "exercises": [
+        {
+          "exercise_id": "single-leg-lateral-hop",
+          "exercise_name": "Single-Leg Lateral Hops",
+          "order": 1,
+          "sets": 3,
+          "reps": "8 each leg",
+          "rest_seconds": 60,
+          "notes": "Hop side to side on one leg, control landing",
+          "primary_muscle_groups": ["glutes", "calves", "ankles"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "reactive-box-jump",
+          "exercise_name": "Reactive Box Jump (with Clap Cue)",
+          "order": 2,
+          "sets": 3,
+          "reps": "5",
+          "rest_seconds": 90,
+          "notes": "Jump on cue (clap or visual), react quickly",
+          "primary_muscle_groups": ["quadriceps", "glutes", "calves"],
+          "equipment": ["plyo_box"]
+        },
+        {
+          "exercise_id": "jump-lunge",
+          "exercise_name": "Jump Lunges",
+          "order": 3,
+          "sets": 3,
+          "reps": "12 total",
+          "rest_seconds": 60,
+          "notes": "Alternate legs explosively, soft landing",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "skater-pause",
+          "exercise_name": "Side-to-Side Skater + Pause",
+          "order": 4,
+          "sets": 3,
+          "reps": "8 each side",
+          "rest_seconds": 60,
+          "notes": "Lateral bound with 1-2 sec hold on landing",
+          "primary_muscle_groups": ["glutes", "quadriceps", "hip_abductors"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "v-sit-flutter",
+          "exercise_name": "V-Sit Flutter Kicks",
+          "order": 5,
+          "sets": 3,
+          "reps": "20 sec",
+          "rest_seconds": 45,
+          "notes": "Core finisher - hold V position, flutter feet",
+          "primary_muscle_groups": ["core", "hip_flexors"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "day_name": "Week 2 - Session 2: Peak Power",
+      "focus": "Maximum Power Output & Sprints",
+      "exercises": [
+        {
+          "exercise_id": "line-hops-3way",
+          "exercise_name": "Line Hops 3-Way",
+          "order": 1,
+          "sets": 3,
+          "reps": "15 sec each direction",
+          "rest_seconds": 45,
+          "notes": "Front/back, side/side, diagonal patterns",
+          "primary_muscle_groups": ["calves", "ankles", "core"],
+          "equipment": ["line_marker"]
+        },
+        {
+          "exercise_id": "bounding-sprint",
+          "exercise_name": "Bounding Sprints",
+          "order": 2,
+          "sets": 4,
+          "reps": "20m",
+          "rest_seconds": 90,
+          "notes": "Exaggerated running stride, maximum distance per bound",
+          "primary_muscle_groups": ["glutes", "hamstrings", "quadriceps"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "frog-jump",
+          "exercise_name": "Frog Jumps",
+          "order": 3,
+          "sets": 3,
+          "reps": "6",
+          "rest_seconds": 60,
+          "notes": "Deep squat position, jump forward explosively",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "burpee-jump",
+          "exercise_name": "Burpee + Jump",
+          "order": 4,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 60,
+          "notes": "Full burpee with explosive jump at top",
+          "primary_muscle_groups": ["full_body", "chest", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-walk",
+          "exercise_name": "Cooldown Walk",
+          "order": 5,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Easy walking to lower heart rate",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "diaphragmatic-breathing",
+          "exercise_name": "Diaphragmatic Breathing",
+          "order": 6,
+          "sets": 1,
+          "reps": "3 min",
+          "rest_seconds": 0,
+          "notes": "Deep belly breathing for recovery",
+          "primary_muscle_groups": ["diaphragm"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    }
+  ],
+
+  "notes": [
+    "Warm-up before each session (e.g., jogging, dynamic stretches)",
+    "Focus on soft landings & knee alignment",
+    "Rest 48 hours between sessions"
+  ]
+}

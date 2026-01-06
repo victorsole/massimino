@@ -548,6 +548,8 @@ export async function getAthleteProgress(
       exercises: {
         select: {
           name: true,
+          hasMedia: true,
+          mediaCount: true,
         },
       },
     },

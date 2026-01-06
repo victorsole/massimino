@@ -109,7 +109,7 @@ export async function POST(
       };
     }
 
-    // Fetch recommended exercises
+    // Fetch recommended exercises - prioritize those with media
     const recommendedExercises = await prisma.exercises.findMany({
       where: whereClause,
       select: {
@@ -120,11 +120,15 @@ export async function POST(
         difficulty: true,
         equipment: true,
         instructions: true,
+        hasMedia: true,
+        mediaCount: true,
       },
-      take: 20,
-      orderBy: {
-        name: 'asc',
-      },
+      take: 40, // Fetch more to allow sorting
+      orderBy: [
+        { hasMedia: 'desc' }, // Exercises with media first
+        { mediaCount: 'desc' }, // Then by media count
+        { name: 'asc' },
+      ],
     });
 
     // Filter out exercises that conflict with limitations
@@ -149,8 +153,17 @@ export async function POST(
       return true;
     });
 
+    // Limit to top 20 after filtering
+    const topRecommendations = filteredExercises.slice(0, 20);
+
+    // Add hasFormReference flag for UI
+    const recommendationsWithFlags = topRecommendations.map(ex => ({
+      ...ex,
+      hasFormReference: ex.hasMedia && (ex.mediaCount ?? 0) > 0,
+    }));
+
     return NextResponse.json({
-      recommendations: filteredExercises,
+      recommendations: recommendationsWithFlags,
       assessmentData: {
         primaryGoal: assessment.primaryGoal,
         experienceYears: assessment.experienceYears,

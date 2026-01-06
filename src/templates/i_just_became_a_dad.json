@@ -1,247 +1,1298 @@
 {
-    "program": "I Just Became a Dad - Functional Strength & Energy Recovery",
-    "author": "Victor Solé Ferioli",
-    "version": "2.0_corrected",
-    "target_demographic": "Men aged 30-45, new fathers",
-    "duration_weeks": 6,
-    "session_duration_minutes": {
-      "min": 30,
-      "max": 45
-    },
-    "frequency_per_week": 3,
-    "optional_activity": {
-      "name": "Recharge Day",
-      "frequency": "1x per week",
-      "duration_minutes": "20-30",
-      "options": ["solo walk", "mobility session", "light sport", "enjoyable activity"]
-    },
-    "level": "Beginner-to-Intermediate (return to fitness)",
-    "settings": ["Home", "Gym", "Outdoor"],
-    "equipment": {
-      "minimal": ["Dumbbells (15-35 lbs)", "Light resistance band", "Yoga mat", "Couch/bench"],
-      "ideal": ["Adjustable dumbbells (5-50 lbs)", "Resistance band set", "Pull-up bar", "Foam roller"],
-      "budget": ["Single set 20-25 lb dumbbells", "Light band", "Use household items"]
-    },
-    
-    "health_screening": {
-      "considerations": [
-        "Chronic injuries (back, shoulders, knees)",
-        "Time since last training (>6 months = start conservatively)",
-        "Current stress and sleep quality",
-        "Age >40 with no recent exercise = medical clearance recommended"
+  "program": "I Just Became a Dad - Functional Strength & Energy Recovery",
+  "program_id": "i-just-became-a-dad",
+  "author": "Victor Solé Ferioli",
+  "version": "3.0_standardized",
+  "target_demographic": "Men aged 30-45, new fathers",
+  "duration_weeks": 6,
+  "session_duration_minutes": {
+    "min": 30,
+    "max": 45
+  },
+  "frequency_per_week": 3,
+  "optional_activity": {
+    "name": "Recharge Day",
+    "frequency": "1x per week",
+    "duration_minutes": "20-30",
+    "options": ["solo walk", "mobility session", "light sport", "enjoyable activity"]
+  },
+  "level": "Beginner-to-Intermediate (return to fitness)",
+  "settings": ["Home", "Gym", "Outdoor"],
+  "equipment": {
+    "minimal": ["Dumbbells (15-35 lbs)", "Light resistance band", "Yoga mat", "Couch/bench"],
+    "ideal": ["Adjustable dumbbells (5-50 lbs)", "Resistance band set", "Pull-up bar", "Foam roller"],
+    "budget": ["Single set 20-25 lb dumbbells", "Light band", "Use household items"]
+  },
+
+  "health_screening": {
+    "considerations": [
+      "Chronic injuries (back, shoulders, knees)",
+      "Time since last training (>6 months = start conservatively)",
+      "Current stress and sleep quality",
+      "Age >40 with no recent exercise = medical clearance recommended"
+    ]
+  },
+
+  "red_flags_to_stop": [
+    "Sharp joint, back, or chest pain",
+    "Dizziness or unusual shortness of breath",
+    "Numbness or tingling",
+    "Pain that doesn't resolve with rest",
+    "Extreme fatigue beyond normal tiredness"
+  ],
+
+  "goals": {
+    "strength_goal": "Perform 3 sets of 10 push-ups, 15 squats, 45-second plank by Week 6",
+    "functional_goal": "Safely lift/carry baby, car seat, stroller without pain",
+    "posture_goal": "Reverse desk-job posture through targeted mobility",
+    "energy_goal": "Improve daily energy and stress resilience",
+    "habit_goal": "Establish 3x/week movement routine"
+  },
+
+  "progressive_overload": {
+    "week_1": "Learn movements, find baseline",
+    "week_2": "Add resistance, full range of motion",
+    "week_3": "Increase volume (add sets, now 3-4)",
+    "week_4": "Increase load (+5-10 lbs)",
+    "week_5": "Reduce rest periods (60-90 sec)",
+    "week_6": "Test maxes, celebrate progress"
+  },
+
+  "training_days": [
+    {
+      "day": 1,
+      "day_name": "Week 1 - Session 1: Reconnect & Reset",
+      "focus": "Foundation Building",
+      "duration_minutes": "30-35",
+      "exercises": [
+        {
+          "exercise_id": "cat-cow",
+          "exercise_name": "Cat-Cow",
+          "order": 1,
+          "sets": 2,
+          "reps": "10 cycles",
+          "rest_seconds": 0,
+          "notes": "Mobility for desk workers - slow controlled movement",
+          "primary_muscle_groups": ["spine", "core"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "thoracic-opener",
+          "exercise_name": "Thoracic Opener",
+          "order": 2,
+          "sets": 2,
+          "reps": "8 each side",
+          "rest_seconds": 0,
+          "notes": "Open up chest and upper back",
+          "primary_muscle_groups": ["thoracic_spine", "chest"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "bodyweight-squat",
+          "exercise_name": "Bodyweight Squats",
+          "order": 3,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 60,
+          "notes": "Chest up, core braced, weight in heels",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "incline-push-up",
+          "exercise_name": "Incline Push-Ups",
+          "order": 4,
+          "sets": 3,
+          "reps": "8",
+          "rest_seconds": 60,
+          "notes": "Hands on couch/bench, elbows 45°, body straight",
+          "primary_muscle_groups": ["chest", "triceps", "front_deltoids"],
+          "equipment": ["bench"]
+        },
+        {
+          "exercise_id": "glute-bridge",
+          "exercise_name": "Glute Bridges",
+          "order": 5,
+          "sets": 3,
+          "reps": "15",
+          "rest_seconds": 45,
+          "notes": "Squeeze glutes not lower back, exhale on lift",
+          "primary_muscle_groups": ["glutes", "hamstrings"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "dead-bug",
+          "exercise_name": "Dead Bugs",
+          "order": 6,
+          "sets": 3,
+          "reps": "8 each side",
+          "rest_seconds": 45,
+          "notes": "Press lower back to floor. Stop if back arches.",
+          "primary_muscle_groups": ["core", "hip_flexors"],
+          "equipment": ["yoga_mat"]
+        }
       ]
     },
-    
-    "red_flags_to_stop": [
-      "Sharp joint, back, or chest pain",
-      "Dizziness or unusual shortness of breath",
-      "Numbness or tingling",
-      "Pain that doesn't resolve with rest",
-      "Extreme fatigue beyond normal tiredness"
-    ],
-    
-    "goals": {
-      "strength_goal": "Perform 3 sets of 10 push-ups, 15 squats, 45-second plank by Week 6",
-      "functional_goal": "Safely lift/carry baby, car seat, stroller without pain",
-      "posture_goal": "Reverse desk-job posture through targeted mobility",
-      "energy_goal": "Improve daily energy and stress resilience",
-      "habit_goal": "Establish 3x/week movement routine"
-    },
-    
-    "progressive_overload": {
-      "week_1": "Learn movements, find baseline",
-      "week_2": "Add resistance, full range of motion",
-      "week_3": "Increase volume (add sets, now 3-4)",
-      "week_4": "Increase load (+5-10 lbs)",
-      "week_5": "Reduce rest periods (60-90 sec)",
-      "week_6": "Test maxes, celebrate progress"
-    },
-    
-    "weekly_structure": [
-      {
-        "week": 1,
-        "theme": "Reconnect & Reset",
-        "focus": [
-          "Mobility for desk workers (cat-cow, thoracic opener, hip rocks, world's greatest stretch)",
-          "Foundation strength circuit: bodyweight squats, incline push-ups, glute bridges, dead bugs, band pull-aparts",
-          "Movement pattern assessment",
-          "Essential stretching (hip flexors, pecs, hamstrings)"
-        ],
-        "duration_minutes": "30-35",
-        "key_exercises": [
-          "Bodyweight squat (10 reps × 3 rounds)",
-          "Incline push-ups (8 reps × 3 rounds)",
-          "Glute bridges (15 reps × 3 rounds)",
-          "Dead bugs (8 each side × 3 rounds)"
-        ]
-      },
-      {
-        "week": 2,
-        "theme": "Build the Base",
-        "focus": [
-          "Full-body circuits with light dumbbells",
-          "Introduction to loaded movements",
-          "Core stability emphasis",
-          "Building work capacity"
-        ],
-        "duration_minutes": "35-40",
-        "key_exercises": [
-          "Goblet squat (12 reps, 15-20 lbs)",
-          "Elevated push-ups (10 reps)",
-          "Bent-over dumbbell row (12 reps, 15-20 lbs each)",
-          "Farmer carry position hold (30 sec)",
-          "Plank (20 sec × 3 sets)"
-        ]
-      },
-      {
-        "week": 3,
-        "theme": "Push & Pull Strength",
-        "focus": [
-          "Upper body emphasis with push/pull split",
-          "Movement quality over quantity",
-          "Volume increase (now 4 sets)",
-          "Postural correction exercises"
-        ],
-        "duration_minutes": "40-45",
-        "key_exercises": [
-          "Push-ups (8-12 reps × 4 rounds)",
-          "Dumbbell shoulder press (10 reps)",
-          "Bent-over rows (15 reps, increased weight)",
-          "Band face pulls (15 reps)",
-          "Side planks (20 sec each × 3 sets)"
-        ]
-      },
-      {
-        "week": 4,
-        "theme": "Lift & Carry (Dad Functional)",
-        "focus": [
-          "Lower body power development",
-          "Practical carrying strength",
-          "Romanian deadlift introduction",
-          "Load increase (+5-10 lbs on main lifts)"
-        ],
-        "duration_minutes": "40-45",
-        "key_exercises": [
-          "Romanian deadlift (10 reps, 20-30 lbs per hand)",
-          "Goblet squat (12 reps, heavier weight)",
-          "Single-arm dumbbell row (12 each)",
-          "Farmer carry (40 steps, 30-40+ lbs per hand)",
-          "Plank to down dog (10 reps)"
-        ]
-      },
-      {
-        "week": 5,
-        "theme": "Power & Work Capacity",
-        "focus": [
-          "Cardiovascular conditioning with walk/jog intervals",
-          "Anti-rotation core strength",
-          "Complex movements (thrusters, renegade rows)",
-          "Reduced rest periods"
-        ],
-        "duration_minutes": "40-45",
-        "key_exercises": [
-          "Walk/jog intervals (30 sec work / 90 sec rest × 8 rounds)",
-          "Dumbbell thrusters (10 reps)",
-          "Renegade rows (8 each side)",
-          "Pallof press (12 each side)",
-          "Reverse lunges (12 each leg)"
-        ]
-      },
-      {
-        "week": 6,
-        "theme": "Dad Strength (Testing)",
-        "focus": [
-          "Session 1: Strength testing (push-ups, squats, plank, farmer carry)",
-          "Sessions 2-3: Full integration workouts",
-          "Maximum effort with perfect form",
-          "Celebration of progress"
-        ],
-        "duration_minutes": "40-45",
-        "test_goals": [
-          "3 sets of 10 quality push-ups",
-          "3 sets of 15 bodyweight squats",
-          "45-second plank hold",
-          "Farmer carry distance/time record"
-        ]
-      }
-    ],
-    
-    "injury_prevention": {
-      "lower_back_safety": [
-        "Always brace core before lifting",
-        "Hip hinge properly (push butt back, flat back)",
-        "Nightly glute bridges (2 sets × 15 reps)",
-        "Perfect form > heavy weight"
-      ],
-      "shoulder_safety": [
-        "Elbows at 45° during push-ups, not 90°",
-        "Shoulder blades pinched back and down",
-        "Never shrug shoulders to ears",
-        "Initiate rows with shoulder blades, not arms"
-      ],
-      "breathing_pattern": [
-        "Exhale on exertion (lifting/pushing phase)",
-        "Inhale on eccentric (lowering phase)",
-        "Never hold breath during strength work",
-        "Maintain core brace while breathing"
+    {
+      "day": 2,
+      "day_name": "Week 1 - Session 2: Movement Patterns",
+      "focus": "Foundation Building",
+      "duration_minutes": "30-35",
+      "exercises": [
+        {
+          "exercise_id": "worlds-greatest-stretch",
+          "exercise_name": "World's Greatest Stretch",
+          "order": 1,
+          "sets": 2,
+          "reps": "5 each side",
+          "rest_seconds": 0,
+          "notes": "Lunge with rotation and reach",
+          "primary_muscle_groups": ["hip_flexors", "thoracic_spine", "hamstrings"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "hip-rock",
+          "exercise_name": "Hip Rocks",
+          "order": 2,
+          "sets": 2,
+          "reps": "10",
+          "rest_seconds": 0,
+          "notes": "Gently rock hips side to side",
+          "primary_muscle_groups": ["hips", "lower_back"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "bodyweight-squat",
+          "exercise_name": "Bodyweight Squats",
+          "order": 3,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 60,
+          "notes": "Focus on depth and form",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "incline-push-up",
+          "exercise_name": "Incline Push-Ups",
+          "order": 4,
+          "sets": 3,
+          "reps": "8",
+          "rest_seconds": 60,
+          "notes": "2 sec down, 1 sec up",
+          "primary_muscle_groups": ["chest", "triceps", "front_deltoids"],
+          "equipment": ["bench"]
+        },
+        {
+          "exercise_id": "band-pull-apart",
+          "exercise_name": "Band Pull-Aparts",
+          "order": 5,
+          "sets": 3,
+          "reps": "15",
+          "rest_seconds": 45,
+          "notes": "Squeeze shoulder blades together",
+          "primary_muscle_groups": ["rear_deltoids", "rhomboids", "traps"],
+          "equipment": ["resistance_band"]
+        },
+        {
+          "exercise_id": "hip-flexor-stretch",
+          "exercise_name": "Hip Flexor Stretch",
+          "order": 6,
+          "sets": 2,
+          "reps": "30 sec each side",
+          "rest_seconds": 0,
+          "notes": "Essential stretch for desk workers",
+          "primary_muscle_groups": ["hip_flexors"],
+          "equipment": ["yoga_mat"]
+        }
       ]
     },
-    
-    "recovery_strategies": {
-      "sleep_deprivation_adaptations": [
-        "If <5 hours sleep: reduce weight by 20%, focus on form",
-        "If exhausted: take recharge day, 20-min walk > nothing",
-        "Don't create training debt"
-      ],
-      "stress_management": [
-        "Box breathing: 4 in, 4 hold, 4 out, 4 hold × 5 rounds",
-        "Progressive muscle relaxation before bed",
-        "Mindful cool-downs with breathing"
-      ],
-      "nutrition_quick_wins": [
-        "Hydrate every time you feed baby",
-        "Palm-sized protein each meal",
-        "Don't cut carbs (need energy)",
-        "Limit coffee after 2pm",
-        "Meal prep: make 2x dinner portions"
+    {
+      "day": 3,
+      "day_name": "Week 1 - Session 3: Assessment",
+      "focus": "Foundation Building",
+      "duration_minutes": "30-35",
+      "exercises": [
+        {
+          "exercise_id": "cat-cow",
+          "exercise_name": "Cat-Cow",
+          "order": 1,
+          "sets": 2,
+          "reps": "10 cycles",
+          "rest_seconds": 0,
+          "notes": "Warm up the spine",
+          "primary_muscle_groups": ["spine", "core"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "bodyweight-squat",
+          "exercise_name": "Bodyweight Squats",
+          "order": 2,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 60,
+          "notes": "Movement pattern assessment",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "incline-push-up",
+          "exercise_name": "Incline Push-Ups",
+          "order": 3,
+          "sets": 3,
+          "reps": "8",
+          "rest_seconds": 60,
+          "notes": "Perfect form assessment",
+          "primary_muscle_groups": ["chest", "triceps", "front_deltoids"],
+          "equipment": ["bench"]
+        },
+        {
+          "exercise_id": "glute-bridge",
+          "exercise_name": "Glute Bridges",
+          "order": 4,
+          "sets": 3,
+          "reps": "15",
+          "rest_seconds": 45,
+          "notes": "Track reps completed with good form",
+          "primary_muscle_groups": ["glutes", "hamstrings"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "dead-bug",
+          "exercise_name": "Dead Bugs",
+          "order": 5,
+          "sets": 3,
+          "reps": "8 each side",
+          "rest_seconds": 45,
+          "notes": "Core stability assessment",
+          "primary_muscle_groups": ["core", "hip_flexors"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "chest-stretch",
+          "exercise_name": "Pec Stretch",
+          "order": 6,
+          "sets": 2,
+          "reps": "30 sec each side",
+          "rest_seconds": 0,
+          "notes": "Doorway stretch for tight chest",
+          "primary_muscle_groups": ["chest", "front_deltoids"],
+          "equipment": ["bodyweight"]
+        }
       ]
     },
-    
-    "progress_tracking": {
-      "week_1_baseline": [
-        "Max push-ups before form breaks",
-        "Continuous bodyweight squat reps",
-        "Plank hold seconds",
-        "Energy level (1-10 scale)"
-      ],
-      "week_3_check_in": [
-        "Push-up improvement check",
-        "Pain/injury assessment",
-        "Consistency tracking (out of 9 workouts)"
-      ],
-      "week_6_final": [
-        "3 sets × 10 push-ups (goal)",
-        "3 sets × 15 squats (goal)",
-        "45-second plank (goal)",
-        "Energy level improvement",
-        "Functional carrying ability assessment"
+    {
+      "day": 4,
+      "day_name": "Week 2 - Session 1: Build the Base",
+      "focus": "Introduction to Loaded Movements",
+      "duration_minutes": "35-40",
+      "exercises": [
+        {
+          "exercise_id": "goblet-squat",
+          "exercise_name": "Goblet Squat",
+          "order": 1,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 60,
+          "notes": "15-20 lb dumbbell, chest up, elbows inside knees",
+          "primary_muscle_groups": ["quadriceps", "glutes", "core"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "elevated-push-up",
+          "exercise_name": "Elevated Push-Ups",
+          "order": 2,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 60,
+          "notes": "Lower surface than week 1 if ready",
+          "primary_muscle_groups": ["chest", "triceps", "front_deltoids"],
+          "equipment": ["bench"]
+        },
+        {
+          "exercise_id": "dumbbell-row",
+          "exercise_name": "Bent-Over Dumbbell Row",
+          "order": 3,
+          "sets": 3,
+          "reps": "12 each arm",
+          "rest_seconds": 60,
+          "notes": "15-20 lbs each hand, initiate with shoulder blades",
+          "primary_muscle_groups": ["lats", "rhomboids", "biceps"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "farmer-carry-hold",
+          "exercise_name": "Farmer Carry Position Hold",
+          "order": 4,
+          "sets": 3,
+          "reps": "30 sec",
+          "rest_seconds": 60,
+          "notes": "Stand tall, shoulders packed down, don't lean",
+          "primary_muscle_groups": ["core", "traps", "grip"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "plank",
+          "exercise_name": "Plank Hold",
+          "order": 5,
+          "sets": 3,
+          "reps": "20 sec",
+          "rest_seconds": 45,
+          "notes": "Don't sag hips. Breathe normally. Stop when form breaks.",
+          "primary_muscle_groups": ["core", "shoulders"],
+          "equipment": ["yoga_mat"]
+        }
       ]
     },
-    
-    "what_comes_next": {
-      "option_1": "Repeat with 5-10 lbs added, reduced rest, optional 4th day",
-      "option_2": "Specialize in specific goal (strength/endurance/body comp)",
-      "option_3": "Maintain with Week 5-6 workouts, rotate exercises",
-      "long_term_goal": "Build identity as dad who prioritizes health and strength"
+    {
+      "day": 5,
+      "day_name": "Week 2 - Session 2: Work Capacity",
+      "focus": "Building Endurance",
+      "duration_minutes": "35-40",
+      "exercises": [
+        {
+          "exercise_id": "goblet-squat",
+          "exercise_name": "Goblet Squat",
+          "order": 1,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 60,
+          "notes": "Focus on depth and control",
+          "primary_muscle_groups": ["quadriceps", "glutes", "core"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "push-up",
+          "exercise_name": "Push-Ups",
+          "order": 2,
+          "sets": 3,
+          "reps": "8-10",
+          "rest_seconds": 60,
+          "notes": "Progress to knee or full push-ups if ready",
+          "primary_muscle_groups": ["chest", "triceps", "front_deltoids"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "dumbbell-row",
+          "exercise_name": "Bent-Over Dumbbell Row",
+          "order": 3,
+          "sets": 3,
+          "reps": "12 each arm",
+          "rest_seconds": 60,
+          "notes": "Squeeze at top, controlled lower",
+          "primary_muscle_groups": ["lats", "rhomboids", "biceps"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "glute-bridge",
+          "exercise_name": "Glute Bridges",
+          "order": 4,
+          "sets": 3,
+          "reps": "15",
+          "rest_seconds": 45,
+          "notes": "2-sec hold at top",
+          "primary_muscle_groups": ["glutes", "hamstrings"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "dead-bug",
+          "exercise_name": "Dead Bugs",
+          "order": 5,
+          "sets": 3,
+          "reps": "10 each side",
+          "rest_seconds": 45,
+          "notes": "Core stability with control",
+          "primary_muscle_groups": ["core", "hip_flexors"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
     },
-    
-    "critical_form_cues": {
-      "squat": "Chest up, core braced, weight in heels. Exhale on stand.",
-      "push_up": "Elbows 45°, body straight line, 2 sec down / 1 sec up",
-      "romanian_deadlift": "FLAT BACK. Hinge at hips, slight knee bend. Push hips back, not down.",
-      "glute_bridge": "Drive through heels, squeeze glutes NOT lower back, exhale on lift",
-      "dead_bug": "Press lower back to floor. Stop if back arches.",
-      "plank": "Don't sag hips. Breathe normally. Stop when form breaks.",
-      "farmer_carry": "Stand tall, don't lean, shoulders packed down"
+    {
+      "day": 6,
+      "day_name": "Week 2 - Session 3: Circuit Training",
+      "focus": "Building Endurance",
+      "duration_minutes": "35-40",
+      "exercises": [
+        {
+          "exercise_id": "goblet-squat",
+          "exercise_name": "Goblet Squat",
+          "order": 1,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 45,
+          "notes": "Reduced rest - circuit style",
+          "primary_muscle_groups": ["quadriceps", "glutes", "core"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "push-up",
+          "exercise_name": "Push-Ups",
+          "order": 2,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 45,
+          "notes": "Circuit style - move quickly",
+          "primary_muscle_groups": ["chest", "triceps", "front_deltoids"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "dumbbell-row",
+          "exercise_name": "Bent-Over Dumbbell Row",
+          "order": 3,
+          "sets": 3,
+          "reps": "12 each arm",
+          "rest_seconds": 45,
+          "notes": "Circuit style",
+          "primary_muscle_groups": ["lats", "rhomboids", "biceps"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "farmer-carry",
+          "exercise_name": "Farmer Carry",
+          "order": 4,
+          "sets": 3,
+          "reps": "30 steps",
+          "rest_seconds": 60,
+          "notes": "Walk with weights, stand tall",
+          "primary_muscle_groups": ["core", "traps", "grip"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "plank",
+          "exercise_name": "Plank Hold",
+          "order": 5,
+          "sets": 3,
+          "reps": "25 sec",
+          "rest_seconds": 45,
+          "notes": "Progress from week 1",
+          "primary_muscle_groups": ["core", "shoulders"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 7,
+      "day_name": "Week 3 - Session 1: Push Focus",
+      "focus": "Push & Pull Strength",
+      "duration_minutes": "40-45",
+      "exercises": [
+        {
+          "exercise_id": "push-up",
+          "exercise_name": "Push-Ups",
+          "order": 1,
+          "sets": 4,
+          "reps": "8-12",
+          "rest_seconds": 60,
+          "notes": "Volume increase to 4 sets",
+          "primary_muscle_groups": ["chest", "triceps", "front_deltoids"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "dumbbell-shoulder-press",
+          "exercise_name": "Dumbbell Shoulder Press",
+          "order": 2,
+          "sets": 4,
+          "reps": "10",
+          "rest_seconds": 60,
+          "notes": "Seated or standing, controlled movement",
+          "primary_muscle_groups": ["front_deltoids", "triceps"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "dumbbell-row",
+          "exercise_name": "Bent-Over Rows",
+          "order": 3,
+          "sets": 4,
+          "reps": "15",
+          "rest_seconds": 60,
+          "notes": "Increased weight from week 2",
+          "primary_muscle_groups": ["lats", "rhomboids", "biceps"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "band-face-pull",
+          "exercise_name": "Band Face Pulls",
+          "order": 4,
+          "sets": 3,
+          "reps": "15",
+          "rest_seconds": 45,
+          "notes": "Postural correction - pull to face, squeeze rear delts",
+          "primary_muscle_groups": ["rear_deltoids", "rhomboids", "traps"],
+          "equipment": ["resistance_band"]
+        },
+        {
+          "exercise_id": "side-plank",
+          "exercise_name": "Side Planks",
+          "order": 5,
+          "sets": 3,
+          "reps": "20 sec each side",
+          "rest_seconds": 45,
+          "notes": "Oblique and lateral stability",
+          "primary_muscle_groups": ["obliques", "core"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 8,
+      "day_name": "Week 3 - Session 2: Pull Focus",
+      "focus": "Push & Pull Strength",
+      "duration_minutes": "40-45",
+      "exercises": [
+        {
+          "exercise_id": "dumbbell-row",
+          "exercise_name": "Single-Arm Dumbbell Row",
+          "order": 1,
+          "sets": 4,
+          "reps": "12 each arm",
+          "rest_seconds": 60,
+          "notes": "Focus on pulling through elbow",
+          "primary_muscle_groups": ["lats", "rhomboids", "biceps"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "band-face-pull",
+          "exercise_name": "Band Face Pulls",
+          "order": 2,
+          "sets": 4,
+          "reps": "15",
+          "rest_seconds": 45,
+          "notes": "Postural correction emphasis",
+          "primary_muscle_groups": ["rear_deltoids", "rhomboids", "traps"],
+          "equipment": ["resistance_band"]
+        },
+        {
+          "exercise_id": "goblet-squat",
+          "exercise_name": "Goblet Squat",
+          "order": 3,
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 60,
+          "notes": "Maintain lower body work",
+          "primary_muscle_groups": ["quadriceps", "glutes", "core"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "push-up",
+          "exercise_name": "Push-Ups",
+          "order": 4,
+          "sets": 3,
+          "reps": "10-12",
+          "rest_seconds": 60,
+          "notes": "Quality over quantity",
+          "primary_muscle_groups": ["chest", "triceps", "front_deltoids"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "dead-bug",
+          "exercise_name": "Dead Bugs",
+          "order": 5,
+          "sets": 3,
+          "reps": "10 each side",
+          "rest_seconds": 45,
+          "notes": "Core stability finisher",
+          "primary_muscle_groups": ["core", "hip_flexors"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 9,
+      "day_name": "Week 3 - Session 3: Full Body",
+      "focus": "Push & Pull Strength",
+      "duration_minutes": "40-45",
+      "exercises": [
+        {
+          "exercise_id": "goblet-squat",
+          "exercise_name": "Goblet Squat",
+          "order": 1,
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 60,
+          "notes": "Full body integration",
+          "primary_muscle_groups": ["quadriceps", "glutes", "core"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "push-up",
+          "exercise_name": "Push-Ups",
+          "order": 2,
+          "sets": 4,
+          "reps": "10-12",
+          "rest_seconds": 60,
+          "notes": "Quality reps",
+          "primary_muscle_groups": ["chest", "triceps", "front_deltoids"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "dumbbell-row",
+          "exercise_name": "Bent-Over Rows",
+          "order": 3,
+          "sets": 4,
+          "reps": "12 each arm",
+          "rest_seconds": 60,
+          "notes": "Balance push with pull",
+          "primary_muscle_groups": ["lats", "rhomboids", "biceps"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "dumbbell-shoulder-press",
+          "exercise_name": "Dumbbell Shoulder Press",
+          "order": 4,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 60,
+          "notes": "Upper body finisher",
+          "primary_muscle_groups": ["front_deltoids", "triceps"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "side-plank",
+          "exercise_name": "Side Planks",
+          "order": 5,
+          "sets": 3,
+          "reps": "20 sec each side",
+          "rest_seconds": 45,
+          "notes": "Core stability",
+          "primary_muscle_groups": ["obliques", "core"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 10,
+      "day_name": "Week 4 - Session 1: Dad Functional - Lower Body",
+      "focus": "Lift & Carry (Dad Functional)",
+      "duration_minutes": "40-45",
+      "exercises": [
+        {
+          "exercise_id": "romanian-deadlift",
+          "exercise_name": "Romanian Deadlift",
+          "order": 1,
+          "sets": 4,
+          "reps": "10",
+          "rest_seconds": 90,
+          "notes": "FLAT BACK. 20-30 lbs per hand. Hinge at hips, slight knee bend.",
+          "primary_muscle_groups": ["hamstrings", "glutes", "lower_back"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "goblet-squat",
+          "exercise_name": "Goblet Squat",
+          "order": 2,
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 60,
+          "notes": "Heavier weight than week 3",
+          "primary_muscle_groups": ["quadriceps", "glutes", "core"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "dumbbell-row",
+          "exercise_name": "Single-Arm Dumbbell Row",
+          "order": 3,
+          "sets": 4,
+          "reps": "12 each arm",
+          "rest_seconds": 60,
+          "notes": "Increased load",
+          "primary_muscle_groups": ["lats", "rhomboids", "biceps"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "farmer-carry",
+          "exercise_name": "Farmer Carry",
+          "order": 4,
+          "sets": 3,
+          "reps": "40 steps",
+          "rest_seconds": 90,
+          "notes": "30-40+ lbs per hand. Stand tall, don't lean.",
+          "primary_muscle_groups": ["core", "traps", "grip"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "plank-to-downdog",
+          "exercise_name": "Plank to Down Dog",
+          "order": 5,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 45,
+          "notes": "Core and mobility combo",
+          "primary_muscle_groups": ["core", "shoulders", "hamstrings"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 11,
+      "day_name": "Week 4 - Session 2: Dad Functional - Upper Body",
+      "focus": "Lift & Carry (Dad Functional)",
+      "duration_minutes": "40-45",
+      "exercises": [
+        {
+          "exercise_id": "push-up",
+          "exercise_name": "Push-Ups",
+          "order": 1,
+          "sets": 4,
+          "reps": "10-12",
+          "rest_seconds": 60,
+          "notes": "Load increase week",
+          "primary_muscle_groups": ["chest", "triceps", "front_deltoids"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "dumbbell-shoulder-press",
+          "exercise_name": "Dumbbell Shoulder Press",
+          "order": 2,
+          "sets": 4,
+          "reps": "10",
+          "rest_seconds": 60,
+          "notes": "Add 5-10 lbs from week 3",
+          "primary_muscle_groups": ["front_deltoids", "triceps"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "dumbbell-row",
+          "exercise_name": "Bent-Over Rows",
+          "order": 3,
+          "sets": 4,
+          "reps": "15",
+          "rest_seconds": 60,
+          "notes": "Increased weight",
+          "primary_muscle_groups": ["lats", "rhomboids", "biceps"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "band-face-pull",
+          "exercise_name": "Band Face Pulls",
+          "order": 4,
+          "sets": 3,
+          "reps": "15",
+          "rest_seconds": 45,
+          "notes": "Postural correction",
+          "primary_muscle_groups": ["rear_deltoids", "rhomboids", "traps"],
+          "equipment": ["resistance_band"]
+        },
+        {
+          "exercise_id": "plank",
+          "exercise_name": "Plank Hold",
+          "order": 5,
+          "sets": 3,
+          "reps": "30 sec",
+          "rest_seconds": 45,
+          "notes": "Progress from week 3",
+          "primary_muscle_groups": ["core", "shoulders"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 12,
+      "day_name": "Week 4 - Session 3: Full Integration",
+      "focus": "Lift & Carry (Dad Functional)",
+      "duration_minutes": "40-45",
+      "exercises": [
+        {
+          "exercise_id": "romanian-deadlift",
+          "exercise_name": "Romanian Deadlift",
+          "order": 1,
+          "sets": 4,
+          "reps": "10",
+          "rest_seconds": 90,
+          "notes": "Perfect hip hinge pattern",
+          "primary_muscle_groups": ["hamstrings", "glutes", "lower_back"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "goblet-squat",
+          "exercise_name": "Goblet Squat",
+          "order": 2,
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 60,
+          "notes": "Heavy goblet work",
+          "primary_muscle_groups": ["quadriceps", "glutes", "core"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "push-up",
+          "exercise_name": "Push-Ups",
+          "order": 3,
+          "sets": 3,
+          "reps": "10-12",
+          "rest_seconds": 60,
+          "notes": "Quality reps",
+          "primary_muscle_groups": ["chest", "triceps", "front_deltoids"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "farmer-carry",
+          "exercise_name": "Farmer Carry",
+          "order": 4,
+          "sets": 4,
+          "reps": "40 steps",
+          "rest_seconds": 90,
+          "notes": "Practical dad strength",
+          "primary_muscle_groups": ["core", "traps", "grip"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "side-plank",
+          "exercise_name": "Side Planks",
+          "order": 5,
+          "sets": 3,
+          "reps": "25 sec each side",
+          "rest_seconds": 45,
+          "notes": "Core finisher",
+          "primary_muscle_groups": ["obliques", "core"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 13,
+      "day_name": "Week 5 - Session 1: Power & Cardio",
+      "focus": "Power & Work Capacity",
+      "duration_minutes": "40-45",
+      "exercises": [
+        {
+          "exercise_id": "walk-jog-interval",
+          "exercise_name": "Walk/Jog Intervals",
+          "order": 1,
+          "sets": 8,
+          "reps": "30 sec work",
+          "rest_seconds": 90,
+          "notes": "Cardiovascular conditioning",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "dumbbell-thruster",
+          "exercise_name": "Dumbbell Thrusters",
+          "order": 2,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 60,
+          "notes": "Squat to overhead press in one fluid movement",
+          "primary_muscle_groups": ["quadriceps", "glutes", "shoulders"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "renegade-row",
+          "exercise_name": "Renegade Rows",
+          "order": 3,
+          "sets": 3,
+          "reps": "8 each side",
+          "rest_seconds": 60,
+          "notes": "Plank position, row one arm at a time",
+          "primary_muscle_groups": ["lats", "core", "shoulders"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "pallof-press",
+          "exercise_name": "Pallof Press",
+          "order": 4,
+          "sets": 3,
+          "reps": "12 each side",
+          "rest_seconds": 45,
+          "notes": "Anti-rotation core strength",
+          "primary_muscle_groups": ["core", "obliques"],
+          "equipment": ["resistance_band"]
+        },
+        {
+          "exercise_id": "reverse-lunge",
+          "exercise_name": "Reverse Lunges",
+          "order": 5,
+          "sets": 3,
+          "reps": "12 each leg",
+          "rest_seconds": 60,
+          "notes": "Single leg stability",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 14,
+      "day_name": "Week 5 - Session 2: Complex Movements",
+      "focus": "Power & Work Capacity",
+      "duration_minutes": "40-45",
+      "exercises": [
+        {
+          "exercise_id": "dumbbell-thruster",
+          "exercise_name": "Dumbbell Thrusters",
+          "order": 1,
+          "sets": 4,
+          "reps": "10",
+          "rest_seconds": 60,
+          "notes": "Explosive power movement",
+          "primary_muscle_groups": ["quadriceps", "glutes", "shoulders"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "renegade-row",
+          "exercise_name": "Renegade Rows",
+          "order": 2,
+          "sets": 4,
+          "reps": "8 each side",
+          "rest_seconds": 60,
+          "notes": "Core stability under load",
+          "primary_muscle_groups": ["lats", "core", "shoulders"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "romanian-deadlift",
+          "exercise_name": "Romanian Deadlift",
+          "order": 3,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 60,
+          "notes": "Reduced rest - 60 sec",
+          "primary_muscle_groups": ["hamstrings", "glutes", "lower_back"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "push-up",
+          "exercise_name": "Push-Ups",
+          "order": 4,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 60,
+          "notes": "Reduced rest periods",
+          "primary_muscle_groups": ["chest", "triceps", "front_deltoids"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "pallof-press",
+          "exercise_name": "Pallof Press",
+          "order": 5,
+          "sets": 3,
+          "reps": "12 each side",
+          "rest_seconds": 45,
+          "notes": "Anti-rotation finisher",
+          "primary_muscle_groups": ["core", "obliques"],
+          "equipment": ["resistance_band"]
+        }
+      ]
+    },
+    {
+      "day": 15,
+      "day_name": "Week 5 - Session 3: Endurance Circuit",
+      "focus": "Power & Work Capacity",
+      "duration_minutes": "40-45",
+      "exercises": [
+        {
+          "exercise_id": "goblet-squat",
+          "exercise_name": "Goblet Squat",
+          "order": 1,
+          "sets": 4,
+          "reps": "15",
+          "rest_seconds": 45,
+          "notes": "Endurance set - higher reps",
+          "primary_muscle_groups": ["quadriceps", "glutes", "core"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "push-up",
+          "exercise_name": "Push-Ups",
+          "order": 2,
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 45,
+          "notes": "Reduced rest circuit",
+          "primary_muscle_groups": ["chest", "triceps", "front_deltoids"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "dumbbell-row",
+          "exercise_name": "Bent-Over Rows",
+          "order": 3,
+          "sets": 4,
+          "reps": "15 each arm",
+          "rest_seconds": 45,
+          "notes": "High rep pulling",
+          "primary_muscle_groups": ["lats", "rhomboids", "biceps"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "farmer-carry",
+          "exercise_name": "Farmer Carry",
+          "order": 4,
+          "sets": 3,
+          "reps": "60 steps",
+          "rest_seconds": 60,
+          "notes": "Extended carry distance",
+          "primary_muscle_groups": ["core", "traps", "grip"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "plank",
+          "exercise_name": "Plank Hold",
+          "order": 5,
+          "sets": 3,
+          "reps": "35 sec",
+          "rest_seconds": 45,
+          "notes": "Building to 45 sec goal",
+          "primary_muscle_groups": ["core", "shoulders"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 16,
+      "day_name": "Week 6 - Session 1: Strength Testing",
+      "focus": "Dad Strength (Testing)",
+      "duration_minutes": "40-45",
+      "exercises": [
+        {
+          "exercise_id": "push-up",
+          "exercise_name": "Push-Up Test",
+          "order": 1,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 90,
+          "notes": "GOAL: 3 sets of 10 quality push-ups",
+          "primary_muscle_groups": ["chest", "triceps", "front_deltoids"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "bodyweight-squat",
+          "exercise_name": "Squat Test",
+          "order": 2,
+          "sets": 3,
+          "reps": "15",
+          "rest_seconds": 90,
+          "notes": "GOAL: 3 sets of 15 bodyweight squats",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "plank",
+          "exercise_name": "Plank Test",
+          "order": 3,
+          "sets": 1,
+          "reps": "45 sec",
+          "rest_seconds": 0,
+          "notes": "GOAL: 45-second plank hold",
+          "primary_muscle_groups": ["core", "shoulders"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "farmer-carry",
+          "exercise_name": "Farmer Carry Test",
+          "order": 4,
+          "sets": 1,
+          "reps": "max distance",
+          "rest_seconds": 0,
+          "notes": "Record distance/time for comparison",
+          "primary_muscle_groups": ["core", "traps", "grip"],
+          "equipment": ["dumbbell"]
+        }
+      ]
+    },
+    {
+      "day": 17,
+      "day_name": "Week 6 - Session 2: Full Integration",
+      "focus": "Dad Strength (Testing)",
+      "duration_minutes": "40-45",
+      "exercises": [
+        {
+          "exercise_id": "dumbbell-thruster",
+          "exercise_name": "Dumbbell Thrusters",
+          "order": 1,
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 60,
+          "notes": "Maximum effort with perfect form",
+          "primary_muscle_groups": ["quadriceps", "glutes", "shoulders"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "renegade-row",
+          "exercise_name": "Renegade Rows",
+          "order": 2,
+          "sets": 4,
+          "reps": "10 each side",
+          "rest_seconds": 60,
+          "notes": "Full integration movement",
+          "primary_muscle_groups": ["lats", "core", "shoulders"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "romanian-deadlift",
+          "exercise_name": "Romanian Deadlift",
+          "order": 3,
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 60,
+          "notes": "Heaviest weight with good form",
+          "primary_muscle_groups": ["hamstrings", "glutes", "lower_back"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "farmer-carry",
+          "exercise_name": "Farmer Carry",
+          "order": 4,
+          "sets": 3,
+          "reps": "60 steps",
+          "rest_seconds": 90,
+          "notes": "Heavy carry - dad mode",
+          "primary_muscle_groups": ["core", "traps", "grip"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "side-plank",
+          "exercise_name": "Side Planks",
+          "order": 5,
+          "sets": 3,
+          "reps": "30 sec each side",
+          "rest_seconds": 45,
+          "notes": "Core finisher",
+          "primary_muscle_groups": ["obliques", "core"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 18,
+      "day_name": "Week 6 - Session 3: Celebration Workout",
+      "focus": "Dad Strength (Testing)",
+      "duration_minutes": "40-45",
+      "exercises": [
+        {
+          "exercise_id": "goblet-squat",
+          "exercise_name": "Goblet Squat",
+          "order": 1,
+          "sets": 4,
+          "reps": "15",
+          "rest_seconds": 60,
+          "notes": "Show your progress!",
+          "primary_muscle_groups": ["quadriceps", "glutes", "core"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "push-up",
+          "exercise_name": "Push-Ups",
+          "order": 2,
+          "sets": 4,
+          "reps": "12",
+          "rest_seconds": 60,
+          "notes": "Celebrate your gains!",
+          "primary_muscle_groups": ["chest", "triceps", "front_deltoids"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "dumbbell-row",
+          "exercise_name": "Bent-Over Rows",
+          "order": 3,
+          "sets": 4,
+          "reps": "15 each arm",
+          "rest_seconds": 60,
+          "notes": "Strong back, strong dad",
+          "primary_muscle_groups": ["lats", "rhomboids", "biceps"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "dumbbell-thruster",
+          "exercise_name": "Dumbbell Thrusters",
+          "order": 4,
+          "sets": 3,
+          "reps": "12",
+          "rest_seconds": 60,
+          "notes": "Full body power",
+          "primary_muscle_groups": ["quadriceps", "glutes", "shoulders"],
+          "equipment": ["dumbbell"]
+        },
+        {
+          "exercise_id": "plank",
+          "exercise_name": "Plank Hold",
+          "order": 5,
+          "sets": 1,
+          "reps": "max time",
+          "rest_seconds": 0,
+          "notes": "Final test - beat your best!",
+          "primary_muscle_groups": ["core", "shoulders"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
     }
+  ],
+
+  "injury_prevention": {
+    "lower_back_safety": [
+      "Always brace core before lifting",
+      "Hip hinge properly (push butt back, flat back)",
+      "Nightly glute bridges (2 sets × 15 reps)",
+      "Perfect form > heavy weight"
+    ],
+    "shoulder_safety": [
+      "Elbows at 45° during push-ups, not 90°",
+      "Shoulder blades pinched back and down",
+      "Never shrug shoulders to ears",
+      "Initiate rows with shoulder blades, not arms"
+    ],
+    "breathing_pattern": [
+      "Exhale on exertion (lifting/pushing phase)",
+      "Inhale on eccentric (lowering phase)",
+      "Never hold breath during strength work",
+      "Maintain core brace while breathing"
+    ]
+  },
+
+  "recovery_strategies": {
+    "sleep_deprivation_adaptations": [
+      "If <5 hours sleep: reduce weight by 20%, focus on form",
+      "If exhausted: take recharge day, 20-min walk > nothing",
+      "Don't create training debt"
+    ],
+    "stress_management": [
+      "Box breathing: 4 in, 4 hold, 4 out, 4 hold × 5 rounds",
+      "Progressive muscle relaxation before bed",
+      "Mindful cool-downs with breathing"
+    ],
+    "nutrition_quick_wins": [
+      "Hydrate every time you feed baby",
+      "Palm-sized protein each meal",
+      "Don't cut carbs (need energy)",
+      "Limit coffee after 2pm",
+      "Meal prep: make 2x dinner portions"
+    ]
+  },
+
+  "progress_tracking": {
+    "week_1_baseline": [
+      "Max push-ups before form breaks",
+      "Continuous bodyweight squat reps",
+      "Plank hold seconds",
+      "Energy level (1-10 scale)"
+    ],
+    "week_3_check_in": [
+      "Push-up improvement check",
+      "Pain/injury assessment",
+      "Consistency tracking (out of 9 workouts)"
+    ],
+    "week_6_final": [
+      "3 sets × 10 push-ups (goal)",
+      "3 sets × 15 squats (goal)",
+      "45-second plank (goal)",
+      "Energy level improvement",
+      "Functional carrying ability assessment"
+    ]
+  },
+
+  "what_comes_next": {
+    "option_1": "Repeat with 5-10 lbs added, reduced rest, optional 4th day",
+    "option_2": "Specialize in specific goal (strength/endurance/body comp)",
+    "option_3": "Maintain with Week 5-6 workouts, rotate exercises",
+    "long_term_goal": "Build identity as dad who prioritizes health and strength"
+  },
+
+  "critical_form_cues": {
+    "squat": "Chest up, core braced, weight in heels. Exhale on stand.",
+    "push_up": "Elbows 45°, body straight line, 2 sec down / 1 sec up",
+    "romanian_deadlift": "FLAT BACK. Hinge at hips, slight knee bend. Push hips back, not down.",
+    "glute_bridge": "Drive through heels, squeeze glutes NOT lower back, exhale on lift",
+    "dead_bug": "Press lower back to floor. Stop if back arches.",
+    "plank": "Don't sag hips. Breathe normally. Stop when form breaks.",
+    "farmer_carry": "Stand tall, don't lean, shoulders packed down"
   }
+}
