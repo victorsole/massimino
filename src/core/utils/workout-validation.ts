@@ -85,25 +85,34 @@ export const intensityTypeSchema = z.nativeEnum(IntensityType);
 // WORKOUT LOG ENTRY SCHEMAS
 // ============================================================================
 
+// Extended setType schema that maps REGULAR to STRAIGHT for backwards compatibility
+const setTypeWithRegularSchema = z.union([
+  setTypeSchema,
+  z.literal('REGULAR').transform(() => 'STRAIGHT' as const),
+]);
+
 /**
  * Base workout log entry schema
  */
 export const workoutLogEntryBaseSchema = z.object({
-  sessionId: z.string().uuid().optional(),
+  sessionId: z.string().optional(), // Allow cuid or uuid
   date: dateStringSchema,
   exerciseId: z.string().min(1, 'Exercise is required'),
   setNumber: z.number().int().positive('Set number must be a positive integer'),
-  setType: setTypeSchema,
+  setType: setTypeWithRegularSchema,
   reps: z.number().int().positive('Reps must be a positive integer'),
   weight: weightStringSchema,
   unit: weightUnitSchema,
   subOrder: z.string().regex(/^[A-Z]$/).optional(),
-  intensity: intensityStringSchema.optional(),
+  intensity: z.string().optional(), // Made flexible - can be percentage, RPE, or descriptive
   intensityType: intensityTypeSchema.optional(),
-  tempo: tempoStringSchema.optional(),
+  tempo: z.string().optional(), // Made flexible - various tempo notations supported
   restSeconds: z.number().int().min(0, 'Rest time must be non-negative').optional(),
   userComments: z.string().max(500, 'Comments must be less than 500 characters').optional(),
   coachFeedback: z.string().max(1000, 'Coach feedback must be less than 1000 characters').optional(),
+  // Additional fields from UI
+  actualRPE: z.number().min(1).max(10).optional(),
+  formQuality: z.union([z.string(), z.number()]).optional(), // Accept both string and number
 });
 
 /**
@@ -318,6 +327,11 @@ export const exerciseSearchOptionsSchema = z.object({
   type: z.string().optional(),
   tags: z.array(z.string()).optional(),
   curated: z.boolean().optional(),
+  // Media filter
+  hasMedia: z.boolean().optional(),
+  // Sorting options
+  sortBy: z.enum(['name', 'mediaCount', 'usageCount']).optional(),
+  sortOrder: z.enum(['asc', 'desc']).optional(),
 });
 
 /**

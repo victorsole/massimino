@@ -540,6 +540,11 @@ export async function getExercises(options: {
   type?: string;
   tags?: string[];
   curated?: boolean;
+  // Media filters
+  hasMedia?: boolean;
+  // Sorting
+  sortBy?: 'name' | 'mediaCount' | 'usageCount';
+  sortOrder?: 'asc' | 'desc';
 } = {}): Promise<Exercise[]> {
   const where: any = {};
 
@@ -591,9 +596,27 @@ export async function getExercises(options: {
     where.curated = options.curated;
   }
 
+  // Media filter
+  if (options.hasMedia !== undefined) {
+    where.hasMedia = options.hasMedia;
+  }
+
+  // Determine sort order
+  const sortBy = options.sortBy || 'name';
+  const sortOrder = options.sortOrder || 'asc';
+
+  let orderBy: any;
+  if (sortBy === 'mediaCount') {
+    orderBy = [{ mediaCount: sortOrder }, { name: 'asc' }];
+  } else if (sortBy === 'usageCount') {
+    orderBy = [{ usageCount: sortOrder }, { name: 'asc' }];
+  } else {
+    orderBy = { name: sortOrder };
+  }
+
   return prisma.exercises.findMany({
     where,
-    orderBy: { name: 'asc' },
+    orderBy,
   });
 }
 
@@ -1801,7 +1824,10 @@ export async function getUserProgramSubscriptions(userId: string) {
         }
       }
     },
-    orderBy: { startDate: 'desc' }
+    orderBy: [
+      { isCurrentlyActive: 'desc' }, // Currently active first
+      { startDate: 'desc' }
+    ]
   });
 }
 
@@ -3003,6 +3029,97 @@ export async function attachMediaToEntryDB(entryId: string, mediaId: string, use
   if (!media) return null;
   await prisma.workout_entry_media.create({ data: { id: crypto.randomUUID(), entryId, mediaId } });
   return { success: true };
+}
+
+/**
+ * Update exercise media stats (hasMedia, mediaCount, mediaCoverageScore)
+ * Call this after adding/approving/deleting media for an exercise
+ */
+export async function updateExerciseMediaStats(exerciseId: string): Promise<{
+  hasMedia: boolean;
+  mediaCount: number;
+  mediaCoverageScore: number;
+}> {
+  const mediaCount = await prisma.exercise_media.count({
+    where: {
+      globalExerciseId: exerciseId,
+      status: 'approved',
+      visibility: 'public',
+    },
+  });
+
+  const hasMedia = mediaCount > 0;
+
+  // Calculate coverage score: 0 for none, 0.5 for 1-2 media, 1.0 for 3+ media
+  let mediaCoverageScore = 0;
+  if (mediaCount >= 3) {
+    mediaCoverageScore = 1.0;
+  } else if (mediaCount >= 1) {
+    mediaCoverageScore = 0.5;
+  }
+
+  // Get the latest media timestamp
+  const latestMedia = await prisma.exercise_media.findFirst({
+    where: {
+      globalExerciseId: exerciseId,
+      status: 'approved',
+      visibility: 'public',
+    },
+    orderBy: { createdAt: 'desc' },
+    select: { createdAt: true },
+  });
+
+  await prisma.exercises.update({
+    where: { id: exerciseId },
+    data: {
+      hasMedia,
+      mediaCount,
+      mediaCoverageScore,
+      lastMediaAddedAt: latestMedia?.createdAt ?? null,
+      updatedAt: new Date(),
+    },
+  });
+
+  return { hasMedia, mediaCount, mediaCoverageScore };
+}
+
+/**
+ * Sync media stats for all exercises
+ * Useful for backfilling after migration or fixing inconsistencies
+ */
+export async function syncAllExerciseMediaStats() {
+  const exercises = await prisma.exercises.findMany({
+    select: { id: true },
+  });
+
+  const results: Array<{
+    exerciseId: string;
+    hasMedia: boolean;
+    mediaCount: number;
+    mediaCoverageScore: number;
+  }> = [];
+  for (const exercise of exercises) {
+    const stats = await updateExerciseMediaStats(exercise.id);
+    results.push({ exerciseId: exercise.id, ...stats });
+  }
+
+  return {
+    totalExercises: exercises.length,
+    exercisesWithMedia: results.filter(r => r.hasMedia).length,
+    exercisesWithoutMedia: results.filter(r => !r.hasMedia).length,
+  };
+}
+
+/**
+ * Increment view count for a media item
+ */
+export async function incrementMediaViewCount(mediaId: string) {
+  return prisma.exercise_media.update({
+    where: { id: mediaId },
+    data: {
+      viewCount: { increment: 1 },
+    },
+  });
 }
 
 /**

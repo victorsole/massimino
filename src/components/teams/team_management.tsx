@@ -29,7 +29,10 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 // Icons
-import { Plus, Users, MessageCircle, Dumbbell, Settings, UserPlus, Check, X, Send } from 'lucide-react';
+import { Plus, Users, MessageCircle, Dumbbell, Settings, UserPlus, Check, X, Send, Link2, Copy, QrCode, Share2 } from 'lucide-react';
+
+// QR Code
+import { QRCodeSVG } from 'qrcode.react';
 
 interface TeamManagementProps {
   className?: string;
@@ -81,7 +84,13 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
   const [inviteUserId, setInviteUserId] = useState('');
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteMessage, setInviteMessage] = useState('');
-  const [inviteMethod, setInviteMethod] = useState<'user-id' | 'email'>('email');
+  const [inviteMethod, setInviteMethod] = useState<'link' | 'email' | 'user-id'>('link');
+
+  // Shareable link state
+  const [shareableLink, setShareableLink] = useState<string | null>(null);
+  const [linkCopied, setLinkCopied] = useState(false);
+  const [showQrCode, setShowQrCode] = useState(false);
+  const [generatingLink, setGeneratingLink] = useState(false);
 
   // Check if user is trainer or admin
   const user = session?.user as any;
@@ -92,6 +101,16 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
       </div>
     );
   }
+
+  // Format visibility for display
+  const formatVisibility = (visibility: string) => {
+    const map: Record<string, string> = {
+      'PUBLIC': 'Public',
+      'PRIVATE': 'Private',
+      'INVITE_ONLY': 'Invite Only'
+    };
+    return map[visibility] || visibility.toLowerCase().replace(/_/g, ' ');
+  };
 
   // Load trainer's teams
   const loadTeams = async () => {
@@ -328,6 +347,74 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
       alert('Failed to create workout');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Generate shareable invite link
+  const generateShareableLink = async () => {
+    if (!selectedTeam) return;
+
+    setGeneratingLink(true);
+    try {
+      const response = await fetch(`/api/teams/${selectedTeam.id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'create-invite-link', expiresInDays: 30 })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setShareableLink(data.data.inviteUrl);
+      } else {
+        alert(data.error || 'Failed to generate invite link');
+      }
+    } catch (error) {
+      console.error('Failed to generate invite link:', error);
+      alert('Failed to generate invite link');
+    } finally {
+      setGeneratingLink(false);
+    }
+  };
+
+  // Copy link to clipboard
+  const copyLinkToClipboard = async () => {
+    if (!shareableLink) return;
+
+    try {
+      await navigator.clipboard.writeText(shareableLink);
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    } catch (error) {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = shareableLink;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    }
+  };
+
+  // Share via Web Share API (mobile)
+  const shareLink = async () => {
+    if (!shareableLink || !selectedTeam) return;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `Join ${selectedTeam.name} on Massimino`,
+          text: `You've been invited to join ${selectedTeam.name}! Click to accept:`,
+          url: shareableLink
+        });
+      } catch (error) {
+        // User cancelled or share failed, fallback to copy
+        copyLinkToClipboard();
+      }
+    } else {
+      copyLinkToClipboard();
     }
   };
 
@@ -585,7 +672,7 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-lg" style={{ color: primary }}>{team.name}</CardTitle>
                       <Badge variant={team.visibility === 'PUBLIC' ? 'default' : 'secondary'} style={team.visibility === 'PUBLIC' ? { backgroundColor: primary, color: '#fff' } : { backgroundColor: secondary, color: '#1f2937' }}>
-                        {team.visibility}
+                        {formatVisibility(team.visibility)}
                       </Badge>
                     </div>
                     <CardDescription className="text-gray-600">{team.description}</CardDescription>
@@ -613,12 +700,12 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
               {/* Team Overview */}
               <Card>
                 <CardHeader>
-                  <div className="flex items-start justify-between">
+                  <div className="space-y-3">
                     <div>
                       <CardTitle>{selectedTeam.name}</CardTitle>
                       <CardDescription>{selectedTeam.description}</CardDescription>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                       <Button size="sm" onClick={() => setShowInviteModal(true)} className="bg-brand-primary hover:bg-brand-primary-dark">
                         <UserPlus size={14} className="mr-1" />
                         Invite
@@ -652,16 +739,16 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
                 </CardContent>
               </Card>
 
-              <div className="grid lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full overflow-hidden">
                 {/* Media Upload & Social Links */}
-                <Card>
+                <Card className="min-w-0">
                   <CardHeader>
                     <CardTitle>Media & Social</CardTitle>
                     <CardDescription>Upload team photos/videos and set social links</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="flex items-center gap-2">
-                      <input id="team-media-file" type="file" className="text-sm" />
+                    <div className="flex flex-wrap items-center gap-2">
+                      <input id="team-media-file" type="file" className="text-sm min-w-0 max-w-full" />
                       <select id="team-media-type" className="border rounded-md p-2 text-sm">
                         <option value="image">Image</option>
                         <option value="video">Video</option>
@@ -760,7 +847,7 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
                   </CardContent>
                 </Card>
                 {/* Team Applications */}
-                <Card>
+                <Card className="min-w-0">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <UserPlus size={18} />
@@ -799,7 +886,7 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
                 </Card>
 
                 {/* Team Members */}
-                <Card>
+                <Card className="min-w-0">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Users size={18} />
@@ -928,18 +1015,18 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
                             {workout.description && (
                               <p className="text-sm text-gray-600 mb-2">{workout.description}</p>
                             )}
-                            <div className="flex items-center justify-between text-sm">
-                              <div className="flex gap-3">
-                                <span className="text-gray-500">
-                                  {workout.team_workout_exercises?.length || 0} exercises
-                                </span>
-                                <span className="text-gray-500">
-                                  {workout.completions?.length || 0} completions
-                                </span>
-                                {workout.duration && (
-                                  <span className="text-gray-500">{workout.duration} min</span>
-                                )}
-                              </div>
+                            <div className="flex flex-wrap gap-3 text-sm text-gray-500 mb-3">
+                              <span>
+                                {workout.team_workout_exercises?.length || 0} exercises
+                              </span>
+                              <span>
+                                {workout.completions?.length || 0} completions
+                              </span>
+                              {workout.duration && (
+                                <span>{workout.duration} min</span>
+                              )}
+                            </div>
+                            <div className="flex justify-end">
                               {isCompleted ? (
                                 <Badge className="bg-green-100 text-green-800">
                                   <Check size={12} className="mr-1" />
@@ -1125,8 +1212,15 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
       </Dialog>
 
       {/* Member Invitation Modal */}
-      <Dialog open={showInviteModal} onOpenChange={setShowInviteModal}>
-        <DialogContent className="max-w-2xl">
+      <Dialog open={showInviteModal} onOpenChange={(open) => {
+        setShowInviteModal(open);
+        if (!open) {
+          setShareableLink(null);
+          setShowQrCode(false);
+          setLinkCopied(false);
+        }
+      }}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Invite Member to {selectedTeam?.name}</DialogTitle>
             <DialogDescription>
@@ -1136,30 +1230,175 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
 
           <div className="space-y-4">
             {/* Invitation Method Tabs */}
-            <div className="flex gap-2 border-b border-gray-200">
+            <div className="flex flex-wrap gap-1 border-b border-gray-200">
+              <button
+                type="button"
+                onClick={() => setInviteMethod('link')}
+                className={`px-3 py-2 border-b-2 font-medium transition-colors text-sm ${
+                  inviteMethod === 'link'
+                    ? 'border-brand-primary text-brand-primary'
+                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                <Link2 size={14} className="inline mr-1" />
+                Share Link
+              </button>
               <button
                 type="button"
                 onClick={() => setInviteMethod('email')}
-                className={`px-4 py-2 border-b-2 font-medium transition-colors ${
+                className={`px-3 py-2 border-b-2 font-medium transition-colors text-sm ${
                   inviteMethod === 'email'
                     ? 'border-brand-primary text-brand-primary'
                     : 'border-transparent text-gray-500 hover:text-gray-700'
                 }`}
               >
-                📧 Email Invitation
+                <span className="mr-1">📧</span>
+                Email
               </button>
               <button
                 type="button"
                 onClick={() => setInviteMethod('user-id')}
-                className={`px-4 py-2 border-b-2 font-medium transition-colors ${
+                className={`px-3 py-2 border-b-2 font-medium transition-colors text-sm ${
                   inviteMethod === 'user-id'
                     ? 'border-brand-primary text-brand-primary'
                     : 'border-transparent text-gray-500 hover:text-gray-700'
                 }`}
               >
-                🔑 User ID
+                <span className="mr-1">🔑</span>
+                User ID
               </button>
             </div>
+
+            {/* Shareable Link Tab */}
+            {inviteMethod === 'link' && (
+              <div className="space-y-4">
+                <div className="bg-brand-secondary/30 border border-brand-primary/20 rounded-lg p-4">
+                  <p className="text-sm text-brand-primary">
+                    <strong><Link2 size={14} className="inline mr-1" /> Shareable Link:</strong> Generate a unique invite link you can share via WhatsApp, SMS, or any messaging app. Anyone with the link can join your team.
+                  </p>
+                </div>
+
+                {!shareableLink ? (
+                  <div className="text-center py-6">
+                    <Button
+                      onClick={generateShareableLink}
+                      disabled={generatingLink}
+                      className="bg-brand-primary hover:bg-brand-primary-dark text-white"
+                    >
+                      {generatingLink ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Generating...
+                        </>
+                      ) : (
+                        <>
+                          <Link2 size={16} className="mr-2" />
+                          Generate Invite Link
+                        </>
+                      )}
+                    </Button>
+                    <p className="text-xs text-gray-500 mt-2">Link expires in 30 days</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {/* Link Display */}
+                    <div>
+                      <Label>Your Invite Link</Label>
+                      <div className="flex gap-2 mt-1">
+                        <Input
+                          value={shareableLink}
+                          readOnly
+                          className="bg-gray-50 text-sm font-mono"
+                        />
+                        <Button
+                          onClick={copyLinkToClipboard}
+                          variant="outline"
+                          className={linkCopied ? 'bg-green-50 border-green-500 text-green-700' : ''}
+                        >
+                          {linkCopied ? <Check size={16} /> : <Copy size={16} />}
+                        </Button>
+                      </div>
+                      {linkCopied && (
+                        <p className="text-xs text-green-600 mt-1">Link copied to clipboard!</p>
+                      )}
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        onClick={shareLink}
+                        className="bg-brand-primary hover:bg-brand-primary-dark text-white flex-1"
+                      >
+                        <Share2 size={16} className="mr-2" />
+                        Share
+                      </Button>
+                      <Button
+                        onClick={() => setShowQrCode(!showQrCode)}
+                        variant="outline"
+                        className="flex-1"
+                      >
+                        <QrCode size={16} className="mr-2" />
+                        {showQrCode ? 'Hide' : 'Show'} QR Code
+                      </Button>
+                    </div>
+
+                    {/* QR Code Display */}
+                    {showQrCode && (
+                      <div className="flex flex-col items-center p-4 bg-white border rounded-lg">
+                        <QRCodeSVG
+                          value={shareableLink}
+                          size={200}
+                          level="M"
+                          includeMargin
+                          className="mb-3"
+                        />
+                        <p className="text-xs text-gray-500 text-center">
+                          Scan to join {selectedTeam?.name}
+                        </p>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="mt-2"
+                          onClick={() => {
+                            // Download QR code as image
+                            const svg = document.querySelector('.qr-code-container svg') as SVGElement;
+                            if (svg) {
+                              const svgData = new XMLSerializer().serializeToString(svg);
+                              const canvas = document.createElement('canvas');
+                              const ctx = canvas.getContext('2d');
+                              const img = new Image();
+                              img.onload = () => {
+                                canvas.width = img.width;
+                                canvas.height = img.height;
+                                ctx?.drawImage(img, 0, 0);
+                                const link = document.createElement('a');
+                                link.download = `${selectedTeam?.name}-invite-qr.png`;
+                                link.href = canvas.toDataURL('image/png');
+                                link.click();
+                              };
+                              img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+                            }
+                          }}
+                        >
+                          Download QR Code
+                        </Button>
+                      </div>
+                    )}
+
+                    {/* Generate New Link */}
+                    <div className="text-center pt-2 border-t">
+                      <button
+                        onClick={generateShareableLink}
+                        className="text-sm text-brand-primary hover:underline"
+                        disabled={generatingLink}
+                      >
+                        Generate a new link
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Email Invitation Form */}
             {inviteMethod === 'email' && (
@@ -1195,10 +1434,23 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
                   </p>
                 </div>
 
-                <div className="bg-brand-secondary/30 border border-brand-primary/20 rounded-lg p-4">
-                  <p className="text-sm text-brand-primary">
-                    <strong>✉️ Email Invitation:</strong> The recipient will receive a branded email with a secure link to join your team. If they don't have a Massimino account, they'll be guided to create one first.
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <p className="text-sm text-yellow-800">
+                    <strong>⚠️ Note:</strong> Email invitations may not work in all environments. We recommend using the <strong>Share Link</strong> option for reliable delivery.
                   </p>
+                </div>
+
+                <div className="flex justify-end gap-2 pt-2">
+                  <Button variant="outline" onClick={() => setShowInviteModal(false)}>
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={inviteMember}
+                    disabled={loading || !inviteEmail}
+                    className="bg-brand-primary hover:bg-brand-primary-dark text-white"
+                  >
+                    {loading ? 'Sending...' : 'Send Email Invitation'}
+                  </Button>
                 </div>
               </div>
             )}
@@ -1225,22 +1477,21 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
                     <strong>🔑 User ID:</strong> Use this method if you already know the Massimino User ID. You can find user IDs in Admin → Users, or ask users to share their profile link.
                   </p>
                 </div>
+
+                <div className="flex justify-end gap-2 pt-2">
+                  <Button variant="outline" onClick={() => setShowInviteModal(false)}>
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={inviteMember}
+                    disabled={loading || !inviteUserId}
+                    className="bg-brand-primary hover:bg-brand-primary-dark text-white"
+                  >
+                    {loading ? 'Sending...' : 'Send Invite'}
+                  </Button>
+                </div>
               </div>
             )}
-
-            {/* Action Buttons */}
-            <div className="flex justify-end gap-2 pt-2">
-              <Button variant="outline" onClick={() => setShowInviteModal(false)}>
-                Cancel
-              </Button>
-              <Button
-                onClick={inviteMember}
-                disabled={loading || (inviteMethod === 'email' ? !inviteEmail : !inviteUserId)}
-                className="bg-brand-primary hover:bg-brand-primary-dark text-white"
-              >
-                {loading ? 'Sending...' : inviteMethod === 'email' ? 'Send Email Invitation' : 'Send Invite'}
-              </Button>
-            </div>
           </div>
         </DialogContent>
       </Dialog>

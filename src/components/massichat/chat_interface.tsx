@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Medal, Frown } from 'lucide-react'
+import { Medal, Frown, ChevronDown, ChevronUp } from 'lucide-react'
 
 interface ChatMessage { id?: string; role: 'user' | 'assistant'; content: string }
 interface WorkoutItemPreview { exerciseName: string; sets?: number; reps?: number; restSeconds?: number; notes?: string }
@@ -29,6 +29,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
   )
   const [suggestions, setSuggestions] = useState<string[]>([])
   const [renaming, setRenaming] = useState<string | null>(null)
+  const [sessionsExpanded, setSessionsExpanded] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -428,7 +429,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle>💬 Massichat - Your AI Fitness Coach</CardTitle>
+          <CardTitle>Massichat - Your AI Fitness Coach</CardTitle>
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" onClick={() => { setSessionId(null); setMessages([]); setWorkoutProposal(null); setEditable(null); }}>New Chat</Button>
           </div>
@@ -438,32 +439,58 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
             {flashMessage}
           </div>
         )}
-        <div className="mt-3">
-          <div className="flex items-center justify-between">
-            <div className="text-sm font-medium text-gray-700">Recent Sessions</div>
-            <div className="flex items-center gap-2">
-              {sessionId && (
-                <>
-                  <Button variant="ghost" size="sm" onClick={renameCurrentSession} disabled={!!renaming}>
-                    {renaming ? 'Renaming…' : 'Rename'}
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={() => deleteSessionById(sessionId!)}>
-                    Delete
-                  </Button>
-                </>
-              )}
-              {loadingSessions && <div className="text-xs text-gray-500">Loading…</div>}
-            </div>
-          </div>
-          <div className="mt-1 flex gap-2 overflow-x-auto pb-1">
-            {sessions.map((s) => (
-              <div key={s.id} className="flex items-center gap-1">
-                <button onClick={() => loadSession(s.id)} className={`text-xs px-2 py-1 rounded border ${sessionId === s.id ? 'bg-gray-200' : 'bg-white'} hover:bg-gray-100`}>{s.title || 'Untitled'}</button>
-                <button onClick={() => deleteSessionById(s.id)} className="text-xs text-gray-500 hover:text-red-600" title="Delete">🗑️</button>
+        {/* Collapsible Recent Sessions */}
+        {sessions.length > 0 && (
+          <div className="mt-3 border rounded-lg">
+            <button
+              onClick={() => setSessionsExpanded(!sessionsExpanded)}
+              className="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg"
+            >
+              <span>Recent Sessions ({sessions.length})</span>
+              {sessionsExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            </button>
+            {sessionsExpanded && (
+              <div className="px-3 pb-3 space-y-2">
+                <div className="flex items-center justify-end gap-2">
+                  {sessionId && (
+                    <>
+                      <Button variant="ghost" size="sm" onClick={renameCurrentSession} disabled={!!renaming}>
+                        {renaming ? 'Renaming…' : 'Rename'}
+                      </Button>
+                      <Button variant="ghost" size="sm" onClick={() => deleteSessionById(sessionId!)}>
+                        Delete
+                      </Button>
+                    </>
+                  )}
+                  {loadingSessions && <div className="text-xs text-gray-500">Loading…</div>}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {sessions.slice(0, 6).map((s) => (
+                    <div key={s.id} className="flex items-center gap-1 max-w-[200px]">
+                      <button
+                        onClick={() => loadSession(s.id)}
+                        className={`text-xs px-2 py-1.5 rounded border truncate flex-1 min-w-0 ${sessionId === s.id ? 'bg-gray-200 border-gray-400' : 'bg-white border-gray-200'} hover:bg-gray-100`}
+                        title={s.title || 'Untitled'}
+                      >
+                        {s.title || 'Untitled'}
+                      </button>
+                      <button
+                        onClick={() => deleteSessionById(s.id)}
+                        className="text-xs text-gray-400 hover:text-red-600 flex-shrink-0 p-1"
+                        title="Delete"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                  {sessions.length > 6 && (
+                    <span className="text-xs text-gray-500 self-center">+{sessions.length - 6} more</span>
+                  )}
+                </div>
               </div>
-            ))}
+            )}
           </div>
-        </div>
+        )}
       </CardHeader>
       <CardContent>
         <div className="space-y-4">

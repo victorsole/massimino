@@ -1,90 +1,359 @@
 {
-    "program": "Balance Workout",
-    "author": "Victor Solé Ferioli",
-    "duration_weeks": 2,
-    "session_duration_minutes": {
-      "min": 20,
-      "max": 30
-    },
-    "frequency_per_week": 3,
-    "level": "Beginner",
-    "settings": ["Indoor", "Outdoor"],
-    "goal": {
-      "outcome_goal": "Hold single-leg balance with eyes closed for 15 seconds each leg by end of Week 2",
-      "progress_goals": [
-        "Perform single-leg reaches without touching the floor for 8 reps",
-        "Improve postural control during basic strength exercises (e.g., squats, lunges)"
+  "program": "Balance Workout",
+  "program_id": "balance-workout",
+  "author": "Victor Solé Ferioli",
+  "version": "2.0_standardized",
+  "duration_weeks": 2,
+  "session_duration_minutes": {
+    "min": 20,
+    "max": 30
+  },
+  "frequency_per_week": 3,
+  "level": "Beginner",
+  "settings": ["Indoor", "Outdoor"],
+  "goal": {
+    "outcome_goal": "Hold single-leg balance with eyes closed for 15 seconds each leg by end of Week 2",
+    "progress_goals": [
+      "Perform single-leg reaches without touching the floor for 8 reps",
+      "Improve postural control during basic strength exercises (e.g., squats, lunges)"
+    ]
+  },
+  "equipment": ["Optional balance pad", "Resistance bands", "Light weights"],
+
+  "training_days": [
+    {
+      "day": 1,
+      "day_name": "Week 1 - Session 1: Stability Activation (Indoor)",
+      "focus": "Foundation Balance Work",
+      "exercises": [
+        {
+          "exercise_id": "single-leg-balance",
+          "exercise_name": "Standing Single-Leg Balance",
+          "order": 1,
+          "sets": 3,
+          "reps": "15 sec each side",
+          "rest_seconds": 15,
+          "notes": "Stand tall, engage core, fix gaze on point",
+          "primary_muscle_groups": ["core", "glutes", "ankles"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "tandem-stance",
+          "exercise_name": "Tandem Stance Toe-to-Heel Hold",
+          "order": 2,
+          "sets": 3,
+          "reps": "20 sec",
+          "rest_seconds": 15,
+          "notes": "One foot directly in front of other, heel to toe",
+          "primary_muscle_groups": ["core", "ankles"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "glute-bridge-hold",
+          "exercise_name": "Glute Bridge Hold",
+          "order": 3,
+          "sets": 3,
+          "reps": "30 sec",
+          "rest_seconds": 30,
+          "notes": "Squeeze glutes at top, maintain neutral spine",
+          "primary_muscle_groups": ["glutes", "core", "hamstrings"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "wall-single-leg-calf-raise",
+          "exercise_name": "Wall-Supported Single-Leg Calf Raises",
+          "order": 4,
+          "sets": 2,
+          "reps": "10 each side",
+          "rest_seconds": 30,
+          "notes": "Light wall touch for balance, full range of motion",
+          "primary_muscle_groups": ["calves", "ankles"],
+          "equipment": ["bodyweight"]
+        }
       ]
     },
-    "equipment": ["Optional balance pad", "Resistance bands", "Light weights"],
-    "weekly_structure": [
-      {
-        "week": 1,
-        "theme": "Stability Activation",
-        "sessions": [
-          {
-            "name": "Session 1 (Indoor)",
-            "components": [
-              "Standing balance on one foot (3x15 sec/side)",
-              "Tandem stance toe-to-heel hold (3x20 sec)",
-              "Glute bridge hold (3x30 sec)",
-              "Wall-supported single-leg calf raises (2x10/side)"
-            ]
-          },
-          {
-            "name": "Session 2 (Outdoor)",
-            "components": [
-              "Walk heel-to-toe in a straight line (3x15 steps)",
-              "One-leg balance on uneven surface (grass)",
-              "Standing knee lift holds (3x10 sec/side)",
-              "Side step-over drills (low cone or curb)"
-            ]
-          },
-          {
-            "name": "Session 3 (Indoor)",
-            "components": [
-              "Balance pad or pillow: 3 rounds of single-leg hold, forward reach, side reach (5 reps each)",
-              "Core finisher: Bird-Dog (3x8 per side)"
-            ]
-          }
-        ]
-      },
-      {
-        "week": 2,
-        "theme": "Dynamic Balance",
-        "sessions": [
-          {
-            "name": "Session 1 (Indoor/Outdoor)",
-            "components": [
-              "Single-leg reach (front, side, diagonal) – 2x8 per leg",
-              "Step-downs from low step (2x10 per leg)",
-              "Bear crawl 4 steps forward/back x 3 sets",
-              "Balance hold + resistance band pull (lateral) – 2x10 each side"
-            ]
-          },
-          {
-            "name": "Session 2 (Outdoor)",
-            "components": [
-              "Low agility ladder walk (or draw with chalk): single-leg steps",
-              "Curved walking paths (2x5 mins each direction)",
-              "Hops to stick balance (mini jumps hold for 2 sec)",
-              "Walking lunges with pause (2x10 steps)"
-            ]
-          },
-          {
-            "name": "Session 3 (Indoor)",
-            "components": [
-              "3-round circuit: BOSU or pillow balance toss, Squat with heel raise at top, Split stance hold + overhead reach",
-              "Finish with supine leg raise core activation (3x10)"
-            ]
-          }
-        ]
-      }
-    ],
-    "notes": [
-      "Focus on control over speed",
-      "Hold near a support object for safety",
-      "Combine with resistance or cardio days for integrated neuromuscular benefits"
-    ]
-  }
-  
+    {
+      "day": 2,
+      "day_name": "Week 1 - Session 2: Outdoor Balance (Outdoor)",
+      "focus": "Balance on Varied Surfaces",
+      "exercises": [
+        {
+          "exercise_id": "heel-toe-walk",
+          "exercise_name": "Heel-to-Toe Walk",
+          "order": 1,
+          "sets": 3,
+          "reps": "15 steps",
+          "rest_seconds": 30,
+          "notes": "Walk in straight line, heel touching toe",
+          "primary_muscle_groups": ["core", "ankles", "calves"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "single-leg-grass-balance",
+          "exercise_name": "Single-Leg Balance on Uneven Surface",
+          "order": 2,
+          "sets": 3,
+          "reps": "15 sec each side",
+          "rest_seconds": 15,
+          "notes": "Stand on grass or soft ground for added challenge",
+          "primary_muscle_groups": ["ankles", "core", "glutes"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "standing-knee-lift",
+          "exercise_name": "Standing Knee Lift Holds",
+          "order": 3,
+          "sets": 3,
+          "reps": "10 sec each side",
+          "rest_seconds": 15,
+          "notes": "Lift knee to hip height, hold steady",
+          "primary_muscle_groups": ["hip_flexors", "core", "glutes"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "side-step-over",
+          "exercise_name": "Side Step-Over Drills",
+          "order": 4,
+          "sets": 3,
+          "reps": "10 each direction",
+          "rest_seconds": 30,
+          "notes": "Use low cone or curb, step over laterally",
+          "primary_muscle_groups": ["hip_abductors", "ankles"],
+          "equipment": ["cone"]
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "day_name": "Week 1 - Session 3: Stability Progression (Indoor)",
+      "focus": "Balance Pad Work & Core",
+      "exercises": [
+        {
+          "exercise_id": "balance-pad-single-leg",
+          "exercise_name": "Balance Pad Single-Leg Hold",
+          "order": 1,
+          "sets": 3,
+          "reps": "15 sec each side",
+          "rest_seconds": 15,
+          "notes": "Stand on pillow or balance pad for instability",
+          "primary_muscle_groups": ["ankles", "core", "glutes"],
+          "equipment": ["balance_pad"]
+        },
+        {
+          "exercise_id": "balance-pad-forward-reach",
+          "exercise_name": "Balance Pad Forward Reach",
+          "order": 2,
+          "sets": 3,
+          "reps": "5 each side",
+          "rest_seconds": 15,
+          "notes": "Single-leg stance, reach forward without losing balance",
+          "primary_muscle_groups": ["core", "glutes", "hamstrings"],
+          "equipment": ["balance_pad"]
+        },
+        {
+          "exercise_id": "balance-pad-side-reach",
+          "exercise_name": "Balance Pad Side Reach",
+          "order": 3,
+          "sets": 3,
+          "reps": "5 each side",
+          "rest_seconds": 15,
+          "notes": "Single-leg stance, reach to side without losing balance",
+          "primary_muscle_groups": ["core", "glutes", "hip_abductors"],
+          "equipment": ["balance_pad"]
+        },
+        {
+          "exercise_id": "bird-dog",
+          "exercise_name": "Bird-Dog",
+          "order": 4,
+          "sets": 3,
+          "reps": "8 each side",
+          "rest_seconds": 30,
+          "notes": "Core finisher - opposite arm and leg extension",
+          "primary_muscle_groups": ["core", "glutes", "lower_back"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "day_name": "Week 2 - Session 1: Dynamic Balance",
+      "focus": "Movement-Based Balance Challenges",
+      "exercises": [
+        {
+          "exercise_id": "single-leg-reach-front",
+          "exercise_name": "Single-Leg Reach (Front)",
+          "order": 1,
+          "sets": 2,
+          "reps": "8 each leg",
+          "rest_seconds": 15,
+          "notes": "Reach forward while balancing, return to start",
+          "primary_muscle_groups": ["glutes", "hamstrings", "core"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "single-leg-reach-side",
+          "exercise_name": "Single-Leg Reach (Side)",
+          "order": 2,
+          "sets": 2,
+          "reps": "8 each leg",
+          "rest_seconds": 15,
+          "notes": "Reach to side while balancing",
+          "primary_muscle_groups": ["hip_abductors", "core", "glutes"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "single-leg-reach-diagonal",
+          "exercise_name": "Single-Leg Reach (Diagonal)",
+          "order": 3,
+          "sets": 2,
+          "reps": "8 each leg",
+          "rest_seconds": 15,
+          "notes": "Reach diagonally behind while balancing",
+          "primary_muscle_groups": ["glutes", "core", "hamstrings"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "step-down",
+          "exercise_name": "Step-Downs from Low Step",
+          "order": 4,
+          "sets": 2,
+          "reps": "10 each leg",
+          "rest_seconds": 30,
+          "notes": "Control descent, tap floor, return",
+          "primary_muscle_groups": ["quadriceps", "glutes", "ankles"],
+          "equipment": ["step"]
+        },
+        {
+          "exercise_id": "bear-crawl",
+          "exercise_name": "Bear Crawl",
+          "order": 5,
+          "sets": 3,
+          "reps": "4 steps forward and back",
+          "rest_seconds": 30,
+          "notes": "Knees hover just above ground",
+          "primary_muscle_groups": ["core", "shoulders", "quadriceps"],
+          "equipment": ["yoga_mat"]
+        },
+        {
+          "exercise_id": "balance-band-pull",
+          "exercise_name": "Balance Hold + Resistance Band Lateral Pull",
+          "order": 6,
+          "sets": 2,
+          "reps": "10 each side",
+          "rest_seconds": 30,
+          "notes": "Single-leg stance while pulling band laterally",
+          "primary_muscle_groups": ["core", "lats", "glutes"],
+          "equipment": ["resistance_band"]
+        }
+      ]
+    },
+    {
+      "day": 5,
+      "day_name": "Week 2 - Session 2: Agility Balance (Outdoor)",
+      "focus": "Dynamic Movement Patterns",
+      "exercises": [
+        {
+          "exercise_id": "agility-ladder-walk",
+          "exercise_name": "Low Agility Ladder Single-Leg Steps",
+          "order": 1,
+          "sets": 3,
+          "reps": "10 steps each leg",
+          "rest_seconds": 30,
+          "notes": "Or draw with chalk - single leg in each box",
+          "primary_muscle_groups": ["ankles", "calves", "core"],
+          "equipment": ["agility_ladder"]
+        },
+        {
+          "exercise_id": "curved-walking-path",
+          "exercise_name": "Curved Walking Paths",
+          "order": 2,
+          "sets": 2,
+          "reps": "5 min each direction",
+          "rest_seconds": 30,
+          "notes": "Walk in figure-8 or serpentine patterns",
+          "primary_muscle_groups": ["core", "ankles", "hips"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "hop-stick-landing",
+          "exercise_name": "Hops to Stick Balance",
+          "order": 3,
+          "sets": 3,
+          "reps": "6 each leg",
+          "rest_seconds": 30,
+          "notes": "Mini jump, land and hold for 2 sec",
+          "primary_muscle_groups": ["calves", "ankles", "glutes"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "walking-lunge-pause",
+          "exercise_name": "Walking Lunges with Pause",
+          "order": 4,
+          "sets": 2,
+          "reps": "10 steps total",
+          "rest_seconds": 30,
+          "notes": "Pause at bottom of each lunge for 1-2 sec",
+          "primary_muscle_groups": ["quadriceps", "glutes", "core"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 6,
+      "day_name": "Week 2 - Session 3: Integration Circuit (Indoor)",
+      "focus": "Full Integration & Assessment",
+      "exercises": [
+        {
+          "exercise_id": "bosu-balance-toss",
+          "exercise_name": "BOSU or Pillow Balance Toss",
+          "order": 1,
+          "sets": 3,
+          "reps": "10 tosses each side",
+          "rest_seconds": 30,
+          "notes": "Stand on unstable surface, toss ball or object",
+          "primary_muscle_groups": ["core", "ankles", "shoulders"],
+          "equipment": ["balance_pad", "ball"]
+        },
+        {
+          "exercise_id": "squat-heel-raise",
+          "exercise_name": "Squat with Heel Raise at Top",
+          "order": 2,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 30,
+          "notes": "Full squat, rise to toes at top",
+          "primary_muscle_groups": ["quadriceps", "glutes", "calves"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "split-stance-overhead-reach",
+          "exercise_name": "Split Stance Hold + Overhead Reach",
+          "order": 3,
+          "sets": 3,
+          "reps": "30 sec each side",
+          "rest_seconds": 30,
+          "notes": "Staggered stance, reach overhead and hold",
+          "primary_muscle_groups": ["core", "shoulders", "hip_flexors"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "supine-leg-raise-core",
+          "exercise_name": "Supine Leg Raise",
+          "order": 4,
+          "sets": 3,
+          "reps": "10",
+          "rest_seconds": 30,
+          "notes": "Core finisher - press lower back into floor",
+          "primary_muscle_groups": ["core", "hip_flexors"],
+          "equipment": ["yoga_mat"]
+        }
+      ]
+    }
+  ],
+
+  "notes": [
+    "Focus on control over speed",
+    "Hold near a support object for safety",
+    "Combine with resistance or cardio days for integrated neuromuscular benefits"
+  ]
+}

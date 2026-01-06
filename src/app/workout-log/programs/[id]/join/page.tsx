@@ -40,26 +40,31 @@ export default function JoinProgramPage({ params }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [checkingStatus, setCheckingStatus] = useState(true);
   const [alreadyJoined, setAlreadyJoined] = useState(false);
+  const [subscriptionId, setSubscriptionId] = useState<string | null>(null);
+  const [activating, setActivating] = useState(false);
 
   useEffect(() => {
-    checkJoinStatus();
+    const init = async () => {
+      await checkJoinStatus();
+    };
+    init();
   }, [params.id]);
-
-  useEffect(() => {
-    if (!alreadyJoined) {
-      fetchProgram();
-    }
-  }, [alreadyJoined]);
 
   const checkJoinStatus = async () => {
     try {
       const res = await fetch(`/api/workout/programs/join?programId=${params.id}`);
       if (res.ok) {
         const data = await res.json();
-        if (data.isSubscribed) {
+        // API returns hasJoined field
+        if (data.hasJoined) {
           setAlreadyJoined(true);
+          setSubscriptionId(data.subscription?.id || null);
+          setCheckingStatus(false);
+          return; // Don't fetch program if already joined
         }
       }
+      // Only fetch program if not already joined
+      await fetchProgram();
     } catch (err) {
       console.error('Failed to check join status:', err);
     } finally {
@@ -72,7 +77,9 @@ export default function JoinProgramPage({ params }: Props) {
     try {
       const res = await fetch('/api/workout/programs/templates');
       if (res.ok) {
-        const programs = await res.json();
+        const data = await res.json();
+        // API returns { templates: [...], total: ... }
+        const programs = Array.isArray(data) ? data : (data.templates || []);
         const found = programs.find((p: ProgramData) => p.id === params.id);
 
         if (!found) {
@@ -95,6 +102,28 @@ export default function JoinProgramPage({ params }: Props) {
       setError('Failed to load program');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const activateAndGoToToday = async () => {
+    if (!subscriptionId) {
+      router.push('/workout-log?tab=today');
+      return;
+    }
+
+    setActivating(true);
+    try {
+      const res = await fetch(`/api/workout/sessions/${subscriptionId}/set-active`, {
+        method: 'PATCH',
+      });
+
+      if (!res.ok) {
+        console.error('Failed to activate subscription');
+      }
+    } catch (err) {
+      console.error('Failed to activate subscription:', err);
+    } finally {
+      router.push('/workout-log?tab=today');
     }
   };
 
@@ -140,9 +169,16 @@ export default function JoinProgramPage({ params }: Props) {
             You are already enrolled in this program. Check your Today tab to see your workouts.
           </p>
           <div className="flex gap-4 justify-center">
-            <Link href="/workout-log?tab=today">
-              <Button>Go to Today</Button>
-            </Link>
+            <Button onClick={activateAndGoToToday} disabled={activating}>
+              {activating ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  Activating...
+                </>
+              ) : (
+                'Go to Today'
+              )}
+            </Button>
             <Link href={`/workout-log/programs/${params.id}`}>
               <Button variant="outline">View Program Details</Button>
             </Link>
