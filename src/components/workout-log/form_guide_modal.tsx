@@ -9,7 +9,8 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Play, ExternalLink, Loader2, Video, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Play, ExternalLink, Loader2, Video, X, ChevronLeft, ChevronRight, Plus } from 'lucide-react';
+import { AddMediaModal } from '@/components/training/session-view/add-media-modal';
 
 interface ExerciseMedia {
   id: string;
@@ -38,6 +39,7 @@ export function FormGuideModal({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [showAddMediaModal, setShowAddMediaModal] = useState(false);
 
   useEffect(() => {
     if (isOpen && exerciseId) {
@@ -133,6 +135,13 @@ export function FormGuideModal({
               <p className="text-sm text-gray-400 mt-2">
                 Be the first to contribute a form guide for this exercise!
               </p>
+              <Button
+                className="mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                onClick={() => setShowAddMediaModal(true)}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Contribute Video
+              </Button>
             </div>
           ) : currentMedia ? (
             <div className="space-y-4">
@@ -263,12 +272,31 @@ export function FormGuideModal({
           ) : null}
         </div>
 
-        <div className="flex justify-end mt-4">
+        <div className="flex justify-between mt-4">
+          <Button
+            variant="outline"
+            className="text-blue-600 border-blue-600 hover:bg-blue-50"
+            onClick={() => setShowAddMediaModal(true)}
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Contribute Video
+          </Button>
           <Button variant="outline" onClick={onClose}>
             Close
           </Button>
         </div>
       </DialogContent>
+
+      {/* Add Media Modal */}
+      <AddMediaModal
+        open={showAddMediaModal}
+        onClose={() => setShowAddMediaModal(false)}
+        exerciseId={exerciseId}
+        onMediaAdded={() => {
+          setShowAddMediaModal(false);
+          fetchMedia(); // Refresh the media list
+        }}
+      />
     </Dialog>
   );
 }

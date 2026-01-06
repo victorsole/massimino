@@ -1,7 +1,7 @@
 // src/app/workout-log/page.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSession } from 'next-auth/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -22,13 +22,15 @@ import { WorkoutEmptyState } from '@/components/workout-log/workout_empty_state'
 import { FloatingActionButton } from '@/components/workout-log/floating_action_button';
 import { SessionStatusBar, SessionTimerBadge } from '@/components/workout-log/session_status_bar';
 import { startOfMonth, endOfMonth, format, subMonths, addMonths } from 'date-fns';
-import { Plus, Calendar, Dumbbell, Clock, Weight, MessageCircle, Edit, Trash2, Search, Info, Target, Zap, ChevronLeft, ChevronRight, ChevronDown, Sparkles, Trophy, ListChecks, LineChart, Users, LayoutGrid, TableIcon } from 'lucide-react';
+import { Plus, Calendar, Dumbbell, Clock, Weight, MessageCircle, Edit, Trash2, Search, Info, Target, Zap, ChevronLeft, ChevronRight, ChevronDown, Sparkles, Trophy, ListChecks, LineChart, Users, LayoutGrid, TableIcon, Moon, Play } from 'lucide-react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { RestTimerBar } from '@/components/workout-log/rest_timer_bar';
 import { BodyMetricsTab } from '@/components/workout-log/body_metrics_tab';
 import { ProgressTab } from '@/components/workout-log/progress_tab';
 import { HabitsTab } from '@/components/workout-log/habits_tab';
 import { ProgramsTab } from '@/components/workout-log/programs_tab';
+import { FormGuideModal } from '@/components/workout-log/form_guide_modal';
 import { MyPrograms } from '@/components/programs/my_programs';
 import { UserProgram } from '@/types/program';
 import { AthleteGallery } from '@/components/periodization/athlete_gallery';
@@ -48,6 +50,7 @@ type WorkoutEntry = {
   id: string;
   date: string | Date;
   exerciseId: string;
+  sessionId?: string;
   setNumber: number;
   setType: string;
   reps: number;
@@ -70,8 +73,9 @@ type WorkoutEntry = {
   };
 };
 
-export default function WorkoutLogPage() {
+function WorkoutLogPageContent() {
   const { data: session } = useSession();
+  const searchParams = useSearchParams();
   const userRole = session?.user?.role as ('CLIENT'|'TRAINER'|'ADMIN'|undefined);
   const isTrainerOrAdmin = userRole === 'TRAINER' || userRole === 'ADMIN';
   const [isAddingEntry, setIsAddingEntry] = useState(false);
@@ -136,6 +140,7 @@ export default function WorkoutLogPage() {
     startTime: Date;
     assessmentId?: string;
   } | null>(null);
+  const [sessionCompletedToday, setSessionCompletedToday] = useState(false); // Hide today's entries after session ends
   const [showSessionCreationModal, setShowSessionCreationModal] = useState(false);
   const [sessionAssessmentId, setSessionAssessmentId] = useState<string>('');
   const [sessionTitle, setSessionTitle] = useState<string>('');
@@ -154,6 +159,15 @@ export default function WorkoutLogPage() {
   const [activeTab, setActiveTab] = useState<WorkoutTab>('today');
   const [, setSessions] = useState<any[]>([]);
 
+  // Read tab from URL query parameter - watch the actual tab value, not the searchParams object
+  const urlTabParam = searchParams.get('tab');
+  useEffect(() => {
+    const validTabs: WorkoutTab[] = ['today', 'my-programs', 'programs', 'athletes', 'history', 'metrics', 'progress', 'habits'];
+    if (urlTabParam && validTabs.includes(urlTabParam as WorkoutTab)) {
+      setActiveTab(urlTabParam as WorkoutTab);
+    }
+  }, [urlTabParam]);
+
   // New mobile UI state
   const [showAddEntryModal, setShowAddEntryModal] = useState(false);
   const [showRestTimerOverlay, setShowRestTimerOverlay] = useState(false);
@@ -162,12 +176,21 @@ export default function WorkoutLogPage() {
   const [totalSetsCount, setTotalSetsCount] = useState(3);
   const [lastLoggedEntry, setLastLoggedEntry] = useState<{ weight: number; reps: number } | null>(null);
 
+  // Form guide modal state
+  const [showFormGuideModal, setShowFormGuideModal] = useState(false);
+
   // My Programs state
   const [myProgramsData, setMyProgramsData] = useState<UserProgram[]>([]);
   const [loadingMyPrograms, setLoadingMyPrograms] = useState(false);
 
   // Recommendations collapsed state (collapsed by default on mobile)
   const [recommendationsExpanded, setRecommendationsExpanded] = useState(false);
+
+  // Recent exercises collapsed state (collapsed by default)
+  const [recentExercisesExpanded, setRecentExercisesExpanded] = useState(false);
+
+  // Session history collapsed state (expanded by default)
+  const [sessionHistoryExpanded, setSessionHistoryExpanded] = useState(true);
 
   // Dismissed today's workout (hides the card for that day)
   const [dismissedTodayWorkout, setDismissedTodayWorkout] = useState(false);
@@ -240,12 +263,19 @@ export default function WorkoutLogPage() {
       // Load active subscriptions for prefill
       (async () => {
         try {
+          console.log('[Today Tab] Loading program subscriptions...');
           const r = await fetch('/api/workout/programs?subscriptions=true');
           if (r.ok) {
             const subs = await r.json();
+            console.log('[Today Tab] Loaded subscriptions:', subs?.length || 0, 'subscriptions');
+            console.log('[Today Tab] Subscription data:', JSON.stringify(subs?.[0]?.program_templates?.name || 'No program', null, 2));
             setProgramSubscriptions(Array.isArray(subs) ? subs : []);
+          } else {
+            console.error('[Today Tab] Failed to load subscriptions:', r.status);
           }
-        } catch {}
+        } catch (e) {
+          console.error('[Today Tab] Error loading subscriptions:', e);
+        }
       })();
     }
     if (activeTab === 'my-programs') {
@@ -454,6 +484,44 @@ export default function WorkoutLogPage() {
     }
   }, [workoutEntries]);
 
+  // Group workout entries by exercise and date for card view
+  // This allows showing 1 card per exercise with all sets inside
+  // On "Today" tab, only show today's entries (unless session was completed)
+  const groupedWorkoutEntries = useMemo(() => {
+    // If session was completed today on "Today" tab, show empty (workout is done)
+    if (activeTab === 'today' && sessionCompletedToday) {
+      return [];
+    }
+
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const groups = new Map<string, WorkoutEntry[]>();
+
+    for (const entry of workoutEntries) {
+      // Create key from exerciseId + date (YYYY-MM-DD format)
+      const dateStr = entry.date instanceof Date
+        ? entry.date.toISOString().split('T')[0]
+        : typeof entry.date === 'string'
+          ? entry.date.split('T')[0]
+          : '';
+
+      // On "Today" tab, only include entries from today
+      if (activeTab === 'today' && dateStr !== today) {
+        continue;
+      }
+
+      const key = `${entry.exerciseId}_${dateStr}`;
+      if (!groups.has(key)) {
+        groups.set(key, []);
+      }
+      groups.get(key)!.push(entry);
+    }
+    // Sort entries within each group by setNumber
+    for (const entries of groups.values()) {
+      entries.sort((a, b) => a.setNumber - b.setNumber);
+    }
+    return Array.from(groups.values());
+  }, [workoutEntries, activeTab, sessionCompletedToday]);
+
   // Load saved pyramid settings (if opted-in)
   useEffect(() => {
     try {
@@ -502,31 +570,72 @@ export default function WorkoutLogPage() {
 
   // Get current workout from active program subscription
   const getCurrentProgramWorkout = () => {
+    console.log('[getCurrentProgramWorkout] programSubscriptions count:', programSubscriptions?.length || 0);
     if (!programSubscriptions || programSubscriptions.length === 0) return null;
 
-    const activeSub = programSubscriptions[0]; // Get first active subscription
+    // Prioritize the currently active subscription, fall back to first
+    const activeSub = programSubscriptions.find((sub: any) => sub.isCurrentlyActive) || programSubscriptions[0];
     const currentWeek = activeSub.currentWeek || 1;
     const currentDay = activeSub.currentDay || 1;
+    console.log('[getCurrentProgramWorkout] activeSub:', activeSub?.id, 'Week:', currentWeek, 'Day:', currentDay);
 
     const program = activeSub.program_templates;
-    if (!program || !program.program_phases || program.program_phases.length === 0) return null;
+    console.log('[getCurrentProgramWorkout] program:', program?.name, 'phases:', program?.program_phases?.length || 0);
+    if (!program || !program.program_phases || program.program_phases.length === 0) {
+      console.log('[getCurrentProgramWorkout] No program or phases found');
+      return null;
+    }
 
     // Find the phase that contains the current week
-    const currentPhase = program.program_phases.find((phase: any) => {
+    // First, try to find by microcycle weekNumber
+    let currentPhase = program.program_phases.find((phase: any) => {
       return phase.microcycles && phase.microcycles.some((micro: any) => micro.weekNumber === currentWeek);
     });
 
-    if (!currentPhase) return null;
+    // Fallback: if no phase found and there's only one phase, use it
+    if (!currentPhase && program.program_phases.length === 1) {
+      currentPhase = program.program_phases[0];
+      console.log('[getCurrentProgramWorkout] Using single phase fallback');
+    }
+
+    console.log('[getCurrentProgramWorkout] currentPhase:', currentPhase?.title || currentPhase?.phaseName || 'Not found');
+
+    if (!currentPhase) {
+      console.log('[getCurrentProgramWorkout] Phase not found for week', currentWeek);
+      return null;
+    }
 
     // Find the microcycle for current week
     const currentMicrocycle = currentPhase.microcycles.find((micro: any) => micro.weekNumber === currentWeek);
+    console.log('[getCurrentProgramWorkout] currentMicrocycle:', currentMicrocycle?.weekNumber, 'workouts:', currentMicrocycle?.workouts?.length || 0);
 
-    if (!currentMicrocycle || !currentMicrocycle.workouts) return null;
+    if (!currentMicrocycle || !currentMicrocycle.workouts) {
+      console.log('[getCurrentProgramWorkout] Microcycle not found or no workouts');
+      return null;
+    }
 
     // Find the workout for current day
     const currentWorkout = currentMicrocycle.workouts.find((workout: any) => workout.dayNumber === currentDay);
+    console.log('[getCurrentProgramWorkout] currentWorkout:', currentWorkout?.dayLabel || 'Not found', 'exercises:', currentWorkout?.workout_exercises?.length || 0);
 
-    if (!currentWorkout) return null;
+    if (!currentWorkout) {
+      console.log('[getCurrentProgramWorkout] Workout not found for day', currentDay, '- likely a rest day');
+      // Return rest day info so UI can show appropriate message
+      return {
+        subscription: activeSub,
+        program,
+        phase: currentPhase,
+        microcycle: currentMicrocycle,
+        workout: null,
+        exercises: [],
+        isRestDay: true,
+        currentDay,
+        // Find next workout day
+        nextWorkoutDay: currentMicrocycle.workouts
+          .filter((w: any) => w.dayNumber > currentDay)
+          .sort((a: any, b: any) => a.dayNumber - b.dayNumber)[0] || currentMicrocycle.workouts[0]
+      };
+    }
 
     return {
       subscription: activeSub,
@@ -534,7 +643,8 @@ export default function WorkoutLogPage() {
       phase: currentPhase,
       microcycle: currentMicrocycle,
       workout: currentWorkout,
-      exercises: currentWorkout.workout_exercises || []
+      exercises: currentWorkout.workout_exercises || [],
+      isRestDay: false
     };
   };
 
@@ -916,6 +1026,35 @@ export default function WorkoutLogPage() {
     try {
       setLoading(true);
 
+      // Auto-create session if none exists
+      let currentSessionId = activeSession?.id;
+      if (!currentSessionId) {
+        const now = new Date();
+        const pad = (n: number) => n.toString().padStart(2, '0');
+        const date = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+        const startTime = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
+        const sessionResponse = await fetch('/api/workout/sessions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: 'Quick Workout',
+            date,
+            startTime,
+          })
+        });
+
+        const sessionData = await sessionResponse.json();
+        if (sessionData.session) {
+          currentSessionId = sessionData.session.id;
+          setActiveSession({
+            id: sessionData.session.id,
+            startTime: sessionData.session.startTime ? new Date(sessionData.session.startTime) : new Date(),
+            assessmentId: sessionData.session.assessmentId
+          });
+        }
+      }
+
       // Create workout entries for all sets
       // Extract numeric value from weight input (e.g., "135 lbs" -> "135")
       const setsNum = parseInt(newEntry.sets || '1', 10) || 1;
@@ -948,7 +1087,7 @@ export default function WorkoutLogPage() {
             reps: repsNum,
             weight: wA,
             unit: 'KG' as any,
-            sessionId: activeSession?.id,
+            sessionId: currentSessionId,
             subOrder: 'A',
             actualRPE: actualRPE || undefined,
             formQuality: formQuality || undefined,
@@ -965,7 +1104,7 @@ export default function WorkoutLogPage() {
             reps: repsNum,
             weight: wB,
             unit: 'KG' as any,
-            sessionId: activeSession?.id,
+            sessionId: currentSessionId,
             subOrder: 'B',
             actualRPE: actualRPE || undefined,
             formQuality: formQuality || undefined,
@@ -994,7 +1133,7 @@ export default function WorkoutLogPage() {
               reps: repsNum,
               weight: w,
               unit: 'KG' as any,
-              sessionId: activeSession?.id,
+              sessionId: currentSessionId,
               subOrder: sub,
               actualRPE: actualRPE || undefined,
               formQuality: formQuality || undefined,
@@ -1034,7 +1173,7 @@ export default function WorkoutLogPage() {
             reps: repsScheme[i] || repsNum,
             weight: w,
             unit: 'KG' as any,
-            sessionId: activeSession?.id,
+            sessionId: currentSessionId,
             subOrder: 'A',
             actualRPE: actualRPE || undefined,
             formQuality: formQuality || undefined,
@@ -1061,7 +1200,7 @@ export default function WorkoutLogPage() {
             reps: repsNum,
             weight: w,
             unit: 'KG' as any,
-            sessionId: activeSession?.id,
+            sessionId: currentSessionId,
             subOrder: 'A',
             actualRPE: actualRPE || undefined,
             formQuality: formQuality || undefined,
@@ -1479,8 +1618,78 @@ export default function WorkoutLogPage() {
               const currentWorkout = getCurrentProgramWorkout();
               if (!currentWorkout || dismissedTodayWorkout) return null;
 
-              const { subscription, program, phase, workout, exercises } = currentWorkout;
+              const { subscription, program, phase, workout, exercises, isRestDay, nextWorkoutDay } = currentWorkout;
               const athleteName = program.legendary_athlete?.name || 'Program';
+
+              // Handle rest day
+              if (isRestDay) {
+                const skipToNextWorkout = async () => {
+                  if (!nextWorkoutDay) return;
+                  try {
+                    // Update subscription to next workout day
+                    const res = await fetch(`/api/workout/programs/subscriptions/${subscription.id}/advance`, {
+                      method: 'PATCH',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ targetDay: nextWorkoutDay.dayNumber }),
+                    });
+                    if (res.ok) {
+                      // Navigate to today tab to load new workout
+                      window.location.href = '/workout-log?tab=today';
+                    }
+                  } catch (err) {
+                    console.error('Failed to skip to next workout:', err);
+                  }
+                };
+
+                return (
+                  <Card className="mb-6 border-blue-200 bg-blue-50/50">
+                    <CardHeader>
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <Moon className="h-5 w-5 text-blue-500" />
+                        Rest Day - {program.name}
+                      </CardTitle>
+                      <CardDescription>
+                        {athleteName} • Week {subscription.currentWeek}, Day {subscription.currentDay}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <p className="text-sm text-gray-600">
+                          Today is a scheduled rest day. Take time to recover and prepare for your next workout.
+                        </p>
+                        {nextWorkoutDay && (
+                          <button
+                            onClick={skipToNextWorkout}
+                            className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
+                          >
+                            <Play className="h-4 w-4" />
+                            <span className="font-medium">Next workout:</span>{' '}
+                            {nextWorkoutDay.dayLabel || `Day ${nextWorkoutDay.dayNumber}`}
+                          </button>
+                        )}
+                        <div className="flex gap-2 pt-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => setActiveTab('my-programs')}
+                          >
+                            View Program
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-gray-400 hover:text-red-500"
+                            onClick={() => setDismissedTodayWorkout(true)}
+                          >
+                            <Trash2 className="h-4 w-4 mr-1" />
+                            Dismiss
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              }
 
               return (
                 <Card className="mb-6">
@@ -1495,9 +1704,9 @@ export default function WorkoutLogPage() {
                       {/* Workout Info */}
                       <div className="flex items-start justify-between gap-3 pb-3 border-b">
                         <div>
-                          <div className="font-medium text-sm">{workout.dayLabel || `Day ${workout.dayNumber}`}</div>
+                          <div className="font-medium text-sm">{workout?.dayLabel || `Day ${workout?.dayNumber}`}</div>
                           <div className="text-xs text-muted-foreground mt-1">
-                            {phase.title} • {phase.description}
+                            {phase?.title} • {phase?.description}
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -1641,29 +1850,39 @@ export default function WorkoutLogPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {/* Recent Exercises Chips */}
+              {/* Recent Exercises Chips - Collapsible */}
               {recentExercises.length > 0 && (
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-brand-primary mb-2">
-                    Recent Exercises
-                  </label>
-                  <div className="flex gap-2 flex-wrap">
-                    {recentExercises.map((ex) => (
-                      <button
-                        key={ex.id}
-                        type="button"
-                        onClick={() => {
-                          const exercise = exercises.find(e => e.id === ex.id);
-                          if (exercise) {
-                            handleExerciseSelect(exercise);
-                          }
-                        }}
-                        className="px-4 py-2 bg-white border-2 border-gray-300 rounded-full text-sm font-medium text-gray-700 hover:border-brand-primary hover:bg-brand-secondary transition-all"
-                      >
-                        {ex.name}
-                      </button>
-                    ))}
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setRecentExercisesExpanded(!recentExercisesExpanded)}
+                    className="flex items-center justify-between w-full text-sm font-medium text-brand-primary mb-2 hover:text-brand-primary-dark transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className="mdi mdi-history text-base" />
+                      Recent Exercises ({recentExercises.length})
+                    </span>
+                    <span className={`mdi ${recentExercisesExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'} text-lg transition-transform`} />
+                  </button>
+                  {recentExercisesExpanded && (
+                    <div className="flex gap-2 flex-wrap">
+                      {recentExercises.map((ex) => (
+                        <button
+                          key={ex.id}
+                          type="button"
+                          onClick={() => {
+                            const exercise = exercises.find(e => e.id === ex.id);
+                            if (exercise) {
+                              handleExerciseSelect(exercise);
+                            }
+                          }}
+                          className="px-4 py-2 bg-white border-2 border-gray-300 rounded-full text-sm font-medium text-gray-700 hover:border-brand-primary hover:bg-brand-secondary transition-all"
+                        >
+                          {ex.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -1781,22 +2000,20 @@ export default function WorkoutLogPage() {
                   {selectedExercise && exerciseMedia.length > 0 && (
                     <div
                       className="mt-3 cursor-pointer transition-all hover:shadow-md"
-                      onClick={() => {
-                        // TODO: Open media gallery modal
-                        console.log('Open media gallery for:', selectedExercise.name);
-                      }}
+                      onClick={() => setShowFormGuideModal(true)}
                     >
                       <div className="border-2 border-gray-200 rounded-lg overflow-hidden hover:border-brand-primary">
                         <div className="relative aspect-video bg-gradient-to-br from-brand-primary to-brand-primary-dark flex items-center justify-center">
                           <div className="text-center text-white">
-                            <div className="text-4xl mb-2">🎥</div>
+                            <span className="mdi mdi-video text-4xl mb-2 block" />
                             <div className="font-semibold text-lg">{selectedExercise.name}</div>
                             <div className="text-sm opacity-90 mt-1">Tap to view form videos</div>
                           </div>
                         </div>
                         <div className="bg-brand-secondary px-4 py-3 flex items-center justify-between">
-                          <span className="text-sm font-semibold text-brand-primary">
-                            👁️ {exerciseMedia.length} {exerciseMedia.length === 1 ? 'video' : 'videos'}
+                          <span className="text-sm font-semibold text-brand-primary flex items-center gap-1">
+                            <span className="mdi mdi-eye" />
+                            {exerciseMedia.length} {exerciseMedia.length === 1 ? 'video' : 'videos'}
                           </span>
                           <span className="text-xs text-gray-600">Community contributed</span>
                         </div>
@@ -1905,15 +2122,17 @@ export default function WorkoutLogPage() {
                   onClick={() => setShowAdvancedFields(!showAdvancedFields)}
                   className="w-full py-3 text-center text-brand-primary font-semibold rounded-lg hover:bg-brand-secondary transition-all flex items-center justify-center gap-2"
                 >
-                  <span>⚙️ More Options</span>
-                  <span className="text-xs">{showAdvancedFields ? '▲' : '▼'}</span>
+                  <span className="mdi mdi-cog text-lg" />
+                  <span>More Options</span>
+                  <span className={`mdi ${showAdvancedFields ? 'mdi-chevron-up' : 'mdi-chevron-down'} text-sm`} />
                 </button>
 
                 {/* Advanced Fields (Collapsible) */}
                 {showAdvancedFields && (
                   <div className="space-y-4 p-4 bg-brand-secondary rounded-lg border-2 border-dashed border-gray-300">
-                    <div className="text-center font-bold text-brand-primary mb-3">
-                      🎯 Acute Variables
+                    <div className="text-center font-bold text-brand-primary mb-3 flex items-center justify-center gap-2">
+                      <span className="mdi mdi-target text-lg" />
+                      <span>Acute Variables</span>
                     </div>
 
                     <div>
@@ -1973,18 +2192,18 @@ export default function WorkoutLogPage() {
                       </div>
                       <div>
                         <label className="block text-xs text-purple-900 mb-1">Reps Scheme (optional)</label>
-                        <div className="flex gap-2">
-                          <input
-                            type="text"
-                            value={newEntry.pyramidReps}
-                            onChange={(e) => setNewEntry({ ...newEntry, pyramidReps: e.target.value })}
-                            placeholder="e.g. 15,12,10,8"
-                            className="flex-1 border rounded-md p-2 text-sm"
-                          />
+                        <input
+                          type="text"
+                          value={newEntry.pyramidReps}
+                          onChange={(e) => setNewEntry({ ...newEntry, pyramidReps: e.target.value })}
+                          placeholder="e.g. 15,12,10,8"
+                          className="w-full border rounded-md p-2 text-sm mb-2"
+                        />
+                        <div className="flex flex-col sm:flex-row gap-2">
                           <Button
                             type="button"
                             variant="outline"
-                            className="text-xs"
+                            className="text-xs w-full sm:w-auto"
                             onClick={() => {
                               setNewEntry({ ...newEntry, pyramidReps: '15,12,10,8', sets: '4' });
                             }}
@@ -1992,7 +2211,7 @@ export default function WorkoutLogPage() {
                           <Button
                             type="button"
                             variant="outline"
-                            className="text-xs"
+                            className="text-xs w-full sm:w-auto"
                             onClick={() => {
                               setNewEntry({ ...newEntry, pyramidReps: '12,10,8', sets: '3' });
                             }}
@@ -2000,7 +2219,7 @@ export default function WorkoutLogPage() {
                           <Button
                             type="button"
                             variant="outline"
-                            className="text-xs"
+                            className="text-xs w-full sm:w-auto"
                             onClick={() => {
                               setNewEntry({ ...newEntry, pyramidReps: '6,8,10,12', sets: '4', pyramidDirection: 'DESC' });
                             }}
@@ -2009,7 +2228,7 @@ export default function WorkoutLogPage() {
                       </div>
                       <div>
                         <label className="block text-xs text-purple-900 mb-1">Weights Auto‑fill</label>
-                        <div className="grid grid-cols-3 gap-2">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                           <input
                             type="number"
                             placeholder="Base (kg)"
@@ -2024,18 +2243,18 @@ export default function WorkoutLogPage() {
                             onChange={(e) => { setNewEntry({ ...newEntry, pyramidStep: e.target.value }); persistPyramidSettings(undefined, e.target.value); }}
                             className="border rounded-md p-2 text-sm"
                           />
-                          <div className="flex gap-2">
-                            <Button type="button" variant="outline" className="text-xs" onClick={() => setNewEntry({ ...newEntry, pyramidStep: '2.5' })}>+2.5</Button>
-                            <Button type="button" variant="outline" className="text-xs" onClick={() => setNewEntry({ ...newEntry, pyramidStep: '5' })}>+5</Button>
+                          <div className="flex gap-2 col-span-2 sm:col-span-1">
+                            <Button type="button" variant="outline" className="text-xs flex-1 sm:flex-none" onClick={() => setNewEntry({ ...newEntry, pyramidStep: '2.5' })}>+2.5</Button>
+                            <Button type="button" variant="outline" className="text-xs flex-1 sm:flex-none" onClick={() => setNewEntry({ ...newEntry, pyramidStep: '5' })}>+5</Button>
                           </div>
                         </div>
-                        <div className="mt-2 grid grid-cols-2 gap-2 items-center">
-                          <div className="text-xs text-purple-900">Preset Step</div>
-                          <div className="flex gap-2">
+                        <div className="mt-2">
+                          <div className="text-xs text-purple-900 mb-2">Preset Step</div>
+                          <div className="flex flex-col sm:flex-row gap-2">
                             <Button
                               type="button"
                               variant="outline"
-                              className="text-xs"
+                              className="text-xs w-full sm:w-auto"
                               onClick={() => {
                                 const step = getRecommendedPyramidStep();
                                 setNewEntry({ ...newEntry, pyramidStep: step });
@@ -2045,7 +2264,7 @@ export default function WorkoutLogPage() {
                             <Button
                               type="button"
                               variant="outline"
-                              className="text-xs"
+                              className="text-xs w-full sm:w-auto"
                               onClick={() => { setNewEntry({ ...newEntry, pyramidStep: '10' }); persistPyramidSettings(undefined, '10'); }}
                             >+10</Button>
                           </div>
@@ -2312,6 +2531,15 @@ export default function WorkoutLogPage() {
                         rows={2}
                       />
                     </div>
+
+                    {/* LOG SET Button inside Acute Variables */}
+                    <Button
+                      onClick={handleAddEntry}
+                      disabled={!selectedExercise || !newEntry.reps || !newEntry.weight}
+                      className="w-full py-6 text-xl font-bold bg-brand-primary hover:bg-brand-primary-dark text-white shadow-lg mt-4"
+                    >
+                      LOG SET {newEntry.sets || '1'}/{newEntry.sets || '1'}
+                    </Button>
                   </div>
                 )}
 
@@ -2473,26 +2701,270 @@ export default function WorkoutLogPage() {
               </Button>
             </div>
 
-            {/* Cards View */}
+            {/* Cards View - Grouped by Exercise */}
             {view_mode === 'cards' && (
               <div className="space-y-4">
-                {workoutEntries.map((entry: WorkoutEntry) => (
-                  <WorkoutCard
-                    key={entry.id}
-                    entry={entry}
-                    isSelected={selectedEntries.has(entry.id)}
-                    isEditing={editingEntry === entry.id}
-                    editFormData={editFormData}
-                    loading={loading}
-                    onSelect={toggleEntrySelection}
-                    onStartEdit={startEditing}
-                    onDelete={handleDeleteEntry}
-                    onSaveEdit={handleEditEntry}
-                    onCancelEdit={() => setEditingEntry(null)}
-                    onEditFormChange={(data) => setEditFormData({ ...editFormData, ...data })}
-                    isTrainer={isTrainerOrAdmin}
-                  />
-                ))}
+                {groupedWorkoutEntries.map((entriesGroup: WorkoutEntry[]) => {
+                  const firstEntry = entriesGroup[0];
+                  const formattedDate = firstEntry.date
+                    ? new Date(firstEntry.date).toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric'
+                      })
+                    : 'No date';
+                  const allSelected = entriesGroup.every(e => selectedEntries.has(e.id));
+                  const someSelected = entriesGroup.some(e => selectedEntries.has(e.id));
+
+                  return (
+                    <Card key={`${firstEntry.exerciseId}_${firstEntry.date}`} className="hover:shadow-md transition-shadow duration-300 border-gray-100">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            {/* Group Selection Checkbox */}
+                            <input
+                              type="checkbox"
+                              checked={allSelected}
+                              ref={(el) => { if (el) el.indeterminate = someSelected && !allSelected; }}
+                              onChange={() => {
+                                const newSelected = new Set(selectedEntries);
+                                if (allSelected) {
+                                  entriesGroup.forEach(e => newSelected.delete(e.id));
+                                } else {
+                                  entriesGroup.forEach(e => newSelected.add(e.id));
+                                }
+                                setSelectedEntries(newSelected);
+                              }}
+                              className="rounded border-gray-300 text-brand-primary focus:ring-brand-primary h-5 w-5 cursor-pointer"
+                              title="Select all sets"
+                            />
+                            <Calendar className="h-4 w-4 text-gray-500" />
+                            <span className="text-sm text-gray-600">{formattedDate}</span>
+                            <Badge variant="outline" className="text-xs bg-gray-100 text-gray-800">
+                              {entriesGroup.length} {entriesGroup.length === 1 ? 'set' : 'sets'}
+                            </Badge>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => {
+                                if (confirm(`Delete all ${entriesGroup.length} sets of ${firstEntry.exercise.name}?`)) {
+                                  entriesGroup.forEach(e => handleDeleteEntry(e.id));
+                                }
+                              }}
+                              disabled={loading}
+                              className="h-9 w-9 hover:bg-red-50 hover:text-red-600"
+                              aria-label="Delete all sets"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+
+                        {/* Exercise Name */}
+                        <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mt-2">
+                          <Dumbbell className="h-5 w-5 text-brand-primary" />
+                          <span>{firstEntry.exercise.name}</span>
+                        </h3>
+
+                        {/* Exercise Metadata */}
+                        <div className="flex flex-wrap gap-2 mt-1">
+                          <Badge variant="outline" className="text-xs bg-gray-100">
+                            {firstEntry.exercise.category}
+                          </Badge>
+                          {firstEntry.exercise.muscleGroups?.slice(0, 2).map((mg: string) => (
+                            <Badge key={mg} variant="outline" className="text-xs">
+                              {mg}
+                            </Badge>
+                          ))}
+                        </div>
+                      </CardHeader>
+
+                      <CardContent className="pt-0">
+                        {/* Sets Table */}
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-sm">
+                            <thead>
+                              <tr className="border-b border-gray-200">
+                                <th className="text-left py-2 px-2 font-medium text-gray-600">Set</th>
+                                <th className="text-left py-2 px-2 font-medium text-gray-600">Reps</th>
+                                <th className="text-left py-2 px-2 font-medium text-gray-600">Weight</th>
+                                <th className="text-left py-2 px-2 font-medium text-gray-600">Rest</th>
+                                <th className="text-right py-2 px-2 font-medium text-gray-600">Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {entriesGroup.map((entry) => (
+                                <tr key={entry.id} className="border-b border-gray-100 last:border-0 hover:bg-gray-50">
+                                  <td className="py-2 px-2">
+                                    <span className="font-medium">#{entry.setNumber}</span>
+                                  </td>
+                                  <td className="py-2 px-2">{entry.reps}</td>
+                                  <td className="py-2 px-2">{entry.weight} {entry.unit}</td>
+                                  <td className="py-2 px-2">{entry.restSeconds ? `${entry.restSeconds}s` : '-'}</td>
+                                  <td className="py-2 px-2 text-right">
+                                    <div className="flex items-center justify-end gap-1">
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => startEditing(entry)}
+                                        disabled={loading}
+                                        className="h-7 w-7 hover:bg-gray-100"
+                                      >
+                                        <Edit className="h-3 w-3 text-gray-600" />
+                                      </Button>
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => handleDeleteEntry(entry.id)}
+                                        disabled={loading}
+                                        className="h-7 w-7 hover:bg-red-50 hover:text-red-600"
+                                      >
+                                        <Trash2 className="h-3 w-3" />
+                                      </Button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+
+                        {/* Summary row */}
+                        <div className="mt-3 pt-3 border-t border-gray-100 flex items-center gap-4 text-sm text-gray-600">
+                          <span><strong>Total:</strong> {entriesGroup.reduce((sum, e) => sum + e.reps, 0)} reps</span>
+                          <span><strong>Volume:</strong> {entriesGroup.reduce((sum, e) => sum + (e.reps * parseFloat(e.weight || '0')), 0).toFixed(1)} kg</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+
+                {/* Session Action Buttons - shown when there are entries */}
+                {groupedWorkoutEntries.length > 0 && (
+                  <div className="flex flex-col sm:flex-row gap-3 mt-6 pt-4 border-t border-gray-200">
+                    <Button
+                      onClick={async () => {
+                        try {
+                          // Try to find the session ID from entries or use activeSession
+                          const sessionIdFromEntries = workoutEntries.find(e => e.sessionId)?.sessionId;
+                          const sessionToEnd = activeSession?.id || sessionIdFromEntries;
+
+                          // End the session if one exists
+                          if (sessionToEnd) {
+                            await fetch(`/api/workout/sessions/${sessionToEnd}`, {
+                              method: 'PUT',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ status: 'COMPLETED' }),
+                            });
+                            setActiveSession(null);
+                          }
+
+                          // Fetch fresh subscriptions if none loaded
+                          let subs = programSubscriptions;
+                          if (subs.length === 0) {
+                            try {
+                              const r = await fetch('/api/workout/programs?subscriptions=true');
+                              if (r.ok) {
+                                subs = await r.json();
+                                if (Array.isArray(subs)) {
+                                  setProgramSubscriptions(subs);
+                                }
+                              }
+                            } catch (e) {
+                              console.error('Failed to fetch subscriptions:', e);
+                            }
+                          }
+
+                          // Advance program day (do this regardless of session)
+                          if (subs.length > 0) {
+                            const sub = subs[0];
+                            const currentWeek = sub.currentWeek || 1;
+                            const currentDay = sub.currentDay || 1;
+
+                            // Get total days from microcycle - default to 7 if not found
+                            const program = sub.program_templates;
+                            let totalDaysInWeek = 7;
+
+                            if (program?.program_phases) {
+                              const currentPhase = program.program_phases.find((phase: any) =>
+                                phase.microcycles?.some((micro: any) => micro.weekNumber === currentWeek)
+                              );
+                              if (currentPhase) {
+                                const currentMicrocycle = currentPhase.microcycles?.find(
+                                  (micro: any) => micro.weekNumber === currentWeek
+                                );
+                                if (currentMicrocycle?.workouts) {
+                                  totalDaysInWeek = currentMicrocycle.workouts.length;
+                                }
+                              }
+                            }
+
+                            // Calculate next day/week
+                            let nextDay = currentDay + 1;
+                            let nextWeek = currentWeek;
+
+                            if (nextDay > totalDaysInWeek) {
+                              nextDay = 1;
+                              nextWeek = currentWeek + 1;
+                            }
+
+                            console.log('Advancing program:', { subscriptionId: sub.id, currentDay, nextDay, currentWeek, nextWeek, totalDaysInWeek });
+
+                            // Update program progress
+                            const progressRes = await fetch('/api/workout/programs/progress', {
+                              method: 'PATCH',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({
+                                subscriptionId: sub.id,
+                                currentWeek: nextWeek,
+                                currentDay: nextDay,
+                              }),
+                            });
+
+                            if (progressRes.ok) {
+                              // Update local state
+                              setProgramSubscriptions(prev => prev.map(s =>
+                                s.id === sub.id
+                                  ? { ...s, currentWeek: nextWeek, currentDay: nextDay }
+                                  : s
+                              ));
+                              console.log('Program advanced successfully to Day', nextDay);
+                            } else {
+                              console.error('Failed to advance program:', await progressRes.text());
+                            }
+                          } else {
+                            console.log('No program subscriptions found to advance');
+                          }
+
+                          // Mark session as completed - hides logged entries from Today view
+                          setSessionCompletedToday(true);
+
+                          alert('Session completed! Great workout!');
+                        } catch (err) {
+                          console.error('Failed to end session:', err);
+                          alert('Failed to end session. Please try again.');
+                        }
+                      }}
+                      className="flex-1 py-4 text-base font-semibold bg-green-600 hover:bg-green-700 text-white"
+                    >
+                      <span className="mdi mdi-check-circle mr-2" />
+                      End Session
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        // Navigate to My Programs tab (day already advanced by End Session)
+                        setActiveTab('my-programs');
+                      }}
+                      className="flex-1 py-4 text-base font-semibold border-2 border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white"
+                    >
+                      <span className="mdi mdi-skip-next mr-2" />
+                      Move to Next Session
+                    </Button>
+                  </div>
+                )}
               </div>
             )}
 
@@ -2553,16 +3025,36 @@ export default function WorkoutLogPage() {
 
         {activeTab === 'history' && (
           <div className="space-y-6">
-            <div>
-              <h3 className="text-sm font-medium mb-2">Session History</h3>
-              <SessionHistoryTable />
+            {/* Collapsible Session History */}
+            <div className="bg-white rounded-lg border shadow-sm">
+              <button
+                type="button"
+                onClick={() => setSessionHistoryExpanded(!sessionHistoryExpanded)}
+                className="flex items-center justify-between w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors rounded-t-lg"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="mdi mdi-history text-blue-600 text-lg" />
+                  <h3 className="text-sm font-semibold text-gray-900">Session History</h3>
+                </div>
+                <span className={`mdi ${sessionHistoryExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'} text-gray-500 text-lg transition-transform duration-200`} />
+              </button>
+              {sessionHistoryExpanded && (
+                <div className="px-4 pb-4 pt-2 border-t">
+                  <SessionHistoryTable />
+                </div>
+              )}
             </div>
-            <div>
+
+            {/* Calendar section */}
+            <div className="bg-white rounded-lg border shadow-sm p-4">
               <div className="flex items-center justify-between mb-3">
-                <div className="text-sm font-medium">Calendar</div>
-                <div className="flex gap-2">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4 text-blue-600" />
+                  <span className="text-sm font-semibold text-gray-900">Calendar</span>
+                </div>
+                <div className="flex gap-2 items-center">
                   <Button variant="outline" size="sm" onClick={() => setCalendarMonth(subMonths(calendarMonth, 1))}><ChevronLeft className="h-4 w-4"/></Button>
-                  <div className="text-xs text-muted-foreground">{format(calendarMonth, 'MMMM yyyy')}</div>
+                  <div className="text-sm font-medium text-gray-700 min-w-[120px] text-center">{format(calendarMonth, 'MMMM yyyy')}</div>
                   <Button variant="outline" size="sm" onClick={() => setCalendarMonth(addMonths(calendarMonth, 1))}><ChevronRight className="h-4 w-4"/></Button>
                 </div>
               </div>
@@ -2875,7 +3367,7 @@ export default function WorkoutLogPage() {
               >
                 <Card className="border-4 border-yellow-400 shadow-2xl">
                   <CardHeader className="text-center bg-gradient-to-r from-yellow-400 to-orange-500 text-white">
-                    <div className="text-6xl mb-2">🏆</div>
+                    <span className="mdi mdi-trophy text-6xl mb-2 block" />
                     <CardTitle className="text-2xl">Achievement Unlocked!</CardTitle>
                   </CardHeader>
                   <CardContent className="text-center pt-6">
@@ -3044,17 +3536,19 @@ export default function WorkoutLogPage() {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                date: today,
-                exerciseId: data.exerciseId,
-                setNumber: currentSetNumber,
-                setType: data.setType,
-                reps: data.reps,
-                weight: String(data.weight),
-                unit: 'KG',
-                sessionId: activeSession?.id,
-                intensity: data.rpe ? `RPE ${data.rpe}` : undefined,
-                restSeconds: data.restSeconds,
-                userComments: data.notes
+                entries: [{
+                  date: today,
+                  exerciseId: data.exerciseId,
+                  setNumber: currentSetNumber,
+                  setType: data.setType,
+                  reps: data.reps,
+                  weight: String(data.weight),
+                  unit: 'KG',
+                  sessionId: activeSession?.id,
+                  intensity: data.rpe ? `RPE ${data.rpe}` : undefined,
+                  restSeconds: data.restSeconds,
+                  userComments: data.notes
+                }]
               })
             });
 
@@ -3130,6 +3624,24 @@ export default function WorkoutLogPage() {
           reps: lastLoggedEntry?.reps || 8
         } : undefined}
       />
+
+      {/* Form Guide Modal */}
+      {selectedExercise && (
+        <FormGuideModal
+          exerciseId={selectedExercise.id}
+          exerciseName={selectedExercise.name}
+          isOpen={showFormGuideModal}
+          onClose={() => setShowFormGuideModal(false)}
+        />
+      )}
     </>
+  );
+}
+
+export default function WorkoutLogPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>}>
+      <WorkoutLogPageContent />
+    </Suspense>
   );
 }

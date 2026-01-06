@@ -801,10 +801,25 @@ export function SessionHistoryTable() {
   const [sessions, set_sessions] = useState<any[]>([]);
   const [loading, set_loading] = useState(true);
   const [selected_session, set_selected_session] = useState<string | null>(null);
+  const [visible_sessions, set_visible_sessions] = useState<Set<string>>(new Set());
+  const [detail_session, set_detail_session] = useState<any | null>(null);
+  const [detail_entries, set_detail_entries] = useState<any[]>([]);
+  const [loading_details, set_loading_details] = useState(false);
 
   useEffect(() => {
     load_sessions();
   }, []);
+
+  // Stagger animation for sessions
+  useEffect(() => {
+    if (sessions.length > 0) {
+      sessions.forEach((session, index) => {
+        setTimeout(() => {
+          set_visible_sessions(prev => new Set([...prev, session.id]));
+        }, index * 100); // 100ms stagger between each card
+      });
+    }
+  }, [sessions]);
 
   async function load_sessions() {
     try {
@@ -815,6 +830,23 @@ export function SessionHistoryTable() {
       console.error('Failed to load sessions:', error);
     } finally {
       set_loading(false);
+    }
+  }
+
+  async function load_session_details(session: any) {
+    set_loading_details(true);
+    set_detail_session(session);
+    try {
+      // Fetch entries for this session
+      const response = await fetch(`/api/workout/entries?sessionId=${session.id}`);
+      if (response.ok) {
+        const data = await response.json();
+        set_detail_entries(data.entries || []);
+      }
+    } catch (error) {
+      console.error('Failed to load session details:', error);
+    } finally {
+      set_loading_details(false);
     }
   }
 
@@ -829,8 +861,16 @@ export function SessionHistoryTable() {
       });
 
       if (response.ok) {
-        alert('Session deleted successfully');
-        load_sessions();
+        // Animate out before removing
+        set_visible_sessions(prev => {
+          const next = new Set(prev);
+          next.delete(session_id);
+          return next;
+        });
+        setTimeout(() => {
+          load_sessions();
+          alert('Session deleted successfully');
+        }, 300);
       }
     } catch (error) {
       console.error('Failed to delete session:', error);
@@ -839,13 +879,22 @@ export function SessionHistoryTable() {
   }
 
   if (loading) {
-    return <div className="text-center py-8">Loading sessions...</div>;
+    return (
+      <div className="text-center py-8 animate-pulse">
+        <div className="flex justify-center items-center gap-2">
+          <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+          <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+          <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+        </div>
+        <p className="text-gray-500 mt-2">Loading sessions...</p>
+      </div>
+    );
   }
 
   return (
     <div className="space-y-4">
       {sessions.length === 0 ? (
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
+        <div className="text-center py-12 bg-gray-50 rounded-lg animate-fadeIn">
           <Activity className="mx-auto h-12 w-12 text-gray-400" />
           <h3 className="mt-2 text-sm font-medium text-gray-900">No sessions yet</h3>
           <p className="mt-1 text-sm text-gray-500">
@@ -854,10 +903,15 @@ export function SessionHistoryTable() {
         </div>
       ) : (
         <div className="grid gap-4">
-          {sessions.map(session => (
+          {sessions.map((session, index) => (
             <Card
               key={session.id}
-              className="hover:shadow-lg transition-shadow cursor-pointer"
+              className={`hover:shadow-lg transition-all duration-300 cursor-pointer transform ${
+                visible_sessions.has(session.id)
+                  ? 'opacity-100 translate-y-0'
+                  : 'opacity-0 translate-y-4'
+              }`}
+              style={{ transitionDelay: `${index * 50}ms` }}
               onClick={() => set_selected_session(session.id)}
             >
               <CardHeader>
@@ -970,7 +1024,7 @@ export function SessionHistoryTable() {
                   size="sm"
                   onClick={(e) => {
                     e.stopPropagation();
-                    // Navigate to session detail view
+                    load_session_details(session);
                   }}
                 >
                   <Eye className="h-4 w-4 mr-2" />
@@ -993,6 +1047,121 @@ export function SessionHistoryTable() {
           ))}
         </div>
       )}
+
+      {/* Session Detail Modal */}
+      <Dialog open={!!detail_session} onOpenChange={(open) => { if (!open) { set_detail_session(null); set_detail_entries([]); } }}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Activity className="h-5 w-5 text-blue-600" />
+              Session Details
+            </DialogTitle>
+          </DialogHeader>
+
+          {detail_session && (
+            <div className="space-y-4 mt-4">
+              {/* Session Header */}
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4">
+                <h3 className="font-semibold text-lg">
+                  {detail_session.date ? format(new Date(detail_session.date), 'EEEE, d MMMM yyyy') : 'No date'}
+                </h3>
+                <p className="text-sm text-gray-600">
+                  {detail_session.startTime ? format(new Date(detail_session.startTime), 'HH:mm') : '--:--'}
+                  {detail_session.endTime && ` - ${format(new Date(detail_session.endTime), 'HH:mm')}`}
+                  {detail_session.endTime && detail_session.startTime && (
+                    <span className="ml-2">
+                      ({formatDuration(
+                        intervalToDuration({
+                          start: new Date(detail_session.startTime),
+                          end: new Date(detail_session.endTime)
+                        })
+                      )})
+                    </span>
+                  )}
+                </p>
+              </div>
+
+              {/* Session Stats */}
+              <div className="grid grid-cols-4 gap-3">
+                <div className="bg-gray-50 rounded-lg p-3 text-center">
+                  <p className="text-2xl font-bold text-blue-600">{detail_session.totalSets || 0}</p>
+                  <p className="text-xs text-gray-500">Sets</p>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-3 text-center">
+                  <p className="text-2xl font-bold text-green-600">{detail_session.totalVolume?.toFixed(0) || 0}</p>
+                  <p className="text-xs text-gray-500">Volume (kg)</p>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-3 text-center">
+                  <p className="text-2xl font-bold text-purple-600">{detail_session.experiencePoints || 0}</p>
+                  <p className="text-xs text-gray-500">XP</p>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-3 text-center">
+                  <div className="flex justify-center gap-0.5">
+                    {[1, 2, 3, 4, 5].map(star => (
+                      <Star
+                        key={star}
+                        className={`h-4 w-4 ${
+                          star <= (detail_session.performanceRating || 0)
+                            ? 'text-yellow-400 fill-yellow-400'
+                            : 'text-gray-300'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">Rating</p>
+                </div>
+              </div>
+
+              {/* Exercises Performed */}
+              <div>
+                <h4 className="font-medium mb-3 flex items-center gap-2">
+                  <Activity className="h-4 w-4" />
+                  Exercises Performed
+                </h4>
+                {loading_details ? (
+                  <div className="text-center py-4 text-gray-500">Loading exercises...</div>
+                ) : detail_entries.length === 0 ? (
+                  <div className="text-center py-4 text-gray-400 text-sm">No exercises logged for this session</div>
+                ) : (
+                  <div className="space-y-3">
+                    {/* Group entries by exercise */}
+                    {(() => {
+                      const grouped = new Map<string, any[]>();
+                      detail_entries.forEach(entry => {
+                        const exerciseName = entry.exercise?.name || entry.exercises?.name || 'Unknown';
+                        if (!grouped.has(exerciseName)) {
+                          grouped.set(exerciseName, []);
+                        }
+                        grouped.get(exerciseName)!.push(entry);
+                      });
+                      return Array.from(grouped.entries()).map(([exerciseName, entries]) => (
+                        <div key={exerciseName} className="bg-gray-50 rounded-lg p-3">
+                          <p className="font-medium text-sm mb-2">{exerciseName}</p>
+                          <div className="flex flex-wrap gap-2">
+                            {entries.sort((a, b) => (a.setNumber || 0) - (b.setNumber || 0)).map((entry, idx) => (
+                              <Badge key={entry.id || idx} variant="secondary" className="text-xs">
+                                Set {entry.setNumber || idx + 1}: {entry.reps} reps × {entry.weight} {entry.unit || 'KG'}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      ));
+                    })()}
+                  </div>
+                )}
+              </div>
+
+              {/* Session Notes */}
+              {detail_session.sessionNotes && (
+                <div className="bg-yellow-50 rounded-lg p-3">
+                  <p className="text-sm font-medium mb-1">Notes</p>
+                  <p className="text-sm text-gray-700">{detail_session.sessionNotes}</p>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
@@ -1004,6 +1173,11 @@ interface WorkoutCalendarProps {
 }
 
 export function WorkoutCalendar({ month, sessions }: WorkoutCalendarProps) {
+  const [animated, set_animated] = useState(false);
+  const [hovered_day, set_hovered_day] = useState<string | null>(null);
+  const [selected_day, set_selected_day] = useState<string | null>(null);
+  const [selected_day_sessions, set_selected_day_sessions] = useState<any[]>([]);
+
   const days_in_month = eachDayOfInterval({
     start: startOfMonth(month),
     end: endOfMonth(month)
@@ -1023,14 +1197,35 @@ export function WorkoutCalendar({ month, sessions }: WorkoutCalendarProps) {
     sessions_by_date.get(date_key)!.push(session);
   });
 
+  // Trigger animation on mount/month change
+  useEffect(() => {
+    set_animated(false);
+    const timer = setTimeout(() => set_animated(true), 50);
+    return () => clearTimeout(timer);
+  }, [month]);
+
+  const handle_day_click = (date_key: string, day_sessions: any[]) => {
+    if (day_sessions.length > 0) {
+      set_selected_day(date_key);
+      set_selected_day_sessions(day_sessions);
+    }
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
+    <div className={`bg-white rounded-lg shadow overflow-hidden transition-all duration-500 ${
+      animated ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+    }`}>
       {/* Day headers */}
       <div className="grid grid-cols-7 gap-px bg-gray-200">
-        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, idx) => (
           <div
             key={day}
-            className="bg-gray-50 py-2 text-center text-sm font-semibold text-gray-700"
+            className="bg-gray-50 py-2 text-center text-sm font-semibold text-gray-700 transition-all duration-300"
+            style={{
+              opacity: animated ? 1 : 0,
+              transform: animated ? 'translateY(0)' : 'translateY(-10px)',
+              transitionDelay: `${idx * 30}ms`
+            }}
           >
             {day}
           </div>
@@ -1045,55 +1240,162 @@ export function WorkoutCalendar({ month, sessions }: WorkoutCalendarProps) {
         ))}
 
         {/* Days of the month */}
-        {days_in_month.map(day => {
+        {days_in_month.map((day, dayIndex) => {
           const date_key = format(day, 'yyyy-MM-dd');
           const day_sessions = sessions_by_date.get(date_key) || [];
           const is_today = isSameDay(day, new Date());
+          const is_hovered = hovered_day === date_key;
+          const has_sessions = day_sessions.length > 0;
+
+          // Calculate totals for the day
+          const totalSets = day_sessions.reduce((sum, s) => sum + (s.totalSets || 0), 0);
+          const totalVolume = day_sessions.reduce((sum, s) => sum + (s.totalVolume || 0), 0);
 
           return (
             <div
               key={date_key}
-              className={`bg-white h-24 p-2 ${
+              className={`relative bg-white h-20 p-1.5 transition-all duration-200 cursor-pointer ${
                 is_today ? 'ring-2 ring-blue-500 ring-inset' : ''
+              } ${is_hovered ? 'bg-blue-50 scale-105 z-10 shadow-lg' : ''} ${
+                has_sessions ? 'hover:bg-green-50 bg-gradient-to-br from-green-50/50 to-blue-50/50' : 'hover:bg-gray-50'
               }`}
+              style={{
+                opacity: animated ? 1 : 0,
+                transform: animated ? 'translateY(0)' : 'translateY(20px)',
+                transitionDelay: `${(dayIndex + start_day) * 15}ms`
+              }}
+              onMouseEnter={() => set_hovered_day(date_key)}
+              onMouseLeave={() => set_hovered_day(null)}
+              onClick={() => handle_day_click(date_key, day_sessions)}
             >
-              <div className="flex justify-between items-start mb-1">
-                <span className={`text-sm font-medium ${
-                  is_today ? 'text-blue-600' : 'text-gray-900'
-                }`}>
-                  {format(day, 'd')}
-                </span>
-
-                {day_sessions.length > 0 && (
-                  <Badge variant="default" className="text-xs">
-                    {day_sessions.length}
-                  </Badge>
-                )}
+              {/* Day number */}
+              <div className={`text-sm font-medium mb-1 ${
+                is_today ? 'text-blue-600 font-bold' : has_sessions ? 'text-green-700' : 'text-gray-900'
+              }`}>
+                {format(day, 'd')}
               </div>
 
-              {day_sessions.length > 0 && (
-                <div className="space-y-1">
-                  {day_sessions.slice(0, 2).map(session => (
-                    <div
-                      key={session.id}
-                      className="text-xs bg-blue-100 text-blue-800 rounded px-1 py-0.5 truncate"
-                      title={`${session.totalSets} sets, ${session.totalVolume}kg`}
-                    >
-                      {session.totalSets} sets
-                    </div>
-                  ))}
+              {/* Workout indicator - cleaner design */}
+              {has_sessions && (
+                <div className="flex flex-col items-center justify-center flex-1">
+                  {/* Workout icon with pulse effect */}
+                  <div className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ${
+                    is_hovered
+                      ? 'bg-green-500 text-white scale-110'
+                      : 'bg-green-100 text-green-600'
+                  }`}>
+                    <Activity className="h-4 w-4" />
+                  </div>
 
-                  {day_sessions.length > 2 && (
-                    <div className="text-xs text-gray-500">
-                      +{day_sessions.length - 2} more
+                  {/* Summary text - only show on hover */}
+                  {is_hovered && (
+                    <div className="absolute bottom-1 left-1/2 -translate-x-1/2 text-[10px] font-medium text-green-700 whitespace-nowrap bg-white/80 px-1 rounded">
+                      {totalSets} sets • {Math.round(totalVolume)}kg
                     </div>
                   )}
+                </div>
+              )}
+
+              {/* Session count badge - top right corner */}
+              {day_sessions.length > 1 && (
+                <div className={`absolute top-1 right-1 w-4 h-4 flex items-center justify-center text-[10px] font-bold rounded-full transition-all duration-200 ${
+                  is_hovered ? 'bg-green-600 text-white' : 'bg-blue-500 text-white'
+                }`}>
+                  {day_sessions.length}
                 </div>
               )}
             </div>
           );
         })}
       </div>
+
+      {/* Day Sessions Modal */}
+      <Dialog open={!!selected_day} onOpenChange={(open) => { if (!open) { set_selected_day(null); set_selected_day_sessions([]); } }}>
+        <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <CalendarIcon className="h-5 w-5 text-blue-600" />
+              {selected_day && format(new Date(selected_day), 'EEEE, d MMMM yyyy')}
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4 mt-4">
+            {selected_day_sessions.length === 0 ? (
+              <p className="text-center text-gray-500 py-4">No workouts on this day</p>
+            ) : (
+              selected_day_sessions.map((session) => (
+                <div
+                  key={session.id}
+                  className="bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-4 border border-blue-100 transition-all duration-200 hover:shadow-md"
+                >
+                  {/* Session Time */}
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <Activity className="h-4 w-4" />
+                      {session.startTime ? format(new Date(session.startTime), 'HH:mm') : '--:--'}
+                      {session.endTime && ` - ${format(new Date(session.endTime), 'HH:mm')}`}
+                    </div>
+                    <Badge variant={session.isComplete ? 'default' : 'secondary'}>
+                      {session.isComplete ? 'Completed' : 'In Progress'}
+                    </Badge>
+                  </div>
+
+                  {/* Session Stats */}
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="text-center">
+                      <p className="text-xl font-bold text-blue-600">{session.totalSets || 0}</p>
+                      <p className="text-xs text-gray-500">Sets</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-xl font-bold text-green-600">{session.totalVolume?.toFixed(0) || 0}</p>
+                      <p className="text-xs text-gray-500">Volume (kg)</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-xl font-bold text-purple-600">{session.experiencePoints || 0}</p>
+                      <p className="text-xs text-gray-500">XP</p>
+                    </div>
+                  </div>
+
+                  {/* Performance Rating */}
+                  {session.performanceRating > 0 && (
+                    <div className="mt-3 pt-3 border-t border-blue-100 flex items-center justify-center gap-1">
+                      {[1, 2, 3, 4, 5].map(star => (
+                        <Star
+                          key={star}
+                          className={`h-4 w-4 ${
+                            star <= session.performanceRating
+                              ? 'text-yellow-400 fill-yellow-400'
+                              : 'text-gray-300'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Session Notes */}
+                  {session.sessionNotes && (
+                    <div className="mt-3 pt-3 border-t border-blue-100">
+                      <p className="text-sm text-gray-600 italic">{session.sessionNotes}</p>
+                    </div>
+                  )}
+
+                  {/* Duration */}
+                  {session.endTime && session.startTime && (
+                    <div className="mt-2 text-xs text-gray-500 text-center">
+                      Duration: {formatDuration(
+                        intervalToDuration({
+                          start: new Date(session.startTime),
+                          end: new Date(session.endTime)
+                        })
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
