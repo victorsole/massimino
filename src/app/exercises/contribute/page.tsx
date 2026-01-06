@@ -6,13 +6,19 @@ import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import MediaLeaderboard from '@/components/leaderboards/media_leaderboard'
+import { AddMediaModal } from '@/components/training/session-view/add-media-modal'
+import { ExerciseSearchModal } from '@/components/exercises/exercise-search-modal'
 
 type PriorityItem = { id: string; name: string; category: string; muscleGroups: string[]; difficulty: string; priorityScore: number }
+type SelectedExercise = { id: string; name: string; category: string; muscleGroups: string[]; difficulty: string }
 
 export default function ContributePage() {
   const [loading, setLoading] = useState(true)
   const [priority, setPriority] = useState<PriorityItem[]>([])
   const [coverage, setCoverage] = useState<{ filled: number; total: number }>({ filled: 0, total: 0 })
+  const [selectedExercise, setSelectedExercise] = useState<SelectedExercise | null>(null)
+  const [mediaModalOpen, setMediaModalOpen] = useState(false)
+  const [searchModalOpen, setSearchModalOpen] = useState(false)
 
   useEffect(() => {
     let ignore = false
@@ -40,17 +46,44 @@ export default function ContributePage() {
 
   const pct = useMemo(() => coverage.total > 0 ? Math.round((coverage.filled / coverage.total) * 100) : 0, [coverage])
 
+  const handleContributeClick = (item: SelectedExercise) => {
+    setSelectedExercise(item)
+    setMediaModalOpen(true)
+  }
+
+  const handleSearchSelect = (exercise: SelectedExercise) => {
+    setSearchModalOpen(false)
+    setSelectedExercise(exercise)
+    setMediaModalOpen(true)
+  }
+
+  const handleMediaAdded = () => {
+    // Refresh coverage stats after media is added
+    fetch('/api/workout/exercises?include=mediaCount', { cache: 'no-store' })
+      .then(res => res.ok ? res.json() : [])
+      .then(ex => {
+        const total = Array.isArray(ex) ? ex.length : 0
+        const filled = Array.isArray(ex) ? ex.filter((e: any) => (e.mediaCount || 0) > 0).length : 0
+        setCoverage({ filled, total })
+      })
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Hero */}
-      <div className="rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-8">
-        <h1 className="text-3xl font-bold mb-2">Fill the Gym — Help Build the Best Exercise Library</h1>
-        <p className="text-white/90 mb-6">Contribute exercise videos and earn XP, achievements, and partner rewards.</p>
-        <div className="flex items-center gap-4">
-          <Link href="/exercises" className="px-4 py-2 bg-white text-blue-700 font-semibold rounded">Start Contributing</Link>
+      <div className="rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-5 sm:p-8">
+        <h1 className="text-xl sm:text-3xl font-bold mb-2">Fill the Gym — Help Build the Best Exercise Library</h1>
+        <p className="text-white/90 mb-4 sm:mb-6 text-sm sm:text-base">Contribute exercise videos and earn XP, achievements, and partner rewards.</p>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+          <button
+            onClick={() => setSearchModalOpen(true)}
+            className="px-4 py-2 bg-white text-blue-700 font-semibold rounded text-center sm:text-left hover:bg-blue-50 transition-colors"
+          >
+            Start Contributing
+          </button>
           <div className="text-sm">
             <div className="font-semibold">Coverage Progress</div>
-            <div className="w-64 bg-white/20 rounded h-2 mt-1">
+            <div className="w-full sm:w-64 bg-white/20 rounded h-2 mt-1">
               <div className="bg-white rounded h-2" style={{ width: `${pct}%` }}></div>
             </div>
             <div className="text-white/90 mt-1">{coverage.filled} / {coverage.total} exercises completed ({pct}%)</div>
@@ -89,7 +122,12 @@ export default function ContributePage() {
                   <div className="text-xs text-gray-600 mt-1">{item.category} • {item.difficulty}</div>
                   <div className="mt-2 text-xs text-gray-600">Priority Score: {item.priorityScore}</div>
                   <div className="mt-3 flex items-center gap-2">
-                    <Link href={`/exercises?exerciseId=${encodeURIComponent(item.id)}&openMedia=1`} className="px-3 py-1 border rounded">Contribute Now</Link>
+                    <button
+                      onClick={() => handleContributeClick(item)}
+                      className="px-3 py-1 border rounded hover:bg-gray-50 transition-colors"
+                    >
+                      Contribute Now
+                    </button>
                     <Button variant="ghost" asChild><a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(item.name)}`} target="_blank" rel="noopener noreferrer">Search YouTube</a></Button>
                   </div>
                 </div>
@@ -109,7 +147,7 @@ export default function ContributePage() {
           <div className="space-y-2">
             <div>
               <div className="font-semibold">How do I submit media?</div>
-              <div>Open the exercise in the database and click “+ Media”, then paste your link.</div>
+              <div>Click "Contribute Now" on any exercise, then upload a file or paste a link from YouTube, Instagram, or TikTok.</div>
             </div>
             <div>
               <div className="font-semibold">How long does approval take?</div>
@@ -122,6 +160,26 @@ export default function ContributePage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Exercise Search Modal */}
+      <ExerciseSearchModal
+        open={searchModalOpen}
+        onClose={() => setSearchModalOpen(false)}
+        onSelectExercise={handleSearchSelect}
+      />
+
+      {/* Add Media Modal */}
+      {selectedExercise && (
+        <AddMediaModal
+          open={mediaModalOpen}
+          onClose={() => {
+            setMediaModalOpen(false)
+            setSelectedExercise(null)
+          }}
+          exerciseId={selectedExercise.id}
+          onMediaAdded={handleMediaAdded}
+        />
+      )}
     </div>
   )
 }

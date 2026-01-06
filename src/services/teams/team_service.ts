@@ -1003,7 +1003,8 @@ export class TeamInvitationService {
       const { sendTeamInvitationEmail, isValidEmail, isEmailServiceConfigured } = await import('@/services/email/email_service');
 
       if (!isEmailServiceConfigured()) {
-        return { success: false, error: 'Email service not configured. Set RESEND_API_KEY and EMAIL_FROM.' };
+        console.warn('[TeamInvitationService] Email service not configured - RESEND_API_KEY and EMAIL_FROM are required');
+        return { success: false, error: 'Email invitations are temporarily unavailable. Please use the User ID invitation method or contact support.' };
       }
 
       // Validate email format
@@ -1307,6 +1308,77 @@ export class TeamInvitationService {
     });
 
     return invitations;
+  }
+
+  /**
+   * Create a shareable invite link (no email required)
+   * This creates a team_invite record that can be shared via any channel
+   */
+  static async createShareableInviteLink(params: {
+    teamId: string;
+    invitedBy: string;
+    expiresInDays?: number;
+  }): Promise<{ success: boolean; invite?: any; inviteUrl?: string; error?: string }> {
+    try {
+      // Get team details
+      const team = await prisma.teams.findUnique({
+        where: { id: params.teamId },
+        include: {
+          users: {
+            select: {
+              id: true,
+              name: true,
+              email: true
+            }
+          }
+        }
+      });
+
+      if (!team) {
+        return { success: false, error: 'Team not found' };
+      }
+
+      // Check team capacity
+      if (team.memberCount >= team.maxMembers) {
+        return { success: false, error: 'Team is full' };
+      }
+
+      // Create invitation with configurable expiration (default 30 days for shareable links)
+      const expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + (params.expiresInDays || 30));
+
+      const token = crypto.randomUUID();
+      const invite = await prisma.team_invites.create({
+        data: {
+          id: crypto.randomUUID(),
+          teamId: params.teamId,
+          email: `link-invite-${token.substring(0, 8)}@shareable.massimino.app`, // Placeholder for link invites
+          invitedBy: params.invitedBy,
+          status: 'PENDING',
+          message: null,
+          token,
+          expiresAt,
+          createdAt: new Date()
+        },
+        include: {
+          teams: true,
+          inviter: {
+            select: {
+              id: true,
+              name: true,
+              email: true
+            }
+          }
+        }
+      });
+
+      const inviteUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/team_invite/${invite.token}`;
+
+      return { success: true, invite, inviteUrl };
+    } catch (error: any) {
+      console.error('[TeamInvitationService] Error creating shareable invite link:', error);
+      return { success: false, error: error.message || 'Failed to create invite link' };
+    }
   }
 
   /**

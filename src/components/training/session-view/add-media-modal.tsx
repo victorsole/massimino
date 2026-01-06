@@ -56,17 +56,19 @@ export function AddMediaModal({
       formData.append('exerciseId', exerciseId);
       formData.append('title', mediaTitle || selectedFile.name);
 
-      const response = await fetch(`/api/workout/exercises/${exerciseId}/media`, {
+      const response = await fetch('/api/upload/exercise-media', {
         method: 'POST',
         body: formData,
       });
 
-      if (response.ok) {
+      const data = await response.json();
+
+      if (response.ok && data.success) {
         onMediaAdded();
         handleClose();
       } else {
-        console.error('Failed to upload media');
-        alert('Failed to upload media. Please try again.');
+        console.error('Failed to upload media:', data.error);
+        alert(data.error || 'Failed to upload media. Please try again.');
       }
     } catch (error) {
       console.error('Error uploading media:', error);

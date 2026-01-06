@@ -1,7 +1,7 @@
 // src/app/workout-log/page.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSession } from 'next-auth/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,14 +12,27 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { SessionHistoryTable, WorkoutCalendar, CommentsPanel } from '@/components/workout-log/WorkoutLogTable';
 import { WorkoutSummaryTable } from '@/components/workout-log/workout_summary_table';
 import { WorkoutDetailsModal } from '@/components/workout-log/workout_details_modal';
+import { WorkoutCard, type WorkoutEntry as WorkoutCardEntry, type EditFormData } from '@/components/workout-log/workout_card';
+// New mobile-optimized components
+import { ResponsiveTabNav, type WorkoutTab } from '@/components/workout-log/mobile_tab_nav';
+import { WorkoutEntryCardV2 } from '@/components/workout-log/workout_entry_card_v2';
+import { AddEntryModal, type AddEntryData, type ExerciseOption } from '@/components/workout-log/add_entry_modal';
+import { RestTimerOverlay } from '@/components/workout-log/rest_timer_overlay';
+import { WorkoutEmptyState } from '@/components/workout-log/workout_empty_state';
+import { FloatingActionButton } from '@/components/workout-log/floating_action_button';
+import { SessionStatusBar, SessionTimerBadge } from '@/components/workout-log/session_status_bar';
 import { startOfMonth, endOfMonth, format, subMonths, addMonths } from 'date-fns';
-import { Plus, Calendar, Dumbbell, Clock, Weight, MessageCircle, Edit, Trash2, Search, Info, Target, Zap, ChevronLeft, ChevronRight, Sparkles, Trophy, ListChecks, LineChart, Users, LayoutGrid, TableIcon } from 'lucide-react';
+import { Plus, Calendar, Dumbbell, Clock, Weight, MessageCircle, Edit, Trash2, Search, Info, Target, Zap, ChevronLeft, ChevronRight, ChevronDown, Sparkles, Trophy, ListChecks, LineChart, Users, LayoutGrid, TableIcon, Moon, Play } from 'lucide-react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { RestTimerBar } from '@/components/workout-log/rest_timer_bar';
 import { BodyMetricsTab } from '@/components/workout-log/body_metrics_tab';
 import { ProgressTab } from '@/components/workout-log/progress_tab';
 import { HabitsTab } from '@/components/workout-log/habits_tab';
 import { ProgramsTab } from '@/components/workout-log/programs_tab';
+import { FormGuideModal } from '@/components/workout-log/form_guide_modal';
+import { MyPrograms } from '@/components/programs/my_programs';
+import { UserProgram } from '@/types/program';
 import { AthleteGallery } from '@/components/periodization/athlete_gallery';
 // Use a relaxed exercise type matching what the UI actually uses
 type ExerciseListItem = {
@@ -37,6 +50,7 @@ type WorkoutEntry = {
   id: string;
   date: string | Date;
   exerciseId: string;
+  sessionId?: string;
   setNumber: number;
   setType: string;
   reps: number;
@@ -59,8 +73,9 @@ type WorkoutEntry = {
   };
 };
 
-export default function WorkoutLogPage() {
+function WorkoutLogPageContent() {
   const { data: session } = useSession();
+  const searchParams = useSearchParams();
   const userRole = session?.user?.role as ('CLIENT'|'TRAINER'|'ADMIN'|undefined);
   const isTrainerOrAdmin = userRole === 'TRAINER' || userRole === 'ADMIN';
   const [isAddingEntry, setIsAddingEntry] = useState(false);
@@ -125,6 +140,7 @@ export default function WorkoutLogPage() {
     startTime: Date;
     assessmentId?: string;
   } | null>(null);
+  const [sessionCompletedToday, setSessionCompletedToday] = useState(false); // Hide today's entries after session ends
   const [showSessionCreationModal, setShowSessionCreationModal] = useState(false);
   const [sessionAssessmentId, setSessionAssessmentId] = useState<string>('');
   const [sessionTitle, setSessionTitle] = useState<string>('');
@@ -139,9 +155,45 @@ export default function WorkoutLogPage() {
   const [formQuality, setFormQuality] = useState<number>(3);
   const [restDuration, setRestDuration] = useState<number>(90);
 
-  // Tab navigation
-  const [activeTab, setActiveTab] = useState<'today' | 'programs' | 'athletes' | 'history' | 'metrics' | 'progress' | 'habits'>('today');
+  // Tab navigation (using WorkoutTab type for consistency)
+  const [activeTab, setActiveTab] = useState<WorkoutTab>('today');
   const [, setSessions] = useState<any[]>([]);
+
+  // Read tab from URL query parameter - watch the actual tab value, not the searchParams object
+  const urlTabParam = searchParams.get('tab');
+  useEffect(() => {
+    const validTabs: WorkoutTab[] = ['today', 'my-programs', 'programs', 'athletes', 'history', 'metrics', 'progress', 'habits'];
+    if (urlTabParam && validTabs.includes(urlTabParam as WorkoutTab)) {
+      setActiveTab(urlTabParam as WorkoutTab);
+    }
+  }, [urlTabParam]);
+
+  // New mobile UI state
+  const [showAddEntryModal, setShowAddEntryModal] = useState(false);
+  const [showRestTimerOverlay, setShowRestTimerOverlay] = useState(false);
+  const [restTimerSeconds, setRestTimerSeconds] = useState(90);
+  const [currentSetNumber, setCurrentSetNumber] = useState(1);
+  const [totalSetsCount, setTotalSetsCount] = useState(3);
+  const [lastLoggedEntry, setLastLoggedEntry] = useState<{ weight: number; reps: number } | null>(null);
+
+  // Form guide modal state
+  const [showFormGuideModal, setShowFormGuideModal] = useState(false);
+
+  // My Programs state
+  const [myProgramsData, setMyProgramsData] = useState<UserProgram[]>([]);
+  const [loadingMyPrograms, setLoadingMyPrograms] = useState(false);
+
+  // Recommendations collapsed state (collapsed by default on mobile)
+  const [recommendationsExpanded, setRecommendationsExpanded] = useState(false);
+
+  // Recent exercises collapsed state (collapsed by default)
+  const [recentExercisesExpanded, setRecentExercisesExpanded] = useState(false);
+
+  // Session history collapsed state (expanded by default)
+  const [sessionHistoryExpanded, setSessionHistoryExpanded] = useState(true);
+
+  // Dismissed today's workout (hides the card for that day)
+  const [dismissedTodayWorkout, setDismissedTodayWorkout] = useState(false);
 
   // Calendar state
   const [calendarMonth, setCalendarMonth] = useState(new Date());
@@ -195,6 +247,11 @@ export default function WorkoutLogPage() {
   const [selectedProgram, setSelectedProgram] = useState<any | null>(null);
   const [plannedExercises, setPlannedExercises] = useState<Array<{ id: string; name: string; sets: number; reps: string }>>([]);
 
+  // UI improvements state
+  const [showAdvancedFields, setShowAdvancedFields] = useState(false);
+  const [exerciseMedia, setExerciseMedia] = useState<any[]>([]);
+  const [recentExercises, setRecentExercises] = useState<Array<{ id: string; name: string }>>([]);
+
   // Fetch exercises and workout entries on component mount
   useEffect(() => {
     fetchExercises();
@@ -206,12 +263,91 @@ export default function WorkoutLogPage() {
       // Load active subscriptions for prefill
       (async () => {
         try {
+          console.log('[Today Tab] Loading program subscriptions...');
           const r = await fetch('/api/workout/programs?subscriptions=true');
           if (r.ok) {
             const subs = await r.json();
+            console.log('[Today Tab] Loaded subscriptions:', subs?.length || 0, 'subscriptions');
+            console.log('[Today Tab] Subscription data:', JSON.stringify(subs?.[0]?.program_templates?.name || 'No program', null, 2));
             setProgramSubscriptions(Array.isArray(subs) ? subs : []);
+          } else {
+            console.error('[Today Tab] Failed to load subscriptions:', r.status);
           }
-        } catch {}
+        } catch (e) {
+          console.error('[Today Tab] Error loading subscriptions:', e);
+        }
+      })();
+    }
+    if (activeTab === 'my-programs') {
+      // Load user's program subscriptions
+      (async () => {
+        setLoadingMyPrograms(true);
+        try {
+          const r = await fetch('/api/workout/programs?subscriptions=true');
+          if (r.ok) {
+            const rawSubs = await r.json();
+            // Transform raw Prisma data to UserProgram format
+            const transformed: UserProgram[] = (Array.isArray(rawSubs) ? rawSubs : [])
+              .filter((sub: any) => sub && sub.program_templates)
+              .map((sub: any) => {
+                const template = sub.program_templates;
+                const programData = template.programData || {};
+                return {
+                  subscription: {
+                    id: sub.id,
+                    user_id: sub.userId,
+                    program_id: sub.programId,
+                    started_at: sub.startedAt || sub.createdAt,
+                    current_week: sub.currentWeek || 1,
+                    current_day: sub.currentDay || 1,
+                    progress_percentage: sub.progressPercentage || 0,
+                    is_active: sub.isActive,
+                    completed_workouts: sub.completedWorkouts || 0,
+                    total_workouts: programData.metadata?.total_workouts || template.totalWorkouts || 0,
+                  },
+                  program: {
+                    metadata: {
+                      program_name: template.name || programData.metadata?.program_name || 'Unknown Program',
+                      program_id: template.id || sub.programId,
+                      author: programData.metadata?.author || 'Massimino',
+                      version: programData.metadata?.version || '1.0',
+                      creation_date: template.createdAt,
+                      last_updated: template.updatedAt,
+                      description: template.description || programData.metadata?.description || '',
+                      goal: programData.metadata?.goal || template.category || '',
+                      methodology: programData.metadata?.methodology || '',
+                      target_audience: programData.metadata?.target_audience || '',
+                      level: programData.metadata?.level || template.difficulty || 'Intermediate',
+                      settings: programData.metadata?.settings || [],
+                      duration_weeks: template.durationWeeks || programData.metadata?.duration_weeks || 0,
+                      total_workouts: programData.metadata?.total_workouts || template.totalWorkouts || 0,
+                      frequency_per_week: template.frequencyPerWeek || programData.metadata?.frequency_per_week || 0,
+                      session_duration_minutes: programData.metadata?.session_duration_minutes || { min: 45, max: 60 },
+                      equipment: programData.metadata?.equipment || { required: [] },
+                      tags: programData.metadata?.tags || [],
+                    },
+                    program_philosophy: programData.program_philosophy || { origin: '', core_principles: [], training_approach: '', differentiator: '' },
+                    prerequisites: programData.prerequisites || { required: [] },
+                    red_flags_to_stop: programData.red_flags_to_stop || [],
+                    goals: programData.goals || { primary_goal: '', outcome_goals: [], what_program_can_do: [], what_program_cannot_do: [] },
+                    workout_sessions: programData.workout_sessions || [],
+                    progression_strategy: programData.progression_strategy || { primary_method: '', when_to_progress: '', how_to_progress: [] },
+                    progress_tracking: programData.progress_tracking || { tracking_metrics: [], check_in_frequency: '', success_criteria: '' },
+                    implementation_for_massimino: programData.implementation_for_massimino || { usage: '', customization_points: [] },
+                    sport_demands: programData.sport_demands,
+                  },
+                  next_workout: null, // Could be computed from program phases
+                };
+              });
+            console.log('Raw subs from API:', rawSubs);
+            console.log('Transformed programs:', transformed);
+            setMyProgramsData(transformed);
+          }
+        } catch (err) {
+          console.error('Failed to load my programs:', err);
+        } finally {
+          setLoadingMyPrograms(false);
+        }
       })();
     }
   }, [activeTab]);
@@ -293,6 +429,7 @@ export default function WorkoutLogPage() {
   useEffect(() => {
     if (newEntry.exerciseId) {
       load_coaching_cues();
+      load_exercise_media();
     }
   }, [newEntry.exerciseId]);
 
@@ -308,10 +445,82 @@ export default function WorkoutLogPage() {
     }
   }
 
+  async function load_exercise_media() {
+    try {
+      const response = await fetch(
+        `/api/workout/exercises/${newEntry.exerciseId}/media`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setExerciseMedia(Array.isArray(data) ? data : []);
+      } else {
+        setExerciseMedia([]);
+      }
+    } catch (error) {
+      console.error('Failed to load exercise media:', error);
+      setExerciseMedia([]);
+    }
+  }
+
   // Load recommendations on mount
   useEffect(() => {
     load_recommendations();
   }, []);
+
+  // Update recent exercises when workout entries change
+  useEffect(() => {
+    if (workoutEntries.length > 0) {
+      // Get unique exercises from today's entries
+      const uniqueExercises = new Map<string, { id: string; name: string }>();
+      for (const entry of workoutEntries) {
+        if (entry.exercise && entry.exerciseId) {
+          uniqueExercises.set(entry.exerciseId, {
+            id: entry.exerciseId,
+            name: entry.exercise.name
+          });
+        }
+      }
+      setRecentExercises(Array.from(uniqueExercises.values()).slice(0, 5));
+    }
+  }, [workoutEntries]);
+
+  // Group workout entries by exercise and date for card view
+  // This allows showing 1 card per exercise with all sets inside
+  // On "Today" tab, only show today's entries (unless session was completed)
+  const groupedWorkoutEntries = useMemo(() => {
+    // If session was completed today on "Today" tab, show empty (workout is done)
+    if (activeTab === 'today' && sessionCompletedToday) {
+      return [];
+    }
+
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const groups = new Map<string, WorkoutEntry[]>();
+
+    for (const entry of workoutEntries) {
+      // Create key from exerciseId + date (YYYY-MM-DD format)
+      const dateStr = entry.date instanceof Date
+        ? entry.date.toISOString().split('T')[0]
+        : typeof entry.date === 'string'
+          ? entry.date.split('T')[0]
+          : '';
+
+      // On "Today" tab, only include entries from today
+      if (activeTab === 'today' && dateStr !== today) {
+        continue;
+      }
+
+      const key = `${entry.exerciseId}_${dateStr}`;
+      if (!groups.has(key)) {
+        groups.set(key, []);
+      }
+      groups.get(key)!.push(entry);
+    }
+    // Sort entries within each group by setNumber
+    for (const entries of groups.values()) {
+      entries.sort((a, b) => a.setNumber - b.setNumber);
+    }
+    return Array.from(groups.values());
+  }, [workoutEntries, activeTab, sessionCompletedToday]);
 
   // Load saved pyramid settings (if opted-in)
   useEffect(() => {
@@ -361,31 +570,72 @@ export default function WorkoutLogPage() {
 
   // Get current workout from active program subscription
   const getCurrentProgramWorkout = () => {
+    console.log('[getCurrentProgramWorkout] programSubscriptions count:', programSubscriptions?.length || 0);
     if (!programSubscriptions || programSubscriptions.length === 0) return null;
 
-    const activeSub = programSubscriptions[0]; // Get first active subscription
+    // Prioritize the currently active subscription, fall back to first
+    const activeSub = programSubscriptions.find((sub: any) => sub.isCurrentlyActive) || programSubscriptions[0];
     const currentWeek = activeSub.currentWeek || 1;
     const currentDay = activeSub.currentDay || 1;
+    console.log('[getCurrentProgramWorkout] activeSub:', activeSub?.id, 'Week:', currentWeek, 'Day:', currentDay);
 
     const program = activeSub.program_templates;
-    if (!program || !program.program_phases || program.program_phases.length === 0) return null;
+    console.log('[getCurrentProgramWorkout] program:', program?.name, 'phases:', program?.program_phases?.length || 0);
+    if (!program || !program.program_phases || program.program_phases.length === 0) {
+      console.log('[getCurrentProgramWorkout] No program or phases found');
+      return null;
+    }
 
     // Find the phase that contains the current week
-    const currentPhase = program.program_phases.find((phase: any) => {
+    // First, try to find by microcycle weekNumber
+    let currentPhase = program.program_phases.find((phase: any) => {
       return phase.microcycles && phase.microcycles.some((micro: any) => micro.weekNumber === currentWeek);
     });
 
-    if (!currentPhase) return null;
+    // Fallback: if no phase found and there's only one phase, use it
+    if (!currentPhase && program.program_phases.length === 1) {
+      currentPhase = program.program_phases[0];
+      console.log('[getCurrentProgramWorkout] Using single phase fallback');
+    }
+
+    console.log('[getCurrentProgramWorkout] currentPhase:', currentPhase?.title || currentPhase?.phaseName || 'Not found');
+
+    if (!currentPhase) {
+      console.log('[getCurrentProgramWorkout] Phase not found for week', currentWeek);
+      return null;
+    }
 
     // Find the microcycle for current week
     const currentMicrocycle = currentPhase.microcycles.find((micro: any) => micro.weekNumber === currentWeek);
+    console.log('[getCurrentProgramWorkout] currentMicrocycle:', currentMicrocycle?.weekNumber, 'workouts:', currentMicrocycle?.workouts?.length || 0);
 
-    if (!currentMicrocycle || !currentMicrocycle.workouts) return null;
+    if (!currentMicrocycle || !currentMicrocycle.workouts) {
+      console.log('[getCurrentProgramWorkout] Microcycle not found or no workouts');
+      return null;
+    }
 
     // Find the workout for current day
     const currentWorkout = currentMicrocycle.workouts.find((workout: any) => workout.dayNumber === currentDay);
+    console.log('[getCurrentProgramWorkout] currentWorkout:', currentWorkout?.dayLabel || 'Not found', 'exercises:', currentWorkout?.workout_exercises?.length || 0);
 
-    if (!currentWorkout) return null;
+    if (!currentWorkout) {
+      console.log('[getCurrentProgramWorkout] Workout not found for day', currentDay, '- likely a rest day');
+      // Return rest day info so UI can show appropriate message
+      return {
+        subscription: activeSub,
+        program,
+        phase: currentPhase,
+        microcycle: currentMicrocycle,
+        workout: null,
+        exercises: [],
+        isRestDay: true,
+        currentDay,
+        // Find next workout day
+        nextWorkoutDay: currentMicrocycle.workouts
+          .filter((w: any) => w.dayNumber > currentDay)
+          .sort((a: any, b: any) => a.dayNumber - b.dayNumber)[0] || currentMicrocycle.workouts[0]
+      };
+    }
 
     return {
       subscription: activeSub,
@@ -393,7 +643,8 @@ export default function WorkoutLogPage() {
       phase: currentPhase,
       microcycle: currentMicrocycle,
       workout: currentWorkout,
-      exercises: currentWorkout.workout_exercises || []
+      exercises: currentWorkout.workout_exercises || [],
+      isRestDay: false
     };
   };
 
@@ -775,6 +1026,35 @@ export default function WorkoutLogPage() {
     try {
       setLoading(true);
 
+      // Auto-create session if none exists
+      let currentSessionId = activeSession?.id;
+      if (!currentSessionId) {
+        const now = new Date();
+        const pad = (n: number) => n.toString().padStart(2, '0');
+        const date = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+        const startTime = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
+        const sessionResponse = await fetch('/api/workout/sessions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: 'Quick Workout',
+            date,
+            startTime,
+          })
+        });
+
+        const sessionData = await sessionResponse.json();
+        if (sessionData.session) {
+          currentSessionId = sessionData.session.id;
+          setActiveSession({
+            id: sessionData.session.id,
+            startTime: sessionData.session.startTime ? new Date(sessionData.session.startTime) : new Date(),
+            assessmentId: sessionData.session.assessmentId
+          });
+        }
+      }
+
       // Create workout entries for all sets
       // Extract numeric value from weight input (e.g., "135 lbs" -> "135")
       const setsNum = parseInt(newEntry.sets || '1', 10) || 1;
@@ -807,7 +1087,7 @@ export default function WorkoutLogPage() {
             reps: repsNum,
             weight: wA,
             unit: 'KG' as any,
-            sessionId: activeSession?.id,
+            sessionId: currentSessionId,
             subOrder: 'A',
             actualRPE: actualRPE || undefined,
             formQuality: formQuality || undefined,
@@ -824,7 +1104,7 @@ export default function WorkoutLogPage() {
             reps: repsNum,
             weight: wB,
             unit: 'KG' as any,
-            sessionId: activeSession?.id,
+            sessionId: currentSessionId,
             subOrder: 'B',
             actualRPE: actualRPE || undefined,
             formQuality: formQuality || undefined,
@@ -853,7 +1133,7 @@ export default function WorkoutLogPage() {
               reps: repsNum,
               weight: w,
               unit: 'KG' as any,
-              sessionId: activeSession?.id,
+              sessionId: currentSessionId,
               subOrder: sub,
               actualRPE: actualRPE || undefined,
               formQuality: formQuality || undefined,
@@ -893,7 +1173,7 @@ export default function WorkoutLogPage() {
             reps: repsScheme[i] || repsNum,
             weight: w,
             unit: 'KG' as any,
-            sessionId: activeSession?.id,
+            sessionId: currentSessionId,
             subOrder: 'A',
             actualRPE: actualRPE || undefined,
             formQuality: formQuality || undefined,
@@ -920,7 +1200,7 @@ export default function WorkoutLogPage() {
             reps: repsNum,
             weight: w,
             unit: 'KG' as any,
-            sessionId: activeSession?.id,
+            sessionId: currentSessionId,
             subOrder: 'A',
             actualRPE: actualRPE || undefined,
             formQuality: formQuality || undefined,
@@ -1179,69 +1459,56 @@ export default function WorkoutLogPage() {
     <>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Workout Log</h1>
             <p className="text-gray-600 mt-2">Track your workouts and see coach feedback</p>
           </div>
-          <div className="flex space-x-2">
+          <div className="flex flex-wrap gap-2">
             {selectedEntries.size > 0 && (
-              <Button onClick={() => setShowSaveTemplateModal(true)} variant="outline">
-                <Plus className="h-4 w-4 mr-2" />
-                Save as Template ({selectedEntries.size})
+              <Button onClick={() => setShowSaveTemplateModal(true)} variant="outline" size="sm" className="text-xs sm:text-sm">
+                <Plus className="h-4 w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Save as Template</span>
+                <span className="sm:hidden">Template</span>
+                <span className="ml-1">({selectedEntries.size})</span>
               </Button>
             )}
             {!activeSession && (
-              <Button onClick={() => setShowSessionCreationModal(true)} variant="outline" className="bg-green-50 border-green-500 text-green-700 hover:bg-green-100">
-                <Zap className="h-4 w-4 mr-2" />
-                Start Session
+              <Button onClick={() => setShowSessionCreationModal(true)} variant="outline" size="sm" className="bg-green-50 border-green-500 text-green-700 hover:bg-green-100 text-xs sm:text-sm">
+                <Zap className="h-4 w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Start Session</span>
+                <span className="sm:hidden">Session</span>
               </Button>
             )}
             {isTrainerOrAdmin && !activeSession ? (
-              <Button disabled title="Start a session first" onClick={() => {}}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Workout Entry
+              <Button disabled title="Start a session first" onClick={() => {}} size="sm" className="text-xs sm:text-sm">
+                <Plus className="h-4 w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Add Workout Entry</span>
+                <span className="sm:hidden">Add</span>
               </Button>
             ) : (
-              <Button onClick={() => setIsAddingEntry(true)}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Workout Entry
+              <Button onClick={() => setIsAddingEntry(true)} size="sm" className="text-xs sm:text-sm">
+                <Plus className="h-4 w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Add Workout Entry</span>
+                <span className="sm:hidden">Add</span>
               </Button>
             )}
             {isTrainerOrAdmin && (
-              <Button variant="outline" onClick={() => setShowCreateForClient(true)}>
-                <Zap className="h-4 w-4 mr-2" />
-                Create Session for Athlete
+              <Button variant="outline" onClick={() => setShowCreateForClient(true)} size="sm" className="text-xs sm:text-sm">
+                <Zap className="h-4 w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Create Session for Athlete</span>
+                <span className="sm:hidden">For Athlete</span>
               </Button>
             )}
           </div>
         </div>
 
-        {/* Tab Navigation (Excel-inspired, on-brand) */}
-        <div className="border-b border-gray-200 mb-6">
-          <nav className="-mb-px flex space-x-6 overflow-x-auto">
-            <button onClick={() => setActiveTab('today')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='today'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
-              <Dumbbell className="inline h-4 w-4 mr-2" /> Today
-            </button>
-            <button onClick={() => setActiveTab('programs')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='programs'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
-              <Target className="inline h-4 w-4 mr-2" /> Programs
-            </button>
-            <button onClick={() => setActiveTab('athletes')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='athletes'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
-              <Trophy className="inline h-4 w-4 mr-2" /> Athletes
-            </button>
-            <button onClick={() => setActiveTab('history')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='history'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
-              <Calendar className="inline h-4 w-4 mr-2" /> History
-            </button>
-            <button onClick={() => setActiveTab('metrics')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='metrics'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
-              <Weight className="inline h-4 w-4 mr-2" /> Body Metrics
-            </button>
-            <button onClick={() => setActiveTab('progress')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='progress'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
-              <LineChart className="inline h-4 w-4 mr-2" /> Progress
-            </button>
-            <button onClick={() => setActiveTab('habits')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab==='habits'?'border-blue-500 text-blue-600':'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
-              <ListChecks className="inline h-4 w-4 mr-2" /> Habits
-            </button>
-          </nav>
+        {/* Tab Navigation - Responsive (mobile-optimized icons, desktop full labels) */}
+        <div className="mb-6">
+          <ResponsiveTabNav
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+          />
         </div>
 
         {/* Active Session Banner */}
@@ -1267,64 +1534,79 @@ export default function WorkoutLogPage() {
           </div>
         )}
 
-        {/* Workout Recommendations Panel */}
+        {/* Workout Recommendations Panel - Collapsible on mobile */}
         {recommendations && (
           <Card className="mb-6 bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-purple-600" />
-                Your Personalised Recommendations
-              </CardTitle>
+            <CardHeader
+              className="cursor-pointer select-none"
+              onClick={() => setRecommendationsExpanded(!recommendationsExpanded)}
+            >
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-purple-600" />
+                  Your Personalised Recommendations
+                </CardTitle>
+                <ChevronDown
+                  className={`h-5 w-5 text-purple-600 transition-transform duration-200 ${
+                    recommendationsExpanded ? 'rotate-180' : ''
+                  }`}
+                />
+              </div>
               <CardDescription>
                 Based on your {recommendations.fitness_level.toLowerCase()} fitness level
+                {!recommendationsExpanded && (
+                  <span className="ml-2 text-purple-600 font-medium">(tap to expand)</span>
+                )}
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-3 gap-4">
-                <div>
-                  <p className="text-sm font-medium text-gray-700 mb-1">
-                    Recommended Volume
-                  </p>
-                  <p className="text-2xl font-bold text-purple-600">
-                    {recommendations.recommended_volume} sets
-                  </p>
-                  <p className="text-xs text-gray-500">per session</p>
-                </div>
+            {recommendationsExpanded && (
+              <CardContent className="pt-0">
+                <div className="grid md:grid-cols-3 gap-4">
+                  <div>
+                    <p className="text-sm font-medium text-gray-700 mb-1">
+                      Recommended Volume
+                    </p>
+                    <p className="text-2xl font-bold text-purple-600">
+                      {recommendations.recommended_volume} sets
+                    </p>
+                    <p className="text-xs text-gray-500">per session</p>
+                  </div>
 
-                <div>
-                  <p className="text-sm font-medium text-gray-700 mb-1">
-                    Training Frequency
-                  </p>
-                  <p className="text-2xl font-bold text-blue-600">
-                    {recommendations.recommended_frequency}x
-                  </p>
-                  <p className="text-xs text-gray-500">per week</p>
-                </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-700 mb-1">
+                      Training Frequency
+                    </p>
+                    <p className="text-2xl font-bold text-blue-600">
+                      {recommendations.recommended_frequency}x
+                    </p>
+                    <p className="text-xs text-gray-500">per week</p>
+                  </div>
 
-                <div>
-                  <p className="text-sm font-medium text-gray-700 mb-1">
-                    Training Phase
-                  </p>
-                  <p className="text-2xl font-bold text-green-600">
-                    {recommendations.training_phase}
-                  </p>
-                  <p className="text-xs text-gray-500">training focus</p>
-                </div>
-              </div>
-
-              {recommendations.coaching_cues?.length > 0 && (
-                <div className="mt-4 pt-4 border-t border-purple-200">
-                  <p className="text-sm font-semibold mb-2">Focus Areas:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {recommendations.coaching_cues.map((cue: string, index: number) => (
-                      <Badge key={index} variant="secondary">
-                        {cue}
-                      </Badge>
-                    ))}
+                  <div>
+                    <p className="text-sm font-medium text-gray-700 mb-1">
+                      Training Phase
+                    </p>
+                    <p className="text-2xl font-bold text-green-600">
+                      {recommendations.training_phase}
+                    </p>
+                    <p className="text-xs text-gray-500">training focus</p>
                   </div>
                 </div>
-              )}
-            </CardContent>
+
+                {recommendations.coaching_cues?.length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-purple-200">
+                    <p className="text-sm font-semibold mb-2">Focus Areas:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {recommendations.coaching_cues.map((cue: string, index: number) => (
+                        <Badge key={index} variant="secondary">
+                          {cue}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            )}
           </Card>
         )}
 
@@ -1334,10 +1616,80 @@ export default function WorkoutLogPage() {
             {/* Active Program Workout */}
             {(() => {
               const currentWorkout = getCurrentProgramWorkout();
-              if (!currentWorkout) return null;
+              if (!currentWorkout || dismissedTodayWorkout) return null;
 
-              const { subscription, program, phase, workout, exercises } = currentWorkout;
+              const { subscription, program, phase, workout, exercises, isRestDay, nextWorkoutDay } = currentWorkout;
               const athleteName = program.legendary_athlete?.name || 'Program';
+
+              // Handle rest day
+              if (isRestDay) {
+                const skipToNextWorkout = async () => {
+                  if (!nextWorkoutDay) return;
+                  try {
+                    // Update subscription to next workout day
+                    const res = await fetch(`/api/workout/programs/subscriptions/${subscription.id}/advance`, {
+                      method: 'PATCH',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ targetDay: nextWorkoutDay.dayNumber }),
+                    });
+                    if (res.ok) {
+                      // Navigate to today tab to load new workout
+                      window.location.href = '/workout-log?tab=today';
+                    }
+                  } catch (err) {
+                    console.error('Failed to skip to next workout:', err);
+                  }
+                };
+
+                return (
+                  <Card className="mb-6 border-blue-200 bg-blue-50/50">
+                    <CardHeader>
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <Moon className="h-5 w-5 text-blue-500" />
+                        Rest Day - {program.name}
+                      </CardTitle>
+                      <CardDescription>
+                        {athleteName} • Week {subscription.currentWeek}, Day {subscription.currentDay}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <p className="text-sm text-gray-600">
+                          Today is a scheduled rest day. Take time to recover and prepare for your next workout.
+                        </p>
+                        {nextWorkoutDay && (
+                          <button
+                            onClick={skipToNextWorkout}
+                            className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
+                          >
+                            <Play className="h-4 w-4" />
+                            <span className="font-medium">Next workout:</span>{' '}
+                            {nextWorkoutDay.dayLabel || `Day ${nextWorkoutDay.dayNumber}`}
+                          </button>
+                        )}
+                        <div className="flex gap-2 pt-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => setActiveTab('my-programs')}
+                          >
+                            View Program
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-gray-400 hover:text-red-500"
+                            onClick={() => setDismissedTodayWorkout(true)}
+                          >
+                            <Trash2 className="h-4 w-4 mr-1" />
+                            Dismiss
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              }
 
               return (
                 <Card className="mb-6">
@@ -1352,50 +1704,65 @@ export default function WorkoutLogPage() {
                       {/* Workout Info */}
                       <div className="flex items-start justify-between gap-3 pb-3 border-b">
                         <div>
-                          <div className="font-medium text-sm">{workout.dayLabel || `Day ${workout.dayNumber}`}</div>
+                          <div className="font-medium text-sm">{workout?.dayLabel || `Day ${workout?.dayNumber}`}</div>
                           <div className="text-xs text-muted-foreground mt-1">
-                            {phase.title} • {phase.description}
+                            {phase?.title} • {phase?.description}
                           </div>
                         </div>
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            // Auto-populate first exercise when starting workout
-                            if (exercises.length > 0) {
-                              const firstEx = exercises[0];
-                              const exercise = firstEx.exercises;
-
-                              if (exercise) {
-                                // Set the selected exercise
-                                setSelectedExercise({
-                                  id: exercise.id,
-                                  name: exercise.name,
-                                  category: exercise.category,
-                                  muscleGroups: exercise.muscleGroups || [],
-                                  equipment: exercise.equipment || []
-                                });
-
-                                // Pre-fill sets and reps from program
-                                setNewEntry({
-                                  ...newEntry,
-                                  exerciseId: exercise.id,
-                                  sets: String(firstEx.sets || 3),
-                                  reps: String(firstEx.repsMin || firstEx.repsMax || 10),
-                                  setType: 'REGULAR'
-                                });
+                        <div className="flex items-center gap-2">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-gray-400 hover:text-red-500 hover:bg-red-50 p-2"
+                            onClick={() => {
+                              if (confirm('Dismiss today\'s workout? You can still access it from My Programs.')) {
+                                setDismissedTodayWorkout(true);
                               }
-                            }
+                            }}
+                            title="Dismiss today's workout"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            onClick={() => {
+                              // Auto-populate first exercise when starting workout
+                              if (exercises.length > 0) {
+                                const firstEx = exercises[0];
+                                const exercise = firstEx.exercises;
 
-                            setIsAddingEntry(true);
+                                if (exercise) {
+                                  // Set the selected exercise
+                                  setSelectedExercise({
+                                    id: exercise.id,
+                                    name: exercise.name,
+                                    category: exercise.category,
+                                    muscleGroups: exercise.muscleGroups || [],
+                                    equipment: exercise.equipment || []
+                                  });
 
-                            // Scroll to form
-                            setTimeout(() => {
-                              document.querySelector('[data-workout-form]')?.scrollIntoView({ behavior: 'smooth' });
-                            }, 100);
-                          }}
-                        >
-                          Start Workout
-                        </Button>
+                                  // Pre-fill sets and reps from program
+                                  setNewEntry({
+                                    ...newEntry,
+                                    exerciseId: exercise.id,
+                                    sets: String(firstEx.sets || 3),
+                                    reps: String(firstEx.repsMin || firstEx.repsMax || 10),
+                                    setType: 'REGULAR'
+                                  });
+                                }
+                              }
+
+                              setIsAddingEntry(true);
+
+                              // Scroll to form
+                              setTimeout(() => {
+                                document.querySelector('[data-workout-form]')?.scrollIntoView({ behavior: 'smooth' });
+                              }, 100);
+                            }}
+                          >
+                            Start Workout
+                          </Button>
+                        </div>
                       </div>
 
                       {/* Exercise List */}
@@ -1483,12 +1850,48 @@ export default function WorkoutLogPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="md:col-span-2 lg:col-span-3">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+              {/* Recent Exercises Chips - Collapsible */}
+              {recentExercises.length > 0 && (
+                <div className="mb-4">
+                  <button
+                    type="button"
+                    onClick={() => setRecentExercisesExpanded(!recentExercisesExpanded)}
+                    className="flex items-center justify-between w-full text-sm font-medium text-brand-primary mb-2 hover:text-brand-primary-dark transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className="mdi mdi-history text-base" />
+                      Recent Exercises ({recentExercises.length})
+                    </span>
+                    <span className={`mdi ${recentExercisesExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'} text-lg transition-transform`} />
+                  </button>
+                  {recentExercisesExpanded && (
+                    <div className="flex gap-2 flex-wrap">
+                      {recentExercises.map((ex) => (
+                        <button
+                          key={ex.id}
+                          type="button"
+                          onClick={() => {
+                            const exercise = exercises.find(e => e.id === ex.id);
+                            if (exercise) {
+                              handleExerciseSelect(exercise);
+                            }
+                          }}
+                          className="px-4 py-2 bg-white border-2 border-gray-300 rounded-full text-sm font-medium text-gray-700 hover:border-brand-primary hover:bg-brand-secondary transition-all"
+                        >
+                          {ex.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-brand-primary mb-1">
                     Exercise
                   </label>
-                  
+
                   {/* Exercise Search */}
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -1593,6 +1996,31 @@ export default function WorkoutLogPage() {
                     </div>
                   )}
 
+                  {/* Exercise Media Card */}
+                  {selectedExercise && exerciseMedia.length > 0 && (
+                    <div
+                      className="mt-3 cursor-pointer transition-all hover:shadow-md"
+                      onClick={() => setShowFormGuideModal(true)}
+                    >
+                      <div className="border-2 border-gray-200 rounded-lg overflow-hidden hover:border-brand-primary">
+                        <div className="relative aspect-video bg-gradient-to-br from-brand-primary to-brand-primary-dark flex items-center justify-center">
+                          <div className="text-center text-white">
+                            <span className="mdi mdi-video text-4xl mb-2 block" />
+                            <div className="font-semibold text-lg">{selectedExercise.name}</div>
+                            <div className="text-sm opacity-90 mt-1">Tap to view form videos</div>
+                          </div>
+                        </div>
+                        <div className="bg-brand-secondary px-4 py-3 flex items-center justify-between">
+                          <span className="text-sm font-semibold text-brand-primary flex items-center gap-1">
+                            <span className="mdi mdi-eye" />
+                            {exerciseMedia.length} {exerciseMedia.length === 1 ? 'video' : 'videos'}
+                          </span>
+                          <span className="text-xs text-gray-600">Community contributed</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Coaching Cues */}
                   {coaching_cues.length > 0 && (
                     <div className="mt-3 bg-blue-50 border border-blue-200 rounded-md p-3">
@@ -1612,20 +2040,21 @@ export default function WorkoutLogPage() {
                   )}
                 </div>
 
+                {/* Core Fields - Always Visible */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Sets
+                  <label className="block text-sm font-medium text-brand-primary mb-1">
+                    Weight (kg)
                   </label>
                   <Input
-                    type="number"
-                    value={newEntry.sets}
-                    onChange={(e) => setNewEntry({...newEntry, sets: e.target.value})}
-                    placeholder="3"
+                    value={newEntry.weight}
+                    onChange={(e) => setNewEntry({...newEntry, weight: e.target.value})}
+                    placeholder="e.g. 60"
+                    className="text-lg font-semibold"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-brand-primary mb-1">
                     Reps
                   </label>
                   <Input
@@ -1633,37 +2062,108 @@ export default function WorkoutLogPage() {
                     value={newEntry.reps}
                     onChange={(e) => setNewEntry({...newEntry, reps: e.target.value})}
                     placeholder="8"
+                    className="text-lg font-semibold"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Weight (kg)
-                  </label>
-                  <Input
-                    value={newEntry.weight}
-                    onChange={(e) => setNewEntry({...newEntry, weight: e.target.value})}
-                    placeholder="e.g. 60"
-                  />
+                {/* Big Add Button */}
+                <Button
+                  onClick={handleAddEntry}
+                  disabled={!selectedExercise || !newEntry.reps || !newEntry.weight}
+                  className="w-full py-6 text-xl font-bold bg-brand-primary hover:bg-brand-primary-dark text-white shadow-lg"
+                >
+                  LOG SET {newEntry.sets || '1'}/{newEntry.sets || '1'}
+                </Button>
+
+                {/* Quick Actions */}
+                <div className="grid grid-cols-3 gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white font-semibold"
+                    onClick={() => {
+                      // TODO: Implement "Same as Last" logic
+                      console.log('Same as last set');
+                    }}
+                  >
+                    Same as Last
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white font-semibold"
+                    onClick={() => {
+                      const currentWeight = parseFloat(newEntry.weight || '0');
+                      if (currentWeight > 0) {
+                        setNewEntry({...newEntry, weight: String(currentWeight + 2.5)});
+                      }
+                    }}
+                  >
+                    +2.5kg
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white font-semibold"
+                    onClick={() => {
+                      const currentReps = parseInt(newEntry.reps || '0');
+                      if (currentReps > 1) {
+                        setNewEntry({...newEntry, reps: String(currentReps - 1)});
+                      }
+                    }}
+                  >
+                    -1 Rep
+                  </Button>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Set Type
-                  </label>
-                  <Select value={newEntry.setType} onValueChange={(value) => setNewEntry({...newEntry, setType: value})}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="STRAIGHT">Straight</SelectItem>
-                      <SelectItem value="SUPERSET">Superset</SelectItem>
-                      <SelectItem value="PYRAMID">Pyramid</SelectItem>
-                      <SelectItem value="DROP_SET">Drop Set</SelectItem>
-                      <SelectItem value="REST_PAUSE">Rest Pause</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                {/* More Options Toggle */}
+                <button
+                  type="button"
+                  onClick={() => setShowAdvancedFields(!showAdvancedFields)}
+                  className="w-full py-3 text-center text-brand-primary font-semibold rounded-lg hover:bg-brand-secondary transition-all flex items-center justify-center gap-2"
+                >
+                  <span className="mdi mdi-cog text-lg" />
+                  <span>More Options</span>
+                  <span className={`mdi ${showAdvancedFields ? 'mdi-chevron-up' : 'mdi-chevron-down'} text-sm`} />
+                </button>
+
+                {/* Advanced Fields (Collapsible) */}
+                {showAdvancedFields && (
+                  <div className="space-y-4 p-4 bg-brand-secondary rounded-lg border-2 border-dashed border-gray-300">
+                    <div className="text-center font-bold text-brand-primary mb-3 flex items-center justify-center gap-2">
+                      <span className="mdi mdi-target text-lg" />
+                      <span>Acute Variables</span>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Sets
+                      </label>
+                      <Input
+                        type="number"
+                        value={newEntry.sets}
+                        onChange={(e) => setNewEntry({...newEntry, sets: e.target.value})}
+                        placeholder="3"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Set Type
+                      </label>
+                      <Select value={newEntry.setType} onValueChange={(value) => setNewEntry({...newEntry, setType: value})}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="STRAIGHT">Straight</SelectItem>
+                          <SelectItem value="SUPERSET">Superset</SelectItem>
+                          <SelectItem value="PYRAMID">Pyramid</SelectItem>
+                          <SelectItem value="DROP_SET">Drop Set</SelectItem>
+                          <SelectItem value="REST_PAUSE">Rest Pause</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
 
                 {/* Contextual help for special set types */}
                 {newEntry.setType === 'SUPERSET' && (
@@ -1692,18 +2192,18 @@ export default function WorkoutLogPage() {
                       </div>
                       <div>
                         <label className="block text-xs text-purple-900 mb-1">Reps Scheme (optional)</label>
-                        <div className="flex gap-2">
-                          <input
-                            type="text"
-                            value={newEntry.pyramidReps}
-                            onChange={(e) => setNewEntry({ ...newEntry, pyramidReps: e.target.value })}
-                            placeholder="e.g. 15,12,10,8"
-                            className="flex-1 border rounded-md p-2 text-sm"
-                          />
+                        <input
+                          type="text"
+                          value={newEntry.pyramidReps}
+                          onChange={(e) => setNewEntry({ ...newEntry, pyramidReps: e.target.value })}
+                          placeholder="e.g. 15,12,10,8"
+                          className="w-full border rounded-md p-2 text-sm mb-2"
+                        />
+                        <div className="flex flex-col sm:flex-row gap-2">
                           <Button
                             type="button"
                             variant="outline"
-                            className="text-xs"
+                            className="text-xs w-full sm:w-auto"
                             onClick={() => {
                               setNewEntry({ ...newEntry, pyramidReps: '15,12,10,8', sets: '4' });
                             }}
@@ -1711,7 +2211,7 @@ export default function WorkoutLogPage() {
                           <Button
                             type="button"
                             variant="outline"
-                            className="text-xs"
+                            className="text-xs w-full sm:w-auto"
                             onClick={() => {
                               setNewEntry({ ...newEntry, pyramidReps: '12,10,8', sets: '3' });
                             }}
@@ -1719,7 +2219,7 @@ export default function WorkoutLogPage() {
                           <Button
                             type="button"
                             variant="outline"
-                            className="text-xs"
+                            className="text-xs w-full sm:w-auto"
                             onClick={() => {
                               setNewEntry({ ...newEntry, pyramidReps: '6,8,10,12', sets: '4', pyramidDirection: 'DESC' });
                             }}
@@ -1728,7 +2228,7 @@ export default function WorkoutLogPage() {
                       </div>
                       <div>
                         <label className="block text-xs text-purple-900 mb-1">Weights Auto‑fill</label>
-                        <div className="grid grid-cols-3 gap-2">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                           <input
                             type="number"
                             placeholder="Base (kg)"
@@ -1743,18 +2243,18 @@ export default function WorkoutLogPage() {
                             onChange={(e) => { setNewEntry({ ...newEntry, pyramidStep: e.target.value }); persistPyramidSettings(undefined, e.target.value); }}
                             className="border rounded-md p-2 text-sm"
                           />
-                          <div className="flex gap-2">
-                            <Button type="button" variant="outline" className="text-xs" onClick={() => setNewEntry({ ...newEntry, pyramidStep: '2.5' })}>+2.5</Button>
-                            <Button type="button" variant="outline" className="text-xs" onClick={() => setNewEntry({ ...newEntry, pyramidStep: '5' })}>+5</Button>
+                          <div className="flex gap-2 col-span-2 sm:col-span-1">
+                            <Button type="button" variant="outline" className="text-xs flex-1 sm:flex-none" onClick={() => setNewEntry({ ...newEntry, pyramidStep: '2.5' })}>+2.5</Button>
+                            <Button type="button" variant="outline" className="text-xs flex-1 sm:flex-none" onClick={() => setNewEntry({ ...newEntry, pyramidStep: '5' })}>+5</Button>
                           </div>
                         </div>
-                        <div className="mt-2 grid grid-cols-2 gap-2 items-center">
-                          <div className="text-xs text-purple-900">Preset Step</div>
-                          <div className="flex gap-2">
+                        <div className="mt-2">
+                          <div className="text-xs text-purple-900 mb-2">Preset Step</div>
+                          <div className="flex flex-col sm:flex-row gap-2">
                             <Button
                               type="button"
                               variant="outline"
-                              className="text-xs"
+                              className="text-xs w-full sm:w-auto"
                               onClick={() => {
                                 const step = getRecommendedPyramidStep();
                                 setNewEntry({ ...newEntry, pyramidStep: step });
@@ -1764,7 +2264,7 @@ export default function WorkoutLogPage() {
                             <Button
                               type="button"
                               variant="outline"
-                              className="text-xs"
+                              className="text-xs w-full sm:w-auto"
                               onClick={() => { setNewEntry({ ...newEntry, pyramidStep: '10' }); persistPyramidSettings(undefined, '10'); }}
                             >+10</Button>
                           </div>
@@ -1942,151 +2442,126 @@ export default function WorkoutLogPage() {
                   ) : null;
                 })()}
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Intensity
-                  </label>
-                  <Input
-                    value={newEntry.intensity}
-                    onChange={(e) => setNewEntry({...newEntry, intensity: e.target.value})}
-                    placeholder="75% or RPE 8"
-                  />
-                </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Tempo (e.g., 3-1-1-0)
+                      </label>
+                      <Input
+                        value={newEntry.tempo}
+                        onChange={(e) => setNewEntry({...newEntry, tempo: e.target.value})}
+                        placeholder="3-1-1-0"
+                      />
+                    </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Tempo
-                  </label>
-                  <Input
-                    value={newEntry.tempo}
-                    onChange={(e) => setNewEntry({...newEntry, tempo: e.target.value})}
-                    placeholder="3-1-1-0"
-                  />
-                </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Intensity
+                      </label>
+                      <Input
+                        value={newEntry.intensity}
+                        onChange={(e) => setNewEntry({...newEntry, intensity: e.target.value})}
+                        placeholder="75% or RPE 8"
+                      />
+                    </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Rest (seconds)
-                  </label>
-                  <Input
-                    type="number"
-                    value={newEntry.restSeconds}
-                    onChange={(e) => setNewEntry({...newEntry, restSeconds: e.target.value})}
-                    placeholder="120"
-                  />
-                </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Rest Between Sets (seconds)
+                      </label>
+                      <Input
+                        type="number"
+                        value={newEntry.restSeconds}
+                        onChange={(e) => setNewEntry({...newEntry, restSeconds: e.target.value})}
+                        placeholder="90"
+                      />
+                    </div>
 
-                {/* Advanced Tracking Fields */}
-                <div className="md:col-span-2 lg:col-span-3">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    RPE (Rate of Perceived Exertion) 1-10
-                    <span className="text-gray-500 ml-2 font-normal text-xs">Optional</span>
-                  </label>
-                  <input
-                    type="range"
-                    min="1"
-                    max="10"
-                    value={actualRPE}
-                    onChange={(e) => setActualRPE(parseInt(e.target.value))}
-                    className="w-full"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500 mt-1">
-                    <span>Very Easy (1)</span>
-                    <span className="font-semibold text-gray-900">{actualRPE}</span>
-                    <span>Maximum Effort (10)</span>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        RPE (Rate of Perceived Exertion) 1-10
+                      </label>
+                      <input
+                        type="range"
+                        min="1"
+                        max="10"
+                        value={actualRPE}
+                        onChange={(e) => setActualRPE(parseInt(e.target.value))}
+                        className="w-full"
+                      />
+                      <div className="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>Easy (1)</span>
+                        <span className="font-semibold text-brand-primary">{actualRPE}</span>
+                        <span>Max (10)</span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Form Quality (1-5)
+                      </label>
+                      <div className="flex gap-2">
+                        {[1, 2, 3, 4, 5].map(rating => (
+                          <button
+                            key={rating}
+                            type="button"
+                            onClick={() => setFormQuality(rating)}
+                            className={`flex-1 py-2 px-3 rounded-md border-2 transition-all ${
+                              formQuality === rating
+                                ? 'border-brand-primary bg-brand-primary text-white font-semibold'
+                                : 'border-gray-300 hover:border-brand-primary'
+                            }`}
+                          >
+                            {rating}
+                          </button>
+                        ))}
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">
+                        1 = Poor form, 5 = Perfect technique
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Personal Notes (for your coach)
+                      </label>
+                      <Textarea
+                        value={newEntry.userComment}
+                        onChange={(e) => setNewEntry({...newEntry, userComment: e.target.value})}
+                        placeholder="How did this exercise feel? Any notes for your coach?"
+                        rows={2}
+                      />
+                    </div>
+
+                    {/* LOG SET Button inside Acute Variables */}
+                    <Button
+                      onClick={handleAddEntry}
+                      disabled={!selectedExercise || !newEntry.reps || !newEntry.weight}
+                      className="w-full py-6 text-xl font-bold bg-brand-primary hover:bg-brand-primary-dark text-white shadow-lg mt-4"
+                    >
+                      LOG SET {newEntry.sets || '1'}/{newEntry.sets || '1'}
+                    </Button>
                   </div>
-                </div>
+                )}
 
-                <div className="md:col-span-2 lg:col-span-3">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Form Quality (1-5)
-                    <span className="text-gray-500 ml-2 font-normal text-xs">Optional</span>
-                  </label>
-                  <div className="flex gap-2">
-                    {[1, 2, 3, 4, 5].map(rating => (
-                      <button
-                        key={rating}
-                        type="button"
-                        onClick={() => setFormQuality(rating)}
-                        className={`flex-1 py-2 px-3 rounded-md border-2 transition-all ${
-                          formQuality === rating
-                            ? 'border-blue-500 bg-blue-50 text-blue-700 font-semibold'
-                            : 'border-gray-300 hover:border-gray-400'
-                        }`}
-                      >
-                        {rating}
-                      </button>
-                    ))}
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    1 = Poor form, 5 = Perfect technique
-                  </p>
-                </div>
-
-                <div className="md:col-span-2 lg:col-span-3">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Rest Duration (seconds)
-                    <span className="text-gray-500 ml-2 font-normal text-xs">Optional</span>
-                  </label>
-                  <select
-                    value={restDuration}
-                    onChange={(e) => setRestDuration(parseInt(e.target.value))}
-                    className="w-full border rounded-md p-2"
+                {/* Form Bottom Actions */}
+                <div className="flex justify-between items-center mt-4 pt-4 border-t">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setIsAddingEntry(false)}
+                    className="text-gray-600"
                   >
-                    <option value={30}>30s - Active recovery</option>
-                    <option value={60}>60s - Endurance/hypertrophy</option>
-                    <option value={90}>90s - Moderate rest</option>
-                    <option value={120}>120s - Strength training</option>
-                    <option value={180}>180s - Power/heavy lifting</option>
-                    <option value={240}>240s - Maximum strength</option>
-                  </select>
-                </div>
+                    Cancel
+                  </Button>
 
-                <div className="md:col-span-2 lg:col-span-3">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Personal Notes
-                  </label>
-                  <Textarea
-                    value={newEntry.userComment}
-                    onChange={(e) => setNewEntry({...newEntry, userComment: e.target.value})}
-                    placeholder="How did this exercise feel? Any notes for your coach?"
-                    rows={3}
-                  />
+                  {/* Form Validation Messages */}
+                  {!selectedExercise && (
+                    <div className="text-sm text-red-600">
+                      Please select an exercise
+                    </div>
+                  )}
                 </div>
               </div>
-
-              {/* Allow Comments Toggle */}
-              <div className="flex items-center space-x-2 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <input
-                  type="checkbox"
-                  id="allowComments"
-                  name="allowComments"
-                  defaultChecked={true}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <label htmlFor="allowComments" className="text-sm font-medium text-blue-900">
-                  Allow others to comment on this workout entry
-                </label>
-              </div>
-
-              <div className="flex justify-end space-x-2 mt-6">
-                <Button variant="outline" onClick={() => setIsAddingEntry(false)}>
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleAddEntry}
-                  disabled={!selectedExercise || !newEntry.sets || !newEntry.reps}
-                >
-                  Add Entry
-                </Button>
-              </div>
-              
-              {/* Form Validation Messages */}
-              {!selectedExercise && (
-                <div className="mt-2 text-sm text-red-600">
-                  Please select an exercise from the database
-                </div>
-              )}
             </CardContent>
           </Card>
         )}
@@ -2163,260 +2638,333 @@ export default function WorkoutLogPage() {
         {!fetchingEntries && !error && workoutEntries.length > 0 && (
           <>
             {/* View Toggle */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Button
-                  variant={view_mode === 'cards' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => set_view_mode('cards')}
-                >
-                  <LayoutGrid className="h-4 w-4 mr-2" />
-                  Cards
-                </Button>
-                <Button
-                  variant={view_mode === 'table' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => set_view_mode('table')}
-                >
-                  <TableIcon className="h-4 w-4 mr-2" />
-                  Table
-                </Button>
+            <div className="flex flex-col gap-2 mb-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant={view_mode === 'cards' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => set_view_mode('cards')}
+                  >
+                    <LayoutGrid className="h-4 w-4 mr-2" />
+                    Cards
+                  </Button>
+                  <Button
+                    variant={view_mode === 'table' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => set_view_mode('table')}
+                  >
+                    <TableIcon className="h-4 w-4 mr-2" />
+                    Table
+                  </Button>
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  {workoutEntries.length} {workoutEntries.length === 1 ? 'entry' : 'entries'}
+                </div>
               </div>
-              <div className="text-sm text-muted-foreground">
-                {workoutEntries.length} {workoutEntries.length === 1 ? 'entry' : 'entries'}
-              </div>
+              {/* Delete All Button */}
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 w-fit"
+                onClick={async () => {
+                  if (!confirm(`Are you sure you want to delete all ${workoutEntries.length} entries? This action cannot be undone.`)) {
+                    return;
+                  }
+                  setLoading(true);
+                  let deleted = 0;
+                  let failed = 0;
+                  try {
+                    for (const entry of workoutEntries) {
+                      const response = await fetch(`/api/workout/entries/${entry.id}`, { method: 'DELETE' });
+                      if (response.ok) {
+                        deleted++;
+                      } else {
+                        failed++;
+                      }
+                    }
+                    await fetchWorkoutEntries();
+                    if (failed > 0) {
+                      alert(`Deleted ${deleted} entries. ${failed} entries could not be deleted (they may belong to another user or were already deleted).`);
+                    }
+                  } catch (error) {
+                    console.error('Error deleting entries:', error);
+                    alert('Failed to delete some entries. Please try again.');
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                disabled={loading}
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete All
+              </Button>
             </div>
 
-            {/* Cards View */}
+            {/* Cards View - Grouped by Exercise */}
             {view_mode === 'cards' && (
-              <div className="space-y-6">
-                {workoutEntries.map((entry: WorkoutEntry) => (
-                  <Card key={entry.id}>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <input
-                      type="checkbox"
-                      checked={selectedEntries.has(entry.id)}
-                      onChange={() => toggleEntrySelection(entry.id)}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
-                      title="Select for template"
-                    />
-                    <div className="flex items-center text-sm text-gray-500">
-                      <Calendar className="h-4 w-4 mr-1" />
-                      {entry.date ? new Date(entry.date).toLocaleDateString() : 'No date'}
-                    </div>
-                    <Badge variant="outline">{entry.setType}</Badge>
-                  </div>
-                  <div className="flex space-x-2">
+              <div className="space-y-4">
+                {groupedWorkoutEntries.map((entriesGroup: WorkoutEntry[]) => {
+                  const firstEntry = entriesGroup[0];
+                  const formattedDate = firstEntry.date
+                    ? new Date(firstEntry.date).toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric'
+                      })
+                    : 'No date';
+                  const allSelected = entriesGroup.every(e => selectedEntries.has(e.id));
+                  const someSelected = entriesGroup.some(e => selectedEntries.has(e.id));
+
+                  return (
+                    <Card key={`${firstEntry.exerciseId}_${firstEntry.date}`} className="hover:shadow-md transition-shadow duration-300 border-gray-100">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            {/* Group Selection Checkbox */}
+                            <input
+                              type="checkbox"
+                              checked={allSelected}
+                              ref={(el) => { if (el) el.indeterminate = someSelected && !allSelected; }}
+                              onChange={() => {
+                                const newSelected = new Set(selectedEntries);
+                                if (allSelected) {
+                                  entriesGroup.forEach(e => newSelected.delete(e.id));
+                                } else {
+                                  entriesGroup.forEach(e => newSelected.add(e.id));
+                                }
+                                setSelectedEntries(newSelected);
+                              }}
+                              className="rounded border-gray-300 text-brand-primary focus:ring-brand-primary h-5 w-5 cursor-pointer"
+                              title="Select all sets"
+                            />
+                            <Calendar className="h-4 w-4 text-gray-500" />
+                            <span className="text-sm text-gray-600">{formattedDate}</span>
+                            <Badge variant="outline" className="text-xs bg-gray-100 text-gray-800">
+                              {entriesGroup.length} {entriesGroup.length === 1 ? 'set' : 'sets'}
+                            </Badge>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => {
+                                if (confirm(`Delete all ${entriesGroup.length} sets of ${firstEntry.exercise.name}?`)) {
+                                  entriesGroup.forEach(e => handleDeleteEntry(e.id));
+                                }
+                              }}
+                              disabled={loading}
+                              className="h-9 w-9 hover:bg-red-50 hover:text-red-600"
+                              aria-label="Delete all sets"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+
+                        {/* Exercise Name */}
+                        <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mt-2">
+                          <Dumbbell className="h-5 w-5 text-brand-primary" />
+                          <span>{firstEntry.exercise.name}</span>
+                        </h3>
+
+                        {/* Exercise Metadata */}
+                        <div className="flex flex-wrap gap-2 mt-1">
+                          <Badge variant="outline" className="text-xs bg-gray-100">
+                            {firstEntry.exercise.category}
+                          </Badge>
+                          {firstEntry.exercise.muscleGroups?.slice(0, 2).map((mg: string) => (
+                            <Badge key={mg} variant="outline" className="text-xs">
+                              {mg}
+                            </Badge>
+                          ))}
+                        </div>
+                      </CardHeader>
+
+                      <CardContent className="pt-0">
+                        {/* Sets Table */}
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-sm">
+                            <thead>
+                              <tr className="border-b border-gray-200">
+                                <th className="text-left py-2 px-2 font-medium text-gray-600">Set</th>
+                                <th className="text-left py-2 px-2 font-medium text-gray-600">Reps</th>
+                                <th className="text-left py-2 px-2 font-medium text-gray-600">Weight</th>
+                                <th className="text-left py-2 px-2 font-medium text-gray-600">Rest</th>
+                                <th className="text-right py-2 px-2 font-medium text-gray-600">Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {entriesGroup.map((entry) => (
+                                <tr key={entry.id} className="border-b border-gray-100 last:border-0 hover:bg-gray-50">
+                                  <td className="py-2 px-2">
+                                    <span className="font-medium">#{entry.setNumber}</span>
+                                  </td>
+                                  <td className="py-2 px-2">{entry.reps}</td>
+                                  <td className="py-2 px-2">{entry.weight} {entry.unit}</td>
+                                  <td className="py-2 px-2">{entry.restSeconds ? `${entry.restSeconds}s` : '-'}</td>
+                                  <td className="py-2 px-2 text-right">
+                                    <div className="flex items-center justify-end gap-1">
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => startEditing(entry)}
+                                        disabled={loading}
+                                        className="h-7 w-7 hover:bg-gray-100"
+                                      >
+                                        <Edit className="h-3 w-3 text-gray-600" />
+                                      </Button>
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => handleDeleteEntry(entry.id)}
+                                        disabled={loading}
+                                        className="h-7 w-7 hover:bg-red-50 hover:text-red-600"
+                                      >
+                                        <Trash2 className="h-3 w-3" />
+                                      </Button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+
+                        {/* Summary row */}
+                        <div className="mt-3 pt-3 border-t border-gray-100 flex items-center gap-4 text-sm text-gray-600">
+                          <span><strong>Total:</strong> {entriesGroup.reduce((sum, e) => sum + e.reps, 0)} reps</span>
+                          <span><strong>Volume:</strong> {entriesGroup.reduce((sum, e) => sum + (e.reps * parseFloat(e.weight || '0')), 0).toFixed(1)} kg</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+
+                {/* Session Action Buttons - shown when there are entries */}
+                {groupedWorkoutEntries.length > 0 && (
+                  <div className="flex flex-col sm:flex-row gap-3 mt-6 pt-4 border-t border-gray-200">
                     <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => startEditing(entry)}
-                      disabled={loading}
+                      onClick={async () => {
+                        try {
+                          // Try to find the session ID from entries or use activeSession
+                          const sessionIdFromEntries = workoutEntries.find(e => e.sessionId)?.sessionId;
+                          const sessionToEnd = activeSession?.id || sessionIdFromEntries;
+
+                          // End the session if one exists
+                          if (sessionToEnd) {
+                            await fetch(`/api/workout/sessions/${sessionToEnd}`, {
+                              method: 'PUT',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ status: 'COMPLETED' }),
+                            });
+                            setActiveSession(null);
+                          }
+
+                          // Fetch fresh subscriptions if none loaded
+                          let subs = programSubscriptions;
+                          if (subs.length === 0) {
+                            try {
+                              const r = await fetch('/api/workout/programs?subscriptions=true');
+                              if (r.ok) {
+                                subs = await r.json();
+                                if (Array.isArray(subs)) {
+                                  setProgramSubscriptions(subs);
+                                }
+                              }
+                            } catch (e) {
+                              console.error('Failed to fetch subscriptions:', e);
+                            }
+                          }
+
+                          // Advance program day (do this regardless of session)
+                          if (subs.length > 0) {
+                            const sub = subs[0];
+                            const currentWeek = sub.currentWeek || 1;
+                            const currentDay = sub.currentDay || 1;
+
+                            // Get total days from microcycle - default to 7 if not found
+                            const program = sub.program_templates;
+                            let totalDaysInWeek = 7;
+
+                            if (program?.program_phases) {
+                              const currentPhase = program.program_phases.find((phase: any) =>
+                                phase.microcycles?.some((micro: any) => micro.weekNumber === currentWeek)
+                              );
+                              if (currentPhase) {
+                                const currentMicrocycle = currentPhase.microcycles?.find(
+                                  (micro: any) => micro.weekNumber === currentWeek
+                                );
+                                if (currentMicrocycle?.workouts) {
+                                  totalDaysInWeek = currentMicrocycle.workouts.length;
+                                }
+                              }
+                            }
+
+                            // Calculate next day/week
+                            let nextDay = currentDay + 1;
+                            let nextWeek = currentWeek;
+
+                            if (nextDay > totalDaysInWeek) {
+                              nextDay = 1;
+                              nextWeek = currentWeek + 1;
+                            }
+
+                            console.log('Advancing program:', { subscriptionId: sub.id, currentDay, nextDay, currentWeek, nextWeek, totalDaysInWeek });
+
+                            // Update program progress
+                            const progressRes = await fetch('/api/workout/programs/progress', {
+                              method: 'PATCH',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({
+                                subscriptionId: sub.id,
+                                currentWeek: nextWeek,
+                                currentDay: nextDay,
+                              }),
+                            });
+
+                            if (progressRes.ok) {
+                              // Update local state
+                              setProgramSubscriptions(prev => prev.map(s =>
+                                s.id === sub.id
+                                  ? { ...s, currentWeek: nextWeek, currentDay: nextDay }
+                                  : s
+                              ));
+                              console.log('Program advanced successfully to Day', nextDay);
+                            } else {
+                              console.error('Failed to advance program:', await progressRes.text());
+                            }
+                          } else {
+                            console.log('No program subscriptions found to advance');
+                          }
+
+                          // Mark session as completed - hides logged entries from Today view
+                          setSessionCompletedToday(true);
+
+                          alert('Session completed! Great workout!');
+                        } catch (err) {
+                          console.error('Failed to end session:', err);
+                          alert('Failed to end session. Please try again.');
+                        }
+                      }}
+                      className="flex-1 py-4 text-base font-semibold bg-green-600 hover:bg-green-700 text-white"
                     >
-                      <Edit className="h-4 w-4" />
+                      <span className="mdi mdi-check-circle mr-2" />
+                      End Session
                     </Button>
                     <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleDeleteEntry(entry.id)}
-                      disabled={loading}
+                      variant="outline"
+                      onClick={() => {
+                        // Navigate to My Programs tab (day already advanced by End Session)
+                        setActiveTab('my-programs');
+                      }}
+                      className="flex-1 py-4 text-base font-semibold border-2 border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white"
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <span className="mdi mdi-skip-next mr-2" />
+                      Move to Next Session
                     </Button>
                   </div>
-                </div>
-                <CardTitle className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Dumbbell className="h-5 w-5 mr-2" />
-                    {entry.exercise.name}
-                    {entry.personalRecord && (
-                      <Badge className="bg-yellow-400 text-yellow-900 hover:bg-yellow-500 border-yellow-600">
-                        <Trophy className="h-3 w-3 mr-1" />
-                        PR!
-                      </Badge>
-                    )}
-                  </div>
-                  {entry.exercise && (
-                    <div className="flex space-x-2">
-                      <Badge variant="outline" className="text-xs">
-                        {entry.exercise.category}
-                      </Badge>
-                      <Badge variant="outline" className="text-xs">
-                        {entry.exercise.difficulty}
-                      </Badge>
-                    </div>
-                  )}
-                </CardTitle>
-
-                {/* Exercise Details */}
-                {entry.exercise && (
-                  <div className="mt-2 grid grid-cols-2 gap-2 text-sm text-gray-600">
-                    <div className="flex items-center">
-                      <Target className="h-4 w-4 mr-1" />
-                      <span>{entry.exercise.muscleGroups.slice(0, 2).join(', ')}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Dumbbell className="h-4 w-4 mr-1" />
-                      <span>{entry.exercise.equipment.join(', ')}</span>
-                    </div>
-                  </div>
                 )}
-              </CardHeader>
-              <CardContent>
-                {editingEntry === entry.id && (
-                  <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <h4 className="font-medium text-blue-900 mb-4">Edit Entry</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Reps
-                        </label>
-                        <Input
-                          type="number"
-                          value={editFormData.reps}
-                          onChange={(e) => setEditFormData({...editFormData, reps: e.target.value})}
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Weight
-                        </label>
-                        <Input
-                          value={editFormData.weight}
-                          onChange={(e) => setEditFormData({...editFormData, weight: e.target.value})}
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Intensity
-                        </label>
-                        <Input
-                          value={editFormData.intensity}
-                          onChange={(e) => setEditFormData({...editFormData, intensity: e.target.value})}
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Tempo
-                        </label>
-                        <Input
-                          value={editFormData.tempo}
-                          onChange={(e) => setEditFormData({...editFormData, tempo: e.target.value})}
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Rest (seconds)
-                        </label>
-                        <Input
-                          type="number"
-                          value={editFormData.restSeconds}
-                          onChange={(e) => setEditFormData({...editFormData, restSeconds: e.target.value})}
-                        />
-                      </div>
-                      <div className="md:col-span-2 lg:col-span-3">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Personal Notes
-                        </label>
-                        <Textarea
-                          value={editFormData.userComments}
-                          onChange={(e) => setEditFormData({...editFormData, userComments: e.target.value})}
-                          rows={2}
-                        />
-                      </div>
-                    </div>
-                    <div className="flex justify-end space-x-2 mt-4">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setEditingEntry(null)}
-                        disabled={loading}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        size="sm"
-                        onClick={() => handleEditEntry(entry.id)}
-                        disabled={loading}
-                      >
-                        Save Changes
-                      </Button>
-                    </div>
-                  </div>
-                )}
-
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                  <div className="flex items-center text-sm">
-                    <Weight className="h-4 w-4 mr-2 text-gray-500" />
-                    <span className="font-medium">Weight:</span>
-                    <span className="ml-1">{entry.weight}</span>
-                  </div>
-                  <div className="flex items-center text-sm">
-                    <span className="font-medium">Set #:</span>
-                    <span className="ml-1">{entry.setNumber}</span>
-                  </div>
-                  <div className="flex items-center text-sm">
-                    <span className="font-medium">Reps:</span>
-                    <span className="ml-1">{entry.reps}</span>
-                  </div>
-                  <div className="flex items-center text-sm">
-                    <Clock className="h-4 w-4 mr-2 text-gray-500" />
-                    <span className="font-medium">Rest:</span>
-                    <span className="ml-1">{entry.restSeconds}s</span>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                  <div>
-                    <span className="text-sm font-medium text-gray-700">Intensity:</span>
-                    <span className="ml-2 text-sm">{entry.intensity}</span>
-                  </div>
-                  <div>
-                    <span className="text-sm font-medium text-gray-700">Tempo:</span>
-                    <span className="ml-2 text-sm">{entry.tempo}</span>
-                  </div>
-                </div>
-
-
-                {/* Comments */}
-                <div className="space-y-4">
-                  {entry.coachFeedback && (
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                      <div className="flex items-center mb-2">
-                        <MessageCircle className="h-4 w-4 mr-2 text-blue-600" />
-                        <span className="text-sm font-medium text-blue-800">Coach Feedback</span>
-                      </div>
-                      <p className="text-sm text-blue-700">{entry.coachFeedback}</p>
-                    </div>
-                  )}
-
-                  {entry.userComments && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <div className="flex items-center mb-2">
-                        <MessageCircle className="h-4 w-4 mr-2 text-gray-600" />
-                        <span className="text-sm font-medium text-gray-800">Your Notes</span>
-                      </div>
-                      <p className="text-sm text-gray-700">{entry.userComments}</p>
-                    </div>
-                  )}
-
-                  {/* Comments Section */}
-                  <div className="mt-6 pt-6 border-t">
-                    <h4 className="font-semibold mb-3 flex items-center gap-2">
-                      <MessageCircle className="h-4 w-4" />
-                      Comments
-                    </h4>
-                    <CommentsPanel
-                      commentable_type="ENTRY"
-                      commentable_id={entry.id}
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-                ))}
               </div>
             )}
 
@@ -2477,22 +3025,58 @@ export default function WorkoutLogPage() {
 
         {activeTab === 'history' && (
           <div className="space-y-6">
-            <div>
-              <h3 className="text-sm font-medium mb-2">Session History</h3>
-              <SessionHistoryTable />
+            {/* Collapsible Session History */}
+            <div className="bg-white rounded-lg border shadow-sm">
+              <button
+                type="button"
+                onClick={() => setSessionHistoryExpanded(!sessionHistoryExpanded)}
+                className="flex items-center justify-between w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors rounded-t-lg"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="mdi mdi-history text-blue-600 text-lg" />
+                  <h3 className="text-sm font-semibold text-gray-900">Session History</h3>
+                </div>
+                <span className={`mdi ${sessionHistoryExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'} text-gray-500 text-lg transition-transform duration-200`} />
+              </button>
+              {sessionHistoryExpanded && (
+                <div className="px-4 pb-4 pt-2 border-t">
+                  <SessionHistoryTable />
+                </div>
+              )}
             </div>
-            <div>
+
+            {/* Calendar section */}
+            <div className="bg-white rounded-lg border shadow-sm p-4">
               <div className="flex items-center justify-between mb-3">
-                <div className="text-sm font-medium">Calendar</div>
-                <div className="flex gap-2">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4 text-blue-600" />
+                  <span className="text-sm font-semibold text-gray-900">Calendar</span>
+                </div>
+                <div className="flex gap-2 items-center">
                   <Button variant="outline" size="sm" onClick={() => setCalendarMonth(subMonths(calendarMonth, 1))}><ChevronLeft className="h-4 w-4"/></Button>
-                  <div className="text-xs text-muted-foreground">{format(calendarMonth, 'MMMM yyyy')}</div>
+                  <div className="text-sm font-medium text-gray-700 min-w-[120px] text-center">{format(calendarMonth, 'MMMM yyyy')}</div>
                   <Button variant="outline" size="sm" onClick={() => setCalendarMonth(addMonths(calendarMonth, 1))}><ChevronRight className="h-4 w-4"/></Button>
                 </div>
               </div>
               <WorkoutCalendar month={calendarMonth} sessions={monthSessions} />
             </div>
           </div>
+        )}
+
+        {activeTab === 'my-programs' && (
+          loadingMyPrograms ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <p className="text-gray-500">Loading your programs...</p>
+              </div>
+            </div>
+          ) : (
+            <MyPrograms
+              programs={myProgramsData}
+              onAddProgram={() => setActiveTab('programs')}
+            />
+          )
         )}
 
         {activeTab === 'programs' && (
@@ -2783,7 +3367,7 @@ export default function WorkoutLogPage() {
               >
                 <Card className="border-4 border-yellow-400 shadow-2xl">
                   <CardHeader className="text-center bg-gradient-to-r from-yellow-400 to-orange-500 text-white">
-                    <div className="text-6xl mb-2">🏆</div>
+                    <span className="mdi mdi-trophy text-6xl mb-2 block" />
                     <CardTitle className="text-2xl">Achievement Unlocked!</CardTitle>
                   </CardHeader>
                   <CardContent className="text-center pt-6">
@@ -2929,6 +3513,135 @@ export default function WorkoutLogPage() {
         exerciseId={selectedExercise?.id}
         sessionId={activeSession?.id}
       />
+
+      {/* Floating Action Button - Mobile only, for quick add */}
+      {activeTab === 'today' && !isAddingEntry && (
+        <div className="md:hidden">
+          <FloatingActionButton
+            onClick={() => setShowAddEntryModal(true)}
+            label="Add workout entry"
+          />
+        </div>
+      )}
+
+      {/* Add Entry Modal - Full screen on mobile */}
+      <AddEntryModal
+        isOpen={showAddEntryModal}
+        onClose={() => setShowAddEntryModal(false)}
+        onSubmit={async (data: AddEntryData) => {
+          // Use the existing handleAddEntry logic but adapted for modal data
+          const today = new Date().toISOString().split('T')[0];
+          try {
+            const response = await fetch('/api/workout/entries', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                entries: [{
+                  date: today,
+                  exerciseId: data.exerciseId,
+                  setNumber: currentSetNumber,
+                  setType: data.setType,
+                  reps: data.reps,
+                  weight: String(data.weight),
+                  unit: 'KG',
+                  sessionId: activeSession?.id,
+                  intensity: data.rpe ? `RPE ${data.rpe}` : undefined,
+                  restSeconds: data.restSeconds,
+                  userComments: data.notes
+                }]
+              })
+            });
+
+            if (response.ok) {
+              // Update state for next set
+              setLastLoggedEntry({ weight: data.weight, reps: data.reps });
+              setCurrentSetNumber(prev => prev + 1);
+
+              // Refresh entries
+              fetchWorkoutEntries();
+
+              // Start rest timer if configured
+              if (data.restSeconds && data.restSeconds > 0) {
+                setRestTimerSeconds(data.restSeconds);
+                setShowRestTimerOverlay(true);
+                setShowAddEntryModal(false);
+              }
+
+              // Keep modal open for next set or close if done
+              if (currentSetNumber >= totalSetsCount) {
+                setShowAddEntryModal(false);
+                setCurrentSetNumber(1);
+              }
+            }
+          } catch (error) {
+            console.error('Failed to add entry:', error);
+          }
+        }}
+        exercises={exercises.map(e => ({
+          id: e.id,
+          name: e.name,
+          category: e.category,
+          muscleGroups: e.muscleGroups,
+          equipment: e.equipment
+        }))}
+        recentExercises={recentExercises.map(e => {
+          const full = exercises.find(ex => ex.id === e.id);
+          return {
+            id: e.id,
+            name: e.name,
+            category: full?.category || 'General',
+            muscleGroups: full?.muscleGroups || [],
+            equipment: full?.equipment || []
+          };
+        })}
+        initialExercise={selectedExercise ? {
+          id: selectedExercise.id,
+          name: selectedExercise.name,
+          category: selectedExercise.category,
+          muscleGroups: selectedExercise.muscleGroups,
+          equipment: selectedExercise.equipment
+        } : null}
+        currentSet={currentSetNumber}
+        totalSets={totalSetsCount}
+        lastEntry={lastLoggedEntry}
+      />
+
+      {/* Rest Timer Overlay - Full screen */}
+      <RestTimerOverlay
+        isOpen={showRestTimerOverlay}
+        initialSeconds={restTimerSeconds}
+        onComplete={() => {
+          setShowRestTimerOverlay(false);
+          setShowAddEntryModal(true); // Re-open add modal for next set
+        }}
+        onSkip={() => {
+          setShowRestTimerOverlay(false);
+          setShowAddEntryModal(true);
+        }}
+        nextExercise={selectedExercise ? {
+          name: selectedExercise.name,
+          weight: lastLoggedEntry?.weight || 0,
+          reps: lastLoggedEntry?.reps || 8
+        } : undefined}
+      />
+
+      {/* Form Guide Modal */}
+      {selectedExercise && (
+        <FormGuideModal
+          exerciseId={selectedExercise.id}
+          exerciseName={selectedExercise.name}
+          isOpen={showFormGuideModal}
+          onClose={() => setShowFormGuideModal(false)}
+        />
+      )}
     </>
+  );
+}
+
+export default function WorkoutLogPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>}>
+      <WorkoutLogPageContent />
+    </Suspense>
   );
 }

@@ -1,3 +1,6 @@
+/* Material Design Icons - needed for program components */
+@import url('https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css');
+
 /* stylelint-disable-next-line at-rule-no-unknown */
 @tailwind base;
 /* stylelint-disable-next-line at-rule-no-unknown */

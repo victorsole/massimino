@@ -14,10 +14,10 @@ const nextConfig = {
       const cspValue = [
         "default-src 'self'",
         "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://connect.facebook.net https://accounts.google.com https://apis.google.com",
-        "style-src 'self' 'unsafe-inline'",
+        "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
         "img-src 'self' data: https: https://i.ytimg.com",
-        "font-src 'self'",
-        "connect-src 'self' https://api.openai.com https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://www.facebook.com https://graph.facebook.com https://www.linkedin.com https://api.linkedin.com",
+        "font-src 'self' https://cdn.jsdelivr.net",
+        "connect-src 'self' https://api.openai.com https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://www.facebook.com https://graph.facebook.com https://www.linkedin.com https://api.linkedin.com https://cdn.jsdelivr.net",
         "frame-src 'self' https://accounts.google.com https://www.facebook.com https://staticxx.facebook.com https://www.linkedin.com",
         "form-action 'self' https://accounts.google.com https://www.facebook.com https://www.linkedin.com",
       ].join('; ')
@@ -68,6 +68,10 @@ const nextConfig = {
           protocol: 'https',
           hostname: 'avatars.githubusercontent.com', // GitHub profile images (backup auth)
         },
+        {
+          protocol: 'https',
+          hostname: 'static.exercisedb.dev', // ExerciseDB exercise images/GIFs
+        },
       ],
       formats: ['image/webp', 'image/avif'],
     },
@@ -111,7 +115,7 @@ const nextConfig = {
         // Redirect bare usernames to /bio/:username, excluding known top-level routes
         {
           source:
-            '/:username((?!api|admin|profile|dashboard|messages|teams|exercises|workout-log|terms|privacy|safety|community|massiminos|login|signup|register|unauthorized|partnerships|assessments|my-athletes|bio|cookies|legal|trainer|athlete|static|uploads|public|images|_next|favicon\\.ico|.*\\..*).+)',
+            '/:username((?!api|admin|profile|dashboard|messages|teams|exercises|workout-log|terms|privacy|safety|community|massiminos|login|signup|register|unauthorized|partnerships|assessments|my-athletes|bio|cookies|legal|trainer|athlete|static|uploads|public|images|_next|favicon\\.ico|settings|.*\\..*).+)',
           destination: '/bio/:username',
           permanent: false,
         },
