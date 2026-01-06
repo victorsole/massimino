@@ -1,0 +1,604 @@
+{
+  "program": "The GGF Fitness Workout for Ballet Dancers",
+  "author": "Gabriel Garcia Forn",
+  "era": "Contemporary Ballet Era",
+  "version": "1.0",
+  "program_id": "ggf-ballet-fitness",
+  "target_audience": "Professional ballet dancers, dance students, and those seeking dancer-like physique and control",
+  "duration_weeks": 8,
+  "session_duration_minutes": {
+    "min": 45,
+    "max": 60
+  },
+  "frequency_per_week": 4,
+  "rest_days_per_week": 3,
+  "level": "Intermediate",
+  "programType": "ATHLETE",
+  "settings": ["Gym with cable machines", "Mirror recommended for form check"],
+  "equipment": {
+    "required": ["Dumbbells (light to moderate)", "Cable machine", "Resistance bands", "Mat"],
+    "recommended": ["Ballet barre or sturdy chair", "Foam roller", "Stability ball"],
+    "optional": ["Ankle weights", "Pilates ring"]
+  },
+
+  "athlete_info": {
+    "name": "Gabriel Garcia Forn",
+    "discipline": "Professional Ballet",
+    "training_philosophy": "Strength without bulk, control through full range of motion, injury prevention as priority"
+  },
+
+  "program_philosophy": {
+    "origin": "This program combines classical ballet conditioning principles with modern sports science. Professional dancers need exceptional strength-to-weight ratio, impeccable body control, and bulletproof joints to perform demanding choreography night after night.",
+    "ggf_quote": "\"Dance is controlled falling. Every movement requires strength, balance, and trust in your body. The gym builds the foundation that lets artistry flourish.\"",
+    "core_principles": [
+      "Strength without excessive muscle bulk - high reps, moderate weight",
+      "Full range of motion in every exercise - mimics dance demands",
+      "Single-leg work for balance and symmetry",
+      "Core control in every movement - the center of all dance",
+      "Flexibility maintenance alongside strength building",
+      "Foot and ankle strength for pointe work and jumps"
+    ]
+  },
+
+  "realistic_expectations": {
+    "8_week_realistic_outcomes": [
+      "Improved jump height and landing control",
+      "Stronger, more stable ankles and feet",
+      "Enhanced core endurance for sustained positions",
+      "Better balance on single leg (retire, arabesque)",
+      "Increased turnout control and hip strength",
+      "Reduced risk of common dance injuries"
+    ],
+    "timeline": {
+      "weeks_1_2": "Foundation - neuromuscular activation and movement quality",
+      "weeks_3_4": "Building strength endurance",
+      "weeks_5_6": "Power and control integration",
+      "weeks_7_8": "Performance readiness and refinement"
+    }
+  },
+
+  "training_schedule": {
+    "day_1": "Lower Body Strength & Turnout",
+    "day_2": "Core & Upper Body Control",
+    "day_3": "Rest / Flexibility & Recovery",
+    "day_4": "Single-Leg & Balance Focus",
+    "day_5": "Rest / Light Cardio or Barre",
+    "day_6": "Full Body Integration & Power",
+    "day_7": "Rest / Active Recovery"
+  },
+
+  "phase_structure": [
+    {
+      "phase": "Activation & Foundation",
+      "weeks": [1, 2],
+      "focus": "Wake up stabilizers, establish movement patterns",
+      "intensity": "Light to moderate",
+      "rep_range": "12-15",
+      "sets": "3",
+      "rest_seconds": "45-60",
+      "key_principle": "Mind-muscle connection"
+    },
+    {
+      "phase": "Strength Endurance",
+      "weeks": [3, 4, 5],
+      "focus": "Build muscular endurance for long rehearsals and performances",
+      "intensity": "Moderate - higher reps",
+      "rep_range": "15-20",
+      "sets": "3",
+      "rest_seconds": "30-45",
+      "key_principle": "Sustained control under fatigue"
+    },
+    {
+      "phase": "Performance Peak",
+      "weeks": [6, 7, 8],
+      "focus": "Power, control, and movement quality",
+      "intensity": "Moderate to high with focus on quality",
+      "rep_range": "10-12",
+      "sets": "3",
+      "rest_seconds": "45-60",
+      "key_principle": "Elegance meets strength"
+    }
+  ],
+
+  "day_1_lower_body_turnout": {
+    "focus": "Lower Body Strength & Turnout",
+    "goal": "Build leg strength while maintaining dancer lines and improving turnout",
+    "sections": [
+      {
+        "section": "warm_up",
+        "description": "Hip and leg activation",
+        "exercises": [
+          {
+            "exercise": "Hip Flexor Stretch",
+            "sets": "2",
+            "reps": "45 sec each side",
+            "tempo": "Hold with breath",
+            "rest": "None",
+            "notes": "Essential for dancer hip mobility - deep lunge position",
+            "imageUrl": "/exercises/hip-flexor-stretch/0.jpg"
+          },
+          {
+            "exercise": "Leg Extension",
+            "sets": "2",
+            "reps": "20",
+            "tempo": "Slow, squeeze at top",
+            "rest": "30s",
+            "notes": "Light weight - VMO activation for knee health",
+            "imageUrl": "/exercises/leg-extension/0.jpg"
+          },
+          {
+            "exercise": "Lying Leg Curl",
+            "sets": "2",
+            "reps": "15",
+            "tempo": "Controlled",
+            "rest": "30s",
+            "notes": "Hamstring activation",
+            "imageUrl": "/exercises/lying-leg-curl/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "lower_body_strength",
+        "description": "Building dancer-strong legs",
+        "exercises": [
+          {
+            "exercise": "Bulgarian Split Squat",
+            "sets": "3",
+            "reps": "15 each leg",
+            "tempo": "3 sec down, controlled up",
+            "rest": "45s each leg",
+            "notes": "Light dumbbells. Focus on turnout and alignment. Keep hips square.",
+            "imageUrl": "/exercises/bulgarian-split-squat/0.jpg"
+          },
+          {
+            "exercise": "Romanian Deadlift",
+            "sets": "3",
+            "reps": "12",
+            "tempo": "Slow eccentric",
+            "rest": "60s",
+            "notes": "Light to moderate weight. Feel the hamstring stretch - critical for arabesques",
+            "imageUrl": "/exercises/romanian-deadlift/0.jpg"
+          },
+          {
+            "exercise": "Leg Press",
+            "sets": "3",
+            "reps": "20",
+            "tempo": "Controlled",
+            "rest": "60s",
+            "notes": "Feet in turnout position (first position). Higher reps for endurance without bulk.",
+            "imageUrl": "/exercises/leg-press/0.jpg"
+          },
+          {
+            "exercise": "Lunge",
+            "sets": "3",
+            "reps": "12 each leg",
+            "tempo": "Slow and controlled",
+            "rest": "45s",
+            "notes": "Reverse lunges - maintain turnout throughout. No weights or light dumbbells.",
+            "imageUrl": "/exercises/lunge/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "ankle_foot_strength",
+        "description": "Critical for pointe work and jumps",
+        "exercises": [
+          {
+            "exercise": "Standing Calf Raise",
+            "sets": "4",
+            "reps": "20",
+            "tempo": "2 sec hold at top (releve)",
+            "rest": "30s",
+            "notes": "Both parallel and turnout positions. Full releve at top.",
+            "imageUrl": "/exercises/standing-calf-raise/0.jpg"
+          },
+          {
+            "exercise": "Seated Calf Raise",
+            "sets": "3",
+            "reps": "20",
+            "tempo": "Slow, full ROM",
+            "rest": "30s",
+            "notes": "Soleus strength for demi-plie stability",
+            "imageUrl": "/exercises/seated-calf-raise/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "core_finish",
+        "description": "Core activation to close",
+        "exercises": [
+          {
+            "exercise": "Plank",
+            "sets": "2",
+            "reps": "45 sec",
+            "tempo": "Hold with dancer posture",
+            "rest": "30s",
+            "notes": "Imagine lengthening through the crown. Core pulled in.",
+            "imageUrl": "/exercises/plank/0.jpg"
+          }
+        ]
+      }
+    ]
+  },
+
+  "day_2_core_upper_body": {
+    "focus": "Core & Upper Body Control",
+    "goal": "Build the center strength and upper body control for partnering and port de bras",
+    "sections": [
+      {
+        "section": "warm_up",
+        "description": "Spine and core activation",
+        "exercises": [
+          {
+            "exercise": "Cat Cow Stretch",
+            "sets": "2",
+            "reps": "12",
+            "tempo": "Breath-led movement",
+            "rest": "None",
+            "notes": "Articulate through each vertebra - spine mobility",
+            "imageUrl": "/exercises/cat-cow-stretch/0.jpg"
+          },
+          {
+            "exercise": "Dead Bug",
+            "sets": "2",
+            "reps": "10 each side",
+            "tempo": "Controlled",
+            "rest": "30s",
+            "notes": "Maintain neutral spine - core activation without hip flexor dominance",
+            "imageUrl": "/exercises/dead-bug/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "core_strength",
+        "description": "The dancer's powerhouse",
+        "exercises": [
+          {
+            "exercise": "Hanging Knee Raise",
+            "sets": "3",
+            "reps": "15",
+            "tempo": "Controlled, no swing",
+            "rest": "45s",
+            "notes": "Lift with core, not hip flexors. Develops extension control.",
+            "imageUrl": "/exercises/hanging-knee-raise/0.jpg"
+          },
+          {
+            "exercise": "Crunch",
+            "sets": "3",
+            "reps": "25",
+            "tempo": "Slow, squeeze",
+            "rest": "30s",
+            "notes": "Small controlled movement - quality over quantity",
+            "imageUrl": "/exercises/crunch/0.jpg"
+          },
+          {
+            "exercise": "Reverse Crunch",
+            "sets": "3",
+            "reps": "15",
+            "tempo": "Controlled",
+            "rest": "30s",
+            "notes": "Lift pelvis, not just legs - lower ab focus",
+            "imageUrl": "/exercises/reverse-crunch/0.jpg"
+          },
+          {
+            "exercise": "Russian Twist",
+            "sets": "3",
+            "reps": "20 total",
+            "tempo": "Controlled rotation",
+            "rest": "30s",
+            "notes": "Light or no weight. Oblique control for turns.",
+            "imageUrl": "/exercises/russian-twist/0.jpg"
+          },
+          {
+            "exercise": "Plank",
+            "sets": "3",
+            "reps": "30 sec each side (side plank)",
+            "tempo": "Hold",
+            "rest": "30s",
+            "notes": "Side planks for lateral stability",
+            "imageUrl": "/exercises/plank/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "upper_body",
+        "description": "Toned arms for port de bras and partnering",
+        "exercises": [
+          {
+            "exercise": "Lat Pulldown",
+            "sets": "3",
+            "reps": "15",
+            "tempo": "Controlled, squeeze",
+            "rest": "45s",
+            "notes": "Wide grip - develops beautiful back lines",
+            "imageUrl": "/exercises/lat-pulldown/0.jpg"
+          },
+          {
+            "exercise": "Dumbbell Bench Press",
+            "sets": "3",
+            "reps": "15",
+            "tempo": "Controlled",
+            "rest": "45s",
+            "notes": "Light weights - strength without bulk",
+            "imageUrl": "/exercises/dumbbell-bench-press/0.jpg"
+          },
+          {
+            "exercise": "Lateral Raise",
+            "sets": "3",
+            "reps": "15",
+            "tempo": "Slow raise, slow lower",
+            "rest": "30s",
+            "notes": "Very light weights. Develops second position arm control.",
+            "imageUrl": "/exercises/lateral-raise/0.jpg"
+          },
+          {
+            "exercise": "Face Pull",
+            "sets": "3",
+            "reps": "15",
+            "tempo": "Squeeze at end",
+            "rest": "30s",
+            "notes": "Posture and shoulder health - prevents rounded shoulders",
+            "imageUrl": "/exercises/face-pull/0.jpg"
+          },
+          {
+            "exercise": "Dumbbell Curl",
+            "sets": "3",
+            "reps": "15",
+            "tempo": "Controlled",
+            "rest": "30s",
+            "notes": "Light weights for toned arms without bulk",
+            "imageUrl": "/exercises/dumbbell-curl/0.jpg"
+          },
+          {
+            "exercise": "Tricep Pushdown",
+            "sets": "3",
+            "reps": "15",
+            "tempo": "Squeeze at bottom",
+            "rest": "30s",
+            "notes": "Defined, toned triceps",
+            "imageUrl": "/exercises/tricep-pushdown/0.jpg"
+          }
+        ]
+      }
+    ]
+  },
+
+  "day_4_single_leg_balance": {
+    "focus": "Single-Leg & Balance Focus",
+    "goal": "Develop the single-leg strength and balance critical for dance",
+    "sections": [
+      {
+        "section": "warm_up",
+        "description": "Proprioception activation",
+        "exercises": [
+          {
+            "exercise": "Hip Flexor Stretch",
+            "sets": "2",
+            "reps": "45 sec each",
+            "tempo": "Deep stretch with breath",
+            "rest": "None",
+            "notes": "Essential for arabesque and extension",
+            "imageUrl": "/exercises/hip-flexor-stretch/0.jpg"
+          },
+          {
+            "exercise": "Leg Extension",
+            "sets": "2",
+            "reps": "15 single leg",
+            "tempo": "Slow, controlled",
+            "rest": "30s",
+            "notes": "Each leg separately - feel the quad work",
+            "imageUrl": "/exercises/leg-extension/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "single_leg_strength",
+        "description": "Building balance and unilateral power",
+        "exercises": [
+          {
+            "exercise": "Bulgarian Split Squat",
+            "sets": "3",
+            "reps": "12 each leg",
+            "tempo": "3 sec down, pause, up",
+            "rest": "45s each leg",
+            "notes": "No weight or very light. Focus entirely on balance and alignment.",
+            "imageUrl": "/exercises/bulgarian-split-squat/0.jpg"
+          },
+          {
+            "exercise": "Romanian Deadlift",
+            "sets": "3",
+            "reps": "10 each leg (single leg)",
+            "tempo": "Slow and controlled",
+            "rest": "45s each leg",
+            "notes": "Single-leg RDL - the dancer's best friend for hamstring and balance",
+            "imageUrl": "/exercises/romanian-deadlift/0.jpg"
+          },
+          {
+            "exercise": "Lunge",
+            "sets": "3",
+            "reps": "10 each leg (curtsy)",
+            "tempo": "Controlled",
+            "rest": "45s",
+            "notes": "Curtsy lunge pattern - cross behind in turnout",
+            "imageUrl": "/exercises/lunge/0.jpg"
+          },
+          {
+            "exercise": "Standing Calf Raise",
+            "sets": "4",
+            "reps": "20 each leg",
+            "tempo": "2 sec releve hold",
+            "rest": "30s each leg",
+            "notes": "Single-leg calf raises - essential for pointe strength",
+            "imageUrl": "/exercises/standing-calf-raise/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "balance_challenge",
+        "description": "Stability work",
+        "exercises": [
+          {
+            "exercise": "Mountain Climber",
+            "sets": "3",
+            "reps": "20 sec slow",
+            "tempo": "Slow and controlled",
+            "rest": "30s",
+            "notes": "Slow mountain climbers - core and hip flexor control",
+            "imageUrl": "/exercises/mountain-climber/0.jpg"
+          },
+          {
+            "exercise": "Plank",
+            "sets": "3",
+            "reps": "30 sec (single leg lift)",
+            "tempo": "Hold with leg extended",
+            "rest": "30s",
+            "notes": "Plank with alternating leg lifts - arabesque position",
+            "imageUrl": "/exercises/plank/0.jpg"
+          }
+        ]
+      }
+    ]
+  },
+
+  "day_6_full_body_integration": {
+    "focus": "Full Body Integration & Power",
+    "goal": "Combine strength with power for jumps and dynamic movement",
+    "sections": [
+      {
+        "section": "warm_up",
+        "description": "Full body activation",
+        "exercises": [
+          {
+            "exercise": "Elliptical",
+            "sets": "1",
+            "reps": "5 min",
+            "tempo": "Light",
+            "rest": "None",
+            "notes": "Low impact warm-up - gentle on dancer joints",
+            "imageUrl": "/exercises/elliptical/0.jpg"
+          },
+          {
+            "exercise": "Cat Cow Stretch",
+            "sets": "1",
+            "reps": "10",
+            "tempo": "Flowing",
+            "rest": "None",
+            "notes": "Spine articulation",
+            "imageUrl": "/exercises/cat-cow-stretch/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "compound_movements",
+        "description": "Full body strength integration",
+        "exercises": [
+          {
+            "exercise": "Front Squat",
+            "sets": "3",
+            "reps": "12",
+            "tempo": "Controlled",
+            "rest": "60s",
+            "notes": "Light weight. Upright torso like a dancer. Focus on depth and alignment.",
+            "imageUrl": "/exercises/front-squat/0.jpg"
+          },
+          {
+            "exercise": "Romanian Deadlift",
+            "sets": "3",
+            "reps": "12",
+            "tempo": "Slow eccentric",
+            "rest": "60s",
+            "notes": "Hip hinge pattern - foundational for penche and arabesques",
+            "imageUrl": "/exercises/romanian-deadlift/0.jpg"
+          },
+          {
+            "exercise": "Pull-Up",
+            "sets": "3",
+            "reps": "8-12 (assisted if needed)",
+            "tempo": "Controlled",
+            "rest": "60s",
+            "notes": "Use assistance band if needed. Full ROM for back development.",
+            "imageUrl": "/exercises/pull-up/0.jpg"
+          },
+          {
+            "exercise": "Overhead Press",
+            "sets": "3",
+            "reps": "12",
+            "tempo": "Controlled",
+            "rest": "45s",
+            "notes": "Light dumbbells. Overhead control for lifts and fifth position.",
+            "imageUrl": "/exercises/overhead-press/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "jump_power",
+        "description": "Plyometric work for allegro",
+        "exercises": [
+          {
+            "exercise": "Jump Rope",
+            "sets": "3",
+            "reps": "1 min",
+            "tempo": "Light bounce",
+            "rest": "30s",
+            "notes": "Stay on balls of feet - releve position. Builds ankle endurance.",
+            "imageUrl": "/exercises/jump-rope/0.jpg"
+          },
+          {
+            "exercise": "Lunge",
+            "sets": "3",
+            "reps": "10 each (jumping)",
+            "tempo": "Explosive but controlled",
+            "rest": "45s",
+            "notes": "Jumping lunges with soft landing - builds jump power",
+            "imageUrl": "/exercises/lunge/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "core_finish",
+        "description": "Core endurance finisher",
+        "exercises": [
+          {
+            "exercise": "Hanging Knee Raise",
+            "sets": "3",
+            "reps": "12",
+            "tempo": "Controlled",
+            "rest": "30s",
+            "notes": "Core control without momentum",
+            "imageUrl": "/exercises/hanging-knee-raise/0.jpg"
+          },
+          {
+            "exercise": "Plank",
+            "sets": "1",
+            "reps": "60 sec",
+            "tempo": "Hold with perfect form",
+            "rest": "None",
+            "notes": "Final hold - imagine your center pulling everything together",
+            "imageUrl": "/exercises/plank/0.jpg"
+          }
+        ]
+      }
+    ]
+  },
+
+  "flexibility_maintenance": {
+    "importance": "Strength training should complement, not compromise flexibility. Always stretch after strength sessions.",
+    "key_stretches": [
+      "Hip flexor stretch (essential)",
+      "Hamstring stretch",
+      "Pigeon pose for hip external rotation",
+      "Quad stretch",
+      "Shoulder stretch"
+    ],
+    "timing": "Hold each stretch 45-60 seconds after workout"
+  },
+
+  "nutrition_guidelines": {
+    "general": "Dancers need to fuel performance while maintaining physique. Focus on lean proteins, complex carbs, and plenty of vegetables.",
+    "pre_workout": "Light carbs 1 hour before - banana or toast with honey",
+    "post_workout": "Protein within 30 minutes for recovery",
+    "hydration": "Essential for muscle function and joint health"
+  },
+
+  "tags": ["Ballet", "Dance", "Flexibility", "Core Strength", "Balance", "Toning", "Injury Prevention", "Artistic Athletes"]
+}
