@@ -1,0 +1,563 @@
+{
+  "program": "The Verdabros Pro Ski Fitness Workout",
+  "author": "Lucas, Oliver & Anton Verdaguer Forn",
+  "era": "Modern Freestyle Skiing Era",
+  "version": "1.0",
+  "program_id": "verdabros-ski-fitness",
+  "target_audience": "Freestyle skiers, mogul athletes, and winter sports enthusiasts",
+  "duration_weeks": 8,
+  "session_duration_minutes": {
+    "min": 50,
+    "max": 75
+  },
+  "frequency_per_week": 4,
+  "rest_days_per_week": 3,
+  "level": "Intermediate to Advanced",
+  "programType": "ATHLETE",
+  "settings": ["Gym with full equipment", "Access to plyometric boxes recommended"],
+  "equipment": {
+    "required": ["Barbell", "Dumbbells", "Squat rack", "Cable machine", "Bench"],
+    "recommended": ["Plyometric box", "Resistance bands", "Balance board", "Medicine ball"],
+    "optional": ["Rowing machine", "Stationary bike"]
+  },
+
+  "athlete_info": {
+    "names": ["Lucas Verdaguer Forn", "Oliver Verdaguer Forn", "Anton Verdaguer Forn"],
+    "achievements": [
+      "Spanish Freestyle Skiing Champions (2022-2023)",
+      "European Cup competitors",
+      "Top finishers at Junior World Championships Italy (2021/2022)"
+    ],
+    "hometown": "Meranges, Catalonian Pyrenees (population < 100)",
+    "disciplines": ["Mogul skiing", "Slopestyle"],
+    "goal": "Olympic Games podium as a family"
+  },
+
+  "program_philosophy": {
+    "origin": "This program was developed based on the training principles that transformed three brothers from a tiny Pyrenean village into Spanish champions and international competitors. Mogul skiing demands explosive power, incredible core stability, and the ability to absorb repeated impacts while maintaining perfect body control.",
+    "verdabros_quote": "\"We grew up with skiing in our blood. Our parents put us on skis before we could walk. The mountains are our gym, but the gym prepares us for the mountains.\"",
+    "core_principles": [
+      "Explosive power for aerial maneuvers and mogul absorption",
+      "Bulletproof core for rotational stability during tricks",
+      "Single-leg strength for asymmetric landings",
+      "Eccentric strength for impact absorption",
+      "Endurance for back-to-back competition runs"
+    ]
+  },
+
+  "realistic_expectations": {
+    "8_week_realistic_outcomes": [
+      "25-40% improvement in explosive leg power",
+      "Significant core stability gains",
+      "Better single-leg balance and proprioception",
+      "Improved eccentric strength for impact absorption",
+      "Enhanced cardiovascular endurance for competition"
+    ],
+    "timeline": {
+      "weeks_1_2": "Foundation - building work capacity and movement patterns",
+      "weeks_3_4": "Power development - introducing explosive movements",
+      "weeks_5_6": "Sport-specific - integrating rotational and balance work",
+      "weeks_7_8": "Peak preparation - competition-ready conditioning"
+    }
+  },
+
+  "training_schedule": {
+    "day_1": "Lower Body Power & Plyometrics",
+    "day_2": "Upper Body & Core Stability",
+    "day_3": "Rest / Active Recovery",
+    "day_4": "Single-Leg & Balance Training",
+    "day_5": "Rest / Light Cardio",
+    "day_6": "Full Body Power & Conditioning",
+    "day_7": "Rest / Mobility Work"
+  },
+
+  "phase_structure": [
+    {
+      "phase": "Foundation",
+      "weeks": [1, 2],
+      "focus": "Build base strength and movement quality",
+      "intensity": "Moderate - focus on form",
+      "rep_range": "10-12",
+      "sets": "3",
+      "rest_seconds": "60-90",
+      "key_principle": "Movement quality over load"
+    },
+    {
+      "phase": "Power Development",
+      "weeks": [3, 4, 5],
+      "focus": "Explosive power and reactive strength",
+      "intensity": "High - maximal effort on power movements",
+      "rep_range": "5-8",
+      "sets": "4",
+      "rest_seconds": "90-120",
+      "key_principle": "Maximum force production"
+    },
+    {
+      "phase": "Competition Prep",
+      "weeks": [6, 7, 8],
+      "focus": "Sport-specific conditioning and peaking",
+      "intensity": "Variable - tapering toward end",
+      "rep_range": "3-6",
+      "sets": "4",
+      "rest_seconds": "120-180",
+      "key_principle": "Peak performance"
+    }
+  ],
+
+  "day_1_lower_body_power": {
+    "focus": "Lower Body Power & Plyometrics",
+    "goal": "Build explosive leg power for mogul absorption and aerial takeoffs",
+    "sections": [
+      {
+        "section": "warm_up",
+        "description": "Dynamic activation for explosive training",
+        "exercises": [
+          {
+            "exercise": "Stationary Bike",
+            "sets": "1",
+            "reps": "5 min",
+            "tempo": "Moderate",
+            "rest": "None",
+            "notes": "Light spin to increase blood flow",
+            "imageUrl": "/exercises/stationary-bike/0.jpg"
+          },
+          {
+            "exercise": "Leg Extension",
+            "sets": "2",
+            "reps": "15",
+            "tempo": "Controlled",
+            "rest": "30s",
+            "notes": "Light weight - quad activation only",
+            "imageUrl": "/exercises/leg-extension/0.jpg"
+          },
+          {
+            "exercise": "Lying Leg Curl",
+            "sets": "2",
+            "reps": "15",
+            "tempo": "Controlled",
+            "rest": "30s",
+            "notes": "Light weight - hamstring activation",
+            "imageUrl": "/exercises/lying-leg-curl/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "power_development",
+        "description": "Explosive movements for skiing power",
+        "exercises": [
+          {
+            "exercise": "Front Squat",
+            "sets": "4",
+            "reps": "5",
+            "tempo": "Explosive up, controlled down",
+            "rest": "2-3 min",
+            "notes": "Focus on explosive drive from the bottom. Mimics mogul absorption position.",
+            "imageUrl": "/exercises/front-squat/0.jpg"
+          },
+          {
+            "exercise": "Romanian Deadlift",
+            "sets": "4",
+            "reps": "8",
+            "tempo": "3 sec eccentric",
+            "rest": "90s",
+            "notes": "Eccentric focus - trains impact absorption",
+            "imageUrl": "/exercises/romanian-deadlift/0.jpg"
+          },
+          {
+            "exercise": "Bulgarian Split Squat",
+            "sets": "3",
+            "reps": "8 each leg",
+            "tempo": "Controlled",
+            "rest": "60s each leg",
+            "notes": "Single-leg power for asymmetric landings",
+            "imageUrl": "/exercises/bulgarian-split-squat/0.jpg"
+          },
+          {
+            "exercise": "Leg Press",
+            "sets": "4",
+            "reps": "12",
+            "tempo": "Explosive push, slow return",
+            "rest": "90s",
+            "notes": "Wide stance to target adductors used in skiing",
+            "imageUrl": "/exercises/leg-press/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "plyometrics",
+        "description": "Reactive power for jumps and landings",
+        "exercises": [
+          {
+            "exercise": "Jump Rope",
+            "sets": "3",
+            "reps": "1 min",
+            "tempo": "Fast",
+            "rest": "30s",
+            "notes": "Quick feet - mimics mogul rhythm",
+            "imageUrl": "/exercises/jump-rope/0.jpg"
+          },
+          {
+            "exercise": "Lunge",
+            "sets": "3",
+            "reps": "10 each leg (jumping)",
+            "tempo": "Explosive",
+            "rest": "60s",
+            "notes": "Jumping lunges - alternate legs explosively",
+            "imageUrl": "/exercises/lunge/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "conditioning",
+        "description": "Endurance for competition runs",
+        "exercises": [
+          {
+            "exercise": "Rowing Machine",
+            "sets": "1",
+            "reps": "10 min intervals",
+            "tempo": "30s hard / 30s easy",
+            "rest": "None",
+            "notes": "Simulates the cardiovascular demands of mogul runs",
+            "imageUrl": "/exercises/rowing-machine/0.jpg"
+          }
+        ]
+      }
+    ]
+  },
+
+  "day_2_upper_body_core": {
+    "focus": "Upper Body & Core Stability",
+    "goal": "Build rotational core strength and upper body control for aerial maneuvers",
+    "sections": [
+      {
+        "section": "warm_up",
+        "description": "Upper body and core activation",
+        "exercises": [
+          {
+            "exercise": "Cat Cow Stretch",
+            "sets": "2",
+            "reps": "10",
+            "tempo": "Slow, controlled",
+            "rest": "None",
+            "notes": "Spine mobilization",
+            "imageUrl": "/exercises/cat-cow-stretch/0.jpg"
+          },
+          {
+            "exercise": "Dead Bug",
+            "sets": "2",
+            "reps": "10 each side",
+            "tempo": "Controlled",
+            "rest": "30s",
+            "notes": "Core activation with anti-rotation",
+            "imageUrl": "/exercises/dead-bug/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "resistance_training",
+        "description": "Upper body strength for pole plants and balance",
+        "exercises": [
+          {
+            "exercise": "Pull-Up",
+            "sets": "4",
+            "reps": "8-10",
+            "tempo": "Controlled",
+            "rest": "90s",
+            "notes": "Grip and lat strength for pole control",
+            "imageUrl": "/exercises/pull-up/0.jpg"
+          },
+          {
+            "exercise": "Dumbbell Bench Press",
+            "sets": "4",
+            "reps": "10",
+            "tempo": "Controlled",
+            "rest": "90s",
+            "notes": "Unilateral pressing for balance",
+            "imageUrl": "/exercises/dumbbell-bench-press/0.jpg"
+          },
+          {
+            "exercise": "Seated Cable Row",
+            "sets": "3",
+            "reps": "12",
+            "tempo": "Squeeze at contraction",
+            "rest": "60s",
+            "notes": "Posture and back strength",
+            "imageUrl": "/exercises/seated-cable-row/0.jpg"
+          },
+          {
+            "exercise": "Arnold Press",
+            "sets": "3",
+            "reps": "10",
+            "tempo": "Controlled rotation",
+            "rest": "60s",
+            "notes": "Shoulder stability through full ROM",
+            "imageUrl": "/exercises/arnold-press/0.jpg"
+          },
+          {
+            "exercise": "Face Pull",
+            "sets": "3",
+            "reps": "15",
+            "tempo": "Squeeze and hold",
+            "rest": "45s",
+            "notes": "Shoulder health and rear delt strength",
+            "imageUrl": "/exercises/face-pull/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "core_stability",
+        "description": "Rotational and anti-rotational core work",
+        "exercises": [
+          {
+            "exercise": "Russian Twist",
+            "sets": "3",
+            "reps": "20 total",
+            "tempo": "Controlled",
+            "rest": "45s",
+            "notes": "Rotational power for aerial tricks",
+            "imageUrl": "/exercises/russian-twist/0.jpg"
+          },
+          {
+            "exercise": "Plank",
+            "sets": "3",
+            "reps": "45 sec",
+            "tempo": "Hold",
+            "rest": "30s",
+            "notes": "Anti-extension core stability",
+            "imageUrl": "/exercises/plank/0.jpg"
+          },
+          {
+            "exercise": "Hanging Knee Raise",
+            "sets": "3",
+            "reps": "12",
+            "tempo": "Controlled",
+            "rest": "45s",
+            "notes": "Hip flexor and lower ab strength",
+            "imageUrl": "/exercises/hanging-knee-raise/0.jpg"
+          },
+          {
+            "exercise": "Cable Crunch",
+            "sets": "3",
+            "reps": "15",
+            "tempo": "Squeeze at bottom",
+            "rest": "45s",
+            "notes": "Weighted ab work for tuck positions",
+            "imageUrl": "/exercises/cable-crunch/0.jpg"
+          }
+        ]
+      }
+    ]
+  },
+
+  "day_4_single_leg_balance": {
+    "focus": "Single-Leg & Balance Training",
+    "goal": "Develop proprioception and single-leg stability for skiing",
+    "sections": [
+      {
+        "section": "warm_up",
+        "description": "Balance and activation",
+        "exercises": [
+          {
+            "exercise": "Hip Flexor Stretch",
+            "sets": "2",
+            "reps": "30 sec each side",
+            "tempo": "Hold",
+            "rest": "None",
+            "notes": "Open up hip flexors for better squat depth",
+            "imageUrl": "/exercises/hip-flexor-stretch/0.jpg"
+          },
+          {
+            "exercise": "Leg Extension",
+            "sets": "2",
+            "reps": "15 single leg",
+            "tempo": "Controlled",
+            "rest": "30s",
+            "notes": "VMO activation each leg",
+            "imageUrl": "/exercises/leg-extension/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "single_leg_strength",
+        "description": "Unilateral leg work for skiing balance",
+        "exercises": [
+          {
+            "exercise": "Bulgarian Split Squat",
+            "sets": "4",
+            "reps": "10 each leg",
+            "tempo": "3 sec down, explosive up",
+            "rest": "60s each leg",
+            "notes": "Rear foot elevated - deep stretch",
+            "imageUrl": "/exercises/bulgarian-split-squat/0.jpg"
+          },
+          {
+            "exercise": "Romanian Deadlift",
+            "sets": "3",
+            "reps": "8 each leg (single leg)",
+            "tempo": "Controlled",
+            "rest": "60s each leg",
+            "notes": "Single-leg RDL for balance and hamstring",
+            "imageUrl": "/exercises/romanian-deadlift/0.jpg"
+          },
+          {
+            "exercise": "Lunge",
+            "sets": "3",
+            "reps": "12 each leg (walking)",
+            "tempo": "Controlled steps",
+            "rest": "60s",
+            "notes": "Walking lunges with dumbbells",
+            "imageUrl": "/exercises/lunge/0.jpg"
+          },
+          {
+            "exercise": "Standing Calf Raise",
+            "sets": "4",
+            "reps": "15 single leg",
+            "tempo": "2 sec hold at top",
+            "rest": "30s each leg",
+            "notes": "Single-leg for ankle stability",
+            "imageUrl": "/exercises/standing-calf-raise/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "core_balance",
+        "description": "Core work with balance challenge",
+        "exercises": [
+          {
+            "exercise": "Mountain Climber",
+            "sets": "3",
+            "reps": "30 sec",
+            "tempo": "Fast",
+            "rest": "30s",
+            "notes": "Quick feet and core stability",
+            "imageUrl": "/exercises/mountain-climber/0.jpg"
+          },
+          {
+            "exercise": "Plank",
+            "sets": "3",
+            "reps": "30 sec each arm (single arm)",
+            "tempo": "Hold",
+            "rest": "30s",
+            "notes": "Single-arm plank for anti-rotation",
+            "imageUrl": "/exercises/plank/0.jpg"
+          }
+        ]
+      }
+    ]
+  },
+
+  "day_6_full_body_conditioning": {
+    "focus": "Full Body Power & Conditioning",
+    "goal": "Competition-ready full body workout combining strength and endurance",
+    "sections": [
+      {
+        "section": "warm_up",
+        "description": "Full body activation",
+        "exercises": [
+          {
+            "exercise": "Elliptical",
+            "sets": "1",
+            "reps": "5 min",
+            "tempo": "Moderate",
+            "rest": "None",
+            "notes": "Low impact full body warm-up",
+            "imageUrl": "/exercises/elliptical/0.jpg"
+          },
+          {
+            "exercise": "Cat Cow Stretch",
+            "sets": "1",
+            "reps": "10",
+            "tempo": "Controlled",
+            "rest": "None",
+            "notes": "Spine mobility",
+            "imageUrl": "/exercises/cat-cow-stretch/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "power_circuit",
+        "description": "Full body power movements",
+        "exercises": [
+          {
+            "exercise": "Barbell Clean and Press",
+            "sets": "4",
+            "reps": "5",
+            "tempo": "Explosive",
+            "rest": "2 min",
+            "notes": "Full body explosive power - key for aerial takeoffs",
+            "imageUrl": "/exercises/barbell-clean-and-press/0.jpg"
+          },
+          {
+            "exercise": "Front Squat",
+            "sets": "4",
+            "reps": "6",
+            "tempo": "Explosive",
+            "rest": "90s",
+            "notes": "Upright torso - ski position",
+            "imageUrl": "/exercises/front-squat/0.jpg"
+          },
+          {
+            "exercise": "One Arm Dumbbell Row",
+            "sets": "3",
+            "reps": "10 each arm",
+            "tempo": "Explosive pull",
+            "rest": "60s",
+            "notes": "Anti-rotation and back power",
+            "imageUrl": "/exercises/one-arm-dumbbell-row/0.jpg"
+          },
+          {
+            "exercise": "Dips",
+            "sets": "3",
+            "reps": "12",
+            "tempo": "Controlled",
+            "rest": "60s",
+            "notes": "Tricep and pushing strength",
+            "imageUrl": "/exercises/dips/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "metabolic_finisher",
+        "description": "Conditioning for competition endurance",
+        "exercises": [
+          {
+            "exercise": "Jump Rope",
+            "sets": "3",
+            "reps": "2 min",
+            "tempo": "Varied (doubles, singles, crossovers)",
+            "rest": "30s",
+            "notes": "Foot speed and cardiovascular conditioning",
+            "imageUrl": "/exercises/jump-rope/0.jpg"
+          },
+          {
+            "exercise": "Crunch",
+            "sets": "3",
+            "reps": "20",
+            "tempo": "Controlled",
+            "rest": "30s",
+            "notes": "Ab burnout",
+            "imageUrl": "/exercises/crunch/0.jpg"
+          },
+          {
+            "exercise": "Reverse Crunch",
+            "sets": "3",
+            "reps": "15",
+            "tempo": "Controlled",
+            "rest": "30s",
+            "notes": "Lower ab focus",
+            "imageUrl": "/exercises/reverse-crunch/0.jpg"
+          }
+        ]
+      }
+    ]
+  },
+
+  "nutrition_guidelines": {
+    "general": "Athletes should focus on high-quality protein for recovery, complex carbs for energy, and healthy fats for joint health.",
+    "pre_workout": "Light carb-rich snack 1-2 hours before training",
+    "post_workout": "Protein shake or meal within 30-60 minutes",
+    "hydration": "Critical for performance - drink throughout the day, especially at altitude"
+  },
+
+  "tags": ["Skiing", "Moguls", "Freestyle", "Athletic Performance", "Plyometrics", "Core Stability", "Balance", "Explosive Power"]
+}

@@ -1,0 +1,592 @@
+{
+  "_comment": "Mapping of Massimino program exercises to free-exercise-db IDs",
+  "_source": "https://github.com/yuhonas/free-exercise-db (Unlicense - Public Domain)",
+  "_generated": "2026-01-06",
+  "exercises": [
+    {
+      "massimino_name": "Barbell Bench Press",
+      "aliases": ["Flat Barbell Bench Press", "Bench Press"],
+      "free_exercise_db_id": "Barbell_Bench_Press_-_Medium_Grip",
+      "category": "chest"
+    },
+    {
+      "massimino_name": "Incline Barbell Bench Press",
+      "aliases": ["Incline Bench Press"],
+      "free_exercise_db_id": "Barbell_Incline_Bench_Press_-_Medium_Grip",
+      "category": "chest"
+    },
+    {
+      "massimino_name": "Decline Barbell Bench Press",
+      "aliases": ["Decline Bench Press"],
+      "free_exercise_db_id": "Decline_Barbell_Bench_Press",
+      "category": "chest"
+    },
+    {
+      "massimino_name": "Dumbbell Bench Press",
+      "aliases": ["Flat Dumbbell Press", "Flat Dumbbell Bench Press"],
+      "free_exercise_db_id": "Dumbbell_Bench_Press",
+      "category": "chest"
+    },
+    {
+      "massimino_name": "Incline Dumbbell Press",
+      "aliases": ["Incline Dumbbell Bench Press"],
+      "free_exercise_db_id": "Incline_Dumbbell_Press",
+      "category": "chest"
+    },
+    {
+      "massimino_name": "Decline Dumbbell Press",
+      "aliases": ["Decline Dumbbell Bench Press"],
+      "free_exercise_db_id": "Decline_Dumbbell_Bench_Press",
+      "category": "chest"
+    },
+    {
+      "massimino_name": "Close Grip Bench Press",
+      "aliases": ["Close-Grip Bench Press"],
+      "free_exercise_db_id": "Close-Grip_Barbell_Bench_Press",
+      "category": "triceps"
+    },
+    {
+      "massimino_name": "Dumbbell Flye",
+      "aliases": ["Flat Dumbbell Fly", "Flat Dumbbell Flyes", "Dumbbell Fly"],
+      "free_exercise_db_id": "Dumbbell_Flyes",
+      "category": "chest"
+    },
+    {
+      "massimino_name": "Incline Dumbbell Flye",
+      "aliases": ["Incline Dumbbell Fly", "Incline Dumbbell Flyes"],
+      "free_exercise_db_id": "Incline_Dumbbell_Flyes",
+      "category": "chest"
+    },
+    {
+      "massimino_name": "Cable Crossover",
+      "aliases": ["Cable Fly", "Cable Crossovers", "Cable Flyes"],
+      "free_exercise_db_id": "Cable_Crossover",
+      "category": "chest"
+    },
+    {
+      "massimino_name": "Pec Deck",
+      "aliases": ["Pec Deck Flyes", "Machine Flyes"],
+      "free_exercise_db_id": "Butterfly",
+      "category": "chest"
+    },
+    {
+      "massimino_name": "Dumbbell Pullover",
+      "aliases": ["Pullover", "Dumbbell Pullovers"],
+      "free_exercise_db_id": "Bent-Arm_Dumbbell_Pullover",
+      "category": "chest"
+    },
+    {
+      "massimino_name": "Barbell Row",
+      "aliases": ["Bent Over Row", "Bent Over Barbell Row", "Barbell Rows"],
+      "free_exercise_db_id": "Bent_Over_Barbell_Row",
+      "category": "back"
+    },
+    {
+      "massimino_name": "T-Bar Row",
+      "aliases": ["T Bar Row", "Chest-Supported T-Bar Row"],
+      "free_exercise_db_id": "T-Bar_Row_with_Handle",
+      "category": "back"
+    },
+    {
+      "massimino_name": "One Arm Dumbbell Row",
+      "aliases": ["Dumbbell Row", "Single Arm Dumbbell Row", "Chest-Supported Dumbbell Row"],
+      "free_exercise_db_id": "One-Arm_Dumbbell_Row",
+      "category": "back"
+    },
+    {
+      "massimino_name": "Seated Cable Row",
+      "aliases": ["Low Pulley Rows", "Seated Pulley Row", "Cable Row"],
+      "free_exercise_db_id": "Seated_Cable_Rows",
+      "category": "back"
+    },
+    {
+      "massimino_name": "Pull-up",
+      "aliases": ["Wide Grip Pull-up", "Wide Grip Pull up", "Pullup"],
+      "free_exercise_db_id": "Pullups",
+      "category": "back"
+    },
+    {
+      "massimino_name": "Chin-Up",
+      "aliases": ["Chin Up", "Chinup"],
+      "free_exercise_db_id": "Chin-Up",
+      "category": "back"
+    },
+    {
+      "massimino_name": "Lat Pulldown",
+      "aliases": ["Wide Grip Lat Pulldown", "Lat Pull Down", "Machine Lat Pulldown"],
+      "free_exercise_db_id": "Wide-Grip_Lat_Pulldown",
+      "category": "back"
+    },
+    {
+      "massimino_name": "Close Grip Lat Pulldown",
+      "aliases": ["Front Lat Pulldowns"],
+      "free_exercise_db_id": "Close-Grip_Front_Lat_Pulldown",
+      "category": "back"
+    },
+    {
+      "massimino_name": "Deadlift",
+      "aliases": ["Barbell Deadlift", "Conventional Deadlift"],
+      "free_exercise_db_id": "Barbell_Deadlift",
+      "category": "back"
+    },
+    {
+      "massimino_name": "Hyperextension",
+      "aliases": ["45-Degree Hyperextension", "Back Extension"],
+      "free_exercise_db_id": "Hyperextensions_Back_Extensions",
+      "category": "back"
+    },
+    {
+      "massimino_name": "Overhead Press",
+      "aliases": ["Military Press", "Barbell Military Press", "Standing Military Press", "Barbell Shoulder Press"],
+      "free_exercise_db_id": "Barbell_Shoulder_Press",
+      "category": "shoulders"
+    },
+    {
+      "massimino_name": "Seated Dumbbell Press",
+      "aliases": ["Seated Dumbbell Shoulder Press", "Seated Dumbbell Overhead Press"],
+      "free_exercise_db_id": "Dumbbell_Shoulder_Press",
+      "category": "shoulders"
+    },
+    {
+      "massimino_name": "Arnold Press",
+      "aliases": ["Arnold Dumbbell Press"],
+      "free_exercise_db_id": "Arnold_Dumbbell_Press",
+      "category": "shoulders"
+    },
+    {
+      "massimino_name": "Behind The Neck Press",
+      "aliases": ["Behind The Neck Overhead Press"],
+      "free_exercise_db_id": "Push_Press_-_Behind_the_Neck",
+      "category": "shoulders"
+    },
+    {
+      "massimino_name": "Barbell Clean and Press",
+      "aliases": ["Clean and Press"],
+      "free_exercise_db_id": "Clean_and_Press",
+      "category": "shoulders"
+    },
+    {
+      "massimino_name": "Lateral Raise",
+      "aliases": ["Lateral Raises", "Dumbbell Lateral Raise", "Side Lateral Raise"],
+      "free_exercise_db_id": "Side_Lateral_Raise",
+      "category": "shoulders"
+    },
+    {
+      "massimino_name": "Cable Lateral Raise",
+      "aliases": ["Single Arm Cable Lateral Raises", "Cable Lateral Raises"],
+      "free_exercise_db_id": "Cable_Seated_Lateral_Raise",
+      "category": "shoulders"
+    },
+    {
+      "massimino_name": "Front Raise",
+      "aliases": ["Front Raises", "Dumbbell Front Raise", "Cable Front Raises"],
+      "free_exercise_db_id": "Front_Dumbbell_Raise",
+      "category": "shoulders"
+    },
+    {
+      "massimino_name": "Rear Delt Fly",
+      "aliases": ["Rear Delt Flyes", "Reverse Fly", "Rear Delt Raises", "Reverse Pec Deck Fly"],
+      "free_exercise_db_id": "Seated_Bent-Over_Rear_Delt_Raise",
+      "category": "shoulders"
+    },
+    {
+      "massimino_name": "Upright Row",
+      "aliases": ["Upright Rows", "Barbell Upright Row"],
+      "free_exercise_db_id": "Upright_Barbell_Row",
+      "category": "shoulders"
+    },
+    {
+      "massimino_name": "Shrug",
+      "aliases": ["Shrugs", "Barbell Shrug"],
+      "free_exercise_db_id": "Barbell_Shrug",
+      "category": "shoulders"
+    },
+    {
+      "massimino_name": "Face Pull",
+      "aliases": ["Face Pulls"],
+      "free_exercise_db_id": "Face_Pull",
+      "category": "shoulders"
+    },
+    {
+      "massimino_name": "Barbell Curl",
+      "aliases": ["Standing Barbell Curl", "Barbell Curls"],
+      "free_exercise_db_id": "Barbell_Curl",
+      "category": "biceps"
+    },
+    {
+      "massimino_name": "Dumbbell Curl",
+      "aliases": ["Seated Dumbbell Curl", "Alternating Dumbbell Curl", "Standing Dumbbell Curl"],
+      "free_exercise_db_id": "Dumbbell_Bicep_Curl",
+      "category": "biceps"
+    },
+    {
+      "massimino_name": "Preacher Curl",
+      "aliases": ["Preacher Curls", "EZ Bar Preacher Curl", "Barbell Preacher Curl"],
+      "free_exercise_db_id": "Preacher_Curl",
+      "category": "biceps"
+    },
+    {
+      "massimino_name": "Spider Curl",
+      "aliases": ["Spider Curls", "Incline Spider Curl"],
+      "free_exercise_db_id": "Spider_Curl",
+      "category": "biceps"
+    },
+    {
+      "massimino_name": "Machine Curl",
+      "aliases": ["Bicep Curl Machine", "Preacher Curl Machine"],
+      "free_exercise_db_id": "Machine_Bicep_Curl",
+      "category": "biceps"
+    },
+    {
+      "massimino_name": "Cable Curl",
+      "aliases": ["Standing Cable Curl", "Low Cable Curl", "Standing Cable Curls"],
+      "free_exercise_db_id": "Cable_Hammer_Curls_-_Rope_Attachment",
+      "category": "biceps"
+    },
+    {
+      "massimino_name": "Hammer Curl",
+      "aliases": ["Hammer Curls"],
+      "free_exercise_db_id": "Hammer_Curls",
+      "category": "biceps"
+    },
+    {
+      "massimino_name": "Concentration Curl",
+      "aliases": ["Dumbbell Concentration Curl"],
+      "free_exercise_db_id": "Concentration_Curls",
+      "category": "biceps"
+    },
+    {
+      "massimino_name": "Incline Dumbbell Curl",
+      "aliases": ["Incline Dumbbell Curls"],
+      "free_exercise_db_id": "Incline_Dumbbell_Curl",
+      "category": "biceps"
+    },
+    {
+      "massimino_name": "Reverse Barbell Curl",
+      "aliases": ["Reverse Curl", "Reverse Curls"],
+      "free_exercise_db_id": "Reverse_Barbell_Curl",
+      "category": "biceps"
+    },
+    {
+      "massimino_name": "Dips",
+      "aliases": ["Machine Dip", "Assisted Dip", "Weighted Dips", "Bodyweight Bar Dips"],
+      "free_exercise_db_id": "Dips_-_Triceps_Version",
+      "category": "triceps"
+    },
+    {
+      "massimino_name": "Tricep Pushdown",
+      "aliases": ["Tricep Pressdown", "Cable Tricep Pushdown"],
+      "free_exercise_db_id": "Triceps_Pushdown",
+      "category": "triceps"
+    },
+    {
+      "massimino_name": "Rope Pushdown",
+      "aliases": ["Rope Pushdowns", "Rope Cable Triceps Pressdowns"],
+      "free_exercise_db_id": "Triceps_Pushdown_-_Rope_Attachment",
+      "category": "triceps"
+    },
+    {
+      "massimino_name": "Overhead Tricep Extension",
+      "aliases": ["Overhead Cable Triceps Extensions", "Seated Dumbbell Tricep Extension", "Overhead Dumbbell Extension"],
+      "free_exercise_db_id": "Standing_Dumbbell_Triceps_Extension",
+      "category": "triceps"
+    },
+    {
+      "massimino_name": "Skull Crusher",
+      "aliases": ["Skull Crushers", "EZ Bar Skullcrusher", "Lying Tricep Extension"],
+      "free_exercise_db_id": "Lying_Triceps_Press",
+      "category": "triceps"
+    },
+    {
+      "massimino_name": "Barbell French Press",
+      "aliases": ["French Press"],
+      "free_exercise_db_id": "Standing_Overhead_Barbell_Triceps_Extension",
+      "category": "triceps"
+    },
+    {
+      "massimino_name": "One Arm Dumbbell Tricep Extension",
+      "aliases": ["Single Arm Cable Extensions", "One Arm Tricep Extension"],
+      "free_exercise_db_id": "Dumbbell_One-Arm_Triceps_Extension",
+      "category": "triceps"
+    },
+    {
+      "massimino_name": "Incline Close Grip Bench Press",
+      "aliases": [],
+      "free_exercise_db_id": "Close-Grip_Barbell_Bench_Press",
+      "category": "triceps"
+    },
+    {
+      "massimino_name": "Barbell Back Squat",
+      "aliases": ["Squat", "Barbell Squat", "Back Squat", "Squats"],
+      "free_exercise_db_id": "Barbell_Squat",
+      "category": "legs"
+    },
+    {
+      "massimino_name": "Front Squat",
+      "aliases": ["Front Squats", "Barbell Front Squat"],
+      "free_exercise_db_id": "Front_Barbell_Squat",
+      "category": "legs"
+    },
+    {
+      "massimino_name": "Smith Machine Squat",
+      "aliases": ["Smith Machine Back Squat"],
+      "free_exercise_db_id": "Smith_Machine_Squat",
+      "category": "legs"
+    },
+    {
+      "massimino_name": "Hack Squat",
+      "aliases": ["Hack Squats", "Machine Hack Squat"],
+      "free_exercise_db_id": "Hack_Squat",
+      "category": "legs"
+    },
+    {
+      "massimino_name": "Reverse Hack Squat",
+      "aliases": [],
+      "free_exercise_db_id": "Hack_Squat",
+      "category": "legs"
+    },
+    {
+      "massimino_name": "Sissy Squat",
+      "aliases": ["Sissy Squats"],
+      "free_exercise_db_id": "Weighted_Sissy_Squat",
+      "category": "legs"
+    },
+    {
+      "massimino_name": "Bulgarian Split Squat",
+      "aliases": [],
+      "free_exercise_db_id": "Split_Squat_with_Dumbbells",
+      "category": "legs"
+    },
+    {
+      "massimino_name": "Lunge",
+      "aliases": ["Lunges", "Barbell Lunge", "Dumbbell Lunge", "Walking Lunge", "Walking Lunges"],
+      "free_exercise_db_id": "Barbell_Lunge",
+      "category": "legs"
+    },
+    {
+      "massimino_name": "Leg Press",
+      "aliases": [],
+      "free_exercise_db_id": "Leg_Press",
+      "category": "legs"
+    },
+    {
+      "massimino_name": "Leg Extension",
+      "aliases": ["Leg Extensions", "Machine Leg Extension"],
+      "free_exercise_db_id": "Leg_Extensions",
+      "category": "legs"
+    },
+    {
+      "massimino_name": "Romanian Deadlift",
+      "aliases": ["Stiff Leg Deadlift", "Stiff Legged Deadlift", "Dumbbell Romanian Deadlifts", "Straight Leg Deadlift"],
+      "free_exercise_db_id": "Romanian_Deadlift",
+      "category": "legs"
+    },
+    {
+      "massimino_name": "Lying Leg Curl",
+      "aliases": ["Leg Curl", "Lying Hamstring Curl", "Lying Leg Curls", "Hamstring Curls"],
+      "free_exercise_db_id": "Lying_Leg_Curls",
+      "category": "legs"
+    },
+    {
+      "massimino_name": "Seated Leg Curl",
+      "aliases": ["Seated Leg Curls"],
+      "free_exercise_db_id": "Seated_Leg_Curl",
+      "category": "legs"
+    },
+    {
+      "massimino_name": "Standing Leg Curl",
+      "aliases": ["Standing Leg Curls"],
+      "free_exercise_db_id": "Standing_Leg_Curl",
+      "category": "legs"
+    },
+    {
+      "massimino_name": "Good Morning",
+      "aliases": ["Good Mornings"],
+      "free_exercise_db_id": "Good_Morning",
+      "category": "legs"
+    },
+    {
+      "massimino_name": "Seated Calf Raise",
+      "aliases": ["Seated Calf Raises", "Machine Seated Calf Raise"],
+      "free_exercise_db_id": "Seated_Calf_Raise",
+      "category": "calves"
+    },
+    {
+      "massimino_name": "Standing Calf Raise",
+      "aliases": ["Standing Calf Raises", "One Leg Dumbbell Calf Raise", "Calf Raise Machine"],
+      "free_exercise_db_id": "Standing_Calf_Raises",
+      "category": "calves"
+    },
+    {
+      "massimino_name": "Donkey Calf Raise",
+      "aliases": ["Donkey Calf Raises"],
+      "free_exercise_db_id": "Donkey_Calf_Raises",
+      "category": "calves"
+    },
+    {
+      "massimino_name": "Wrist Curl",
+      "aliases": ["Wrist Curls", "Barbell Wrist Curl"],
+      "free_exercise_db_id": "Palms-Up_Barbell_Wrist_Curl_Over_A_Bench",
+      "category": "forearms"
+    },
+    {
+      "massimino_name": "Reverse Wrist Curl",
+      "aliases": ["Reverse Wrist Curls"],
+      "free_exercise_db_id": "Palms-Down_Wrist_Curl_Over_A_Bench",
+      "category": "forearms"
+    },
+    {
+      "massimino_name": "Wrist Roller",
+      "aliases": ["Wrist Roller Machine"],
+      "free_exercise_db_id": "Wrist_Roller",
+      "category": "forearms"
+    },
+    {
+      "massimino_name": "Crunch",
+      "aliases": ["Crunches", "Ab Crunch", "Weighted Crunch", "Abdominal Crunch"],
+      "free_exercise_db_id": "Crunches",
+      "category": "abs"
+    },
+    {
+      "massimino_name": "Reverse Crunch",
+      "aliases": ["Reverse Crunches"],
+      "free_exercise_db_id": "Reverse_Crunch",
+      "category": "abs"
+    },
+    {
+      "massimino_name": "Sit-Up",
+      "aliases": ["Sit-Ups", "Situp"],
+      "free_exercise_db_id": "Sit-Up",
+      "category": "abs"
+    },
+    {
+      "massimino_name": "Hanging Knee Raise",
+      "aliases": ["Hanging Knee Raises", "Hanging Leg Raise"],
+      "free_exercise_db_id": "Hanging_Leg_Raise",
+      "category": "abs"
+    },
+    {
+      "massimino_name": "Cable Crunch",
+      "aliases": ["Cable Crunches", "Kneeling Cable Crunch"],
+      "free_exercise_db_id": "Cable_Crunch",
+      "category": "abs"
+    },
+    {
+      "massimino_name": "Leg Raise",
+      "aliases": ["Leg Raises", "Lying Leg Raise"],
+      "free_exercise_db_id": "Flat_Bench_Lying_Leg_Raise",
+      "category": "abs"
+    },
+    {
+      "massimino_name": "Plank",
+      "aliases": [],
+      "free_exercise_db_id": "Plank",
+      "category": "abs"
+    },
+    {
+      "massimino_name": "Russian Twist",
+      "aliases": [],
+      "free_exercise_db_id": "Russian_Twist",
+      "category": "abs"
+    },
+    {
+      "massimino_name": "Mountain Climber",
+      "aliases": ["Mountain Climbers"],
+      "free_exercise_db_id": "Mountain_Climbers",
+      "category": "abs"
+    },
+    {
+      "massimino_name": "Dead Bug",
+      "aliases": [],
+      "free_exercise_db_id": "Dead_Bug",
+      "category": "abs"
+    },
+    {
+      "massimino_name": "Non-Stop Abs Training",
+      "aliases": [],
+      "free_exercise_db_id": null,
+      "category": "abs",
+      "status": "no_match"
+    },
+    {
+      "massimino_name": "Weighted Pull-up",
+      "aliases": [],
+      "free_exercise_db_id": "Pullups",
+      "category": "back"
+    },
+    {
+      "massimino_name": "Hammer Strength Press",
+      "aliases": ["Incline Machine Press", "60-Degree Incline Machine Press"],
+      "free_exercise_db_id": "Leverage_Incline_Chest_Press",
+      "category": "chest"
+    },
+    {
+      "massimino_name": "Machine Pressdown Dips",
+      "aliases": [],
+      "free_exercise_db_id": "Dips_-_Triceps_Version",
+      "category": "triceps"
+    },
+    {
+      "massimino_name": "Treadmill Run",
+      "aliases": [],
+      "free_exercise_db_id": "Jogging_Treadmill",
+      "category": "cardio"
+    },
+    {
+      "massimino_name": "Stationary Bike",
+      "aliases": [],
+      "free_exercise_db_id": "Bicycling_Stationary",
+      "category": "cardio"
+    },
+    {
+      "massimino_name": "Rowing Machine",
+      "aliases": [],
+      "free_exercise_db_id": "Rowing_Stationary",
+      "category": "cardio"
+    },
+    {
+      "massimino_name": "Elliptical",
+      "aliases": [],
+      "free_exercise_db_id": "Elliptical_Trainer",
+      "category": "cardio"
+    },
+    {
+      "massimino_name": "Jump Rope",
+      "aliases": [],
+      "free_exercise_db_id": "Rope_Jumping",
+      "category": "cardio"
+    },
+    {
+      "massimino_name": "Cat-Cow Stretch",
+      "aliases": [],
+      "free_exercise_db_id": "Cat_Stretch",
+      "category": "mobility"
+    },
+    {
+      "massimino_name": "Hip Flexor Stretch",
+      "aliases": [],
+      "free_exercise_db_id": "Kneeling_Hip_Flexor",
+      "category": "mobility"
+    },
+    {
+      "massimino_name": "Shoulder Dislocation",
+      "aliases": [],
+      "free_exercise_db_id": "Shoulder_Stretch",
+      "category": "mobility"
+    },
+    {
+      "massimino_name": "Foam Rolling",
+      "aliases": [],
+      "free_exercise_db_id": null,
+      "category": "mobility",
+      "status": "no_match"
+    },
+    {
+      "massimino_name": "Dynamic Warm-up",
+      "aliases": [],
+      "free_exercise_db_id": null,
+      "category": "mobility",
+      "status": "no_match"
+    }
+  ]
+}

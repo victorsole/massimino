@@ -1,0 +1,593 @@
+{
+  "timestamp": "2026-01-06T10:17:27.324Z",
+  "summary": {
+    "total": 97,
+    "success": 94,
+    "skipped": 3,
+    "errors": 0
+  },
+  "results": [
+    {
+      "exercise": "Barbell Bench Press",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/barbell-bench-press"
+    },
+    {
+      "exercise": "Incline Barbell Bench Press",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/incline-barbell-bench-press"
+    },
+    {
+      "exercise": "Decline Barbell Bench Press",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/decline-barbell-bench-press"
+    },
+    {
+      "exercise": "Dumbbell Bench Press",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/dumbbell-bench-press"
+    },
+    {
+      "exercise": "Incline Dumbbell Press",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/incline-dumbbell-press"
+    },
+    {
+      "exercise": "Decline Dumbbell Press",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/decline-dumbbell-press"
+    },
+    {
+      "exercise": "Close Grip Bench Press",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/close-grip-bench-press"
+    },
+    {
+      "exercise": "Dumbbell Flye",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/dumbbell-flye"
+    },
+    {
+      "exercise": "Incline Dumbbell Flye",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/incline-dumbbell-flye"
+    },
+    {
+      "exercise": "Cable Crossover",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/cable-crossover"
+    },
+    {
+      "exercise": "Pec Deck",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/pec-deck"
+    },
+    {
+      "exercise": "Dumbbell Pullover",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/dumbbell-pullover"
+    },
+    {
+      "exercise": "Barbell Row",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/barbell-row"
+    },
+    {
+      "exercise": "T-Bar Row",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/t-bar-row"
+    },
+    {
+      "exercise": "One Arm Dumbbell Row",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/one-arm-dumbbell-row"
+    },
+    {
+      "exercise": "Seated Cable Row",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/seated-cable-row"
+    },
+    {
+      "exercise": "Pull-up",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/pull-up"
+    },
+    {
+      "exercise": "Chin-Up",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/chin-up"
+    },
+    {
+      "exercise": "Lat Pulldown",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/lat-pulldown"
+    },
+    {
+      "exercise": "Close Grip Lat Pulldown",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/close-grip-lat-pulldown"
+    },
+    {
+      "exercise": "Deadlift",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/deadlift"
+    },
+    {
+      "exercise": "Hyperextension",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/hyperextension"
+    },
+    {
+      "exercise": "Overhead Press",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/overhead-press"
+    },
+    {
+      "exercise": "Seated Dumbbell Press",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/seated-dumbbell-press"
+    },
+    {
+      "exercise": "Arnold Press",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/arnold-press"
+    },
+    {
+      "exercise": "Behind The Neck Press",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/behind-the-neck-press"
+    },
+    {
+      "exercise": "Barbell Clean and Press",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/barbell-clean-and-press"
+    },
+    {
+      "exercise": "Lateral Raise",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/lateral-raise"
+    },
+    {
+      "exercise": "Cable Lateral Raise",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/cable-lateral-raise"
+    },
+    {
+      "exercise": "Front Raise",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/front-raise"
+    },
+    {
+      "exercise": "Rear Delt Fly",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/rear-delt-fly"
+    },
+    {
+      "exercise": "Upright Row",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/upright-row"
+    },
+    {
+      "exercise": "Shrug",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/shrug"
+    },
+    {
+      "exercise": "Face Pull",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/face-pull"
+    },
+    {
+      "exercise": "Barbell Curl",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/barbell-curl"
+    },
+    {
+      "exercise": "Dumbbell Curl",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/dumbbell-curl"
+    },
+    {
+      "exercise": "Preacher Curl",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/preacher-curl"
+    },
+    {
+      "exercise": "Spider Curl",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/spider-curl"
+    },
+    {
+      "exercise": "Machine Curl",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/machine-curl"
+    },
+    {
+      "exercise": "Cable Curl",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/cable-curl"
+    },
+    {
+      "exercise": "Hammer Curl",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/hammer-curl"
+    },
+    {
+      "exercise": "Concentration Curl",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/concentration-curl"
+    },
+    {
+      "exercise": "Incline Dumbbell Curl",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/incline-dumbbell-curl"
+    },
+    {
+      "exercise": "Reverse Barbell Curl",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/reverse-barbell-curl"
+    },
+    {
+      "exercise": "Dips",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/dips"
+    },
+    {
+      "exercise": "Tricep Pushdown",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/tricep-pushdown"
+    },
+    {
+      "exercise": "Rope Pushdown",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/rope-pushdown"
+    },
+    {
+      "exercise": "Overhead Tricep Extension",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/overhead-tricep-extension"
+    },
+    {
+      "exercise": "Skull Crusher",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/skull-crusher"
+    },
+    {
+      "exercise": "Barbell French Press",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/barbell-french-press"
+    },
+    {
+      "exercise": "One Arm Dumbbell Tricep Extension",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/one-arm-dumbbell-tricep-extension"
+    },
+    {
+      "exercise": "Incline Close Grip Bench Press",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/incline-close-grip-bench-press"
+    },
+    {
+      "exercise": "Barbell Back Squat",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/barbell-back-squat"
+    },
+    {
+      "exercise": "Front Squat",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/front-squat"
+    },
+    {
+      "exercise": "Smith Machine Squat",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/smith-machine-squat"
+    },
+    {
+      "exercise": "Hack Squat",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/hack-squat"
+    },
+    {
+      "exercise": "Reverse Hack Squat",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/reverse-hack-squat"
+    },
+    {
+      "exercise": "Sissy Squat",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/sissy-squat"
+    },
+    {
+      "exercise": "Bulgarian Split Squat",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/bulgarian-split-squat"
+    },
+    {
+      "exercise": "Lunge",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/lunge"
+    },
+    {
+      "exercise": "Leg Press",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/leg-press"
+    },
+    {
+      "exercise": "Leg Extension",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/leg-extension"
+    },
+    {
+      "exercise": "Romanian Deadlift",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/romanian-deadlift"
+    },
+    {
+      "exercise": "Lying Leg Curl",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/lying-leg-curl"
+    },
+    {
+      "exercise": "Seated Leg Curl",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/seated-leg-curl"
+    },
+    {
+      "exercise": "Standing Leg Curl",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/standing-leg-curl"
+    },
+    {
+      "exercise": "Good Morning",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/good-morning"
+    },
+    {
+      "exercise": "Seated Calf Raise",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/seated-calf-raise"
+    },
+    {
+      "exercise": "Standing Calf Raise",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/standing-calf-raise"
+    },
+    {
+      "exercise": "Donkey Calf Raise",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/donkey-calf-raise"
+    },
+    {
+      "exercise": "Wrist Curl",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/wrist-curl"
+    },
+    {
+      "exercise": "Reverse Wrist Curl",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/reverse-wrist-curl"
+    },
+    {
+      "exercise": "Wrist Roller",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/wrist-roller"
+    },
+    {
+      "exercise": "Crunch",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/crunch"
+    },
+    {
+      "exercise": "Reverse Crunch",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/reverse-crunch"
+    },
+    {
+      "exercise": "Sit-Up",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/sit-up"
+    },
+    {
+      "exercise": "Hanging Knee Raise",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/hanging-knee-raise"
+    },
+    {
+      "exercise": "Cable Crunch",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/cable-crunch"
+    },
+    {
+      "exercise": "Leg Raise",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/leg-raise"
+    },
+    {
+      "exercise": "Plank",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/plank"
+    },
+    {
+      "exercise": "Russian Twist",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/russian-twist"
+    },
+    {
+      "exercise": "Mountain Climber",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/mountain-climber"
+    },
+    {
+      "exercise": "Dead Bug",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/dead-bug"
+    },
+    {
+      "exercise": "Non-Stop Abs Training",
+      "status": "skipped",
+      "imagesCopied": 0,
+      "message": "No free-exercise-db match"
+    },
+    {
+      "exercise": "Weighted Pull-up",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/weighted-pull-up"
+    },
+    {
+      "exercise": "Hammer Strength Press",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/hammer-strength-press"
+    },
+    {
+      "exercise": "Machine Pressdown Dips",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/machine-pressdown-dips"
+    },
+    {
+      "exercise": "Treadmill Run",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/treadmill-run"
+    },
+    {
+      "exercise": "Stationary Bike",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/stationary-bike"
+    },
+    {
+      "exercise": "Rowing Machine",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/rowing-machine"
+    },
+    {
+      "exercise": "Elliptical",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/elliptical"
+    },
+    {
+      "exercise": "Jump Rope",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/jump-rope"
+    },
+    {
+      "exercise": "Cat-Cow Stretch",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/cat-cow-stretch"
+    },
+    {
+      "exercise": "Hip Flexor Stretch",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/hip-flexor-stretch"
+    },
+    {
+      "exercise": "Shoulder Dislocation",
+      "status": "success",
+      "imagesCopied": 2,
+      "publicPath": "/exercises/shoulder-dislocation"
+    },
+    {
+      "exercise": "Foam Rolling",
+      "status": "skipped",
+      "imagesCopied": 0,
+      "message": "No free-exercise-db match"
+    },
+    {
+      "exercise": "Dynamic Warm-up",
+      "status": "skipped",
+      "imagesCopied": 0,
+      "message": "No free-exercise-db match"
+    }
+  ]
+}
