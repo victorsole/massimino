@@ -1,0 +1,635 @@
+{
+  "program": "Post Christmas Holidays Rentree Workout",
+  "subtitle": "Your New Year Resolution Made Real",
+  "author": "Massimino Training Team",
+  "version": "1.0",
+  "program_id": "post-christmas-rentree",
+  "target_audience": "Anyone returning to fitness after the holiday season, new year resolutioners, those who took a break during Christmas festivities",
+  "duration_weeks": 6,
+  "session_duration_minutes": {
+    "min": 45,
+    "max": 60
+  },
+  "frequency_per_week": 4,
+  "rest_days_per_week": 3,
+  "level": "Beginner to Intermediate",
+  "programType": "LIFESTYLE",
+  "settings": ["Gym or Home with basic equipment", "Minimal equipment version available"],
+  "equipment": {
+    "required": ["Dumbbells", "Bench or sturdy surface", "Pull-up bar or resistance bands"],
+    "recommended": ["Barbell", "Cable machine", "Rowing machine or cardio equipment"],
+    "optional": ["Kettlebell", "Medicine ball", "Jump rope"]
+  },
+
+  "program_philosophy": {
+    "origin": "Let's be honest - the holidays hit us all. Between Christmas dinners, New Year's celebrations, and endless festive treats, most of us enter January carrying a few extra kilos and feeling sluggish. This program is designed specifically for the 'rentree' - the return to fitness after holiday indulgence.",
+    "core_message": "\"You don't need to punish yourself for enjoying the holidays. You need a smart, progressive return to training that rebuilds your fitness without burning you out or causing injury.\"",
+    "core_principles": [
+      "Progressive return - start easier than you think you need",
+      "Full body metabolic training for maximum calorie burn",
+      "Rebuild strength foundation before increasing intensity",
+      "Sustainable approach - no crash diets or extreme workouts",
+      "Build habits that last beyond January"
+    ]
+  },
+
+  "realistic_expectations": {
+    "what_this_program_will_do": [
+      "Help you lose 2-4kg of holiday weight safely",
+      "Rebuild workout capacity and endurance",
+      "Re-establish healthy training habits",
+      "Improve energy levels and mood",
+      "Build a foundation for more advanced training"
+    ],
+    "what_this_program_will_not_do": [
+      "Give you a six-pack in 6 weeks (that takes longer)",
+      "Undo years of inactivity in one month",
+      "Replace proper nutrition (you still need to eat well)",
+      "Work if you skip sessions"
+    ],
+    "honest_truth": "The holiday weight came from 2-3 weeks of excess. It will take 4-6 weeks of consistent effort to reverse. Be patient with yourself.",
+    "timeline": {
+      "week_1": "Getting back in the groove - expect soreness and fatigue",
+      "weeks_2_3": "Building momentum - workouts feel more natural",
+      "weeks_4_5": "Seeing results - clothes fit better, energy improves",
+      "week_6": "New baseline - ready for more advanced programming"
+    }
+  },
+
+  "training_schedule": {
+    "day_1": "Full Body Metabolic A",
+    "day_2": "Rest / Light Walk",
+    "day_3": "Upper Body & Core",
+    "day_4": "Rest / Active Recovery",
+    "day_5": "Full Body Metabolic B",
+    "day_6": "Lower Body & Cardio",
+    "day_7": "Rest"
+  },
+
+  "phase_structure": [
+    {
+      "phase": "Re-Entry",
+      "weeks": [1, 2],
+      "focus": "Ease back into training, rebuild movement patterns",
+      "intensity": "Moderate - stop 2-3 reps before failure",
+      "cardio": "Low intensity steady state (LISS) - walks, light cycling",
+      "rep_range": "12-15",
+      "sets": "3",
+      "rest_seconds": "60-90",
+      "key_principle": "Rebuild workout capacity safely"
+    },
+    {
+      "phase": "Build Up",
+      "weeks": [3, 4],
+      "focus": "Increase intensity, add complexity",
+      "intensity": "Moderate-High - approach failure on final sets",
+      "cardio": "Mix of LISS and intervals",
+      "rep_range": "10-12",
+      "sets": "4",
+      "rest_seconds": "60-90",
+      "key_principle": "Progressive overload"
+    },
+    {
+      "phase": "Push Through",
+      "weeks": [5, 6],
+      "focus": "Maximum effort, fat loss focus",
+      "intensity": "High - train to failure on compound movements",
+      "cardio": "More HIIT, metabolic circuits",
+      "rep_range": "8-12",
+      "sets": "4",
+      "rest_seconds": "60-90",
+      "key_principle": "Maximum metabolic output"
+    }
+  ],
+
+  "day_1_full_body_metabolic_a": {
+    "focus": "Full Body Metabolic A",
+    "goal": "Full body workout with metabolic focus - burn calories and build strength",
+    "sections": [
+      {
+        "section": "warm_up",
+        "description": "Wake up the body - especially important after time off",
+        "exercises": [
+          {
+            "exercise": "Treadmill Run",
+            "sets": "1",
+            "reps": "5 min",
+            "tempo": "Light jog or brisk walk",
+            "rest": "None",
+            "notes": "Get blood flowing, break a light sweat. Walk if jogging feels hard.",
+            "imageUrl": "/exercises/treadmill-run/0.jpg"
+          },
+          {
+            "exercise": "Cat Cow Stretch",
+            "sets": "2",
+            "reps": "10",
+            "tempo": "Slow, feel each vertebra",
+            "rest": "None",
+            "notes": "Mobilize the spine after holiday couch time",
+            "imageUrl": "/exercises/cat-cow-stretch/0.jpg"
+          },
+          {
+            "exercise": "Leg Extension",
+            "sets": "2",
+            "reps": "15",
+            "tempo": "Light, controlled",
+            "rest": "30s",
+            "notes": "Very light - just activating the quads",
+            "imageUrl": "/exercises/leg-extension/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "compound_strength",
+        "description": "Big movements for maximum calorie burn",
+        "exercises": [
+          {
+            "exercise": "Barbell Back Squat",
+            "sets": "4",
+            "reps": "12",
+            "tempo": "Controlled down, drive up",
+            "rest": "90s",
+            "notes": "Start lighter than pre-holiday weight. Build back up gradually.",
+            "imageUrl": "/exercises/barbell-back-squat/0.jpg"
+          },
+          {
+            "exercise": "Dumbbell Bench Press",
+            "sets": "4",
+            "reps": "12",
+            "tempo": "Controlled",
+            "rest": "90s",
+            "notes": "Full range of motion. Don't ego lift on week 1.",
+            "imageUrl": "/exercises/dumbbell-bench-press/0.jpg"
+          },
+          {
+            "exercise": "Barbell Row",
+            "sets": "4",
+            "reps": "12",
+            "tempo": "Squeeze at top",
+            "rest": "90s",
+            "notes": "Pull to lower chest. Engage lats.",
+            "imageUrl": "/exercises/barbell-row/0.jpg"
+          },
+          {
+            "exercise": "Romanian Deadlift",
+            "sets": "3",
+            "reps": "12",
+            "tempo": "Slow eccentric",
+            "rest": "90s",
+            "notes": "Feel the hamstring stretch. Great for posterior chain.",
+            "imageUrl": "/exercises/romanian-deadlift/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "metabolic_finisher",
+        "description": "Burn extra calories and boost metabolism",
+        "exercises": [
+          {
+            "exercise": "Mountain Climber",
+            "sets": "3",
+            "reps": "30 sec",
+            "tempo": "Fast",
+            "rest": "30s",
+            "notes": "Heart rate up! Scale back to slow pace if needed.",
+            "imageUrl": "/exercises/mountain-climber/0.jpg"
+          },
+          {
+            "exercise": "Plank",
+            "sets": "3",
+            "reps": "30-45 sec",
+            "tempo": "Hold",
+            "rest": "30s",
+            "notes": "Rebuild core stability. Don't let hips sag.",
+            "imageUrl": "/exercises/plank/0.jpg"
+          }
+        ]
+      }
+    ]
+  },
+
+  "day_3_upper_body_core": {
+    "focus": "Upper Body & Core",
+    "goal": "Build upper body strength and core stability",
+    "sections": [
+      {
+        "section": "warm_up",
+        "description": "Upper body activation",
+        "exercises": [
+          {
+            "exercise": "Elliptical",
+            "sets": "1",
+            "reps": "5 min",
+            "tempo": "Moderate",
+            "rest": "None",
+            "notes": "Use arms to warm up upper body too",
+            "imageUrl": "/exercises/elliptical/0.jpg"
+          },
+          {
+            "exercise": "Shoulder Dislocation",
+            "sets": "2",
+            "reps": "10",
+            "tempo": "Slow",
+            "rest": "None",
+            "notes": "Shoulder mobility with band or stick",
+            "imageUrl": "/exercises/shoulder-dislocation/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "push_movements",
+        "description": "Chest, shoulders, triceps",
+        "exercises": [
+          {
+            "exercise": "Incline Dumbbell Press",
+            "sets": "4",
+            "reps": "12",
+            "tempo": "Controlled",
+            "rest": "90s",
+            "notes": "Upper chest focus. Full stretch at bottom.",
+            "imageUrl": "/exercises/incline-dumbbell-press/0.jpg"
+          },
+          {
+            "exercise": "Overhead Press",
+            "sets": "3",
+            "reps": "10",
+            "tempo": "Controlled",
+            "rest": "90s",
+            "notes": "Seated or standing. Core tight.",
+            "imageUrl": "/exercises/overhead-press/0.jpg"
+          },
+          {
+            "exercise": "Dips",
+            "sets": "3",
+            "reps": "10-12",
+            "tempo": "Controlled",
+            "rest": "60s",
+            "notes": "Use machine assistance if needed. Don't go too deep if shoulders are tight.",
+            "imageUrl": "/exercises/dips/0.jpg"
+          },
+          {
+            "exercise": "Lateral Raise",
+            "sets": "3",
+            "reps": "15",
+            "tempo": "Controlled, no swinging",
+            "rest": "45s",
+            "notes": "Light weight, feel the shoulders work",
+            "imageUrl": "/exercises/lateral-raise/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "pull_movements",
+        "description": "Back, biceps, rear delts",
+        "exercises": [
+          {
+            "exercise": "Lat Pulldown",
+            "sets": "4",
+            "reps": "12",
+            "tempo": "Squeeze at bottom",
+            "rest": "90s",
+            "notes": "Wide grip. Pull to upper chest.",
+            "imageUrl": "/exercises/lat-pulldown/0.jpg"
+          },
+          {
+            "exercise": "Seated Cable Row",
+            "sets": "3",
+            "reps": "12",
+            "tempo": "Squeeze and hold",
+            "rest": "60s",
+            "notes": "Feel the back muscles work. Don't just pull with arms.",
+            "imageUrl": "/exercises/seated-cable-row/0.jpg"
+          },
+          {
+            "exercise": "Face Pull",
+            "sets": "3",
+            "reps": "15",
+            "tempo": "Squeeze at end",
+            "rest": "45s",
+            "notes": "Rear delts and rotator cuff - prevents shoulder problems",
+            "imageUrl": "/exercises/face-pull/0.jpg"
+          },
+          {
+            "exercise": "Hammer Curl",
+            "sets": "3",
+            "reps": "12",
+            "tempo": "Controlled",
+            "rest": "45s",
+            "notes": "Forearms and biceps",
+            "imageUrl": "/exercises/hammer-curl/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "core_work",
+        "description": "Rebuild core strength",
+        "exercises": [
+          {
+            "exercise": "Crunch",
+            "sets": "3",
+            "reps": "20",
+            "tempo": "Controlled",
+            "rest": "30s",
+            "notes": "Focus on contraction, not just movement",
+            "imageUrl": "/exercises/crunch/0.jpg"
+          },
+          {
+            "exercise": "Hanging Knee Raise",
+            "sets": "3",
+            "reps": "12",
+            "tempo": "Controlled, no swing",
+            "rest": "45s",
+            "notes": "If too hard, do lying leg raises instead",
+            "imageUrl": "/exercises/hanging-knee-raise/0.jpg"
+          },
+          {
+            "exercise": "Russian Twist",
+            "sets": "3",
+            "reps": "20 total",
+            "tempo": "Controlled",
+            "rest": "30s",
+            "notes": "Light or no weight to start",
+            "imageUrl": "/exercises/russian-twist/0.jpg"
+          }
+        ]
+      }
+    ]
+  },
+
+  "day_5_full_body_metabolic_b": {
+    "focus": "Full Body Metabolic B",
+    "goal": "Different full body workout for variety and complete development",
+    "sections": [
+      {
+        "section": "warm_up",
+        "description": "Get moving",
+        "exercises": [
+          {
+            "exercise": "Rowing Machine",
+            "sets": "1",
+            "reps": "5 min",
+            "tempo": "Moderate",
+            "rest": "None",
+            "notes": "Great full body warm-up",
+            "imageUrl": "/exercises/rowing-machine/0.jpg"
+          },
+          {
+            "exercise": "Hip Flexor Stretch",
+            "sets": "2",
+            "reps": "30 sec each",
+            "tempo": "Hold",
+            "rest": "None",
+            "notes": "Open up hips - tight from sitting during holidays",
+            "imageUrl": "/exercises/hip-flexor-stretch/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "strength_circuit",
+        "description": "Circuit style for metabolic effect",
+        "exercises": [
+          {
+            "exercise": "Deadlift",
+            "sets": "4",
+            "reps": "10",
+            "tempo": "Controlled",
+            "rest": "90s",
+            "notes": "King of exercises. Start lighter than you think. Perfect form!",
+            "imageUrl": "/exercises/deadlift/0.jpg"
+          },
+          {
+            "exercise": "Dumbbell Bench Press",
+            "sets": "4",
+            "reps": "12",
+            "tempo": "Controlled",
+            "rest": "90s",
+            "notes": "Full range of motion",
+            "imageUrl": "/exercises/dumbbell-bench-press/0.jpg"
+          },
+          {
+            "exercise": "Pull-Up",
+            "sets": "3",
+            "reps": "8-10",
+            "tempo": "Controlled",
+            "rest": "90s",
+            "notes": "Use band assistance or lat pulldown if needed",
+            "imageUrl": "/exercises/pull-up/0.jpg"
+          },
+          {
+            "exercise": "Lunge",
+            "sets": "3",
+            "reps": "10 each leg",
+            "tempo": "Controlled",
+            "rest": "60s",
+            "notes": "Walking or reverse lunges with dumbbells",
+            "imageUrl": "/exercises/lunge/0.jpg"
+          },
+          {
+            "exercise": "Arnold Press",
+            "sets": "3",
+            "reps": "12",
+            "tempo": "Controlled rotation",
+            "rest": "60s",
+            "notes": "Full shoulder development",
+            "imageUrl": "/exercises/arnold-press/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "conditioning",
+        "description": "Fat burning finisher",
+        "exercises": [
+          {
+            "exercise": "Jump Rope",
+            "sets": "3",
+            "reps": "1 min",
+            "tempo": "Steady or intervals",
+            "rest": "30s",
+            "notes": "No rope? Do jumping jacks instead",
+            "imageUrl": "/exercises/jump-rope/0.jpg"
+          },
+          {
+            "exercise": "Dead Bug",
+            "sets": "3",
+            "reps": "10 each side",
+            "tempo": "Slow and controlled",
+            "rest": "30s",
+            "notes": "Core stability without lower back stress",
+            "imageUrl": "/exercises/dead-bug/0.jpg"
+          }
+        ]
+      }
+    ]
+  },
+
+  "day_6_lower_body_cardio": {
+    "focus": "Lower Body & Cardio",
+    "goal": "Leg day plus conditioning for maximum fat burning",
+    "sections": [
+      {
+        "section": "warm_up",
+        "description": "Prepare the legs",
+        "exercises": [
+          {
+            "exercise": "Stationary Bike",
+            "sets": "1",
+            "reps": "5 min",
+            "tempo": "Light to moderate",
+            "rest": "None",
+            "notes": "Get blood into the legs",
+            "imageUrl": "/exercises/stationary-bike/0.jpg"
+          },
+          {
+            "exercise": "Leg Extension",
+            "sets": "2",
+            "reps": "15",
+            "tempo": "Light",
+            "rest": "30s",
+            "notes": "Quad activation",
+            "imageUrl": "/exercises/leg-extension/0.jpg"
+          },
+          {
+            "exercise": "Lying Leg Curl",
+            "sets": "2",
+            "reps": "15",
+            "tempo": "Light",
+            "rest": "30s",
+            "notes": "Hamstring activation",
+            "imageUrl": "/exercises/lying-leg-curl/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "leg_strength",
+        "description": "Build strong legs",
+        "exercises": [
+          {
+            "exercise": "Leg Press",
+            "sets": "4",
+            "reps": "15",
+            "tempo": "Controlled",
+            "rest": "90s",
+            "notes": "Higher reps for endurance and calorie burn. Full ROM.",
+            "imageUrl": "/exercises/leg-press/0.jpg"
+          },
+          {
+            "exercise": "Romanian Deadlift",
+            "sets": "4",
+            "reps": "12",
+            "tempo": "Slow eccentric",
+            "rest": "90s",
+            "notes": "Hamstring focus. Feel the stretch.",
+            "imageUrl": "/exercises/romanian-deadlift/0.jpg"
+          },
+          {
+            "exercise": "Bulgarian Split Squat",
+            "sets": "3",
+            "reps": "10 each leg",
+            "tempo": "Controlled",
+            "rest": "60s each leg",
+            "notes": "Balance and single-leg strength",
+            "imageUrl": "/exercises/bulgarian-split-squat/0.jpg"
+          },
+          {
+            "exercise": "Leg Extension",
+            "sets": "3",
+            "reps": "15",
+            "tempo": "Squeeze at top",
+            "rest": "45s",
+            "notes": "Quad burnout",
+            "imageUrl": "/exercises/leg-extension/0.jpg"
+          },
+          {
+            "exercise": "Lying Leg Curl",
+            "sets": "3",
+            "reps": "15",
+            "tempo": "Squeeze at top",
+            "rest": "45s",
+            "notes": "Hamstring burnout",
+            "imageUrl": "/exercises/lying-leg-curl/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "calves",
+        "description": "Don't skip calves",
+        "exercises": [
+          {
+            "exercise": "Standing Calf Raise",
+            "sets": "4",
+            "reps": "15",
+            "tempo": "Full stretch, full contraction",
+            "rest": "30s",
+            "notes": "2 sec pause at top",
+            "imageUrl": "/exercises/standing-calf-raise/0.jpg"
+          },
+          {
+            "exercise": "Seated Calf Raise",
+            "sets": "3",
+            "reps": "20",
+            "tempo": "Controlled",
+            "rest": "30s",
+            "notes": "Target the soleus",
+            "imageUrl": "/exercises/seated-calf-raise/0.jpg"
+          }
+        ]
+      },
+      {
+        "section": "cardio_finisher",
+        "description": "Metabolic conditioning",
+        "exercises": [
+          {
+            "exercise": "Treadmill Run",
+            "sets": "1",
+            "reps": "15-20 min",
+            "tempo": "Incline walk or light jog intervals",
+            "rest": "None",
+            "notes": "Week 1-2: Steady state walk. Week 3+: Add intervals (1 min fast / 2 min easy)",
+            "imageUrl": "/exercises/treadmill-run/0.jpg"
+          }
+        ]
+      }
+    ]
+  },
+
+  "nutrition_guidelines": {
+    "general_approach": "You don't need to diet extremely. Focus on returning to normal, healthy eating patterns.",
+    "key_principles": [
+      "Protein at every meal (palm-sized portion)",
+      "Fill half your plate with vegetables",
+      "Reduce (don't eliminate) processed foods and sweets",
+      "Drink water instead of sugary drinks",
+      "Don't skip meals - leads to overeating later"
+    ],
+    "holiday_damage_control": [
+      "The weight gain is mostly water retention and glycogen",
+      "Reducing carbs slightly will help shed water weight quickly",
+      "Don't crash diet - this leads to muscle loss",
+      "Aim for 0.5-1kg loss per week maximum"
+    ],
+    "pre_workout": "Light carbs and protein 1-2 hours before",
+    "post_workout": "Protein shake or meal within an hour",
+    "alcohol": "Limit to weekends only during this program for best results"
+  },
+
+  "mindset_tips": {
+    "week_1_motivation": "The hardest part is starting. You've already done that by beginning this program.",
+    "dealing_with_soreness": "You WILL be sore. This is normal after time off. Move gently on rest days.",
+    "comparison_trap": "Don't compare yourself to pre-holiday fitness. Start fresh.",
+    "consistency_over_intensity": "Showing up 4 times per week beats going hard once and burning out.",
+    "celebrate_small_wins": [
+      "Completed a full week? Win.",
+      "Lifted more than last session? Win.",
+      "Chose gym over couch? Win."
+    ]
+  },
+
+  "progression_guidelines": {
+    "weeks_1_2": "Focus on form and consistency. Weight should feel moderate.",
+    "weeks_3_4": "Increase weights by 5-10% when you complete all reps with good form.",
+    "weeks_5_6": "Push harder. Final sets should approach failure.",
+    "after_6_weeks": "You're ready for more advanced programming. Consider a strength-focused or physique-focused program."
+  },
+
+  "tags": ["Fat Loss", "Muscle Building", "New Year", "Beginner Friendly", "Full Body", "Metabolic Training", "Lifestyle", "Return to Fitness", "Weight Loss"]
+}
