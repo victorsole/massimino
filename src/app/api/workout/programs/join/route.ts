@@ -87,7 +87,19 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Create subscription
+    // Deactivate all other subscriptions for this user before creating new one
+    await prisma.program_subscriptions.updateMany({
+      where: {
+        userId: session.user.id,
+        isCurrentlyActive: true,
+      },
+      data: {
+        isCurrentlyActive: false,
+        updatedAt: new Date(),
+      },
+    });
+
+    // Create subscription and set as currently active
     const firstPhase = program.program_phases[0];
     const subscription = await prisma.program_subscriptions.create({
       data: {
@@ -98,6 +110,7 @@ export async function POST(request: NextRequest) {
         currentDay: 1,
         startDate: new Date(),
         isActive: true,
+        isCurrentlyActive: true, // Set as currently active
         currentPhaseId: firstPhase?.id,
         currentWeekInPhase: 1,
         phaseStartedAt: new Date(),

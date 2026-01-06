@@ -36,6 +36,7 @@
     "scripts:exercises:sync:firestore": "ts-node -e \"(async()=>{const { prisma } = require('./dist')?.lib?.database?.client || require('./src/lib/database/client'); const { publishExercise } = require('./src/lib/integrations/firebase'); const all = await prisma.exercise.findMany(); let n=0; for (const ex of all){ await publishExercise(ex); if(++n%200===0) console.log('...synced', n);} console.log('done'); process.exit(0)})()\""
   },
   "dependencies": {
+    "@floating-ui/react-dom": "^2.1.6",
     "@gsap/react": "^2.1.2",
     "@mdi/js": "^7.4.47",
     "@mollie/api-client": "^4.3.3",

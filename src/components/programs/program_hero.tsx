@@ -87,9 +87,13 @@ export function ProgramHero({
         </h1>
 
         {/* Subtitle / Description */}
-        <p className="text-base md:text-lg opacity-95 max-w-xl mb-5">
-          {metadata.description}
-        </p>
+        <div className="text-base md:text-lg opacity-95 max-w-xl mb-5 space-y-2">
+          {metadata.description.split('\n').map((line, idx) => (
+            <p key={idx} className={line.startsWith('•') ? 'pl-2' : ''}>
+              {line}
+            </p>
+          ))}
+        </div>
 
         {/* Meta Info */}
         <div className="flex flex-wrap gap-4 mb-6">
