@@ -336,21 +336,21 @@ export const PROGRAM_CATEGORY_COLORS: Record<ProgramCategory, {
   },
 };
 
-// Program image mapping
+// Program image mapping (keys must match TEMPLATE_FILE_MAP in templates/route.ts)
 export const PROGRAM_IMAGES: Record<string, string> = {
   // Celebrity
-  'cbum': '/images/programs/cbum.jpg',
-  'arnold-volume': '/images/programs/arnoldvolume.jpg',
+  'cbum-classic-physique': '/images/programs/cbum.jpg',
+  'arnold-volume-workout': '/images/programs/arnoldvolume.jpg',
   'arnold-golden-six': '/images/programs/arnoldgoldensix.jpg',
-  'ronnie-coleman-volume': '/images/programs/ronniecolemanvolume.jpg',
-  'colorado-experiment': '/images/programs/coloradoexperiment.jpg',
+  'ronnie-coleman-mass-builder': '/images/programs/ronniecolemanvolume.jpg',
+  'colorado-experiment-hit': '/images/programs/coloradoexperiment.jpg',
   'ifbb-classic-physique': '/images/programs/ifbbclassicphysique.jpg',
   // Goal-Based
-  'fat-loss': '/images/programs/fatloss.jpg',
-  'muscle-gain': '/images/programs/musclegain.jpg',
-  'performance': '/images/programs/performance.jpg',
+  'nasm-fat-loss-program': '/images/programs/fatloss.jpg',
+  'nasm-muscle-gain-program': '/images/programs/musclegain.jpg',
+  'nasm-performance-program': '/images/programs/performance.jpg',
   'aesthetics-hunter': '/images/programs/aestheticshunter.jpg',
-  'wanna-lose-this-beer-belly': '/images/programs/wannalosethisbeerbelly.jpg',
+  'wanna-lose-beer-belly': '/images/programs/wannalosethisbeerbelly.jpg',
   // Lifestyle
   'i-just-became-a-mum': '/images/programs/ijustbecameamum.jpg',
   'i-just-became-a-dad': '/images/programs/ijustbecameadad.jpg',

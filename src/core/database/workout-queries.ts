@@ -1824,7 +1824,10 @@ export async function getUserProgramSubscriptions(userId: string) {
         }
       }
     },
-    orderBy: { startDate: 'desc' }
+    orderBy: [
+      { isCurrentlyActive: 'desc' }, // Currently active first
+      { startDate: 'desc' }
+    ]
   });
 }
 

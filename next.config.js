@@ -68,6 +68,10 @@ const nextConfig = {
           protocol: 'https',
           hostname: 'avatars.githubusercontent.com', // GitHub profile images (backup auth)
         },
+        {
+          protocol: 'https',
+          hostname: 'static.exercisedb.dev', // ExerciseDB exercise images/GIFs
+        },
       ],
       formats: ['image/webp', 'image/avif'],
     },
