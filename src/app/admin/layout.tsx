@@ -201,6 +201,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <div className="space-y-2">
               <h3 className="text-xs font-semibold text-brand-primary uppercase tracking-wide mb-3">Professional</h3>
               <div className="space-y-1">
+                <Link
+                  href="/admin/athlete-applications"
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:text-brand-primary hover:bg-brand-secondary/20 rounded-md transition-colors"
+                >
+                  <span className="w-2 h-2 bg-amber-400 rounded-full"></span>
+                  Athlete Applications
+                </Link>
                 {/* TODO: Create Trainer Partnerships page
                 <Link
                   href="/admin/partnerships"

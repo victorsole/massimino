@@ -8,7 +8,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Trophy,
   Users,
-  TrendingUp,
   Shield,
   Star,
   CheckCircle2,
@@ -30,12 +29,32 @@ export default function AthleteApplyPage() {
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Integrate with backend API
-    console.log('Application submitted:', formData);
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch('/api/athletes/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Failed to submit application');
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -76,21 +95,14 @@ export default function AthleteApplyPage() {
             can transform the lives of dedicated fitness enthusiasts worldwide.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
-              className="bg-white text-gray-900 hover:bg-gray-100 font-semibold px-8"
-              onClick={() => document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              Apply Now
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Link href="/workout-log/athletes">
-              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8">
-                View Featured Athletes
-              </Button>
-            </Link>
-          </div>
+          <Button
+            size="lg"
+            className="bg-white text-gray-900 hover:bg-gray-100 font-semibold px-8"
+            onClick={() => document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            Apply Now
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Button>
         </div>
       </section>
 
@@ -141,19 +153,6 @@ export default function AthleteApplyPage() {
               <CardContent className="text-gray-600">
                 Your programs reach fitness enthusiasts across Europe and beyond.
                 Build your international following with our multilingual platform.
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
-                  <TrendingUp className="h-6 w-6 text-green-600" />
-                </div>
-                <CardTitle>Revenue Share</CardTitle>
-              </CardHeader>
-              <CardContent className="text-gray-600">
-                Earn passive income from premium program subscriptions.
-                Our transparent revenue model ensures you're fairly compensated.
               </CardContent>
             </Card>
 
@@ -413,14 +412,21 @@ export default function AthleteApplyPage() {
                     />
                   </div>
 
+                  {error && (
+                    <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                      {error}
+                    </div>
+                  )}
+
                   <div className="pt-4">
                     <Button
                       type="submit"
                       size="lg"
-                      className="w-full bg-gradient-to-r from-[#254967] to-[#1a2a3e] hover:from-[#1e3a52] hover:to-[#152230] font-semibold py-6"
+                      disabled={loading}
+                      className="w-full bg-gradient-to-r from-[#254967] to-[#1a2a3e] hover:from-[#1e3a52] hover:to-[#152230] font-semibold py-6 disabled:opacity-50"
                     >
                       <Dumbbell className="mr-2 h-5 w-5" />
-                      Submit Application
+                      {loading ? 'Submitting...' : 'Submit Application'}
                     </Button>
                     <p className="text-center text-sm text-gray-500 mt-4">
                       By submitting, you agree to our partnership terms and conditions.
