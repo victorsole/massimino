@@ -34,6 +34,8 @@ const TEMPLATE_FILE_MAP: Record<string, string> = {
   'medical-conditions': 'medical_conditions.json',
   'ifbb-classic-physique': 'ifbb_classic_physique.json',
   'superday-workout': 'superday_workout.json',
+  'hiit-workout': 'hiit_workout.json',
+  'hyrox-training': 'hyrox_training.json',
   // Periodization templates
   'linear-periodization-12week': 'micro_mesocycles.json',
   'standard-programming': 'programming.json',
