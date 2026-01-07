@@ -19,6 +19,22 @@ Massimino creates a zero-tolerance, anti-creep environment for fitness professio
 - **Secure Messaging** — Real-time, moderated, professional communication
 - **Payments** — Mollie integration for seamless coaching transactions
 
+### 🏋️ Browse Programs
+- **30+ Pre-Built Training Programs** — Celebrity, goal-based, lifestyle, sport-specific, and modality programs
+- **Program Categories:**
+  - **Celebrity Programs** — Arnold's Golden Six, CBUM Classic Physique, Ronnie Coleman, Colorado Experiment, IFBB Classic Physique
+  - **Goal-Based** — NASM Fat Loss, Muscle Gain, Performance, Aesthetics Hunter
+  - **Lifestyle** — Postpartum (Mum/Dad), Stress Management, Time-Constrained, Medical Conditions
+  - **Training Modality** — HIIT, [Hyrox](https://hyrox.com/), Cardio, Flexibility, Balance, Plyometric
+  - **Sport-Specific** — Castellers, Basketball, Football, Tennis conditioning
+- **My Programs** — Track subscribed programs with progress indicators and next workout info
+- **Exercise Media Integration** — Video and image demonstrations from exercise database
+
+### ⚙️ Settings & Preferences
+- **Profile Visibility** — Public/Private profile control
+- **Discovery Settings** — Enable/disable profile discovery for new users
+- **Mobile-Optimized UI** — Responsive settings page with improved mobile dropdown positioning
+
 ---
 
 ## 📝 Language Style Guide (UI Copy)
@@ -57,22 +73,37 @@ Massimino creates a zero-tolerance, anti-creep environment for fitness professio
 ---
 
 ## 📁 Project Structure
+```
 massimino/
-
-├── prisma/ # Database schema & seeds
+├── prisma/                    # Database schema & seeds
 ├── src/
-│ ├── app/ # Auth, dashboard, and API routes
-│ ├── components/ # UI and form components
-│ ├── lib/ # Core logic (auth, moderation, payments, etc.)
-│ ├── types/ # TypeScript interfaces
-│ └── hooks/ # Custom React hooks
-├── tests/ # Unit & e2e tests
-├── public/ # Static assets and icons
-├── docs/ # API and deployment guides
-├── .env.example # Env variable template
-├── tailwind.config.js # Tailwind setup
-├── next.config.js # Next.js config
+│   ├── app/                   # Auth, dashboard, and API routes
+│   │   ├── api/               # REST API endpoints
+│   │   │   └── workout/       # Workout & program APIs
+│   │   ├── workout-log/       # Workout logging pages
+│   │   └── settings/          # User settings page
+│   ├── components/            # UI and form components
+│   │   ├── programs/          # Program display components
+│   │   ├── workout-log/       # Workout log UI (mobile-optimized)
+│   │   └── ui/                # Shared UI components
+│   ├── core/                  # Core business logic
+│   │   └── database/          # Database queries and utilities
+│   ├── templates/             # 30+ JSON program templates
+│   │   ├── arnold_golden_six.json
+│   │   ├── hiit_workout.json
+│   │   ├── hyrox_training.json
+│   │   └── ... (celebrity, goal, lifestyle, sport programs)
+│   ├── types/                 # TypeScript interfaces
+│   └── hooks/                 # Custom React hooks
+├── tests/                     # Unit & e2e tests
+├── public/
+│   └── images/programs/       # Program hero images
+├── docs/                      # API and deployment guides
+├── .env.example               # Env variable template
+├── tailwind.config.js         # Tailwind setup
+├── next.config.js             # Next.js config
 └── README.md
+```
 
 ## Ownership
 Massimino is a product of Beresol BV and developed by Victor Solé Ferioli.

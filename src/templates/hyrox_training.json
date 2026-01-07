@@ -1,0 +1,1261 @@
+{
+  "program": "Hyrox Training Program",
+  "program_id": "hyrox-training",
+  "author": "HYROX",
+  "author_url": "https://hyrox.com/",
+  "version": "1.0",
+  "duration_weeks": 8,
+  "session_duration": {
+    "min_minutes": 45,
+    "max_minutes": 75
+  },
+  "frequency_per_week": 4,
+  "level": "Intermediate to Advanced",
+  "goal": {
+    "outcome_goal": "Complete a simulated Hyrox race with improved times across all 8 stations",
+    "progress_goals": [
+      "Build running endurance for 8km total distance",
+      "Develop functional strength for all 8 Hyrox stations",
+      "Improve transitions between running and functional exercises",
+      "Increase grip strength and muscular endurance"
+    ]
+  },
+
+  "program_philosophy": {
+    "core_principles": [
+      "Train the 8 Hyrox stations with race-specific intensity",
+      "Build running capacity to sustain 1km efforts between stations",
+      "Develop mental toughness for the unique demands of fitness racing",
+      "Practice transitions to minimize time lost between activities"
+    ],
+    "training_approach": "Hyrox combines 8km of running with 8 functional workout stations: SkiErg, Sled Push, Sled Pull, Burpee Broad Jumps, Rowing, Farmers Carry, Sandbag Lunges, and Wall Balls. This program prepares you for the unique demands of hybrid endurance-strength racing.",
+    "differentiator": "Race-specific training that mirrors the exact Hyrox format while building progressive capacity"
+  },
+
+  "equipment": {
+    "required": ["skierg", "rowing_machine", "sled", "kettlebells", "sandbag", "medicine_ball"],
+    "recommended": ["heart_rate_monitor", "gym_timer"],
+    "optional": ["weighted_vest", "battle_ropes"]
+  },
+
+  "hyrox_race_format": {
+    "total_running": "8km (8 x 1km runs)",
+    "stations": [
+      {"station": 1, "exercise": "SkiErg", "distance_reps": "1000m"},
+      {"station": 2, "exercise": "Sled Push", "distance_reps": "50m"},
+      {"station": 3, "exercise": "Sled Pull", "distance_reps": "50m"},
+      {"station": 4, "exercise": "Burpee Broad Jumps", "distance_reps": "80m"},
+      {"station": 5, "exercise": "Rowing", "distance_reps": "1000m"},
+      {"station": 6, "exercise": "Farmers Carry", "distance_reps": "200m"},
+      {"station": 7, "exercise": "Sandbag Lunges", "distance_reps": "100m"},
+      {"station": 8, "exercise": "Wall Balls", "distance_reps": "100 reps"}
+    ],
+    "division_weights": {
+      "open_male": {"sled_push": "152kg", "sled_pull": "103kg", "farmers_carry": "2x24kg", "sandbag": "20kg", "wall_ball": "6kg"},
+      "open_female": {"sled_push": "102kg", "sled_pull": "78kg", "farmers_carry": "2x16kg", "sandbag": "10kg", "wall_ball": "4kg"},
+      "pro_male": {"sled_push": "202kg", "sled_pull": "153kg", "farmers_carry": "2x32kg", "sandbag": "30kg", "wall_ball": "9kg"},
+      "pro_female": {"sled_push": "152kg", "sled_pull": "103kg", "farmers_carry": "2x24kg", "sandbag": "20kg", "wall_ball": "6kg"}
+    }
+  },
+
+  "training_days": [
+    {
+      "day": 1,
+      "day_name": "Week 1 - Session 1: Running Base + SkiErg",
+      "focus": "Station 1 Focus - Aerobic Foundation",
+      "exercises": [
+        {
+          "exercise_id": "warmup-run",
+          "exercise_name": "Easy Run Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "10 min",
+          "rest_seconds": 0,
+          "notes": "Conversational pace, prepare for intervals",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "run-intervals",
+          "exercise_name": "1km Run Intervals",
+          "order": 2,
+          "sets": 4,
+          "reps": "1 km",
+          "rest_seconds": 120,
+          "notes": "Race pace effort, 2 min rest between each km",
+          "primary_muscle_groups": ["cardiovascular", "quadriceps", "hamstrings", "calves"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "skierg-practice",
+          "exercise_name": "SkiErg Intervals",
+          "order": 3,
+          "sets": 4,
+          "reps": "250m",
+          "rest_seconds": 60,
+          "notes": "Focus on technique - drive with arms and core, engage lats",
+          "primary_muscle_groups": ["latissimus_dorsi", "shoulders", "core", "triceps"],
+          "equipment": ["skierg"]
+        },
+        {
+          "exercise_id": "cooldown-jog",
+          "exercise_name": "Cooldown Jog & Stretch",
+          "order": 4,
+          "sets": 1,
+          "reps": "10 min",
+          "rest_seconds": 0,
+          "notes": "Easy jog transitioning to walking and stretching",
+          "primary_muscle_groups": ["cardiovascular", "full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "day_name": "Week 1 - Session 2: Sled Work",
+      "focus": "Stations 2-3 - Sled Push & Pull",
+      "exercises": [
+        {
+          "exercise_id": "warmup-dynamic",
+          "exercise_name": "Dynamic Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "10 min",
+          "rest_seconds": 0,
+          "notes": "Hip circles, leg swings, arm circles, light jog",
+          "primary_muscle_groups": ["cardiovascular", "full_body"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "sled-push",
+          "exercise_name": "Sled Push",
+          "order": 2,
+          "sets": 6,
+          "reps": "25m",
+          "rest_seconds": 90,
+          "notes": "Low body position, drive through legs, chest over handles. Use 60-70% race weight.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "calves", "core"],
+          "equipment": ["sled"]
+        },
+        {
+          "exercise_id": "sled-pull",
+          "exercise_name": "Sled Pull (Rope)",
+          "order": 3,
+          "sets": 6,
+          "reps": "25m",
+          "rest_seconds": 90,
+          "notes": "Hand over hand pulling, stay low, engage back and biceps. Use 60-70% race weight.",
+          "primary_muscle_groups": ["latissimus_dorsi", "biceps", "core", "forearms"],
+          "equipment": ["sled"]
+        },
+        {
+          "exercise_id": "transition-run",
+          "exercise_name": "Transition Runs",
+          "order": 4,
+          "sets": 4,
+          "reps": "400m",
+          "rest_seconds": 60,
+          "notes": "Practice running immediately after sled work - legs will be heavy!",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 5,
+          "sets": 1,
+          "reps": "10 min",
+          "rest_seconds": 0,
+          "notes": "Focus on hip flexors, quads, and lower back",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "day_name": "Week 1 - Session 3: Burpee Broad Jumps + Row",
+      "focus": "Stations 4-5 - High Intensity",
+      "exercises": [
+        {
+          "exercise_id": "warmup-run",
+          "exercise_name": "Easy Run Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "1 km",
+          "rest_seconds": 0,
+          "notes": "Light jog to prepare",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "burpee-broad-jump",
+          "exercise_name": "Burpee Broad Jumps",
+          "order": 2,
+          "sets": 5,
+          "reps": "16m (approx 8-10 jumps)",
+          "rest_seconds": 90,
+          "notes": "Burpee, then broad jump forward. This is the most mentally demanding station!",
+          "primary_muscle_groups": ["full_body", "quadriceps", "glutes", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "row-intervals",
+          "exercise_name": "Rowing Intervals",
+          "order": 3,
+          "sets": 4,
+          "reps": "500m",
+          "rest_seconds": 90,
+          "notes": "Target pace: under 2:00/500m. Drive with legs, then pull with back.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "latissimus_dorsi", "biceps"],
+          "equipment": ["rowing_machine"]
+        },
+        {
+          "exercise_id": "run-after-row",
+          "exercise_name": "Run After Row",
+          "order": 4,
+          "sets": 2,
+          "reps": "800m",
+          "rest_seconds": 60,
+          "notes": "Practice running on tired legs post-rowing",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 5,
+          "sets": 1,
+          "reps": "10 min",
+          "rest_seconds": 0,
+          "notes": "Full body stretching, focus on hamstrings and hip flexors",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "day_name": "Week 1 - Session 4: Carry, Lunge, Wall Balls",
+      "focus": "Stations 6-8 - The Final Push",
+      "exercises": [
+        {
+          "exercise_id": "warmup-run",
+          "exercise_name": "Easy Run Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "1 km",
+          "rest_seconds": 0,
+          "notes": "Light jog",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "farmers-carry",
+          "exercise_name": "Farmers Carry",
+          "order": 2,
+          "sets": 4,
+          "reps": "50m",
+          "rest_seconds": 60,
+          "notes": "Grip strength is key - use race weight or slightly lighter. Keep core tight, shoulders back.",
+          "primary_muscle_groups": ["forearms", "trapezius", "core"],
+          "equipment": ["kettlebells"]
+        },
+        {
+          "exercise_id": "sandbag-lunges",
+          "exercise_name": "Sandbag Lunges",
+          "order": 3,
+          "sets": 4,
+          "reps": "25m",
+          "rest_seconds": 90,
+          "notes": "Sandbag on shoulders, alternate legs. This station exposes leg endurance!",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings", "core"],
+          "equipment": ["sandbag"]
+        },
+        {
+          "exercise_id": "wall-balls",
+          "exercise_name": "Wall Balls",
+          "order": 4,
+          "sets": 4,
+          "reps": "25 reps",
+          "rest_seconds": 60,
+          "notes": "Squat and throw to target (10ft for men, 9ft for women). Final station - finish strong!",
+          "primary_muscle_groups": ["quadriceps", "glutes", "shoulders", "core"],
+          "equipment": ["medicine_ball"]
+        },
+        {
+          "exercise_id": "finish-run",
+          "exercise_name": "Finish Line Run",
+          "order": 5,
+          "sets": 1,
+          "reps": "400m sprint",
+          "rest_seconds": 0,
+          "notes": "Sprint to the finish - simulate race ending!",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 6,
+          "sets": 1,
+          "reps": "10 min",
+          "rest_seconds": 0,
+          "notes": "Full body recovery stretching",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 5,
+      "day_name": "Week 2 - Session 1: Long Run + SkiErg Volume",
+      "focus": "Building Endurance Base",
+      "exercises": [
+        {
+          "exercise_id": "long-run",
+          "exercise_name": "Long Run",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 km",
+          "rest_seconds": 0,
+          "notes": "Steady pace, build aerobic base. Target 5:30-6:30/km pace.",
+          "primary_muscle_groups": ["cardiovascular", "quadriceps", "hamstrings", "calves"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "skierg-1000m",
+          "exercise_name": "SkiErg 1000m",
+          "order": 2,
+          "sets": 2,
+          "reps": "1000m",
+          "rest_seconds": 180,
+          "notes": "Race distance! Target time based on your level.",
+          "primary_muscle_groups": ["latissimus_dorsi", "shoulders", "core", "triceps"],
+          "equipment": ["skierg"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 3,
+          "sets": 1,
+          "reps": "10 min",
+          "rest_seconds": 0,
+          "notes": "Focus on lats, shoulders, and legs",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 6,
+      "day_name": "Week 2 - Session 2: Sled Volume",
+      "focus": "Building Pushing & Pulling Capacity",
+      "exercises": [
+        {
+          "exercise_id": "warmup-dynamic",
+          "exercise_name": "Dynamic Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "10 min",
+          "rest_seconds": 0,
+          "notes": "Thorough warm-up for heavy work",
+          "primary_muscle_groups": ["cardiovascular", "full_body"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "sled-push-race",
+          "exercise_name": "Sled Push (Race Distance)",
+          "order": 2,
+          "sets": 3,
+          "reps": "50m",
+          "rest_seconds": 180,
+          "notes": "Full 50m race distance. Time each effort!",
+          "primary_muscle_groups": ["quadriceps", "glutes", "calves", "core"],
+          "equipment": ["sled"]
+        },
+        {
+          "exercise_id": "run-transition",
+          "exercise_name": "Transition Run",
+          "order": 3,
+          "sets": 3,
+          "reps": "1 km",
+          "rest_seconds": 60,
+          "notes": "Run immediately after each sled push set",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "sled-pull-race",
+          "exercise_name": "Sled Pull (Race Distance)",
+          "order": 4,
+          "sets": 3,
+          "reps": "50m",
+          "rest_seconds": 180,
+          "notes": "Full 50m race distance. Hand over hand technique.",
+          "primary_muscle_groups": ["latissimus_dorsi", "biceps", "core", "forearms"],
+          "equipment": ["sled"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 5,
+          "sets": 1,
+          "reps": "10 min",
+          "rest_seconds": 0,
+          "notes": "Focus on grip, forearms, and back",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 7,
+      "day_name": "Week 2 - Session 3: Burpee Broad Jump Volume",
+      "focus": "Building Mental Toughness",
+      "exercises": [
+        {
+          "exercise_id": "warmup-run",
+          "exercise_name": "Easy Run Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "1 km",
+          "rest_seconds": 0,
+          "notes": "Light jog to prepare",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "burpee-broad-jump-long",
+          "exercise_name": "Burpee Broad Jumps (Race Simulation)",
+          "order": 2,
+          "sets": 2,
+          "reps": "40m",
+          "rest_seconds": 180,
+          "notes": "Half race distance. Focus on consistent pace - don't burn out!",
+          "primary_muscle_groups": ["full_body", "quadriceps", "glutes", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "run-intervals",
+          "exercise_name": "1km Run Intervals",
+          "order": 3,
+          "sets": 3,
+          "reps": "1 km",
+          "rest_seconds": 90,
+          "notes": "Race pace after burpee broad jumps - this is brutal but necessary!",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "row-1000m",
+          "exercise_name": "Rowing 1000m",
+          "order": 4,
+          "sets": 2,
+          "reps": "1000m",
+          "rest_seconds": 180,
+          "notes": "Race distance rowing. Track your time!",
+          "primary_muscle_groups": ["quadriceps", "glutes", "latissimus_dorsi", "biceps"],
+          "equipment": ["rowing_machine"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 5,
+          "sets": 1,
+          "reps": "10 min",
+          "rest_seconds": 0,
+          "notes": "Full body recovery",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 8,
+      "day_name": "Week 2 - Session 4: Final Stations Volume",
+      "focus": "Finishing Strong",
+      "exercises": [
+        {
+          "exercise_id": "warmup-run",
+          "exercise_name": "Easy Run Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "2 km",
+          "rest_seconds": 0,
+          "notes": "Extended warm-up",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "farmers-carry-race",
+          "exercise_name": "Farmers Carry (Race Distance)",
+          "order": 2,
+          "sets": 2,
+          "reps": "200m",
+          "rest_seconds": 180,
+          "notes": "Full race distance! Don't drop the weights - train grip endurance.",
+          "primary_muscle_groups": ["forearms", "trapezius", "core"],
+          "equipment": ["kettlebells"]
+        },
+        {
+          "exercise_id": "sandbag-lunges-race",
+          "exercise_name": "Sandbag Lunges (Race Distance)",
+          "order": 3,
+          "sets": 2,
+          "reps": "50m",
+          "rest_seconds": 180,
+          "notes": "Half race distance. Focus on consistent steps.",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings", "core"],
+          "equipment": ["sandbag"]
+        },
+        {
+          "exercise_id": "wall-balls-race",
+          "exercise_name": "Wall Balls (Race Volume)",
+          "order": 4,
+          "sets": 2,
+          "reps": "50 reps",
+          "rest_seconds": 120,
+          "notes": "Half race volume. Break into manageable sets if needed (10-10-10-10-10).",
+          "primary_muscle_groups": ["quadriceps", "glutes", "shoulders", "core"],
+          "equipment": ["medicine_ball"]
+        },
+        {
+          "exercise_id": "finish-sprint",
+          "exercise_name": "Finish Sprint",
+          "order": 5,
+          "sets": 1,
+          "reps": "1 km",
+          "rest_seconds": 0,
+          "notes": "Final push - simulate race finish!",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 6,
+          "sets": 1,
+          "reps": "10 min",
+          "rest_seconds": 0,
+          "notes": "Recovery focus",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 9,
+      "day_name": "Week 3 - Session 1: Race Simulation Part 1",
+      "focus": "Stations 1-4 Continuous",
+      "exercises": [
+        {
+          "exercise_id": "warmup-run",
+          "exercise_name": "Warm-Up Run",
+          "order": 1,
+          "sets": 1,
+          "reps": "1 km",
+          "rest_seconds": 0,
+          "notes": "Race warm-up simulation",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "sim-run-1",
+          "exercise_name": "Run to Station 1",
+          "order": 2,
+          "sets": 1,
+          "reps": "1 km",
+          "rest_seconds": 0,
+          "notes": "Race pace",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "sim-skierg",
+          "exercise_name": "Station 1: SkiErg",
+          "order": 3,
+          "sets": 1,
+          "reps": "1000m",
+          "rest_seconds": 0,
+          "notes": "GO! Transition immediately to run.",
+          "primary_muscle_groups": ["latissimus_dorsi", "shoulders", "core"],
+          "equipment": ["skierg"]
+        },
+        {
+          "exercise_id": "sim-run-2",
+          "exercise_name": "Run to Station 2",
+          "order": 4,
+          "sets": 1,
+          "reps": "1 km",
+          "rest_seconds": 0,
+          "notes": "Race pace - arms will be tired!",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "sim-sled-push",
+          "exercise_name": "Station 2: Sled Push",
+          "order": 5,
+          "sets": 1,
+          "reps": "50m",
+          "rest_seconds": 0,
+          "notes": "Full race distance and weight",
+          "primary_muscle_groups": ["quadriceps", "glutes", "calves", "core"],
+          "equipment": ["sled"]
+        },
+        {
+          "exercise_id": "sim-run-3",
+          "exercise_name": "Run to Station 3",
+          "order": 6,
+          "sets": 1,
+          "reps": "1 km",
+          "rest_seconds": 0,
+          "notes": "Legs will be heavy - push through!",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "sim-sled-pull",
+          "exercise_name": "Station 3: Sled Pull",
+          "order": 7,
+          "sets": 1,
+          "reps": "50m",
+          "rest_seconds": 0,
+          "notes": "Full race distance and weight",
+          "primary_muscle_groups": ["latissimus_dorsi", "biceps", "core", "forearms"],
+          "equipment": ["sled"]
+        },
+        {
+          "exercise_id": "sim-run-4",
+          "exercise_name": "Run to Station 4",
+          "order": 8,
+          "sets": 1,
+          "reps": "1 km",
+          "rest_seconds": 0,
+          "notes": "Keep moving!",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "sim-burpee-bj",
+          "exercise_name": "Station 4: Burpee Broad Jumps",
+          "order": 9,
+          "sets": 1,
+          "reps": "80m",
+          "rest_seconds": 0,
+          "notes": "Full race distance - this is where mental toughness matters!",
+          "primary_muscle_groups": ["full_body", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 10,
+          "sets": 1,
+          "reps": "15 min",
+          "rest_seconds": 0,
+          "notes": "Extended recovery - you've earned it!",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 10,
+      "day_name": "Week 3 - Session 2: Recovery & Technique",
+      "focus": "Active Recovery & Form Work",
+      "exercises": [
+        {
+          "exercise_id": "easy-run",
+          "exercise_name": "Easy Recovery Run",
+          "order": 1,
+          "sets": 1,
+          "reps": "3 km",
+          "rest_seconds": 0,
+          "notes": "Very easy pace - recovery is key!",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "skierg-technique",
+          "exercise_name": "SkiErg Technique Work",
+          "order": 2,
+          "sets": 4,
+          "reps": "250m",
+          "rest_seconds": 90,
+          "notes": "Focus on perfect form, not speed. Long arms, engage core.",
+          "primary_muscle_groups": ["latissimus_dorsi", "shoulders", "core"],
+          "equipment": ["skierg"]
+        },
+        {
+          "exercise_id": "rowing-technique",
+          "exercise_name": "Rowing Technique Work",
+          "order": 3,
+          "sets": 4,
+          "reps": "250m",
+          "rest_seconds": 90,
+          "notes": "Legs-body-arms sequence. Perfect stroke mechanics.",
+          "primary_muscle_groups": ["quadriceps", "latissimus_dorsi", "biceps"],
+          "equipment": ["rowing_machine"]
+        },
+        {
+          "exercise_id": "mobility-work",
+          "exercise_name": "Full Body Mobility",
+          "order": 4,
+          "sets": 1,
+          "reps": "15 min",
+          "rest_seconds": 0,
+          "notes": "Hip circles, thoracic rotation, ankle mobility, shoulder work",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 11,
+      "day_name": "Week 3 - Session 3: Race Simulation Part 2",
+      "focus": "Stations 5-8 Continuous",
+      "exercises": [
+        {
+          "exercise_id": "warmup-run",
+          "exercise_name": "Warm-Up Run",
+          "order": 1,
+          "sets": 1,
+          "reps": "2 km",
+          "rest_seconds": 0,
+          "notes": "Simulate having run 4km already",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "sim-run-5",
+          "exercise_name": "Run to Station 5",
+          "order": 2,
+          "sets": 1,
+          "reps": "1 km",
+          "rest_seconds": 0,
+          "notes": "Beginning of second half",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "sim-row",
+          "exercise_name": "Station 5: Rowing",
+          "order": 3,
+          "sets": 1,
+          "reps": "1000m",
+          "rest_seconds": 0,
+          "notes": "Second erg of the race. Pace yourself!",
+          "primary_muscle_groups": ["quadriceps", "glutes", "latissimus_dorsi", "biceps"],
+          "equipment": ["rowing_machine"]
+        },
+        {
+          "exercise_id": "sim-run-6",
+          "exercise_name": "Run to Station 6",
+          "order": 4,
+          "sets": 1,
+          "reps": "1 km",
+          "rest_seconds": 0,
+          "notes": "Recovery run after rowing",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "sim-farmers",
+          "exercise_name": "Station 6: Farmers Carry",
+          "order": 5,
+          "sets": 1,
+          "reps": "200m",
+          "rest_seconds": 0,
+          "notes": "Full race distance - don't drop the weights!",
+          "primary_muscle_groups": ["forearms", "trapezius", "core"],
+          "equipment": ["kettlebells"]
+        },
+        {
+          "exercise_id": "sim-run-7",
+          "exercise_name": "Run to Station 7",
+          "order": 6,
+          "sets": 1,
+          "reps": "1 km",
+          "rest_seconds": 0,
+          "notes": "Forearms will be pumped - shake them out!",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "sim-lunges",
+          "exercise_name": "Station 7: Sandbag Lunges",
+          "order": 7,
+          "sets": 1,
+          "reps": "100m",
+          "rest_seconds": 0,
+          "notes": "Full race distance - this exposes leg fatigue!",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings", "core"],
+          "equipment": ["sandbag"]
+        },
+        {
+          "exercise_id": "sim-run-8",
+          "exercise_name": "Run to Station 8",
+          "order": 8,
+          "sets": 1,
+          "reps": "1 km",
+          "rest_seconds": 0,
+          "notes": "Final run before wall balls!",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "sim-wallballs",
+          "exercise_name": "Station 8: Wall Balls",
+          "order": 9,
+          "sets": 1,
+          "reps": "100 reps",
+          "rest_seconds": 0,
+          "notes": "Final station! Break into sets: 20-20-20-20-20 or 25-25-25-25",
+          "primary_muscle_groups": ["quadriceps", "glutes", "shoulders", "core"],
+          "equipment": ["medicine_ball"]
+        },
+        {
+          "exercise_id": "finish-sprint",
+          "exercise_name": "Sprint to Finish",
+          "order": 10,
+          "sets": 1,
+          "reps": "200m",
+          "rest_seconds": 0,
+          "notes": "FINISH STRONG!",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 11,
+          "sets": 1,
+          "reps": "15 min",
+          "rest_seconds": 0,
+          "notes": "Full recovery stretching",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 12,
+      "day_name": "Week 3 - Session 4: Strength & Conditioning",
+      "focus": "Build Race-Specific Strength",
+      "exercises": [
+        {
+          "exercise_id": "warmup-dynamic",
+          "exercise_name": "Dynamic Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "10 min",
+          "rest_seconds": 0,
+          "notes": "Full body preparation",
+          "primary_muscle_groups": ["cardiovascular", "full_body"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "goblet-squats",
+          "exercise_name": "Goblet Squats",
+          "order": 2,
+          "sets": 4,
+          "reps": 12,
+          "rest_seconds": 60,
+          "notes": "Build leg strength for lunges and wall balls",
+          "primary_muscle_groups": ["quadriceps", "glutes", "core"],
+          "equipment": ["kettlebells"]
+        },
+        {
+          "exercise_id": "deadlifts",
+          "exercise_name": "Romanian Deadlifts",
+          "order": 3,
+          "sets": 4,
+          "reps": 10,
+          "rest_seconds": 60,
+          "notes": "Posterior chain strength for sled work",
+          "primary_muscle_groups": ["hamstrings", "glutes", "lower_back"],
+          "equipment": ["kettlebells"]
+        },
+        {
+          "exercise_id": "rows",
+          "exercise_name": "Bent Over Rows",
+          "order": 4,
+          "sets": 4,
+          "reps": 12,
+          "rest_seconds": 60,
+          "notes": "Back strength for sled pull and rowing",
+          "primary_muscle_groups": ["latissimus_dorsi", "biceps", "rhomboids"],
+          "equipment": ["kettlebells"]
+        },
+        {
+          "exercise_id": "push-press",
+          "exercise_name": "Push Press",
+          "order": 5,
+          "sets": 4,
+          "reps": 10,
+          "rest_seconds": 60,
+          "notes": "Overhead strength for wall balls",
+          "primary_muscle_groups": ["shoulders", "triceps", "core"],
+          "equipment": ["kettlebells"]
+        },
+        {
+          "exercise_id": "farmers-hold",
+          "exercise_name": "Farmers Carry Hold",
+          "order": 6,
+          "sets": 3,
+          "reps": "45 sec",
+          "rest_seconds": 60,
+          "notes": "Grip endurance training",
+          "primary_muscle_groups": ["forearms", "trapezius", "core"],
+          "equipment": ["kettlebells"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 7,
+          "sets": 1,
+          "reps": "10 min",
+          "rest_seconds": 0,
+          "notes": "Recovery focus",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 13,
+      "day_name": "Week 4 - Session 1: Speed Work",
+      "focus": "Improve Running Pace",
+      "exercises": [
+        {
+          "exercise_id": "warmup-jog",
+          "exercise_name": "Warm-Up Jog",
+          "order": 1,
+          "sets": 1,
+          "reps": "2 km",
+          "rest_seconds": 0,
+          "notes": "Easy pace warm-up",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "speed-intervals",
+          "exercise_name": "400m Speed Intervals",
+          "order": 2,
+          "sets": 8,
+          "reps": "400m",
+          "rest_seconds": 90,
+          "notes": "Faster than race pace - build speed reserve",
+          "primary_muscle_groups": ["cardiovascular", "quadriceps", "hamstrings", "calves"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "easy-jog",
+          "exercise_name": "Easy Recovery Jog",
+          "order": 3,
+          "sets": 1,
+          "reps": "1 km",
+          "rest_seconds": 0,
+          "notes": "Slow jog to recover",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "tempo-run",
+          "exercise_name": "Tempo Run",
+          "order": 4,
+          "sets": 1,
+          "reps": "2 km",
+          "rest_seconds": 0,
+          "notes": "Comfortably hard pace - race simulation",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 5,
+          "sets": 1,
+          "reps": "10 min",
+          "rest_seconds": 0,
+          "notes": "Focus on calves, hamstrings, hip flexors",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 14,
+      "day_name": "Week 4 - Session 2: Station Intervals",
+      "focus": "High Intensity Station Work",
+      "exercises": [
+        {
+          "exercise_id": "warmup-run",
+          "exercise_name": "Warm-Up Run",
+          "order": 1,
+          "sets": 1,
+          "reps": "1 km",
+          "rest_seconds": 0,
+          "notes": "Get heart rate up",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "circuit",
+          "exercise_name": "Station Circuit (3 rounds)",
+          "order": 2,
+          "sets": 3,
+          "reps": "Full circuit",
+          "rest_seconds": 180,
+          "notes": "Complete all 8 mini-stations with 1min rest between stations, 3min between rounds",
+          "primary_muscle_groups": ["full_body", "cardiovascular"],
+          "equipment": ["skierg", "sled", "rowing_machine", "kettlebells", "sandbag", "medicine_ball"]
+        },
+        {
+          "exercise_id": "circuit-skierg",
+          "exercise_name": "SkiErg",
+          "order": 3,
+          "sets": 1,
+          "reps": "500m",
+          "rest_seconds": 60,
+          "notes": "Half race distance, race intensity",
+          "primary_muscle_groups": ["latissimus_dorsi", "shoulders", "core"],
+          "equipment": ["skierg"]
+        },
+        {
+          "exercise_id": "circuit-sled-push",
+          "exercise_name": "Sled Push",
+          "order": 4,
+          "sets": 1,
+          "reps": "25m",
+          "rest_seconds": 60,
+          "notes": "Half distance, full weight",
+          "primary_muscle_groups": ["quadriceps", "glutes", "calves"],
+          "equipment": ["sled"]
+        },
+        {
+          "exercise_id": "circuit-sled-pull",
+          "exercise_name": "Sled Pull",
+          "order": 5,
+          "sets": 1,
+          "reps": "25m",
+          "rest_seconds": 60,
+          "notes": "Half distance, full weight",
+          "primary_muscle_groups": ["latissimus_dorsi", "biceps", "forearms"],
+          "equipment": ["sled"]
+        },
+        {
+          "exercise_id": "circuit-burpee-bj",
+          "exercise_name": "Burpee Broad Jumps",
+          "order": 6,
+          "sets": 1,
+          "reps": "40m",
+          "rest_seconds": 60,
+          "notes": "Half distance",
+          "primary_muscle_groups": ["full_body", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "circuit-row",
+          "exercise_name": "Rowing",
+          "order": 7,
+          "sets": 1,
+          "reps": "500m",
+          "rest_seconds": 60,
+          "notes": "Half distance, push hard",
+          "primary_muscle_groups": ["quadriceps", "latissimus_dorsi", "biceps"],
+          "equipment": ["rowing_machine"]
+        },
+        {
+          "exercise_id": "circuit-farmers",
+          "exercise_name": "Farmers Carry",
+          "order": 8,
+          "sets": 1,
+          "reps": "100m",
+          "rest_seconds": 60,
+          "notes": "Half distance, full weight",
+          "primary_muscle_groups": ["forearms", "trapezius", "core"],
+          "equipment": ["kettlebells"]
+        },
+        {
+          "exercise_id": "circuit-lunges",
+          "exercise_name": "Sandbag Lunges",
+          "order": 9,
+          "sets": 1,
+          "reps": "50m",
+          "rest_seconds": 60,
+          "notes": "Half distance, full weight",
+          "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
+          "equipment": ["sandbag"]
+        },
+        {
+          "exercise_id": "circuit-wallballs",
+          "exercise_name": "Wall Balls",
+          "order": 10,
+          "sets": 1,
+          "reps": "50 reps",
+          "rest_seconds": 180,
+          "notes": "Half volume, then 3 min rest before next round",
+          "primary_muscle_groups": ["quadriceps", "shoulders", "core"],
+          "equipment": ["medicine_ball"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 11,
+          "sets": 1,
+          "reps": "15 min",
+          "rest_seconds": 0,
+          "notes": "Full recovery needed!",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 15,
+      "day_name": "Week 4 - Session 3: Long Run + Ergs",
+      "focus": "Endurance Building",
+      "exercises": [
+        {
+          "exercise_id": "long-run",
+          "exercise_name": "Long Run",
+          "order": 1,
+          "sets": 1,
+          "reps": "6 km",
+          "rest_seconds": 0,
+          "notes": "Steady pace, build aerobic endurance",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "skierg-post-run",
+          "exercise_name": "SkiErg (Post-Run)",
+          "order": 2,
+          "sets": 2,
+          "reps": "1000m",
+          "rest_seconds": 180,
+          "notes": "Race distance after running - simulate real conditions",
+          "primary_muscle_groups": ["latissimus_dorsi", "shoulders", "core"],
+          "equipment": ["skierg"]
+        },
+        {
+          "exercise_id": "row-post-run",
+          "exercise_name": "Rowing (Post-Run)",
+          "order": 3,
+          "sets": 2,
+          "reps": "1000m",
+          "rest_seconds": 180,
+          "notes": "Race distance after running",
+          "primary_muscle_groups": ["quadriceps", "latissimus_dorsi", "biceps"],
+          "equipment": ["rowing_machine"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 4,
+          "sets": 1,
+          "reps": "15 min",
+          "rest_seconds": 0,
+          "notes": "Extended recovery",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 16,
+      "day_name": "Week 4 - Session 4: Full Race Simulation",
+      "focus": "Complete Hyrox Simulation",
+      "exercises": [
+        {
+          "exercise_id": "race-warmup",
+          "exercise_name": "Race Day Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "10 min",
+          "rest_seconds": 0,
+          "notes": "Dynamic warm-up, practice transitions mentally",
+          "primary_muscle_groups": ["cardiovascular", "full_body"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "full-race",
+          "exercise_name": "FULL HYROX SIMULATION",
+          "order": 2,
+          "sets": 1,
+          "reps": "Complete race",
+          "rest_seconds": 0,
+          "notes": "8km running + 8 stations. Time everything! This is your baseline race time.",
+          "primary_muscle_groups": ["full_body", "cardiovascular"],
+          "equipment": ["skierg", "sled", "rowing_machine", "kettlebells", "sandbag", "medicine_ball"]
+        },
+        {
+          "exercise_id": "cooldown-walk",
+          "exercise_name": "Cooldown Walk",
+          "order": 3,
+          "sets": 1,
+          "reps": "10 min",
+          "rest_seconds": 0,
+          "notes": "Easy walking to bring heart rate down",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Full Recovery Stretch",
+          "order": 4,
+          "sets": 1,
+          "reps": "20 min",
+          "rest_seconds": 0,
+          "notes": "Extended stretching - you completed a full race simulation!",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 17,
+      "day_name": "Week 5-8 Overview",
+      "focus": "Progressive Race Preparation",
+      "exercises": [
+        {
+          "exercise_id": "program-note",
+          "exercise_name": "Weeks 5-8 Programming",
+          "order": 1,
+          "sets": 1,
+          "reps": "See notes",
+          "rest_seconds": 0,
+          "notes": "Continue the Week 1-4 cycle with progressions: Week 5-6: Increase weights to 80-90% race weight, reduce rest periods by 15%. Week 7: Full race weight, race-pace simulations. Week 8: Taper - reduce volume by 40%, maintain intensity, rest before race day.",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["all"]
+        }
+      ]
+    }
+  ],
+
+  "tracking_tools": [
+    "Hyrox App (official timing)",
+    "Heart Rate Monitor",
+    "SkiErg/Rower Display (track 1000m times)",
+    "Stopwatch for station times",
+    "Training Log for progressive tracking"
+  ],
+
+  "progression_strategy": {
+    "weeks_1_2": "Build station familiarity and running base at 60-70% race intensity",
+    "weeks_3_4": "Increase to 75-85% race weight/intensity, practice race simulations",
+    "weeks_5_6": "Full race weights, reduce rest periods, improve transitions",
+    "weeks_7_8": "Peak training week 7, taper week 8 for race day freshness"
+  },
+
+  "race_day_tips": [
+    "Start conservative on the first 1km and SkiErg - don't blow up early",
+    "Break wall balls into sets of 20-25 rather than trying unbroken",
+    "Keep moving during transitions - every second counts",
+    "Practice your nutrition strategy: water at every station",
+    "The race is won or lost at the burpee broad jumps - pace yourself there"
+  ]
+}

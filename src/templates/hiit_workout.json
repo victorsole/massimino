@@ -1,0 +1,997 @@
+{
+  "program": "HIIT Workout",
+  "program_id": "hiit-workout",
+  "author": "Victor Sole Ferioli",
+  "version": "1.0",
+  "duration_weeks": 4,
+  "session_duration": {
+    "min_minutes": 20,
+    "max_minutes": 35
+  },
+  "frequency_per_week": 3,
+  "level": "Intermediate",
+  "goal": {
+    "outcome_goal": "Improve cardiovascular capacity and metabolic conditioning through high-intensity intervals",
+    "progress_goals": [
+      "Increase work capacity by completing more rounds in the same time",
+      "Reduce recovery time between intervals by 20%",
+      "Improve resting heart rate recovery by end of program"
+    ]
+  },
+
+  "program_philosophy": {
+    "core_principles": [
+      "Maximum effort during work intervals (85-95% max heart rate)",
+      "Active or complete rest during recovery periods",
+      "Progressive overload through reduced rest or increased work duration",
+      "Full body engagement for maximum caloric burn"
+    ],
+    "training_approach": "HIIT alternates between short bursts of intense exercise and recovery periods, maximizing fat oxidation and improving both aerobic and anaerobic fitness.",
+    "differentiator": "Time-efficient workouts that deliver results in under 30 minutes"
+  },
+
+  "equipment": {
+    "required": ["bodyweight"],
+    "recommended": ["timer", "heart_rate_monitor"],
+    "optional": ["kettlebell", "jump_rope", "medicine_ball"]
+  },
+
+  "training_days": [
+    {
+      "day": 1,
+      "day_name": "Week 1 - Session 1: HIIT Foundations",
+      "focus": "Learn the Format - 30/30 Intervals",
+      "exercises": [
+        {
+          "exercise_id": "warmup-dynamic",
+          "exercise_name": "Dynamic Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Jumping jacks, high knees, arm circles, leg swings",
+          "primary_muscle_groups": ["cardiovascular", "full_body"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "hiit-jumping-jacks",
+          "exercise_name": "Jumping Jacks",
+          "order": 2,
+          "sets": 4,
+          "reps": "30 sec",
+          "rest_seconds": 30,
+          "notes": "Maximum effort - aim for 40+ reps per set",
+          "primary_muscle_groups": ["cardiovascular", "shoulders", "calves"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "hiit-squat-jumps",
+          "exercise_name": "Squat Jumps",
+          "order": 3,
+          "sets": 4,
+          "reps": "30 sec",
+          "rest_seconds": 30,
+          "notes": "Explosive jump from squat position, soft landing",
+          "primary_muscle_groups": ["quadriceps", "glutes", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "hiit-mountain-climbers",
+          "exercise_name": "Mountain Climbers",
+          "order": 4,
+          "sets": 4,
+          "reps": "30 sec",
+          "rest_seconds": 30,
+          "notes": "Fast pace, drive knees to chest",
+          "primary_muscle_groups": ["core", "hip_flexors", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "hiit-burpees",
+          "exercise_name": "Burpees",
+          "order": 5,
+          "sets": 4,
+          "reps": "30 sec",
+          "rest_seconds": 30,
+          "notes": "Full burpee with jump at top - aim for 8-10 reps per set",
+          "primary_muscle_groups": ["full_body", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-walk",
+          "exercise_name": "Cooldown Walk & Stretch",
+          "order": 6,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Light walking followed by static stretching",
+          "primary_muscle_groups": ["cardiovascular", "full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "day_name": "Week 1 - Session 2: Tabata Protocol",
+      "focus": "Classic Tabata - 20/10 Intervals",
+      "exercises": [
+        {
+          "exercise_id": "warmup-dynamic",
+          "exercise_name": "Dynamic Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Light jog, dynamic stretches",
+          "primary_muscle_groups": ["cardiovascular", "full_body"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "tabata-high-knees",
+          "exercise_name": "High Knees",
+          "order": 2,
+          "sets": 8,
+          "reps": "20 sec",
+          "rest_seconds": 10,
+          "notes": "Tabata round 1 - maximum speed",
+          "primary_muscle_groups": ["hip_flexors", "calves", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "rest-transition",
+          "exercise_name": "Transition Rest",
+          "order": 3,
+          "sets": 1,
+          "reps": "1 min",
+          "rest_seconds": 0,
+          "notes": "Catch breath, prepare for next Tabata",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "tabata-pushups",
+          "exercise_name": "Push-Ups",
+          "order": 4,
+          "sets": 8,
+          "reps": "20 sec",
+          "rest_seconds": 10,
+          "notes": "Tabata round 2 - max reps with good form",
+          "primary_muscle_groups": ["chest", "triceps", "shoulders"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "rest-transition-2",
+          "exercise_name": "Transition Rest",
+          "order": 5,
+          "sets": 1,
+          "reps": "1 min",
+          "rest_seconds": 0,
+          "notes": "Catch breath",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "tabata-plank-jacks",
+          "exercise_name": "Plank Jacks",
+          "order": 6,
+          "sets": 8,
+          "reps": "20 sec",
+          "rest_seconds": 10,
+          "notes": "Tabata round 3 - jump feet in and out in plank position",
+          "primary_muscle_groups": ["core", "shoulders", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 7,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Full body static stretching",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "day_name": "Week 1 - Session 3: EMOM Challenge",
+      "focus": "Every Minute On the Minute",
+      "exercises": [
+        {
+          "exercise_id": "warmup-dynamic",
+          "exercise_name": "Dynamic Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Prepare body for intense work",
+          "primary_muscle_groups": ["cardiovascular", "full_body"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "emom-burpees",
+          "exercise_name": "Burpees (Minute 1, 4, 7, 10)",
+          "order": 2,
+          "sets": 4,
+          "reps": "10 reps",
+          "rest_seconds": 0,
+          "notes": "Complete 10 burpees, rest remainder of minute",
+          "primary_muscle_groups": ["full_body", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "emom-squats",
+          "exercise_name": "Air Squats (Minute 2, 5, 8, 11)",
+          "order": 3,
+          "sets": 4,
+          "reps": "15 reps",
+          "rest_seconds": 0,
+          "notes": "Complete 15 squats, rest remainder of minute",
+          "primary_muscle_groups": ["quadriceps", "glutes"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "emom-pushups",
+          "exercise_name": "Push-Ups (Minute 3, 6, 9, 12)",
+          "order": 4,
+          "sets": 4,
+          "reps": "12 reps",
+          "rest_seconds": 0,
+          "notes": "Complete 12 push-ups, rest remainder of minute",
+          "primary_muscle_groups": ["chest", "triceps", "shoulders"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-walk",
+          "exercise_name": "Cooldown Walk & Stretch",
+          "order": 5,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Light walking and stretching",
+          "primary_muscle_groups": ["cardiovascular", "full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "day_name": "Week 2 - Session 1: Ladder Intervals",
+      "focus": "Progressive Work Intervals",
+      "exercises": [
+        {
+          "exercise_id": "warmup-dynamic",
+          "exercise_name": "Dynamic Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Prepare body for increasing intensity",
+          "primary_muscle_groups": ["cardiovascular", "full_body"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "ladder-round1",
+          "exercise_name": "Speed Skaters",
+          "order": 2,
+          "sets": 1,
+          "reps": "20 sec work / 40 sec rest",
+          "rest_seconds": 40,
+          "notes": "Ladder up: 20s work, 40s rest",
+          "primary_muscle_groups": ["quadriceps", "glutes", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "ladder-round2",
+          "exercise_name": "Speed Skaters",
+          "order": 3,
+          "sets": 1,
+          "reps": "30 sec work / 30 sec rest",
+          "rest_seconds": 30,
+          "notes": "Ladder up: 30s work, 30s rest",
+          "primary_muscle_groups": ["quadriceps", "glutes", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "ladder-round3",
+          "exercise_name": "Speed Skaters",
+          "order": 4,
+          "sets": 1,
+          "reps": "40 sec work / 20 sec rest",
+          "rest_seconds": 20,
+          "notes": "Ladder up: 40s work, 20s rest",
+          "primary_muscle_groups": ["quadriceps", "glutes", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "ladder-rest",
+          "exercise_name": "Active Recovery",
+          "order": 5,
+          "sets": 1,
+          "reps": "1 min",
+          "rest_seconds": 0,
+          "notes": "March in place, catch breath",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "ladder-tuck-jumps-1",
+          "exercise_name": "Tuck Jumps",
+          "order": 6,
+          "sets": 1,
+          "reps": "20 sec work / 40 sec rest",
+          "rest_seconds": 40,
+          "notes": "Ladder up: 20s work",
+          "primary_muscle_groups": ["quadriceps", "calves", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "ladder-tuck-jumps-2",
+          "exercise_name": "Tuck Jumps",
+          "order": 7,
+          "sets": 1,
+          "reps": "30 sec work / 30 sec rest",
+          "rest_seconds": 30,
+          "notes": "Ladder up: 30s work",
+          "primary_muscle_groups": ["quadriceps", "calves", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "ladder-tuck-jumps-3",
+          "exercise_name": "Tuck Jumps",
+          "order": 8,
+          "sets": 1,
+          "reps": "40 sec work / 20 sec rest",
+          "rest_seconds": 20,
+          "notes": "Ladder up: 40s work - push through!",
+          "primary_muscle_groups": ["quadriceps", "calves", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "ladder-rest-2",
+          "exercise_name": "Active Recovery",
+          "order": 9,
+          "sets": 1,
+          "reps": "1 min",
+          "rest_seconds": 0,
+          "notes": "Catch breath",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "ladder-burpees-1",
+          "exercise_name": "Burpees",
+          "order": 10,
+          "sets": 1,
+          "reps": "20 sec work / 40 sec rest",
+          "rest_seconds": 40,
+          "notes": "Final ladder: 20s work",
+          "primary_muscle_groups": ["full_body", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "ladder-burpees-2",
+          "exercise_name": "Burpees",
+          "order": 11,
+          "sets": 1,
+          "reps": "30 sec work / 30 sec rest",
+          "rest_seconds": 30,
+          "notes": "Final ladder: 30s work",
+          "primary_muscle_groups": ["full_body", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "ladder-burpees-3",
+          "exercise_name": "Burpees",
+          "order": 12,
+          "sets": 1,
+          "reps": "40 sec work / 20 sec rest",
+          "rest_seconds": 20,
+          "notes": "Final ladder: 40s work - finish strong!",
+          "primary_muscle_groups": ["full_body", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 13,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Full body stretching",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 5,
+      "day_name": "Week 2 - Session 2: AMRAP Challenge",
+      "focus": "As Many Rounds As Possible",
+      "exercises": [
+        {
+          "exercise_id": "warmup-dynamic",
+          "exercise_name": "Dynamic Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Prepare for sustained effort",
+          "primary_muscle_groups": ["cardiovascular", "full_body"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "amrap-circuit",
+          "exercise_name": "AMRAP Circuit (15 minutes)",
+          "order": 2,
+          "sets": 1,
+          "reps": "15 min total",
+          "rest_seconds": 0,
+          "notes": "Complete as many rounds as possible: 5 burpees, 10 push-ups, 15 squats, 20 mountain climbers",
+          "primary_muscle_groups": ["full_body", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "rest-2min",
+          "exercise_name": "Recovery",
+          "order": 3,
+          "sets": 1,
+          "reps": "2 min",
+          "rest_seconds": 0,
+          "notes": "Walk and breathe",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "amrap-finisher",
+          "exercise_name": "AMRAP Finisher (5 minutes)",
+          "order": 4,
+          "sets": 1,
+          "reps": "5 min total",
+          "rest_seconds": 0,
+          "notes": "Complete as many rounds as possible: 10 jumping lunges, 10 plank shoulder taps",
+          "primary_muscle_groups": ["legs", "core", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 5,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Full body stretching, focus on hips and shoulders",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 6,
+      "day_name": "Week 2 - Session 3: Sprint Intervals",
+      "focus": "Maximum Intensity Sprints",
+      "exercises": [
+        {
+          "exercise_id": "warmup-jog",
+          "exercise_name": "Light Jog Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Easy pace to warm up legs",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "sprint-intervals",
+          "exercise_name": "Sprint Intervals",
+          "order": 2,
+          "sets": 8,
+          "reps": "20 sec sprint",
+          "rest_seconds": 40,
+          "notes": "100% effort sprint followed by walking recovery",
+          "primary_muscle_groups": ["quadriceps", "hamstrings", "glutes", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "recovery-walk",
+          "exercise_name": "Recovery Walk",
+          "order": 3,
+          "sets": 1,
+          "reps": "3 min",
+          "rest_seconds": 0,
+          "notes": "Slow walk, lower heart rate",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "sprint-intervals-2",
+          "exercise_name": "Sprint Intervals Round 2",
+          "order": 4,
+          "sets": 6,
+          "reps": "30 sec sprint",
+          "rest_seconds": 60,
+          "notes": "Longer sprints with more recovery",
+          "primary_muscle_groups": ["quadriceps", "hamstrings", "glutes", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-walk",
+          "exercise_name": "Cooldown Walk & Stretch",
+          "order": 5,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Gradual cooldown, stretch hamstrings and hip flexors",
+          "primary_muscle_groups": ["cardiovascular", "legs"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 7,
+      "day_name": "Week 3 - Session 1: Complex HIIT",
+      "focus": "Multi-Movement Combinations",
+      "exercises": [
+        {
+          "exercise_id": "warmup-dynamic",
+          "exercise_name": "Dynamic Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Full body mobilization",
+          "primary_muscle_groups": ["cardiovascular", "full_body"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "complex-1",
+          "exercise_name": "Burpee to Tuck Jump Complex",
+          "order": 2,
+          "sets": 4,
+          "reps": "45 sec",
+          "rest_seconds": 15,
+          "notes": "Burpee directly into tuck jump, repeat",
+          "primary_muscle_groups": ["full_body", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "complex-2",
+          "exercise_name": "Squat Thrust to Push-Up Complex",
+          "order": 3,
+          "sets": 4,
+          "reps": "45 sec",
+          "rest_seconds": 15,
+          "notes": "Squat thrust, push-up, return, repeat",
+          "primary_muscle_groups": ["chest", "core", "legs"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "complex-3",
+          "exercise_name": "Lunge Jump to High Knees Complex",
+          "order": 4,
+          "sets": 4,
+          "reps": "45 sec",
+          "rest_seconds": 15,
+          "notes": "2 lunge jumps, 4 high knees, repeat",
+          "primary_muscle_groups": ["quadriceps", "glutes", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "rest-90",
+          "exercise_name": "Active Recovery",
+          "order": 5,
+          "sets": 1,
+          "reps": "90 sec",
+          "rest_seconds": 0,
+          "notes": "Walk, shake out legs",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "complex-repeat",
+          "exercise_name": "Repeat Complex Circuit",
+          "order": 6,
+          "sets": 1,
+          "reps": "Repeat exercises 2-4",
+          "rest_seconds": 0,
+          "notes": "Second round of all three complexes",
+          "primary_muscle_groups": ["full_body", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 7,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Deep stretching, focus on recovery",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 8,
+      "day_name": "Week 3 - Session 2: Density Training",
+      "focus": "More Work in Less Time",
+      "exercises": [
+        {
+          "exercise_id": "warmup-dynamic",
+          "exercise_name": "Dynamic Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Prepare for high density work",
+          "primary_muscle_groups": ["cardiovascular", "full_body"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "density-block-1",
+          "exercise_name": "Density Block 1 (4 min)",
+          "order": 2,
+          "sets": 1,
+          "reps": "4 min",
+          "rest_seconds": 0,
+          "notes": "Alternate: 5 push-ups, 5 squat jumps - as many rounds as possible",
+          "primary_muscle_groups": ["chest", "legs", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "rest-60",
+          "exercise_name": "Rest",
+          "order": 3,
+          "sets": 1,
+          "reps": "60 sec",
+          "rest_seconds": 0,
+          "notes": "Complete rest",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "density-block-2",
+          "exercise_name": "Density Block 2 (4 min)",
+          "order": 4,
+          "sets": 1,
+          "reps": "4 min",
+          "rest_seconds": 0,
+          "notes": "Alternate: 10 mountain climbers, 5 burpees - as many rounds as possible",
+          "primary_muscle_groups": ["core", "full_body", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "rest-60-2",
+          "exercise_name": "Rest",
+          "order": 5,
+          "sets": 1,
+          "reps": "60 sec",
+          "rest_seconds": 0,
+          "notes": "Complete rest",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "density-block-3",
+          "exercise_name": "Density Block 3 (4 min)",
+          "order": 6,
+          "sets": 1,
+          "reps": "4 min",
+          "rest_seconds": 0,
+          "notes": "Alternate: 8 lunge jumps, 8 plank jacks - as many rounds as possible",
+          "primary_muscle_groups": ["legs", "core", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 7,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Track rounds completed for progress",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 9,
+      "day_name": "Week 3 - Session 3: Pyramid HIIT",
+      "focus": "Ascending and Descending Reps",
+      "exercises": [
+        {
+          "exercise_id": "warmup-dynamic",
+          "exercise_name": "Dynamic Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Full body warm-up",
+          "primary_muscle_groups": ["cardiovascular", "full_body"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "pyramid-up",
+          "exercise_name": "Pyramid Up: Burpees",
+          "order": 2,
+          "sets": 5,
+          "reps": "2, 4, 6, 8, 10 reps",
+          "rest_seconds": 20,
+          "notes": "Start with 2 reps, add 2 each round up to 10",
+          "primary_muscle_groups": ["full_body", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "pyramid-down",
+          "exercise_name": "Pyramid Down: Burpees",
+          "order": 3,
+          "sets": 5,
+          "reps": "10, 8, 6, 4, 2 reps",
+          "rest_seconds": 20,
+          "notes": "Start with 10, subtract 2 each round back to 2",
+          "primary_muscle_groups": ["full_body", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "rest-90",
+          "exercise_name": "Recovery",
+          "order": 4,
+          "sets": 1,
+          "reps": "90 sec",
+          "rest_seconds": 0,
+          "notes": "Active recovery - light movement",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "pyramid-squat-up",
+          "exercise_name": "Pyramid Up: Squat Jumps",
+          "order": 5,
+          "sets": 5,
+          "reps": "4, 8, 12, 16, 20 reps",
+          "rest_seconds": 15,
+          "notes": "Start with 4, add 4 each round",
+          "primary_muscle_groups": ["quadriceps", "glutes", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "pyramid-squat-down",
+          "exercise_name": "Pyramid Down: Squat Jumps",
+          "order": 6,
+          "sets": 5,
+          "reps": "20, 16, 12, 8, 4 reps",
+          "rest_seconds": 15,
+          "notes": "Start with 20, subtract 4 each round",
+          "primary_muscle_groups": ["quadriceps", "glutes", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 7,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Full body stretching",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 10,
+      "day_name": "Week 4 - Session 1: Death by Intervals",
+      "focus": "Progressive Overload EMOM",
+      "exercises": [
+        {
+          "exercise_id": "warmup-dynamic",
+          "exercise_name": "Dynamic Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Prepare for increasing intensity",
+          "primary_muscle_groups": ["cardiovascular", "full_body"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "death-by-burpees",
+          "exercise_name": "Death By Burpees",
+          "order": 2,
+          "sets": 1,
+          "reps": "Until failure",
+          "rest_seconds": 0,
+          "notes": "Min 1: 1 burpee, Min 2: 2 burpees... continue until you can't complete reps in the minute",
+          "primary_muscle_groups": ["full_body", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "rest-3min",
+          "exercise_name": "Full Recovery",
+          "order": 3,
+          "sets": 1,
+          "reps": "3 min",
+          "rest_seconds": 0,
+          "notes": "Full rest, walk around",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "death-by-squats",
+          "exercise_name": "Death By Air Squats",
+          "order": 4,
+          "sets": 1,
+          "reps": "Until failure",
+          "rest_seconds": 0,
+          "notes": "Min 1: 3 squats, Min 2: 6 squats, Min 3: 9 squats... add 3 each minute until failure",
+          "primary_muscle_groups": ["quadriceps", "glutes"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Stretch",
+          "order": 5,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Track your scores! How many minutes did you last?",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 11,
+      "day_name": "Week 4 - Session 2: Chipper Workout",
+      "focus": "High Volume Challenge",
+      "exercises": [
+        {
+          "exercise_id": "warmup-dynamic",
+          "exercise_name": "Dynamic Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Prepare for sustained effort",
+          "primary_muscle_groups": ["cardiovascular", "full_body"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "chipper",
+          "exercise_name": "The Chipper (For Time)",
+          "order": 2,
+          "sets": 1,
+          "reps": "Complete all reps",
+          "rest_seconds": 0,
+          "notes": "100 jumping jacks, 75 air squats, 50 push-ups, 25 burpees - complete for time",
+          "primary_muscle_groups": ["full_body", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-walk",
+          "exercise_name": "Cooldown Walk",
+          "order": 3,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Light walking, controlled breathing",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Full Body Stretch",
+          "order": 4,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Record your time for future comparison!",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    },
+    {
+      "day": 12,
+      "day_name": "Week 4 - Session 3: Final Assessment",
+      "focus": "Test Your Progress",
+      "exercises": [
+        {
+          "exercise_id": "warmup-dynamic",
+          "exercise_name": "Dynamic Warm-Up",
+          "order": 1,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Final workout - give it everything!",
+          "primary_muscle_groups": ["cardiovascular", "full_body"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "assessment-1",
+          "exercise_name": "Max Burpees in 3 Minutes",
+          "order": 2,
+          "sets": 1,
+          "reps": "3 min max effort",
+          "rest_seconds": 0,
+          "notes": "Count total burpees completed - this is your benchmark",
+          "primary_muscle_groups": ["full_body", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "rest-3min",
+          "exercise_name": "Full Recovery",
+          "order": 3,
+          "sets": 1,
+          "reps": "3 min",
+          "rest_seconds": 0,
+          "notes": "Walk and recover",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "assessment-2",
+          "exercise_name": "Tabata Burpees (Total Reps)",
+          "order": 4,
+          "sets": 8,
+          "reps": "20 sec work",
+          "rest_seconds": 10,
+          "notes": "8 rounds of 20 sec work, 10 sec rest - count total reps",
+          "primary_muscle_groups": ["full_body", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "rest-3min-2",
+          "exercise_name": "Full Recovery",
+          "order": 5,
+          "sets": 1,
+          "reps": "3 min",
+          "rest_seconds": 0,
+          "notes": "Walk and recover",
+          "primary_muscle_groups": ["cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "assessment-3",
+          "exercise_name": "AMRAP Final (10 minutes)",
+          "order": 6,
+          "sets": 1,
+          "reps": "10 min",
+          "rest_seconds": 0,
+          "notes": "5 burpees, 10 push-ups, 15 squats, 20 high knees - count total rounds",
+          "primary_muscle_groups": ["full_body", "cardiovascular"],
+          "equipment": ["bodyweight"]
+        },
+        {
+          "exercise_id": "cooldown-stretch",
+          "exercise_name": "Cooldown & Celebration Stretch",
+          "order": 7,
+          "sets": 1,
+          "reps": "5 min",
+          "rest_seconds": 0,
+          "notes": "Congratulations! Compare your scores to Week 1!",
+          "primary_muscle_groups": ["full_body"],
+          "equipment": ["bodyweight"]
+        }
+      ]
+    }
+  ],
+
+  "tracking_tools": [
+    "Heart Rate Monitor (track peak HR and recovery)",
+    "Interval Timer App",
+    "Workout Journal (record rounds, reps, and times)",
+    "RPE (Rate of Perceived Exertion) Scale"
+  ],
+
+  "progression_strategy": {
+    "week_1": "Learn the formats, establish baseline capacity",
+    "week_2": "Increase work intervals, decrease rest",
+    "week_3": "Add complexity with combined movements",
+    "week_4": "Test limits and measure improvement"
+  }
+}
