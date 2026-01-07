@@ -22,7 +22,7 @@ import { WorkoutEmptyState } from '@/components/workout-log/workout_empty_state'
 import { FloatingActionButton } from '@/components/workout-log/floating_action_button';
 import { SessionStatusBar, SessionTimerBadge } from '@/components/workout-log/session_status_bar';
 import { startOfMonth, endOfMonth, format, subMonths, addMonths } from 'date-fns';
-import { Plus, Calendar, Dumbbell, Clock, Weight, MessageCircle, Edit, Trash2, Search, Info, Target, Zap, ChevronLeft, ChevronRight, ChevronDown, Sparkles, Trophy, ListChecks, LineChart, Users, LayoutGrid, TableIcon, Moon, Play } from 'lucide-react';
+import { Plus, Calendar, Dumbbell, Clock, Weight, MessageCircle, Edit, Trash2, Search, Info, Target, Zap, ChevronLeft, ChevronRight, ChevronDown, Sparkles, Trophy, ListChecks, LineChart, Users, LayoutGrid, TableIcon, Moon, Play, Eye, X } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { RestTimerBar } from '@/components/workout-log/rest_timer_bar';
@@ -43,6 +43,8 @@ type ExerciseListItem = {
   equipment: string[];
   difficulty?: string;
   instructions?: string;
+  imageUrl?: string; // For exercise thumbnail/media
+  videoUrl?: string; // For exercise video
   _userExerciseId?: string; // present if this originated from My Library custom (no baseExerciseId)
 };
 
@@ -70,6 +72,8 @@ type WorkoutEntry = {
     muscleGroups: string[];
     equipment: string[];
     difficulty?: string;
+    imageUrl?: string;
+    videoUrl?: string;
   };
 };
 
@@ -80,6 +84,7 @@ function WorkoutLogPageContent() {
   const isTrainerOrAdmin = userRole === 'TRAINER' || userRole === 'ADMIN';
   const [isAddingEntry, setIsAddingEntry] = useState(false);
   const [exercises, setExercises] = useState<ExerciseListItem[]>([]);
+  const [curatedExerciseCount, setCuratedExerciseCount] = useState<number>(0);
   const [filteredExercises, setFilteredExercises] = useState<ExerciseListItem[]>([]);
   const [selectedExercise, setSelectedExercise] = useState<ExerciseListItem | null>(null);
   const [exerciseSearch, setExerciseSearch] = useState('');
@@ -104,6 +109,7 @@ function WorkoutLogPageContent() {
   const [linkMyExercise, setLinkMyExercise] = useState<{ id: string; name: string } | null>(null);
   const [linkSearch, setLinkSearch] = useState('');
   const [linkResults, setLinkResults] = useState<ExerciseListItem[]>([]);
+  const [showExerciseExample, setShowExerciseExample] = useState(false);
   const [newEntry, setNewEntry] = useState({
     exercise: '',
     exerciseId: '',
@@ -291,7 +297,63 @@ function WorkoutLogPageContent() {
               .filter((sub: any) => sub && sub.program_templates)
               .map((sub: any) => {
                 const template = sub.program_templates;
-                const programData = template.programData || {};
+                // FIXED: Use templateData (correct field name per schema), not programData
+                const templateData = template.templateData || {};
+
+                // Extract duration_weeks from various sources
+                const getDurationWeeks = (): number => {
+                  // 1. From templateData metadata
+                  if (templateData.metadata?.duration_weeks) return templateData.metadata.duration_weeks;
+                  // 2. From program_structure
+                  if (templateData.program_structure?.duration_weeks) return templateData.program_structure.duration_weeks;
+                  // 3. Parse from template.duration string (e.g., "12 Weeks", "8 weeks")
+                  if (template.duration) {
+                    const match = template.duration.match(/(\d+)\s*week/i);
+                    if (match) return parseInt(match[1]);
+                  }
+                  // 4. Count program phases as weeks fallback
+                  if (template.program_phases?.length) return template.program_phases.length;
+                  // 5. For programs with day_X structure, estimate weeks from days
+                  const dayKeys = Object.keys(templateData).filter(k => k.startsWith('day_'));
+                  if (dayKeys.length > 0 && templateData.program_structure?.cycle_length) {
+                    // Assume indefinite/ongoing program - show 12 weeks as default
+                    return 12;
+                  }
+                  return 0;
+                };
+
+                // Extract frequency (training days per week)
+                const getFrequencyPerWeek = (): number => {
+                  // 1. From templateData metadata
+                  if (templateData.metadata?.frequency_per_week) return templateData.metadata.frequency_per_week;
+                  // 2. From program_structure.training_days
+                  if (templateData.program_structure?.training_days) return templateData.program_structure.training_days;
+                  // 3. Count non-rest days in weekly_schedule
+                  if (templateData.weekly_schedule?.length) {
+                    return templateData.weekly_schedule.filter((d: any) =>
+                      d.focus?.toLowerCase() !== 'rest' && d.muscle_groups?.length > 0
+                    ).length;
+                  }
+                  // 4. Count day_X keys in templateData
+                  const dayKeys = Object.keys(templateData).filter(k => k.startsWith('day_'));
+                  if (dayKeys.length > 0) {
+                    // Count non-rest days
+                    let trainingDays = 0;
+                    for (const key of dayKeys) {
+                      const day = templateData[key];
+                      if (day && !key.toLowerCase().includes('rest') && day.sections?.length > 0) {
+                        trainingDays++;
+                      }
+                    }
+                    return trainingDays || dayKeys.length;
+                  }
+                  return 0;
+                };
+
+                const durationWeeks = getDurationWeeks();
+                const frequencyPerWeek = getFrequencyPerWeek();
+                const totalWorkouts = templateData.metadata?.total_workouts || (durationWeeks * frequencyPerWeek) || 0;
+
                 return {
                   subscription: {
                     id: sub.id,
@@ -303,38 +365,43 @@ function WorkoutLogPageContent() {
                     progress_percentage: sub.progressPercentage || 0,
                     is_active: sub.isActive,
                     completed_workouts: sub.completedWorkouts || 0,
-                    total_workouts: programData.metadata?.total_workouts || template.totalWorkouts || 0,
+                    total_workouts: totalWorkouts,
                   },
                   program: {
                     metadata: {
-                      program_name: template.name || programData.metadata?.program_name || 'Unknown Program',
+                      program_name: template.name || templateData.metadata?.program_name || templateData.template_name || 'Unknown Program',
                       program_id: template.id || sub.programId,
-                      author: programData.metadata?.author || 'Massimino',
-                      version: programData.metadata?.version || '1.0',
+                      author: templateData.metadata?.author || templateData.athlete_info?.name || 'Massimino',
+                      version: templateData.metadata?.version || '1.0',
                       creation_date: template.createdAt,
                       last_updated: template.updatedAt,
-                      description: template.description || programData.metadata?.description || '',
-                      goal: programData.metadata?.goal || template.category || '',
-                      methodology: programData.metadata?.methodology || '',
-                      target_audience: programData.metadata?.target_audience || '',
-                      level: programData.metadata?.level || template.difficulty || 'Intermediate',
-                      settings: programData.metadata?.settings || [],
-                      duration_weeks: template.durationWeeks || programData.metadata?.duration_weeks || 0,
-                      total_workouts: programData.metadata?.total_workouts || template.totalWorkouts || 0,
-                      frequency_per_week: template.frequencyPerWeek || programData.metadata?.frequency_per_week || 0,
-                      session_duration_minutes: programData.metadata?.session_duration_minutes || { min: 45, max: 60 },
-                      equipment: programData.metadata?.equipment || { required: [] },
-                      tags: programData.metadata?.tags || [],
+                      description: template.description || templateData.metadata?.description || '',
+                      goal: templateData.metadata?.goal || template.category || '',
+                      methodology: templateData.metadata?.methodology || templateData.program_structure?.split_type || '',
+                      target_audience: templateData.metadata?.target_audience || '',
+                      level: templateData.metadata?.level || template.difficulty || 'Intermediate',
+                      settings: templateData.metadata?.settings || [],
+                      duration_weeks: durationWeeks,
+                      total_workouts: totalWorkouts,
+                      frequency_per_week: frequencyPerWeek,
+                      session_duration_minutes: templateData.metadata?.session_duration_minutes || { min: 45, max: 60 },
+                      equipment: templateData.metadata?.equipment || { required: [] },
+                      tags: templateData.metadata?.tags || [],
                     },
-                    program_philosophy: programData.program_philosophy || { origin: '', core_principles: [], training_approach: '', differentiator: '' },
-                    prerequisites: programData.prerequisites || { required: [] },
-                    red_flags_to_stop: programData.red_flags_to_stop || [],
-                    goals: programData.goals || { primary_goal: '', outcome_goals: [], what_program_can_do: [], what_program_cannot_do: [] },
-                    workout_sessions: programData.workout_sessions || [],
-                    progression_strategy: programData.progression_strategy || { primary_method: '', when_to_progress: '', how_to_progress: [] },
-                    progress_tracking: programData.progress_tracking || { tracking_metrics: [], check_in_frequency: '', success_criteria: '' },
-                    implementation_for_massimino: programData.implementation_for_massimino || { usage: '', customization_points: [] },
-                    sport_demands: programData.sport_demands,
+                    program_philosophy: templateData.program_philosophy || {
+                      origin: templateData.athlete_info?.name ? `${templateData.athlete_info.name}'s training methodology` : '',
+                      core_principles: templateData.training_principles ? Object.values(templateData.training_principles) : [],
+                      training_approach: templateData.athlete_info?.training_philosophy || '',
+                      differentiator: ''
+                    },
+                    prerequisites: templateData.prerequisites || { required: [] },
+                    red_flags_to_stop: templateData.red_flags_to_stop || [],
+                    goals: templateData.goals || { primary_goal: '', outcome_goals: [], what_program_can_do: [], what_program_cannot_do: [] },
+                    workout_sessions: templateData.workout_sessions || templateData.weekly_schedule || [],
+                    progression_strategy: templateData.progression_strategy || { primary_method: '', when_to_progress: '', how_to_progress: [] },
+                    progress_tracking: templateData.progress_tracking || { tracking_metrics: [], check_in_frequency: '', success_criteria: '' },
+                    implementation_for_massimino: templateData.implementation_for_massimino || { usage: '', customization_points: [] },
+                    sport_demands: templateData.sport_demands,
                   },
                   next_workout: null, // Could be computed from program phases
                 };
@@ -568,6 +635,94 @@ function WorkoutLogPageContent() {
     return '2.5';
   };
 
+  // Helper: Parse exercises from templateData for a given day
+  const getExercisesFromTemplateData = (templateData: any, dayNumber: number): any[] => {
+    if (!templateData) return [];
+
+    // Format 1: day_X_name structure (CBum and similar programs)
+    const dayKey = Object.keys(templateData).find(k => {
+      const match = k.match(/^day_(\d+)_/);
+      return match && parseInt(match[1]) === dayNumber;
+    });
+
+    if (dayKey && templateData[dayKey]) {
+      const dayData = templateData[dayKey];
+      const exercises: any[] = [];
+
+      // Parse sections and exercises
+      if (dayData.sections && Array.isArray(dayData.sections)) {
+        for (const section of dayData.sections) {
+          if (section.exercises && Array.isArray(section.exercises)) {
+            for (const ex of section.exercises) {
+              exercises.push({
+                exerciseName: ex.exercise || ex.exercise_name || ex.name,
+                sets: ex.sets,
+                repsMin: ex.reps_min || ex.reps,
+                repsMax: ex.reps_max || ex.reps,
+                rest: ex.rest,
+                tempo: ex.tempo,
+                notes: ex.notes,
+                section: section.section_name || section.name
+              });
+            }
+          }
+        }
+      }
+      return exercises;
+    }
+
+    // Format 2: workout_sessions array
+    if (templateData.workout_sessions && Array.isArray(templateData.workout_sessions)) {
+      const session = templateData.workout_sessions.find((s: any) => s.day === dayNumber || s.day_number === dayNumber);
+      if (session) {
+        const exercises: any[] = [];
+        for (const section of session.sections || []) {
+          for (const ex of section.exercises || []) {
+            exercises.push({
+              exerciseName: ex.exercise_name || ex.name,
+              sets: ex.sets,
+              repsMin: ex.reps,
+              repsMax: ex.reps,
+              rest: ex.rest_seconds,
+              tempo: ex.tempo,
+              notes: ex.notes,
+              section: section.section_name
+            });
+          }
+        }
+        return exercises;
+      }
+    }
+
+    // Format 3: weekly_schedule
+    if (templateData.weekly_schedule && Array.isArray(templateData.weekly_schedule)) {
+      const day = templateData.weekly_schedule.find((d: any) => d.day === dayNumber);
+      if (day && day.workout_key) {
+        const workoutData = templateData[day.workout_key];
+        if (workoutData?.sections) {
+          const exercises: any[] = [];
+          for (const section of workoutData.sections) {
+            for (const ex of section.exercises || []) {
+              exercises.push({
+                exerciseName: ex.exercise || ex.exercise_name,
+                sets: ex.sets,
+                repsMin: ex.reps_min || ex.reps,
+                repsMax: ex.reps_max || ex.reps,
+                rest: ex.rest,
+                tempo: ex.tempo,
+                notes: ex.notes,
+                section: section.section_name
+              });
+            }
+          }
+          return exercises;
+        }
+      }
+    }
+
+    return [];
+  };
+
   // Get current workout from active program subscription
   const getCurrentProgramWorkout = () => {
     console.log('[getCurrentProgramWorkout] programSubscriptions count:', programSubscriptions?.length || 0);
@@ -628,6 +783,7 @@ function WorkoutLogPageContent() {
         microcycle: currentMicrocycle,
         workout: null,
         exercises: [],
+        templateExercises: [],
         isRestDay: true,
         currentDay,
         // Find next workout day
@@ -637,6 +793,10 @@ function WorkoutLogPageContent() {
       };
     }
 
+    // Get exercises from templateData (source of truth for exercise names)
+    const templateExercises = getExercisesFromTemplateData(program.templateData, currentDay);
+    console.log('[getCurrentProgramWorkout] templateExercises:', templateExercises.length, templateExercises.map((e: any) => e.exerciseName));
+
     return {
       subscription: activeSub,
       program,
@@ -644,6 +804,7 @@ function WorkoutLogPageContent() {
       microcycle: currentMicrocycle,
       workout: currentWorkout,
       exercises: currentWorkout.workout_exercises || [],
+      templateExercises, // Exercises from templateData
       isRestDay: false
     };
   };
@@ -676,10 +837,20 @@ function WorkoutLogPageContent() {
   const fetchExercises = async () => {
     try {
       setLoading(true);
-      const [resGlobal, resMine] = await Promise.all([
+      const [resGlobal, resMine, resCurated] = await Promise.all([
         fetch('/api/workout/exercises'),
-        fetch('/api/workout/my_exercises')
+        fetch('/api/workout/my_exercises'),
+        fetch('/api/workout/exercises?curated=true')
       ]);
+      // Set curated count for the "Browse All" button
+      if (resCurated.ok) {
+        try {
+          const curatedData = await resCurated.json();
+          setCuratedExerciseCount(Array.isArray(curatedData) ? curatedData.length : 0);
+        } catch {
+          setCuratedExerciseCount(0);
+        }
+      }
       // Global list
       let globalList: ExerciseListItem[] = [];
       if (resGlobal.ok) {
@@ -695,6 +866,8 @@ function WorkoutLogPageContent() {
                 equipment: Array.isArray(e.equipment) ? e.equipment.map(String) : [],
                 ...(e.difficulty ? { difficulty: String(e.difficulty) } : {}),
                 ...(e.instructions ? { instructions: String(e.instructions) } : {}),
+                ...(e.imageUrl ? { imageUrl: String(e.imageUrl) } : {}),
+                ...(e.videoUrl ? { videoUrl: String(e.videoUrl) } : {}),
               }))
             : [];
         } catch (jsonError) {
@@ -718,6 +891,7 @@ function WorkoutLogPageContent() {
             equipment: Array.isArray(m.equipment) ? m.equipment.map(String) : [],
             ...(m.difficulty ? { difficulty: String(m.difficulty) } : {}),
             ...(m.instructions ? { instructions: String(m.instructions) } : {}),
+            ...(m.imageUrl ? { imageUrl: String(m.imageUrl) } : {}),
           }));
           mineCustom = custom.map((m: any) => ({
             id: `user:${m.id}`,
@@ -727,6 +901,7 @@ function WorkoutLogPageContent() {
             equipment: Array.isArray(m.equipment) ? m.equipment.map(String) : [],
             ...(m.difficulty ? { difficulty: String(m.difficulty) } : {}),
             ...(m.instructions ? { instructions: String(m.instructions) } : {}),
+            ...(m.imageUrl ? { imageUrl: String(m.imageUrl) } : {}),
             _userExerciseId: String(m.id),
           }));
         } catch {}
@@ -774,29 +949,42 @@ function WorkoutLogPageContent() {
       if (response.ok) {
         const data = await response.json();
         // Map the API response to our component's expected format
-        const entries: WorkoutEntry[] = (data.entries || []).map((entry: any) => ({
-          id: entry.id,
-          date: entry.date,
-          exerciseId: entry.exerciseId,
-          setNumber: entry.setNumber,
-          setType: entry.setType,
-          reps: entry.reps,
-          weight: entry.weight,
-          unit: entry.unit,
-          intensity: entry.intensity,
-          tempo: entry.tempo,
-          restSeconds: entry.restSeconds,
-          coachFeedback: entry.coachFeedback,
-          userComments: entry.userComments,
-          exercise: {
-            id: entry.exercises?.id || entry.exerciseId,
-            name: entry.exercises?.name || 'Unknown Exercise',
-            category: entry.exercises?.category || 'General',
-            muscleGroups: entry.exercises?.muscleGroups || [],
-            equipment: entry.exercises?.equipment || [],
-            difficulty: entry.exercises?.difficulty
-          }
-        }));
+        const entries: WorkoutEntry[] = (data.entries || []).map((entry: any) => {
+          // Debug: Log entry exercise data
+          console.log('[Entry Exercise Data]', {
+            entryId: entry.id,
+            exerciseId: entry.exerciseId,
+            exerciseName: entry.exercises?.name,
+            exerciseCategory: entry.exercises?.category,
+            exerciseMuscleGroups: entry.exercises?.muscleGroups,
+            exerciseImageUrl: entry.exercises?.imageUrl
+          });
+          return {
+            id: entry.id,
+            date: entry.date,
+            exerciseId: entry.exerciseId,
+            setNumber: entry.setNumber,
+            setType: entry.setType,
+            reps: entry.reps,
+            weight: entry.weight,
+            unit: entry.unit,
+            intensity: entry.intensity,
+            tempo: entry.tempo,
+            restSeconds: entry.restSeconds,
+            coachFeedback: entry.coachFeedback,
+            userComments: entry.userComments,
+            exercise: {
+              id: entry.exercises?.id || entry.exerciseId,
+              name: entry.exercises?.name || 'Unknown Exercise',
+              category: entry.exercises?.category || 'General',
+              muscleGroups: entry.exercises?.muscleGroups || [],
+              equipment: entry.exercises?.equipment || [],
+              difficulty: entry.exercises?.difficulty,
+              imageUrl: entry.exercises?.imageUrl,
+              videoUrl: entry.exercises?.videoUrl
+            }
+          };
+        });
         setWorkoutEntries(entries);
       } else {
         const errorData = await response.json();
@@ -1063,6 +1251,15 @@ function WorkoutLogPageContent() {
       const today = new Date().toISOString().split('T')[0];
 
       const entries: any[] = [];
+
+      // Debug: Log what exercise data is being used to create entry
+      console.log('[Creating Entry]', {
+        selectedExerciseId: selectedExercise?.id,
+        selectedExerciseName: selectedExercise?.name,
+        newEntryExerciseId: newEntry.exerciseId,
+        selectedCategory: selectedExercise?.category,
+        selectedMuscleGroups: selectedExercise?.muscleGroups
+      });
 
       if (newEntry.setType === 'SUPERSET') {
         if (!newEntry.exerciseBId) {
@@ -1618,7 +1815,9 @@ function WorkoutLogPageContent() {
               const currentWorkout = getCurrentProgramWorkout();
               if (!currentWorkout || dismissedTodayWorkout) return null;
 
-              const { subscription, program, phase, workout, exercises, isRestDay, nextWorkoutDay } = currentWorkout;
+              const { subscription, program, phase, workout, exercises: workoutExercises, templateExercises, isRestDay, nextWorkoutDay } = currentWorkout;
+              // Use templateExercises if available (correct exercise names), fallback to workout_exercises
+              const displayExercises = templateExercises && templateExercises.length > 0 ? templateExercises : workoutExercises;
               const athleteName = program.legendary_athlete?.name || 'Program';
 
               // Handle rest day
@@ -1727,27 +1926,49 @@ function WorkoutLogPageContent() {
                             size="sm"
                             onClick={() => {
                               // Auto-populate first exercise when starting workout
-                              if (exercises.length > 0) {
-                                const firstEx = exercises[0];
-                                const exercise = firstEx.exercises;
+                              if (displayExercises.length > 0) {
+                                const firstEx = displayExercises[0];
+                                const isTemplateFormat = !!firstEx.exerciseName;
+                                const exerciseName = isTemplateFormat ? firstEx.exerciseName : (firstEx.exercises?.name || 'Exercise');
 
-                                if (exercise) {
-                                  // Set the selected exercise
+                                // Look up exercise by name
+                                let foundExercise = isTemplateFormat
+                                  ? exercises.find((e: any) => e.name?.toLowerCase() === exerciseName?.toLowerCase())
+                                  : firstEx.exercises;
+
+                                if (!foundExercise && isTemplateFormat) {
+                                  foundExercise = exercises.find((e: any) =>
+                                    e.name?.toLowerCase().includes(exerciseName?.toLowerCase()) ||
+                                    exerciseName?.toLowerCase().includes(e.name?.toLowerCase())
+                                  );
+                                }
+
+                                if (foundExercise) {
                                   setSelectedExercise({
-                                    id: exercise.id,
-                                    name: exercise.name,
-                                    category: exercise.category,
-                                    muscleGroups: exercise.muscleGroups || [],
-                                    equipment: exercise.equipment || []
+                                    id: foundExercise.id,
+                                    name: foundExercise.name,
+                                    category: foundExercise.category || 'General',
+                                    muscleGroups: foundExercise.muscleGroups || [],
+                                    equipment: foundExercise.equipment || [],
+                                    imageUrl: foundExercise.imageUrl,
+                                    videoUrl: foundExercise.videoUrl
                                   });
 
-                                  // Pre-fill sets and reps from program
                                   setNewEntry({
                                     ...newEntry,
-                                    exerciseId: exercise.id,
+                                    exerciseId: foundExercise.id,
                                     sets: String(firstEx.sets || 3),
                                     reps: String(firstEx.repsMin || firstEx.repsMax || 10),
                                     setType: 'REGULAR'
+                                  });
+                                } else {
+                                  // Use exercise name even if not in database
+                                  setSelectedExercise({
+                                    id: `template:${exerciseName}`,
+                                    name: exerciseName,
+                                    category: 'General',
+                                    muscleGroups: [],
+                                    equipment: []
                                   });
                                 }
                               }
@@ -1766,14 +1987,16 @@ function WorkoutLogPageContent() {
                       </div>
 
                       {/* Exercise List */}
-                      {exercises.length > 0 && (
+                      {displayExercises.length > 0 && (
                         <div>
                           <div className="text-xs font-medium text-muted-foreground mb-2">
-                            {exercises.length} exercises
+                            {displayExercises.length} exercises
                           </div>
                           <div className="space-y-2">
-                            {exercises.map((ex: any, idx: number) => {
-                              const exercise = ex.exercises;
+                            {displayExercises.map((ex: any, idx: number) => {
+                              // Handle both templateExercises format and workout_exercises format
+                              const isTemplateFormat = !!ex.exerciseName;
+                              const exerciseName = isTemplateFormat ? ex.exerciseName : (ex.exercises?.name || 'Exercise');
                               const setsDisplay = ex.sets || '-';
                               const repsDisplay = ex.repsMin && ex.repsMax
                                 ? (ex.repsMin === ex.repsMax ? ex.repsMin : `${ex.repsMin}-${ex.repsMax}`)
@@ -1783,41 +2006,76 @@ function WorkoutLogPageContent() {
                                 <div
                                   key={ex.id || idx}
                                   className="flex items-center justify-between p-3 border rounded-lg hover:bg-blue-50 cursor-pointer transition-colors"
-                                  onClick={() => {
-                                    if (exercise) {
-                                      // Load this exercise into the form
+                                  onClick={async () => {
+                                    // For templateExercises, look up exercise by name
+                                    let foundExercise = isTemplateFormat
+                                      ? exercises.find((e: any) => e.name?.toLowerCase() === exerciseName?.toLowerCase())
+                                      : ex.exercises;
+
+                                    // If not found in global list, search by name
+                                    if (!foundExercise && isTemplateFormat) {
+                                      foundExercise = exercises.find((e: any) =>
+                                        e.name?.toLowerCase().includes(exerciseName?.toLowerCase()) ||
+                                        exerciseName?.toLowerCase().includes(e.name?.toLowerCase())
+                                      );
+                                    }
+
+                                    console.log('[Program Exercise Click]', {
+                                      exerciseName,
+                                      isTemplateFormat,
+                                      foundExercise: foundExercise?.name || 'Not found'
+                                    });
+
+                                    if (foundExercise) {
                                       setSelectedExercise({
-                                        id: exercise.id,
-                                        name: exercise.name,
-                                        category: exercise.category,
-                                        muscleGroups: exercise.muscleGroups || [],
-                                        equipment: exercise.equipment || []
+                                        id: foundExercise.id,
+                                        name: foundExercise.name,
+                                        category: foundExercise.category || 'General',
+                                        muscleGroups: foundExercise.muscleGroups || [],
+                                        equipment: foundExercise.equipment || [],
+                                        imageUrl: foundExercise.imageUrl,
+                                        videoUrl: foundExercise.videoUrl
                                       });
 
                                       setNewEntry({
                                         ...newEntry,
-                                        exerciseId: exercise.id,
+                                        exerciseId: foundExercise.id,
                                         sets: String(ex.sets || 3),
                                         reps: String(ex.repsMin || ex.repsMax || 10),
                                         setType: 'REGULAR'
                                       });
+                                    } else {
+                                      // Use exercise name even if not in database
+                                      setSelectedExercise({
+                                        id: `template:${exerciseName}`,
+                                        name: exerciseName,
+                                        category: 'General',
+                                        muscleGroups: [],
+                                        equipment: []
+                                      });
 
-                                      setIsAddingEntry(true);
-
-                                      // Scroll to form
-                                      setTimeout(() => {
-                                        document.querySelector('[data-workout-form]')?.scrollIntoView({ behavior: 'smooth' });
-                                      }, 100);
+                                      setNewEntry({
+                                        ...newEntry,
+                                        exerciseId: '',
+                                        sets: String(ex.sets || 3),
+                                        reps: String(ex.repsMin || ex.repsMax || 10),
+                                        setType: 'REGULAR'
+                                      });
                                     }
+
+                                    setIsAddingEntry(true);
+
+                                    // Scroll to form
+                                    setTimeout(() => {
+                                      document.querySelector('[data-workout-form]')?.scrollIntoView({ behavior: 'smooth' });
+                                    }, 100);
                                   }}
                                 >
                                   <div className="flex-1">
-                                    <div className="font-medium text-sm">{exercise?.name || 'Exercise'}</div>
+                                    <div className="font-medium text-sm">{exerciseName}</div>
                                     <div className="text-xs text-muted-foreground mt-1">
-                                      {exercise?.category && <span>{exercise.category}</span>}
-                                      {exercise?.muscleGroups && exercise.muscleGroups.length > 0 && (
-                                        <span> • {exercise.muscleGroups.slice(0, 2).join(', ')}</span>
-                                      )}
+                                      {ex.section && <span>{ex.section}</span>}
+                                      {ex.notes && <span className="ml-2 text-gray-400">• {ex.notes}</span>}
                                     </div>
                                   </div>
                                   <div className="text-sm font-medium text-gray-900 ml-4">
@@ -1830,7 +2088,7 @@ function WorkoutLogPageContent() {
                         </div>
                       )}
 
-                      {exercises.length === 0 && (
+                      {displayExercises.length === 0 && (
                         <div className="text-sm text-muted-foreground text-center py-4">
                           No exercises scheduled for today
                         </div>
@@ -1911,7 +2169,7 @@ function WorkoutLogPageContent() {
                       onClick={() => window.open('/exercises', '_blank')}
                     >
                       <Dumbbell className="h-4 w-4 mr-2" />
-                      Browse All Exercises ({exercises.length})
+                      Browse All Exercises ({curatedExerciseCount || exercises.length})
                     </Button>
                   </div>
 
@@ -1950,8 +2208,18 @@ function WorkoutLogPageContent() {
                   {/* Selected Exercise Display */}
                   {selectedExercise && (
                     <div className="mt-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
+                      <div className="flex items-start justify-between gap-3">
+                        {/* Exercise Image */}
+                        {selectedExercise.imageUrl && (
+                          <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-white border border-blue-200">
+                            <img
+                              src={selectedExercise.imageUrl}
+                              alt={selectedExercise.name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
                           <h4 className="font-medium text-blue-900">{selectedExercise.name}</h4>
                           <div className="mt-2 grid grid-cols-2 gap-2 text-sm">
                             <div className="flex items-center">
@@ -1996,35 +2264,45 @@ function WorkoutLogPageContent() {
                     </div>
                   )}
 
-                  {/* Exercise Media Card */}
-                  {selectedExercise && exerciseMedia.length > 0 && (
-                    <div
-                      className="mt-3 cursor-pointer transition-all hover:shadow-md"
-                      onClick={() => setShowFormGuideModal(true)}
-                    >
-                      <div className="border-2 border-gray-200 rounded-lg overflow-hidden hover:border-brand-primary">
-                        <div className="relative aspect-video bg-gradient-to-br from-brand-primary to-brand-primary-dark flex items-center justify-center">
-                          <div className="text-center text-white">
-                            <span className="mdi mdi-video text-4xl mb-2 block" />
-                            <div className="font-semibold text-lg">{selectedExercise.name}</div>
-                            <div className="text-sm opacity-90 mt-1">Tap to view form videos</div>
-                          </div>
-                        </div>
-                        <div className="bg-brand-secondary px-4 py-3 flex items-center justify-between">
-                          <span className="text-sm font-semibold text-brand-primary flex items-center gap-1">
-                            <span className="mdi mdi-eye" />
-                            {exerciseMedia.length} {exerciseMedia.length === 1 ? 'video' : 'videos'}
-                          </span>
-                          <span className="text-xs text-gray-600">Community contributed</span>
-                        </div>
+                  {/* Exercise Media Section - Merged view for demo and community videos */}
+                  {selectedExercise && (selectedExercise.imageUrl || exerciseMedia.length > 0) && (
+                    <div className="mt-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+                      <div className="flex gap-2">
+                        {/* Primary Demo Button */}
+                        {selectedExercise.imageUrl && (
+                          <Button
+                            variant="outline"
+                            className="flex-1 h-10 bg-white border-blue-300 text-blue-700 hover:bg-blue-100 font-medium"
+                            onClick={() => setShowExerciseExample(true)}
+                          >
+                            <Eye className="h-4 w-4 mr-2" />
+                            View Demo
+                          </Button>
+                        )}
+                        {/* Community Videos Button */}
+                        {exerciseMedia.length > 0 && (
+                          <Button
+                            variant="outline"
+                            className="flex-1 h-10 bg-white border-blue-300 text-blue-700 hover:bg-blue-100 font-medium"
+                            onClick={() => setShowFormGuideModal(true)}
+                          >
+                            <Play className="h-4 w-4 mr-2" />
+                            {exerciseMedia.length} {exerciseMedia.length === 1 ? 'Video' : 'Videos'}
+                          </Button>
+                        )}
                       </div>
+                      {!selectedExercise.imageUrl && exerciseMedia.length === 0 && (
+                        <div className="text-center text-sm text-gray-500 py-2">
+                          No media available for this exercise
+                        </div>
+                      )}
                     </div>
                   )}
 
                   {/* Coaching Cues */}
                   {coaching_cues.length > 0 && (
                     <div className="mt-3 bg-blue-50 border border-blue-200 rounded-md p-3">
-                      <h4 className="text-sm font-semibold text-blue-900 mb-2 flex items-center gap-2">
+                      <h4 className="text-sm font-semibold text-blue-900 flex items-center gap-2 mb-2">
                         <Info className="h-4 w-4" />
                         Exercise Tips
                       </h4>
@@ -2762,22 +3040,40 @@ function WorkoutLogPageContent() {
                           </div>
                         </div>
 
-                        {/* Exercise Name */}
-                        <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mt-2">
-                          <Dumbbell className="h-5 w-5 text-brand-primary" />
-                          <span>{firstEntry.exercise.name}</span>
-                        </h3>
+                        {/* Exercise Info with Image */}
+                        <div className="flex items-start gap-3 mt-2">
+                          {/* Exercise Image */}
+                          {firstEntry.exercise.imageUrl ? (
+                            <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 border border-gray-200">
+                              <img
+                                src={firstEntry.exercise.imageUrl}
+                                alt={firstEntry.exercise.name}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          ) : (
+                            <div className="w-16 h-16 rounded-lg flex-shrink-0 bg-gray-100 border border-gray-200 flex items-center justify-center">
+                              <Dumbbell className="h-6 w-6 text-gray-400" />
+                            </div>
+                          )}
+                          <div className="flex-1 min-w-0">
+                            {/* Exercise Name */}
+                            <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900">
+                              <span className="truncate">{firstEntry.exercise.name}</span>
+                            </h3>
 
-                        {/* Exercise Metadata */}
-                        <div className="flex flex-wrap gap-2 mt-1">
-                          <Badge variant="outline" className="text-xs bg-gray-100">
-                            {firstEntry.exercise.category}
-                          </Badge>
-                          {firstEntry.exercise.muscleGroups?.slice(0, 2).map((mg: string) => (
-                            <Badge key={mg} variant="outline" className="text-xs">
-                              {mg}
-                            </Badge>
-                          ))}
+                            {/* Exercise Metadata */}
+                            <div className="flex flex-wrap gap-2 mt-1">
+                              <Badge variant="outline" className="text-xs bg-gray-100">
+                                {firstEntry.exercise.category}
+                              </Badge>
+                              {firstEntry.exercise.muscleGroups?.slice(0, 2).map((mg: string) => (
+                                <Badge key={mg} variant="outline" className="text-xs">
+                                  {mg}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
                         </div>
                       </CardHeader>
 
@@ -3624,6 +3920,51 @@ function WorkoutLogPageContent() {
           reps: lastLoggedEntry?.reps || 8
         } : undefined}
       />
+
+      {/* Exercise Example Modal */}
+      {showExerciseExample && (selectedExercise?.imageUrl || selectedExercise?.videoUrl) && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4" onClick={() => setShowExerciseExample(false)}>
+          <div className="relative max-w-lg w-full bg-white rounded-lg overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-4 border-b">
+              <h3 className="text-lg font-semibold text-gray-900">{selectedExercise.name}</h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 w-8 p-0"
+                onClick={() => setShowExerciseExample(false)}
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+            <div className="p-4 bg-black">
+              {/* Check if it's a video URL */}
+              {(selectedExercise.videoUrl || selectedExercise.imageUrl?.match(/\.(mp4|webm|mov)$/i)) ? (
+                <video
+                  src={selectedExercise.videoUrl || selectedExercise.imageUrl}
+                  className="w-full h-auto rounded-lg"
+                  controls
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
+              ) : (
+                /* For images and GIFs - GIFs will auto-animate */
+                <img
+                  src={selectedExercise.imageUrl}
+                  alt={`${selectedExercise.name} demonstration`}
+                  className="w-full h-auto rounded-lg"
+                />
+              )}
+            </div>
+            <div className="p-3 bg-gray-50 text-center text-xs text-gray-500">
+              {selectedExercise.imageUrl?.includes('.gif') || selectedExercise.imageUrl?.includes('exercisedb')
+                ? 'Animated demonstration'
+                : 'Exercise demonstration'}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Form Guide Modal */}
       {selectedExercise && (
