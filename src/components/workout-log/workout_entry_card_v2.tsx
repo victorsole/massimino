@@ -28,6 +28,7 @@ export interface WorkoutEntryV2 {
     muscleGroups: string[];
     equipment: string[];
     difficulty?: string;
+    imageUrl?: string;
   };
 }
 
@@ -165,8 +166,18 @@ export function WorkoutEntryCardV2({
         onClick={() => showActions && resetSwipe()}
       >
         <div className="p-4">
-          {/* Top Row: Exercise Name + Time */}
-          <div className="flex items-start justify-between mb-3">
+          {/* Top Row: Exercise Image + Name + Time */}
+          <div className="flex items-start gap-3 mb-3">
+            {/* Exercise Image */}
+            {entry.exercise.imageUrl && (
+              <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 border border-gray-200">
+                <img
+                  src={entry.exercise.imageUrl}
+                  alt={entry.exercise.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <h3 className="font-semibold text-gray-900 text-lg truncate">

@@ -33,10 +33,12 @@ export async function GET(request: NextRequest) {
     const goalsParam = searchParams.get('goals') || ''
     const goals = goalsParam ? goalsParam.split(',') : []
 
-    // 3. Build where clause - show all discoverable users
+    // 3. Build where clause - show all active users
+    // Users can opt-out by setting profileVisibility to PRIVATE
     const where: any = {
-      status: 'ACTIVE',
-      enableDiscovery: true // Only users who enabled discovery
+      status: 'ACTIVE'
+      // Removed enableDiscovery requirement - show all active users by default
+      // Privacy is controlled by profileVisibility filter in step 5
     }
 
     // Role filter

@@ -17,6 +17,9 @@
  *  - EXERCISE_MEDIA_SYSTEM_USER_ID (optional; if absent, script will try to auto-pick an admin user)
  */
 
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 import { prisma } from '../src/core/database/client'
 
 type V1Exercise = {

@@ -16,6 +16,13 @@ import { updateEmailAction, submitTrainerAccreditationAction, updateProfileBasic
 import CameraCapture from '@/components/ui/camera_capture';
 import SocialMediaIntegration from '@/components/ui/social_media_integration';
 import PersonaliseBackground from '@/components/profile/personalise_background';
+import { XPLevelProgress } from '@/components/profile/XPLevelProgress';
+import { FillTheGymSection } from '@/components/profile/FillTheGymSection';
+import { TrainingStats } from '@/components/profile/TrainingStats';
+import { TrainerPointsRewards } from '@/components/profile/TrainerPointsRewards';
+import { InvitationsReferrals } from '@/components/profile/InvitationsReferrals';
+import { ProfileHeader, ProfileTab } from '@/components/profile/ProfileHeader';
+import { Confetti, createConfettiBurst } from '@/components/animations';
 import { Plus } from 'lucide-react';
 import Image from 'next/image';
 import { useFormStatus } from 'react-dom';
@@ -56,7 +63,18 @@ export default function ProfilePage() {
     customQualifications: ''
   });
 
+  // Gamification state
+  const [userXP, setUserXP] = useState(0);
+  const [mediaContributions, setMediaContributions] = useState(0);
+  const [featuredContributions, setFeaturedContributions] = useState(0);
+  const [achievements, setAchievements] = useState<any[]>([]);
+  const [showConfetti, setShowConfetti] = useState(false);
+
+  // Tab navigation state
+  const [activeTab, setActiveTab] = useState<ProfileTab>('overview');
+
   const user = session?.user;
+  const isTrainer = user?.role === 'TRAINER';
 
   // Initialize form state from profile data (not session)
   useEffect(() => {
@@ -100,6 +118,47 @@ export default function ProfilePage() {
     }
     loadStored()
   }, [])
+
+  // Load gamification data (XP, contributions, achievements)
+  useEffect(() => {
+    const loadGamificationData = async () => {
+      if (!user?.id) return;
+
+      let xpLoaded = false;
+      let mediaLoaded = false;
+
+      try {
+        // Fetch user points/XP from profile stats
+        const pointsRes = await fetch(`/api/profile/stats?userId=${user.id}`);
+        if (pointsRes.ok) {
+          const pointsData = await pointsRes.json();
+          setUserXP(pointsData.totalXP || 0);
+          setAchievements(pointsData.achievements || []);
+          xpLoaded = true;
+        }
+      } catch {
+        // XP fetch failed
+      }
+
+      // Use demo data for now (TODO: create proper API endpoint)
+      // The media stats endpoint doesn't exist yet
+      if (!mediaLoaded) {
+        // Demo data - will be replaced when API is ready
+        setMediaContributions(12);
+        setFeaturedContributions(3);
+      }
+
+      if (!xpLoaded) {
+        // Demo XP data
+        setUserXP(2450);
+        setAchievements([
+          { id: '1', code: 'MEDIA_PIONEER', name: 'Media Pioneer', tier: 'BRONZE', iconColour: '#6B7280' },
+          { id: '2', code: 'VIDEO_CURATOR_10', name: 'Video Curator', tier: 'SILVER', iconColour: '#64748B' },
+        ]);
+      }
+    };
+    loadGamificationData();
+  }, [user?.id]);
 
   // Auto-remove notifications after 5 seconds
   useEffect(() => {
@@ -360,298 +419,359 @@ export default function ProfilePage() {
         </div>
       )}
 
-      {/* Header with Profile Completion */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Profile</h1>
-            <p className="text-gray-600 mt-1">Manage your account and trainer status</p>
-          </div>
-          <Badge variant="secondary" className="text-sm px-3 py-1">{formatRole(user?.role || 'CLIENT')}</Badge>
-        </div>
+      {/* Header with Tabs and Preview */}
+      <ProfileHeader
+        title="Profile"
+        subtitle="Manage your account and trainer status"
+        role={user?.role || 'CLIENT'}
+        isTrainer={isTrainer}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        onPreview={(viewAs) => {
+          // TODO: Open preview modal showing profile as different user types
+          showNotification('success', `Preview as ${viewAs} - Coming soon!`);
+        }}
+      />
 
-        {/* Profile Completion Indicator */}
-        <Card className="border-l-4 border-l-blue-500">
-          <CardContent className="pt-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-700">Profile Completion</span>
-              <span className="text-sm font-bold text-blue-600">{completionPercentage}%</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div
-                className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${completionPercentage}%` }}
-              ></div>
-            </div>
-            {completionPercentage < 100 && (
-              <p className="text-xs text-gray-500 mt-2">
-                Complete your profile to unlock all features
-              </p>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Admin Panel Access - Only for specific users */}
-      {isAdmin && (
-        <Card className="border-l-4 border-l-purple-500 bg-purple-50">
-          <CardContent className="pt-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <svg className="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-                <div>
-                  <h3 className="font-medium text-purple-800">Administrator Access</h3>
-                  <p className="text-sm text-purple-600">Manage users, exercises, and platform settings</p>
-                </div>
-              </div>
-              <Button
-                onClick={() => window.open('/admin', '_blank')}
-                className="bg-purple-600 hover:bg-purple-700 text-white"
-              >
-                <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                Open Admin Panel
-              </Button>
-            </div>
-        </CardContent>
-      </Card>
-      )}
-
-      {/* Email */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Identity</CardTitle>
-          <CardDescription>Use nickname or full name; we’ll display nickname if provided</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form action={updateProfileBasicsAction} className="space-y-4" onSubmit={async (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.currentTarget);
-            await updateProfileBasicsAction(formData);
-            await refreshProfile(); // Refresh profile data after save
-            showNotification('success', 'Profile updated successfully');
-          }}>
-            <input type="hidden" name="userId" value={user?.id || ''} />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <div>
-                <Label className="mb-1 block">Name</Label>
-                <Input name="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="John" />
-              </div>
-              <div>
-                <Label className="mb-1 block">Surname</Label>
-                <Input name="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Doe" />
-              </div>
-              <div>
-                <Label className="mb-1 block">Nickname</Label>
-                <Input name="nickname" value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder="johnny" />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="bio" className="text-sm font-medium">About You</Label>
-              <Textarea
-                id="bio"
-                name="bio"
-                placeholder="Tell us about yourself, your fitness journey, or your training philosophy..."
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
-                className="min-h-[120px] transition-colors focus:border-blue-500"
-              />
-              <p className="text-xs text-gray-500">{bio.length}/500 characters</p>
-            </div>
-            <Button type="submit">Save</Button>
-          </form>
-        </CardContent>
-      </Card>
-      
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-            Profile Picture
-          </CardTitle>
-          <CardDescription>Upload a clear photo of yourself (PNG, JPG, or WebP)</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col sm:flex-row gap-6 items-start">
-            {/* Avatar Preview */}
-            <div className="flex flex-col items-center space-y-3">
-              <div className="relative">
-                <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden border-2 border-gray-300">
-                  {avatarPreview ? (
-                    <Image
-                      src={avatarPreview}
-                      alt="Avatar preview"
-                      width={96}
-                      height={96}
-                      className="w-full h-full object-cover"
-                      referrerPolicy="no-referrer"
-                    />
-                  ) : (user?.image && !avatarLoadError) ? (
-                    <Image
-                      src={user.image}
-                      alt="Current avatar"
-                      width={96}
-                      height={96}
-                      className="w-full h-full object-cover"
-                      referrerPolicy="no-referrer"
-                      onError={() => setAvatarLoadError(true)}
-                    />
-                  ) : (
-                    <svg className="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                  )}
-                </div>
-                {(avatarPreview || user?.image) && (
-                  <Badge className="absolute -bottom-1 -right-1 bg-green-100 text-green-800">
-                    ✓
-                  </Badge>
-                )}
-              </div>
-              <span className="text-xs text-gray-500 text-center">Recommended: 400x400px</span>
-            </div>
-
-            {/* Upload Area */}
-            <div className="flex-1">
-              <form action={uploadAvatarAction} className="space-y-4" onSubmit={async (e) => {
+      {/* ==================== GENERAL TAB ==================== */}
+      {activeTab === 'overview' && (
+        <>
+          {/* Identity */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <span className="mdi mdi-account text-xl" />
+                Identity
+              </CardTitle>
+              <CardDescription>Use nickname or full name; we'll display nickname if provided</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form action={updateProfileBasicsAction} className="space-y-4" onSubmit={async (e) => {
                 e.preventDefault();
                 const formData = new FormData(e.currentTarget);
-                await uploadAvatarAction(formData);
-                await refreshProfile(); // Refresh profile data after save
-                showNotification('success', 'Avatar uploaded successfully');
+                await updateProfileBasicsAction(formData);
+                await refreshProfile();
+                showNotification('success', 'Profile updated successfully');
               }}>
                 <input type="hidden" name="userId" value={user?.id || ''} />
-                <div
-                  className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
-                    dragActive ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
-                  }`}
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                >
-                  <svg className="h-8 w-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                  </svg>
-                  <p className="text-sm text-gray-600 mb-2">Drag & drop your image here, or click to browse</p>
-                  <Input
-                    name="avatar"
-                    type="file"
-                    accept="image/png,image/jpeg,image/jpg,image/webp"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        handleFilePreview(file);
-                        setAvatarFileName(file.name);
-                      }
-                    }}
-                    className="max-w-xs mx-auto"
-                    required
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div>
+                    <Label className="mb-1 block">Name</Label>
+                    <Input name="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="John" />
+                  </div>
+                  <div>
+                    <Label className="mb-1 block">Surname</Label>
+                    <Input name="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Doe" />
+                  </div>
+                  <div>
+                    <Label className="mb-1 block">Nickname</Label>
+                    <Input name="nickname" value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder="johnny" />
+                  </div>
                 </div>
-                {avatarFileName && (
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <span className="text-green-500">✓</span>
-                    <span>{avatarFileName}</span>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        setAvatarFileName('');
-                        setAvatarPreview(null);
-                      }}
-                    >
-                      ×
-                    </Button>
-                  </div>
-                )}
-                <SubmitButton label="Upload Photo" pendingLabel="Uploading..." disabled={!avatarFileName} />
+                <div className="space-y-2">
+                  <Label htmlFor="bio-general" className="text-sm font-medium">About You</Label>
+                  <Textarea
+                    id="bio-general"
+                    name="bio"
+                    placeholder="Tell us about yourself, your fitness journey, or your training philosophy..."
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                    className="min-h-[120px] transition-colors focus:border-blue-500"
+                  />
+                  <p className="text-xs text-gray-500">{bio.length}/500 characters</p>
+                </div>
+                <Button type="submit">Save</Button>
               </form>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
 
-      {/* Email Section - Enhanced */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Email Address
-          </CardTitle>
-          <CardDescription>Your primary email address for account access and notifications</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {!isEditingEmail ? (
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="font-medium text-gray-900">{user?.email}</span>
-                <Badge variant="secondary" className="text-xs">Verified</Badge>
-              </div>
-              <Button variant="outline" size="sm" onClick={() => { setEmail(user?.email || ''); setIsEditingEmail(true); setFormErrors({}); }}>Edit</Button>
-            </div>
-          ) : (
-            <form action={updateEmailAction} className="space-y-4" onSubmit={async (e) => {
-              e.preventDefault();
-              const formData = new FormData(e.currentTarget);
-              await updateEmailAction(formData);
-              await refreshProfile(); // Refresh profile data after save
-              showNotification('success', 'Email updated successfully');
-            }}>
-              <input type="hidden" name="userId" value={user?.id || ''} />
-              <div className="space-y-2">
-                <Input
-                  name="email"
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    if (formErrors.email) {
-                      const newErrors = { ...formErrors };
-                      delete newErrors.email;
-                      setFormErrors(newErrors);
-                    }
-                  }}
-                  placeholder="you@example.com"
-                  className={`transition-colors ${
-                    formErrors.email ? 'border-red-500 focus:border-red-500' : 'focus:border-blue-500'
-                  }`}
-                />
-                {formErrors.email && (
-                  <div className="flex items-center gap-2 text-sm text-red-600">
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                    </svg>
-                    <span>{formErrors.email}</span>
+          {/* Profile Picture */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <span className="mdi mdi-account-circle text-xl" />
+                Profile Picture
+              </CardTitle>
+              <CardDescription>Upload a clear photo of yourself (PNG, JPG, or WebP)</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col sm:flex-row gap-6 items-start">
+                {/* Avatar Preview */}
+                <div className="flex flex-col items-center space-y-3">
+                  <div className="relative">
+                    <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden border-2 border-gray-300">
+                      {avatarPreview ? (
+                        <Image
+                          src={avatarPreview}
+                          alt="Avatar preview"
+                          width={96}
+                          height={96}
+                          className="w-full h-full object-cover"
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (user?.image && !avatarLoadError) ? (
+                        <Image
+                          src={user.image}
+                          alt="Current avatar"
+                          width={96}
+                          height={96}
+                          className="w-full h-full object-cover"
+                          referrerPolicy="no-referrer"
+                          onError={() => setAvatarLoadError(true)}
+                        />
+                      ) : (
+                        <span className="mdi mdi-camera text-3xl text-gray-400" />
+                      )}
+                    </div>
+                    {(avatarPreview || user?.image) && (
+                      <Badge className="absolute -bottom-1 -right-1 bg-green-100 text-green-800">
+                        <span className="mdi mdi-check" />
+                      </Badge>
+                    )}
                   </div>
-                )}
-              </div>
-              <div className="flex gap-2">
-                <SubmitButton label="Save Email" pendingLabel="Saving..." onClick={() => validateForm()} />
-                <Button type="button" variant="ghost" onClick={() => {
-                  setIsEditingEmail(false);
-                  setFormErrors({});
-                  setEmail(user?.email || '');
-                }}>Cancel</Button>
-              </div>
-            </form>
-          )}
-        </CardContent>
-      </Card>
+                  <span className="text-xs text-gray-500 text-center">Recommended: 400x400px</span>
+                </div>
 
-      {/* Social Media Links */}
+                {/* Upload Area */}
+                <div className="flex-1">
+                  <form action={uploadAvatarAction} className="space-y-4" onSubmit={async (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.currentTarget);
+                    await uploadAvatarAction(formData);
+                    await refreshProfile();
+                    showNotification('success', 'Avatar uploaded successfully');
+                  }}>
+                    <input type="hidden" name="userId" value={user?.id || ''} />
+                    <div
+                      className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
+                        dragActive ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
+                      }`}
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={handleDrop}
+                    >
+                      <span className="mdi mdi-cloud-upload text-3xl text-gray-400 mb-2 block" />
+                      <p className="text-sm text-gray-600 mb-2">Drag & drop your image here, or click to browse</p>
+                      <Input
+                        name="avatar"
+                        type="file"
+                        accept="image/png,image/jpeg,image/jpg,image/webp"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            handleFilePreview(file);
+                            setAvatarFileName(file.name);
+                          }
+                        }}
+                        className="max-w-xs mx-auto"
+                        required
+                      />
+                    </div>
+                    {avatarFileName && (
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <span className="mdi mdi-check text-green-500" />
+                        <span>{avatarFileName}</span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            setAvatarFileName('');
+                            setAvatarPreview(null);
+                          }}
+                        >
+                          <span className="mdi mdi-close" />
+                        </Button>
+                      </div>
+                    )}
+                    <SubmitButton label="Upload Photo" pendingLabel="Uploading..." disabled={!avatarFileName} />
+                  </form>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Email Address */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <span className="mdi mdi-email text-xl" />
+                Email Address
+              </CardTitle>
+              <CardDescription>Your primary email address for account access and notifications</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {!isEditingEmail ? (
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="font-medium text-gray-900">{user?.email}</span>
+                    <Badge variant="secondary" className="text-xs">Verified</Badge>
+                  </div>
+                  <Button variant="outline" size="sm" onClick={() => { setEmail(user?.email || ''); setIsEditingEmail(true); setFormErrors({}); }}>Edit</Button>
+                </div>
+              ) : (
+                <form action={updateEmailAction} className="space-y-4" onSubmit={async (e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  await updateEmailAction(formData);
+                  await refreshProfile();
+                  showNotification('success', 'Email updated successfully');
+                }}>
+                  <input type="hidden" name="userId" value={user?.id || ''} />
+                  <div className="space-y-2">
+                    <Input
+                      name="email"
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        if (formErrors.email) {
+                          const newErrors = { ...formErrors };
+                          delete newErrors.email;
+                          setFormErrors(newErrors);
+                        }
+                      }}
+                      placeholder="you@example.com"
+                      className={`transition-colors ${
+                        formErrors.email ? 'border-red-500 focus:border-red-500' : 'focus:border-blue-500'
+                      }`}
+                    />
+                    {formErrors.email && (
+                      <div className="flex items-center gap-2 text-sm text-red-600">
+                        <span className="mdi mdi-alert" />
+                        <span>{formErrors.email}</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex gap-2">
+                    <SubmitButton label="Save Email" pendingLabel="Saving..." onClick={() => validateForm()} />
+                    <Button type="button" variant="ghost" onClick={() => {
+                      setIsEditingEmail(false);
+                      setFormErrors({});
+                      setEmail(user?.email || '');
+                    }}>Cancel</Button>
+                  </div>
+                </form>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Profile Completion Indicator */}
+          <Card className="border-l-4 border-l-blue-500">
+            <CardContent className="pt-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-gray-700">Profile Completion</span>
+                <span className="text-sm font-bold text-blue-600">{completionPercentage}%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${completionPercentage}%` }}
+                ></div>
+              </div>
+              {completionPercentage < 100 && (
+                <p className="text-xs text-gray-500 mt-2">
+                  Complete your profile to unlock all features
+                </p>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* XP & Level Progress Section */}
+          <XPLevelProgress
+            totalXP={userXP}
+            achievements={achievements}
+            showAchievements={true}
+            onLevelClick={() => {
+              setShowConfetti(true);
+              setTimeout(() => setShowConfetti(false), 3000);
+            }}
+          />
+
+          {/* Fill The Gym Contributions Section */}
+          <FillTheGymSection
+            contributions={mediaContributions}
+            featuredCount={featuredContributions}
+          />
+
+          {/* Training Stats Section */}
+          <TrainingStats
+            programs={3}
+            workouts={48}
+            dayStreak={7}
+            totalVolume={24500}
+            volumeUnit="kg"
+            personalRecords={[
+              { exercise: 'Bench Press', weight: '80kg' },
+              { exercise: 'Squat', weight: '100kg' },
+              { exercise: 'Deadlift', weight: '120kg' },
+            ]}
+          />
+
+          {/* Trainer Points & Rewards - Only for trainers */}
+          {isTrainer && (
+            <TrainerPointsRewards
+              currentPoints={1250}
+              totalEarned={3500}
+              redeemed={2250}
+              badgesEarned={5}
+            />
+          )}
+
+          {/* Invitations & Referrals - Only for trainers */}
+          {isTrainer && (
+            <InvitationsReferrals
+              sent={15}
+              accepted={8}
+              pending={3}
+              pointsEarned={800}
+              onInvite={() => {
+                // TODO: Open invite modal
+                console.log('Open invite modal');
+              }}
+            />
+          )}
+
+          {/* Admin Panel Access - Only for specific users */}
+          {isAdmin && (
+            <Card className="border-l-4 border-l-purple-500 bg-purple-50">
+              <CardContent className="pt-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <svg className="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <div>
+                      <h3 className="font-medium text-purple-800">Administrator Access</h3>
+                      <p className="text-sm text-purple-600">Manage users, exercises, and platform settings</p>
+                    </div>
+                  </div>
+                  <Button
+                    onClick={() => window.open('/admin', '_blank')}
+                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                  >
+                    <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    Open Admin Panel
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </>
+      )}
+
+      {/* Confetti celebration - outside tabs so it shows on any tab */}
+      <Confetti active={showConfetti} onComplete={() => setShowConfetti(false)} />
+
+      {/* ==================== SETTINGS TAB ==================== */}
+      {activeTab === 'settings' && (
+        <>
+          {/* Social Media Links */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -876,15 +996,15 @@ export default function ProfilePage() {
               <Label className="text-sm font-medium">Preferred Workout Types</Label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {[
-                  { value: 'Strength Training', icon: '💪' },
-                  { value: 'Cardio', icon: '🏃' },
-                  { value: 'HIIT', icon: '⚡' },
-                  { value: 'Yoga', icon: '🧘' },
-                  { value: 'Pilates', icon: '🤸' },
-                  { value: 'Calisthenics', icon: '🏋️' },
-                  { value: 'Swimming', icon: '🏊' },
-                  { value: 'Running', icon: '🏃‍♀️' },
-                  { value: 'Cycling', icon: '🚴' }
+                  { value: 'Strength Training', icon: 'mdi-arm-flex' },
+                  { value: 'Cardio', icon: 'mdi-run' },
+                  { value: 'HIIT', icon: 'mdi-lightning-bolt' },
+                  { value: 'Yoga', icon: 'mdi-yoga' },
+                  { value: 'Pilates', icon: 'mdi-human-handsup' },
+                  { value: 'Calisthenics', icon: 'mdi-weight-lifter' },
+                  { value: 'Swimming', icon: 'mdi-swim' },
+                  { value: 'Running', icon: 'mdi-run-fast' },
+                  { value: 'Cycling', icon: 'mdi-bike' }
                 ].map((workout) => (
                   <label key={workout.value} className="flex items-center space-x-2 p-3 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer">
                     <input
@@ -893,7 +1013,7 @@ export default function ProfilePage() {
                       value={workout.value}
                       className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
-                    <span className="text-lg">{workout.icon}</span>
+                    <span className={`mdi ${workout.icon} text-lg text-brand-primary`} />
                     <span className="text-sm font-medium">{workout.value}</span>
                   </label>
                 ))}
@@ -1103,9 +1223,14 @@ export default function ProfilePage() {
           </form>
         </CardContent>
       </Card>
+        </>
+      )}
 
-      {/* Media Gallery & Camera */}
-      <Card>
+      {/* ==================== MEDIA TAB ==================== */}
+      {activeTab === 'media' && (
+        <>
+          {/* Media Gallery & Camera */}
+          <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1276,11 +1401,16 @@ export default function ProfilePage() {
         </CardContent>
       </Card>
 
-      {/* Social Media Integration */}
-      <SocialMediaIntegration userId={session?.user?.id || ''} />
+          {/* Social Media Integration */}
+          <SocialMediaIntegration userId={session?.user?.id || ''} />
+        </>
+      )}
 
-      {/* Trainer Accreditation - Enhanced */}
-      <Card className={user?.trainerVerified ? 'border-green-200 bg-green-50' : 'border-orange-200 bg-orange-50'}>
+      {/* ==================== CREDENTIALS TAB ==================== */}
+      {activeTab === 'credentials' && (
+        <>
+          {/* Trainer Accreditation - Enhanced */}
+          <Card className={user?.trainerVerified ? 'border-green-200 bg-green-50' : 'border-orange-200 bg-orange-50'}>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             {user?.trainerVerified ? (
@@ -1898,18 +2028,20 @@ export default function ProfilePage() {
         </Card>
       )}
 
-      {/* Accredited Training Providers */}
-      {!user?.trainerVerified && (
-        <AccreditedProvidersBrowser
-          onSelect={(p) => {
-            setSelectedProvider(p);
-            setIsApplyingTrainer(true);
-            showNotification('success', `Selected ${p.name} as your training provider`);
-          }}
-        />
+          {/* Accredited Training Providers */}
+          {!user?.trainerVerified && (
+            <AccreditedProvidersBrowser
+              onSelect={(p) => {
+                setSelectedProvider(p);
+                setIsApplyingTrainer(true);
+                showNotification('success', `Selected ${p.name} as your training provider`);
+              }}
+            />
+          )}
+        </>
       )}
 
-      {/* Save All Button */}
+      {/* Save All Button - Outside tabs, always visible */}
       <Card className="border-2 border-blue-200 bg-blue-50">
         <CardContent className="pt-6">
           <div className="flex items-center justify-between mb-4">
