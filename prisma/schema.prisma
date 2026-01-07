@@ -1695,6 +1695,26 @@ model team_applications {
   @@index([teamId, status])
 }
 
+model athlete_applications {
+  id              String            @id @default(uuid())
+  name            String
+  email           String
+  discipline      String
+  achievements    String            @db.Text
+  instagram       String?
+  website         String?
+  message         String?           @db.Text
+  status          ApplicationStatus @default(PENDING)
+  appliedAt       DateTime          @default(now())
+  reviewedAt      DateTime?
+  reviewedBy      String?
+  adminNotes      String?           @db.Text
+  users           users?            @relation("athlete_application_reviewer", fields: [reviewedBy], references: [id])
+
+  @@index([status, appliedAt])
+  @@index([email])
+}
+
 model team_challenges {
   id                       String                     @id
   creatorId                String
@@ -2369,6 +2389,7 @@ model users {
   subscriptions                                               subscriptions[]
   team_applications_team_applications_reviewedByTousers       team_applications[]              @relation("team_applications_reviewedByTousers")
   team_applications_team_applications_userIdTousers           team_applications[]              @relation("team_applications_userIdTousers")
+  athlete_applications_reviewed                               athlete_applications[]           @relation("athlete_application_reviewer")
   team_challenges                                             team_challenges[]
   team_members_team_members_invitedByTousers                  team_members[]                   @relation("team_members_invitedByTousers")
   team_members_team_members_userIdTousers                     team_members[]                   @relation("team_members_userIdTousers")
