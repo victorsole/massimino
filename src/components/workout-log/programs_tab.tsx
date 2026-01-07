@@ -241,17 +241,25 @@ export function ProgramsTab() {
       {/* Separator */}
       <div className="border-t border-gray-200 pt-8" ref={browseRef}>
         <div className="max-w-[1400px] mx-auto px-5">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>
               <h2 className="text-2xl font-bold text-gray-900">Browse Programs</h2>
               <p className="text-gray-600">Discover new training programs to follow</p>
             </div>
-            <Link href="/workout-log/athletes">
-              <Button variant="outline">
-                <Users className="h-4 w-4 mr-2" />
-                View All Athletes
-              </Button>
-            </Link>
+            <div className="flex flex-wrap gap-2">
+              <Link href="/workout-log/athletes">
+                <Button variant="outline" size="sm">
+                  <Users className="h-4 w-4 mr-2" />
+                  View All Athletes
+                </Button>
+              </Link>
+              <Link href="/workout-log/athletes/apply">
+                <Button variant="default" size="sm" className="bg-gradient-to-r from-[#254967] to-[#1a2a3e] hover:from-[#1e3a52] hover:to-[#152230]">
+                  <Target className="h-4 w-4 mr-2" />
+                  Get Featured
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
