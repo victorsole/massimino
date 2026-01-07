@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Trophy, Calendar, MapPin, Lock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Trophy, Calendar, MapPin, Lock, Star, ArrowRight } from 'lucide-react';
 
 type Athlete = {
   id: string;
@@ -61,11 +62,20 @@ export function AthleteGallery() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold">Workout Like A Master</h1>
-        <p className="text-gray-600 mt-2">
-          Train with the exact programs used by legendary athletes throughout their careers
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold">Workout Like A Master</h1>
+          <p className="text-gray-600 mt-2">
+            Train with the exact programs used by legendary athletes throughout their careers
+          </p>
+        </div>
+        <Link href="/workout-log/athletes/apply">
+          <Button className="bg-gradient-to-r from-[#254967] to-[#1a2a3e] hover:from-[#1e3a52] hover:to-[#152230] whitespace-nowrap">
+            <Star className="h-4 w-4 mr-2" />
+            Get Featured
+            <ArrowRight className="h-4 w-4 ml-2" />
+          </Button>
+        </Link>
       </div>
 
       {/* Filters */}
