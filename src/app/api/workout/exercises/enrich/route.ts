@@ -4,10 +4,59 @@
  *
  * Takes an array of exercise names and returns matching exercises with their
  * cover images and media counts from the database.
+ *
+ * Matching priority:
+ * 1. Exact name match
+ * 2. Exact alias match
+ * 3. Cleaned name match (without parentheses, "or X" patterns)
+ * 4. Partial match (preferring shorter/more specific matches)
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/core/database';
+
+// Clean exercise name for better matching
+function cleanExerciseName(name: string): string[] {
+  const normalized = name.toLowerCase().trim();
+  const variants: string[] = [normalized];
+
+  // Remove parenthetical content: "Chin-Ups (or Barbell Pullover)" -> "Chin-Ups"
+  const withoutParens = normalized.replace(/\s*\([^)]*\)\s*/g, ' ').trim();
+  if (withoutParens !== normalized) {
+    variants.push(withoutParens);
+  }
+
+  // Handle "X or Y" patterns: take X and Y separately
+  const orMatch = normalized.match(/^(.+?)\s+or\s+(.+)$/i);
+  if (orMatch) {
+    variants.push(orMatch[1].trim());
+    variants.push(orMatch[2].trim());
+  }
+
+  // Handle "X (Y)" patterns: add Y as variant
+  const parenMatch = normalized.match(/^(.+?)\s*\((.+?)\)\s*$/);
+  if (parenMatch) {
+    variants.push(parenMatch[1].trim());
+    // If content in parens looks like an alternative (starts with "or ")
+    const parenContent = parenMatch[2].trim();
+    if (parenContent.toLowerCase().startsWith('or ')) {
+      variants.push(parenContent.substring(3).trim());
+    } else {
+      variants.push(parenContent);
+    }
+  }
+
+  // Remove common prefixes that might vary
+  const withoutPrefix = normalized
+    .replace(/^(wide grip|close grip|narrow grip|standing|seated|lying|incline|decline|flat)\s+/i, '')
+    .trim();
+  if (withoutPrefix !== normalized) {
+    variants.push(withoutPrefix);
+  }
+
+  // Remove duplicates and empty strings
+  return [...new Set(variants)].filter(v => v.length > 0);
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,21 +78,40 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Normalize names for matching
-    const normalizedNames = exerciseNames.map((name: string) =>
-      name.toLowerCase().trim()
-    );
+    // Build search variants for all exercise names
+    const searchVariants = new Set<string>();
+    for (const name of exerciseNames) {
+      for (const variant of cleanExerciseName(name)) {
+        searchVariants.add(variant);
+      }
+    }
 
-    // Find matching exercises by name (case-insensitive)
+    // Find matching exercises by name or alias (case-insensitive)
     const exercises = await prisma.exercises.findMany({
       where: {
         isActive: true,
-        OR: normalizedNames.map((name: string) => ({
-          name: {
-            contains: name,
-            mode: 'insensitive' as const,
-          },
-        })),
+        OR: [
+          // Try name matches
+          ...Array.from(searchVariants).map((variant: string) => ({
+            name: {
+              equals: variant,
+              mode: 'insensitive' as const,
+            },
+          })),
+          // Try alias matches
+          ...Array.from(searchVariants).map((variant: string) => ({
+            aliasNames: {
+              has: variant,
+            },
+          })),
+          // Fallback: partial name matches
+          ...Array.from(searchVariants).map((variant: string) => ({
+            name: {
+              contains: variant,
+              mode: 'insensitive' as const,
+            },
+          })),
+        ],
       },
       select: {
         id: true,
@@ -51,6 +119,7 @@ export async function POST(request: NextRequest) {
         imageUrl: true,
         hasMedia: true,
         mediaCount: true,
+        aliasNames: true,
       },
     });
 
@@ -112,8 +181,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Build a lookup map by normalized exercise name
-    const exerciseLookup = new Map<string, {
+    // Build exercise data structure
+    type ExerciseData = {
       id: string;
       name: string;
       imageUrl: string | null;
@@ -121,20 +190,19 @@ export async function POST(request: NextRequest) {
       mediaCount: number;
       coverUrl: string | null;
       hasVideo: boolean;
-    }>();
+      aliasNames: string[];
+    };
+
+    const exerciseDataList: ExerciseData[] = [];
 
     for (const exercise of exercises) {
-      const normalizedName = exercise.name.toLowerCase().trim();
       const cover = coverMap.get(exercise.id);
-      // Use computed values from media query instead of potentially stale database columns
       const computedMediaCount = cover?.mediaCount ?? 0;
       const coverUrl = cover?.url || exercise.imageUrl || null;
-      // hasMedia is true if we have media in exercise_media OR if the exercise has a default imageUrl
       const computedHasMedia = computedMediaCount > 0 || !!coverUrl;
-      // Check if the coverUrl itself is a video/gif (for cases where imageUrl is the only source)
       const isVideoFromUrl = coverUrl ? (coverUrl.includes('.gif') || coverUrl.includes('.mp4')) : false;
 
-      exerciseLookup.set(normalizedName, {
+      exerciseDataList.push({
         id: exercise.id,
         name: exercise.name,
         imageUrl: exercise.imageUrl,
@@ -142,7 +210,53 @@ export async function POST(request: NextRequest) {
         mediaCount: computedMediaCount > 0 ? computedMediaCount : (coverUrl ? 1 : 0),
         coverUrl,
         hasVideo: cover?.hasVideo ?? isVideoFromUrl,
+        aliasNames: exercise.aliasNames || [],
       });
+    }
+
+    // Helper: find best match for a name with priority scoring
+    function findBestMatch(searchName: string, variants: string[]): ExerciseData | null {
+      let bestMatch: ExerciseData | null = null;
+      let bestScore = 0;
+
+      for (const exercise of exerciseDataList) {
+        const exNameLower = exercise.name.toLowerCase();
+        const aliasesLower = exercise.aliasNames.map(a => a.toLowerCase());
+
+        for (const variant of variants) {
+          let score = 0;
+
+          // Exact name match = highest priority (100)
+          if (exNameLower === variant) {
+            score = 100;
+          }
+          // Exact alias match = high priority (90)
+          else if (aliasesLower.includes(variant)) {
+            score = 90;
+          }
+          // Name starts with variant (80)
+          else if (exNameLower.startsWith(variant + ' ') || exNameLower.startsWith(variant + '-')) {
+            score = 80;
+          }
+          // Name contains variant as word (70) - but penalize longer names
+          else if (exNameLower.includes(variant)) {
+            // Prefer shorter exercise names (more specific matches)
+            score = 70 - Math.min(20, (exNameLower.length - variant.length) / 2);
+          }
+          // Variant contains exercise name (60) - e.g., "barbell bench press" contains "bench press"
+          else if (variant.includes(exNameLower)) {
+            score = 60;
+          }
+
+          // Update best match if this is better
+          if (score > bestScore) {
+            bestScore = score;
+            bestMatch = exercise;
+          }
+        }
+      }
+
+      return bestMatch;
     }
 
     // Match original exercise names to database exercises
@@ -156,20 +270,8 @@ export async function POST(request: NextRequest) {
     } | null> = {};
 
     for (const originalName of exerciseNames) {
-      const normalized = originalName.toLowerCase().trim();
-
-      // Try exact match first
-      let match = exerciseLookup.get(normalized);
-
-      // Try partial match if no exact match
-      if (!match) {
-        for (const [key, value] of exerciseLookup.entries()) {
-          if (key.includes(normalized) || normalized.includes(key)) {
-            match = value;
-            break;
-          }
-        }
-      }
+      const variants = cleanExerciseName(originalName);
+      const match = findBestMatch(originalName, variants);
 
       enrichedExercises[originalName] = match ? {
         id: match.id,

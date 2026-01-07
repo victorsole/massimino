@@ -1,0 +1,304 @@
+{
+  "program": "Linear Periodization - 12 Week Strength Program",
+  "author": "NASM / Classical Periodization",
+  "version": "1.0",
+  "program_id": "linear-periodization-12week",
+  "target_audience": "Intermediate to Advanced",
+  "duration_weeks": 12,
+  "session_duration_minutes": {
+    "min": 45,
+    "max": 75
+  },
+  "frequency_per_week": 4,
+  "rest_days_per_week": 3,
+  "level": "Intermediate",
+  "settings": ["Gym (required)"],
+  "equipment": {
+    "required": ["Barbell", "Dumbbells", "Squat rack", "Bench", "Cable machine"],
+    "recommended": ["Leg press", "Lat pulldown machine"],
+    "optional": ["Lifting belt", "Knee sleeves"]
+  },
+
+  "program_philosophy": {
+    "origin": "Linear periodization was developed by Soviet sports scientists and popularized by Tudor Bompa. It systematically progresses from high volume/low intensity to low volume/high intensity.",
+    "core_principles": [
+      "Gradual increase in intensity over time",
+      "Planned deload weeks for recovery",
+      "Progressive overload through systematic planning",
+      "Phase-specific training adaptations"
+    ]
+  },
+
+  "workout_sessions": [
+    {
+      "workout_id": "lp-day1",
+      "name": "Day 1 - Upper Body Push",
+      "day": 1,
+      "focus": "Chest, Shoulders, Triceps",
+      "duration_minutes": 60,
+      "sections": [
+        {
+          "section_name": "Main Lifts",
+          "exercises": [
+            {
+              "exercise_name": "Barbell Bench Press",
+              "sets": 4,
+              "reps": "8-12",
+              "tempo": "3-1-2",
+              "rest_seconds": 90,
+              "notes": "Week 1-4: 8-12 reps. Week 5-8: 6-8 reps. Week 9-12: 3-5 reps."
+            },
+            {
+              "exercise_name": "Overhead Press",
+              "sets": 4,
+              "reps": "8-12",
+              "tempo": "3-1-2",
+              "rest_seconds": 90,
+              "notes": "Standing or seated. Maintain strict form."
+            }
+          ]
+        },
+        {
+          "section_name": "Accessory Work",
+          "exercises": [
+            {
+              "exercise_name": "Incline Dumbbell Press",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 60,
+              "notes": "30-45 degree incline"
+            },
+            {
+              "exercise_name": "Lateral Raise",
+              "sets": 3,
+              "reps": "12-15",
+              "rest_seconds": 60,
+              "notes": "Control the negative"
+            },
+            {
+              "exercise_name": "Tricep Pushdown",
+              "sets": 3,
+              "reps": "12-15",
+              "rest_seconds": 60,
+              "notes": "Rope or bar attachment"
+            },
+            {
+              "exercise_name": "Dumbbell Flye",
+              "sets": 3,
+              "reps": "12-15",
+              "rest_seconds": 60,
+              "notes": "Slight bend in elbows"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workout_id": "lp-day2",
+      "name": "Day 2 - Lower Body",
+      "day": 2,
+      "focus": "Quads, Hamstrings, Glutes, Calves",
+      "duration_minutes": 60,
+      "sections": [
+        {
+          "section_name": "Main Lifts",
+          "exercises": [
+            {
+              "exercise_name": "Barbell Back Squat",
+              "sets": 4,
+              "reps": "8-12",
+              "tempo": "3-1-2",
+              "rest_seconds": 120,
+              "notes": "Week 1-4: 8-12 reps. Week 5-8: 6-8 reps. Week 9-12: 3-5 reps."
+            },
+            {
+              "exercise_name": "Romanian Deadlift",
+              "sets": 4,
+              "reps": "8-12",
+              "tempo": "3-1-2",
+              "rest_seconds": 90,
+              "notes": "Feel the stretch in hamstrings"
+            }
+          ]
+        },
+        {
+          "section_name": "Accessory Work",
+          "exercises": [
+            {
+              "exercise_name": "Leg Press",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 90,
+              "notes": "Feet shoulder width apart"
+            },
+            {
+              "exercise_name": "Lying Leg Curl",
+              "sets": 3,
+              "reps": "12-15",
+              "rest_seconds": 60,
+              "notes": "Control the eccentric"
+            },
+            {
+              "exercise_name": "Leg Extension",
+              "sets": 3,
+              "reps": "12-15",
+              "rest_seconds": 60,
+              "notes": "Squeeze at the top"
+            },
+            {
+              "exercise_name": "Standing Calf Raise",
+              "sets": 4,
+              "reps": "15-20",
+              "rest_seconds": 45,
+              "notes": "Full range of motion"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workout_id": "lp-day3",
+      "name": "Day 3 - Upper Body Pull",
+      "day": 4,
+      "focus": "Back, Biceps, Rear Delts",
+      "duration_minutes": 60,
+      "sections": [
+        {
+          "section_name": "Main Lifts",
+          "exercises": [
+            {
+              "exercise_name": "Barbell Row",
+              "sets": 4,
+              "reps": "8-12",
+              "tempo": "3-1-2",
+              "rest_seconds": 90,
+              "notes": "Week 1-4: 8-12 reps. Week 5-8: 6-8 reps. Week 9-12: 3-5 reps."
+            },
+            {
+              "exercise_name": "Lat Pulldown",
+              "sets": 4,
+              "reps": "8-12",
+              "tempo": "3-1-2",
+              "rest_seconds": 90,
+              "notes": "Wide grip, pull to upper chest"
+            }
+          ]
+        },
+        {
+          "section_name": "Accessory Work",
+          "exercises": [
+            {
+              "exercise_name": "Seated Cable Row",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 60,
+              "notes": "Squeeze shoulder blades together"
+            },
+            {
+              "exercise_name": "Face Pull",
+              "sets": 3,
+              "reps": "15-20",
+              "rest_seconds": 60,
+              "notes": "External rotation at the top"
+            },
+            {
+              "exercise_name": "Barbell Curl",
+              "sets": 3,
+              "reps": "10-12",
+              "rest_seconds": 60,
+              "notes": "Strict form, no swinging"
+            },
+            {
+              "exercise_name": "Hammer Curl",
+              "sets": 3,
+              "reps": "12-15",
+              "rest_seconds": 60,
+              "notes": "Neutral grip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workout_id": "lp-day4",
+      "name": "Day 4 - Lower Body (Posterior Chain Focus)",
+      "day": 5,
+      "focus": "Glutes, Hamstrings, Lower Back",
+      "duration_minutes": 60,
+      "sections": [
+        {
+          "section_name": "Main Lifts",
+          "exercises": [
+            {
+              "exercise_name": "Deadlift",
+              "sets": 4,
+              "reps": "6-8",
+              "tempo": "3-1-2",
+              "rest_seconds": 180,
+              "notes": "Week 1-4: 6-8 reps. Week 5-8: 5-6 reps. Week 9-12: 3-5 reps."
+            },
+            {
+              "exercise_name": "Front Squat",
+              "sets": 3,
+              "reps": "8-10",
+              "tempo": "3-1-2",
+              "rest_seconds": 120,
+              "notes": "Keep torso upright"
+            }
+          ]
+        },
+        {
+          "section_name": "Accessory Work",
+          "exercises": [
+            {
+              "exercise_name": "Bulgarian Split Squat",
+              "sets": 3,
+              "reps": "10-12 each",
+              "rest_seconds": 60,
+              "notes": "Rear foot elevated"
+            },
+            {
+              "exercise_name": "Good Morning",
+              "sets": 3,
+              "reps": "12-15",
+              "rest_seconds": 60,
+              "notes": "Light weight, feel the hamstring stretch"
+            },
+            {
+              "exercise_name": "Glute Bridge",
+              "sets": 3,
+              "reps": "15-20",
+              "rest_seconds": 45,
+              "notes": "Squeeze at top, hold 2 seconds"
+            },
+            {
+              "exercise_name": "Seated Calf Raise",
+              "sets": 4,
+              "reps": "15-20",
+              "rest_seconds": 45,
+              "notes": "Slow and controlled"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+
+  "metadata": {
+    "program_name": "Linear Periodization (12 Weeks)",
+    "description": "Classical linear periodization program progressing from hypertrophy to strength to power phases.",
+    "goal": "Strength and Muscle Building",
+    "methodology": "Linear Periodization",
+    "duration_weeks": 12,
+    "frequency_per_week": 4
+  },
+
+  "goals": {
+    "primary_goal": "Build strength through systematic progression",
+    "outcome_goals": [
+      "Increase strength in major compound lifts",
+      "Build muscle through progressive overload",
+      "Develop work capacity and recovery"
+    ]
+  }
+}

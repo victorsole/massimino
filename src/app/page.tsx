@@ -75,12 +75,13 @@ export default function HomePage() {
               transition={{ duration: 0.8, type: 'spring', stiffness: 200 }}
             >
               <div className="relative w-24 h-24">
-                <Image
-                  src="/massimino_logo.png"
-                  alt="Massimino Logo"
-                  fill
-                  sizes="120px"
-                  className="object-contain"
+                <video
+                  src="/massimino_logo_word_animated.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-contain"
                 />
               </div>
             </motion.div>

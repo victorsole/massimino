@@ -1,0 +1,217 @@
+{
+  "program": "Mike Mentzer's Heavy Duty",
+  "author": "Mike Mentzer",
+  "era": "High Intensity Training Era (1970s-1980s)",
+  "version": "1.0",
+  "program_id": "mike-mentzer-heavy-duty",
+  "target_audience": "Advanced Lifters",
+  "duration_weeks": 12,
+  "session_duration_minutes": {
+    "min": 30,
+    "max": 45
+  },
+  "frequency_per_week": 2,
+  "rest_days_per_week": 5,
+  "level": "Advanced",
+  "settings": ["Gym (required)"],
+  "equipment": {
+    "required": ["Barbell", "Dumbbells", "Cable machine", "Leg press", "Lat pulldown"],
+    "recommended": ["Nautilus machines", "Pec deck"],
+    "optional": ["Training partner for forced reps"]
+  },
+
+  "program_philosophy": {
+    "origin": "Mike Mentzer developed Heavy Duty after studying Arthur Jones's High Intensity Training principles. He won the 1978 Mr. Universe with a perfect 300 score using this system.",
+    "mentzer_quote": "That last rep, where you're struggling with everything you have, that's where the growth stimulus occurs. Everything before that is just preparation.",
+    "core_principles": [
+      "Train to absolute momentary muscular failure",
+      "One working set per exercise after warm-ups",
+      "Longer rest between sessions (4-7 days per muscle)",
+      "Maximum intensity over high volume",
+      "Use advanced techniques: forced reps, negatives, rest-pause"
+    ]
+  },
+
+  "workout_sessions": [
+    {
+      "workout_id": "hd-workout-a",
+      "name": "Workout A - Chest, Back, Shoulders",
+      "day": 1,
+      "focus": "Upper Body Push/Pull",
+      "duration_minutes": 35,
+      "sections": [
+        {
+          "section_name": "Chest",
+          "exercises": [
+            {
+              "exercise_name": "Dumbbell Flye",
+              "sets": 1,
+              "reps": "6-10",
+              "tempo": "4-1-2",
+              "rest_seconds": 0,
+              "notes": "Pre-exhaust: Immediately superset with next exercise"
+            },
+            {
+              "exercise_name": "Incline Barbell Bench Press",
+              "sets": 1,
+              "reps": "6-10",
+              "tempo": "4-1-2",
+              "rest_seconds": 180,
+              "notes": "To absolute failure. Partner-assisted forced reps on final 2-3."
+            }
+          ]
+        },
+        {
+          "section_name": "Back",
+          "exercises": [
+            {
+              "exercise_name": "Lat Pulldown",
+              "sets": 1,
+              "reps": "6-10",
+              "tempo": "4-1-2",
+              "rest_seconds": 0,
+              "notes": "Pre-exhaust: Immediately superset with next exercise"
+            },
+            {
+              "exercise_name": "Barbell Row",
+              "sets": 1,
+              "reps": "6-10",
+              "tempo": "4-1-2",
+              "rest_seconds": 180,
+              "notes": "To absolute failure."
+            }
+          ]
+        },
+        {
+          "section_name": "Shoulders",
+          "exercises": [
+            {
+              "exercise_name": "Lateral Raise",
+              "sets": 1,
+              "reps": "6-10",
+              "tempo": "3-1-2",
+              "rest_seconds": 0,
+              "notes": "Pre-exhaust: Immediately superset with next exercise"
+            },
+            {
+              "exercise_name": "Overhead Press",
+              "sets": 1,
+              "reps": "6-10",
+              "tempo": "4-1-2",
+              "rest_seconds": 180,
+              "notes": "To absolute failure."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workout_id": "hd-workout-b",
+      "name": "Workout B - Legs, Arms",
+      "day": 4,
+      "focus": "Legs and Arms",
+      "duration_minutes": 40,
+      "sections": [
+        {
+          "section_name": "Quadriceps",
+          "exercises": [
+            {
+              "exercise_name": "Leg Extension",
+              "sets": 1,
+              "reps": "8-15",
+              "tempo": "4-1-2",
+              "rest_seconds": 0,
+              "notes": "Pre-exhaust: Immediately superset with leg press"
+            },
+            {
+              "exercise_name": "Leg Press",
+              "sets": 1,
+              "reps": "8-15",
+              "tempo": "4-1-2",
+              "rest_seconds": 180,
+              "notes": "To absolute failure. Use rest-pause if needed."
+            }
+          ]
+        },
+        {
+          "section_name": "Hamstrings",
+          "exercises": [
+            {
+              "exercise_name": "Lying Leg Curl",
+              "sets": 1,
+              "reps": "8-12",
+              "tempo": "4-1-2",
+              "rest_seconds": 120,
+              "notes": "To failure with 4-second negatives"
+            }
+          ]
+        },
+        {
+          "section_name": "Calves",
+          "exercises": [
+            {
+              "exercise_name": "Standing Calf Raise",
+              "sets": 1,
+              "reps": "12-20",
+              "tempo": "2-2-4",
+              "rest_seconds": 120,
+              "notes": "Full stretch at bottom, hold peak contraction"
+            }
+          ]
+        },
+        {
+          "section_name": "Biceps",
+          "exercises": [
+            {
+              "exercise_name": "Barbell Curl",
+              "sets": 1,
+              "reps": "6-10",
+              "tempo": "4-1-2",
+              "rest_seconds": 120,
+              "notes": "Strict form, no momentum. To failure."
+            }
+          ]
+        },
+        {
+          "section_name": "Triceps",
+          "exercises": [
+            {
+              "exercise_name": "Tricep Pushdown",
+              "sets": 1,
+              "reps": "6-10",
+              "tempo": "4-1-2",
+              "rest_seconds": 0,
+              "notes": "Pre-exhaust: Immediately superset with dips"
+            },
+            {
+              "exercise_name": "Dips",
+              "sets": 1,
+              "reps": "6-10",
+              "tempo": "4-1-2",
+              "rest_seconds": 120,
+              "notes": "To failure. Add weight if bodyweight is too easy."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+
+  "metadata": {
+    "program_name": "Mike Mentzer's Heavy Duty",
+    "description": "High-Intensity Training (HIT) program emphasizing maximum intensity, low volume, and training to absolute failure.",
+    "goal": "Muscle Hypertrophy",
+    "methodology": "High Intensity Training (HIT)",
+    "duration_weeks": 12,
+    "frequency_per_week": 2
+  },
+
+  "goals": {
+    "primary_goal": "Maximum muscle stimulation with minimal volume",
+    "outcome_goals": [
+      "Trigger hypertrophy through maximum intensity",
+      "Allow full recovery between sessions",
+      "Build mental fortitude for true failure training"
+    ]
+  }
+}

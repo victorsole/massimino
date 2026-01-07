@@ -17,9 +17,10 @@ import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import {
   MapPin, Map, List, Loader2, Filter,
-  X, User, Award, Instagram, Music, Youtube, Facebook, Linkedin
+  X, User, Award, Instagram, Music, Youtube, Facebook, Linkedin, Star, Camera
 } from 'lucide-react'
 import { UserPublicProfile } from '@/components/layout/user_public_profile'
+import { calculateLevel, LEVEL_NAMES } from '@/components/profile/XPLevelProgress'
 
 // ===== TYPES =====
 
@@ -41,6 +42,10 @@ interface DiscoveryUser {
   youtubeUrl: string | null
   facebookUrl: string | null
   linkedinUrl: string | null
+  // Gamification fields
+  totalXP?: number
+  level?: number
+  mediaContributions?: number
 }
 
 interface DiscoveryFilters {
@@ -205,12 +210,39 @@ function FilterPanel({
   )
 }
 
+// Gradient colors for user cards
+const CARD_GRADIENTS = [
+  'from-brand-primary to-brand-primary-light',
+  'from-blue-500 to-cyan-500',
+  'from-green-400 to-teal-500',
+  'from-purple-500 to-indigo-600',
+  'from-pink-500 to-rose-500',
+  'from-orange-400 to-red-500',
+  'from-cyan-500 to-blue-600',
+]
+
+// Experience level progress percentages
+const EXPERIENCE_PROGRESS: Record<string, number> = {
+  'BEGINNER': 25,
+  'INTERMEDIATE': 55,
+  'ADVANCED': 85,
+}
+
+// Experience level colors
+const EXPERIENCE_COLORS: Record<string, { bg: string; text: string; bar: string }> = {
+  'BEGINNER': { bg: 'bg-green-100', text: 'text-green-700', bar: 'from-green-400 to-green-500' },
+  'INTERMEDIATE': { bg: 'bg-yellow-100', text: 'text-yellow-700', bar: 'from-yellow-400 to-orange-500' },
+  'ADVANCED': { bg: 'bg-purple-100', text: 'text-purple-700', bar: 'from-purple-500 to-indigo-600' },
+}
+
 function UserCard({
   user,
-  onViewProfile
+  onViewProfile,
+  index = 0
 }: {
   user: DiscoveryUser
   onViewProfile: (userId: string) => void
+  index?: number
 }) {
   // Social media links - Spotify icon component
   const SpotifyIcon = () => (
@@ -220,123 +252,180 @@ function UserCard({
   )
 
   const socialLinks = [
-    { url: user.instagramUrl, icon: Instagram, label: 'Instagram', color: 'text-pink-600' },
-    { url: user.spotifyUrl, icon: SpotifyIcon, label: 'Spotify', color: 'text-green-600' },
-    { url: user.tiktokUrl, icon: Music, label: 'TikTok', color: 'text-black' },
-    { url: user.youtubeUrl, icon: Youtube, label: 'YouTube', color: 'text-red-600' },
-    { url: user.facebookUrl, icon: Facebook, label: 'Facebook', color: 'text-blue-600' },
-    { url: user.linkedinUrl, icon: Linkedin, label: 'LinkedIn', color: 'text-blue-700' }
+    { url: user.instagramUrl, icon: Instagram, label: 'Instagram', color: 'text-pink-600 hover:text-pink-700' },
+    { url: user.spotifyUrl, icon: SpotifyIcon, label: 'Spotify', color: 'text-green-600 hover:text-green-700' },
+    { url: user.tiktokUrl, icon: Music, label: 'TikTok', color: 'text-black hover:text-gray-700' },
+    { url: user.youtubeUrl, icon: Youtube, label: 'YouTube', color: 'text-red-600 hover:text-red-700' },
+    { url: user.facebookUrl, icon: Facebook, label: 'Facebook', color: 'text-blue-600 hover:text-blue-700' },
+    { url: user.linkedinUrl, icon: Linkedin, label: 'LinkedIn', color: 'text-blue-700 hover:text-blue-800' }
   ].filter(link => link.url)
 
+  // Get gradient based on index or user role
+  const gradient = user.role === 'TRAINER'
+    ? CARD_GRADIENTS[0]
+    : CARD_GRADIENTS[index % CARD_GRADIENTS.length]
+
+  // Get experience colors
+  const expColors = EXPERIENCE_COLORS[user.experienceLevel] || EXPERIENCE_COLORS['BEGINNER']
+  const expProgress = EXPERIENCE_PROGRESS[user.experienceLevel] || 25
+
+  // Calculate level info
+  const levelInfo = user.totalXP !== undefined && user.totalXP > 0
+    ? calculateLevel(user.totalXP)
+    : null
+
   return (
-    <Card className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => onViewProfile(user.id)}>
-      <CardContent className="p-5">
-        <div className="flex gap-4">
-          {/* Avatar */}
-          <Avatar className="w-20 h-20 flex-shrink-0">
-            {user.image ? (
-              <AvatarImage src={user.image} alt={user.name} />
-            ) : null}
-            <AvatarFallback className="text-lg">{user.name.charAt(0).toUpperCase()}</AvatarFallback>
-          </Avatar>
+    <div
+      className="user-card bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden cursor-pointer transition-all duration-400 hover:-translate-y-2 hover:shadow-xl"
+      style={{ animationDelay: `${index * 0.05}s` }}
+      onClick={() => onViewProfile(user.id)}
+    >
+      {/* Gradient Header */}
+      <div className="relative">
+        <div className={`h-24 bg-gradient-to-r ${gradient}`}></div>
 
-          {/* Content */}
-          <div className="flex-1 min-w-0 space-y-2">
-            {/* Name and Role */}
-            <div>
-              <div className="flex items-center gap-2 flex-wrap mb-1">
-                <h3 className="font-semibold text-lg">{user.name}</h3>
-                {user.trainerVerified && (
-                  <span title="Verified Trainer">
-                    <Award size={16} className="text-blue-600" />
-                  </span>
-                )}
-              </div>
-              <Badge variant={user.role === 'TRAINER' ? 'default' : user.role === 'ADMIN' ? 'destructive' : 'secondary'} className="text-xs">
-                {user.role}
-              </Badge>
-            </div>
+        {/* Avatar positioned over header */}
+        <div className="absolute -bottom-10 left-6">
+          <div className="relative">
+            <Avatar className="w-20 h-20 border-4 border-white shadow-lg">
+              {user.image ? (
+                <AvatarImage src={user.image} alt={user.name} />
+              ) : null}
+              <AvatarFallback className={`text-2xl font-bold text-white bg-gradient-to-br ${gradient}`}>
+                {user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)}
+              </AvatarFallback>
+            </Avatar>
 
-            {/* Social Media Icons */}
-            {socialLinks.length > 0 && (
-              <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-                {socialLinks.map(link => (
-                  <a
-                    key={link.label}
-                    href={link.url!}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`${link.color} hover:opacity-70 transition-opacity`}
-                    title={link.label}
-                  >
-                    <link.icon size={18} />
-                  </a>
-                ))}
+            {/* Level Badge */}
+            {levelInfo && (
+              <div
+                className="absolute -top-1 -right-1 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center text-xs font-bold text-yellow-900 border-2 border-white"
+                title={`Level ${levelInfo.level}: ${LEVEL_NAMES[levelInfo.level - 1]}`}
+              >
+                {levelInfo.level}
               </div>
             )}
-
-            {/* Location */}
-            {(user.city || user.state) && (
-              <div className="flex items-center gap-1 text-sm text-gray-600">
-                <MapPin size={14} />
-                <span>
-                  {user.city && user.state ? `${user.city}, ${user.state}` : user.city || user.state}
-                </span>
-              </div>
-            )}
-
-            {/* Fitness Info */}
-            <div className="space-y-1.5">
-              {/* Experience Level */}
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs font-medium text-gray-500">Experience:</span>
-                <Badge variant="outline" className="text-xs">
-                  {user.experienceLevel}
-                </Badge>
-              </div>
-
-              {/* Fitness Goals */}
-              {user.fitnessGoals.length > 0 && (
-                <div className="flex items-start gap-1.5">
-                  <span className="text-xs font-medium text-gray-500 mt-0.5">Goals:</span>
-                  <div className="flex gap-1 flex-wrap">
-                    {user.fitnessGoals.map(goal => (
-                      <Badge key={goal} variant="secondary" className="text-xs">
-                        {goal}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Workout Types */}
-              {user.preferredWorkoutTypes.length > 0 && (
-                <div className="flex items-start gap-1.5">
-                  <span className="text-xs font-medium text-gray-500 mt-0.5">Workouts:</span>
-                  <div className="flex gap-1 flex-wrap">
-                    {user.preferredWorkoutTypes.map(type => (
-                      <Badge key={type} variant="outline" className="text-xs">
-                        {type}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Available Days */}
-              {user.availableWorkoutDays.length > 0 && (
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-medium text-gray-500">Available:</span>
-                  <span className="text-xs text-gray-700">
-                    {user.availableWorkoutDays.join(', ')}
-                  </span>
-                </div>
-              )}
-            </div>
           </div>
         </div>
-      </CardContent>
-    </Card>
+
+        {/* Role Badge - Top Right */}
+        <div className="absolute top-4 right-4">
+          {user.trainerVerified ? (
+            <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">
+              <Award size={12} />
+              Premium
+            </span>
+          ) : user.role === 'TRAINER' ? (
+            <span className="px-2 py-1 bg-brand-secondary text-brand-primary text-xs font-medium rounded-full">
+              Trainer
+            </span>
+          ) : (
+            <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
+              Athlete
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Card Content */}
+      <div className="pt-14 px-6 pb-6">
+        {/* Name and Location */}
+        <div className="flex items-start justify-between mb-3">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900">{user.name}</h3>
+            {(user.city || user.state) && (
+              <p className="text-sm text-gray-500 flex items-center gap-1">
+                <MapPin size={14} />
+                {user.city && user.state ? `${user.city}, ${user.state}` : user.city || user.state}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Experience Level with Progress Bar */}
+        <div className="mb-4">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-xs text-gray-500">Experience</span>
+            <span className={`px-2 py-0.5 ${expColors.bg} ${expColors.text} text-xs font-medium rounded`}>
+              {user.experienceLevel}
+            </span>
+          </div>
+          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div
+              className={`h-full bg-gradient-to-r ${expColors.bar} rounded-full transition-all duration-1000`}
+              style={{ width: `${expProgress}%` }}
+            />
+          </div>
+        </div>
+
+        {/* XP Display */}
+        {levelInfo && (
+          <div className="flex items-center gap-3 mb-3 p-2 bg-yellow-50 rounded-lg">
+            <div className="flex items-center gap-1">
+              <Star size={16} className="text-yellow-500 fill-yellow-500" />
+              <span className="text-sm font-bold text-yellow-700">{user.totalXP?.toLocaleString()} XP</span>
+            </div>
+            <span className="text-xs text-yellow-600">{LEVEL_NAMES[levelInfo.level - 1]}</span>
+          </div>
+        )}
+
+        {/* Fill The Gym Contributions */}
+        {user.mediaContributions !== undefined && user.mediaContributions > 0 && (
+          <div className="flex items-center gap-3 mb-3 p-2 bg-purple-50 rounded-lg">
+            <div className="flex items-center gap-1">
+              <Camera size={16} className="text-purple-500" />
+              <span className="text-sm font-bold text-purple-700">{user.mediaContributions} Videos</span>
+            </div>
+            <span className="text-xs text-purple-600">Fill The Gym</span>
+          </div>
+        )}
+
+        {/* Tags - Fitness Goals & Workout Types */}
+        <div className="flex flex-wrap gap-1.5 mb-4">
+          {user.fitnessGoals.slice(0, 2).map(goal => (
+            <span key={goal} className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">
+              {goal}
+            </span>
+          ))}
+          {user.preferredWorkoutTypes.slice(0, 2).map(type => (
+            <span key={type} className="px-2 py-1 bg-green-50 text-green-700 text-xs rounded-full">
+              {type}
+            </span>
+          ))}
+        </div>
+
+        {/* Footer with Social Icons and View Profile Button */}
+        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+          {/* Social Media Icons */}
+          <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+            {socialLinks.slice(0, 3).map(link => (
+              <a
+                key={link.label}
+                href={link.url!}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${link.color} transition-all duration-200 hover:scale-125`}
+                title={link.label}
+              >
+                <link.icon size={18} />
+              </a>
+            ))}
+          </div>
+
+          {/* View Profile Button */}
+          <Button
+            size="sm"
+            className="bg-brand-primary hover:bg-brand-primary-dark text-white text-sm font-medium"
+            onClick={(e) => {
+              e.stopPropagation()
+              onViewProfile(user.id)
+            }}
+          >
+            View Profile
+          </Button>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -486,12 +575,13 @@ export default function MassiminosPage() {
             )}
 
             {!usersLoading && users.length > 0 && (
-              <div className="space-y-3">
-                {users.map(user => (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {users.map((user, index) => (
                   <UserCard
                     key={user.id}
                     user={user}
                     onViewProfile={setSelectedUserId}
+                    index={index}
                   />
                 ))}
               </div>
