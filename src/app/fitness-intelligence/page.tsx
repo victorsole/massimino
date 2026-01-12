@@ -8,6 +8,7 @@ import { EUROPE_TOTALS } from '@/types/fitness_data';
 import { EuropeMap } from './components/europe_map';
 import {
   EUROPE_GYM_CHAINS_2024,
+  EUROPE_SUPPLEMENTS_2024,
   EUROPE_INFLUENCERS_2024,
   HASHTAG_COMPARISON_2024,
   TIKTOK_FITNESS_HASHTAGS_2024,
@@ -335,6 +336,56 @@ export default function FitnessIntelligencePage() {
             </div>
             <p className="text-sm text-gray-500 mt-4">
               {EUROPE_GYM_CHAINS_2024.length} chains | Total members: {formatNumber(EUROPE_GYM_CHAINS_2024.reduce((sum, c) => sum + c.members, 0))} | Basic-Fit acquired Clever Fit in Oct 2025 for €175M
+            </p>
+          </div>
+        </section>
+
+        {/* Section: Top European Supplement Companies */}
+        <section className="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden animate-fade-in-right hover:shadow-lg transition-shadow duration-300" style={{ animationDelay: '0.38s' }}>
+          <div className="p-6 border-b border-gray-100">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center hover:scale-110 hover:-rotate-3 transition-transform duration-300">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-green-600">
+                  <path d="M6,2A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V4A2,2 0 0,0 18,2H6M6,4H18V20H6V4M12,6C9.79,6 8,7.79 8,10C8,11.5 8.71,12.85 9.82,13.72L10,14.14V17H14V14.14L14.18,13.72C15.29,12.85 16,11.5 16,10C16,7.79 14.21,6 12,6M12,8A2,2 0 0,1 14,10C14,10.74 13.6,11.39 13,11.73V15H11V11.73C10.4,11.39 10,10.74 10,10A2,2 0 0,1 12,8Z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">Top European Supplement Companies</h2>
+                <p className="text-gray-600">Revenue and market position (2024)</p>
+              </div>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="text-left p-3 font-semibold">Rank</th>
+                    <th className="text-left p-3 font-semibold">Company</th>
+                    <th className="text-left p-3 font-semibold">HQ</th>
+                    <th className="text-left p-3 font-semibold">Revenue (EUR)</th>
+                    <th className="text-left p-3 font-semibold">Market Position</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {EUROPE_SUPPLEMENTS_2024.map((company) => (
+                    <tr key={company.name} className="border-b border-gray-100 hover:bg-green-50 hover:scale-[1.01] transition-all duration-200 cursor-default">
+                      <td className="p-3">{company.rank}</td>
+                      <td className="p-3 font-medium">
+                        {company.website ? (
+                          <a href={company.website} target="_blank" rel="noopener noreferrer" className="text-green-600 hover:underline">{company.name}</a>
+                        ) : company.name}
+                      </td>
+                      <td className="p-3 text-gray-500">{company.country_code}</td>
+                      <td className="p-3 text-green-600 font-semibold">{company.revenue_eur ? formatRevenue(company.revenue_eur) : 'N/A'}</td>
+                      <td className="p-3 text-gray-500 text-xs">{company.market_position || '-'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-sm text-gray-500 mt-4">
+              {EUROPE_SUPPLEMENTS_2024.length} companies | European sports nutrition market projected to reach €9-10B by 2030-2032 | Myprotein partnered with HYROX in Jan 2024
             </p>
           </div>
         </section>
