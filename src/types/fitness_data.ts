@@ -55,3 +55,57 @@ export const EUROPE_TOTALS = {
   cagr_2024_2031: 8.2,
   year: 2024
 };
+
+// ===== NEW METRICS TYPES =====
+
+export interface GymChainData {
+  rank: number;
+  name: string;
+  country_code: string;       // "NL", "GB", "DE"
+  members: number;            // In actual numbers (e.g., 4250000)
+  locations: number;
+  revenue_eur?: number;       // In EUR (e.g., 1200000000 for €1.2B)
+  website?: string;
+  year: number;
+}
+
+export interface SupplementCompanyData {
+  rank: number;
+  name: string;
+  country_code: string;
+  revenue_eur?: number;       // In EUR where available
+  website?: string;
+  market_position?: string;
+  year: number;
+}
+
+export interface FitnessInfluencerData {
+  rank: number;
+  name: string;
+  country_code: string;
+  instagram_followers: number;   // In actual numbers
+  youtube_followers?: number;    // In actual numbers
+  tiktok_followers?: number;     // In actual numbers
+  handle: string;
+  specialty: string;
+  year: number;
+}
+
+export interface HashtagData {
+  rank: number;
+  hashtag: string;
+  instagram_posts: number;       // Total posts
+  tiktok_views: number;          // Total views in billions (stored as actual number)
+  tiktok_videos?: number;        // Total videos
+  avg_views_per_video?: number;  // Average views per video
+  platform_leader: 'Instagram' | 'TikTok' | 'Balanced';
+  year: number;
+}
+
+export interface CountryGymChainData {
+  country_code: string;
+  country_name: string;
+  gym_chains: GymChainData[];
+  supplement_companies: SupplementCompanyData[];
+  influencers: FitnessInfluencerData[];
+}
