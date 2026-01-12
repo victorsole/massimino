@@ -6,6 +6,14 @@ import Image from 'next/image';
 import { EUROPE_FITNESS_DATA_2024, getByPenetrationRate, getByMarketSize, getByGrowthRate } from '@/data/fitness/europe_2024';
 import { EUROPE_TOTALS } from '@/types/fitness_data';
 import { EuropeMap } from './components/europe_map';
+import {
+  EUROPE_GYM_CHAINS_2024,
+  EUROPE_INFLUENCERS_2024,
+  HASHTAG_COMPARISON_2024,
+  TIKTOK_FITNESS_HASHTAGS_2024,
+  formatNumber,
+  formatRevenue,
+} from '@/data/fitness/industry_2024';
 
 export const metadata: Metadata = {
   title: 'Fitness Intelligence - Massimino',
@@ -279,6 +287,210 @@ export default function FitnessIntelligencePage() {
           </p>
         </div>
 
+        {/* Section: Top European Gym Chains */}
+        <section className="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden animate-fade-in-left hover:shadow-lg transition-shadow duration-300" style={{ animationDelay: '0.35s' }}>
+          <div className="p-6 border-b border-gray-100">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center hover:scale-110 hover:rotate-3 transition-transform duration-300">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-orange-600">
+                  <path d="M20.57,14.86L22,13.43L20.57,12L17,15.57L8.43,7L12,3.43L10.57,2L9.14,3.43L7.71,2L5.57,4.14L4.14,2.71L2.71,4.14L4.14,5.57L2,7.71L3.43,9.14L2,10.57L3.43,12L7,8.43L15.57,17L12,20.57L13.43,22L14.86,20.57L16.29,22L18.43,19.86L19.86,21.29L21.29,19.86L19.86,18.43L22,16.29L20.57,14.86Z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">Top European Gym Chains</h2>
+                <p className="text-gray-600">Membership, locations, and revenue data (2024)</p>
+              </div>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="text-left p-3 font-semibold">Rank</th>
+                    <th className="text-left p-3 font-semibold">Company</th>
+                    <th className="text-left p-3 font-semibold">HQ</th>
+                    <th className="text-left p-3 font-semibold">Members</th>
+                    <th className="text-left p-3 font-semibold">Locations</th>
+                    <th className="text-left p-3 font-semibold">Revenue</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {EUROPE_GYM_CHAINS_2024.map((chain) => (
+                    <tr key={chain.name} className="border-b border-gray-100 hover:bg-orange-50 hover:scale-[1.01] transition-all duration-200 cursor-default">
+                      <td className="p-3">{chain.rank}</td>
+                      <td className="p-3 font-medium">
+                        {chain.website ? (
+                          <a href={chain.website} target="_blank" rel="noopener noreferrer" className="text-orange-600 hover:underline">{chain.name}</a>
+                        ) : chain.name}
+                      </td>
+                      <td className="p-3 text-gray-500">{chain.country_code}</td>
+                      <td className="p-3 text-orange-600 font-semibold">{formatNumber(chain.members)}</td>
+                      <td className="p-3">{chain.locations.toLocaleString()}+</td>
+                      <td className="p-3 text-emerald-600">{chain.revenue_eur ? formatRevenue(chain.revenue_eur) : 'N/A'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-sm text-gray-500 mt-4">
+              {EUROPE_GYM_CHAINS_2024.length} chains | Total members: {formatNumber(EUROPE_GYM_CHAINS_2024.reduce((sum, c) => sum + c.members, 0))} | Basic-Fit acquired Clever Fit in Oct 2025 for €175M
+            </p>
+          </div>
+        </section>
+
+        {/* Section: Top European Fitness Influencers */}
+        <section className="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden animate-fade-in-right hover:shadow-lg transition-shadow duration-300" style={{ animationDelay: '0.4s' }}>
+          <div className="p-6 border-b border-gray-100">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center hover:scale-110 hover:-rotate-3 transition-transform duration-300">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-pink-600">
+                  <path d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">Top European Fitness Influencers</h2>
+                <p className="text-gray-600">Social media reach and follower counts (2024)</p>
+              </div>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
+              <table className="w-full text-sm">
+                <thead className="sticky top-0 bg-gray-50 z-10">
+                  <tr>
+                    <th className="text-left p-3 font-semibold">Rank</th>
+                    <th className="text-left p-3 font-semibold">Name</th>
+                    <th className="text-left p-3 font-semibold">Country</th>
+                    <th className="text-left p-3 font-semibold">Instagram</th>
+                    <th className="text-left p-3 font-semibold">YouTube</th>
+                    <th className="text-left p-3 font-semibold">Handle</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {EUROPE_INFLUENCERS_2024.map((influencer) => (
+                    <tr key={influencer.name} className="border-b border-gray-100 hover:bg-pink-50 hover:scale-[1.01] transition-all duration-200 cursor-default">
+                      <td className="p-3">{influencer.rank}</td>
+                      <td className="p-3 font-medium">{influencer.name}</td>
+                      <td className="p-3 text-gray-500">{influencer.country_code}</td>
+                      <td className="p-3 text-pink-600 font-semibold">{formatNumber(influencer.instagram_followers)}</td>
+                      <td className="p-3 text-red-500">{influencer.youtube_followers ? formatNumber(influencer.youtube_followers) : '-'}</td>
+                      <td className="p-3 text-gray-500 text-xs">{influencer.handle}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-sm text-gray-500 mt-4">
+              {EUROPE_INFLUENCERS_2024.length} influencers | Pamela Reif: Forbes "30 Under 30 DACH" #1 (2020) | Tibo InShape: France&apos;s #1 fitness YouTuber
+            </p>
+          </div>
+        </section>
+
+        {/* Section: Fitness Hashtag Statistics */}
+        <section className="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden animate-fade-in-left hover:shadow-lg transition-shadow duration-300" style={{ animationDelay: '0.45s' }}>
+          <div className="p-6 border-b border-gray-100">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-violet-100 rounded-lg flex items-center justify-center hover:scale-110 hover:rotate-6 transition-transform duration-300">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-violet-600">
+                  <path d="M5.41,21L6.12,17H2.12L2.47,15H6.47L7.53,9H3.53L3.88,7H7.88L8.59,3H10.59L9.88,7H15.88L16.59,3H18.59L17.88,7H21.88L21.53,9H17.53L16.47,15H20.47L20.12,17H16.12L15.41,21H13.41L14.12,17H8.12L7.41,21H5.41M9.47,9L8.41,15H14.41L15.47,9H9.47Z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">Fitness Hashtag Statistics</h2>
+                <p className="text-gray-600">Instagram vs TikTok comparison (2024/2025)</p>
+              </div>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
+              <table className="w-full text-sm">
+                <thead className="sticky top-0 bg-gray-50 z-10">
+                  <tr>
+                    <th className="text-left p-3 font-semibold">Rank</th>
+                    <th className="text-left p-3 font-semibold">Hashtag</th>
+                    <th className="text-left p-3 font-semibold">Instagram Posts</th>
+                    <th className="text-left p-3 font-semibold">TikTok Views</th>
+                    <th className="text-left p-3 font-semibold">TikTok Videos</th>
+                    <th className="text-left p-3 font-semibold">Avg Views/Video</th>
+                    <th className="text-left p-3 font-semibold">Leader</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {HASHTAG_COMPARISON_2024.map((tag) => (
+                    <tr key={tag.hashtag} className="border-b border-gray-100 hover:bg-violet-50 hover:scale-[1.01] transition-all duration-200 cursor-default">
+                      <td className="p-3">{tag.rank}</td>
+                      <td className="p-3 font-medium text-violet-700">{tag.hashtag}</td>
+                      <td className="p-3 text-pink-600 font-semibold">{formatNumber(tag.instagram_posts)}</td>
+                      <td className="p-3 text-cyan-600 font-semibold">{formatNumber(tag.tiktok_views)}</td>
+                      <td className="p-3">{tag.tiktok_videos ? formatNumber(tag.tiktok_videos) : '-'}</td>
+                      <td className="p-3 text-emerald-600">{tag.avg_views_per_video ? formatNumber(tag.avg_views_per_video) : '-'}</td>
+                      <td className="p-3">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          tag.platform_leader === 'TikTok' ? 'bg-cyan-100 text-cyan-700' :
+                          tag.platform_leader === 'Instagram' ? 'bg-pink-100 text-pink-700' :
+                          'bg-gray-100 text-gray-700'
+                        }`}>
+                          {tag.platform_leader}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-sm text-gray-500 mt-4">
+              #gym dominates TikTok with 547B views | #fitness leads Instagram with 563M posts | #gymhumor has highest avg views (30.6K/video)
+            </p>
+          </div>
+        </section>
+
+        {/* Section: TikTok Top Fitness Hashtags */}
+        <section className="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden animate-fade-in-right hover:shadow-lg transition-shadow duration-300" style={{ animationDelay: '0.5s' }}>
+          <div className="p-6 border-b border-gray-100">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center hover:scale-110 hover:-rotate-3 transition-transform duration-300">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-cyan-600">
+                  <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z"/>
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">TikTok Fitness Engagement Leaders</h2>
+                <p className="text-gray-600">Highest views and engagement per video (2024)</p>
+              </div>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="overflow-x-auto max-h-[400px] overflow-y-auto">
+              <table className="w-full text-sm">
+                <thead className="sticky top-0 bg-gray-50 z-10">
+                  <tr>
+                    <th className="text-left p-3 font-semibold">Rank</th>
+                    <th className="text-left p-3 font-semibold">Hashtag</th>
+                    <th className="text-left p-3 font-semibold">Total Views</th>
+                    <th className="text-left p-3 font-semibold">Videos</th>
+                    <th className="text-left p-3 font-semibold">Avg Views/Video</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {TIKTOK_FITNESS_HASHTAGS_2024.map((tag) => (
+                    <tr key={tag.hashtag} className="border-b border-gray-100 hover:bg-cyan-50 hover:scale-[1.01] transition-all duration-200 cursor-default">
+                      <td className="p-3">{tag.rank}</td>
+                      <td className="p-3 font-medium text-cyan-700">{tag.hashtag}</td>
+                      <td className="p-3 text-cyan-600 font-semibold">{formatNumber(tag.tiktok_views)}</td>
+                      <td className="p-3">{tag.tiktok_videos ? formatNumber(tag.tiktok_videos) : '-'}</td>
+                      <td className="p-3 text-emerald-600 font-semibold">{tag.avg_views_per_video ? formatNumber(tag.avg_views_per_video) : '-'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-sm text-gray-500 mt-4">
+              Platform-native hashtags (#GymTok, #FitTok) outperform traditional tags | #gymhumor averages 30,636 views/video | TikTok fitness content averages 9.3% engagement vs 0.55% on Instagram
+            </p>
+          </div>
+        </section>
+
         {/* EU Legal Framework */}
         <div className="mt-12">
           <div className="flex items-center gap-3 mb-6">
@@ -302,7 +514,7 @@ export default function FitnessIntelligencePage() {
               </div>
               <ul className="space-y-2 text-sm text-gray-600">
                 <li><strong>TFEU Art. 165</strong> - EU sports competence</li>
-                <li><strong>Erasmus+ (2021/817)</strong> - Grassroots funding</li>
+                <li><a href="https://eur-lex.europa.eu/eli/reg/2021/817/oj/eng" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"><strong>Erasmus+ (2021/817)</strong></a> - Grassroots funding</li>
                 <li>Health-enhancing physical activity</li>
               </ul>
             </div>
@@ -316,10 +528,10 @@ export default function FitnessIntelligencePage() {
                 <h3 className="font-semibold text-gray-900">Health & Supplements</h3>
               </div>
               <ul className="space-y-2 text-sm text-gray-600">
-                <li><strong>Reg. 1924/2006</strong> - Health claims pre-auth</li>
-                <li><strong>FIC 1169/2011</strong> - Mandatory labelling</li>
-                <li><strong>Novel Foods 2015/2283</strong> - New ingredients</li>
-                <li><strong>MDR 2017/745</strong> - Fitness devices</li>
+                <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02006R1924-20141213" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"><strong>Reg. 1924/2006</strong></a> - Health claims pre-auth</li>
+                <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32011R1169" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"><strong>FIC 1169/2011</strong></a> - Mandatory labelling</li>
+                <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02015R2283-20210327" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"><strong>Novel Foods 2015/2283</strong></a> - New ingredients</li>
+                <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02017R0745-20250110" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"><strong>MDR 2017/745</strong></a> - Fitness devices</li>
               </ul>
             </div>
 
@@ -332,9 +544,9 @@ export default function FitnessIntelligencePage() {
                 <h3 className="font-semibold text-gray-900">Consumer & Product Safety</h3>
               </div>
               <ul className="space-y-2 text-sm text-gray-600">
-                <li><strong>GPSR 2023/988</strong> - Equipment safety</li>
-                <li><strong>CE Marking</strong> - Required</li>
-                <li><strong>Consumer Rights Dir.</strong> - Contracts</li>
+                <li><a href="https://eur-lex.europa.eu/eli/reg/2023/988/oj/eng" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"><strong>GPSR 2023/988</strong></a> - Equipment safety</li>
+                <li><a href="https://europa.eu/youreurope/business/product-requirements/labels-markings/ce-marking/index_en.htm" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"><strong>CE Marking</strong></a> - Required</li>
+                <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02011L0083-20220528" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"><strong>Consumer Rights Dir.</strong></a> - Contracts</li>
               </ul>
             </div>
 
@@ -347,10 +559,10 @@ export default function FitnessIntelligencePage() {
                 <h3 className="font-semibold text-gray-900">Influencer Marketing</h3>
               </div>
               <ul className="space-y-2 text-sm text-gray-600">
-                <li><strong>UCPD 2005/29</strong> - Disclose relationships</li>
-                <li><strong>DSA 2022/2065</strong> - Ad transparency</li>
-                <li><strong>AVMSD 2018/1808</strong> - Clear identification</li>
-                <li><strong>GDPR</strong> - Consent for targeted ads</li>
+                <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02005L0029-20220528" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"><strong>UCPD 2005/29</strong></a> - Disclose relationships</li>
+                <li><a href="https://eur-lex.europa.eu/eli/reg/2022/2065/oj/eng" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"><strong>DSA 2022/2065</strong></a> - Ad transparency</li>
+                <li><a href="https://eur-lex.europa.eu/eli/dir/2018/1808/oj/eng" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"><strong>AVMSD 2018/1808</strong></a> - Clear identification</li>
+                <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02016R0679-20160504" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"><strong>GDPR</strong></a> - Consent for targeted ads</li>
               </ul>
             </div>
 
@@ -365,9 +577,9 @@ export default function FitnessIntelligencePage() {
                 <h3 className="font-semibold text-gray-900">Anti-Doping</h3>
               </div>
               <ul className="space-y-2 text-sm text-gray-600">
-                <li><strong>CoE Convention (1989)</strong> - Obligations</li>
-                <li><strong>WADA Code</strong> - Via federations</li>
-                <li><strong>Reg. 2019/1148</strong> - Precursors</li>
+                <li><a href="https://rm.coe.int/168007b0d8" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"><strong>CoE Convention (1989)</strong></a> - Obligations</li>
+                <li><a href="https://www.wada-ama.org/en/what-we-do/world-anti-doping-code" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"><strong>WADA Code</strong></a> - Via federations</li>
+                <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02019R1148-20190711" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"><strong>Reg. 2019/1148</strong></a> - Precursors</li>
               </ul>
             </div>
 
@@ -382,10 +594,10 @@ export default function FitnessIntelligencePage() {
                 <h3 className="font-semibold text-gray-900">Enforcement & Penalties</h3>
               </div>
               <ul className="space-y-2 text-sm text-gray-600">
-                <li><strong>UCPD:</strong> Up to 4% turnover</li>
-                <li><strong>DSA:</strong> Up to 6% global turnover</li>
-                <li><strong>GDPR:</strong> Up to 20M or 4%</li>
-                <li><strong>Product safety:</strong> Criminal liability</li>
+                <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02005L0029-20220528" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"><strong>UCPD:</strong></a> Up to 4% turnover</li>
+                <li><a href="https://eur-lex.europa.eu/eli/reg/2022/2065/oj/eng" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"><strong>DSA:</strong></a> Up to 6% global turnover</li>
+                <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02016R0679-20160504" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"><strong>GDPR:</strong></a> Up to 20M or 4%</li>
+                <li><a href="https://eur-lex.europa.eu/eli/reg/2023/988/oj/eng" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"><strong>Product safety:</strong></a> Criminal liability</li>
               </ul>
             </div>
           </div>
