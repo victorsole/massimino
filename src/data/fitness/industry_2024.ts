@@ -7,6 +7,7 @@ import type {
   GymChainData,
   FitnessInfluencerData,
   HashtagData,
+  SupplementCompanyData,
 } from '@/types/fitness_data';
 
 // ===== PAN-EUROPEAN GYM CHAINS =====
@@ -57,6 +58,100 @@ export const EUROPE_GYM_CHAINS_2024: GymChainData[] = [
     country_code: 'DE',
     members: 1000000,
     locations: 500,
+    year: 2024
+  }
+];
+
+// ===== PAN-EUROPEAN SUPPLEMENT COMPANIES =====
+export const EUROPE_SUPPLEMENTS_2024: SupplementCompanyData[] = [
+  {
+    rank: 1,
+    name: 'Myprotein',
+    country_code: 'GB',
+    revenue_eur: 800000000,
+    website: 'https://www.myprotein.com',
+    market_position: '#1 Europe by Euromonitor',
+    year: 2024
+  },
+  {
+    rank: 2,
+    name: 'Bulk',
+    country_code: 'GB',
+    revenue_eur: 99000000,
+    website: 'https://www.bulk.com',
+    market_position: 'UK #2',
+    year: 2024
+  },
+  {
+    rank: 3,
+    name: 'ESN / The Quality Group',
+    country_code: 'DE',
+    revenue_eur: 680000000,
+    website: 'https://www.esn.com',
+    market_position: 'German market leader',
+    year: 2024
+  },
+  {
+    rank: 4,
+    name: 'Foodspring',
+    country_code: 'DE',
+    revenue_eur: 150000000,
+    website: 'https://www.foodspring.com',
+    market_position: 'DACH leader',
+    year: 2024
+  },
+  {
+    rank: 5,
+    name: 'Optimum Nutrition',
+    country_code: 'US',
+    revenue_eur: 500000000,
+    website: 'https://www.optimumnutrition.com',
+    market_position: 'Global premium leader',
+    year: 2024
+  },
+  {
+    rank: 6,
+    name: 'Olimp Sport Nutrition',
+    country_code: 'PL',
+    revenue_eur: 200000000,
+    website: 'https://olimpsport.com',
+    market_position: 'Polish market leader',
+    year: 2024
+  },
+  {
+    rank: 7,
+    name: 'Yamamoto Nutrition',
+    country_code: 'IT',
+    revenue_eur: 100000000,
+    website: 'https://www.yamamotonutrition.com',
+    market_position: '#1 Italy by revenue',
+    year: 2024
+  },
+  {
+    rank: 8,
+    name: 'HSN',
+    country_code: 'ES',
+    revenue_eur: 80000000,
+    website: 'https://www.hsnstore.eu',
+    market_position: 'Spain #1 domestic brand',
+    year: 2024
+  },
+  {
+    rank: 9,
+    name: 'QNT',
+    country_code: 'BE',
+    revenue_eur: 60000000,
+    website: 'https://www.qntsport.com',
+    market_position: 'Belgium leader, 35+ years',
+    year: 2024
+  },
+  {
+    rank: 10,
+    name: 'Grenade',
+    country_code: 'GB',
+    revenue_eur: 96000000,
+    website: 'https://www.grenade.com',
+    market_position: '#1 protein bar UK since 2016',
     year: 2024
   }
 ];
