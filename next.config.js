@@ -15,11 +15,12 @@ const nextConfig = {
         "default-src 'self'",
         "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://connect.facebook.net https://accounts.google.com https://apis.google.com",
         "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
-        "img-src 'self' data: https: https://i.ytimg.com",
+        "img-src 'self' data: https: https://i.ytimg.com https://*.tile.openstreetmap.org",
         "font-src 'self' https://cdn.jsdelivr.net",
-        "connect-src 'self' https://api.openai.com https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://www.facebook.com https://graph.facebook.com https://www.linkedin.com https://api.linkedin.com https://cdn.jsdelivr.net",
+        "connect-src 'self' https://api.openai.com https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com https://www.facebook.com https://graph.facebook.com https://www.linkedin.com https://api.linkedin.com https://cdn.jsdelivr.net https://*.tile.openstreetmap.org",
         "frame-src 'self' https://accounts.google.com https://www.facebook.com https://staticxx.facebook.com https://www.linkedin.com",
         "form-action 'self' https://accounts.google.com https://www.facebook.com https://www.linkedin.com",
+        "worker-src 'self' blob:",
       ].join('; ')
       return [
         {
