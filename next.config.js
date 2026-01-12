@@ -115,7 +115,7 @@ const nextConfig = {
         // Redirect bare usernames to /bio/:username, excluding known top-level routes
         {
           source:
-            '/:username((?!api|admin|profile|dashboard|messages|teams|exercises|workout-log|terms|privacy|safety|community|massiminos|login|signup|register|unauthorized|partnerships|assessments|my-athletes|bio|cookies|legal|trainer|athlete|static|uploads|public|images|_next|favicon\\.ico|settings|.*\\..*).+)',
+            '/:username((?!api|admin|profile|dashboard|messages|teams|exercises|workout-log|terms|privacy|safety|community|massiminos|login|signup|register|unauthorized|partnerships|assessments|my-athletes|bio|cookies|legal|trainer|athlete|static|uploads|public|images|_next|favicon\\.ico|settings|fitness-intelligence|massichat|accept-invitation|team_invite|.*\\..*).+)',
           destination: '/bio/:username',
           permanent: false,
         },
