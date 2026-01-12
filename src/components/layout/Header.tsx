@@ -25,6 +25,7 @@ import {
 
 // MDI icon paths (Material Design Icons)
 const MDI_ICONS = {
+  earth: 'M17.9,17.39C17.64,16.59 16.89,16 16,16H15V13A1,1 0 0,0 14,12H8V10H10A1,1 0 0,0 11,9V7H13A2,2 0 0,0 15,5V4.59C17.93,5.77 20,8.64 20,12C20,14.08 19.2,15.97 17.9,17.39M11,19.93C7.05,19.44 4,16.08 4,12C4,11.38 4.08,10.78 4.21,10.21L9,15V16A2,2 0 0,0 11,18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z',
   viewDashboard: 'M19,5V7H15V5H19M9,5V11H5V5H9M19,13V19H15V13H19M9,17V19H5V17H9M21,3H13V9H21V3M11,3H3V13H11V3M21,11H13V21H21V11M11,15H3V21H11V15Z',
   dumbbell: 'M20.57,14.86L22,13.43L20.57,12L17,15.57L8.43,7L12,3.43L10.57,2L9.14,3.43L7.71,2L5.57,4.14L4.14,2.71L2.71,4.14L4.14,5.57L2,7.71L3.43,9.14L2,10.57L3.43,12L7,8.43L15.57,17L12,20.57L13.43,22L14.86,20.57L16.29,22L18.43,19.86L19.86,21.29L21.29,19.86L19.86,18.43L22,16.29L20.57,14.86Z',
   clipboardCheck: 'M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M7,7H17V5H19V19H5V5H7V7M7.5,13.5L9,12L11,14L15.5,9.5L17,11L11,17L7.5,13.5Z',
@@ -121,6 +122,20 @@ export default function Header({ user }: HeaderProps) {
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    href="/fitness-intelligence"
+                    className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
+                  >
+                    <MdiIcon path={MDI_ICONS.earth} size={0.83} />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Fitness Intelligence</p>
+                </TooltipContent>
+              </Tooltip>
+
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link
@@ -346,6 +361,14 @@ export default function Header({ user }: HeaderProps) {
         {isMenuOpen && (
           <div className="md:hidden border-t border-brand-primary-dark">
             <div className="px-2 pt-2 pb-3 space-y-1">
+              <Link
+                href="/fitness-intelligence"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 active:scale-95"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <MdiIcon path={MDI_ICONS.earth} size={0.8} />
+                <span>Fitness Intelligence</span>
+              </Link>
               <Link
                 href="/dashboard"
                 className="flex items-center gap-3 px-3 py-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 active:scale-95"
