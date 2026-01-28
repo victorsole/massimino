@@ -46,14 +46,14 @@ export type FitnessMetric =
   | 'clubs_count'
   | 'trainers_count';
 
-// European market totals (2024)
+// European market totals (2025 - EuropeActive/Deloitte Report)
 export const EUROPE_TOTALS = {
-  total_members: 71600000,    // 71.6M
-  total_market_eur: 36000000000, // €36B
-  total_clubs: 64550,
-  average_penetration: 8.9,
+  total_members: 71000000,    // 71M+ (all-time high, surpassing pre-pandemic)
+  total_market_eur: 36000000000, // €36B (10% increase from 2023)
+  total_clubs: 64000,         // 2% increase from 2023
+  average_penetration: 8.9,   // 0.5% increase from previous year
   cagr_2024_2031: 8.2,
-  year: 2024
+  year: 2025
 };
 
 // ===== NEW METRICS TYPES =====

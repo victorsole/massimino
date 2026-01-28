@@ -1,7 +1,7 @@
 // src/data/fitness/europe_2024.ts
-// Data sources: EuropeActive/Deloitte European Health & Fitness Market Report 2025 (2024 data),
+// Data sources: EuropeActive/Deloitte European Health & Fitness Market Report 2025,
 // Statista, Health & Fitness Association, and industry reports.
-// Last updated: January 2025
+// Last updated: January 2026
 
 import type { CountryFitnessData } from '@/types/fitness_data';
 
@@ -17,7 +17,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 750,
     trainers_count: 12000,
     top_chains: ['SATS', 'Nordic Wellness', 'Friskis&Svettis'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'NO',
@@ -29,7 +29,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 600,
     trainers_count: 8500,
     top_chains: ['SATS', 'Evo Fitness', 'Treningshansen'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'DK',
@@ -41,7 +41,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 520,
     trainers_count: 6500,
     top_chains: ['Fitness World', 'PureGym', 'Loop Fitness'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'FI',
@@ -53,7 +53,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 450,
     trainers_count: 5200,
     top_chains: ['SATS', 'Elixia', 'Fitness24Seven'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'IS',
@@ -65,7 +65,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 65,
     trainers_count: 650,
     top_chains: ['World Class', 'Jakaból', 'CrossFit Reykjavik'],
-    year: 2024
+    year: 2025
   },
 
   // ===== BRITISH ISLES =====
@@ -79,7 +79,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 7600,
     trainers_count: 68000,
     top_chains: ['PureGym', 'The Gym Group', 'David Lloyd'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'IE',
@@ -91,7 +91,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 380,
     trainers_count: 4200,
     top_chains: ['Flyefit', 'Ben Dunne Gyms', 'West Wood Club'],
-    year: 2024
+    year: 2025
   },
 
   // ===== WESTERN EUROPE =====
@@ -105,7 +105,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 9127,
     trainers_count: 88000,
     top_chains: ['RSG Group', 'Clever fit', 'FitX'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'FR',
@@ -117,7 +117,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 6200,
     trainers_count: 48000,
     top_chains: ['Basic-Fit', 'Fitness Park', 'Neoness'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'NL',
@@ -129,7 +129,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 2100,
     trainers_count: 19000,
     top_chains: ['Basic-Fit', 'TrainMore', 'Fit For Free'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'BE',
@@ -141,7 +141,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 580,
     trainers_count: 8500,
     top_chains: ['Basic-Fit', 'Jims', 'Fitness Park'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'LU',
@@ -153,7 +153,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 72,
     trainers_count: 850,
     top_chains: ['Fitness First', 'Basic-Fit', 'Les Mills'],
-    year: 2024
+    year: 2025
   },
 
   // ===== CENTRAL EUROPE =====
@@ -167,7 +167,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 850,
     trainers_count: 10500,
     top_chains: ['Migros Fitnesspark', 'Activ Fitness', 'Update Fitness'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'AT',
@@ -179,7 +179,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 750,
     trainers_count: 8500,
     top_chains: ['LifeFit Group', 'John Harris', 'McFit'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'PL',
@@ -191,7 +191,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 3800,
     trainers_count: 28000,
     top_chains: ['Benefit Systems', 'CityFit', 'Zdrofit'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'CZ',
@@ -203,7 +203,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 950,
     trainers_count: 7000,
     top_chains: ['Fitness Project', 'John Reed', 'Form Factory'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'SK',
@@ -215,7 +215,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 420,
     trainers_count: 3500,
     top_chains: ['Golem Club', 'Fitinn', 'X-Fitness'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'HU',
@@ -227,7 +227,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 650,
     trainers_count: 5000,
     top_chains: ['Life1 Fitness', 'All You Can Move', 'Fitness Force'],
-    year: 2024
+    year: 2025
   },
 
   // ===== SOUTHERN EUROPE =====
@@ -241,7 +241,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 4950,
     trainers_count: 42000,
     top_chains: ['Basic-Fit', 'Vivagym', 'AltaFit'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'PT',
@@ -253,7 +253,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 720,
     trainers_count: 6200,
     top_chains: ['Holmes Place', 'Fitness Hut', 'Solinca'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'IT',
@@ -265,7 +265,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 7200,
     trainers_count: 48000,
     top_chains: ['Anytime Fitness', 'McFit', 'Virgin Active'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'GR',
@@ -277,7 +277,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 680,
     trainers_count: 5500,
     top_chains: ['Holmes Place', 'Curves', 'Body Control'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'MT',
@@ -289,7 +289,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 48,
     trainers_count: 450,
     top_chains: ['Tigne Fitness', 'Cynergi Health', 'Powerhouse'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'CY',
@@ -301,7 +301,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 95,
     trainers_count: 720,
     top_chains: ['Oxygen Gym', 'Virgin Active', 'CrossFit Limassol'],
-    year: 2024
+    year: 2025
   },
 
   // ===== BALKANS =====
@@ -315,7 +315,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 180,
     trainers_count: 1400,
     top_chains: ['Fitinn', 'ABS Fitness', 'Activity'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'HR',
@@ -327,7 +327,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 320,
     trainers_count: 2400,
     top_chains: ['Fitness First', 'Gyms4You', 'World Class'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'RS',
@@ -339,7 +339,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 380,
     trainers_count: 2800,
     top_chains: ['Fit Zone', 'Puls Sport', 'MrFit'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'BA',
@@ -351,7 +351,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 190,
     trainers_count: 1200,
     top_chains: ['Gym Factory', 'Fitness One', 'Gold Gym'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'ME',
@@ -363,7 +363,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 65,
     trainers_count: 480,
     top_chains: ['Gym Pro', 'Fit Life', 'CrossFit Podgorica'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'AL',
@@ -375,7 +375,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 150,
     trainers_count: 950,
     top_chains: ['Metropol Gym', 'CrossFit Tirana', 'Fitness Zone'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'MK',
@@ -387,7 +387,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 135,
     trainers_count: 850,
     top_chains: ['Fit Factory', 'Pro Gym', 'CrossFit Skopje'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'XK',
@@ -399,7 +399,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 95,
     trainers_count: 620,
     top_chains: ['Fitness Zone', 'Pro Gym', 'Active Life'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'BG',
@@ -411,7 +411,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 480,
     trainers_count: 3500,
     top_chains: ['MultiSport', 'Next Level', 'Pulse Fitness'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'RO',
@@ -423,7 +423,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 720,
     trainers_count: 5800,
     top_chains: ['World Class', '7Card', 'Smartfit'],
-    year: 2024
+    year: 2025
   },
 
   // ===== BALTIC STATES =====
@@ -437,7 +437,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 145,
     trainers_count: 1150,
     top_chains: ['MyFitness', 'Reval Sport', 'Sportland Fitness'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'LV',
@@ -449,7 +449,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 155,
     trainers_count: 1250,
     top_chains: ['MyFitness', 'Lemon Gym', 'O2 Gym'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'LT',
@@ -461,7 +461,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 215,
     trainers_count: 1700,
     top_chains: ['MyFitness', 'Lemon Gym', 'Impuls'],
-    year: 2024
+    year: 2025
   },
 
   // ===== EASTERN EUROPE =====
@@ -475,7 +475,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 1800,
     trainers_count: 14000,
     top_chains: ['Sport Life', 'Sportpalace', 'FitCurves'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'MD',
@@ -487,7 +487,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 95,
     trainers_count: 680,
     top_chains: ['Oxygen Gym', 'Grand Fitness', 'FitZone'],
-    year: 2024
+    year: 2025
   },
   {
     iso_code: 'BY',
@@ -499,7 +499,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 280,
     trainers_count: 2200,
     top_chains: ['World Class', 'Fitness House', 'Sport Life'],
-    year: 2024
+    year: 2025
   },
 
   // ===== TURKEY (Transcontinental) =====
@@ -513,7 +513,7 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
     clubs_count: 4200,
     trainers_count: 32000,
     top_chains: ['MAC', 'Goldengym', 'Mars Athletic'],
-    year: 2024
+    year: 2025
   }
 ];
 
