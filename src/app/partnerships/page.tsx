@@ -525,7 +525,7 @@ export default function PartnershipsPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <Button size="lg">
                 <Mail className="h-5 w-5 mr-2" />
-                helloberesol@gmail.com
+                hello@beresol.eu
               </Button>
               <Button variant="outline" size="lg">
                 <Phone className="h-5 w-5 mr-2" />

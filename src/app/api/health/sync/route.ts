@@ -9,6 +9,19 @@ import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
 import { z } from 'zod';
 import crypto from 'crypto';
+import { checkRateLimit, getClientIdentifier, RATE_LIMITS, getRateLimitHeaders } from '@/lib/rate-limit';
+
+// Valid ranges for health metrics to prevent unrealistic data
+const METRIC_RANGES: Record<string, { min: number; max: number }> = {
+  STEPS: { min: 0, max: 200000 },           // Max ~200k steps in a day (ultra marathon)
+  HEART_RATE: { min: 20, max: 250 },        // Resting to max HR
+  CALORIES_BURNED: { min: 0, max: 20000 },  // Max for extreme athletes
+  DISTANCE: { min: 0, max: 500 },           // Max ~500km in a day (km)
+  SLEEP: { min: 0, max: 24 },               // Hours of sleep
+  WEIGHT: { min: 20, max: 700 },            // kg - covers all cases
+  BODY_FAT: { min: 1, max: 70 },            // Body fat percentage
+  BLOOD_PRESSURE: { min: 40, max: 300 },    // Systolic BP range
+};
 
 const healthMetricSchema = z.object({
   type: z.enum(['STEPS', 'HEART_RATE', 'CALORIES_BURNED', 'DISTANCE', 'SLEEP', 'WEIGHT', 'BODY_FAT', 'BLOOD_PRESSURE']),
@@ -16,6 +29,12 @@ const healthMetricSchema = z.object({
   unit: z.string(),
   timestamp: z.string().datetime(),
   source: z.string().optional(),
+}).refine((data) => {
+  const range = METRIC_RANGES[data.type];
+  if (!range) return true;
+  return data.value >= range.min && data.value <= range.max;
+}, {
+  message: 'Health metric value is outside valid range',
 });
 
 const syncHealthDataSchema = z.object({
@@ -25,6 +44,17 @@ const syncHealthDataSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit check
+    const clientId = getClientIdentifier(request);
+    const rateLimitResult = checkRateLimit(clientId, RATE_LIMITS.health);
+
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429, headers: getRateLimitHeaders(rateLimitResult) }
+      );
+    }
+
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
       return NextResponse.json(

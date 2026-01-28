@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bo</string>
+    <string name="server_client_id">554542066408-iqvq07gaitiouljhgubrhtf5k31g9nc4.apps.googleusercontent.com</string>
+    <string name="title_activity_main">Bo</string>
+    <string name="package_name">eu.hellobo.app</string>
+    <string name="custom_url_scheme">eu.hellobo.app</string>
+</resources>

@@ -350,7 +350,7 @@ export default function ProfilePage() {
   };
 
   // Check if user has admin access
-  const isAdmin = user?.email === 'helloberesol@gmail.com' || user?.email === 'vsoleferioli@gmail.com';
+  const isAdmin = user?.email === 'hello@beresol.eu' || user?.email === 'vsoleferioli@gmail.com';
 
   // Show loading state while fetching profile
   if (profileLoading) {

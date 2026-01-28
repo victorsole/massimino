@@ -79,31 +79,31 @@ export default function FitnessIntelligencePage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 animate-fade-in-up-delay-1 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
             <div className="text-2xl font-bold text-blue-600">
-              {(EUROPE_TOTALS.total_members / 1000000).toFixed(1)}M
+              {(EUROPE_TOTALS.total_members / 1000000).toFixed(0)}M+
             </div>
-            <div className="text-sm text-gray-500">Total Members (2024)</div>
-            <div className="text-xs text-green-600 mt-1">+5.8% from 2023</div>
+            <div className="text-sm text-gray-500">Total Members (2025)</div>
+            <div className="text-xs text-green-600 mt-1">All-time high, surpassing pre-pandemic</div>
           </div>
           <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 animate-fade-in-up-delay-2 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
             <div className="text-2xl font-bold text-emerald-600">
-              {(EUROPE_TOTALS.total_market_eur / 1000000000).toFixed(0)}B
+              €{(EUROPE_TOTALS.total_market_eur / 1000000000).toFixed(0)}B
             </div>
-            <div className="text-sm text-gray-500">Market Size (EUR)</div>
-            <div className="text-xs text-green-600 mt-1">+10% YoY growth</div>
+            <div className="text-sm text-gray-500">Market Size (2025)</div>
+            <div className="text-xs text-green-600 mt-1">+10% YoY growth from 2023</div>
           </div>
           <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 animate-fade-in-up-delay-3 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
             <div className="text-2xl font-bold text-purple-600">
-              {EUROPE_TOTALS.total_clubs.toLocaleString()}
+              {EUROPE_TOTALS.total_clubs.toLocaleString()}+
             </div>
-            <div className="text-sm text-gray-500">Fitness Clubs</div>
-            <div className="text-xs text-green-600 mt-1">+2% from 2023</div>
+            <div className="text-sm text-gray-500">Fitness Clubs (2025)</div>
+            <div className="text-xs text-green-600 mt-1">+2% increase from 2023</div>
           </div>
           <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 animate-fade-in-up-delay-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
             <div className="text-2xl font-bold text-amber-600">
               {EUROPE_TOTALS.cagr_2024_2031}%
             </div>
-            <div className="text-sm text-gray-500">CAGR 2024-2031</div>
-            <div className="text-xs text-blue-600 mt-1">100M target by 2030</div>
+            <div className="text-sm text-gray-500">CAGR 2025-2031</div>
+            <div className="text-xs text-blue-600 mt-1">EuropeActive: 100M target by 2030</div>
           </div>
         </div>
 
@@ -256,35 +256,35 @@ export default function FitnessIntelligencePage() {
 
         {/* Top Operators */}
         <div className="mt-8 bg-white rounded-xl p-6 shadow-sm border border-gray-100 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Top European Operators (2024)</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Top European Operators (2025)</h3>
           <div className="grid md:grid-cols-3 gap-4">
             <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-lg hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-default group">
               <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold group-hover:animate-heartbeat">1</div>
               <div>
                 <a href="https://www.basic-fit.com/nl-nl/home" target="_blank" rel="noopener noreferrer" className="font-semibold text-gray-900 hover:text-blue-600 transition-colors duration-200">Basic-Fit</a>
-                <div className="text-sm text-gray-600">4.25M members | 1,537 clubs</div>
-                <div className="text-xs text-green-600">+17% revenue growth</div>
+                <div className="text-sm text-gray-600">4.73M members | 1,653 clubs</div>
+                <div className="text-xs text-green-600">+16% revenue growth (Q3 2025)</div>
               </div>
             </div>
             <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-default group">
               <div className="w-12 h-12 bg-gray-600 rounded-full flex items-center justify-center text-white font-bold group-hover:animate-heartbeat">2</div>
               <div>
                 <a href="https://www.puregym.com/" target="_blank" rel="noopener noreferrer" className="font-semibold text-gray-900 hover:text-gray-600 transition-colors duration-200">PureGym</a>
-                <div className="text-sm text-gray-600">1.99M members</div>
-                <div className="text-xs text-blue-600">EU&apos;s 3rd largest operator</div>
+                <div className="text-sm text-gray-600">2.25M members | 680 clubs</div>
+                <div className="text-xs text-green-600">+21% member growth (2024)</div>
               </div>
             </div>
             <div className="flex items-center gap-4 p-4 bg-amber-50 rounded-lg hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-default group">
               <div className="w-12 h-12 bg-amber-600 rounded-full flex items-center justify-center text-white font-bold group-hover:animate-heartbeat">3</div>
               <div>
                 <a href="https://rsggroup.com/en/" target="_blank" rel="noopener noreferrer" className="font-semibold text-gray-900 hover:text-amber-600 transition-colors duration-200">RSG Group</a>
-                <div className="text-sm text-gray-600">1.81M members</div>
-                <div className="text-xs text-gray-500">McFit, Gold&apos;s Gym brands</div>
+                <div className="text-sm text-gray-600">4.5M+ members | 900+ locations</div>
+                <div className="text-xs text-gray-500">McFit, Gold&apos;s Gym, John Reed</div>
               </div>
             </div>
           </div>
           <p className="text-xs text-gray-500 mt-4">
-            Top 3 operators account for 44% of the Top 20 membership count (18.8M total)
+            EuropeActive 2025: 80% of operators rate business situation as &quot;good&quot; (+20% from 2023)
           </p>
         </div>
 
@@ -299,7 +299,7 @@ export default function FitnessIntelligencePage() {
               </div>
               <div>
                 <h2 className="text-xl font-bold text-gray-900">Top European Gym Chains</h2>
-                <p className="text-gray-600">Membership, locations, and revenue data (2024)</p>
+                <p className="text-gray-600">Membership, locations, and revenue data (2025)</p>
               </div>
             </div>
           </div>
@@ -335,7 +335,7 @@ export default function FitnessIntelligencePage() {
               </table>
             </div>
             <p className="text-sm text-gray-500 mt-4">
-              {EUROPE_GYM_CHAINS_2024.length} chains | Total members: {formatNumber(EUROPE_GYM_CHAINS_2024.reduce((sum, c) => sum + c.members, 0))} | Basic-Fit acquired Clever Fit in Oct 2025 for €175M
+              {EUROPE_GYM_CHAINS_2024.length} chains | Total members: {formatNumber(EUROPE_GYM_CHAINS_2024.reduce((sum, c) => sum + c.members, 0))} | Basic-Fit Q3 2025: +218K new members, 16% revenue growth
             </p>
           </div>
         </section>
@@ -351,7 +351,7 @@ export default function FitnessIntelligencePage() {
               </div>
               <div>
                 <h2 className="text-xl font-bold text-gray-900">Top European Supplement Companies</h2>
-                <p className="text-gray-600">Revenue and market position (2024)</p>
+                <p className="text-gray-600">Revenue and market position (2025)</p>
               </div>
             </div>
           </div>
@@ -385,7 +385,7 @@ export default function FitnessIntelligencePage() {
               </table>
             </div>
             <p className="text-sm text-gray-500 mt-4">
-              {EUROPE_SUPPLEMENTS_2024.length} companies | European sports nutrition market projected to reach €9-10B by 2030-2032 | Myprotein partnered with HYROX in Jan 2024
+              {EUROPE_SUPPLEMENTS_2024.length} companies | EU sports nutrition market: €6.7B (2025), projected €10.1B by 2032 | UK holds 22% market share
             </p>
           </div>
         </section>
@@ -401,7 +401,7 @@ export default function FitnessIntelligencePage() {
               </div>
               <div>
                 <h2 className="text-xl font-bold text-gray-900">Top European Fitness Influencers</h2>
-                <p className="text-gray-600">Social media reach and follower counts (2024)</p>
+                <p className="text-gray-600">Social media reach and follower counts (2025)</p>
               </div>
             </div>
           </div>
@@ -449,7 +449,7 @@ export default function FitnessIntelligencePage() {
               </div>
               <div>
                 <h2 className="text-xl font-bold text-gray-900">Fitness Hashtag Statistics</h2>
-                <p className="text-gray-600">Instagram vs TikTok comparison (2024/2025)</p>
+                <p className="text-gray-600">Instagram vs TikTok comparison (2025)</p>
               </div>
             </div>
           </div>
@@ -507,7 +507,7 @@ export default function FitnessIntelligencePage() {
               </div>
               <div>
                 <h2 className="text-xl font-bold text-gray-900">TikTok Fitness Engagement Leaders</h2>
-                <p className="text-gray-600">Highest views and engagement per video (2024)</p>
+                <p className="text-gray-600">Highest views and engagement per video (2025)</p>
               </div>
             </div>
           </div>
@@ -780,7 +780,7 @@ export default function FitnessIntelligencePage() {
             In <a href="https://beresol.eu" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 font-medium hover:underline transition-colors duration-200">Beresol</a>, we build custom intelligence dashboards tracking legislation, funding programs, stakeholder movements, and regulatory developments in any policy area of the European Union.
           </p>
           <a
-            href="mailto:helloberesol@gmail.com?subject=Custom EU Policy Monitor Inquiry"
+            href="mailto:hello@beresol.eu?subject=Custom EU Policy Monitor Inquiry"
             className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
@@ -798,9 +798,9 @@ export default function FitnessIntelligencePage() {
             <div>
               <h5 className="font-medium text-gray-700 mb-2">Primary Sources</h5>
               <ul className="space-y-1">
-                <li><a href="https://www.europeactive.eu/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline hover:text-blue-800 transition-colors duration-200">EuropeActive</a> - 2025 European Health & Fitness Market Report</li>
+                <li><a href="https://www.europeactive.eu/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline hover:text-blue-800 transition-colors duration-200">EuropeActive/Deloitte</a> - 2025 European Health & Fitness Market Report</li>
                 <li><a href="https://www.healthandfitness.org/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline hover:text-blue-800 transition-colors duration-200">Health & Fitness Association (HFA)</a> - 2025 Global Report</li>
-                <li><a href="https://www.statista.com/topics/3405/fitness-industry-in-europe/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline hover:text-blue-800 transition-colors duration-200">Statista</a> - European Fitness Statistics</li>
+                <li><a href="https://www.statista.com/topics/3405/fitness-industry-in-europe/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline hover:text-blue-800 transition-colors duration-200">Statista</a> - European Fitness Statistics 2025</li>
               </ul>
             </div>
             <div>
@@ -813,7 +813,7 @@ export default function FitnessIntelligencePage() {
             </div>
           </div>
           <p className="text-xs text-gray-500 mt-4">
-            Data as of 2024. Deloitte/EuropeActive report figures. Some regional estimates based on market trends.
+            Data as of January 2026. EuropeActive/Deloitte 2025 report, company filings (Basic-Fit Q3 2025, PureGym FY24). Some regional estimates based on market trends.
           </p>
         </div>
       </div>
