@@ -22,7 +22,7 @@ We believe privacy and safety work together. Our data practices are designed to 
 
 ## 2. CONTROLLER AND CONTRACT
 - Controller: Massimino, Zonnewende 181, 7325 EP, Apeldoorn, Netherlands
-- Email: helloberesol@gmail.com (because Massimino belongs to Beresol BV)
+- Email: hello@beresol.eu (because Massimino belongs to Beresol BV)
 - EU Supervisory Authority: You may lodge a complaint with your local authority or the Dutch Data Protection Authority.
 
 ## 3. SCOPE OF THIS PRIVACY POLICY
@@ -278,13 +278,13 @@ Your continued use of the Platform after policy updates constitutes acceptance o
 
 ### 15.1 Privacy Questions
 For questions about this Privacy Policy or our privacy practices:
-- **Email:** helloberesol@gmail.com
+- **Email:** hello@beresol.eu
 - **Address:** Zonnewende 181, 7325EP Apeldoorn, Nederland
 - **Phone:** +32493365423
 
 ### 15.2 Data Protection Officer
 For GDPR-related inquiries:
-- **Email:** helloberesol@gmail.com
+- **Email:** hello@beresol.eu
 
 ### 15.3 Exercise Your Rights
 To exercise your privacy rights or submit privacy requests:
@@ -306,7 +306,7 @@ Remember that information you share in public areas of the Platform may be visib
 
 **Your privacy and safety are our priorities. Train hard, stay safe, and keep your personal information secure.**
 
-**Questions? Contact us at helloberesol@gmail.com**` as const
+**Questions? Contact us at hello@beresol.eu**` as const
 
 function renderSimpleMarkdown(md: string) {
   const lines = md.split(/\r?\n/)

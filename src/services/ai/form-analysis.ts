@@ -138,7 +138,7 @@ Provide your analysis in the following JSON format:
 
     // Call OpenAI API
     const response = await openai.chat.completions.create({
-      model: 'gpt-4-vision-preview',
+      model: 'gpt-4o',
       messages,
       max_tokens: 1500,
       temperature: 0.3, // Lower temperature for more consistent analysis

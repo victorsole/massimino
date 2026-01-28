@@ -170,7 +170,7 @@ These Terms, along with our Privacy Policy, constitute the entire agreement betw
 ## 14. CONTACT INFORMATION
 
 For questions about these Terms:
-- Email: helloberesol@gmail.com
+- Email: hello@beresol.eu
 - Address: Zonnewende 181, 7325 EP, Apeldoorn, Nederland
 - Phone: +32493365423
 

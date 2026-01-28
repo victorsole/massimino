@@ -9,6 +9,7 @@ import { authOptions } from '@/core';
 import { analyzeExerciseForm } from '@/services/ai/form-analysis';
 import { moderateContent } from '@/services/moderation/openai';
 import { getExercise } from '@/core/database';
+import { checkRateLimit, getClientIdentifier, RATE_LIMITS, getRateLimitHeaders } from '@/lib/rate-limit';
 
 // ============================================================================
 // POST /api/workout/form-analysis
@@ -16,6 +17,17 @@ import { getExercise } from '@/core/database';
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit check - AI endpoints have stricter limits
+    const clientId = getClientIdentifier(request);
+    const rateLimitResult = checkRateLimit(clientId, RATE_LIMITS.ai);
+
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429, headers: getRateLimitHeaders(rateLimitResult) }
+      );
+    }
+
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
       return NextResponse.json(
