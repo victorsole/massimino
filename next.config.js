@@ -73,6 +73,10 @@ const nextConfig = {
           protocol: 'https',
           hostname: 'static.exercisedb.dev', // ExerciseDB exercise images/GIFs
         },
+        {
+          protocol: 'https',
+          hostname: 'images.pexels.com', // Pexels stock photos
+        },
       ],
       formats: ['image/webp', 'image/avif'],
     },

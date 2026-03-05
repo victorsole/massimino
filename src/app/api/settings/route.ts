@@ -18,6 +18,12 @@ export async function GET() {
       where: { userId: session.user.id },
     });
 
+    // Fetch onboarding status from users table
+    const user = await prisma.users.findUnique({
+      where: { id: session.user.id },
+      select: { onboardingCompleted: true },
+    });
+
     if (!settings) {
       // Return default settings if none exist - profile is PUBLIC by default
       return NextResponse.json({
@@ -33,6 +39,7 @@ export async function GET() {
           contentFilterStrength: 'MEDIUM',
           safetyAlerts: true,
           moderationNotifications: true,
+          onboardingCompleted: user?.onboardingCompleted ?? false,
         },
       });
     }
@@ -50,6 +57,7 @@ export async function GET() {
         contentFilterStrength: settings.contentFilterStrength,
         safetyAlerts: settings.safetyAlerts,
         moderationNotifications: settings.moderationNotifications,
+        onboardingCompleted: user?.onboardingCompleted ?? false,
       },
     });
   } catch (error) {
@@ -78,7 +86,20 @@ export async function PUT(request: NextRequest) {
       contentFilterStrength,
       safetyAlerts,
       moderationNotifications,
+      onboardingCompleted,
     } = body;
+
+    // Handle onboarding flag separately (stored on users table)
+    if (typeof onboardingCompleted === 'boolean') {
+      await prisma.users.update({
+        where: { id: session.user.id },
+        data: { onboardingCompleted },
+      });
+      // If this is the only field, return early
+      if (Object.keys(body).length === 1) {
+        return NextResponse.json({ success: true, settings: { onboardingCompleted } });
+      }
+    }
 
     // Validate profileVisibility
     const validVisibilities = ['PUBLIC', 'PRIVATE', 'TRAINERS_ONLY'];

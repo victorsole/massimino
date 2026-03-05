@@ -162,6 +162,31 @@ export async function GET(
 
     // 2. Validate userId
     const { userId } = await params
+
+    // 2b. Parse previewAs (owner-only profile preview)
+    const url0 = new URL(_request.url)
+    const previewAs = url0.searchParams.get('previewAs') as 'anonymous' | 'athlete' | 'trainer' | null
+    const isOwnerPreview = previewAs && viewerId === userId
+
+    // Override viewer context when owner is previewing their own profile
+    let effectiveViewerId = viewerId
+    let effectiveViewerRole = viewerRole
+    if (isOwnerPreview) {
+      switch (previewAs) {
+        case 'anonymous':
+          effectiveViewerId = null
+          effectiveViewerRole = null
+          break
+        case 'athlete':
+          effectiveViewerId = 'preview-athlete'
+          effectiveViewerRole = 'CLIENT'
+          break
+        case 'trainer':
+          effectiveViewerId = 'preview-trainer'
+          effectiveViewerRole = 'TRAINER'
+          break
+      }
+    }
     if (!userId) {
       return NextResponse.json(
         { success: false, message: 'User ID is required' },
@@ -239,7 +264,18 @@ export async function GET(
     }
 
     // 6. Privacy check: Can viewer see this profile?
-    if (!canViewProfile(user, viewerId, viewerRole)) {
+    if (!canViewProfile(user, effectiveViewerId, effectiveViewerRole)) {
+      if (isOwnerPreview) {
+        // Owner preview: return helpful message instead of 403
+        const viewerLabel = previewAs === 'anonymous' ? 'an anonymous visitor'
+          : previewAs === 'athlete' ? 'an athlete' : 'another trainer'
+        return NextResponse.json({
+          success: true,
+          data: null,
+          preview: true,
+          blockedReason: `Your profile is not visible to ${viewerLabel}. Your current visibility is set to "${user.profileVisibility}".`
+        })
+      }
       return NextResponse.json(
         { success: false, message: 'You do not have permission to view this profile' },
         { status: 403 }
@@ -247,7 +283,15 @@ export async function GET(
     }
 
     // 7. Privacy check: Are they blocked?
-    if (viewerId && await isBlocked(user.id, viewerId)) {
+    if (effectiveViewerId && await isBlocked(user.id, effectiveViewerId)) {
+      if (isOwnerPreview) {
+        return NextResponse.json({
+          success: true,
+          data: null,
+          preview: true,
+          blockedReason: 'This viewer would be blocked from seeing your profile.'
+        })
+      }
       return NextResponse.json(
         { success: false, message: 'This profile is not available' },
         { status: 403 }
@@ -255,7 +299,7 @@ export async function GET(
     }
 
     // 8. Filter user data based on privacy settings
-    const publicProfile = filterUserData(user, viewerId)
+    const publicProfile = filterUserData(user, effectiveViewerId)
 
     // 9. Optionally include public sections
     const url = new URL(_request.url)

@@ -2444,6 +2444,7 @@ model users {
   athlete_invitations_sent                                    athlete_invitations[]        @relation("trainer_invitations")
   coaching_requests_as_athlete                                coaching_requests[]          @relation("athlete_coaching_requests")
   coaching_requests_as_trainer                                coaching_requests[]          @relation("trainer_coaching_requests")
+  onboardingCompleted                                         Boolean                      @default(false)
 }
 
 model email_verification_tokens {

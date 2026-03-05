@@ -126,6 +126,7 @@ export default function Header({ user }: HeaderProps) {
                 <TooltipTrigger asChild>
                   <Link
                     href="/fitness-intelligence"
+                    aria-label="Fitness Intelligence"
                     className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
                   >
                     <MdiIcon path={MDI_ICONS.earth} size={0.83} />
@@ -140,6 +141,7 @@ export default function Header({ user }: HeaderProps) {
                 <TooltipTrigger asChild>
                   <Link
                     href="/dashboard"
+                    aria-label="Dashboard"
                     className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
                   >
                     <MdiIcon path={MDI_ICONS.viewDashboard} size={0.83} />
@@ -154,6 +156,7 @@ export default function Header({ user }: HeaderProps) {
                 <TooltipTrigger asChild>
                   <Link
                     href="/workout-log"
+                    aria-label="Workout Log"
                     className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
                   >
                     <MdiIcon path={MDI_ICONS.dumbbell} size={0.83} />
@@ -170,6 +173,7 @@ export default function Header({ user }: HeaderProps) {
                   <TooltipTrigger asChild>
                     <Link
                       href="/dashboard"
+                      aria-label="Manage Teams"
                       className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
                     >
                     <MdiIcon path={MDI_ICONS.accountGroup} size={0.83} />
@@ -184,6 +188,7 @@ export default function Header({ user }: HeaderProps) {
                   <TooltipTrigger asChild>
                     <Link
                       href="/teams/discover"
+                      aria-label="Join Teams"
                       className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
                     >
                       <MdiIcon path={MDI_ICONS.accountGroup} size={0.83} />
@@ -199,6 +204,7 @@ export default function Header({ user }: HeaderProps) {
                 <TooltipTrigger asChild>
                   <Link
                     href="/massiminos"
+                    aria-label="Discover"
                     className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
                   >
                     <MdiIcon path={MDI_ICONS.compass} size={0.83} />
@@ -213,6 +219,7 @@ export default function Header({ user }: HeaderProps) {
                 <TooltipTrigger asChild>
                   <Link
                     href="/exercises"
+                    aria-label="Exercises"
                     className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
                   >
                     <MdiIcon path={MDI_ICONS.runFast} size={0.83} />
@@ -227,6 +234,7 @@ export default function Header({ user }: HeaderProps) {
                 <TooltipTrigger asChild>
                   <Link
                     href="/partnerships"
+                    aria-label="Partnerships"
                     className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
                   >
                     <MdiIcon path={MDI_ICONS.handshake} size={0.83} />
@@ -291,7 +299,7 @@ export default function Header({ user }: HeaderProps) {
                         <User className="h-4 w-4 text-gray-600" />
                       </div>
                     )}
-                    <span className="hidden sm:block text-sm font-medium">
+                    <span className="hidden sm:block text-sm font-medium truncate max-w-[120px] lg:max-w-[200px]">
                       {user.name || user.email}
                     </span>
                   </Button>

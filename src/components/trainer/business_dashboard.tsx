@@ -9,6 +9,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -97,6 +98,7 @@ interface PaymentHistoryItem {
 // ============================================================================
 
 export default function BusinessDashboard() {
+  const { data: session } = useSession();
   const [dashboardData, setDashboardData] = useState<BusinessDashboardData | null>(null);
   const [paymentHistory, setPaymentHistory] = useState<PaymentHistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -108,13 +110,19 @@ export default function BusinessDashboard() {
     search: ''
   });
 
+  const isTrainer = session?.user?.role === 'TRAINER' || session?.user?.role === 'ADMIN';
+
   // ============================================================================
   // DATA FETCHING
   // ============================================================================
 
   useEffect(() => {
+    if (!isTrainer) {
+      setLoading(false);
+      return;
+    }
     fetchDashboardData();
-  }, [period]);
+  }, [period, isTrainer]);
 
   const fetchDashboardData = async () => {
     try {
@@ -154,17 +162,17 @@ export default function BusinessDashboard() {
   };
 
   useEffect(() => {
-    if (activeTab === 'payments') {
+    if (activeTab === 'payments' && isTrainer) {
       fetchPaymentHistory();
     }
-  }, [activeTab, paymentFilters]);
+  }, [activeTab, paymentFilters, isTrainer]);
 
   // ============================================================================
   // REVENUE OVERVIEW COMPONENT
   // ============================================================================
 
   const RevenueOverview = () => {
-    if (!dashboardData) return <div>Loading revenue data...</div>;
+    if (!dashboardData) return <div className="flex items-center justify-center py-12 text-sm text-gray-500">{loading ? <><span className="animate-spin mr-2">⏳</span>Loading revenue data...</> : 'No revenue data yet. Start by creating subscription plans or packages.'}</div>;
 
     const { revenueMetrics } = dashboardData;
 
@@ -286,7 +294,7 @@ export default function BusinessDashboard() {
       }));
     };
 
-    if (!dashboardData) return <div>Loading subscriptions...</div>;
+    if (!dashboardData) return <div className="flex items-center justify-center py-12 text-sm text-gray-500">{loading ? <><span className="animate-spin mr-2">⏳</span>Loading subscriptions...</> : 'No subscription plans yet. Create your first plan to start earning.'}</div>;
 
     return (
       <div className="space-y-6">
@@ -496,7 +504,7 @@ export default function BusinessDashboard() {
       }
     };
 
-    if (!dashboardData) return <div>Loading packages...</div>;
+    if (!dashboardData) return <div className="flex items-center justify-center py-12 text-sm text-gray-500">{loading ? <><span className="animate-spin mr-2">⏳</span>Loading packages...</> : 'No training packages yet. Create your first package to offer to clients.'}</div>;
 
     return (
       <div className="space-y-6">

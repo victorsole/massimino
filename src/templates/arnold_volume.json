@@ -1,8 +1,9 @@
 {
     "program": {
-      "name": "Arnold Schwarzenegger Volume Workout Routines",
-      "athlete": "Arnold Schwarzenegger",
-      "titles": "7x Mr. Olympia",
+      "name": "Classic Volume Training",
+      "athlete": "Golden Era Training",
+      "titles": "High Volume Method",
+      "originalInspiration": "golden-era-volume",
       "main_goal": "Build Muscle",
       "training_level": "Advanced",
       "program_duration": "16 Weeks",
@@ -15,10 +16,8 @@
         "Dumbbells",
         "EZ Bar"
       ],
-      "author": "Steve Shaw",
-      "source": "MUSCLEANDSTRENGTH.COM",
-      "link": "https://www.muscleandstrength.com/workouts/arnold-schwarzenegger-volume-workout-routines",
-      "description": "Train insane like the one and only 7 time Mr. Olympia Arnold Schwarzenegger. Arnold's muscle building workouts feature an intense high volume and frequency approach to training."
+      "author": "Massimino Training",
+      "description": "An intense high-volume and high-frequency approach to muscle building, inspired by the golden era of bodybuilding. Features a 6-day split with serious dedication required."
     },
     "variations": [
       {

@@ -61,23 +61,29 @@ interface UserPublicProfileProps {
   variant: 'massitree' | 'massiminos' | 'embed'
   showActions?: boolean
   compact?: boolean
+  previewAs?: 'anonymous' | 'athlete' | 'trainer'
 }
 
 // ===== INLINE HOOK =====
-function usePublicProfile(userId: string) {
+function usePublicProfile(userId: string, previewAs?: 'anonymous' | 'athlete' | 'trainer') {
   const [data, setData] = useState<PublicUserProfile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [blockedReason, setBlockedReason] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchPublicProfile() {
       try {
         setIsLoading(true)
         setError(null)
+        setBlockedReason(null)
 
-        const response = await fetch(`/api/users/${userId}/public?include=workouts,achievements,media,teams&workouts_limit=5&media_limit=6`, {
-          cache: 'no-store'
-        })
+        let url = `/api/users/${userId}/public?include=workouts,achievements,media,teams&workouts_limit=5&media_limit=6`
+        if (previewAs) {
+          url += `&previewAs=${previewAs}`
+        }
+
+        const response = await fetch(url, { cache: 'no-store' })
 
         if (!response.ok) {
           throw new Error('Failed to fetch profile')
@@ -85,7 +91,12 @@ function usePublicProfile(userId: string) {
 
         const result = await response.json()
         if (result.success) {
-          setData(result.data)
+          if (result.preview && result.blockedReason) {
+            setBlockedReason(result.blockedReason)
+            setData(null)
+          } else {
+            setData(result.data)
+          }
         } else {
           throw new Error(result.message)
         }
@@ -97,9 +108,9 @@ function usePublicProfile(userId: string) {
     }
 
     if (userId) fetchPublicProfile()
-  }, [userId])
+  }, [userId, previewAs])
 
-  return { data, isLoading, error }
+  return { data, isLoading, error, blockedReason }
 }
 
 // ===== INLINE HELPER FUNCTIONS =====
@@ -231,14 +242,31 @@ export function UserPublicProfile({
   userId,
   variant,
   showActions = true,
-  compact = false
+  compact = false,
+  previewAs
 }: UserPublicProfileProps) {
-  const { data: profile, isLoading, error } = usePublicProfile(userId)
+  const { data: profile, isLoading, error, blockedReason } = usePublicProfile(userId, previewAs)
   const { data: session } = useSession()
   const [tipLoading, setTipLoading] = useState(false)
   const [tipAmount, setTipAmount] = useState<number>(5)
 
   if (isLoading) return <LoadingSkeleton variant={variant} />
+
+  if (blockedReason) {
+    return (
+      <Card>
+        <CardContent className="p-6 text-center space-y-3">
+          <div className="w-12 h-12 mx-auto rounded-full bg-orange-100 flex items-center justify-center">
+            <span className="text-orange-600 text-xl">🔒</span>
+          </div>
+          <h3 className="font-semibold text-lg">Profile Not Visible</h3>
+          <p className="text-sm text-gray-600 max-w-md mx-auto">{blockedReason}</p>
+          <p className="text-xs text-gray-400">Adjust your privacy settings to make your profile visible to this audience.</p>
+        </CardContent>
+      </Card>
+    )
+  }
+
   if (error || !profile) {
     return (
       <Card>

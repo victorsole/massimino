@@ -1,6 +1,7 @@
 {
-    "program": "Arnold's Golden Six - Foundation for Champions",
-    "author": "Arnold Schwarzenegger",
+    "program": "The Golden Six — Foundation Builder",
+    "author": "Golden Era Training",
+    "originalInspiration": "golden-era-foundation",
     "era": "Golden Era Bodybuilding (1960s)",
     "version": "2.0_enhanced",
     "program_id": "arnold-golden-six",
@@ -21,8 +22,8 @@
     },
 
     "program_philosophy": {
-      "origin": "This was Arnold's first structured program when he began serious training in Austria. Before the split routines and high volume that made him famous, Arnold built his foundation with this simple, effective full-body routine.",
-      "arnold_quote": "\"The Golden Six built my base. Every champion starts with mastering the fundamentals. You must walk before you run, and you must build a solid foundation before you sculpt a masterpiece.\"",
+      "origin": "A foundational full-body program from the golden era of bodybuilding (1960s). Before advanced split routines and high volume, champions built their base with this simple, effective routine.",
+      "training_quote": "\"The Golden Six builds your base. Every champion starts with mastering the fundamentals. You must walk before you run, and you must build a solid foundation before you sculpt a masterpiece.\"",
       "core_principles": [
         "Master the fundamental movement patterns",
         "Train the whole body frequently (3x per week)",
@@ -33,7 +34,7 @@
     },
 
     "realistic_expectations": {
-      "historical_context": "Arnold used this program at age 15-17 before transitioning to more advanced split routines. This is NOT the routine that built his Mr. Olympia physique - that came later with much higher volume and intensity.",
+      "historical_context": "This program was used in the 1960s golden era as a beginner foundation before transitioning to more advanced split routines. It is NOT a competition-level routine — that requires much higher volume and intensity.",
       "12_week_realistic_outcomes": [
         "3-6kg muscle gain (with proper nutrition)",
         "Strength increases of 50-100% in major lifts",
@@ -42,7 +43,7 @@
         "Foundation ready for intermediate programming"
       ],
       "12_weeks_will_not_achieve": [
-        "Arnold's physique (that took 8+ years of advanced training)",
+        "A champion physique (that takes 8+ years of advanced training)",
         "Massive arms or chest (need more volume and specialization)",
         "Competition-ready condition",
         "Elite strength levels"
@@ -51,7 +52,7 @@
         "weeks_1_4": "Learning movements, neurological adaptation, minimal visible muscle",
         "weeks_5_8": "Noticeable strength gains, some muscle fullness",
         "weeks_9_12": "Visible muscle development, confident with all movements",
-        "after_12_weeks": "Ready to progress to Arnold's intermediate programs with split routines"
+        "after_12_weeks": "Ready to progress to intermediate split routines with higher volume"
       }
     },
 
@@ -97,7 +98,7 @@
       {
         "exercise_number": 1,
         "exercise_name": "Barbell Back Squat",
-        "arnold_perspective": "The king of exercises. Squats built my legs and helped me add size all over my body. No squat, no mass.",
+        "coaching_perspective": "The king of exercises. Squats build your legs and help add size all over your body. No squat, no mass.",
         "sets": 4,
         "reps": 10,
         "rest_seconds": 90,
@@ -123,7 +124,7 @@
       {
         "exercise_number": 2,
         "exercise_name": "Wide Grip Barbell Bench Press",
-        "arnold_perspective": "I built my chest foundation with heavy barbell pressing. The pump you get is unmatched.",
+        "coaching_perspective": "Heavy barbell pressing builds your chest foundation. The pump you get is unmatched.",
         "sets": 3,
         "reps": 10,
         "rest_seconds": 90,
@@ -149,7 +150,7 @@
       {
         "exercise_number": 3,
         "exercise_name": "Chin-Ups (or Barbell Pullover)",
-        "arnold_perspective": "Chin-ups built width in my lats. If you can't do them yet, use pulldowns or pullovers and work toward them.",
+        "coaching_perspective": "Chin-ups build width in your lats. If you can't do them yet, use pulldowns or pullovers and work toward them.",
         "sets": 3,
         "reps": 10,
         "rest_seconds": 90,
@@ -186,7 +187,7 @@
       {
         "exercise_number": 4,
         "exercise_name": "Overhead Barbell Press (Military Press)",
-        "arnold_perspective": "For big, strong shoulders. This exercise separates champions from casual lifters.",
+        "coaching_perspective": "For big, strong shoulders. This exercise separates champions from casual lifters.",
         "sets": 4,
         "reps": 10,
         "rest_seconds": 90,
@@ -212,7 +213,7 @@
       {
         "exercise_number": 5,
         "exercise_name": "Barbell Curl",
-        "arnold_perspective": "Everyone wants big arms. Barbell curls with strict form build them. No cheating!",
+        "coaching_perspective": "Everyone wants big arms. Barbell curls with strict form build them. No cheating!",
         "sets": 3,
         "reps": 10,
         "rest_seconds": 60,
@@ -238,7 +239,7 @@
       {
         "exercise_number": 6,
         "exercise_name": "Sit-Ups",
-        "arnold_perspective": "A strong core is the foundation of a strong body. I did hundreds of sit-ups daily.",
+        "coaching_perspective": "A strong core is the foundation of a strong body. Golden-era champions did hundreds of sit-ups daily.",
         "sets": 4,
         "reps": "To failure (minimum 20-25 per set)",
         "rest_seconds": 60,
@@ -306,7 +307,7 @@
       "healthy_fats": "1g per kg bodyweight minimum for hormone production",
       "meal_timing": "Eat protein every 3-4 hours. Have carbs before and after training.",
       "hydration": "3-4 liters of water daily, more if you sweat heavily",
-      "arnold_nutrition_philosophy": "Arnold ate 5-6 meals per day with lots of meat, eggs, dairy, and carbs. No fancy supplements - just real food and hard work.",
+      "nutrition_philosophy": "Golden-era champions ate 5-6 meals per day with lots of meat, eggs, dairy, and carbs. No fancy supplements — just real food and hard work.",
       "sample_day": [
         "Breakfast: 4 eggs, oatmeal, fruit",
         "Snack: Protein shake, banana",
@@ -325,9 +326,9 @@
     },
 
     "supplements": {
-      "arnold_era": "In the 1960s, Arnold had access to basic protein powder, vitamins, and liver tablets. That's it. No pre-workouts, no fancy supplements. Just food and hard work.",
+      "golden_era": "In the 1960s, athletes had access to basic protein powder, vitamins, and liver tablets. That's it. No pre-workouts, no fancy supplements. Just food and hard work.",
       "actually_useful_today": {
-        "creatine_monohydrate": "5g daily. Proven, safe, effective. Arnold would have loved this.",
+        "creatine_monohydrate": "5g daily. Proven, safe, effective. A golden-era staple if it had existed.",
         "protein_powder": "Convenient for hitting protein targets. Whey is fine.",
         "multivitamin": "Insurance policy for micronutrients",
         "fish_oil": "If not eating fatty fish 2-3x per week"
@@ -345,7 +346,7 @@
       "sleep": {
         "minimum": "7 hours",
         "optimal": "8-9 hours",
-        "why_it_matters": "You grow when you sleep, not when you train. Arnold slept 8 hours plus napped. Recovery is non-negotiable.",
+        "why_it_matters": "You grow when you sleep, not when you train. Golden-era champions slept 8 hours plus naps. Recovery is non-negotiable.",
         "sleep_tips": [
           "Same bedtime every night",
           "Dark, cool room (16-19°C)",
@@ -386,20 +387,20 @@
           "prevention": "Perfect form, warm up elbows, don't train through pain"
         }
       },
-      "when_injured": "REST. See a doctor/physio. Don't be a hero. Arnold had several injuries that sidelined him - learn from mistakes."
+      "when_injured": "REST. See a doctor/physio. Don't be a hero. Even champions had injuries that sidelined them — learn from mistakes."
     },
 
     "mental_approach": {
-      "arnold_mindset": [
+      "champion_mindset": [
         "\"The mind is the limit. As long as the mind can envision you doing something, you can do it, as long as you really believe 100%.\"",
         "\"Strength does not come from winning. Your struggles develop your strengths.\"",
         "\"The worst thing I can be is the same as everybody else.\"",
         "\"The resistance that you fight physically in the gym and the resistance that you fight in life can only build a strong character.\""
       ],
-      "visualization": "Arnold famously visualized his biceps as mountains. See yourself successful BEFORE you are.",
+      "visualization": "Champions visualize their muscles growing. See yourself successful BEFORE you are.",
       "consistency_over_intensity": "Missing one workout won't hurt you. Missing consistently destroys progress. Show up even when you don't feel like it.",
       "enjoy_the_process": "This is a 12-week program, but fitness is a lifetime journey. Fall in love with the process, not just the outcome.",
-      "avoid_comparison": "Don't compare yourself to Arnold's peak physique or other people in the gym. Compare yourself to yourself yesterday."
+      "avoid_comparison": "Don't compare yourself to anyone else in the gym. Compare yourself to yourself yesterday."
     },
 
     "progress_tracking": {
@@ -433,12 +434,12 @@
         "Base for intermediate training"
       ],
       "next_steps": [
-        "Option 1: Arnold's Volume Program (high volume split routine)",
+        "Option 1: Classic Volume Training (high volume split routine)",
         "Option 2: Upper/Lower split 4x per week",
         "Option 3: Push/Pull/Legs 6x per week",
         "Option 4: Repeat Golden Six with heavier weights for another 8-12 weeks"
       ],
-      "long_term_reality": "Arnold trained for 8 years before his first Mr. Olympia. This 12-week program is step 1 of a multi-year journey. Be patient.",
+      "long_term_reality": "Champions train for 8+ years before reaching elite level. This 12-week program is step 1 of a multi-year journey. Be patient.",
       "maintenance": "Once you achieve your goals, you'll need to train 2-3x per week to maintain. But building takes years of consistent effort."
     },
 
@@ -478,9 +479,9 @@
     },
 
     "historical_context": {
-      "when_arnold_used_this": "1960-1962, age 13-15, training in Graz, Austria",
-      "how_it_fit_in_his_journey": "This was the beginning. Arnold outgrew this program after 18-24 months and moved to high-volume split routines. The Golden Six built his foundation.",
-      "training_environment": "Arnold trained in a basic gym with minimal equipment. No fancy machines, no supplements, just barbells and iron will.",
+      "era_origins": "1960s golden era, used in basic European gyms",
+      "progression_path": "Most athletes outgrow this program after 18-24 months and move to high-volume split routines. The Golden Six builds the foundation.",
+      "training_environment": "Designed for a basic gym with minimal equipment. No fancy machines, no supplements, just barbells and iron will.",
       "golden_era_philosophy": "The Golden Era (1960s-1970s) focused on: full-body workouts for beginners, compound movements, high frequency, eating huge amounts of food, and unwavering dedication."
     }
   }

@@ -20,9 +20,9 @@ Massimino creates a zero-tolerance, anti-creep environment for fitness professio
 - **Payments** — Mollie integration for seamless coaching transactions
 
 ### 🏋️ Browse Programs
-- **30+ Pre-Built Training Programs** — Celebrity, goal-based, lifestyle, sport-specific, and modality programs
+- **30+ Pre-Built Training Programs** — Classic, goal-based, lifestyle, sport-specific, and modality programs
 - **Program Categories:**
-  - **Celebrity Programs** — Arnold's Golden Six, CBUM Classic Physique, Ronnie Coleman, Colorado Experiment, IFBB Classic Physique
+  - **Classic Programs** — The Golden Six, Classic Physique PPL, Ultimate Mass Builder, Heavy Duty HIT, The 28-Day Experiment, Classic Physique Blueprint
   - **Goal-Based** — NASM Fat Loss, Muscle Gain, Performance, Aesthetics Hunter
   - **Lifestyle** — Postpartum (Mum/Dad), Stress Management, Time-Constrained, Medical Conditions
   - **Training Modality** — HIIT, [Hyrox](https://hyrox.com/), Cardio, Flexibility, Balance, Plyometric
@@ -53,6 +53,69 @@ Massimino creates a zero-tolerance, anti-creep environment for fitness professio
 - **Embeddable Widgets** — Easily plug into existing gym sites
 - **API Access** — RESTful integration for fitness tools
 - **White-Labeling** — Partner-branded platform deployments
+
+---
+
+## 🎨 Design System
+
+### Responsive Design
+
+Massimino **must be fully responsive** across all screen sizes:
+
+| Breakpoint | Device        | Min Width |
+|------------|---------------|-----------|
+| `sm`       | Smartphone    | 640px     |
+| `md`       | Tablet        | 768px     |
+| `lg`       | Laptop        | 1024px    |
+| `xl`       | Desktop       | 1280px    |
+| `2xl`      | Large Desktop | 1536px    |
+
+All layouts, components, and pages must adapt gracefully from mobile-first to large desktop screens.
+
+### Brand Colors
+
+| Token          | Hex       | Usage                        |
+|----------------|-----------|------------------------------|
+| **Primary**    | `#2b5069` | Headings, buttons, accents   |
+| **Background** | `#fcfaf5` | Page backgrounds, surfaces   |
+
+### Typography
+
+**Primary font:** Nunito Sans
+**Secondary font:** Lato
+
+#### Google Fonts
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap" rel="stylesheet">
+```
+
+#### CSS Classes
+
+**Nunito Sans (primary):**
+
+```css
+.nunito-sans {
+  font-family: "Nunito Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100,
+    "YTLC" 500;
+}
+```
+
+**Lato (secondary):**
+
+```css
+.lato-thin       { font-family: "Lato", sans-serif; font-weight: 100; font-style: normal; }
+.lato-light      { font-family: "Lato", sans-serif; font-weight: 300; font-style: normal; }
+.lato-regular    { font-family: "Lato", sans-serif; font-weight: 400; font-style: normal; }
+.lato-bold       { font-family: "Lato", sans-serif; font-weight: 700; font-style: normal; }
+.lato-black      { font-family: "Lato", sans-serif; font-weight: 900; font-style: normal; }
+```
 
 ---
 

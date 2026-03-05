@@ -46,7 +46,7 @@ interface ChatRoom {
 }
 
 export default function MessagesPage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [conversations, setConversations] = useState<ChatRoom[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<ChatRoom | null>(null);
@@ -57,13 +57,14 @@ export default function MessagesPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (status === 'loading') return;
     if (!session?.user?.id) {
       router.push('/login');
       return;
     }
 
     fetchConversations();
-  }, [session, router]);
+  }, [session, status, router]);
 
   const fetchConversations = async () => {
     try {
@@ -310,7 +311,7 @@ export default function MessagesPage() {
           <p className="text-brand-primary-light">Stay connected with your fitness community</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[600px]">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-auto sm:h-[600px]">
           {/* Conversations List */}
           <div className="lg:col-span-1">
             <Card className="h-full">

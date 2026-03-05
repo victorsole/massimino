@@ -59,7 +59,7 @@ export async function searchKnowledgeBase(query: string, limit = 5): Promise<{ d
 
   // 2) Local NASM docs (lexical fallback; no new files/routes required)
   try {
-    const nasmHits = await searchLocalNasm(query, limit)
+    const nasmHits = await searchLocalDocs(query, limit)
     results.push(...nasmHits)
   } catch (e) {
     // ignore if FS not available
@@ -77,18 +77,19 @@ export async function searchKnowledgeBase(query: string, limit = 5): Promise<{ d
   return deduped.slice(0, limit)
 }
 
-const NASM_ROOTS = [
+const LOCAL_KB_ROOTS = [
   'public/databases/NASM_CPT/converted',
   'public/databases/NASM_CNC/converted',
+  'public/databases',
 ]
 
-async function searchLocalNasm(query: string, limit: number): Promise<{ documentName: string; content: string; similarity: number }[]> {
+async function searchLocalDocs(query: string, limit: number): Promise<{ documentName: string; content: string; similarity: number }[]> {
   const baseDir = process.cwd()
   const files: string[] = []
-  for (const rel of NASM_ROOTS) {
+  for (const rel of LOCAL_KB_ROOTS) {
     const dir = path.join(baseDir, rel)
     const list = await safeWalk(dir)
-    files.push(...list.filter((f) => f.endsWith('.md') && path.basename(f).toLowerCase().startsWith('section')))
+    files.push(...list.filter((f) => f.endsWith('.md')))
   }
 
   // Keep it light: cap scanned files

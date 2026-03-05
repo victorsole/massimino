@@ -254,8 +254,8 @@ export default function AthleteApplyPage() {
                   <Trophy className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <div className="font-bold text-gray-900">Featured Athletes</div>
-                  <div className="text-sm text-gray-600">Join legends like Arnold, CBUM & more</div>
+                  <div className="font-bold text-gray-900">Featured Programs</div>
+                  <div className="text-sm text-gray-600">Train with elite-level programs & methods</div>
                 </div>
               </div>
             </div>

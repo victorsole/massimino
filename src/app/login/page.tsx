@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -30,8 +30,15 @@ function LoginContent() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const { data: session, status } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user) {
+      router.replace('/dashboard');
+    }
+  }, [status, session, router]);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -266,7 +273,7 @@ function LoginContent() {
             </div>
 
             {/* Social Login Buttons */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Button
                 variant="outline"
                 onClick={() => handleSocialLogin('Google')}

@@ -4,7 +4,7 @@
   "description": "The safety-first fitness community platform for trainers and enthusiasts",
   "private": true,
   "scripts": {
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate && node scripts/patch-next-server.js",
     "clean": "bash -c 'rm -rf .next .next-dev.log .next-dev.pid tsconfig.tsbuildinfo'",
     "predev": "node -e \"if(process.env.CLEAN_ON_DEV==='true'){require('child_process').execSync('npm run clean',{stdio:'inherit'})}else{console.log('Skipping clean in dev. Set CLEAN_ON_DEV=true to enable.')}\"",
     "prebuild": "npm run clean",
@@ -73,6 +73,7 @@
     "clsx": "^2.0.0",
     "csv-parse": "^6.1.0",
     "date-fns": "^4.1.0",
+    "driver.js": "^1.4.0",
     "firebase-admin": "^13.5.0",
     "framer-motion": "^12.23.24",
     "gsap": "^3.13.0",

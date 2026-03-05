@@ -1,16 +1,55 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { WorkoutSession, ProgramExercise } from '@/types/program';
 
+// Pexels search queries per session for specific programs
+const SESSION_PEXELS_QUERIES: Record<string, string[]> = {
+  castellers: [
+    'castellers human tower catalonia',
+    'castellers pinya base tower',
+    'castells festival catalonia',
+    'human tower castellers team',
+    'castellers climbing tower strength',
+    'castellers balance acrobatics catalonia',
+    'castellers children top tower',
+  ],
+};
+
+// Keywords in program/session names that map to a Pexels query
+const NAME_PEXELS_QUERIES: Record<string, string> = {
+  baixos: 'castellers human tower base pinya',
+  contrafort: 'castellers human tower support team',
+  'primeres mans': 'castellers human tower climbing overhead',
+  segons: 'castellers climbing human tower acrobatics',
+  'pom de dalt': 'castellers children top human tower',
+  castellers: 'castellers human tower catalonia festival',
+};
+
+// Resolve Pexels query from program ID or session name
+function resolvePexelsQuery(programId?: string, sessionName?: string): string | null {
+  // Direct match by programId
+  if (programId && SESSION_PEXELS_QUERIES[programId]) return null; // handled by array logic
+  // Match by name keywords
+  const lower = (sessionName || '').toLowerCase();
+  for (const [keyword, query] of Object.entries(NAME_PEXELS_QUERIES)) {
+    if (lower.includes(keyword)) return query;
+  }
+  return null;
+}
+
+type PexelsPhoto = { src: string; photographer: string };
+
 interface ProgramScheduleProps {
+  programId?: string;
   title?: string;
   workoutSessions: WorkoutSession[];
   cycleDays?: number;
 }
 
 export function ProgramSchedule({
+  programId,
   title = 'Training Schedule',
   workoutSessions,
   cycleDays,
@@ -19,6 +58,49 @@ export function ProgramSchedule({
     workoutSessions.length > 0 ? 0 : null
   );
   const [selectedExercise, setSelectedExercise] = useState<ProgramExercise | null>(null);
+  const [sessionImages, setSessionImages] = useState<Record<number, PexelsPhoto>>({});
+
+  useEffect(() => {
+    if (!programId) return;
+
+    const fetchImages = async () => {
+      const images: Record<number, PexelsPhoto> = {};
+
+      // Case 1: Program has per-session queries array (e.g. castellers parent program)
+      const queries = SESSION_PEXELS_QUERIES[programId];
+      if (queries) {
+        for (let i = 0; i < Math.min(queries.length, workoutSessions.length); i++) {
+          try {
+            const res = await fetch(`/api/pexels?query=${encodeURIComponent(queries[i])}&per_page=3`);
+            if (!res.ok) continue;
+            const data = await res.json();
+            const photo = data.photos?.[0];
+            if (photo) {
+              images[i] = { src: photo.src.large || photo.src.medium, photographer: photo.photographer };
+            }
+          } catch { /* ignore */ }
+        }
+      } else {
+        // Case 2: Individual workout — match session names against keywords
+        for (let i = 0; i < workoutSessions.length; i++) {
+          const query = resolvePexelsQuery(programId, workoutSessions[i]?.name);
+          if (!query) continue;
+          try {
+            const res = await fetch(`/api/pexels?query=${encodeURIComponent(query)}&per_page=3`);
+            if (!res.ok) continue;
+            const data = await res.json();
+            const photo = data.photos?.[0];
+            if (photo) {
+              images[i] = { src: photo.src.large || photo.src.medium, photographer: photo.photographer };
+            }
+          } catch { /* ignore */ }
+        }
+      }
+
+      if (Object.keys(images).length > 0) setSessionImages(images);
+    };
+    fetchImages();
+  }, [programId, workoutSessions]);
 
   const toggleDay = (index: number) => {
     setExpandedDay(expandedDay === index ? null : index);
@@ -51,6 +133,7 @@ export function ProgramSchedule({
             onToggle={() => toggleDay(index)}
             isRest={session.name.toLowerCase().includes('rest')}
             onExerciseClick={handleExerciseClick}
+            backgroundImage={sessionImages[index]}
           />
         ))}
       </div>
@@ -73,6 +156,7 @@ interface WorkoutDayProps {
   onToggle: () => void;
   isRest?: boolean;
   onExerciseClick?: (exercise: ProgramExercise) => void;
+  backgroundImage?: PexelsPhoto;
 }
 
 function WorkoutDay({
@@ -82,6 +166,7 @@ function WorkoutDay({
   onToggle,
   isRest = false,
   onExerciseClick,
+  backgroundImage,
 }: WorkoutDayProps) {
   const totalExercises = session.sections?.reduce(
     (acc, section) => acc + (section.exercises?.length || 0),
@@ -90,51 +175,88 @@ function WorkoutDay({
 
   return (
     <div
-      className={`bg-[#fcf8f2] rounded-lg overflow-hidden transition-shadow ${
+      className={`rounded-lg overflow-hidden transition-shadow ${
         isExpanded ? 'shadow-md' : ''
-      } ${isRest ? 'opacity-70' : ''}`}
+      } ${isRest ? 'opacity-70' : ''} ${backgroundImage ? '' : 'bg-[#fcf8f2]'}`}
     >
       {/* Header - Clickable */}
       <div
-        className={`flex items-center justify-between p-4 cursor-pointer transition-colors ${
-          !isRest ? 'hover:bg-[#254967]/5' : ''
-        }`}
+        className={`relative flex items-center justify-between cursor-pointer transition-colors ${
+          backgroundImage ? 'p-0' : 'p-4'
+        } ${!isRest && !backgroundImage ? 'hover:bg-[#254967]/5' : ''}`}
         onClick={!isRest ? onToggle : undefined}
       >
-        <div className="flex items-center gap-3">
-          <div
-            className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white ${
-              isRest ? 'bg-green-500' : 'bg-[#254967]'
-            }`}
-          >
-            {dayNumber}
-          </div>
-          <div>
-            <h4 className="text-sm font-semibold text-gray-900">
-              {session.name}
-            </h4>
-            <p className="text-xs text-gray-500">{session.focus}</p>
-          </div>
-        </div>
+        {backgroundImage ? (
+          <>
+            {/* Background image header */}
+            <div className="absolute inset-0">
+              <img src={backgroundImage.src} alt="" className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#254967]/85 via-[#254967]/70 to-[#254967]/50" />
+            </div>
+            <div className="relative z-10 flex items-center justify-between w-full p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-[#254967] bg-white/90">
+                  {dayNumber}
+                </div>
+                <div>
+                  <h4 className="text-sm font-semibold text-white">
+                    {session.name}
+                  </h4>
+                  <p className="text-xs text-white/70">{session.focus}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                {!isRest && (
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-white/20 text-white backdrop-blur-sm">
+                    {totalExercises} exercises
+                  </span>
+                )}
+                <span
+                  className={`mdi mdi-chevron-down text-white/70 transition-transform ${
+                    isExpanded ? 'rotate-180' : ''
+                  }`}
+                />
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="flex items-center gap-3">
+              <div
+                className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white ${
+                  isRest ? 'bg-green-500' : 'bg-[#254967]'
+                }`}
+              >
+                {dayNumber}
+              </div>
+              <div>
+                <h4 className="text-sm font-semibold text-gray-900">
+                  {session.name}
+                </h4>
+                <p className="text-xs text-gray-500">{session.focus}</p>
+              </div>
+            </div>
 
-        <div className="flex items-center gap-3">
-          {!isRest && (
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-white text-[#254967]">
-              {totalExercises} exercises
-            </span>
-          )}
-          {isRest ? (
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-green-100 text-green-700">
-              Recovery
-            </span>
-          ) : (
-            <span
-              className={`mdi mdi-chevron-down text-gray-400 transition-transform ${
-                isExpanded ? 'rotate-180' : ''
-              }`}
-            />
-          )}
-        </div>
+            <div className="flex items-center gap-3">
+              {!isRest && (
+                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-white text-[#254967]">
+                  {totalExercises} exercises
+                </span>
+              )}
+              {isRest ? (
+                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-green-100 text-green-700">
+                  Recovery
+                </span>
+              ) : (
+                <span
+                  className={`mdi mdi-chevron-down text-gray-400 transition-transform ${
+                    isExpanded ? 'rotate-180' : ''
+                  }`}
+                />
+              )}
+            </div>
+          </>
+        )}
       </div>
 
       {/* Expanded Content */}

@@ -1,13 +1,14 @@
 {
     "program_info": {
-      "name": "The Colorado Experiment Protocol",
-      "subtitle": "Arthur Jones High-Intensity Training Method",
-      "creator": "Arthur Jones",
+      "name": "The 28-Day Experiment",
+      "subtitle": "Extreme High-Intensity Training Protocol",
+      "originalInspiration": "colorado-experiment",
+      "creator": "HIT Pioneer",
       "year_created": 1973,
       "duration_weeks": 4,
       "difficulty_level": "Advanced",
       "program_type": "High-Intensity Training (HIT)",
-      "description": "Based on the legendary 28-day experiment that produced 63 pounds of muscle gain in Casey Viator. This ultra-high intensity, low-volume protocol emphasizes one set to absolute failure per exercise, brief workouts, and full recovery between sessions.",
+      "description": "Based on a legendary 28-day experiment from 1973 that produced extraordinary muscle gains. This ultra-high intensity, low-volume protocol emphasizes one set to absolute failure per exercise, brief workouts, and full recovery between sessions.",
       "warning": "This is an extremely demanding protocol. Only attempt if you have solid training experience and excellent recovery capacity. The original experiment had unique circumstances (muscle memory, pharmaceutical enhancement) that contributed to extraordinary results.",
       "key_principles": [
         "One set to absolute muscular failure per exercise",

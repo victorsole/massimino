@@ -22,6 +22,7 @@ import { TrainingStats } from '@/components/profile/TrainingStats';
 import { TrainerPointsRewards } from '@/components/profile/TrainerPointsRewards';
 import { InvitationsReferrals } from '@/components/profile/InvitationsReferrals';
 import { ProfileHeader, ProfileTab } from '@/components/profile/ProfileHeader';
+import { ProfilePreviewDialog } from '@/components/profile/ProfilePreviewDialog';
 import { Confetti, createConfettiBurst } from '@/components/animations';
 import { Plus } from 'lucide-react';
 import Image from 'next/image';
@@ -72,6 +73,13 @@ export default function ProfilePage() {
 
   // Tab navigation state
   const [activeTab, setActiveTab] = useState<ProfileTab>('overview');
+
+  // Preview dialog state
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewViewerType, setPreviewViewerType] = useState<'anonymous' | 'athlete' | 'trainer'>('anonymous');
+
+  // Recent media for the Media tab
+  const [recentMedia, setRecentMedia] = useState<Array<{ id: string; url: string; thumbnailUrl?: string | null; title?: string | null }>>([]);
 
   const user = session?.user;
   const isTrainer = user?.role === 'TRAINER';
@@ -158,6 +166,19 @@ export default function ProfilePage() {
       }
     };
     loadGamificationData();
+  }, [user?.id]);
+
+  // Fetch recent media for the Media tab
+  useEffect(() => {
+    if (!user?.id) return;
+    fetch(`/api/users/${user.id}/public?include=media&media_limit=8`, { cache: 'no-store' })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success && data.data?.sections?.media) {
+          setRecentMedia(data.data.sections.media);
+        }
+      })
+      .catch(() => {});
   }, [user?.id]);
 
   // Auto-remove notifications after 5 seconds
@@ -428,8 +449,8 @@ export default function ProfilePage() {
         activeTab={activeTab}
         onTabChange={setActiveTab}
         onPreview={(viewAs) => {
-          // TODO: Open preview modal showing profile as different user types
-          showNotification('success', `Preview as ${viewAs} - Coming soon!`);
+          setPreviewViewerType(viewAs);
+          setPreviewOpen(true);
         }}
       />
 
@@ -457,11 +478,11 @@ export default function ProfilePage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div>
                     <Label className="mb-1 block">Name</Label>
-                    <Input name="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="John" />
+                    <Input name="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First name" />
                   </div>
                   <div>
                     <Label className="mb-1 block">Surname</Label>
-                    <Input name="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Doe" />
+                    <Input name="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last name" />
                   </div>
                   <div>
                     <Label className="mb-1 block">Nickname</Label>
@@ -1354,31 +1375,27 @@ export default function ProfilePage() {
             <div className="space-y-3">
               <h4 className="font-medium text-gray-900">Recent Media</h4>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {/* Placeholder media items */}
-                <div className="aspect-square bg-gray-200 rounded-lg flex items-center justify-center">
-                  <svg className="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <div className="aspect-square bg-gray-200 rounded-lg flex items-center justify-center">
-                  <svg className="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <div className="aspect-square bg-gray-200 rounded-lg flex items-center justify-center">
-                  <div className="text-center text-gray-500">
-                    <Plus className="h-8 w-8 mx-auto mb-1" />
-                    <div className="text-xs">Add Media</div>
-                  </div>
-                </div>
-                <div className="aspect-square bg-gray-200 rounded-lg flex items-center justify-center">
-                  <div className="text-center text-gray-500">
-                    <svg className="h-8 w-8 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                {recentMedia.length > 0 ? (
+                  recentMedia.map(m => (
+                    <a key={m.id} href={m.url} target="_blank" rel="noopener noreferrer" className="block">
+                      <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                        <img
+                          src={m.thumbnailUrl || m.url}
+                          alt={m.title || 'media'}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      {m.title && <p className="text-xs text-gray-600 mt-1 truncate">{m.title}</p>}
+                    </a>
+                  ))
+                ) : (
+                  <div className="col-span-full text-center py-8 text-gray-500">
+                    <svg className="h-10 w-10 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <div className="text-xs">View All</div>
+                    <p className="text-sm">No media yet. Use the camera above to capture your first photo!</p>
                   </div>
-                </div>
+                )}
               </div>
             </div>
 
@@ -2090,6 +2107,16 @@ export default function ProfilePage() {
           </Button>
         </CardContent>
       </Card>
+
+      {/* Profile Preview Dialog */}
+      {user?.id && (
+        <ProfilePreviewDialog
+          open={previewOpen}
+          onOpenChange={setPreviewOpen}
+          userId={user.id}
+          viewerType={previewViewerType}
+        />
+      )}
     </div>
   );
 }

@@ -2,12 +2,12 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Building2, 
-  Users, 
-  Zap, 
-  Target, 
-  Shield, 
+import {
+  Building2,
+  Users,
+  Zap,
+  Target,
+  Shield,
   BarChart3,
   Smartphone,
   Globe,
@@ -18,113 +18,155 @@ import {
   Phone
 } from 'lucide-react';
 import { LeadDialog, KitDownloadButton } from './lead_dialogs';
+import { HeroSection, AnimatedSection, StaggerContainer, StaggerItem, AnimatedCard } from '@/components/ui/animated_section';
 
 export default function PartnershipsPage() {
   return (
     <>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Featured Partners */}
-        <section className="mb-10">
+        <AnimatedSection className="mb-10">
           <h2 className="text-2xl font-semibold text-gray-900 text-center mb-6">Featured Partners</h2>
-          <div className="flex items-center justify-center gap-8 flex-wrap">
-            <a href="https://amix.com/?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=amix" target="_blank" rel="noopener" className="group">
-              <span className="sr-only">Amix</span>
-              <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
-                <img src="/images/amix-logo.png" alt="Amix" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
-              </span>
-            </a>
-            <a href="http://app.hellobo.eu?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=bo" target="_blank" rel="noopener" className="group">
-              <span className="sr-only">Bo</span>
-              <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
-                <img src="/images/Bo_logo.png" alt="Bo" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
-              </span>
-            </a>
+          <StaggerContainer className="flex items-center justify-center gap-8 flex-wrap">
+            <StaggerItem>
+              <a href="https://amix.com/?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=amix" target="_blank" rel="noopener" className="group">
+                <span className="sr-only">Amix</span>
+                <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
+                  <img src="/images/amix-logo.png" alt="Amix" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
+                </span>
+              </a>
+            </StaggerItem>
+            <StaggerItem>
+              <a href="http://app.hellobo.eu?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=bo" target="_blank" rel="noopener" className="group">
+                <span className="sr-only">Bo</span>
+                <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
+                  <img src="/images/Bo_logo.png" alt="Bo" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
+                </span>
+              </a>
+            </StaggerItem>
+            <StaggerItem>
+              <a href="https://www.quotavita.com/en?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=quotavita" target="_blank" rel="noopener" className="group">
+                <span className="sr-only">Quota Vita</span>
+                <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
+                  <img src="/images/quotavitalogo.jpg" alt="Quota Vita" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
+                </span>
+              </a>
+            </StaggerItem>
             {/** Temporarily removed Jims pending formal agreement **/}
             {/**
-            <a href="https://www.jims.be/nl?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=jims" target="_blank" rel="noopener" className="group">
-              <span className="sr-only">Jims</span>
-              <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
-                <img src="/images/jims-logo.png" alt="Jims" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
-              </span>
-            </a>
+            <StaggerItem>
+              <a href="https://www.jims.be/nl?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=jims" target="_blank" rel="noopener" className="group">
+                <span className="sr-only">Jims</span>
+                <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
+                  <img src="/images/jims-logo.png" alt="Jims" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
+                </span>
+              </a>
+            </StaggerItem>
             **/}
-          </div>
-        </section>
+          </StaggerContainer>
+        </AnimatedSection>
 
         {/* Partner Cards */}
         <section className="mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <img src="/images/amix-logo.png" alt="Amix" className="h-8 w-auto rounded" />
-                  Amix • Spain
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="mb-3">
-                  Quality sports supplements — protein, pre‑workout, and recovery essentials.
-                </CardDescription>
-                <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
-                  <li>Wide range of evidence‑based products</li>
-                  <li>Supports training performance and recovery</li>
-                  <li>Trusted by athletes and coaches</li>
-                </ul>
-                <a href="https://amix.com/?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=amix" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit Amix →</a>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <img src="/images/Bo_logo.png" alt="Bo" className="h-8 w-auto rounded" />
-                  Bo • Europe
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="mb-3">
-                  Bo is a social network that links visitors to local producers from all over Europe, whom are called hosts in Bo. Local producers of any category (i.e., wine, beer, vegetables, fruit, fish, crafts, etc.). Bo also shows the geographical indications (GIs) of Europe.
-                </CardDescription>
-                <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
-                  <li>Connects visitors with local producer “hosts” across Europe</li>
-                  <li>Covers all categories: wine, beer, produce, fish, crafts</li>
-                  <li>Highlights Europe’s geographical indications (GIs)</li>
-                </ul>
-                <a href="http://app.hellobo.eu?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=bo" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit Bo →</a>
-              </CardContent>
-            </Card>
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <AnimatedCard>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-3">
+                    <img src="/images/amix-logo.png" alt="Amix" className="h-8 w-auto rounded" />
+                    Amix • Spain
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="mb-3">
+                    Quality sports supplements — protein, pre‑workout, and recovery essentials.
+                  </CardDescription>
+                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
+                    <li>Wide range of evidence‑based products</li>
+                    <li>Supports training performance and recovery</li>
+                    <li>Trusted by athletes and coaches</li>
+                  </ul>
+                  <a href="https://amix.com/?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=amix" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit Amix →</a>
+                </CardContent>
+              </Card>
+            </AnimatedCard>
+            <AnimatedCard>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-3">
+                    <img src="/images/Bo_logo.png" alt="Bo" className="h-8 w-auto rounded" />
+                    Bo • Europe
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="mb-3">
+                    Bo is a social network that links visitors to local producers from all over Europe, whom are called hosts in Bo. Local producers of any category (i.e., wine, beer, vegetables, fruit, fish, crafts, etc.). Bo also shows the geographical indications (GIs) of Europe.
+                  </CardDescription>
+                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
+                    <li>Connects visitors with local producer "hosts" across Europe</li>
+                    <li>Covers all categories: wine, beer, produce, fish, crafts</li>
+                    <li>Highlights Europe's geographical indications (GIs)</li>
+                  </ul>
+                  <a href="http://app.hellobo.eu?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=bo" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit Bo →</a>
+                </CardContent>
+              </Card>
+            </AnimatedCard>
+            <AnimatedCard>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-3">
+                    <img src="/images/quotavitalogo.jpg" alt="Quota Vita" className="h-8 w-auto rounded" />
+                    Quota Vita • Spain
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="mb-3">
+                    Whey protein supplements with unique Mediterranean flavors, crafted in Barcelona for healthy supplementation.
+                  </CardDescription>
+                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
+                    <li>24g protein per serving with complete amino acid profile</li>
+                    <li>Unique flavors like Crema Catalana</li>
+                    <li>Focus on healthy habits and sustainable nutrition</li>
+                  </ul>
+                  <a href="https://www.quotavita.com/en?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=quotavita" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit Quota Vita &#x2192;</a>
+                </CardContent>
+              </Card>
+            </AnimatedCard>
             {/** Temporarily removed Jims card pending formal agreement **/}
             {/**
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <img src="/images/jims-logo.png" alt="Jims" className="h-8 w-auto rounded" />
-                  Jims • Belgium
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="mb-3">
-                  Accessible gym network with multiple locations and flexible memberships.
-                </CardDescription>
-                <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
-                  <li>Convenient locations across Belgium</li>
-                  <li>Great value membership options</li>
-                  <li>Friendly, supportive environment</li>
-                </ul>
-                <a href="https://www.jims.be/nl?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=jims" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit Jims →</a>
-              </CardContent>
-            </Card>
+            <AnimatedCard>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-3">
+                    <img src="/images/jims-logo.png" alt="Jims" className="h-8 w-auto rounded" />
+                    Jims • Belgium
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="mb-3">
+                    Accessible gym network with multiple locations and flexible memberships.
+                  </CardDescription>
+                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
+                    <li>Convenient locations across Belgium</li>
+                    <li>Great value membership options</li>
+                    <li>Friendly, supportive environment</li>
+                  </ul>
+                  <a href="https://www.jims.be/nl?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=jims" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit Jims →</a>
+                </CardContent>
+              </Card>
+            </AnimatedCard>
             **/}
-          </div>
+          </StaggerContainer>
           <p className="text-xs text-gray-500 mt-3">Partnership details subject to change.</p>
         </section>
 
         {/* Hero Section */}
-        <section className="text-center mb-16">
+        <HeroSection className="text-center mb-16">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Partner with Massimino
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Join the future of fitness technology. Partner with Massimino to reach 
+            Join the future of fitness technology. Partner with Massimino to reach
             millions of fitness enthusiasts and professionals worldwide.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -132,56 +174,65 @@ export default function PartnershipsPage() {
             {/* Download Partnership Kit button - temporarily hidden */}
             {/* <KitDownloadButton variant="outline" size="lg" /> */}
           </div>
-        </section>
+        </HeroSection>
 
         {/* Highlights */}
         <section className="mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="text-center">
-              <CardHeader>
-                <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                  <CheckCircle className="h-6 w-6 text-green-600" />
-                </div>
-                <CardTitle>Easy Integration</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>SDK/API/white‑label options with branded experiences.</CardDescription>
-              </CardContent>
-            </Card>
-            <Card className="text-center">
-              <CardHeader>
-                <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                  <Target className="h-6 w-6 text-blue-600" />
-                </div>
-                <CardTitle>Targeted Reach</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>Contextual placements across feed, workouts, teams.</CardDescription>
-              </CardContent>
-            </Card>
-            <Card className="text-center">
-              <CardHeader>
-                <div className="mx-auto w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mb-4">
-                  <BarChart3 className="h-6 w-6 text-amber-600" />
-                </div>
-                <CardTitle>Clear Analytics</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>Impressions, clicks, CTR, and pacing transparency.</CardDescription>
-              </CardContent>
-            </Card>
-          </div>
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <AnimatedCard>
+              <Card className="text-center h-full">
+                <CardHeader>
+                  <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                    <CheckCircle className="h-6 w-6 text-green-600" />
+                  </div>
+                  <CardTitle>Easy Integration</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>SDK/API/white‑label options with branded experiences.</CardDescription>
+                </CardContent>
+              </Card>
+            </AnimatedCard>
+            <AnimatedCard>
+              <Card className="text-center h-full">
+                <CardHeader>
+                  <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                    <Target className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <CardTitle>Targeted Reach</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>Contextual placements across feed, workouts, teams.</CardDescription>
+                </CardContent>
+              </Card>
+            </AnimatedCard>
+            <AnimatedCard>
+              <Card className="text-center h-full">
+                <CardHeader>
+                  <div className="mx-auto w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mb-4">
+                    <BarChart3 className="h-6 w-6 text-amber-600" />
+                  </div>
+                  <CardTitle>Clear Analytics</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>Impressions, clicks, CTR, and pacing transparency.</CardDescription>
+                </CardContent>
+              </Card>
+            </AnimatedCard>
+          </StaggerContainer>
         </section>
 
         {/* Partnership Types */}
         <section className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-            Partnership Opportunities
-          </h2>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <AnimatedSection>
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
+              Partnership Opportunities
+            </h2>
+          </AnimatedSection>
+
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Gym Partnerships */}
-            <Card className="border-2 border-blue-200">
+            <AnimatedCard>
+            <Card className="border-2 border-blue-200 h-full">
               <CardHeader>
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
@@ -221,9 +272,11 @@ export default function PartnershipsPage() {
                 <LeadDialog variant="gym" fullWidth />
               </CardContent>
             </Card>
+            </AnimatedCard>
 
             {/* Advertising Partnerships */}
-            <Card className="border-2 border-green-200">
+            <AnimatedCard>
+            <Card className="border-2 border-green-200 h-full">
               <CardHeader>
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
@@ -263,86 +316,100 @@ export default function PartnershipsPage() {
                 <LeadDialog variant="ad" fullWidth />
               </CardContent>
             </Card>
-          </div>
+            </AnimatedCard>
+          </StaggerContainer>
         </section>
 
         {/* Features Section */}
         <section className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-            Why Partner with Massimino?
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="text-center">
-              <CardHeader>
-                <div className="mx-auto w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
-                  <Users className="h-6 w-6 text-purple-600" />
-                </div>
-                <CardTitle>Growing Community</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  Access to thousands of active fitness enthusiasts and professionals
-                </CardDescription>
-              </CardContent>
-            </Card>
+          <AnimatedSection>
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
+              Why Partner with Massimino?
+            </h2>
+          </AnimatedSection>
 
-            <Card className="text-center">
-              <CardHeader>
-                <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                  <Shield className="h-6 w-6 text-blue-600" />
-                </div>
-                <CardTitle>Safety First</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  Trusted platform with advanced safety and moderation features
-                </CardDescription>
-              </CardContent>
-            </Card>
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <AnimatedCard>
+              <Card className="text-center h-full">
+                <CardHeader>
+                  <div className="mx-auto w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                    <Users className="h-6 w-6 text-purple-600" />
+                  </div>
+                  <CardTitle>Growing Community</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Access to thousands of active fitness enthusiasts and professionals
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </AnimatedCard>
 
-            <Card className="text-center">
-              <CardHeader>
-                <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                  <BarChart3 className="h-6 w-6 text-green-600" />
-                </div>
-                <CardTitle>Data Insights</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  Comprehensive analytics and insights for better decision making
-                </CardDescription>
-              </CardContent>
-            </Card>
+            <AnimatedCard>
+              <Card className="text-center h-full">
+                <CardHeader>
+                  <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                    <Shield className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <CardTitle>Safety First</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Trusted platform with advanced safety and moderation features
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </AnimatedCard>
 
-            <Card className="text-center">
-              <CardHeader>
-                <div className="mx-auto w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mb-4">
-                  <Zap className="h-6 w-6 text-orange-600" />
-                </div>
-                <CardTitle>Easy Integration</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  Simple APIs and documentation for quick implementation
-                </CardDescription>
-              </CardContent>
-            </Card>
-          </div>
+            <AnimatedCard>
+              <Card className="text-center h-full">
+                <CardHeader>
+                  <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                    <BarChart3 className="h-6 w-6 text-green-600" />
+                  </div>
+                  <CardTitle>Data Insights</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Comprehensive analytics and insights for better decision making
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </AnimatedCard>
+
+            <AnimatedCard>
+              <Card className="text-center h-full">
+                <CardHeader>
+                  <div className="mx-auto w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mb-4">
+                    <Zap className="h-6 w-6 text-orange-600" />
+                  </div>
+                  <CardTitle>Easy Integration</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Simple APIs and documentation for quick implementation
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </AnimatedCard>
+          </StaggerContainer>
         </section>
 
         {/* How It Works */}
         <section className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="border-blue-200">
+          <AnimatedSection>
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">How It Works</h2>
+          </AnimatedSection>
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <StaggerItem>
+            <Card className="border-blue-200 h-full">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Building2 className="h-5 w-5 text-blue-600" /> Gyms
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div>
                     <div className="flex items-center gap-2 text-sm font-medium"><Globe className="h-4 w-4 text-blue-600" />Explore</div>
                     <CardDescription>Scoping call + sandbox access</CardDescription>
@@ -358,14 +425,16 @@ export default function PartnershipsPage() {
                 </div>
               </CardContent>
             </Card>
-            <Card className="border-amber-200">
+            </StaggerItem>
+            <StaggerItem>
+            <Card className="border-amber-200 h-full">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Target className="h-5 w-5 text-amber-600" /> Advertisers
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                   <div>
                     <div className="flex items-center gap-2 text-sm font-medium"><Mail className="h-4 w-4 text-amber-600" />Brief</div>
                     <CardDescription>Goals + placements + dates</CardDescription>
@@ -385,7 +454,8 @@ export default function PartnershipsPage() {
                 </div>
               </CardContent>
             </Card>
-          </div>
+            </StaggerItem>
+          </StaggerContainer>
         </section>
 
         {/* Integration Examples — commented out for later */}
@@ -512,7 +582,7 @@ export default function PartnershipsPage() {
         */}
 
         {/* Contact Section */}
-        <section className="bg-gray-50 rounded-lg p-8">
+        <AnimatedSection className="bg-gray-50 rounded-lg p-8">
           <div className="text-center">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Ready to Partner with Us?
@@ -554,7 +624,7 @@ export default function PartnershipsPage() {
               </div>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
       </div>
     </>
   );

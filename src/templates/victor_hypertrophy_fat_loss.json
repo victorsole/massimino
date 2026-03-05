@@ -1,0 +1,1041 @@
+{
+    "program_name": "Victor's Hypertrophy & Fat Loss Program",
+    "program_id": "victor-hypertrophy-fat-loss",
+    "description": "12-week evidence-based hypertrophy and fat loss program designed for experienced lifters. Built on Van Every et al. (2026) research, featuring 3 mesocycles with progressive overload across 4 weekly sessions. Includes step machine warmup protocol, compound-first training, and structured deload weeks.",
+    "goal": "Hypertrophy & Fat Loss",
+    "methodology": "Evidence-Based Periodization",
+    "total_workouts": 48,
+    "duration": "12 weeks",
+    "target_audience": "Experienced lifters (10+ years) seeking hypertrophy with simultaneous fat loss through structured periodization",
+    "phases_covered": [
+      {
+        "phase": 1,
+        "phase_name": "Foundation",
+        "workouts": "Weeks 1-4",
+        "focus": "Re-establish progressive overload patterns, moderate volume at 8-12 reps, 2-3 RIR. Deload in Week 4."
+      },
+      {
+        "phase": 2,
+        "phase_name": "Accumulation",
+        "workouts": "Weeks 5-8",
+        "focus": "Increase volume and introduce intensity techniques, 6-12 reps, 1-2 RIR. Peak volume in Week 7, deload in Week 8."
+      },
+      {
+        "phase": 3,
+        "phase_name": "Intensification",
+        "workouts": "Weeks 9-12",
+        "focus": "Peak intensity with slight volume reduction, 5-10 reps, 0-1 RIR. Push strength PRs and taper into reassessment."
+      }
+    ],
+    "metadata": {
+      "author": "Victor Sole Ferioli",
+      "level": "Advanced",
+      "settings": ["Gym"],
+      "frequency": "4 sessions/week (flexible to 3 or 5)",
+      "session_length": "60 minutes maximum",
+      "equipment": ["Barbell", "Dumbbells", "Cable Machine", "Step Machine", "Leg Press", "Leg Extension", "Leg Curl", "Pull-up Bar"],
+      "supplements": "Creatine (daily), ESN Whey Isolate (morning, post-workout, optional pre-bed + magnesium)"
+    },
+    "program_philosophy": {
+      "principles": [
+        "Mechanical tension is the primary driver of hypertrophy — every session prioritizes compound movements with progressive overload",
+        "No time wasted chasing hormonal spikes or 'the pump' — every minute of your 60 is purposeful",
+        "Progressive overload across 12 weeks with structured volume and intensity increases",
+        "Fat loss comes from energy deficit created by training + daily activity + reasonable nutrition",
+        "Step machine warmup is non-negotiable — doubles as steady-state cardio for caloric expenditure and cardiovascular health"
+      ],
+      "evidence_base": "Van Every DW, Lees MJ, Wilson B, Nippard J, Phillips SM. Load-induced human skeletal muscle hypertrophy: Mechanisms, myths, and misconceptions. Journal of Sport and Health Science, 2026;15:101104."
+    },
+    "progression_protocol": {
+      "description": "Every week, try to do at least one of the following on each exercise:",
+      "methods": [
+        "Add weight (even 1-2 kg counts)",
+        "Add a rep within the prescribed range",
+        "Add a set (within the phase prescription)"
+      ],
+      "rule": "If you hit the top of the rep range for all prescribed sets, increase the load next session by the smallest increment available."
+    },
+    "nutrition_guidelines": {
+      "protein_target": "1.6-2.2 g/kg bodyweight daily",
+      "creatine": "3-5 g daily, timing doesn't matter — consistency does",
+      "principles": [
+        "Eat protein first at every meal",
+        "Don't restrict food groups — be mindful of portions on calorie-dense foods",
+        "Pair carbs with solid protein source and vegetables",
+        "Keep alcohol moderate (blunts MPS and adds empty calories)",
+        "Stay hydrated, especially with creatine supplementation",
+        "Magnesium before bed supports sleep quality and recovery"
+      ]
+    },
+    "workouts": [
+      {
+        "workout_number": 1,
+        "workout_id": "victor-phase1-session-a",
+        "phase": 1,
+        "phase_name": "Foundation",
+        "date": "Week 1 — Monday",
+        "coaching_tips": "Focus on establishing baseline weights. Use 2-3 RIR — leave reps in reserve. Log every set.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Step Machine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "15 min",
+                "rest_seconds": 60,
+                "notes": "Moderate intensity (RPE 5-6). Steady pace to elevate heart rate and warm up legs."
+              }
+            ]
+          },
+          "resistance_training": {
+            "exercises": [
+              {
+                "exercise_name": "Flat Barbell Bench Press",
+                "pattern": "Push Pattern",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "Controlled",
+                "rest_seconds": 120,
+                "notes": "Compound push. Focus on chest stretch at bottom, full lockout at top."
+              },
+              {
+                "exercise_name": "Seated Dumbbell Overhead Press",
+                "pattern": "Press Pattern",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Shoulder primary. Avoid excessive back arch."
+              },
+              {
+                "exercise_name": "Incline Dumbbell Press",
+                "pattern": "Push Pattern",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "30° incline angle. Upper chest emphasis."
+              },
+              {
+                "exercise_name": "Cable Lateral Raise",
+                "pattern": "Isolation",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Lateral delt isolation. Control the eccentric."
+              },
+              {
+                "exercise_name": "Tricep Rope Pushdown",
+                "pattern": "Isolation",
+                "sets": 2,
+                "reps": "12-15",
+                "tempo": "Controlled",
+                "rest_seconds": 60,
+                "notes": "Squeeze at bottom, spread the rope ends."
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": []
+          }
+        }
+      },
+      {
+        "workout_number": 2,
+        "workout_id": "victor-phase1-session-b",
+        "phase": 1,
+        "phase_name": "Foundation",
+        "date": "Week 1 — Tuesday",
+        "coaching_tips": "Quad and glute emphasis. Keep step machine intensity moderate. Control all eccentric phases.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Step Machine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "15 min",
+                "rest_seconds": 60,
+                "notes": "Moderate intensity (RPE 5-6). Steady pace."
+              }
+            ]
+          },
+          "resistance_training": {
+            "exercises": [
+              {
+                "exercise_name": "Barbell Back Squat",
+                "pattern": "Squat Pattern",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "Controlled",
+                "rest_seconds": 120,
+                "notes": "Compound lower. Depth to parallel or below. Brace core."
+              },
+              {
+                "exercise_name": "Leg Press",
+                "pattern": "Squat Pattern",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Feet shoulder-width, mid-platform. Full range of motion."
+              },
+              {
+                "exercise_name": "Walking Lunges",
+                "pattern": "Lunge Pattern",
+                "sets": 3,
+                "reps": "10/leg",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Hold dumbbells at sides. Keep torso upright."
+              },
+              {
+                "exercise_name": "Leg Extension",
+                "pattern": "Isolation",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Quad isolation. Pause at top contraction."
+              },
+              {
+                "exercise_name": "Standing Calf Raise",
+                "pattern": "Isolation",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Full stretch at bottom, hold at top for 1 second."
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": []
+          }
+        }
+      },
+      {
+        "workout_number": 3,
+        "workout_id": "victor-phase1-session-c",
+        "phase": 1,
+        "phase_name": "Foundation",
+        "date": "Week 1 — Thursday",
+        "coaching_tips": "Pull emphasis day. Prioritize back thickness and lat width. Use full ROM on all pulling movements.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Step Machine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "15 min",
+                "rest_seconds": 60,
+                "notes": "Moderate intensity (RPE 5-6). Steady pace."
+              }
+            ]
+          },
+          "resistance_training": {
+            "exercises": [
+              {
+                "exercise_name": "Pull-ups",
+                "pattern": "Pull Pattern",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "Controlled",
+                "rest_seconds": 120,
+                "notes": "If bodyweight is too easy, add weight belt. Use lat pulldown as alternative."
+              },
+              {
+                "exercise_name": "Barbell Bent-Over Row",
+                "pattern": "Pull Pattern",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "45° torso angle. Pull to lower chest. No excessive body English."
+              },
+              {
+                "exercise_name": "Seated Cable Row",
+                "pattern": "Pull Pattern",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Close grip attachment. Squeeze shoulder blades together."
+              },
+              {
+                "exercise_name": "Face Pulls",
+                "pattern": "Pull Pattern",
+                "sets": 3,
+                "reps": "15-20",
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Rear delt and rotator cuff. Rope attachment, pull to forehead level."
+              },
+              {
+                "exercise_name": "Barbell Curl",
+                "pattern": "Isolation",
+                "sets": 2,
+                "reps": "10-12",
+                "tempo": "Controlled",
+                "rest_seconds": 60,
+                "notes": "Bicep isolation. No swinging — strict form."
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": []
+          }
+        }
+      },
+      {
+        "workout_number": 4,
+        "workout_id": "victor-phase1-session-d",
+        "phase": 1,
+        "phase_name": "Foundation",
+        "date": "Week 1 — Friday",
+        "coaching_tips": "Posterior chain focus. Hinge movements first. Protect the lower back — brace on every rep.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Step Machine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "15 min",
+                "rest_seconds": 60,
+                "notes": "Moderate intensity (RPE 5-6). Steady pace."
+              }
+            ]
+          },
+          "resistance_training": {
+            "exercises": [
+              {
+                "exercise_name": "Romanian Deadlift",
+                "pattern": "Hinge Pattern",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "Controlled",
+                "rest_seconds": 120,
+                "notes": "Barbell. Hinge at hips, slight knee bend. Feel the hamstring stretch."
+              },
+              {
+                "exercise_name": "Bulgarian Split Squat",
+                "pattern": "Lunge Pattern",
+                "sets": 3,
+                "reps": "10/leg",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Dumbbells at sides. Rear foot elevated on bench."
+              },
+              {
+                "exercise_name": "Lying Leg Curl",
+                "pattern": "Isolation",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Hamstring isolation. Control the eccentric."
+              },
+              {
+                "exercise_name": "Hip Thrust",
+                "pattern": "Hinge Pattern",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Barbell or machine. Full hip extension, squeeze glutes at top."
+              },
+              {
+                "exercise_name": "Seated Calf Raise",
+                "pattern": "Isolation",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Soleus focus. Full range of motion."
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": []
+          }
+        }
+      },
+      {
+        "workout_number": 5,
+        "workout_id": "victor-phase2-session-a",
+        "phase": 2,
+        "phase_name": "Accumulation",
+        "date": "Week 5 — Monday",
+        "coaching_tips": "Volume increases. Push to 1-2 RIR. Extra set on bench press. Step machine duration increases to 17 min.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Step Machine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "17 min",
+                "rest_seconds": 60,
+                "notes": "Moderate-high intensity (RPE 6-7). Slightly faster pace than Phase 1."
+              }
+            ]
+          },
+          "resistance_training": {
+            "exercises": [
+              {
+                "exercise_name": "Flat Barbell Bench Press",
+                "pattern": "Push Pattern",
+                "sets": 4,
+                "reps": "6-8",
+                "tempo": "Controlled",
+                "rest_seconds": 120,
+                "notes": "Heavier loads, added set. Push toward 1-2 RIR."
+              },
+              {
+                "exercise_name": "Seated Dumbbell Overhead Press",
+                "pattern": "Press Pattern",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Heavier than Phase 1. Maintain strict form."
+              },
+              {
+                "exercise_name": "Incline Dumbbell Press",
+                "pattern": "Push Pattern",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "30° incline. Progressive overload from Phase 1 weights."
+              },
+              {
+                "exercise_name": "Cable Lateral Raise",
+                "pattern": "Isolation",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Slightly heavier. Control the negative."
+              },
+              {
+                "exercise_name": "Tricep Rope Pushdown",
+                "pattern": "Isolation",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "Controlled",
+                "rest_seconds": 60,
+                "notes": "Added set vs Phase 1. Push close to failure."
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": []
+          }
+        }
+      },
+      {
+        "workout_number": 6,
+        "workout_id": "victor-phase2-session-b",
+        "phase": 2,
+        "phase_name": "Accumulation",
+        "date": "Week 5 — Tuesday",
+        "coaching_tips": "Heavier squats with added set. Step up lunge volume. Push 1-2 RIR on all movements.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Step Machine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "17 min",
+                "rest_seconds": 60,
+                "notes": "Moderate-high intensity (RPE 6-7)."
+              }
+            ]
+          },
+          "resistance_training": {
+            "exercises": [
+              {
+                "exercise_name": "Barbell Back Squat",
+                "pattern": "Squat Pattern",
+                "sets": 4,
+                "reps": "6-8",
+                "tempo": "Controlled",
+                "rest_seconds": 120,
+                "notes": "Heavier loads, added set. Brace hard."
+              },
+              {
+                "exercise_name": "Leg Press",
+                "pattern": "Squat Pattern",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Increase load from Phase 1."
+              },
+              {
+                "exercise_name": "Walking Lunges",
+                "pattern": "Lunge Pattern",
+                "sets": 3,
+                "reps": "12/leg",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Increased reps. Heavier dumbbells if possible."
+              },
+              {
+                "exercise_name": "Leg Extension",
+                "pattern": "Isolation",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Push closer to failure than Phase 1."
+              },
+              {
+                "exercise_name": "Standing Calf Raise",
+                "pattern": "Isolation",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Maintain full ROM, add weight."
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": []
+          }
+        }
+      },
+      {
+        "workout_number": 7,
+        "workout_id": "victor-phase2-session-c",
+        "phase": 2,
+        "phase_name": "Accumulation",
+        "date": "Week 5 — Thursday",
+        "coaching_tips": "Pull volume increases. Extra set on pull-ups. Heavier rows. Added set on curls.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Step Machine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "17 min",
+                "rest_seconds": 60,
+                "notes": "Moderate-high intensity (RPE 6-7)."
+              }
+            ]
+          },
+          "resistance_training": {
+            "exercises": [
+              {
+                "exercise_name": "Pull-ups",
+                "pattern": "Pull Pattern",
+                "sets": 4,
+                "reps": "6-8",
+                "tempo": "Controlled",
+                "rest_seconds": 120,
+                "notes": "Add weight if needed. Extra set vs Phase 1."
+              },
+              {
+                "exercise_name": "Barbell Bent-Over Row",
+                "pattern": "Pull Pattern",
+                "sets": 3,
+                "reps": "6-8",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Heavier loads. Maintain 45° torso angle."
+              },
+              {
+                "exercise_name": "Seated Cable Row",
+                "pattern": "Pull Pattern",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Close grip. Increase weight from Phase 1."
+              },
+              {
+                "exercise_name": "Face Pulls",
+                "pattern": "Pull Pattern",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Slightly heavier. Focus on external rotation at end."
+              },
+              {
+                "exercise_name": "Dumbbell Curl",
+                "pattern": "Isolation",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "Controlled",
+                "rest_seconds": 60,
+                "notes": "Added set. Alternating or simultaneous."
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": []
+          }
+        }
+      },
+      {
+        "workout_number": 8,
+        "workout_id": "victor-phase2-session-d",
+        "phase": 2,
+        "phase_name": "Accumulation",
+        "date": "Week 5 — Friday",
+        "coaching_tips": "Heavier hinge work. Added set on RDL. Push Bulgarian split squats hard.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Step Machine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "17 min",
+                "rest_seconds": 60,
+                "notes": "Moderate-high intensity (RPE 6-7)."
+              }
+            ]
+          },
+          "resistance_training": {
+            "exercises": [
+              {
+                "exercise_name": "Romanian Deadlift",
+                "pattern": "Hinge Pattern",
+                "sets": 4,
+                "reps": "6-8",
+                "tempo": "Controlled",
+                "rest_seconds": 120,
+                "notes": "Heavier loads, added set. Maintain neutral spine."
+              },
+              {
+                "exercise_name": "Bulgarian Split Squat",
+                "pattern": "Lunge Pattern",
+                "sets": 3,
+                "reps": "8/leg",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Increase dumbbell weight from Phase 1."
+              },
+              {
+                "exercise_name": "Lying Leg Curl",
+                "pattern": "Isolation",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Heavier. Slow eccentric for extra tension."
+              },
+              {
+                "exercise_name": "Hip Thrust",
+                "pattern": "Hinge Pattern",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Increase load. 2-second pause at top."
+              },
+              {
+                "exercise_name": "Seated Calf Raise",
+                "pattern": "Isolation",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Add weight. Full stretch at bottom."
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": []
+          }
+        }
+      },
+      {
+        "workout_number": 9,
+        "workout_id": "victor-phase3-session-a",
+        "phase": 3,
+        "phase_name": "Intensification",
+        "date": "Week 9 — Monday",
+        "coaching_tips": "Peak intensity phase. Push to 0-1 RIR. Step machine increases to 20 min with intervals. Heaviest loads of the program.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Step Machine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "20 min",
+                "rest_seconds": 60,
+                "notes": "Intervals: 2 min moderate / 1 min high (RPE 7-8). Most challenging warmup phase."
+              }
+            ]
+          },
+          "resistance_training": {
+            "exercises": [
+              {
+                "exercise_name": "Flat Barbell Bench Press",
+                "pattern": "Push Pattern",
+                "sets": 4,
+                "reps": "5-7",
+                "tempo": "Controlled",
+                "rest_seconds": 120,
+                "notes": "Heaviest bench of the program. Push for PRs. 0-1 RIR."
+              },
+              {
+                "exercise_name": "Seated Dumbbell Overhead Press",
+                "pattern": "Press Pattern",
+                "sets": 3,
+                "reps": "6-8",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Heaviest press loads. Strict form."
+              },
+              {
+                "exercise_name": "Incline Dumbbell Press",
+                "pattern": "Push Pattern",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Maintain intensity from Phase 2."
+              },
+              {
+                "exercise_name": "Cable Lateral Raise",
+                "pattern": "Isolation",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Push close to failure."
+              },
+              {
+                "exercise_name": "Tricep Rope Pushdown",
+                "pattern": "Isolation",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "Controlled",
+                "rest_seconds": 60,
+                "notes": "Near failure. Squeeze at bottom."
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": []
+          }
+        }
+      },
+      {
+        "workout_number": 10,
+        "workout_id": "victor-phase3-session-b",
+        "phase": 3,
+        "phase_name": "Intensification",
+        "date": "Week 9 — Tuesday",
+        "coaching_tips": "Heaviest squat session. Push for strength PRs. Maintain technique under heavy loads.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Step Machine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "20 min",
+                "rest_seconds": 60,
+                "notes": "Intervals: 2 min moderate / 1 min high (RPE 7-8)."
+              }
+            ]
+          },
+          "resistance_training": {
+            "exercises": [
+              {
+                "exercise_name": "Barbell Back Squat",
+                "pattern": "Squat Pattern",
+                "sets": 4,
+                "reps": "5-7",
+                "tempo": "Controlled",
+                "rest_seconds": 120,
+                "notes": "Heaviest squats of the program. 0-1 RIR. Belt recommended."
+              },
+              {
+                "exercise_name": "Leg Press",
+                "pattern": "Squat Pattern",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Heavy. Maintain full ROM."
+              },
+              {
+                "exercise_name": "Walking Lunges",
+                "pattern": "Lunge Pattern",
+                "sets": 3,
+                "reps": "12/leg",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Maintain Phase 2 weight. Focus on glute activation."
+              },
+              {
+                "exercise_name": "Leg Extension",
+                "pattern": "Isolation",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Push to near failure."
+              },
+              {
+                "exercise_name": "Standing Calf Raise",
+                "pattern": "Isolation",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Heavier weight, slightly lower rep range."
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": []
+          }
+        }
+      },
+      {
+        "workout_number": 11,
+        "workout_id": "victor-phase3-session-c",
+        "phase": 3,
+        "phase_name": "Intensification",
+        "date": "Week 9 — Thursday",
+        "coaching_tips": "Heaviest pulling session. Push pull-up and row PRs. Near-failure on all working sets.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Step Machine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "20 min",
+                "rest_seconds": 60,
+                "notes": "Intervals: 2 min moderate / 1 min high (RPE 7-8)."
+              }
+            ]
+          },
+          "resistance_training": {
+            "exercises": [
+              {
+                "exercise_name": "Pull-ups",
+                "pattern": "Pull Pattern",
+                "sets": 4,
+                "reps": "5-8",
+                "tempo": "Controlled",
+                "rest_seconds": 120,
+                "notes": "Weighted. Heaviest pull-ups of the program."
+              },
+              {
+                "exercise_name": "Barbell Bent-Over Row",
+                "pattern": "Pull Pattern",
+                "sets": 3,
+                "reps": "6-8",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Heaviest rows. Maintain form — no cheating."
+              },
+              {
+                "exercise_name": "Seated Cable Row",
+                "pattern": "Pull Pattern",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Heavy. Full stretch and squeeze."
+              },
+              {
+                "exercise_name": "Face Pulls",
+                "pattern": "Pull Pattern",
+                "sets": 3,
+                "reps": "12-15",
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Maintain rear delt health. Don't go too heavy."
+              },
+              {
+                "exercise_name": "Dumbbell Curl",
+                "pattern": "Isolation",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "Controlled",
+                "rest_seconds": 60,
+                "notes": "Push close to failure. Strict form."
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": []
+          }
+        }
+      },
+      {
+        "workout_number": 12,
+        "workout_id": "victor-phase3-session-d",
+        "phase": 3,
+        "phase_name": "Intensification",
+        "date": "Week 9 — Friday",
+        "coaching_tips": "Heaviest posterior chain session. RDL and hip thrust PRs. Full intensity on all movements.",
+        "workout_structure": {
+          "warm_up": {
+            "exercises": [
+              {
+                "exercise_name": "Step Machine",
+                "sets": 1,
+                "reps": 1,
+                "tempo": "20 min",
+                "rest_seconds": 60,
+                "notes": "Intervals: 2 min moderate / 1 min high (RPE 7-8)."
+              }
+            ]
+          },
+          "resistance_training": {
+            "exercises": [
+              {
+                "exercise_name": "Romanian Deadlift",
+                "pattern": "Hinge Pattern",
+                "sets": 4,
+                "reps": "5-7",
+                "tempo": "Controlled",
+                "rest_seconds": 120,
+                "notes": "Heaviest RDLs. 0-1 RIR. Belt recommended."
+              },
+              {
+                "exercise_name": "Bulgarian Split Squat",
+                "pattern": "Lunge Pattern",
+                "sets": 3,
+                "reps": "8/leg",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Heaviest split squats. Balance and control."
+              },
+              {
+                "exercise_name": "Seated Leg Curl",
+                "pattern": "Isolation",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Seated variation for Phase 3. Push to failure."
+              },
+              {
+                "exercise_name": "Hip Thrust",
+                "pattern": "Hinge Pattern",
+                "sets": 3,
+                "reps": "8-10",
+                "tempo": "Controlled",
+                "rest_seconds": 90,
+                "notes": "Heaviest hip thrusts. Full lockout."
+              },
+              {
+                "exercise_name": "Seated Calf Raise",
+                "pattern": "Isolation",
+                "sets": 3,
+                "reps": "10-12",
+                "tempo": "Slow",
+                "rest_seconds": 60,
+                "notes": "Heavier. Push close to failure."
+              }
+            ]
+          },
+          "cool_down": {
+            "exercises": []
+          }
+        }
+      }
+    ],
+    "deload_protocol": {
+      "weeks": [4, 8],
+      "description": "Reduce volume by ~40% (drop 1-2 sets per exercise, use same weight). This isn't laziness — it's how experienced lifters manage fatigue accumulation across 22+ years of training.",
+      "guidelines": [
+        "Keep the same exercises and weight",
+        "Drop 1-2 sets per exercise",
+        "RIR increases to 3-4 (far from failure)",
+        "Step machine stays at current duration but reduce intensity to RPE 4-5",
+        "Focus on recovery, sleep, and nutrition"
+      ]
+    },
+    "optional_session": {
+      "session_name": "Session E — Arms, Core & Conditioning",
+      "day": "Saturday (only if time and energy allow)",
+      "duration": "45 minutes",
+      "exercises": [
+        {
+          "exercise_name": "Step Machine",
+          "sets": 1,
+          "reps": 1,
+          "tempo": "15 min",
+          "rest_seconds": 60,
+          "notes": "Moderate intensity. Light warmup."
+        },
+        {
+          "exercise_name": "Dumbbell Hammer Curl",
+          "sets": 3,
+          "reps": "10-12",
+          "tempo": "Controlled",
+          "rest_seconds": 60,
+          "notes": "Brachialis and forearm emphasis."
+        },
+        {
+          "exercise_name": "Overhead Tricep Extension",
+          "sets": 3,
+          "reps": "10-12",
+          "tempo": "Controlled",
+          "rest_seconds": 60,
+          "notes": "Cable. Long head tricep stretch."
+        },
+        {
+          "exercise_name": "Cable Woodchop",
+          "sets": 3,
+          "reps": "12/side",
+          "tempo": "Controlled",
+          "rest_seconds": 60,
+          "notes": "Rotational core. High-to-low or low-to-high."
+        },
+        {
+          "exercise_name": "Hanging Leg Raise",
+          "sets": 3,
+          "reps": "10-15",
+          "tempo": "Controlled",
+          "rest_seconds": 60,
+          "notes": "Lower abs. Avoid swinging."
+        },
+        {
+          "exercise_name": "Plank Hold",
+          "sets": 3,
+          "reps": 1,
+          "tempo": "30-45 sec",
+          "rest_seconds": 60,
+          "notes": "Core stability. Squeeze glutes and brace."
+        }
+      ]
+    },
+    "measurement_protocol": {
+      "metrics": [
+        { "metric": "Body weight", "method": "Morning, fasted, after bathroom", "frequency": "Weekly (same day)" },
+        { "metric": "Waist circumference", "method": "At navel, standing relaxed", "frequency": "Week 1, 4, 8, 12" },
+        { "metric": "Progress photos", "method": "Front, side, back — same lighting", "frequency": "Week 1, 6, 12" },
+        { "metric": "Key lifts (1RM or estimated)", "method": "Bench, Squat, RDL, Pull-up", "frequency": "Week 1, 12" },
+        { "metric": "Subjective energy & mood", "method": "Quick 1-10 rating", "frequency": "Weekly" }
+      ],
+      "expectations": [
+        "As an experienced lifter, expect 0.5-1.5 kg of lean mass gain over 12 weeks",
+        "Visible fat loss depends more on overall caloric balance than any specific exercise",
+        "Strength should increase on all major lifts by 5-15%",
+        "At 38 with 22+ years of training, every kilogram of muscle is earned. Respect the process."
+      ]
+    }
+}

@@ -127,6 +127,7 @@ export function NotificationsDropdown({ userId }: NotificationsDropdownProps) {
         variant="ghost"
         size="sm"
         className="relative"
+        aria-label="Notifications"
         onClick={() => setIsOpen(!isOpen)}
       >
         <Bell className="h-5 w-5" />
