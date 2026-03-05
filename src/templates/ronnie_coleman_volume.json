@@ -1,7 +1,8 @@
 {
-    "program_name": "Ronnie Coleman's Mass Building Routine",
+    "program_name": "Ultimate Mass Builder",
     "program_id": "ronnie-coleman-mass-builder",
-    "description": "Ronnie Coleman's high-volume, high-intensity bodybuilding routine used during his 8x Mr. Olympia reign. This is an advanced program requiring serious dedication and recovery capacity. As Ronnie says: 'Everybody wants to be a bodybuilder, but nobody wants to lift no heavy-ass weights!'",
+    "originalInspiration": "mass-building-champion",
+    "description": "A high-volume, high-intensity bodybuilding routine inspired by 8x Mr. Olympia-level training. This is an advanced program requiring serious dedication and recovery capacity. As the saying goes: 'Everybody wants to be a bodybuilder, but nobody wants to lift heavy weights!'",
     "frequency": "6 days per week + 1 rest day",
     "duration": "8-16 weeks (advanced lifters only)",
     "level": "Advanced to Elite",
@@ -24,7 +25,7 @@
             "tempo_description": "Controlled descent, explosive pull",
             "load_guidance": "140-230kg (work up to max)",
             "load_percentage": "80-90% of 1RM",
-            "notes": "King of back exercises. Ronnie's trademark. Go heavy but maintain form. 'Light weight baby!' (it's never light).",
+            "notes": "King of back exercises. Go heavy but maintain form. The foundation of any mass-building program.",
             "primary_muscle_groups": ["lower_back", "glutes", "hamstrings", "traps", "lats"],
             "equipment": ["barbell"]
           },
@@ -166,7 +167,7 @@
             "tempo_description": "Controlled descent, explosive drive",
             "load_guidance": "180-300kg+",
             "load_percentage": "85-95% of 1RM",
-            "notes": "Ronnie's legendary squat. Go deep, drive hard. 'Yeah buddy!'",
+            "notes": "The legendary squat. Go deep, drive hard. No shortcuts.",
             "primary_muscle_groups": ["quadriceps", "glutes", "hamstrings"],
             "equipment": ["barbell", "squat_rack"]
           },
@@ -181,7 +182,7 @@
             "tempo_description": "Full ROM, controlled",
             "load_guidance": "300-600kg+",
             "load_percentage": "Heavy loading",
-            "notes": "Go deep, press hard. Ronnie used to load this with plates.",
+            "notes": "Go deep, press hard. Load this with as many plates as you can handle with good form.",
             "primary_muscle_groups": ["quadriceps", "glutes"],
             "equipment": ["leg_press_machine"]
           },
@@ -767,12 +768,10 @@
       "hydration": "4-6 liters of water per day",
       "injury_prevention": "Listen to your body, warm up properly, use proper form always"
     },
-    "ronnie_philosophy": {
-      "quotes": [
-        "Yeah buddy!",
-        "Light weight baby!",
-        "Ain't nothin' to it but to do it!",
-        "Everybody wants to be a bodybuilder, but nobody wants to lift no heavy-ass weights!"
+    "training_philosophy": {
+      "motivational_sayings": [
+        "Nothing to it but to do it!",
+        "Everybody wants results, but nobody wants to put in the work!"
       ],
       "principles": [
         "Train heavy with perfect form",

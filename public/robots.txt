@@ -1,0 +1,53 @@
+# Massimino — robots.txt
+# https://massimino.fitness
+
+# Default rules for all crawlers
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /messages/
+Disallow: /workout-log/
+
+# GPTBot (OpenAI)
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /messages/
+Disallow: /workout-log/
+
+# ClaudeBot (Anthropic)
+User-agent: ClaudeBot
+Allow: /
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /messages/
+Disallow: /workout-log/
+
+# PerplexityBot
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /messages/
+Disallow: /workout-log/
+
+# Google-Extended (Gemini)
+User-agent: Google-Extended
+Allow: /
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /messages/
+Disallow: /workout-log/
+
+# LLMs.txt standard
+Llmstxt: https://massimino.fitness/llms.txt
+
+# Sitemap
+Sitemap: https://massimino.fitness/sitemap.xml

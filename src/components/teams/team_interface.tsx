@@ -24,8 +24,13 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 
+// Animation
+import { motion } from 'framer-motion';
+import { fadeInVariants, staggerContainerVariants, staggerItemVariants } from '@/lib/animations/variants';
+import { useReducedMotion } from '@/hooks/use_reduced_motion';
+
 // Icons
-import { Search, Users, Star, UserPlus, Palette, Music } from 'lucide-react';
+import { Search, Users, Star, UserPlus, Palette, Music, ArrowRight } from 'lucide-react';
 
 interface TeamInterfaceProps {
   className?: string;
@@ -39,6 +44,7 @@ export function TeamInterface({
   teamId
 }: TeamInterfaceProps) {
   const { data: session } = useSession();
+  const prefersReducedMotion = useReducedMotion();
   const [teams, setTeams] = useState<Team[]>([]);
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
   const [loading, setLoading] = useState(false);
@@ -187,46 +193,46 @@ export function TeamInterface({
 
   // Team Discovery Component
   const TeamDiscovery = () => (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Trainer/Admin toolbar */}
       {session?.user?.role && (session.user.role === 'TRAINER' || session.user.role === 'ADMIN') && (
         <div className="flex justify-end">
-          <Link href="/dashboard" className="text-sm underline text-blue-600 hover:text-blue-700">
-            Manage my teams →
+          <Link href="/dashboard" className="font-body text-sm text-[#2b5069] hover:text-[#1e3d52] flex items-center gap-1 transition-colors">
+            Manage my teams <ArrowRight size={14} />
           </Link>
         </div>
       )}
+
       {/* Search and Filters */}
-      <Card className="border-brand-primary/20 shadow-lg">
-        <CardHeader className="bg-gradient-to-r from-brand-primary to-brand-primary-dark text-white rounded-t-lg">
-          <CardTitle className="flex items-center gap-2 text-white">
-            <Search size={18} />
-            Discover Teams
-          </CardTitle>
-          <CardDescription className="text-brand-secondary">
-            Find and join fitness teams that match your interests
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
+      <motion.div
+        variants={!prefersReducedMotion ? fadeInVariants : undefined}
+        initial={!prefersReducedMotion ? "hidden" : undefined}
+        animate={!prefersReducedMotion ? "visible" : undefined}
+        transition={{ delay: 0.1 }}
+      >
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+          {/* Search input */}
+          <div className="relative">
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
             <Input
-              placeholder="Search teams..."
+              placeholder="Search teams by name, trainer, or type..."
               value={filters.searchQuery || ''}
               onChange={(e) => setFilters(prev => ({ ...prev, searchQuery: e.target.value }))}
-              className="mb-4 border-brand-primary/30 focus:border-brand-primary focus:ring-brand-primary"
+              className="pl-12 h-12 rounded-xl bg-gray-50/50 border-gray-200 focus:border-[#2b5069] focus:ring-[#2b5069] text-sm"
             />
           </div>
 
-          <div className="grid md:grid-cols-3 gap-4">
-            <div>
-              <Label>Team Type</Label>
+          {/* Filters row */}
+          <div className="mt-4 flex flex-col sm:flex-row gap-4 items-start sm:items-end">
+            <div className="flex-1 w-full sm:w-auto">
+              <Label className="text-xs font-body text-gray-500 uppercase tracking-wider mb-1.5 block">Type</Label>
               <Select onValueChange={(value: string) =>
                 setFilters(prev => ({
                   ...prev,
                   type: value === 'ALL' ? [] : [value as TeamType]
                 }))
               }>
-                <SelectTrigger>
+                <SelectTrigger className="h-10 rounded-lg border-gray-200">
                   <SelectValue placeholder="All Types" />
                 </SelectTrigger>
                 <SelectContent>
@@ -241,190 +247,248 @@ export function TeamInterface({
               </Select>
             </div>
 
-            <div className="flex items-center space-x-2 pt-6">
-              <input
-                type="checkbox"
-                id="verified-trainers"
-                checked={filters.trainerVerified}
-                onChange={(e) => setFilters(prev => ({ ...prev, trainerVerified: e.target.checked }))}
-                className="rounded"
-              />
-              <Label htmlFor="verified-trainers">Verified trainers only</Label>
+            <div className="flex items-center gap-5">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={filters.trainerVerified}
+                  onChange={(e) => setFilters(prev => ({ ...prev, trainerVerified: e.target.checked }))}
+                  className="rounded border-gray-300 text-[#2b5069] focus:ring-[#2b5069]"
+                />
+                <span className="text-sm font-body text-gray-600">Verified only</span>
+              </label>
+
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={filters.hasSpots}
+                  onChange={(e) => setFilters(prev => ({ ...prev, hasSpots: e.target.checked }))}
+                  className="rounded border-gray-300 text-[#2b5069] focus:ring-[#2b5069]"
+                />
+                <span className="text-sm font-body text-gray-600">Open spots</span>
+              </label>
             </div>
 
-            <div className="flex items-center space-x-2 pt-6">
-              <input
-                type="checkbox"
-                id="has-spots"
-                checked={filters.hasSpots}
-                onChange={(e) => setFilters(prev => ({ ...prev, hasSpots: e.target.checked }))}
-                className="rounded"
-              />
-              <Label htmlFor="has-spots">Available spots</Label>
-            </div>
+            <Button
+              onClick={discoverTeams}
+              className="bg-[#2b5069] hover:bg-[#1e3d52] text-white h-10 px-6 rounded-lg font-display uppercase tracking-wider text-xs w-full sm:w-auto"
+            >
+              Search
+            </Button>
           </div>
-
-          <Button onClick={discoverTeams} className="w-full bg-brand-primary hover:bg-brand-primary-dark text-white">
-            Search Teams
-          </Button>
-        </CardContent>
-      </Card>
+        </div>
+      </motion.div>
 
       {/* Teams Results */}
-      <div className="grid gap-4">
-        {loading ? (
-          <div className="text-center py-8">
-            <p className="text-brand-primary-light">Searching for teams...</p>
-          </div>
-        ) : teams.length === 0 ? (
-          <div className="text-center py-8">
-            <Users className="mx-auto h-12 w-12 text-brand-primary/40 mb-4" />
-            <p className="text-brand-primary-light">No teams found matching your criteria</p>
-          </div>
-        ) : (
-          teams.map((team) => {
-            const aesthetic = (team as any).aestheticSettings || (team as any).aesthetic_settings || {};
-            const primary = aesthetic.primaryColor || aesthetic.primary_colour || '#2563eb';
-            const secondary = aesthetic.secondaryColor || aesthetic.secondary_colour || '#93c5fd';
-            const bannerStyle: React.CSSProperties = { backgroundColor: primary };
-            return (
-            <Card key={team.id} className="hover:shadow-lg transition-shadow" style={{ borderColor: primary + '33', borderWidth: 1 }}>
-              {/* Accent banner */}
-              <div style={bannerStyle} className="h-1 w-full rounded-t"/>
-              <CardHeader className="border-b" style={{ background: `linear-gradient(90deg, ${secondary}22, #ffffff)` }}>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle className="flex items-center gap-2" style={{ color: primary }}>
-                      {team.name}
-                      {team.trainer?.trainerVerified && (
-                        <Star className="h-4 w-4 text-yellow-500" />
-                      )}
-                    </CardTitle>
-                    <CardDescription className="text-gray-600">{team.description}</CardDescription>
-                  </div>
-                  <Badge variant={team.visibility === 'PUBLIC' ? 'default' : 'secondary'}
-                         style={team.visibility === 'PUBLIC' ? { backgroundColor: primary, color: '#fff' } : { backgroundColor: secondary, color: '#1f2937' }}>
-                    {team.visibility}
-                  </Badge>
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 animate-pulse">
+              <div className="h-0.5 bg-gray-200" />
+              <div className="p-5 space-y-4">
+                <div className="h-4 bg-gray-200 rounded w-2/3" />
+                <div className="h-3 bg-gray-100 rounded w-1/3" />
+                <div className="space-y-2">
+                  <div className="h-3 bg-gray-100 rounded w-full" />
+                  <div className="h-3 bg-gray-100 rounded w-4/5" />
                 </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between text-sm">
-                    <div className="flex items-center gap-4">
-                      <span className="flex items-center gap-1" style={{ color: primary }}>
-                        <Users size={14} />
-                        {team.memberCount}/{team.maxMembers}
-                      </span>
-                      <span className="capitalize text-gray-600">
-                        {team.type.toLowerCase().replace('_', ' ')}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1 text-gray-600">
-                      <img
-                        src={team.trainer?.image || '/massimino-logo.svg'}
-                        alt={team.trainer?.name || 'Trainer'}
-                        className="w-5 h-5 rounded-full border"
-                        onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/massimino-logo.svg'; }}
-                      />
-                      <span className="text-sm">{team.trainer?.name}</span>
-                    </div>
+                <div className="h-1.5 bg-gray-100 rounded-full" />
+                <div className="flex justify-between items-center pt-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-gray-200 rounded-full" />
+                    <div className="h-3 bg-gray-200 rounded w-20" />
                   </div>
+                  <div className="h-8 bg-gray-200 rounded-lg w-16" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : teams.length === 0 ? (
+        <div className="text-center py-16">
+          <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
+            <Users className="h-8 w-8 text-gray-400" />
+          </div>
+          <h3 className="font-display text-lg font-bold text-[#2b5069] mb-1">No teams found</h3>
+          <p className="font-body text-sm text-gray-500 mb-6">Try adjusting your search or filters</p>
+          <Button
+            variant="outline"
+            onClick={() => {
+              setFilters({ searchQuery: '', type: [], trainerVerified: false, hasSpots: true });
+            }}
+            className="rounded-lg border-gray-200 text-gray-600 hover:bg-gray-50"
+          >
+            Clear Filters
+          </Button>
+        </div>
+      ) : (
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          variants={!prefersReducedMotion ? staggerContainerVariants : undefined}
+          initial={!prefersReducedMotion ? "hidden" : undefined}
+          animate={!prefersReducedMotion ? "visible" : undefined}
+        >
+          {teams.map((team) => {
+            const aesthetic = (team as any).aestheticSettings || (team as any).aesthetic_settings || {};
+            const primary = aesthetic.primaryColor || aesthetic.primary_colour || '#2b5069';
+            const capacityPercent = team.maxMembers > 0 ? (team.memberCount / team.maxMembers) * 100 : 0;
+            const isNearFull = capacityPercent >= 90;
 
-                  {team.spotifyPlaylistUrl && (
-                    <div className="flex items-center gap-2 text-sm" style={{ color: primary }}>
-                      <Music size={14} />
-                      <span>Has team playlist</span>
+            return (
+              <motion.div
+                key={team.id}
+                variants={!prefersReducedMotion ? staggerItemVariants : undefined}
+                whileHover={!prefersReducedMotion ? { y: -6 } : undefined}
+                transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                className="group"
+              >
+                <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                  {/* Accent stripe */}
+                  <div className="h-0.5" style={{ backgroundColor: primary }} />
+
+                  <div className="p-5 flex-1 flex flex-col">
+                    {/* Header: name + type */}
+                    <div className="mb-3">
+                      <h3 className="font-display text-lg font-bold text-[#2b5069] leading-tight">
+                        {team.name}
+                      </h3>
+                      <p className="text-[10px] font-body uppercase tracking-wider text-gray-400 mt-0.5">
+                        {team.type.toLowerCase().replace('_', ' ')}
+                      </p>
                     </div>
-                  )}
 
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">
-                      {team.memberCount < team.maxMembers ? (
-                        <span className="text-green-600 font-medium">Open spots available</span>
-                      ) : (
-                        <span className="text-red-600 font-medium">Team is full</span>
+                    {/* Description */}
+                    <p className="font-body text-sm text-gray-500 line-clamp-2 mb-4 flex-1">
+                      {team.description || 'No description provided.'}
+                    </p>
+
+                    {/* Member progress bar */}
+                    <div className="mb-4">
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-xs font-body text-gray-400">{team.memberCount}/{team.maxMembers} members</span>
+                        {team.memberCount >= team.maxMembers && (
+                          <span className="text-[10px] font-display uppercase tracking-wider text-red-500">Full</span>
+                        )}
+                      </div>
+                      <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full rounded-full transition-all duration-500"
+                          style={{
+                            width: `${Math.min(capacityPercent, 100)}%`,
+                            backgroundColor: isNearFull ? '#ef4444' : primary
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Trainer + visibility row */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={team.trainer?.image || '/massimino-logo.svg'}
+                          alt={team.trainer?.name || 'Trainer'}
+                          className="w-6 h-6 rounded-full border border-gray-200"
+                          onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/massimino-logo.svg'; }}
+                        />
+                        <span className="font-body text-sm text-gray-600">{team.trainer?.name}</span>
+                        {team.trainer?.trainerVerified && (
+                          <Star className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500" />
+                        )}
+                      </div>
+                      <span
+                        className="text-[10px] font-display uppercase tracking-wider px-2 py-0.5 rounded-full"
+                        style={{
+                          backgroundColor: primary + '15',
+                          color: primary
+                        }}
+                      >
+                        {team.visibility === 'INVITE_ONLY' ? 'Invite Only' : team.visibility === 'PUBLIC' ? 'Public' : 'Private'}
+                      </span>
+                    </div>
+
+                    {/* Actions row */}
+                    <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                      <Link
+                        href={`/teams/${team.id}`}
+                        className="font-body text-sm text-gray-500 hover:text-[#2b5069] flex items-center gap-1 transition-colors"
+                      >
+                        View team <ArrowRight size={14} />
+                      </Link>
+
+                      {session?.user?.id && team.memberCount < team.maxMembers && (
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button
+                              size="sm"
+                              className="text-white text-xs font-display uppercase tracking-wider rounded-lg h-8 px-4"
+                              style={{ backgroundColor: primary }}
+                            >
+                              Apply
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Apply to join {team.name}</DialogTitle>
+                              <DialogDescription>
+                                Send a message to the trainer explaining why you&apos;d like to join this team.
+                              </DialogDescription>
+                            </DialogHeader>
+
+                            <div className="space-y-4">
+                              <div>
+                                <Label htmlFor="message">Application Message (Optional)</Label>
+                                <Input
+                                  id="message"
+                                  value={applicationMessage}
+                                  onChange={(e) => setApplicationMessage(e.target.value)}
+                                  placeholder="Why would you like to join this team?"
+                                />
+                              </div>
+
+                              <div className="flex justify-end gap-2">
+                                <Button variant="outline">Cancel</Button>
+                                <Button onClick={() => applyToTeam(team)} className="bg-[#2b5069] hover:bg-[#1e3d52] text-white">
+                                  Submit Application
+                                </Button>
+                              </div>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
                       )}
-                    </span>
+                    </div>
 
-                    {session?.user?.id && team.memberCount < team.maxMembers && (
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button size="sm" className="text-white" style={{ backgroundColor: primary }}>
-                            <UserPlus size={14} className="mr-1" />
-                            Apply
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Apply to join {team.name}</DialogTitle>
-                            <DialogDescription>
-                              Send a message to the trainer explaining why you'd like to join this team.
-                            </DialogDescription>
-                          </DialogHeader>
-
-                          <div className="space-y-4">
-                            <div>
-                              <Label htmlFor="message">Application Message (Optional)</Label>
-                              <Input
-                                id="message"
-                                value={applicationMessage}
-                                onChange={(e) => setApplicationMessage(e.target.value)}
-                                placeholder="Why would you like to join this team?"
-                              />
-                            </div>
-
-                            <div className="flex justify-end gap-2">
-                              <Button variant="outline">
-                                Cancel
-                              </Button>
-                              <Button onClick={() => applyToTeam(team)}>
-                                Submit Application
-                              </Button>
-                            </div>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
+                    {/* Trainer/Admin quick actions */}
+                    {(session?.user?.role === 'ADMIN' || session?.user?.id === team.trainer?.id) && (
+                      <div className="flex gap-3 justify-end pt-2 mt-2 border-t border-gray-50">
+                        <a href="/dashboard" className="text-xs font-body text-gray-400 hover:text-[#2b5069] transition-colors">Edit</a>
+                        <button
+                          className="text-xs font-body text-red-400 hover:text-red-600 transition-colors"
+                          onClick={async () => {
+                            if (!confirm('Delete this team? This will deactivate the team.')) return;
+                            try {
+                              const res = await fetch(`/api/teams/${team.id}`, { method: 'DELETE' });
+                              const data = await res.json();
+                              if (res.ok && data.success) {
+                                alert('Team deleted successfully');
+                                discoverTeams();
+                              } else {
+                                alert(data.error || 'Failed to delete team');
+                              }
+                            } catch (err) {
+                              console.error(err);
+                              alert('Failed to delete team');
+                            }
+                          }}
+                        >Delete</button>
+                      </div>
                     )}
                   </div>
-                  <div className="flex justify-end gap-3 pt-1">
-                    <Link href={`/teams/${team.id}`} className="text-sm underline" style={{ color: primary }}>
-                      View team
-                    </Link>
-                  </div>
-
-                  {/* Trainer/Admin quick actions for management */}
-                  {(session?.user?.role === 'ADMIN' || session?.user?.id === team.trainer?.id) && (
-                    <div className="flex gap-2 justify-end pt-2">
-                      <a href="/dashboard" className="text-sm underline">Edit</a>
-                      <button
-                        className="text-sm text-red-600 underline"
-                        onClick={async () => {
-                          if (!confirm('Delete this team? This will deactivate the team.')) return;
-                          try {
-                            const res = await fetch(`/api/teams/${team.id}`, { method: 'DELETE' });
-                            const data = await res.json();
-                            if (res.ok && data.success) {
-                              alert('Team deleted successfully');
-                              discoverTeams();
-                            } else {
-                              alert(data.error || 'Failed to delete team');
-                            }
-                          } catch (err) {
-                            console.error(err);
-                            alert('Failed to delete team');
-                          }
-                        }}
-                      >Delete</button>
-                    </div>
-                  )}
                 </div>
-              </CardContent>
-            </Card>
+              </motion.div>
             );
-          })
-        )}
-      </div>
+          })}
+        </motion.div>
+      )}
     </div>
   );
 

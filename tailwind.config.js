@@ -74,10 +74,10 @@ module.exports = {
           },
           // Massimino brand colors from logo
           brand: {
-            primary: '#254967',    // Deep blue from logo
-            secondary: '#fcf8f2',  // Warm cream from logo
-            'primary-light': '#3a5a7a',  // Lighter variant of primary
-            'primary-dark': '#1a3a52',  // Darker variant of primary
+            primary: '#2b5069',    // Massimino primary blue
+            secondary: '#fcfaf5',  // Massimino warm cream
+            'primary-light': '#3d6a85',  // Lighter variant of primary
+            'primary-dark': '#1e3d52',  // Darker variant of primary
             'secondary-dark': '#f5f0e8', // Slightly darker cream
           },
         },
@@ -193,6 +193,14 @@ module.exports = {
             '0%': { opacity: '0', filter: 'blur(10px)' },
             '100%': { opacity: '1', filter: 'blur(0)' },
           },
+          'marquee-scroll': {
+            '0%': { transform: 'translateX(0)' },
+            '100%': { transform: 'translateX(-50%)' },
+          },
+          'partners-scroll': {
+            '0%': { transform: 'translateX(0)' },
+            '100%': { transform: 'translateX(-50%)' },
+          },
         },
         animation: {
           'accordion-down': 'accordion-down 0.2s ease-out',
@@ -221,10 +229,14 @@ module.exports = {
           'heartbeat': 'heartbeat 1.5s ease-in-out infinite',
           'flip-in': 'flip-in 0.8s ease-out forwards',
           'blur-in': 'blur-in 0.6s ease-out forwards',
+          'marquee-scroll': 'marquee-scroll 25s linear infinite',
+          'partners-scroll': 'partners-scroll 35s linear infinite',
         },
         // Typography for safety messaging
         fontFamily: {
-          sans: ['Inter', 'system-ui', 'sans-serif'],
+          sans: ['Nunito Sans', 'Lato', 'system-ui', 'sans-serif'],
+          display: ['Nunito Sans', 'sans-serif'],
+          body: ['Lato', 'sans-serif'],
           mono: ['JetBrains Mono', 'monospace'],
         },
         // Spacing for safety elements

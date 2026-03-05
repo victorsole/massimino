@@ -373,6 +373,8 @@ export const PROGRAM_IMAGES: Record<string, string> = {
   'volleyball-conditioning': '/images/programs/volleyball.jpg',
   'pingpong-conditioning': '/images/programs/pingpong.jpg',
   'castellers': '/images/programs/castellers.jpg',
+  // Personalized
+  'victor-hypertrophy-fat-loss': '/images/victor.JPG',
 };
 
 // Helper to get program category from template

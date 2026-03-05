@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- WP: wp_head() -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alicia | Beresol Template</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* ===== CSS RESET & VARIABLES ===== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary-color: #8B1538;
+            --primary-light: #C4254F;
+            --accent-gold: #D4A843;
+            --bg-dark: #0A0A14;
+            --bg-card: #12121E;
+            --bg-elevated: #1A1A2A;
+            --text-primary: #FFFFFF;
+            --text-muted: rgba(255, 255, 255, 0.5);
+            --text-dark: #0A0A14;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --font-display: 'Oswald', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul, ol {
+            list-style: none;
+        }
+
+        /* ===== HEADER ===== */
+        /* WP: get_header() */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 0 48px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.4s ease;
+        }
+
+        .header--scrolled {
+            background: rgba(10, 10, 20, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header__logo {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .header__logo span {
+            color: var(--accent-gold);
+        }
+
+        /* WP: wp_nav_menu() */
+        .header__nav {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .header__nav-link {
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+
+        .header__nav-link:hover {
+            color: var(--accent-gold);
+        }
+
+        .header__cta {
+            padding: 10px 24px;
+            background: var(--primary-color);
+            color: var(--text-primary);
+            font-family: var(--font-display);
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header__cta:hover {
+            background: var(--primary-light);
+        }
+
+        /* ===== HAMBURGER ===== */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 201;
+        }
+
+        .hamburger__line {
+            width: 24px;
+            height: 2px;
+            background: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        /* ===== MENU OVERLAY ===== */
+        .menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-dark);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .menu-overlay__close {
+            position: absolute;
+            top: 20px;
+            right: 48px;
+            width: 48px;
+            height: 48px;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .menu-overlay__links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .menu-overlay__link {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+            line-height: 1.15;
+        }
+
+        .menu-overlay__link:hover {
+            color: var(--accent-gold);
+        }
+
+        /* ===== MOBILE MENU BTN ===== */
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: var(--text-primary);
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 20px rgba(139, 21, 56, 0.4);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-menu-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 999;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero__bg {
+            position: absolute;
+            inset: 0;
+        }
+
+        .hero__bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero__bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(10, 10, 20, 0.5) 0%,
+                rgba(10, 10, 20, 0.3) 40%,
+                rgba(10, 10, 20, 0.8) 80%,
+                rgba(10, 10, 20, 1) 100%
+            );
+        }
+
+        .hero__content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            padding: 0 24px;
+        }
+
+        .hero__eyebrow {
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--accent-gold);
+            margin-bottom: 20px;
+        }
+
+        .hero__title {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 10vw, 7.5rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            line-height: 0.95;
+            margin-bottom: 24px;
+        }
+
+        .hero__title span {
+            display: block;
+            color: var(--accent-gold);
+            font-size: 0.6em;
+        }
+
+        .hero__badge {
+            display: inline-block;
+            padding: 8px 24px;
+            border: 1px solid var(--accent-gold);
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-gold);
+            margin-bottom: 32px;
+        }
+
+        .hero__cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 40px;
+            background: var(--primary-color);
+            color: var(--text-primary);
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .hero__cta:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        /* ===== MARQUEE ===== */
+        .marquee {
+            padding: 16px 0;
+            overflow: hidden;
+            background: var(--primary-color);
+        }
+
+        .marquee__track {
+            display: flex;
+            animation: marqueeScroll 25s linear infinite;
+            width: max-content;
+        }
+
+        .marquee__item {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 0 24px;
+            white-space: nowrap;
+        }
+
+        .marquee__text {
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        .marquee__dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        @keyframes marqueeScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ===== COUNTDOWN ===== */
+        .countdown {
+            padding: 80px 48px;
+            text-align: center;
+        }
+
+        .countdown__label {
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent-gold);
+            margin-bottom: 24px;
+        }
+
+        .countdown__timer {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .countdown__unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .countdown__value {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            line-height: 1;
+            min-width: 100px;
+        }
+
+        .countdown__name {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        .countdown__sep {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 6vw, 4rem);
+            color: var(--primary-color);
+            line-height: 1;
+            padding-top: 4px;
+        }
+
+        /* ===== ABOUT / INTRO ===== */
+        .intro {
+            padding: 100px 48px;
+        }
+
+        .intro__container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .intro__label {
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+        }
+
+        .intro__title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            line-height: 1.05;
+            margin-bottom: 20px;
+        }
+
+        .intro__text {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .intro__features {
+            display: flex;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .intro__feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .intro__feature-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .intro__feature-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--accent-gold);
+        }
+
+        .intro__feature-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .intro__image {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .intro__image img {
+            width: 100%;
+            aspect-ratio: 4/5;
+            object-fit: cover;
+        }
+
+        .intro__image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 24px;
+            background: linear-gradient(to top, rgba(10, 10, 20, 0.9), transparent);
+        }
+
+        .intro__image-text {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        /* ===== SCHEDULE ===== */
+        .schedule {
+            padding: 100px 48px;
+            background: var(--bg-card);
+        }
+
+        .schedule__container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .schedule__header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .schedule__label {
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+        }
+
+        .schedule__title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .schedule__list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .match {
+            display: grid;
+            grid-template-columns: 180px 1fr 180px;
+            align-items: center;
+            padding: 24px 32px;
+            background: var(--bg-elevated);
+            transition: all 0.3s ease;
+        }
+
+        .match:hover {
+            background: rgba(139, 21, 56, 0.15);
+        }
+
+        .match__date {
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--accent-gold);
+        }
+
+        .match__teams {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            text-align: center;
+        }
+
+        .match__teams span {
+            color: var(--text-muted);
+            font-weight: 400;
+            margin: 0 8px;
+            font-size: 0.9em;
+        }
+
+        .match__time {
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            text-align: right;
+        }
+
+        /* ===== EVENT MAP ===== */
+        .event-map {
+            padding: 100px 48px;
+        }
+
+        .event-map__container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .event-map__header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .event-map__title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .event-map__image {
+            width: 100%;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .event-map__image img {
+            width: 100%;
+            object-fit: cover;
+        }
+
+        /* ===== GALLERY / INSTAGRAM ===== */
+        .gallery {
+            padding: 80px 0;
+        }
+
+        .gallery__header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 0 48px;
+        }
+
+        .gallery__label {
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+        }
+
+        .gallery__title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .gallery__grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+        }
+
+        .gallery__item {
+            overflow: hidden;
+            aspect-ratio: 1;
+        }
+
+        .gallery__item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(30%);
+            transition: all 0.5s ease;
+        }
+
+        .gallery__item:hover img {
+            filter: grayscale(0%);
+            transform: scale(1.08);
+        }
+
+        /* ===== VENUES ===== */
+        .venues {
+            padding: 100px 48px;
+            background: var(--bg-card);
+        }
+
+        .venues__container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .venues__header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .venues__label {
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+        }
+
+        .venues__title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .venues__grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .venue-card {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .venue-card__image {
+            aspect-ratio: 3/4;
+            overflow: hidden;
+        }
+
+        .venue-card__image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .venue-card:hover .venue-card__image img {
+            transform: scale(1.05);
+        }
+
+        .venue-card__content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 32px 24px;
+            background: linear-gradient(to top, rgba(10, 10, 20, 0.95), transparent);
+        }
+
+        .venue-card__name {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            margin-bottom: 4px;
+        }
+
+        .venue-card__detail {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .venue-card__tag {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            padding: 6px 14px;
+            background: var(--accent-gold);
+            color: var(--text-dark);
+            font-family: var(--font-display);
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        /* ===== PARTNERS ===== */
+        .partners {
+            padding: 60px 48px;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .partners__label {
+            text-align: center;
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            text-transform: uppercase;
+        }
+
+        .partners__track {
+            display: flex;
+            animation: partnersScroll 35s linear infinite;
+            width: max-content;
+        }
+
+        .partners__item {
+            flex-shrink: 0;
+            width: 160px;
+            height: 56px;
+            margin: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            opacity: 0.35;
+            transition: opacity 0.3s ease;
+        }
+
+        .partners__item:hover {
+            opacity: 0.7;
+        }
+
+        .partners__item-text {
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        @keyframes partnersScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ===== CONTACT / NEWSLETTER ===== */
+        .contact {
+            padding: 100px 48px;
+        }
+
+        .contact__container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact__label {
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+        }
+
+        .contact__title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .contact__text {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        .contact__form {
+            display: flex;
+            gap: 0;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .contact__input {
+            flex: 1;
+            padding: 14px 20px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-right: none;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .contact__input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .contact__input:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .contact__submit {
+            padding: 14px 28px;
+            background: var(--primary-color);
+            color: var(--text-primary);
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border: 1px solid var(--primary-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .contact__submit:hover {
+            background: var(--primary-light);
+        }
+
+        /* ===== CTA SECTION ===== */
+        .cta {
+            position: relative;
+            padding: 120px 48px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .cta__bg {
+            position: absolute;
+            inset: 0;
+        }
+
+        .cta__bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cta__bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(10, 10, 20, 0.85), rgba(139, 21, 56, 0.5));
+        }
+
+        .cta__content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta__title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            line-height: 1;
+            margin-bottom: 16px;
+        }
+
+        .cta__title span {
+            color: var(--accent-gold);
+        }
+
+        .cta__text {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .cta__btn {
+            display: inline-flex;
+            padding: 16px 48px;
+            background: var(--accent-gold);
+            color: var(--text-dark);
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cta__btn:hover {
+            background: #E8BD5C;
+            transform: translateY(-2px);
+        }
+
+        /* ===== FOOTER ===== */
+        /* WP: get_footer() */
+        .footer {
+            padding: 60px 48px 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer__top {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+            max-width: 1200px;
+            margin: 0 auto 48px;
+        }
+
+        .footer__brand-name {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .footer__brand-name span {
+            color: var(--accent-gold);
+        }
+
+        .footer__brand-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            max-width: 320px;
+        }
+
+        .footer__heading {
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            letter-spacing: 0.12em;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        /* WP: wp_nav_menu() for footer menu */
+        .footer__links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer__link {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+
+        .footer__link:hover {
+            color: var(--accent-gold);
+        }
+
+        .footer__bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* ===== FOOTER RUNNER MARQUEE ===== */
+        .footer-runner {
+            padding: 12px 0;
+            overflow: hidden;
+            background: var(--primary-color);
+        }
+
+        .footer-runner__track {
+            display: flex;
+            animation: marqueeScroll 20s linear infinite;
+            width: max-content;
+        }
+
+        .footer-runner__text {
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            padding: 0 48px;
+            white-space: nowrap;
+        }
+
+        /* ===== FADE IN ===== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1199px) {
+            .header { padding: 0 24px; }
+            .countdown { padding: 60px 24px; }
+            .intro { padding: 80px 24px; }
+            .intro__container { gap: 48px; }
+            .schedule { padding: 80px 24px; }
+            .match { grid-template-columns: 140px 1fr 140px; padding: 20px 24px; }
+            .event-map { padding: 80px 24px; }
+            .gallery__header { padding: 0 24px; }
+            .venues { padding: 80px 24px; }
+            .partners { padding: 40px 24px; }
+            .contact { padding: 80px 24px; }
+            .cta { padding: 80px 24px; }
+            .footer { padding: 48px 24px 20px; }
+            .footer__top { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 767px) {
+            .header__nav { display: none; }
+            .header__cta { display: none; }
+            .hamburger { display: flex; }
+            .mobile-menu-btn { display: flex; }
+
+            .header { padding: 0 16px; height: 60px; }
+
+            .hero__cta { width: 100%; justify-content: center; }
+
+            .countdown { padding: 40px 16px; }
+            .countdown__timer { gap: 12px; }
+            .countdown__value { min-width: 60px; }
+
+            .intro { padding: 60px 16px; }
+            .intro__container { grid-template-columns: 1fr; gap: 32px; }
+            .intro__features { flex-direction: column; gap: 16px; }
+
+            .schedule { padding: 60px 16px; }
+            .match { grid-template-columns: 1fr; gap: 8px; text-align: center; padding: 20px 16px; }
+            .match__date { text-align: center; }
+            .match__time { text-align: center; }
+
+            .event-map { padding: 60px 16px; }
+
+            .gallery { padding: 60px 0; }
+            .gallery__grid { grid-template-columns: repeat(2, 1fr); }
+
+            .venues { padding: 60px 16px; }
+            .venues__grid { grid-template-columns: 1fr; }
+
+            .partners { padding: 32px 16px; }
+
+            .contact { padding: 60px 16px; }
+            .contact__form { flex-direction: column; }
+            .contact__input { border-right: 1px solid var(--border-color); border-bottom: none; }
+            .contact__submit { width: 100%; }
+
+            .cta { padding: 80px 16px; }
+            .cta__btn { width: 100%; justify-content: center; }
+
+            .footer { padding: 40px 16px 16px; }
+            .footer__top { grid-template-columns: 1fr; gap: 32px; }
+            .footer__bottom { flex-direction: column; gap: 12px; text-align: center; }
+
+            .menu-overlay__close { right: 16px; }
+        }
+    </style>
+    <!-- WP: wp_head() -->
+</head>
+<body>
+    <!-- WP: get_header() -->
+    <header class="header" id="header">
+        <a href="#" class="header__logo">ALI<span>CIA</span></a>
+
+        <!-- WP: wp_nav_menu() -->
+        <nav class="header__nav" aria-label="Main navigation">
+            <a href="#about" class="header__nav-link">About</a>
+            <a href="#schedule" class="header__nav-link">Schedule</a>
+            <a href="#venues" class="header__nav-link">Venues</a>
+            <a href="#gallery" class="header__nav-link">Gallery</a>
+            <a href="#partners" class="header__nav-link">Partners</a>
+            <a href="#contact" class="header__nav-link">Contact</a>
+        </nav>
+
+        <a href="#contact" class="header__cta">Lorem Ipsum</a>
+
+        <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+            <span class="hamburger__line"></span>
+            <span class="hamburger__line"></span>
+            <span class="hamburger__line"></span>
+        </button>
+    </header>
+
+    <!-- Fullscreen Menu -->
+    <div class="menu-overlay" id="menuOverlay">
+        <button class="menu-overlay__close" id="menuClose" aria-label="Close menu">&times;</button>
+        <nav class="menu-overlay__links">
+            <a href="#about" class="menu-overlay__link">About</a>
+            <a href="#schedule" class="menu-overlay__link">Schedule</a>
+            <a href="#venues" class="menu-overlay__link">Venues</a>
+            <a href="#gallery" class="menu-overlay__link">Gallery</a>
+            <a href="#partners" class="menu-overlay__link">Partners</a>
+            <a href="#contact" class="menu-overlay__link">Contact</a>
+        </nav>
+    </div>
+
+    <!-- Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open navigation">
+        <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+    </button>
+
+    <main>
+        <!-- WP: the_content() -->
+
+        <!-- ===== HERO ===== -->
+        <section class="hero">
+            <div class="hero__bg">
+                <img src="https://images.pexels.com/photos/18420917/pexels-photo-18420917.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Lorem ipsum event" loading="eager">
+            </div>
+            <div class="hero__content fade-in">
+                <p class="hero__eyebrow">Lorem ipsum dolor sit</p>
+                <h1 class="hero__title">LOREM<br>IPSUM <span>ALICIA&trade;</span></h1>
+                <div class="hero__badge">Lorem ipsum dolor sit amet &bull; Consectetur</div>
+                <br>
+                <a href="#contact" class="hero__cta">Lorem Ipsum Dolor</a>
+            </div>
+        </section>
+
+        <!-- ===== MARQUEE ===== -->
+        <div class="marquee">
+            <div class="marquee__track">
+                <div class="marquee__item">
+                    <span class="marquee__text">#LoremIpsum</span>
+                    <span class="marquee__dot"></span>
+                    <span class="marquee__text">#DolorSitAmet</span>
+                    <span class="marquee__dot"></span>
+                    <span class="marquee__text">#Consectetur</span>
+                    <span class="marquee__dot"></span>
+                    <span class="marquee__text">#Adipiscing</span>
+                    <span class="marquee__dot"></span>
+                </div>
+                <div class="marquee__item">
+                    <span class="marquee__text">#LoremIpsum</span>
+                    <span class="marquee__dot"></span>
+                    <span class="marquee__text">#DolorSitAmet</span>
+                    <span class="marquee__dot"></span>
+                    <span class="marquee__text">#Consectetur</span>
+                    <span class="marquee__dot"></span>
+                    <span class="marquee__text">#Adipiscing</span>
+                    <span class="marquee__dot"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== COUNTDOWN ===== -->
+        <section class="countdown fade-in">
+            <p class="countdown__label">Lorem ipsum dolor sit amet</p>
+            <div class="countdown__timer" id="countdownTimer">
+                <div class="countdown__unit">
+                    <div class="countdown__value" id="countDays">120</div>
+                    <div class="countdown__name">Lorem</div>
+                </div>
+                <div class="countdown__sep">:</div>
+                <div class="countdown__unit">
+                    <div class="countdown__value" id="countHours">08</div>
+                    <div class="countdown__name">Ipsum</div>
+                </div>
+                <div class="countdown__sep">:</div>
+                <div class="countdown__unit">
+                    <div class="countdown__value" id="countMins">42</div>
+                    <div class="countdown__name">Dolor</div>
+                </div>
+                <div class="countdown__sep">:</div>
+                <div class="countdown__unit">
+                    <div class="countdown__value" id="countSecs">17</div>
+                    <div class="countdown__name">Amet</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ABOUT / INTRO ===== -->
+        <section class="intro" id="about">
+            <div class="intro__container">
+                <div class="intro__content fade-in">
+                    <p class="intro__label">Lorem ipsum dolor</p>
+                    <h2 class="intro__title">LOREM IPSUM DOLOR SIT AMET CONSECTETUR</h2>
+                    <p class="intro__text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+                    <p class="intro__text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                    <div class="intro__features">
+                        <div class="intro__feature">
+                            <div class="intro__feature-icon">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                            </div>
+                            <span class="intro__feature-text">Lorem ipsum dolor</span>
+                        </div>
+                        <div class="intro__feature">
+                            <div class="intro__feature-icon">
+                                <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+                            </div>
+                            <span class="intro__feature-text">Consectetur adipiscing</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="intro__image fade-in">
+                    <img src="https://images.pexels.com/photos/4122451/pexels-photo-4122451.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Lorem ipsum intro">
+                    <div class="intro__image-overlay">
+                        <p class="intro__image-text">Lorem Ipsum &bull; Dolor Sit Amet</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SCHEDULE ===== -->
+        <section class="schedule" id="schedule">
+            <div class="schedule__container">
+                <div class="schedule__header fade-in">
+                    <p class="schedule__label">Lorem ipsum</p>
+                    <h2 class="schedule__title">LOREM IPSUM IN&nbsp;DOLOR</h2>
+                </div>
+                <div class="schedule__list">
+                    <div class="match fade-in">
+                        <div class="match__date">June 13, 2026</div>
+                        <div class="match__teams">Lorem <span>vs</span> Ipsum</div>
+                        <div class="match__time">6:00 PM ET</div>
+                    </div>
+                    <div class="match fade-in">
+                        <div class="match__date">June 16, 2026</div>
+                        <div class="match__teams">Dolor <span>vs</span> Amet</div>
+                        <div class="match__time">3:00 PM ET</div>
+                    </div>
+                    <div class="match fade-in">
+                        <div class="match__date">June 22, 2026</div>
+                        <div class="match__teams">Consectetur <span>vs</span> Adipiscing</div>
+                        <div class="match__time">8:00 PM ET</div>
+                    </div>
+                    <div class="match fade-in">
+                        <div class="match__date">June 28, 2026</div>
+                        <div class="match__teams">Eiusmod <span>vs</span> Tempor</div>
+                        <div class="match__time">6:00 PM ET</div>
+                    </div>
+                    <div class="match fade-in">
+                        <div class="match__date">July 4, 2026</div>
+                        <div class="match__teams">Veniam <span>vs</span> Nostrud</div>
+                        <div class="match__time">3:00 PM ET</div>
+                    </div>
+                    <div class="match fade-in">
+                        <div class="match__date">July 19, 2026</div>
+                        <div class="match__teams">Lorem Ipsum <span>&mdash;</span> Dolor</div>
+                        <div class="match__time">7:00 PM ET</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== EVENT MAP ===== -->
+        <section class="event-map fade-in">
+            <div class="event-map__container">
+                <div class="event-map__header">
+                    <h2 class="event-map__title">EVENT MAP</h2>
+                </div>
+                <div class="event-map__image">
+                    <img src="https://images.pexels.com/photos/31416399/pexels-photo-31416399.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Lorem ipsum event map">
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== GALLERY ===== -->
+        <section class="gallery" id="gallery">
+            <div class="gallery__header fade-in">
+                <p class="gallery__label">Lorem ipsum dolor</p>
+                <h2 class="gallery__title">STAY UPDATED</h2>
+            </div>
+            <div class="gallery__grid">
+                <div class="gallery__item">
+                    <img src="https://images.pexels.com/photos/14668350/pexels-photo-14668350.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Lorem ipsum gallery">
+                </div>
+                <div class="gallery__item">
+                    <img src="https://images.pexels.com/photos/6275764/pexels-photo-6275764.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Lorem ipsum gallery">
+                </div>
+                <div class="gallery__item">
+                    <img src="https://images.pexels.com/photos/270085/pexels-photo-270085.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Lorem ipsum gallery">
+                </div>
+                <div class="gallery__item">
+                    <img src="https://images.pexels.com/photos/167605/pexels-photo-167605.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Lorem ipsum gallery">
+                </div>
+                <div class="gallery__item">
+                    <img src="https://images.pexels.com/photos/1306791/pexels-photo-1306791.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Lorem ipsum gallery">
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== VENUES ===== -->
+        <section class="venues" id="venues">
+            <div class="venues__container">
+                <div class="venues__header fade-in">
+                    <p class="venues__label">Lorem ipsum</p>
+                    <h2 class="venues__title">LOREM IPSUM</h2>
+                </div>
+                <div class="venues__grid">
+                    <article class="venue-card fade-in">
+                        <div class="venue-card__image">
+                            <img src="https://images.pexels.com/photos/3991976/pexels-photo-3991976.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Lorem ipsum venue">
+                        </div>
+                        <div class="venue-card__content">
+                            <h3 class="venue-card__name">Lorem Ipsum</h3>
+                            <p class="venue-card__detail">Dolor sit amet consectetur</p>
+                        </div>
+                        <span class="venue-card__tag">Stadium</span>
+                    </article>
+                    <article class="venue-card fade-in">
+                        <div class="venue-card__image">
+                            <img src="https://images.pexels.com/photos/18108149/pexels-photo-18108149.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Lorem ipsum venue">
+                        </div>
+                        <div class="venue-card__content">
+                            <h3 class="venue-card__name">Dolor Amet</h3>
+                            <p class="venue-card__detail">Adipiscing elit sed do</p>
+                        </div>
+                        <span class="venue-card__tag">Fan Zone</span>
+                    </article>
+                    <article class="venue-card fade-in">
+                        <div class="venue-card__image">
+                            <img src="https://images.pexels.com/photos/1537636/pexels-photo-1537636.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Lorem ipsum venue">
+                        </div>
+                        <div class="venue-card__content">
+                            <h3 class="venue-card__name">Consectetur</h3>
+                            <p class="venue-card__detail">Eiusmod tempor incididunt</p>
+                        </div>
+                        <span class="venue-card__tag">Festival</span>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== PARTNERS ===== -->
+        <div class="partners" id="partners">
+            <p class="partners__label">Lorem Ipsum Dolor</p>
+            <div class="partners__track">
+                <div class="partners__item"><span class="partners__item-text">LOREM CO.</span></div>
+                <div class="partners__item"><span class="partners__item-text">IPSUM INC.</span></div>
+                <div class="partners__item"><span class="partners__item-text">DOLOR LTD.</span></div>
+                <div class="partners__item"><span class="partners__item-text">SIT AMET</span></div>
+                <div class="partners__item"><span class="partners__item-text">CONSECT.</span></div>
+                <div class="partners__item"><span class="partners__item-text">ADIPISC.</span></div>
+                <div class="partners__item"><span class="partners__item-text">EIUSMOD</span></div>
+                <div class="partners__item"><span class="partners__item-text">TEMPOR</span></div>
+                <div class="partners__item"><span class="partners__item-text">LOREM CO.</span></div>
+                <div class="partners__item"><span class="partners__item-text">IPSUM INC.</span></div>
+                <div class="partners__item"><span class="partners__item-text">DOLOR LTD.</span></div>
+                <div class="partners__item"><span class="partners__item-text">SIT AMET</span></div>
+                <div class="partners__item"><span class="partners__item-text">CONSECT.</span></div>
+                <div class="partners__item"><span class="partners__item-text">ADIPISC.</span></div>
+                <div class="partners__item"><span class="partners__item-text">EIUSMOD</span></div>
+                <div class="partners__item"><span class="partners__item-text">TEMPOR</span></div>
+            </div>
+        </div>
+
+        <!-- ===== CONTACT / NEWSLETTER ===== -->
+        <section class="contact" id="contact">
+            <div class="contact__container fade-in">
+                <p class="contact__label">Lorem ipsum</p>
+                <h2 class="contact__title">LOREM IPSUM DOLOR</h2>
+                <p class="contact__text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <form class="contact__form" onsubmit="event.preventDefault();">
+                    <input type="email" class="contact__input" placeholder="Lorem@ipsum.dolor" aria-label="Email address">
+                    <button type="submit" class="contact__submit">Lorem</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ===== CTA ===== -->
+        <section class="cta">
+            <div class="cta__bg">
+                <img src="https://images.pexels.com/photos/12616082/pexels-photo-12616082.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Lorem ipsum CTA">
+            </div>
+            <div class="cta__content fade-in">
+                <h2 class="cta__title">LOREM IPSUM<br><span>DOLOR SIT</span></h2>
+                <p class="cta__text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt.</p>
+                <button class="cta__btn">Lorem Ipsum Dolor</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== FOOTER RUNNER ===== -->
+    <div class="footer-runner">
+        <div class="footer-runner__track">
+            <span class="footer-runner__text">#LoremIpsum &bull; #DolorSitAmet &bull; #Consectetur &bull; #Adipiscing &bull; #LoremIpsum &bull; #DolorSitAmet &bull; #Consectetur &bull; #Adipiscing</span>
+            <span class="footer-runner__text">#LoremIpsum &bull; #DolorSitAmet &bull; #Consectetur &bull; #Adipiscing &bull; #LoremIpsum &bull; #DolorSitAmet &bull; #Consectetur &bull; #Adipiscing</span>
+        </div>
+    </div>
+
+    <!-- WP: get_footer() -->
+    <footer class="footer">
+        <div class="footer__top">
+            <div class="footer__brand">
+                <div class="footer__brand-name">ALI<span>CIA</span></div>
+                <p class="footer__brand-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.</p>
+            </div>
+            <!-- WP: wp_nav_menu() for footer menu -->
+            <div class="footer__col">
+                <h4 class="footer__heading">Navigation</h4>
+                <nav class="footer__links">
+                    <a href="#schedule" class="footer__link">Schedule</a>
+                    <a href="#venues" class="footer__link">Venues</a>
+                    <a href="#about" class="footer__link">About</a>
+                    <a href="#partners" class="footer__link">Partners</a>
+                </nav>
+            </div>
+            <div class="footer__col">
+                <h4 class="footer__heading">Lorem</h4>
+                <nav class="footer__links">
+                    <a href="#" class="footer__link">Lorem ipsum</a>
+                    <a href="#" class="footer__link">Dolor sit amet</a>
+                    <a href="#" class="footer__link">Consectetur</a>
+                    <a href="#" class="footer__link">FAQ</a>
+                </nav>
+            </div>
+            <!-- WP: dynamic_sidebar() -->
+            <div class="footer__col">
+                <h4 class="footer__heading">Social</h4>
+                <nav class="footer__links">
+                    <a href="#" class="footer__link">Instagram</a>
+                    <a href="#" class="footer__link">X / Twitter</a>
+                    <a href="#" class="footer__link">TikTok</a>
+                    <a href="#" class="footer__link">YouTube</a>
+                </nav>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <span>&copy; 2026 Alicia. Lorem ipsum dolor sit amet.</span>
+            <span>Lorem &middot; Ipsum &middot; Dolor</span>
+        </div>
+    </footer>
+    <!-- WP: wp_footer() -->
+
+    <script>
+        /* ===== HEADER SCROLL ===== */
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('header--scrolled', window.scrollY > 50);
+        });
+
+        /* ===== COUNTDOWN TIMER ===== */
+        const targetDate = new Date('2026-07-19T12:00:00').getTime();
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+            if (diff <= 0) return;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById('countDays').textContent = String(days).padStart(2, '0');
+            document.getElementById('countHours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('countMins').textContent = String(mins).padStart(2, '0');
+            document.getElementById('countSecs').textContent = String(secs).padStart(2, '0');
+        }
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        /* ===== FULLSCREEN MENU ===== */
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const menuOverlay = document.getElementById('menuOverlay');
+        const menuClose = document.getElementById('menuClose');
+
+        hamburgerBtn.addEventListener('click', () => {
+            menuOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        menuClose.addEventListener('click', () => {
+            menuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        document.querySelectorAll('.menu-overlay__link').forEach(link => {
+            link.addEventListener('click', () => {
+                menuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        /* ===== MOBILE MENU ===== */
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            menuOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        sidebarOverlay.addEventListener('click', () => {
+            menuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        /* ===== INTERSECTION OBSERVER ===== */
+        const fadeEls = document.querySelectorAll('.fade-in');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        fadeEls.forEach(el => observer.observe(el));
+
+        /* ===== SMOOTH SCROLL ===== */
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
