@@ -114,13 +114,11 @@ export function ProgramsTab() {
   useEffect(() => {
     try {
       const params = new URLSearchParams(window.location.search);
+      params.set('tab', 'programs');
       if (filter && filter !== 'all') params.set('type', filter); else params.delete('type');
       if (sortBy && sortBy !== 'popularity') params.set('sort', sortBy); else params.delete('sort');
       if (equipmentFilters.length) params.set('equip', equipmentFilters.join(',')); else params.delete('equip');
-      const query = params.toString();
-      const url = query ? `/workout-log?tab=programs&${query}` : `/workout-log?tab=programs`;
-      // Keep it client-side without navigation
-      window.history.replaceState(null, '', url);
+      window.history.replaceState(null, '', `/workout-log?${params.toString()}`);
     } catch {}
   }, [filter, sortBy, equipmentFilters]);
 

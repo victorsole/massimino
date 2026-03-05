@@ -36,6 +36,8 @@ const TEMPLATE_FILE_MAP: Record<string, string> = {
   'superday-workout': 'superday_workout.json',
   'hiit-workout': 'hiit_workout.json',
   'hyrox-training': 'hyrox_training.json',
+  // Personalized
+  'victor-hypertrophy-fat-loss': 'victor_hypertrophy_fat_loss.json',
   // Periodization templates
   'linear-periodization-12week': 'micro_mesocycles.json',
   'standard-programming': 'programming.json',

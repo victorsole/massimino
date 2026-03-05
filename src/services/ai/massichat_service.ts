@@ -3,16 +3,25 @@ import { prisma } from '@/core/database'
 import { buildUserContext } from './context_builder'
 import { searchKnowledgeBase } from './vector_search'
 
+// Mistral (primary) — OpenAI-compatible API
+const mistral = new OpenAI({
+  apiKey: process.env.MISTRAL_API_KEY,
+  baseURL: 'https://api.mistral.ai/v1',
+})
+
+// OpenAI (fallback)
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
   organization: process.env.OPENAI_ORG_ID,
-  // Optional: allow pinning a specific OpenAI project if provided
   project: process.env.OPENAI_PROJECT,
 })
 
-function provider(): 'openai' | 'anthropic' {
-  const p = (process.env.AI_PROVIDER || 'openai').toLowerCase()
-  return p === 'anthropic' ? 'anthropic' : 'openai'
+type Provider = 'mistral' | 'openai'
+
+function provider(): Provider {
+  // Mistral is the primary provider; OpenAI is fallback
+  if (process.env.MISTRAL_API_KEY) return 'mistral'
+  return 'openai'
 }
 
 export interface MassichatRequest {
@@ -35,14 +44,11 @@ export interface MassichatResponse {
 
 export async function sendMassichatMessage(req: MassichatRequest): Promise<MassichatResponse> {
   const prov = provider()
-  if (prov === 'openai') {
-    if (!process.env.OPENAI_API_KEY) {
-      throw new Error('OPENAI_API_KEY not configured. Set it in your environment to use Massichat.')
-    }
-  } else {
-    if (!process.env.ANTHROPIC_API_KEY) {
-      throw new Error('ANTHROPIC_API_KEY not configured. Set it in your environment or set AI_PROVIDER=openai.')
-    }
+  if (prov === 'mistral' && !process.env.MISTRAL_API_KEY) {
+    throw new Error('MISTRAL_API_KEY not configured. Set it in your environment to use Massichat.')
+  }
+  if (prov === 'openai' && !process.env.OPENAI_API_KEY) {
+    throw new Error('OPENAI_API_KEY not configured. Set it in your environment to use Massichat.')
   }
   const db: any = prisma as any
   if (!db?.ai_chat_sessions?.create || !db?.ai_chat_messages?.create) {
@@ -92,7 +98,8 @@ Clarifications policy:
 Partnerships policy (non‑invasive):
 - Mention a Massimino partner only when the user's request clearly relates (e.g., supplements, protein, pre‑workout, gym memberships).
 - At most one very short partner sentence, after your main answer. Keep it optional and user‑centric.
-- Prefer regionally relevant partners (e.g., Spain → Amix; Belgium → Jims) when known.
+- Prefer regionally relevant partners (e.g., Spain → Amix or Quota Vita; Belgium → Jims) when known.
+- Quota Vita specialises in whey protein with Mediterranean flavors (Barcelona). Mention alongside or instead of Amix when protein is the focus.
 - Never allow partner mentions to replace or block core guidance.
 
 When proposing a workout:
@@ -118,8 +125,8 @@ When proposing a workout:
       const country = (u?.country || '').toLowerCase()
 
       if (isSuppIntent) {
-        // Supplements → Amix (regardless of country for now)
-        partnerContext = 'If helpful: Amix — quality sports supplements (protein, pre‑workout, recovery). Learn more: https://amix.com/?utm_source=massimino&utm_medium=massichat&utm_campaign=amix'
+        // Supplements → Amix + Quota Vita
+        partnerContext = 'If helpful: Amix — quality sports supplements (protein, pre‑workout, recovery). Learn more: https://amix.com/?utm_source=massimino&utm_medium=massichat&utm_campaign=amix | Quota Vita — Mediterranean whey protein from Barcelona (24g protein, unique flavors like Crema Catalana). Learn more: https://www.quotavita.com/en?utm_source=massimino&utm_medium=massichat&utm_campaign=quotavita'
       } else if (isGymIntent) {
         // Gyms → Jims only for Belgium
         if (country.includes('belgium')) {
@@ -140,55 +147,54 @@ When proposing a workout:
     }
   } catch {}
 
-  // 5) call OpenAI
+  // 5) call AI provider (Mistral primary, OpenAI fallback)
   let aiText = 'I could not generate a response.'
   let modelUsed = ''
-  if (prov === 'openai') {
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      messages: [
-        { role: 'system', content: system },
-        { role: 'system', content: userContext + kbContext },
-        ...(partnerContext ? [{ role: 'system', content: `PartnerContext: ${partnerContext}` } as const] : []),
-        { role: 'user', content: req.message },
-      ],
+
+  const chatMessages: Array<{ role: 'system' | 'user'; content: string }> = [
+    { role: 'system', content: system },
+    { role: 'system', content: userContext + kbContext },
+    ...(partnerContext ? [{ role: 'system' as const, content: `PartnerContext: ${partnerContext}` }] : []),
+    { role: 'user', content: req.message },
+  ]
+
+  async function callMistral() {
+    const completion = await mistral.chat.completions.create({
+      model: process.env.MISTRAL_MODEL || 'mistral-small-latest',
+      messages: chatMessages,
       temperature: 0.4,
       max_tokens: 800,
     })
-    aiText = completion.choices[0]?.message?.content || aiText
-    modelUsed = 'gpt-4o-mini'
-  } else {
-    // Anthropic (Claude) via HTTP to avoid SDK dependency
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY as string,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: process.env.ANTHROPIC_MODEL || 'claude-3-5-sonnet-20241022',
-        max_tokens: 800,
-        temperature: 0.4,
-        system,
-        messages: [
-          {
-            role: 'user',
-            content: [
-              { type: 'text', text: `${userContext}${kbContext}${partnerContext ? `\n\nPartnerContext: ${partnerContext}` : ''}\n\n${req.message}` },
-            ],
-          },
-        ],
-      }),
+    return { text: completion.choices[0]?.message?.content || '', model: process.env.MISTRAL_MODEL || 'mistral-small-latest' }
+  }
+
+  async function callOpenAI() {
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: chatMessages,
+      temperature: 0.4,
+      max_tokens: 800,
     })
-    if (!resp.ok) {
-      const err = await resp.text().catch(() => '')
-      throw new Error(`Anthropic error: ${resp.status} ${err}`)
+    return { text: completion.choices[0]?.message?.content || '', model: 'gpt-4o-mini' }
+  }
+
+  if (prov === 'mistral') {
+    try {
+      const result = await callMistral()
+      aiText = result.text || aiText
+      modelUsed = result.model
+    } catch (mistralErr) {
+      console.warn('Mistral failed, falling back to OpenAI:', mistralErr)
+      if (process.env.OPENAI_API_KEY) {
+        const result = await callOpenAI()
+        aiText = result.text || aiText
+        modelUsed = result.model
+      }
     }
-    const data: any = await resp.json()
-    const parts = Array.isArray(data?.content) ? data.content : []
-    aiText = parts.map((p: any) => p?.text).filter(Boolean).join('\n').trim() || aiText
-    modelUsed = data?.model || 'claude'
+  } else {
+    const result = await callOpenAI()
+    aiText = result.text || aiText
+    modelUsed = result.model
   }
   const suggestions = extractFollowUps(aiText)
 
@@ -245,7 +251,7 @@ When proposing a workout:
       role: 'assistant',
       content: aiText,
       metadata: { model: modelUsed },
-      aiProvider: prov,
+      aiProvider: modelUsed.startsWith('mistral') ? 'mistral' : 'openai',
     },
   })
 
@@ -360,7 +366,7 @@ function isWorkoutShape(obj: any): boolean {
 }
 
 async function requestWorkoutJson(args: {
-  provider: 'openai' | 'anthropic'
+  provider: Provider
   modelUsed: string
   system: string
   userContext: string
@@ -368,44 +374,26 @@ async function requestWorkoutJson(args: {
 }): Promise<any | null> {
   const instruction = `Return ONLY a fenced JSON block (no prose) immediately after this line: WORKOUT_PROPOSAL_JSON\n\n\nThe JSON MUST have: {\n  "title": string,\n  "description": string,\n  "items": [{ "exerciseName": string, "sets": number, "reps": number, "restSeconds": number, "notes"?: string }]\n}\nNo additional text before or after the JSON.`
 
-  if (args.provider === 'openai') {
-    const resp = await openai.chat.completions.create({
-      model: args.modelUsed || 'gpt-4o-mini',
-      messages: [
-        { role: 'system', content: args.system },
-        { role: 'system', content: args.userContext },
-        { role: 'user', content: `${args.userMessage}\n\n${instruction}` },
-      ],
-      temperature: 0.2,
-      max_tokens: 700,
-    })
-    const txt = resp.choices[0]?.message?.content || ''
-    const parsed = tryParseWorkoutProposal(txt)
-    return parsed || null
-  } else {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY as string,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: process.env.ANTHROPIC_MODEL || 'claude-3-5-sonnet-20241022',
-        max_tokens: 700,
-        temperature: 0.2,
-        system: args.system,
-        messages: [
-          { role: 'user', content: [{ type: 'text', text: `${args.userContext}\n\n${args.userMessage}\n\n${instruction}` }] },
-        ],
-      }),
-    })
-    if (!resp.ok) return null
-    const data: any = await resp.json()
-    const txt = (Array.isArray(data?.content) ? data.content : []).map((p: any) => p?.text).filter(Boolean).join('\n')
-    const parsed = tryParseWorkoutProposal(txt || '')
-    return parsed || null
-  }
+  const messages: Array<{ role: 'system' | 'user'; content: string }> = [
+    { role: 'system', content: args.system },
+    { role: 'system', content: args.userContext },
+    { role: 'user', content: `${args.userMessage}\n\n${instruction}` },
+  ]
+
+  const client = args.provider === 'mistral' ? mistral : openai
+  const model = args.provider === 'mistral'
+    ? (process.env.MISTRAL_MODEL || 'mistral-small-latest')
+    : (args.modelUsed || 'gpt-4o-mini')
+
+  const resp = await client.chat.completions.create({
+    model,
+    messages,
+    temperature: 0.2,
+    max_tokens: 700,
+  })
+  const txt = resp.choices[0]?.message?.content || ''
+  const parsed = tryParseWorkoutProposal(txt)
+  return parsed || null
 }
 
 function extractReasoning(text: string): string | undefined {

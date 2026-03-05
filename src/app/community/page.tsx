@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
+import { HeroSection, AnimatedSection, StaggerContainer, StaggerItem, AnimatedCard } from '@/components/ui/animated_section';
 
 export const metadata = {
   title: 'Community | Massimino',
@@ -13,7 +14,7 @@ export default function CommunityPage() {
     <div className="min-h-screen bg-gradient-to-br from-brand-secondary to-brand-secondary-dark py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-12">
+        <HeroSection className="text-center mb-12">
           <div className="flex justify-center mb-6">
             <div className="relative w-20 h-20">
               <Image
@@ -29,10 +30,10 @@ export default function CommunityPage() {
             Connect with fitness enthusiasts, find trainers, join teams, and achieve your goals together
             in a safe and supportive environment.
           </p>
-        </div>
+        </HeroSection>
 
         {/* Research-Backed Difference */}
-        <div className="mb-12">
+        <AnimatedSection className="mb-12">
           <Card className="border-2 border-brand-primary bg-white">
             <CardHeader>
               <div className="flex items-center gap-3 mb-2">
@@ -175,13 +176,14 @@ export default function CommunityPage() {
               </div>
             </CardContent>
           </Card>
-        </div>
+        </AnimatedSection>
 
         {/* Community Features */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          <Card className="hover:shadow-lg transition-shadow">
+        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          <AnimatedCard>
+          <Card className="hover:shadow-lg transition-shadow h-full">
             <CardHeader>
-              <div className="w-16 h-16 relative mx-auto mb-4">
+              <div className="w-16 h-16 relative mx-auto mb-4 group-hover:scale-110 transition-transform">
                 <Image
                   src="/ionicons.designerpack/person-add-outline.svg"
                   alt="Find Trainers"
@@ -202,10 +204,12 @@ export default function CommunityPage() {
               </Link>
             </CardContent>
           </Card>
+          </AnimatedCard>
 
-          <Card className="hover:shadow-lg transition-shadow">
+          <AnimatedCard>
+          <Card className="hover:shadow-lg transition-shadow h-full">
             <CardHeader>
-              <div className="w-16 h-16 relative mx-auto mb-4">
+              <div className="w-16 h-16 relative mx-auto mb-4 group-hover:scale-110 transition-transform">
                 <Image
                   src="/ionicons.designerpack/people-circle.svg"
                   alt="Join Teams"
@@ -226,10 +230,12 @@ export default function CommunityPage() {
               </Link>
             </CardContent>
           </Card>
+          </AnimatedCard>
 
-          <Card className="hover:shadow-lg transition-shadow">
+          <AnimatedCard>
+          <Card className="hover:shadow-lg transition-shadow h-full">
             <CardHeader>
-              <div className="w-16 h-16 relative mx-auto mb-4">
+              <div className="w-16 h-16 relative mx-auto mb-4 group-hover:scale-110 transition-transform">
                 <Image
                   src="/ionicons.designerpack/chatbubbles.svg"
                   alt="Chat & Connect"
@@ -250,10 +256,12 @@ export default function CommunityPage() {
               </Link>
             </CardContent>
           </Card>
+          </AnimatedCard>
 
-          <Card className="hover:shadow-lg transition-shadow">
+          <AnimatedCard>
+          <Card className="hover:shadow-lg transition-shadow h-full">
             <CardHeader>
-              <div className="w-16 h-16 relative mx-auto mb-4">
+              <div className="w-16 h-16 relative mx-auto mb-4 group-hover:scale-110 transition-transform">
                 <Image
                   src="/ionicons.designerpack/trophy.svg"
                   alt="Leaderboards"
@@ -274,10 +282,12 @@ export default function CommunityPage() {
               </Link>
             </CardContent>
           </Card>
+          </AnimatedCard>
 
-          <Card className="hover:shadow-lg transition-shadow">
+          <AnimatedCard>
+          <Card className="hover:shadow-lg transition-shadow h-full">
             <CardHeader>
-              <div className="w-16 h-16 relative mx-auto mb-4">
+              <div className="w-16 h-16 relative mx-auto mb-4 group-hover:scale-110 transition-transform">
                 <Image
                   src="/ionicons.designerpack/barbell.svg"
                   alt="Share Workouts"
@@ -298,10 +308,12 @@ export default function CommunityPage() {
               </Link>
             </CardContent>
           </Card>
+          </AnimatedCard>
 
-          <Card className="hover:shadow-lg transition-shadow">
+          <AnimatedCard>
+          <Card className="hover:shadow-lg transition-shadow h-full">
             <CardHeader>
-              <div className="w-16 h-16 relative mx-auto mb-4">
+              <div className="w-16 h-16 relative mx-auto mb-4 group-hover:scale-110 transition-transform">
                 <Image
                   src="/ionicons.designerpack/stats-chart.svg"
                   alt="Track Progress"
@@ -322,10 +334,12 @@ export default function CommunityPage() {
               </Link>
             </CardContent>
           </Card>
-        </div>
+          </AnimatedCard>
+        </StaggerContainer>
 
         {/* MassiChat Feature */}
-        <Card className="mb-8 bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200">
+        <AnimatedSection className="mb-8">
+        <Card className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200">
           <CardHeader>
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 relative">
@@ -354,9 +368,11 @@ export default function CommunityPage() {
             </Link>
           </CardContent>
         </Card>
+        </AnimatedSection>
 
         {/* Community Values */}
-        <Card className="mb-8 bg-brand-primary text-white">
+        <AnimatedSection className="mb-8">
+        <Card className="bg-brand-primary text-white">
           <CardHeader>
             <CardTitle className="text-2xl text-white">Our Community Values</CardTitle>
           </CardHeader>
@@ -427,62 +443,67 @@ export default function CommunityPage() {
             </div>
           </CardContent>
         </Card>
+        </AnimatedSection>
 
         {/* Additional Features */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 relative">
-                  <Image
-                    src="/ionicons.designerpack/star.svg"
-                    alt="Assessments"
-                    fill
-                    className="object-contain"
-                  />
+        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <AnimatedCard>
+            <Card className="h-full">
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 relative">
+                    <Image
+                      src="/ionicons.designerpack/star.svg"
+                      alt="Assessments"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <CardTitle>Fitness Assessments</CardTitle>
                 </div>
-                <CardTitle>Fitness Assessments</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600 mb-4">
-                Get evaluated by professional trainers to understand your current fitness level
-                and receive personalized recommendations.
-              </p>
-              <Link href="/assessments">
-                <Button variant="outline">View Assessments</Button>
-              </Link>
-            </CardContent>
-          </Card>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4">
+                  Get evaluated by professional trainers to understand your current fitness level
+                  and receive personalized recommendations.
+                </p>
+                <Link href="/assessments">
+                  <Button variant="outline">View Assessments</Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </AnimatedCard>
 
-          <Card>
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 relative">
-                  <Image
-                    src="/ionicons.designerpack/fitness.svg"
-                    alt="Exercises"
-                    fill
-                    className="object-contain"
-                  />
+          <AnimatedCard>
+            <Card className="h-full">
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 relative">
+                    <Image
+                      src="/ionicons.designerpack/fitness.svg"
+                      alt="Exercises"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <CardTitle>Exercise Library</CardTitle>
                 </div>
-                <CardTitle>Exercise Library</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600 mb-4">
-                Browse our comprehensive library of exercises with video demonstrations,
-                form tips, and safety instructions.
-              </p>
-              <Link href="/exercises">
-                <Button variant="outline">Browse Exercises</Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4">
+                  Browse our comprehensive library of exercises with video demonstrations,
+                  form tips, and safety instructions.
+                </p>
+                <Link href="/exercises">
+                  <Button variant="outline">Browse Exercises</Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </AnimatedCard>
+        </StaggerContainer>
 
         {/* Call to Action */}
-        <div className="text-center">
+        <AnimatedSection className="text-center">
           <Card className="inline-block max-w-2xl">
             <CardContent className="pt-6">
               <div className="w-16 h-16 relative mx-auto mb-4">
@@ -513,7 +534,7 @@ export default function CommunityPage() {
               </div>
             </CardContent>
           </Card>
-        </div>
+        </AnimatedSection>
 
         {/* Safety Link */}
         <div className="text-center mt-8">

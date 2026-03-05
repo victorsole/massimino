@@ -269,12 +269,9 @@ function WorkoutLogPageContent() {
       // Load active subscriptions for prefill
       (async () => {
         try {
-          console.log('[Today Tab] Loading program subscriptions...');
           const r = await fetch('/api/workout/programs?subscriptions=true');
           if (r.ok) {
             const subs = await r.json();
-            console.log('[Today Tab] Loaded subscriptions:', subs?.length || 0, 'subscriptions');
-            console.log('[Today Tab] Subscription data:', JSON.stringify(subs?.[0]?.program_templates?.name || 'No program', null, 2));
             setProgramSubscriptions(Array.isArray(subs) ? subs : []);
           } else {
             console.error('[Today Tab] Failed to load subscriptions:', r.status);
@@ -406,8 +403,6 @@ function WorkoutLogPageContent() {
                   next_workout: null, // Could be computed from program phases
                 };
               });
-            console.log('Raw subs from API:', rawSubs);
-            console.log('Transformed programs:', transformed);
             setMyProgramsData(transformed);
           }
         } catch (err) {
@@ -725,19 +720,14 @@ function WorkoutLogPageContent() {
 
   // Get current workout from active program subscription
   const getCurrentProgramWorkout = () => {
-    console.log('[getCurrentProgramWorkout] programSubscriptions count:', programSubscriptions?.length || 0);
     if (!programSubscriptions || programSubscriptions.length === 0) return null;
 
     // Prioritize the currently active subscription, fall back to first
     const activeSub = programSubscriptions.find((sub: any) => sub.isCurrentlyActive) || programSubscriptions[0];
     const currentWeek = activeSub.currentWeek || 1;
     const currentDay = activeSub.currentDay || 1;
-    console.log('[getCurrentProgramWorkout] activeSub:', activeSub?.id, 'Week:', currentWeek, 'Day:', currentDay);
-
     const program = activeSub.program_templates;
-    console.log('[getCurrentProgramWorkout] program:', program?.name, 'phases:', program?.program_phases?.length || 0);
     if (!program || !program.program_phases || program.program_phases.length === 0) {
-      console.log('[getCurrentProgramWorkout] No program or phases found');
       return null;
     }
 
@@ -750,31 +740,21 @@ function WorkoutLogPageContent() {
     // Fallback: if no phase found and there's only one phase, use it
     if (!currentPhase && program.program_phases.length === 1) {
       currentPhase = program.program_phases[0];
-      console.log('[getCurrentProgramWorkout] Using single phase fallback');
     }
 
-    console.log('[getCurrentProgramWorkout] currentPhase:', currentPhase?.title || currentPhase?.phaseName || 'Not found');
-
     if (!currentPhase) {
-      console.log('[getCurrentProgramWorkout] Phase not found for week', currentWeek);
       return null;
     }
 
     // Find the microcycle for current week
     const currentMicrocycle = currentPhase.microcycles.find((micro: any) => micro.weekNumber === currentWeek);
-    console.log('[getCurrentProgramWorkout] currentMicrocycle:', currentMicrocycle?.weekNumber, 'workouts:', currentMicrocycle?.workouts?.length || 0);
-
     if (!currentMicrocycle || !currentMicrocycle.workouts) {
-      console.log('[getCurrentProgramWorkout] Microcycle not found or no workouts');
       return null;
     }
 
     // Find the workout for current day
     const currentWorkout = currentMicrocycle.workouts.find((workout: any) => workout.dayNumber === currentDay);
-    console.log('[getCurrentProgramWorkout] currentWorkout:', currentWorkout?.dayLabel || 'Not found', 'exercises:', currentWorkout?.workout_exercises?.length || 0);
-
     if (!currentWorkout) {
-      console.log('[getCurrentProgramWorkout] Workout not found for day', currentDay, '- likely a rest day');
       // Return rest day info so UI can show appropriate message
       return {
         subscription: activeSub,
@@ -795,8 +775,6 @@ function WorkoutLogPageContent() {
 
     // Get exercises from templateData (source of truth for exercise names)
     const templateExercises = getExercisesFromTemplateData(program.templateData, currentDay);
-    console.log('[getCurrentProgramWorkout] templateExercises:', templateExercises.length, templateExercises.map((e: any) => e.exerciseName));
-
     return {
       subscription: activeSub,
       program,
@@ -950,15 +928,6 @@ function WorkoutLogPageContent() {
         const data = await response.json();
         // Map the API response to our component's expected format
         const entries: WorkoutEntry[] = (data.entries || []).map((entry: any) => {
-          // Debug: Log entry exercise data
-          console.log('[Entry Exercise Data]', {
-            entryId: entry.id,
-            exerciseId: entry.exerciseId,
-            exerciseName: entry.exercises?.name,
-            exerciseCategory: entry.exercises?.category,
-            exerciseMuscleGroups: entry.exercises?.muscleGroups,
-            exerciseImageUrl: entry.exercises?.imageUrl
-          });
           return {
             id: entry.id,
             date: entry.date,
@@ -1251,15 +1220,6 @@ function WorkoutLogPageContent() {
       const today = new Date().toISOString().split('T')[0];
 
       const entries: any[] = [];
-
-      // Debug: Log what exercise data is being used to create entry
-      console.log('[Creating Entry]', {
-        selectedExerciseId: selectedExercise?.id,
-        selectedExerciseName: selectedExercise?.name,
-        newEntryExerciseId: newEntry.exerciseId,
-        selectedCategory: selectedExercise?.category,
-        selectedMuscleGroups: selectedExercise?.muscleGroups
-      });
 
       if (newEntry.setType === 'SUPERSET') {
         if (!newEntry.exerciseBId) {
@@ -1710,11 +1670,11 @@ function WorkoutLogPageContent() {
 
         {/* Active Session Banner */}
         {activeSession && (
-          <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg p-4 mb-6 shadow-lg">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Zap className="h-6 w-6 animate-pulse" />
-                <div>
+          <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg p-4 mb-6 shadow-lg overflow-hidden">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="flex items-center gap-3 min-w-0">
+                <Zap className="h-6 w-6 animate-pulse flex-shrink-0" />
+                <div className="min-w-0">
                   <h3 className="font-semibold text-lg">Active Workout Session</h3>
                   <p className="text-sm text-green-50">
                     Started {activeSession.startTime ? new Date(activeSession.startTime).toLocaleTimeString() : 'recently'}
@@ -1723,7 +1683,7 @@ function WorkoutLogPageContent() {
               </div>
               <Button
                 onClick={handleCompleteSession}
-                className="bg-white text-green-600 hover:bg-green-50 font-semibold"
+                className="bg-white text-green-600 hover:bg-green-50 font-semibold whitespace-nowrap flex-shrink-0 w-full sm:w-auto"
               >
                 Complete Session
               </Button>
@@ -2020,11 +1980,7 @@ function WorkoutLogPageContent() {
                                       );
                                     }
 
-                                    console.log('[Program Exercise Click]', {
-                                      exerciseName,
-                                      isTemplateFormat,
-                                      foundExercise: foundExercise?.name || 'Not found'
-                                    });
+
 
                                     if (foundExercise) {
                                       setSelectedExercise({
@@ -2361,7 +2317,6 @@ function WorkoutLogPageContent() {
                     className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white font-semibold"
                     onClick={() => {
                       // TODO: Implement "Same as Last" logic
-                      console.log('Same as last set');
                     }}
                   >
                     Same as Last
@@ -3206,8 +3161,6 @@ function WorkoutLogPageContent() {
                               nextWeek = currentWeek + 1;
                             }
 
-                            console.log('Advancing program:', { subscriptionId: sub.id, currentDay, nextDay, currentWeek, nextWeek, totalDaysInWeek });
-
                             // Update program progress
                             const progressRes = await fetch('/api/workout/programs/progress', {
                               method: 'PATCH',
@@ -3226,12 +3179,10 @@ function WorkoutLogPageContent() {
                                   ? { ...s, currentWeek: nextWeek, currentDay: nextDay }
                                   : s
                               ));
-                              console.log('Program advanced successfully to Day', nextDay);
                             } else {
                               console.error('Failed to advance program:', await progressRes.text());
                             }
                           } else {
-                            console.log('No program subscriptions found to advance');
                           }
 
                           // Mark session as completed - hides logged entries from Today view

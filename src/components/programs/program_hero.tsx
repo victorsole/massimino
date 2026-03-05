@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import {
   ProgramCategory,
@@ -9,6 +9,67 @@ import {
   PROGRAM_CATEGORY_COLORS,
   getProgramHeroImage,
 } from '@/types/program';
+
+// Programs that should fetch a Pexels background image
+const PEXELS_HERO_QUERIES: Record<string, string> = {
+  // Celebrity
+  'cbum-classic-physique': 'classic physique bodybuilding stage',
+  'arnold-volume-workout': 'bodybuilding gym training heavy weights',
+  'arnold-golden-six': 'barbell strength training gym',
+  'ronnie-coleman-mass-builder': 'heavy deadlift powerlifting gym',
+  'colorado-experiment-hit': 'intense weight training gym',
+  'ifbb-classic-physique': 'bodybuilding competition physique',
+  // Goal-Based
+  'nasm-fat-loss-program': 'fitness weight loss cardio training',
+  'nasm-muscle-gain-program': 'muscle building gym workout',
+  'nasm-performance-program': 'athletic performance training',
+  'aesthetics-hunter': 'aesthetic physique gym mirror',
+  'wanna-lose-beer-belly': 'fitness transformation belly fat exercise',
+  // Lifestyle
+  'i-just-became-a-mum': 'postpartum fitness mother exercise',
+  'i-just-became-a-dad': 'father fitness workout baby',
+  'bye-stress-bye': 'yoga meditation stress relief exercise',
+  'i-dont-have-much-time': 'quick workout home fitness',
+  'medical-conditions': 'rehabilitation exercise physical therapy',
+  // Training Modality
+  'flexibility-workout': 'stretching flexibility yoga',
+  'balance-workout': 'balance training stability exercise',
+  'cardio-workout': 'running cardio treadmill fitness',
+  'superday-workout': 'crossfit functional fitness workout',
+  'hiit-workout': 'hiit high intensity interval training',
+  'hyrox-training': 'hyrox fitness race functional',
+  // Sport-Specific
+  'basketball-conditioning': 'basketball training court athletes',
+  'football-conditioning': 'football soccer training pitch',
+  'handball-conditioning': 'handball sport training team',
+  'rugby-conditioning': 'rugby training scrum athletes',
+  'tennis-conditioning': 'tennis court training athlete',
+  'volleyball-conditioning': 'volleyball training jump athletes',
+  'pingpong-conditioning': 'table tennis ping pong training',
+  'castellers': 'castellers human tower catalonia',
+  // Personalized
+  'victor-hypertrophy-fat-loss': 'hypertrophy weight training gym',
+};
+
+// Keywords in program names that map to a Pexels query (for UUID-based programs)
+const NAME_HERO_QUERIES: Record<string, string> = {
+  baixos: 'castellers human tower base pinya',
+  contrafort: 'castellers human tower support team',
+  'primeres mans': 'castellers human tower climbing',
+  segons: 'castellers climbing human tower',
+  'pom de dalt': 'castellers children top human tower',
+};
+
+function resolveHeroQuery(programId: string, programName?: string): string | null {
+  if (PEXELS_HERO_QUERIES[programId]) return PEXELS_HERO_QUERIES[programId];
+  if (programName) {
+    const lower = programName.toLowerCase();
+    for (const [keyword, query] of Object.entries(NAME_HERO_QUERIES)) {
+      if (lower.includes(keyword)) return query;
+    }
+  }
+  return null;
+}
 
 interface ProgramHeroProps {
   programId: string;
@@ -47,6 +108,21 @@ export function ProgramHero({
 }: ProgramHeroProps) {
   const heroImage = getProgramHeroImage(programId);
   const colors = PROGRAM_CATEGORY_COLORS[category];
+  const pexelsQuery = resolveHeroQuery(programId, metadata.program_name);
+  const [pexelsImage, setPexelsImage] = useState<{ src: string; photographer: string } | null>(null);
+
+  useEffect(() => {
+    if (!pexelsQuery) return;
+    fetch(`/api/pexels?query=${encodeURIComponent(pexelsQuery)}&per_page=5`)
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        const photo = data?.photos?.[0];
+        if (photo) setPexelsImage({ src: photo.src.large2x || photo.src.large, photographer: photo.photographer });
+      })
+      .catch(() => {});
+  }, [pexelsQuery]);
+
+  const bgImage = pexelsImage?.src || heroImage;
 
   const gradientStyle = {
     background: `linear-gradient(135deg, ${colors.gradient_start} 0%, ${colors.gradient_end} 100%)`,
@@ -55,15 +131,23 @@ export function ProgramHero({
   return (
     <div className="relative overflow-hidden text-white">
       {/* Background Image */}
-      {heroImage && (
+      {bgImage && (
         <div className="absolute inset-0 z-0">
-          <Image
-            src={heroImage}
-            alt={metadata.program_name}
-            fill
-            className="object-cover"
-            priority
-          />
+          {pexelsImage ? (
+            <img
+              src={pexelsImage.src}
+              alt={metadata.program_name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <Image
+              src={bgImage}
+              alt={metadata.program_name}
+              fill
+              className="object-cover"
+              priority
+            />
+          )}
         </div>
       )}
 
@@ -145,6 +229,12 @@ export function ProgramHero({
             Save for Later
           </button>
         </div>
+
+        {pexelsImage && (
+          <p className="mt-6 text-white/30 text-xs">
+            Photo by {pexelsImage.photographer} on Pexels
+          </p>
+        )}
       </div>
     </div>
   );

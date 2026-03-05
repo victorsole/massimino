@@ -2,10 +2,10 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Medal, Frown, ChevronDown, ChevronUp } from 'lucide-react'
+import { Medal, Frown, ChevronDown, ChevronUp, Send, Plus, Trash2, Pencil, Sparkles, Dumbbell, Apple, Clock, ArrowRight } from 'lucide-react'
+import Image from 'next/image'
 
 interface ChatMessage { id?: string; role: 'user' | 'assistant'; content: string }
 interface WorkoutItemPreview { exerciseName: string; sets?: number; reps?: number; restSeconds?: number; notes?: string }
@@ -426,292 +426,463 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle>Massichat - Your AI Fitness Coach</CardTitle>
+    <>
+      <div className="flex flex-col h-[600px] sm:h-[650px] lg:h-[calc(100vh-14rem)] bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        {/* Header */}
+        <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-[#2b5069]/10 flex items-center justify-center overflow-hidden flex-shrink-0">
+              <Image src="/massimino_logo.png" alt="MassiChat" width={24} height={24} />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-gray-900 font-display leading-tight">MassiChat</h3>
+              <p className="text-xs text-gray-500 leading-tight">AI Fitness Coach</p>
+            </div>
+          </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => { setSessionId(null); setMessages([]); setWorkoutProposal(null); setEditable(null); }}>New Chat</Button>
+            {sessions.length > 0 && (
+              <button
+                onClick={() => setSessionsExpanded(!sessionsExpanded)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${sessionsExpanded ? 'bg-[#2b5069]/10 text-[#2b5069]' : 'text-gray-600 hover:bg-gray-100'}`}
+              >
+                History
+                {sessions.length > 0 && (
+                  <span className="inline-flex items-center justify-center w-5 h-5 text-[10px] font-bold bg-[#2b5069] text-white rounded-full">{sessions.length}</span>
+                )}
+                {sessionsExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+              </button>
+            )}
+            <button
+              onClick={() => { setSessionId(null); setMessages([]); setWorkoutProposal(null); setEditable(null); setSuggestions([]); }}
+              className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#2b5069] text-white hover:bg-[#2b5069]/90 transition-colors"
+              title="New Chat"
+            >
+              <Plus size={16} />
+            </button>
           </div>
         </div>
+
+        {/* Flash message */}
         {flashMessage && (
-          <div className="mt-2 text-xs text-green-700 bg-green-50 border border-green-200 rounded px-2 py-1 inline-block">
+          <div className="flex-shrink-0 mx-4 mt-2 text-xs text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-1.5">
             {flashMessage}
           </div>
         )}
-        {/* Collapsible Recent Sessions */}
-        {sessions.length > 0 && (
-          <div className="mt-3 border rounded-lg">
-            <button
-              onClick={() => setSessionsExpanded(!sessionsExpanded)}
-              className="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg"
-            >
-              <span>Recent Sessions ({sessions.length})</span>
-              {sessionsExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-            </button>
-            {sessionsExpanded && (
-              <div className="px-3 pb-3 space-y-2">
-                <div className="flex items-center justify-end gap-2">
-                  {sessionId && (
-                    <>
-                      <Button variant="ghost" size="sm" onClick={renameCurrentSession} disabled={!!renaming}>
-                        {renaming ? 'Renaming…' : 'Rename'}
-                      </Button>
-                      <Button variant="ghost" size="sm" onClick={() => deleteSessionById(sessionId!)}>
-                        Delete
-                      </Button>
-                    </>
-                  )}
-                  {loadingSessions && <div className="text-xs text-gray-500">Loading…</div>}
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {sessions.slice(0, 6).map((s) => (
-                    <div key={s.id} className="flex items-center gap-1 max-w-[200px]">
-                      <button
-                        onClick={() => loadSession(s.id)}
-                        className={`text-xs px-2 py-1.5 rounded border truncate flex-1 min-w-0 ${sessionId === s.id ? 'bg-gray-200 border-gray-400' : 'bg-white border-gray-200'} hover:bg-gray-100`}
-                        title={s.title || 'Untitled'}
-                      >
-                        {s.title || 'Untitled'}
-                      </button>
-                      <button
-                        onClick={() => deleteSessionById(s.id)}
-                        className="text-xs text-gray-400 hover:text-red-600 flex-shrink-0 p-1"
-                        title="Delete"
-                      >
-                        ×
-                      </button>
+
+        {/* Session panel - slide down */}
+        {sessionsExpanded && (
+          <div className="flex-shrink-0 border-b border-gray-100 bg-gray-50/80 overflow-y-auto max-h-48">
+            {loadingSessions && <div className="px-4 py-2 text-xs text-gray-500">Loading sessions...</div>}
+            <div className="py-1">
+              {sessions.slice(0, 10).map((s) => (
+                <div
+                  key={s.id}
+                  className={`group flex items-center gap-2 px-4 py-2 cursor-pointer transition-colors ${sessionId === s.id ? 'bg-[#2b5069]/10' : 'hover:bg-gray-100'}`}
+                  onClick={() => loadSession(s.id)}
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className={`text-sm truncate ${sessionId === s.id ? 'font-medium text-[#2b5069]' : 'text-gray-700'}`}>
+                      {s.title || 'Untitled'}
                     </div>
-                  ))}
-                  {sessions.length > 6 && (
-                    <span className="text-xs text-gray-500 self-center">+{sessions.length - 6} more</span>
-                  )}
+                    {s.last && <div className="text-xs text-gray-400 truncate mt-0.5">{s.last.slice(0, 60)}</div>}
+                  </div>
+                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setSessionId(s.id); renameCurrentSession(); }}
+                      className="p-1 rounded hover:bg-gray-200 text-gray-400 hover:text-gray-600"
+                      title="Rename"
+                    >
+                      <Pencil size={14} />
+                    </button>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); deleteSessionById(s.id); }}
+                      className="p-1 rounded hover:bg-red-50 text-gray-400 hover:text-red-500"
+                      title="Delete"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
+              ))}
+              {sessions.length > 10 && (
+                <div className="px-4 py-1.5 text-xs text-gray-400">+{sessions.length - 10} more sessions</div>
+              )}
+            </div>
           </div>
         )}
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <div ref={scrollRef} className="h-80 overflow-y-auto space-y-3 rounded border p-3 bg-white">
-            {messages.map((m, i) => (
-              <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'} items-start gap-2`}>
-                <div className={`max-w-[80%] p-3 rounded-lg ${m.role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-100'}`}>
+
+        {/* Message area */}
+        <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-4 bg-[#fcfaf5]/50">
+          {/* Welcome / Empty state */}
+          {messages.length === 0 && !loading && (
+            <div className="flex flex-col items-center justify-center h-full text-center px-4">
+              <div className="w-16 h-16 rounded-full bg-[#2b5069]/10 flex items-center justify-center mb-4 overflow-hidden">
+                <Image src="/massimino_logo.png" alt="MassiChat" width={40} height={40} />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 font-display mb-1">Welcome to MassiChat</h3>
+              <p className="text-sm text-gray-500 mb-6 max-w-xs">Your AI-powered fitness coach. Ask me anything about workouts, nutrition, or training.</p>
+              <div className="grid grid-cols-2 gap-3 w-full max-w-sm">
+                <button
+                  onClick={() => setInput('Create a workout for me')}
+                  className="flex flex-col items-center gap-2 p-4 rounded-xl border border-gray-100 bg-white hover:border-[#2b5069]/30 hover:shadow-sm transition-all text-center group"
+                >
+                  <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                    <Dumbbell size={20} className="text-[#2b5069]" />
+                  </div>
+                  <span className="text-xs font-medium text-gray-700">Create a workout</span>
+                </button>
+                <button
+                  onClick={() => setInput('Give me nutrition advice')}
+                  className="flex flex-col items-center gap-2 p-4 rounded-xl border border-gray-100 bg-white hover:border-green-300 hover:shadow-sm transition-all text-center group"
+                >
+                  <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center group-hover:bg-green-100 transition-colors">
+                    <Apple size={20} className="text-green-600" />
+                  </div>
+                  <span className="text-xs font-medium text-gray-700">Nutrition advice</span>
+                </button>
+                <button
+                  onClick={() => setInput('Give me a quick 20-minute HIIT session')}
+                  className="flex flex-col items-center gap-2 p-4 rounded-xl border border-gray-100 bg-white hover:border-orange-300 hover:shadow-sm transition-all text-center group"
+                >
+                  <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center group-hover:bg-orange-100 transition-colors">
+                    <Clock size={20} className="text-orange-500" />
+                  </div>
+                  <span className="text-xs font-medium text-gray-700">Quick HIIT session</span>
+                </button>
+                <button
+                  onClick={() => setInput('Give me training tips to improve')}
+                  className="flex flex-col items-center gap-2 p-4 rounded-xl border border-gray-100 bg-white hover:border-purple-300 hover:shadow-sm transition-all text-center group"
+                >
+                  <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center group-hover:bg-purple-100 transition-colors">
+                    <Sparkles size={20} className="text-purple-500" />
+                  </div>
+                  <span className="text-xs font-medium text-gray-700">Training tips</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Messages */}
+          {messages.map((m, i) => (
+            <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'} items-end gap-2`}>
+              {/* Assistant avatar */}
+              {m.role === 'assistant' && (
+                <div className="w-8 h-8 rounded-full bg-[#2b5069]/10 flex items-center justify-center flex-shrink-0 mb-1 overflow-hidden">
+                  <Image src="/massimino_logo.png" alt="M" width={22} height={22} />
+                </div>
+              )}
+              <div className="flex flex-col max-w-[75%] sm:max-w-[70%]">
+                <div className={`px-4 py-2.5 text-sm leading-relaxed ${
+                  m.role === 'user'
+                    ? 'bg-[#2b5069] text-white rounded-2xl rounded-br-md'
+                    : 'bg-white border border-gray-100 shadow-sm rounded-2xl rounded-bl-md text-gray-800'
+                }`}>
                   {m.role === 'assistant' ? renderMarkdown(m.content) : m.content}
                 </div>
+                {/* Feedback buttons below assistant bubbles */}
                 {m.role === 'assistant' && (
-                  <div className="flex gap-1 pt-1">
-                    <button aria-label="Helpful" className="p-1 rounded hover:bg-emerald-50 text-emerald-600" onClick={() => rateAssistantMessage(m, 'UP')}>
-                      <Medal size={20} />
+                  <div className="flex gap-1 mt-1 ml-1">
+                    <button
+                      aria-label="Helpful"
+                      className="p-1 rounded-md text-gray-300 hover:text-emerald-500 hover:bg-emerald-50 transition-colors"
+                      onClick={() => rateAssistantMessage(m, 'UP')}
+                    >
+                      <Medal size={16} />
                     </button>
-                    <button aria-label="Not helpful" className="p-1 rounded hover:bg-red-50 text-red-600" onClick={() => rateAssistantMessage(m, 'DOWN')}>
-                      <Frown size={20} />
+                    <button
+                      aria-label="Not helpful"
+                      className="p-1 rounded-md text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors"
+                      onClick={() => rateAssistantMessage(m, 'DOWN')}
+                    >
+                      <Frown size={16} />
                     </button>
                   </div>
                 )}
               </div>
-            ))}
-            {loading && (
-              <div className="flex justify-start">
-                <div className="max-w-[80%] p-3 rounded-lg bg-gray-100 text-gray-600">
-                  <span>Massichat is typing</span>
-                  <span className="inline-block animate-pulse">...</span>
+            </div>
+          ))}
+
+          {/* Typing indicator */}
+          {loading && (
+            <div className="flex justify-start items-end gap-2">
+              <div className="w-8 h-8 rounded-full bg-[#2b5069] flex items-center justify-center flex-shrink-0 mb-1">
+                <Image src="/massimino-logo.svg" alt="M" width={18} height={18} className="brightness-0 invert" />
+              </div>
+              <div className="bg-white border border-gray-100 shadow-sm rounded-2xl rounded-bl-md px-4 py-3">
+                <div className="flex gap-1">
+                  <span className="w-2 h-2 rounded-full bg-[#2b5069]/40 animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <span className="w-2 h-2 rounded-full bg-[#2b5069]/40 animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <span className="w-2 h-2 rounded-full bg-[#2b5069]/40 animate-bounce" style={{ animationDelay: '300ms' }} />
                 </div>
               </div>
-            )}
-            {messages.length === 0 && (
-              <div className="text-sm text-gray-500">Ask me for a personalized workout or tips. Example: "I want a 30-minute full-body at home."</div>
-            )}
-          </div>
+            </div>
+          )}
+        </div>
 
-          {workoutProposal && (
-            <Card className="border-2 border-green-500">
-              <CardHeader>
-                <CardTitle>🏋️ Proposed Workout</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm text-gray-700">
-                      <div className="font-medium">{(editable?.title || workoutProposal.workoutData?.title) || workoutProposal.summary || 'New workout available'}</div>
-                      {(editable?.description || workoutProposal.workoutData?.description) && (
-                        <div className="text-xs text-gray-500 mt-0.5">{editable?.description || workoutProposal.workoutData?.description}</div>
+        {/* Workout proposal */}
+        {workoutProposal && (
+          <div className="flex-shrink-0 mx-4 mb-3">
+            <div className="rounded-2xl bg-gradient-to-br from-[#2b5069]/5 to-transparent border border-gray-100 overflow-hidden">
+              <div className="px-4 py-3">
+                <div className="flex items-start gap-3 mb-3">
+                  <div className="w-9 h-9 rounded-lg bg-[#2b5069]/10 flex items-center justify-center flex-shrink-0">
+                    <Dumbbell size={18} className="text-[#2b5069]" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-semibold text-gray-900">
+                      {(editable?.title || workoutProposal.workoutData?.title) || workoutProposal.summary || 'Proposed Workout'}
+                    </div>
+                    {(editable?.description || workoutProposal.workoutData?.description) && (
+                      <div className="text-xs text-gray-500 mt-0.5">{editable?.description || workoutProposal.workoutData?.description}</div>
+                    )}
+                  </div>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 mb-3">
+                  {workoutProposal.workoutData?.items?.length ? (
+                    <button
+                      onClick={() => setShowPreview((s) => !s)}
+                      className="text-xs font-medium px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
+                    >
+                      {showPreview ? 'Hide' : 'Preview'}
+                    </button>
+                  ) : null}
+                  {showPreview && (
+                    <button
+                      onClick={() => setEditMode((e) => !e)}
+                      className="text-xs font-medium px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
+                    >
+                      {editMode ? 'Done' : 'Edit'}
+                    </button>
+                  )}
+                  {showPreview && (
+                    <button
+                      onClick={() => {
+                        if (!editable) return;
+                        setTemplateForm({ name: editable.title || 'Workout Template', isPublic: false, difficulty: 'INTERMEDIATE', tags: '' });
+                        setShowTemplateModal(true);
+                      }}
+                      className="text-xs font-medium px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
+                    >
+                      Save as Template
+                    </button>
+                  )}
+                  <button
+                    onClick={acceptWorkout}
+                    className="text-xs font-medium px-4 py-1.5 rounded-lg bg-[#2b5069] text-white hover:bg-[#2b5069]/90 transition-colors ml-auto"
+                  >
+                    Accept & Add
+                  </button>
+                </div>
+
+                {showPreview && (
+                  <div className="space-y-2">
+                    {/* Totals row */}
+                    {(() => {
+                      const t = totals(editable || workoutProposal.workoutData);
+                      return (
+                        <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                          <span>{t.totalSets} sets</span>
+                          <span className="w-1 h-1 rounded-full bg-gray-300" />
+                          <span>{t.totalReps} reps</span>
+                          <span className="w-1 h-1 rounded-full bg-gray-300" />
+                          <span>~{t.totalRestMin} min rest</span>
+                        </div>
+                      );
+                    })()}
+                    <div className="overflow-x-auto rounded-xl border border-gray-100 bg-white">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="bg-gray-50">
+                            <th className="px-3 py-2 text-left text-[10px] uppercase tracking-wider text-gray-400 font-medium w-12">#</th>
+                            <th className="px-3 py-2 text-left text-[10px] uppercase tracking-wider text-gray-400 font-medium">Exercise</th>
+                            <th className="px-3 py-2 text-left text-[10px] uppercase tracking-wider text-gray-400 font-medium">Sets</th>
+                            <th className="px-3 py-2 text-left text-[10px] uppercase tracking-wider text-gray-400 font-medium">Reps</th>
+                            <th className="px-3 py-2 text-left text-[10px] uppercase tracking-wider text-gray-400 font-medium">Rest</th>
+                            <th className="px-3 py-2 text-left text-[10px] uppercase tracking-wider text-gray-400 font-medium">Notes</th>
+                            {editMode && <th className="px-3 py-2 w-20" />}
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-50">
+                          {((editable?.items || workoutProposal.workoutData?.items || []) as WorkoutItemPreview[]).map((it, idx) => (
+                            <tr key={idx} className="hover:bg-gray-50/50">
+                              <td className="px-3 py-2">
+                                {editMode ? (
+                                  <div className="flex items-center gap-0.5">
+                                    <button className="px-1 py-0.5 border rounded text-xs text-gray-500 hover:bg-gray-100" onClick={() => moveItem(idx, -1)}>&#8593;</button>
+                                    <button className="px-1 py-0.5 border rounded text-xs text-gray-500 hover:bg-gray-100" onClick={() => moveItem(idx, 1)}>&#8595;</button>
+                                  </div>
+                                ) : (
+                                  <span className="text-gray-400 text-xs">{idx + 1}</span>
+                                )}
+                              </td>
+                              <td className="px-3 py-2 font-medium text-gray-800">
+                                {editMode ? (
+                                  <input className="w-full border border-gray-200 rounded-lg px-2 py-1 text-sm focus:ring-1 focus:ring-[#2b5069] focus:border-[#2b5069] outline-none" type="text" value={it.exerciseName || ''} onChange={(e) => onItemChange(idx, { exerciseName: e.target.value })} />
+                                ) : (
+                                  <span>{it.exerciseName || 'Exercise'}</span>
+                                )}
+                              </td>
+                              <td className="px-3 py-2 text-gray-600">
+                                {editMode ? (
+                                  <input className="w-14 border border-gray-200 rounded-lg px-2 py-1 text-sm focus:ring-1 focus:ring-[#2b5069] focus:border-[#2b5069] outline-none" type="number" value={it.sets ?? ''} onChange={(e) => onItemChange(idx, { sets: Number(e.target.value) })} />
+                                ) : (
+                                  <span>{it.sets ?? '-'}</span>
+                                )}
+                              </td>
+                              <td className="px-3 py-2 text-gray-600">
+                                {editMode ? (
+                                  <input className="w-14 border border-gray-200 rounded-lg px-2 py-1 text-sm focus:ring-1 focus:ring-[#2b5069] focus:border-[#2b5069] outline-none" type="number" value={it.reps ?? ''} onChange={(e) => onItemChange(idx, { reps: Number(e.target.value) })} />
+                                ) : (
+                                  <span>{it.reps ?? '-'}</span>
+                                )}
+                              </td>
+                              <td className="px-3 py-2 text-gray-600">
+                                {editMode ? (
+                                  <input className="w-16 border border-gray-200 rounded-lg px-2 py-1 text-sm focus:ring-1 focus:ring-[#2b5069] focus:border-[#2b5069] outline-none" type="number" value={it.restSeconds ?? ''} onChange={(e) => onItemChange(idx, { restSeconds: Number(e.target.value) })} />
+                                ) : (
+                                  <span>{it.restSeconds ? `${it.restSeconds}s` : '-'}</span>
+                                )}
+                              </td>
+                              <td className="px-3 py-2 text-gray-500 text-xs">
+                                {editMode ? (
+                                  <input className="w-full border border-gray-200 rounded-lg px-2 py-1 text-sm focus:ring-1 focus:ring-[#2b5069] focus:border-[#2b5069] outline-none" type="text" value={it.notes ?? ''} onChange={(e) => onItemChange(idx, { notes: e.target.value })} />
+                                ) : (
+                                  <span>{it.notes ?? '-'}</span>
+                                )}
+                              </td>
+                              {editMode && (
+                                <td className="px-3 py-2">
+                                  <button className="text-xs text-red-500 hover:text-red-700 font-medium" onClick={() => removeItem(idx)}>Remove</button>
+                                </td>
+                              )}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                      {editMode && (
+                        <div className="px-3 py-2 border-t border-gray-50">
+                          <button onClick={addItem} className="text-xs font-medium text-[#2b5069] hover:text-[#2b5069]/80">+ Add Exercise</button>
+                        </div>
                       )}
                     </div>
-                    <div className="flex items-center gap-2">
-                      {workoutProposal.workoutData?.items?.length ? (
-                        <Button variant="secondary" size="sm" onClick={() => setShowPreview((s) => !s)}>
-                          {showPreview ? 'Hide' : 'Preview'}
-                        </Button>
-                      ) : null}
-                      {showPreview ? (
-                        <Button variant="outline" size="sm" onClick={() => setEditMode((e) => !e)}>
-                          {editMode ? 'Done' : 'Edit'}
-                        </Button>
-                      ) : null}
-                      {showPreview ? (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            if (!editable) return;
-                            setTemplateForm({ name: editable.title || 'Workout Template', isPublic: false, difficulty: 'INTERMEDIATE', tags: '' });
-                            setShowTemplateModal(true);
-                          }}
-                        >
-                          Save as Template
-                        </Button>
-                      ) : null}
-                      <Button onClick={acceptWorkout} size="sm">Accept & Add</Button>
-                    </div>
                   </div>
-
-                  {showPreview && (
-                    <div className="rounded border bg-white p-2 space-y-2">
-                      {/* Totals */}
-                      {(() => { const t = totals(editable || workoutProposal.workoutData); return (
-                        <div className="text-xs text-gray-600">Totals: {t.totalSets} sets • {t.totalReps} reps • ~{t.totalRestMin} min rest</div>
-                      ) })()}
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
-                          <thead>
-                            <tr className="text-left text-gray-500">
-                              <th className="px-2 py-1 w-16">#</th>
-                              <th className="px-2 py-1">Exercise</th>
-                              <th className="px-2 py-1">Sets</th>
-                              <th className="px-2 py-1">Reps</th>
-                              <th className="px-2 py-1">Rest (s)</th>
-                              <th className="px-2 py-1">Notes</th>
-                              {editMode && <th className="px-2 py-1 w-20">Actions</th>}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {((editable?.items || workoutProposal.workoutData?.items || []) as WorkoutItemPreview[]).map((it, idx) => (
-                              <tr key={idx} className="border-t">
-                                <td className="px-2 py-1">
-                                  {editMode ? (
-                                    <div className="flex items-center gap-1">
-                                      <button className="px-1 py-0.5 border rounded" onClick={() => moveItem(idx, -1)} title="Move up">↑</button>
-                                      <button className="px-1 py-0.5 border rounded" onClick={() => moveItem(idx, 1)} title="Move down">↓</button>
-                                    </div>
-                                  ) : (
-                                    <span className="text-gray-500">{idx + 1}</span>
-                                  )}
-                                </td>
-                                <td className="px-2 py-1 font-medium">
-                                  {editMode ? (
-                                    <input className="w-full border rounded px-1 py-0.5" type="text" value={it.exerciseName || ''} onChange={(e) => onItemChange(idx, { exerciseName: e.target.value })} />
-                                  ) : (
-                                    <span>{it.exerciseName || 'Exercise'}</span>
-                                  )}
-                                </td>
-                                <td className="px-2 py-1">
-                                  {editMode ? (
-                                    <input className="w-16 border rounded px-1 py-0.5" type="number" value={it.sets ?? ''} onChange={(e) => onItemChange(idx, { sets: Number(e.target.value) })} />
-                                  ) : (
-                                    <span>{it.sets ?? '-'}</span>
-                                  )}
-                                </td>
-                                <td className="px-2 py-1">
-                                  {editMode ? (
-                                    <input className="w-16 border rounded px-1 py-0.5" type="number" value={it.reps ?? ''} onChange={(e) => onItemChange(idx, { reps: Number(e.target.value) })} />
-                                  ) : (
-                                    <span>{it.reps ?? '-'}</span>
-                                  )}
-                                </td>
-                                <td className="px-2 py-1">
-                                  {editMode ? (
-                                    <input className="w-20 border rounded px-1 py-0.5" type="number" value={it.restSeconds ?? ''} onChange={(e) => onItemChange(idx, { restSeconds: Number(e.target.value) })} />
-                                  ) : (
-                                    <span>{it.restSeconds ?? '-'}</span>
-                                  )}
-                                </td>
-                                <td className="px-2 py-1">
-                                  {editMode ? (
-                                    <input className="w-full border rounded px-1 py-0.5" type="text" value={it.notes ?? ''} onChange={(e) => onItemChange(idx, { notes: e.target.value })} />
-                                  ) : (
-                                    <span className="text-gray-600">{it.notes ?? '-'}</span>
-                                  )}
-                                </td>
-                                {editMode && (
-                                  <td className="px-2 py-1">
-                                    <button className="px-2 py-0.5 border rounded text-red-600" onClick={() => removeItem(idx)}>Remove</button>
-                                  </td>
-                                )}
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                        {editMode && (
-                          <div className="mt-2">
-                            <Button variant="secondary" size="sm" onClick={addItem}>+ Add Exercise</Button>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Save Template Modal */}
-          {showTemplateModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center">
-              <div className="absolute inset-0 bg-black/30" onClick={() => !templateSaving && setShowTemplateModal(false)} />
-              <div className="relative bg-white rounded-lg shadow-lg w-full max-w-md p-4">
-                <div className="text-lg font-semibold mb-3">Save as Template</div>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-sm text-gray-600 mb-1">Name</label>
-                    <Input value={templateForm.name} onChange={(e) => setTemplateForm({ ...templateForm, name: e.target.value })} placeholder="Template name" />
-                  </div>
-                  <div>
-                    <label className="block text-sm text-gray-600 mb-1">Difficulty</label>
-                    <select
-                      className="w-full border rounded px-2 py-2 text-sm"
-                      value={templateForm.difficulty}
-                      onChange={(e) => setTemplateForm({ ...templateForm, difficulty: e.target.value as any })}
-                    >
-                      <option value="BEGINNER">BEGINNER</option>
-                      <option value="INTERMEDIATE">INTERMEDIATE</option>
-                      <option value="ADVANCED">ADVANCED</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm text-gray-600 mb-1">Tags (comma-separated)</label>
-                    <Input value={templateForm.tags} onChange={(e) => setTemplateForm({ ...templateForm, tags: e.target.value })} placeholder="e.g., arms, hypertrophy" />
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <input id="tmpl-public" type="checkbox" className="h-4 w-4" checked={templateForm.isPublic} onChange={(e) => setTemplateForm({ ...templateForm, isPublic: e.target.checked })} />
-                    <label htmlFor="tmpl-public" className="text-sm text-gray-700">Make template public</label>
-                  </div>
-                </div>
-                <div className="mt-4 flex items-center justify-end gap-2">
-                  <Button variant="outline" size="sm" onClick={() => setShowTemplateModal(false)} disabled={templateSaving}>Cancel</Button>
-                  <Button size="sm" onClick={saveAsTemplate} disabled={templateSaving}>{templateSaving ? 'Saving…' : 'Save'}</Button>
-                </div>
+                )}
               </div>
             </div>
-          )}
+          </div>
+        )}
 
-          {suggestions.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {suggestions.slice(0, 4).map((s, i) => (
-                <Button key={i} variant="secondary" size="sm" onClick={() => { setInput(s); setTimeout(() => sendMessage(), 0) }}>
-                  {s}
-                </Button>
-              ))}
+        {/* Suggestion chips */}
+        {suggestions.length > 0 && (
+          <div className="flex-shrink-0 px-4 pb-2 flex flex-wrap gap-2">
+            {suggestions.slice(0, 4).map((s, i) => (
+              <button
+                key={i}
+                onClick={() => { setInput(s); setTimeout(() => sendMessage(), 0) }}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border border-[#2b5069]/20 text-[#2b5069] bg-[#2b5069]/5 hover:bg-[#2b5069]/10 transition-colors"
+              >
+                <ArrowRight size={12} />
+                {s}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Input area */}
+        <div className="flex-shrink-0 border-t border-gray-100 px-4 py-3 bg-white">
+          <div className="flex items-center gap-2">
+            <div className="flex-1 relative">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+                placeholder="Ask me about your workout..."
+                className="w-full px-4 py-2.5 text-sm bg-gray-50 rounded-xl border border-transparent focus:bg-white focus:border-gray-200 focus:ring-2 focus:ring-[#2b5069]/20 outline-none transition-all placeholder:text-gray-400"
+              />
             </div>
-          )}
-
-          <div className="flex gap-2">
-            <Input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask me about your workout..." onKeyDown={(e) => e.key === 'Enter' && sendMessage()} />
-            <Button onClick={sendMessage} disabled={loading}>{loading ? 'Sending...' : 'Send'}</Button>
+            <button
+              onClick={sendMessage}
+              disabled={loading}
+              className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all flex-shrink-0 ${
+                input.trim()
+                  ? 'bg-[#2b5069] text-white hover:bg-[#2b5069]/90 shadow-sm'
+                  : 'bg-gray-100 text-gray-400'
+              } disabled:opacity-50`}
+            >
+              {loading ? (
+                <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <Send size={18} />
+              )}
+            </button>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+
+      {/* Template modal */}
+      {showTemplateModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => !templateSaving && setShowTemplateModal(false)} />
+          <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 animate-in fade-in zoom-in-95 duration-200">
+            <h4 className="text-lg font-bold text-gray-900 font-display mb-4">Save as Template</h4>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <input
+                  type="text"
+                  value={templateForm.name}
+                  onChange={(e) => setTemplateForm({ ...templateForm, name: e.target.value })}
+                  placeholder="Template name"
+                  className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2b5069]/20 focus:border-[#2b5069] outline-none transition-all"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Difficulty</label>
+                <select
+                  className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2b5069]/20 focus:border-[#2b5069] outline-none transition-all"
+                  value={templateForm.difficulty}
+                  onChange={(e) => setTemplateForm({ ...templateForm, difficulty: e.target.value as any })}
+                >
+                  <option value="BEGINNER">Beginner</option>
+                  <option value="INTERMEDIATE">Intermediate</option>
+                  <option value="ADVANCED">Advanced</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Tags (comma-separated)</label>
+                <input
+                  type="text"
+                  value={templateForm.tags}
+                  onChange={(e) => setTemplateForm({ ...templateForm, tags: e.target.value })}
+                  placeholder="e.g., arms, hypertrophy"
+                  className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2b5069]/20 focus:border-[#2b5069] outline-none transition-all"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <input id="tmpl-public" type="checkbox" className="h-4 w-4 rounded border-gray-300 text-[#2b5069] focus:ring-[#2b5069]" checked={templateForm.isPublic} onChange={(e) => setTemplateForm({ ...templateForm, isPublic: e.target.checked })} />
+                <label htmlFor="tmpl-public" className="text-sm text-gray-700">Make template public</label>
+              </div>
+            </div>
+            <div className="mt-6 flex items-center justify-end gap-3">
+              <button
+                onClick={() => setShowTemplateModal(false)}
+                disabled={templateSaving}
+                className="px-4 py-2 text-sm font-medium text-gray-600 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={saveAsTemplate}
+                disabled={templateSaving}
+                className="px-4 py-2 text-sm font-medium text-white bg-[#2b5069] rounded-xl hover:bg-[#2b5069]/90 transition-colors disabled:opacity-50"
+              >
+                {templateSaving ? 'Saving...' : 'Save'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }

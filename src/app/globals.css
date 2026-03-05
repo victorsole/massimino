@@ -67,6 +67,7 @@
     @apply bg-background text-foreground;
     overflow-x: hidden;
     max-width: 100vw;
+    font-variation-settings: "wdth" 100, "YTLC" 500;
   }
 }
 
@@ -167,6 +168,28 @@
   
   .badge-lg {
     @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+  }
+}
+
+/* Landing page styles */
+@layer components {
+  .landing-section {
+    @apply w-full;
+  }
+
+  .landing-eyebrow {
+    font-family: 'Nunito Sans', sans-serif;
+    @apply text-sm font-medium uppercase tracking-[0.25em];
+  }
+
+  .landing-title {
+    font-family: 'Nunito Sans', sans-serif;
+    @apply font-bold uppercase tracking-tight leading-none;
+  }
+
+  .landing-body {
+    font-family: 'Lato', sans-serif;
+    @apply leading-relaxed;
   }
 }
 
@@ -535,6 +558,75 @@
 
   .hover-glow:hover {
     box-shadow: 0 0 20px rgba(37, 73, 103, 0.3);
+  }
+}
+
+/* ===== ONBOARDING TOUR (driver.js) ===== */
+.massimino-tour-popover {
+  background: #fcfaf5 !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(43, 80, 105, 0.15) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12) !important;
+  max-width: 340px !important;
+}
+
+.massimino-tour-popover .driver-popover-title {
+  font-family: 'Nunito Sans', sans-serif !important;
+  color: #2b5069 !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+}
+
+.massimino-tour-popover .driver-popover-description {
+  font-family: 'Lato', sans-serif !important;
+  color: #4b5563 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.5 !important;
+}
+
+.massimino-tour-popover .driver-popover-progress-text {
+  font-family: 'Lato', sans-serif !important;
+  color: #9ca3af !important;
+  font-size: 0.75rem !important;
+}
+
+.massimino-tour-popover .driver-popover-next-btn,
+.massimino-tour-popover .driver-popover-prev-btn {
+  font-family: 'Nunito Sans', sans-serif !important;
+  border-radius: 8px !important;
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  padding: 6px 16px !important;
+}
+
+.massimino-tour-popover .driver-popover-next-btn {
+  background: #2b5069 !important;
+  color: #fff !important;
+  border: none !important;
+  text-shadow: none !important;
+}
+
+.massimino-tour-popover .driver-popover-next-btn:hover {
+  background: #1e3a4d !important;
+}
+
+.massimino-tour-popover .driver-popover-prev-btn {
+  background: transparent !important;
+  color: #2b5069 !important;
+  border: 1px solid #2b5069 !important;
+}
+
+.massimino-tour-popover .driver-popover-close-btn {
+  color: #9ca3af !important;
+}
+
+.massimino-tour-popover .driver-popover-close-btn:hover {
+  color: #2b5069 !important;
+}
+
+@media (max-width: 640px) {
+  .massimino-tour-popover {
+    max-width: 280px !important;
   }
 }
 

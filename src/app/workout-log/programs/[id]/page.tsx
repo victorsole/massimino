@@ -300,7 +300,7 @@ function transformApiResponse(apiData: any): {
       sections: [],
     }));
   } else if (Array.isArray(templateData.variations)) {
-    // Handle Arnold Volume format - variations with workouts containing muscle groups
+    // Handle Classic Volume format - variations with workouts containing muscle groups
     const firstVariation = templateData.variations[0];
     if (firstVariation?.workouts) {
       workoutSessions = firstVariation.workouts.map((workout: any, index: number) => {
@@ -336,7 +336,7 @@ function transformApiResponse(apiData: any): {
       });
     }
   } else if (Array.isArray(templateData.the_six_exercises)) {
-    // Handle Arnold Golden Six format - same exercises repeated each workout
+    // Handle Golden Six format - same exercises repeated each workout
     const exercises = templateData.the_six_exercises.map((ex: any) => ({
       exercise_name: ex.exercise_name,
       sets: ex.sets || 3,
@@ -362,7 +362,7 @@ function transformApiResponse(apiData: any): {
       duration_minutes: metadata.session_duration_minutes?.max || 60,
       sections: [{
         section_name: 'The Golden Six',
-        description: 'Arnold\'s foundational full-body workout',
+        description: 'Golden-era foundational full-body workout',
         exercises,
       }],
     }));
@@ -796,6 +796,7 @@ export default function ProgramDetailPage() {
             {/* Schedule */}
             {workoutSessions.length > 0 && (
               <ProgramSchedule
+                programId={programId}
                 workoutSessions={workoutSessions}
                 cycleDays={workoutSessions.length}
               />

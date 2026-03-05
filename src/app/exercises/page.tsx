@@ -2,17 +2,17 @@
 
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  Search, 
-  Filter, 
-  Dumbbell, 
-  Play, 
+import {
+  Search,
+  Filter,
+  Dumbbell,
+  Play,
   Image as ImageIcon,
   Eye,
   ChevronLeft,
@@ -20,6 +20,9 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { Exercise } from '@/types/workout';
+import { motion, AnimatePresence } from 'framer-motion';
+import { heroVariants, fadeInVariants, staggerContainerVariants, staggerItemVariants, scaleVariants } from '@/lib/animations/variants';
+import { useReducedMotion } from '@/hooks/use_reduced_motion';
 
 interface ExerciseFilters {
   search: string;
@@ -47,6 +50,7 @@ interface ExerciseStats {
 }
 
 export default function ExercisesPage() {
+  const prefersReducedMotion = useReducedMotion();
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [myExercises, setMyExercises] = useState<any[]>([]);
   const [filteredExercises, setFilteredExercises] = useState<Exercise[]>([]);
@@ -104,21 +108,111 @@ export default function ExercisesPage() {
   const [linkSearch, setLinkSearch] = useState('');
   const [linkResults, setLinkResults] = useState<Exercise[]>([]);
 
-  // Fetch exercises and stats
+  // Fetch exercises and user library on mount (with AbortController for StrictMode cleanup)
   useEffect(() => {
-    fetchExercises();
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    const loadExercises = async () => {
+      try {
+        setLoading(true);
+        const params = new URLSearchParams();
+        if (filters.curatedOnly) params.set('curated', 'true');
+        const sep = params.toString() ? '&' : '?';
+        const response = await fetch(
+          `/api/workout/exercises${params.toString() ? `?${params.toString()}` : ''}${sep}include=cover,mediaCount`,
+          { signal }
+        );
+        if (response.ok && !signal.aborted) {
+          const data = await response.json();
+          setExercises(data);
+        }
+      } catch (error) {
+        if ((error as any)?.name !== 'AbortError') {
+          console.error('Error fetching exercises:', error);
+        }
+      } finally {
+        if (!signal.aborted) setLoading(false);
+      }
+    };
+
+    const loadMyExercises = async () => {
+      try {
+        const r = await fetch('/api/workout/my_exercises', { signal });
+        if (r.ok && !signal.aborted) {
+          const data = await r.json();
+          setMyExercises(data);
+        } else if (!signal.aborted) {
+          setMyExercises([]);
+        }
+      } catch (error) {
+        if ((error as any)?.name !== 'AbortError') {
+          setMyExercises([]);
+        }
+      }
+    };
+
+    loadExercises();
+    loadMyExercises();
+
+    return () => controller.abort();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Fetch filter metadata (stats) after exercises are loaded
+  const statsLoadedRef = useRef(false);
   useEffect(() => {
-    // Load user's library if authenticated; ignore errors silently
-    fetch('/api/workout/my_exercises').then(r => r.ok ? r.json() : []).then(setMyExercises).catch(() => setMyExercises([]))
-  }, []);
+    // Only fetch stats once when exercises first load
+    if (exercises.length === 0 || statsLoadedRef.current) return;
+    statsLoadedRef.current = true;
 
-  // Fetch stats after exercises are loaded
-  useEffect(() => {
-    if (exercises.length > 0) {
-      fetchStats();
-    }
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    const loadStats = async () => {
+      try {
+        const [categoriesRes, muscleGroupsRes, equipmentRes, bodyPartsRes, movementPatternsRes, typesRes, tagsRes] = await Promise.all([
+          fetch('/api/workout/exercises?categories=true', { signal }),
+          fetch('/api/workout/exercises?muscleGroups=true', { signal }),
+          fetch('/api/workout/exercises?equipment=true', { signal }),
+          fetch('/api/workout/exercises?meta=bodyParts', { signal }),
+          fetch('/api/workout/exercises?meta=movementPatterns', { signal }),
+          fetch('/api/workout/exercises?meta=types', { signal }),
+          fetch('/api/workout/exercises?meta=tags', { signal }),
+        ]);
+
+        if (signal.aborted) return;
+
+        const categories = categoriesRes.ok ? await categoriesRes.json() : [];
+        const muscleGroups = muscleGroupsRes.ok ? await muscleGroupsRes.json() : [];
+        const equipment = equipmentRes.ok ? await equipmentRes.json() : [];
+        const bodyParts = bodyPartsRes.ok ? await bodyPartsRes.json() : [];
+        const movementPatterns = movementPatternsRes.ok ? await movementPatternsRes.json() : [];
+        const types = typesRes.ok ? await typesRes.json() : [];
+        const tags = tagsRes.ok ? await tagsRes.json() : [];
+
+        if (!signal.aborted) {
+          setStats(prevStats => ({
+            ...prevStats,
+            totalExercises: exercises.length,
+            categories,
+            muscleGroups,
+            equipment,
+            bodyParts,
+            movementPatterns,
+            types,
+            tags,
+          }));
+        }
+      } catch (error) {
+        if ((error as any)?.name !== 'AbortError') {
+          console.error('Error fetching stats:', error);
+        }
+      }
+    };
+
+    loadStats();
+    return () => controller.abort();
   }, [exercises]);
 
   // Deep-link support: /exercises?exerciseId=...&openMedia=1
@@ -176,18 +270,22 @@ export default function ExercisesPage() {
     }
   }, [highlightedId, filteredExercises, itemsPerPage, currentPage]);
 
-  // Filter exercises when filters change
+  // Filter exercises when filters, tab, or source data change
   useEffect(() => {
     filterExercises();
-  }, [exercises, filters]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [exercises, myExercises, filters, activeTab]);
 
-  const fetchExercises = async () => {
+  // Standalone fetchExercises for the Refresh button (no AbortController needed for user-triggered actions)
+  const fetchExercises = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
       if (filters.curatedOnly) params.set('curated', 'true');
-      const sep = params.toString() ? '&' : '?'
-      const response = await fetch(`/api/workout/exercises${params.toString() ? `?${params.toString()}` : ''}${sep}include=cover,mediaCount`);
+      const sep = params.toString() ? '&' : '?';
+      const response = await fetch(
+        `/api/workout/exercises${params.toString() ? `?${params.toString()}` : ''}${sep}include=cover,mediaCount`
+      );
       if (response.ok) {
         const data = await response.json();
         setExercises(data);
@@ -197,45 +295,7 @@ export default function ExercisesPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const fetchStats = async () => {
-    try {
-      const [categoriesRes, muscleGroupsRes, equipmentRes] = await Promise.all([
-        fetch('/api/workout/exercises?categories=true'),
-        fetch('/api/workout/exercises?muscleGroups=true'),
-        fetch('/api/workout/exercises?equipment=true')
-      ]);
-
-      const categories = categoriesRes.ok ? await categoriesRes.json() : [];
-      const muscleGroups = muscleGroupsRes.ok ? await muscleGroupsRes.json() : [];
-      const equipment = equipmentRes.ok ? await equipmentRes.json() : [];
-      const [bodyPartsRes, movementPatternsRes, typesRes, tagsRes] = await Promise.all([
-        fetch('/api/workout/exercises?meta=bodyParts'),
-        fetch('/api/workout/exercises?meta=movementPatterns'),
-        fetch('/api/workout/exercises?meta=types'),
-        fetch('/api/workout/exercises?meta=tags'),
-      ]);
-      const bodyParts = bodyPartsRes.ok ? await bodyPartsRes.json() : [];
-      const movementPatterns = movementPatternsRes.ok ? await movementPatternsRes.json() : [];
-      const types = typesRes.ok ? await typesRes.json() : [];
-      const tags = tagsRes.ok ? await tagsRes.json() : [];
-
-      setStats(prevStats => ({
-        ...prevStats,
-        totalExercises: exercises.length,
-        categories,
-        muscleGroups,
-        equipment,
-        bodyParts,
-        movementPatterns,
-        types,
-        tags,
-      }));
-    } catch (error) {
-      console.error('Error fetching stats:', error);
-    }
-  };
+  }, [filters.curatedOnly]);
 
   const filterExercises = () => {
     const source = activeTab === 'mine' ? (myExercises as any[]) : (exercises as any[]);
@@ -352,10 +412,15 @@ export default function ExercisesPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
-      <div className="mb-8">
+      <motion.div
+        className="mb-8"
+        variants={!prefersReducedMotion ? heroVariants : undefined}
+        initial={!prefersReducedMotion ? "hidden" : undefined}
+        animate={!prefersReducedMotion ? "visible" : undefined}
+      >
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Exercise Database</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Exercise Database</h1>
             <p className="text-gray-600">
               Browse and search through our comprehensive database of fitness exercises
             </p>
@@ -366,14 +431,14 @@ export default function ExercisesPage() {
             </a>
           </Button>
         </div>
-        <div className="mt-4 flex gap-2">
+        <div className="mt-4 flex flex-wrap gap-2">
           <Button variant={activeTab==='all' ? 'default' : 'outline'} onClick={() => setActiveTab('all')}>All Exercises</Button>
-          <Button variant={activeTab==='mine' ? 'default' : 'outline'} onClick={() => setActiveTab('mine')}>My Exercise Library</Button>
+          <Button variant={activeTab==='mine' ? 'default' : 'outline'} onClick={() => setActiveTab('mine')}><span className="sm:hidden">My Library</span><span className="hidden sm:inline">My Exercise Library</span></Button>
           {activeTab==='mine' && (
             <Button onClick={() => setShowCreateModal(true)}>Create Exercise</Button>
           )}
         </div>
-      </div>
+      </motion.div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -433,6 +498,12 @@ export default function ExercisesPage() {
       </div>
 
       {/* Filters */}
+      <motion.div
+        variants={!prefersReducedMotion ? fadeInVariants : undefined}
+        initial={!prefersReducedMotion ? "hidden" : undefined}
+        animate={!prefersReducedMotion ? "visible" : undefined}
+        transition={{ delay: 0.2 }}
+      >
       <Card className="mb-8">
         <CardHeader>
           <CardTitle className="flex items-center">
@@ -623,11 +694,12 @@ export default function ExercisesPage() {
           </div>
         </CardContent>
       </Card>
+      </motion.div>
 
       {/* Exercise Grid */}
       <Card>
         <CardHeader>
-          <CardTitle>Exercise Database</CardTitle>
+          <CardTitle>Browse Exercises</CardTitle>
           <CardDescription>Browse through our curated collection with visual covers</CardDescription>
         </CardHeader>
         <CardContent>
@@ -638,15 +710,26 @@ export default function ExercisesPage() {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <motion.div
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                variants={!prefersReducedMotion ? staggerContainerVariants : undefined}
+                initial={!prefersReducedMotion ? "hidden" : undefined}
+                animate={!prefersReducedMotion ? "visible" : undefined}
+                key={currentPage}
+              >
                 {currentExercises.map((exercise) => {
                   const coverUrl = (exercise as any).coverUrl as string | undefined
                   const mediaCount = (exercise as any).mediaCount as number | undefined
                   return (
-                    <Card
+                    <motion.div
                       key={exercise.id}
+                      variants={!prefersReducedMotion ? staggerItemVariants : undefined}
+                      whileHover={!prefersReducedMotion ? { y: -4, boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)' } : undefined}
+                      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                    >
+                    <Card
                       data-ex-id={exercise.id}
-                      className={`overflow-hidden group ${highlightedId===exercise.id ? `ring-2 ring-indigo-500${highlightPulse ? ' animate-pulse' : ''}` : ''}`}
+                      className={`overflow-hidden group h-full ${highlightedId===exercise.id ? `ring-2 ring-indigo-500${highlightPulse ? ' animate-pulse' : ''}` : ''}`}
                     >
                       <div className="relative aspect-video bg-gray-50">
                         {coverUrl ? (
@@ -723,9 +806,10 @@ export default function ExercisesPage() {
                         </div>
                       </CardContent>
                     </Card>
+                    </motion.div>
                   )
                 })}
-              </div>
+              </motion.div>
 
               {/* Pagination */}
               {totalPages > 1 && (
@@ -837,9 +921,18 @@ export default function ExercisesPage() {
       </Card>
 
       {/* Exercise Detail Modal */}
+      <AnimatePresence>
       {selectedExercise && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <Card className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <motion.div
+            variants={!prefersReducedMotion ? scaleVariants : undefined}
+            initial={!prefersReducedMotion ? "hidden" : undefined}
+            animate={!prefersReducedMotion ? "visible" : undefined}
+            exit={!prefersReducedMotion ? "exit" : undefined}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            className="max-w-2xl w-full"
+          >
+          <Card className="max-h-[90vh] overflow-y-auto">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>{selectedExercise.name}</CardTitle>
@@ -928,8 +1021,10 @@ export default function ExercisesPage() {
               </div>
             </CardContent>
           </Card>
+          </motion.div>
         </div>
       )}
+      </AnimatePresence>
 
       {/* Add Media Modal */}
       {showMediaModal && targetRef && (
@@ -974,7 +1069,7 @@ export default function ExercisesPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <Card className="max-w-xl w-full">
             <CardHeader>
-              <CardTitle>Link “{linkModal.name}” to a global exercise</CardTitle>
+              <CardTitle>Link "{linkModal.name}" to a global exercise</CardTitle>
               <CardDescription>Select the closest match from the global database.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">

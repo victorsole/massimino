@@ -1,0 +1,37 @@
+# Massimino
+
+> Safe Workouts for Everyone
+
+## About
+
+Massimino is a safety-first fitness community platform where trainers and athletes connect, track workouts, and achieve goals together. Built for real people who want structured, evidence-based training programs with professional guidance.
+
+## Key Features
+
+- **Workout Logging** — Track sets, reps, weight, and RPE for every session
+- **Training Programs** — Follow structured programs from classic bodybuilding to modern hypertrophy science
+- **Exercise Database** — Browse 1,300+ exercises with muscle group targeting and instructions
+- **Community** — Connect with trainers, athletes, and fitness enthusiasts
+- **Teams** — Create or join training teams for group accountability
+- **AI Coach (MassiChat)** — Get personalized training advice powered by sports science
+- **Partnerships** — Collaborate with fitness brands and professionals
+- **Nutrition Coaching** — Track macros and get dietary guidance
+
+## Public Pages
+
+- `/` — Homepage
+- `/signup` — Create an account
+- `/exercises` — Exercise database browser
+- `/community` — Community feed and discovery
+- `/teams/discover` — Find and join training teams
+- `/massiminos` — Core platform features
+- `/partnerships` — Partnership opportunities
+
+## Tech Stack
+
+Next.js (App Router), TypeScript, Tailwind CSS, Supabase, Prisma
+
+## Contact
+
+- Website: https://massimino.fitness
+- Support: support@massimino.app

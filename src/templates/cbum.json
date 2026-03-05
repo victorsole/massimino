@@ -1,9 +1,10 @@
 {
-    "template_name": "Chris Bumstead (CBum) Training Program",
+    "template_name": "Classic Physique PPL",
+    "originalInspiration": "classic-physique-champion",
     "athlete_info": {
-      "name": "Chris Bumstead",
-      "nickname": "CBum",
-      "achievements": "6x Mr. Olympia Classic Physique Champion (2019-2024)",
+      "name": "Classic Physique Athlete",
+      "nickname": "Classic PPL",
+      "achievements": "Elite-level Classic Physique training methodology",
       "height": "185 cm",
       "weight": "97-100 kg",
       "training_philosophy": "High volume, heavy weight, full range of motion with time-under-tension focus"
