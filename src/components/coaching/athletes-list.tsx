@@ -107,24 +107,24 @@ export function AthletesList({ athletes, onViewProgress, onCreateSession, onMess
 
       {filteredAthletes.map((athlete) => (
         <Card key={athlete.id} className="hover:shadow-lg transition-shadow">
-          <CardContent className="p-6">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center space-x-4 flex-1">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+              <div className="flex items-center space-x-3 sm:space-x-4 flex-1 min-w-0">
                 {athlete.client.image ? (
                   <img
                     src={athlete.client.image}
                     alt={athlete.client.name || 'Athlete'}
-                    className="h-12 w-12 rounded-full object-cover"
+                    className="h-10 w-10 sm:h-12 sm:w-12 rounded-full object-cover flex-shrink-0"
                   />
                 ) : (
-                  <div className="h-12 w-12 rounded-full bg-brand-primary flex items-center justify-center">
-                    <User className="h-6 w-6 text-white" />
+                  <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-brand-primary flex items-center justify-center flex-shrink-0">
+                    <User className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                   </div>
                 )}
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2 mb-1">
-                    <h4 className="font-medium text-gray-900 truncate">
+                    <h4 className="font-medium text-gray-900 truncate text-sm sm:text-base">
                       {athlete.client.name || 'Unknown'}
                     </h4>
                     <Badge className={getStatusColor(athlete.status)}>
@@ -132,7 +132,7 @@ export function AthletesList({ athletes, onViewProgress, onCreateSession, onMess
                     </Badge>
                   </div>
 
-                  <div className="flex items-center space-x-4 text-sm text-gray-600">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm text-gray-600">
                     {athlete.client.massiminoUsername && (
                       <span className="flex items-center">
                         <User className="h-3 w-3 mr-1" />
@@ -166,7 +166,7 @@ export function AthletesList({ athletes, onViewProgress, onCreateSession, onMess
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 ml-4">
+              <div className="flex items-center gap-2 sm:ml-4 pl-13 sm:pl-0">
                 <Button
                   variant="outline"
                   size="sm"

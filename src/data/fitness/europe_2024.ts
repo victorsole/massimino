@@ -1,7 +1,7 @@
 // src/data/fitness/europe_2024.ts
 // Data sources: EuropeActive/Deloitte European Health & Fitness Market Report 2025,
 // Statista, Health & Fitness Association, and industry reports.
-// Last updated: January 2026
+// Last updated: March 2026
 
 import type { CountryFitnessData } from '@/types/fitness_data';
 

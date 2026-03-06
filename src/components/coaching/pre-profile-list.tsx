@@ -64,16 +64,16 @@ export function PreProfileList({ invitations, onResend, onCancel, onCreateSessio
 
         return (
           <Card key={invitation.id} className={`hover:shadow-lg transition-shadow ${isExpiringSoon ? 'border-orange-200' : ''}`}>
-            <CardContent className="p-6">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center space-x-4 flex-1">
-                  <div className="h-12 w-12 rounded-full bg-indigo-100 flex items-center justify-center">
-                    <Mail className="h-6 w-6 text-indigo-600" />
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                <div className="flex items-center space-x-3 sm:space-x-4 flex-1 min-w-0">
+                  <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0">
+                    <Mail className="h-5 w-5 sm:h-6 sm:w-6 text-indigo-600" />
                   </div>
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center space-x-2 mb-1">
-                      <h4 className="font-medium text-gray-900 truncate">
+                      <h4 className="font-medium text-gray-900 truncate text-sm sm:text-base">
                         {invitation.athleteName || invitation.athleteEmail}
                       </h4>
                       <Badge className="bg-yellow-100 text-yellow-800">
@@ -81,10 +81,10 @@ export function PreProfileList({ invitations, onResend, onCancel, onCreateSessio
                       </Badge>
                     </div>
 
-                    <div className="flex items-center space-x-4 text-sm text-gray-600">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm text-gray-600">
                       <span className="flex items-center">
                         <Mail className="h-3 w-3 mr-1" />
-                        {invitation.athleteEmail}
+                        <span className="truncate">{invitation.athleteEmail}</span>
                       </span>
                       <span className="flex items-center text-gray-500">
                         <Clock className="h-3 w-3 mr-1" />
@@ -105,7 +105,7 @@ export function PreProfileList({ invitations, onResend, onCancel, onCreateSessio
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 ml-4">
+                <div className="flex items-center gap-2 sm:ml-4 pl-13 sm:pl-0">
                   {onViewProgress && (
                     <Button
                       variant="outline"
