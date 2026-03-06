@@ -56,28 +56,28 @@ export function PendingRequests({ requests, onAccept, onDecline }: PendingReques
     <div className="space-y-4">
       {requests.map((request) => (
         <Card key={request.id} className="hover:shadow-lg transition-shadow border-2 border-blue-200">
-          <CardContent className="p-6">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center space-x-4 flex-1">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+              <div className="flex items-center space-x-3 sm:space-x-4 flex-1 min-w-0">
                 {request.athlete.image ? (
                   <img
                     src={request.athlete.image}
                     alt={request.athlete.name || 'Athlete'}
-                    className="h-12 w-12 rounded-full object-cover"
+                    className="h-10 w-10 sm:h-12 sm:w-12 rounded-full object-cover flex-shrink-0"
                   />
                 ) : (
-                  <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
-                    <User className="h-6 w-6 text-blue-600" />
+                  <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                    <User className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                   </div>
                 )}
 
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-medium text-gray-900 mb-1">
+                  <h4 className="font-medium text-gray-900 mb-1 text-sm sm:text-base">
                     {request.athlete.name || 'Unknown'} wants your coaching
                   </h4>
 
-                  <div className="text-sm text-gray-600 space-y-1">
-                    <div className="flex items-center space-x-4">
+                  <div className="text-xs sm:text-sm text-gray-600 space-y-1">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                       {request.athlete.massiminoUsername && (
                         <span className="flex items-center">
                           <User className="h-3 w-3 mr-1" />
@@ -91,8 +91,8 @@ export function PendingRequests({ requests, onAccept, onDecline }: PendingReques
                   </div>
 
                   {request.message && (
-                    <div className="mt-3 p-3 rounded-lg bg-gray-50 border border-gray-200">
-                      <p className="text-sm text-gray-700 italic">
+                    <div className="mt-3 p-2 sm:p-3 rounded-lg bg-gray-50 border border-gray-200">
+                      <p className="text-xs sm:text-sm text-gray-700 italic">
                         {request.message}
                       </p>
                     </div>
@@ -100,7 +100,7 @@ export function PendingRequests({ requests, onAccept, onDecline }: PendingReques
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 ml-4">
+              <div className="flex items-center gap-2 sm:ml-4 pl-13 sm:pl-0">
                 <Button
                   variant="default"
                   size="sm"

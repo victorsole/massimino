@@ -418,14 +418,14 @@ export default function ExercisesPage() {
         initial={!prefersReducedMotion ? "hidden" : undefined}
         animate={!prefersReducedMotion ? "visible" : undefined}
       >
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Exercise Database</h1>
-            <p className="text-gray-600">
+            <p className="text-sm sm:text-base text-gray-600">
               Browse and search through our comprehensive database of fitness exercises
             </p>
           </div>
-          <Button asChild className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
+          <Button asChild className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 self-start flex-shrink-0">
             <a href="/exercises/contribute">
               🏋️ Fill the Gym
             </a>
@@ -441,56 +441,56 @@ export default function ExercisesPage() {
       </motion.div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-8">
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-3 sm:p-6">
             <div className="flex items-center">
-              <Dumbbell className="h-8 w-8 text-blue-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Exercises</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.totalExercises}</p>
+              <Dumbbell className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 flex-shrink-0" />
+              <div className="ml-3 sm:ml-4 min-w-0">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Total Exercises</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.totalExercises}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-3 sm:p-6">
             <div className="flex items-center">
-              <div className="h-8 w-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                <span className="text-purple-600 font-bold text-sm">C</span>
+              <div className="h-6 w-6 sm:h-8 sm:w-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span className="text-purple-600 font-bold text-xs sm:text-sm">C</span>
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Categories</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.categories.length}</p>
+              <div className="ml-3 sm:ml-4 min-w-0">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Categories</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.categories.length}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-3 sm:p-6">
             <div className="flex items-center">
-              <div className="h-8 w-8 bg-green-100 rounded-lg flex items-center justify-center">
-                <span className="text-green-600 font-bold text-sm">M</span>
+              <div className="h-6 w-6 sm:h-8 sm:w-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span className="text-green-600 font-bold text-xs sm:text-sm">M</span>
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Muscle Groups</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.muscleGroups.length}</p>
+              <div className="ml-3 sm:ml-4 min-w-0">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Muscle Groups</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.muscleGroups.length}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-3 sm:p-6">
             <div className="flex items-center">
-              <div className="h-8 w-8 bg-orange-100 rounded-lg flex items-center justify-center">
-                <span className="text-orange-600 font-bold text-sm">E</span>
+              <div className="h-6 w-6 sm:h-8 sm:w-8 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span className="text-orange-600 font-bold text-xs sm:text-sm">E</span>
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Equipment Types</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.equipment.length}</p>
+              <div className="ml-3 sm:ml-4 min-w-0">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Equipment Types</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.equipment.length}</p>
               </div>
             </div>
           </CardContent>
@@ -512,8 +512,8 @@ export default function ExercisesPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-            <div className="lg:col-span-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-4">
+            <div className="sm:col-span-2 lg:col-span-2">
               <label className="text-sm font-medium text-gray-700 mb-2 block">Search</label>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -674,20 +674,20 @@ export default function ExercisesPage() {
             </div>
           </div>
 
-          <div className="flex justify-between items-center mt-4">
-            <div className="text-sm text-gray-600">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mt-4">
+            <div className="text-xs sm:text-sm text-gray-600">
               Showing {filteredExercises.length} of {exercises.length} exercises
             </div>
-            <div className="flex space-x-2">
-              <div className="flex items-center gap-2 mr-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex items-center gap-2">
                 <input id="curatedOnly" type="checkbox" className="h-4 w-4" checked={filters.curatedOnly} onChange={(e)=>setFilters(prev=>({ ...prev, curatedOnly: e.target.checked }))} />
                 <label htmlFor="curatedOnly" className="text-sm">Curated only</label>
               </div>
-              <Button variant="outline" onClick={clearFilters}>
+              <Button variant="outline" size="sm" onClick={clearFilters}>
                 Clear Filters
               </Button>
-              <Button variant="outline" onClick={fetchExercises}>
-                <RefreshCw className="h-4 w-4 mr-2" />
+              <Button variant="outline" size="sm" onClick={fetchExercises}>
+                <RefreshCw className="h-4 w-4 mr-1 sm:mr-2" />
                 Refresh
               </Button>
             </div>
@@ -784,7 +784,7 @@ export default function ExercisesPage() {
                             ) : null
                           })()
                         )}
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                           <Button variant="outline" size="sm" onClick={() => setSelectedExercise(exercise)}>
                             <Eye className="h-4 w-4 mr-1" /> View
                           </Button>
@@ -813,12 +813,12 @@ export default function ExercisesPage() {
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="flex items-center justify-between mt-6">
-                  <div className="text-sm text-gray-600">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-6">
+                  <div className="text-xs sm:text-sm text-gray-600">
                     Showing {startIndex + 1} to {Math.min(endIndex, filteredExercises.length)} of {filteredExercises.length} exercises
                   </div>
-                  <div className="flex items-center space-x-4">
-                    <div className="flex items-center space-x-2">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+                    <div className="hidden sm:flex items-center space-x-2">
                       <span className="text-sm text-gray-600">Go to page:</span>
                       <Input
                         type="number"
@@ -835,8 +835,8 @@ export default function ExercisesPage() {
                       />
                       <span className="text-sm text-gray-600">of {totalPages}</span>
                     </div>
-                    
-                    <div className="flex items-center space-x-2">
+
+                    <div className="flex items-center space-x-1 sm:space-x-2">
                       <Button
                         variant="outline"
                         size="sm"
@@ -845,7 +845,7 @@ export default function ExercisesPage() {
                       >
                         <ChevronLeft className="h-4 w-4" />
                       </Button>
-                    
+
                     <div className="flex items-center space-x-1">
                       {/* First page */}
                       {currentPage > 3 && (

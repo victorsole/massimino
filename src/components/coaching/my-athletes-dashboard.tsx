@@ -198,23 +198,23 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-brand-primary mb-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-brand-primary mb-1 sm:mb-2">
             My Athletes
           </h1>
-          <p className="text-gray-600">
+          <p className="text-sm sm:text-base text-gray-600">
             Manage your athletes, track their progress, and create workouts
           </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-2 sm:gap-3">
           <Link href="/assessments">
-            <Button variant="outline">
+            <Button variant="outline" size="sm" className="sm:size-default">
               <ClipboardList className="h-4 w-4 mr-2" />
               Assessments
             </Button>
           </Link>
-          <Button onClick={() => setShowInviteModal(true)}>
+          <Button size="sm" className="sm:size-default" onClick={() => setShowInviteModal(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Invite Athlete
           </Button>
@@ -264,49 +264,51 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
 
       <Card className="mb-8">
         <CardHeader>
-          <div className="flex space-x-2 border-b">
+          <div className="flex overflow-x-auto border-b -mx-2 px-2">
             <button
               onClick={() => setActiveTab('active')}
-              className={`py-3 px-6 font-medium text-sm transition-colors ${
+              className={`py-3 px-3 sm:px-6 font-medium text-xs sm:text-sm transition-colors whitespace-nowrap ${
                 activeTab === 'active'
                   ? 'border-b-2 border-brand-primary text-brand-primary'
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
               <div className="flex items-center">
-                <Users className="h-4 w-4 mr-2" />
-                Active Athletes ({stats.activeAthletes})
+                <Users className="h-4 w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Active Athletes</span>
+                <span className="sm:hidden">Active</span>
+                {' '}({stats.activeAthletes})
               </div>
             </button>
             <button
               onClick={() => setActiveTab('invited')}
-              className={`py-3 px-6 font-medium text-sm transition-colors ${
+              className={`py-3 px-3 sm:px-6 font-medium text-xs sm:text-sm transition-colors whitespace-nowrap ${
                 activeTab === 'invited'
                   ? 'border-b-2 border-brand-primary text-brand-primary'
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
               <div className="flex items-center">
-                <Mail className="h-4 w-4 mr-2" />
+                <Mail className="h-4 w-4 mr-1 sm:mr-2" />
                 Invited ({stats.pendingInvitations})
               </div>
             </button>
             <button
               onClick={() => setActiveTab('requests')}
-              className={`py-3 px-6 font-medium text-sm transition-colors ${
+              className={`py-3 px-3 sm:px-6 font-medium text-xs sm:text-sm transition-colors whitespace-nowrap ${
                 activeTab === 'requests'
                   ? 'border-b-2 border-brand-primary text-brand-primary'
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
               <div className="flex items-center">
-                <MessageSquare className="h-4 w-4 mr-2" />
+                <MessageSquare className="h-4 w-4 mr-1 sm:mr-2" />
                 Requests ({stats.pendingRequests})
               </div>
             </button>
           </div>
         </CardHeader>
-        <CardContent className="p-6">
+        <CardContent className="p-3 sm:p-6">
           {activeTab === 'active' && (
             <AthletesList
               athletes={data?.withProfile || []}

@@ -55,7 +55,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       />
 
       {/* Main content area */}
-      <div className="flex-1 min-w-0 lg:ml-[200px] md:ml-[70px] ml-0 min-h-screen flex flex-col transition-[margin] duration-300">
+      <div className="flex-1 min-w-0 lg:ml-[200px] md:ml-[70px] ml-0 min-h-screen flex flex-col transition-[margin] duration-300 overflow-x-hidden">
         <DashboardHeader
           onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
           userName={session.user?.name || ''}
