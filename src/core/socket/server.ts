@@ -22,7 +22,7 @@ export class SocketServer {
     this.io = new SocketIOServer(httpServer, {
       cors: {
         origin: process.env.NODE_ENV === 'production'
-          ? ['https://massimino.app']
+          ? ['https://massimino.fitness']
           : ['http://localhost:3000', 'http://localhost:3001'],
         methods: ['GET', 'POST'],
         credentials: true,

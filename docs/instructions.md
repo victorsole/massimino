@@ -24,8 +24,17 @@ We should invite the companies that were in Planet Performance to become partner
 
 ---
 
-We will have to develop the possibility for Trainers to get paid via Massimino. This means that we have to develop Business (http://localhost:3000/dashboard/business) further. How?
+I'll write to my nephews Lucas, Oliver and Anton Verdaguer on Instagram (@verdabros) to use the Verabros Ski workout and make publicity of it, and to use it for their fitness preparations for ski competitions. I'll ask them if they want to feature some of their pictures in the workout page.
 
 ---
 
-Let's deploy everything we've built so far. We tend to deploy by commit and push to repo in order for Vercel to pick up on it.
+I'll write to my nephew Gabriel Garcia Forn, a great ballet dancer, to user the GGF workout. I'll ask him if he wants to feature some of their pictures in the workout page.
+
+---
+
+Plugin MyFitnessPal 
+
+
+---
+
+Now Massimino is in dev.massimino.fitness but I want it to be just in massimino.fitness

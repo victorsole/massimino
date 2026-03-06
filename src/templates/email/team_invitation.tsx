@@ -32,7 +32,7 @@ interface TeamInvitationEmailProps {
 export function TeamInvitationEmail({
   teamName = 'Awesome Fitness Team',
   trainerName = 'Coach Victor',
-  inviteUrl = 'https://massimino.app/team_invite/abc123',
+  inviteUrl = 'https://massimino.fitness/team_invite/abc123',
   message,
   expiresInDays = 7,
 }: TeamInvitationEmailProps) {
@@ -113,7 +113,7 @@ interface TeamInvitationReminderEmailProps {
 export function TeamInvitationReminderEmail({
   teamName = 'Awesome Fitness Team',
   trainerName = 'Coach Victor',
-  inviteUrl = 'https://massimino.app/team_invite/abc123',
+  inviteUrl = 'https://massimino.fitness/team_invite/abc123',
   expiresInDays = 3,
 }: TeamInvitationReminderEmailProps) {
   const previewText = `Reminder: Join ${teamName} on Massimino`;
