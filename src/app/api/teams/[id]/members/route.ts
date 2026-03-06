@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
-import { createPayment } from '@/core/integrations/mollie';
+import { createPayment } from '@/core/integrations/stripe';
 import crypto from 'crypto';
 //
 
@@ -199,7 +199,7 @@ export async function POST(
     }
 
     // Create payment for paid membership
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.BASE_URL || 'https://massimino.app';
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.BASE_URL || 'https://massimino.fitness';
     const payment = await createPayment({
       amount: { value: String(finalPrice / 100), currency: team.currency },
       description: `Team membership: ${team.name}`,

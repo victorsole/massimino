@@ -8,7 +8,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
 import { moderateContent } from '@/services/moderation/openai';
-import { createPayment } from '@/core/integrations/mollie';
+import { createPayment } from '@/core/integrations/stripe';
 import { z } from 'zod';
 import crypto from 'crypto';
 
@@ -536,7 +536,7 @@ async function handleJoinTeam(teamId: string, body: any, session: any) {
   }
 
   // Create payment for paid membership
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://massimino.app';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://massimino.fitness';
   const payment = await createPayment({
     amount: { value: String(finalPrice / 100), currency: team.currency },
     description: `Team membership: ${team.name}`,

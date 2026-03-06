@@ -24,7 +24,7 @@ export async function POST(req: Request) {
       html: `
         <div style="font-family: 'Nunito Sans', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <img src="https://dev.massimino.fitness/massimino_logo.png" alt="Massimino Fitness" width="64" height="64" style="display: block; margin: 0 auto 12px;" />
+            <img src="https://massimino.fitness/massimino_logo.png" alt="Massimino Fitness" width="64" height="64" style="display: block; margin: 0 auto 12px;" />
             <h1 style="color: #2b5069; font-size: 24px; margin: 0;">Massimino Fitness</h1>
             <p style="color: #6b7280; font-size: 14px; margin-top: 4px;">Safe Workouts for Everyone</p>
           </div>
