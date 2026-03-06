@@ -1,7 +1,7 @@
 // src/data/fitness/industry_2024.ts
 // Data sources: EuropeActive/Deloitte 2025 Report, company filings, fitness_new_metrics.md
 // Gym chains, supplement companies, influencers, and hashtag statistics
-// Last updated: January 2026
+// Last updated: March 2026
 
 import type {
   GymChainData,
@@ -16,49 +16,51 @@ export const EUROPE_GYM_CHAINS_2024: GymChainData[] = [
     rank: 1,
     name: 'Basic-Fit',
     country_code: 'NL',
-    members: 4730000,         // Q3 2025: 4.73M members (+13% YoY)
-    locations: 1653,          // Q3 2025: 1,653 clubs
-    revenue_eur: 1400000000,  // FY25 projected: €1.375-1.425B
+    members: 4800000,         // FY25: ~4.8M members (H1 4.51M + continued growth)
+    locations: 1670,          // FY25: ~1,670 clubs (H1 1,628 + ~42 new in H2)
+    revenue_eur: 1400000000,  // FY25: €1.375-1.425B (+16% YoY)
     website: 'https://www.basic-fit.com',
-    year: 2025
+    year: 2026
   },
   {
     rank: 2,
     name: 'PureGym',
     country_code: 'GB',
-    members: 2250000,         // End 2024: 2.25M members (+21% YoY)
-    locations: 680,           // End 2024: 680 clubs globally
-    revenue_eur: 720000000,   // FY24: £605M ≈ €720M (+10.2% YoY)
+    members: 2400000,         // Q3 2025: 2.4M+ members
+    locations: 694,           // Q3 2025: 694 sites globally (439 UK)
+    revenue_eur: 880000000,   // FY25 est: ~£740M ≈ €880M (9-mo £555.5M, +25% YoY)
     website: 'https://www.puregym.com',
-    year: 2025
+    year: 2026
   },
   {
     rank: 3,
     name: 'RSG Group (McFit)',
     country_code: 'DE',
-    members: 4500000,         // RSG Group total: 4.5M+ globally
-    locations: 900,           // 900+ locations across 30+ countries
+    members: 4500000,         // RSG Group total: 4.5M+ globally, McFit 1.7M alone
+    locations: 900,           // 900+ locations across 30+ countries, now franchising internationally
     revenue_eur: 700000000,
     website: 'https://www.mcfit.com',
-    year: 2025
+    year: 2026
   },
   {
     rank: 4,
     name: 'David Lloyd Leisure',
     country_code: 'GB',
-    members: 816000,          // 2025: 816,000+ members
-    locations: 134,           // 134 clubs across UK & Europe
+    members: 811000,          // Aug 2025: 811,000+ members
+    locations: 135,           // 135 clubs (106 UK + 29 Europe)
     revenue_eur: 1200000000,  // ~£1B+ / €1.2B
     website: 'https://www.davidlloyd.co.uk',
-    year: 2025
+    year: 2026
   },
   {
     rank: 5,
-    name: 'Clever Fit',
-    country_code: 'DE',
-    members: 1000000,
-    locations: 500,
-    year: 2025
+    name: 'The Gym Group',
+    country_code: 'GB',
+    members: 945000,          // FY25: 945K average, 923K year-end
+    locations: 260,           // FY25: 260 gyms (+16 new sites)
+    revenue_eur: 290000000,   // FY25: £244.9M ≈ €290M (+8% YoY)
+    website: 'https://www.thegymgroup.com',
+    year: 2026
   }
 ];
 
@@ -162,21 +164,21 @@ export const EUROPE_INFLUENCERS_2024: FitnessInfluencerData[] = [
     rank: 1,
     name: 'Pamela Reif',
     country_code: 'DE',
-    instagram_followers: 8900000,   // Dec 2025: ~8.9M
-    youtube_followers: 10700000,    // 2025: 10.7M
+    instagram_followers: 9100000,   // Feb 2026: ~9.1M
+    youtube_followers: 10700000,    // 2026: 10.7M
     handle: '@pamela_rf',
     specialty: 'Home workouts, HIIT',
-    year: 2025
+    year: 2026
   },
   {
     rank: 2,
     name: 'Tibo InShape',
     country_code: 'FR',
-    instagram_followers: 14600000,
-    youtube_followers: 26900000,
+    instagram_followers: 18000000,  // Oct 2025: ~18M
+    youtube_followers: 27000000,    // Feb 2026: ~27M
     handle: '@tiboinshape',
     specialty: 'Fitness, comedy',
-    year: 2025
+    year: 2026
   },
   {
     rank: 3,
@@ -305,11 +307,11 @@ export const EUROPE_INFLUENCERS_2024: FitnessInfluencerData[] = [
 
 // ===== COUNTRY-SPECIFIC GYM CHAINS =====
 export const UK_GYM_CHAINS_2024: GymChainData[] = [
-  { rank: 1, name: 'PureGym', country_code: 'GB', members: 1900000, locations: 400, website: 'https://www.puregym.com', year: 2025 },
-  { rank: 2, name: 'The Gym Group', country_code: 'GB', members: 891000, locations: 245, revenue_eur: 270000000, website: 'https://www.thegymgroup.com', year: 2025 },
-  { rank: 3, name: 'David Lloyd Clubs', country_code: 'GB', members: 800000, locations: 103, website: 'https://www.davidlloyd.co.uk', year: 2025 },
-  { rank: 4, name: 'Nuffield Health', country_code: 'GB', members: 500000, locations: 110, website: 'https://www.nuffieldhealth.com', year: 2025 },
-  { rank: 5, name: 'Anytime Fitness UK', country_code: 'GB', members: 400000, locations: 185, website: 'https://www.anytimefitness.co.uk', year: 2025 }
+  { rank: 1, name: 'PureGym', country_code: 'GB', members: 2000000, locations: 439, website: 'https://www.puregym.com', year: 2026 },
+  { rank: 2, name: 'The Gym Group', country_code: 'GB', members: 945000, locations: 260, revenue_eur: 290000000, website: 'https://www.thegymgroup.com', year: 2026 },
+  { rank: 3, name: 'David Lloyd Clubs', country_code: 'GB', members: 811000, locations: 106, website: 'https://www.davidlloyd.co.uk', year: 2026 },
+  { rank: 4, name: 'Nuffield Health', country_code: 'GB', members: 500000, locations: 110, website: 'https://www.nuffieldhealth.com', year: 2026 },
+  { rank: 5, name: 'Anytime Fitness UK', country_code: 'GB', members: 400000, locations: 185, website: 'https://www.anytimefitness.co.uk', year: 2026 }
 ];
 
 export const GERMANY_GYM_CHAINS_2024: GymChainData[] = [

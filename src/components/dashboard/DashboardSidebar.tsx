@@ -53,7 +53,7 @@ const appItems = [
 ];
 
 const trainerItems = [
-  { href: '/dashboard/athletes', label: 'My Athletes', icon: Users },
+  { href: '/my-athletes', label: 'My Athletes', icon: Users },
   { href: '/dashboard/business', label: 'Business', icon: DollarSign },
   { href: '/dashboard/ai-coach', label: 'AI Coach', icon: MessageCircle },
 ];

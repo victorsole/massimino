@@ -24,8 +24,8 @@ export function FloatingActionButton({
       disabled={disabled}
       aria-label={label || 'Add'}
       className={cn(
-        'fixed bottom-6 right-6 z-40',
-        'w-16 h-16 rounded-full',
+        'fixed bottom-[5.5rem] right-5 z-40 md:bottom-6 md:right-6',
+        'w-14 h-14 md:w-16 md:h-16 rounded-full',
         'bg-brand-primary text-white',
         'flex items-center justify-center',
         'shadow-lg transition-all duration-200',
@@ -33,7 +33,6 @@ export function FloatingActionButton({
         'hover:bg-brand-primary-dark hover:scale-105',
         'active:scale-95',
         'disabled:opacity-50 disabled:cursor-not-allowed',
-        // Custom shadow for depth
         '[box-shadow:0_6px_20px_rgba(37,73,103,0.4)]',
         className
       )}
@@ -61,7 +60,7 @@ export function ExtendedFAB({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        'fixed bottom-6 right-6 z-40',
+        'fixed bottom-[5.5rem] right-5 z-40 md:bottom-6 md:right-6',
         'h-14 rounded-full',
         'bg-brand-primary text-white',
         'flex items-center justify-center gap-2',

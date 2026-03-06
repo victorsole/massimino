@@ -61,13 +61,13 @@ export default function FitnessIntelligencePage() {
   const allByGrowth = getByGrowthRate();
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50 overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
         <div className="mb-8">
           <div className="animate-fade-in-up">
-            <h1 className="text-3xl font-bold text-gray-900">Fitness Intelligence</h1>
-            <p className="text-gray-600">European fitness industry data visualization</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Fitness Intelligence</h1>
+            <p className="text-sm sm:text-base text-gray-600">European fitness industry data visualization</p>
           </div>
           <p className="text-gray-500 max-w-3xl animate-fade-in-up-delay-1">
             Explore interactive maps showing gym penetration rates, market sizes,
@@ -78,31 +78,31 @@ export default function FitnessIntelligencePage() {
         {/* Stats Overview */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 animate-fade-in-up-delay-1 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-            <div className="text-2xl font-bold text-blue-600">
+            <div className="text-xl sm:text-2xl font-bold text-blue-600">
               {(EUROPE_TOTALS.total_members / 1000000).toFixed(0)}M+
             </div>
-            <div className="text-sm text-gray-500">Total Members (2025)</div>
-            <div className="text-xs text-green-600 mt-1">All-time high, surpassing pre-pandemic</div>
+            <div className="text-sm text-gray-500">Total Members (2025/26)</div>
+            <div className="text-xs text-green-600 mt-1">All-time high; +3.9M YoY; &gt;50% active Europeans in gyms</div>
           </div>
           <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 animate-fade-in-up-delay-2 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-            <div className="text-2xl font-bold text-emerald-600">
+            <div className="text-xl sm:text-2xl font-bold text-emerald-600">
               €{(EUROPE_TOTALS.total_market_eur / 1000000000).toFixed(0)}B
             </div>
-            <div className="text-sm text-gray-500">Market Size (2025)</div>
+            <div className="text-sm text-gray-500">Market Size (2025/26)</div>
             <div className="text-xs text-green-600 mt-1">+10% YoY growth from 2023</div>
           </div>
           <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 animate-fade-in-up-delay-3 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-            <div className="text-2xl font-bold text-purple-600">
+            <div className="text-xl sm:text-2xl font-bold text-purple-600">
               {EUROPE_TOTALS.total_clubs.toLocaleString()}+
             </div>
-            <div className="text-sm text-gray-500">Fitness Clubs (2025)</div>
+            <div className="text-sm text-gray-500">Fitness Clubs (2025/26)</div>
             <div className="text-xs text-green-600 mt-1">+2% increase from 2023</div>
           </div>
           <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 animate-fade-in-up-delay-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-            <div className="text-2xl font-bold text-amber-600">
+            <div className="text-xl sm:text-2xl font-bold text-amber-600">
               {EUROPE_TOTALS.cagr_2024_2031}%
             </div>
-            <div className="text-sm text-gray-500">CAGR 2025-2031</div>
+            <div className="text-sm text-gray-500">CAGR 2024-2031</div>
             <div className="text-xs text-blue-600 mt-1">EuropeActive: 100M target by 2030</div>
           </div>
         </div>
@@ -114,20 +114,20 @@ export default function FitnessIntelligencePage() {
 
         {/* Section: Where Europeans Work Out */}
         <section className="mt-12 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden animate-fade-in-left hover:shadow-lg transition-shadow duration-300">
-          <div className="p-6 border-b border-gray-100">
+          <div className="p-4 sm:p-6 border-b border-gray-100">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center hover:scale-110 hover:rotate-3 transition-transform duration-300">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-lg flex items-center justify-center hover:scale-110 hover:rotate-3 transition-transform duration-300">
                 <Icon path={ICONS.chart} size={24} className="text-blue-600" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Where Europeans Work Out</h2>
+                <h2 className="text-base sm:text-xl font-bold text-gray-900">Where Europeans Work Out</h2>
                 <p className="text-gray-600">Gym penetration rates by country - Sweden leads at 21.6%</p>
               </div>
             </div>
           </div>
-          <div className="p-6">
+          <div className="p-3 sm:p-6">
             <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
-              <table className="w-full text-sm">
+              <table className="w-full text-sm min-w-[600px]">
                 <thead className="sticky top-0 bg-gray-50 z-10">
                   <tr>
                     <th className="text-left p-3 font-semibold">Rank</th>
@@ -158,20 +158,20 @@ export default function FitnessIntelligencePage() {
 
         {/* Section: The 36 Billion Market */}
         <section className="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden animate-fade-in-right hover:shadow-lg transition-shadow duration-300" style={{ animationDelay: '0.1s' }}>
-          <div className="p-6 border-b border-gray-100">
+          <div className="p-4 sm:p-6 border-b border-gray-100">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center hover:scale-110 hover:-rotate-3 transition-transform duration-300">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-emerald-100 rounded-lg flex items-center justify-center hover:scale-110 hover:-rotate-3 transition-transform duration-300">
                 <Icon path={ICONS.currency} size={24} className="text-emerald-600" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900">The 36 Billion Market</h2>
+                <h2 className="text-base sm:text-xl font-bold text-gray-900">The 36 Billion Market</h2>
                 <p className="text-gray-600">Revenue distribution across Europe - UK leads with 6.7B</p>
               </div>
             </div>
           </div>
-          <div className="p-6">
+          <div className="p-3 sm:p-6">
             <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
-              <table className="w-full text-sm">
+              <table className="w-full text-sm min-w-[600px]">
                 <thead className="sticky top-0 bg-gray-50 z-10">
                   <tr>
                     <th className="text-left p-3 font-semibold">Rank</th>
@@ -204,20 +204,20 @@ export default function FitnessIntelligencePage() {
 
         {/* Section: Fastest Growing Markets */}
         <section className="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden animate-fade-in-left hover:shadow-lg transition-shadow duration-300" style={{ animationDelay: '0.2s' }}>
-          <div className="p-6 border-b border-gray-100">
+          <div className="p-4 sm:p-6 border-b border-gray-100">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center hover:scale-110 hover:rotate-6 transition-transform duration-300">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-lg flex items-center justify-center hover:scale-110 hover:rotate-6 transition-transform duration-300">
                 <Icon path={ICONS.trendUp} size={24} className="text-purple-600" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Fastest Growing Markets</h2>
+                <h2 className="text-base sm:text-xl font-bold text-gray-900">Fastest Growing Markets</h2>
                 <p className="text-gray-600">Membership growth and CAGR projections through 2031</p>
               </div>
             </div>
           </div>
-          <div className="p-6">
+          <div className="p-3 sm:p-6">
             <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
-              <table className="w-full text-sm">
+              <table className="w-full text-sm min-w-[600px]">
                 <thead className="sticky top-0 bg-gray-50 z-10">
                   <tr>
                     <th className="text-left p-3 font-semibold">Rank</th>
@@ -255,27 +255,27 @@ export default function FitnessIntelligencePage() {
         </section>
 
         {/* Top Operators */}
-        <div className="mt-8 bg-white rounded-xl p-6 shadow-sm border border-gray-100 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Top European Operators (2025)</h3>
-          <div className="grid md:grid-cols-3 gap-4">
+        <div className="mt-8 bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">Top European Operators (2026)</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
             <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-lg hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-default group">
-              <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold group-hover:animate-heartbeat">1</div>
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold group-hover:animate-heartbeat">1</div>
               <div>
                 <a href="https://www.basic-fit.com/nl-nl/home" target="_blank" rel="noopener noreferrer" className="font-semibold text-gray-900 hover:text-blue-600 transition-colors duration-200">Basic-Fit</a>
-                <div className="text-sm text-gray-600">4.73M members | 1,653 clubs</div>
-                <div className="text-xs text-green-600">+16% revenue growth (Q3 2025)</div>
+                <div className="text-sm text-gray-600">4.8M members | 1,670 clubs</div>
+                <div className="text-xs text-green-600">+16% revenue growth FY25 (€1.4B)</div>
               </div>
             </div>
             <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-default group">
-              <div className="w-12 h-12 bg-gray-600 rounded-full flex items-center justify-center text-white font-bold group-hover:animate-heartbeat">2</div>
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-600 rounded-full flex items-center justify-center text-white font-bold group-hover:animate-heartbeat">2</div>
               <div>
                 <a href="https://www.puregym.com/" target="_blank" rel="noopener noreferrer" className="font-semibold text-gray-900 hover:text-gray-600 transition-colors duration-200">PureGym</a>
-                <div className="text-sm text-gray-600">2.25M members | 680 clubs</div>
-                <div className="text-xs text-green-600">+21% member growth (2024)</div>
+                <div className="text-sm text-gray-600">2.4M members | 694 sites</div>
+                <div className="text-xs text-green-600">+25% revenue growth YoY (£555M 9-mo)</div>
               </div>
             </div>
             <div className="flex items-center gap-4 p-4 bg-amber-50 rounded-lg hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-default group">
-              <div className="w-12 h-12 bg-amber-600 rounded-full flex items-center justify-center text-white font-bold group-hover:animate-heartbeat">3</div>
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-amber-600 rounded-full flex items-center justify-center text-white font-bold group-hover:animate-heartbeat">3</div>
               <div>
                 <a href="https://rsggroup.com/en/" target="_blank" rel="noopener noreferrer" className="font-semibold text-gray-900 hover:text-amber-600 transition-colors duration-200">RSG Group</a>
                 <div className="text-sm text-gray-600">4.5M+ members | 900+ locations</div>
@@ -290,22 +290,22 @@ export default function FitnessIntelligencePage() {
 
         {/* Section: Top European Gym Chains */}
         <section className="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden animate-fade-in-left hover:shadow-lg transition-shadow duration-300" style={{ animationDelay: '0.35s' }}>
-          <div className="p-6 border-b border-gray-100">
+          <div className="p-4 sm:p-6 border-b border-gray-100">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center hover:scale-110 hover:rotate-3 transition-transform duration-300">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-orange-100 rounded-lg flex items-center justify-center hover:scale-110 hover:rotate-3 transition-transform duration-300">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-orange-600">
                   <path d="M20.57,14.86L22,13.43L20.57,12L17,15.57L8.43,7L12,3.43L10.57,2L9.14,3.43L7.71,2L5.57,4.14L4.14,2.71L2.71,4.14L4.14,5.57L2,7.71L3.43,9.14L2,10.57L3.43,12L7,8.43L15.57,17L12,20.57L13.43,22L14.86,20.57L16.29,22L18.43,19.86L19.86,21.29L21.29,19.86L19.86,18.43L22,16.29L20.57,14.86Z" />
                 </svg>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Top European Gym Chains</h2>
+                <h2 className="text-base sm:text-xl font-bold text-gray-900">Top European Gym Chains</h2>
                 <p className="text-gray-600">Membership, locations, and revenue data (2025)</p>
               </div>
             </div>
           </div>
-          <div className="p-6">
+          <div className="p-3 sm:p-6">
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="w-full text-sm min-w-[600px]">
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="text-left p-3 font-semibold">Rank</th>
@@ -342,22 +342,22 @@ export default function FitnessIntelligencePage() {
 
         {/* Section: Top European Supplement Companies */}
         <section className="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden animate-fade-in-right hover:shadow-lg transition-shadow duration-300" style={{ animationDelay: '0.38s' }}>
-          <div className="p-6 border-b border-gray-100">
+          <div className="p-4 sm:p-6 border-b border-gray-100">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center hover:scale-110 hover:-rotate-3 transition-transform duration-300">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-lg flex items-center justify-center hover:scale-110 hover:-rotate-3 transition-transform duration-300">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-green-600">
                   <path d="M6,2A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V4A2,2 0 0,0 18,2H6M6,4H18V20H6V4M12,6C9.79,6 8,7.79 8,10C8,11.5 8.71,12.85 9.82,13.72L10,14.14V17H14V14.14L14.18,13.72C15.29,12.85 16,11.5 16,10C16,7.79 14.21,6 12,6M12,8A2,2 0 0,1 14,10C14,10.74 13.6,11.39 13,11.73V15H11V11.73C10.4,11.39 10,10.74 10,10A2,2 0 0,1 12,8Z" />
                 </svg>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Top European Supplement Companies</h2>
+                <h2 className="text-base sm:text-xl font-bold text-gray-900">Top European Supplement Companies</h2>
                 <p className="text-gray-600">Revenue and market position (2025)</p>
               </div>
             </div>
           </div>
-          <div className="p-6">
+          <div className="p-3 sm:p-6">
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="w-full text-sm min-w-[600px]">
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="text-left p-3 font-semibold">Rank</th>
@@ -392,22 +392,22 @@ export default function FitnessIntelligencePage() {
 
         {/* Section: Top European Fitness Influencers */}
         <section className="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden animate-fade-in-right hover:shadow-lg transition-shadow duration-300" style={{ animationDelay: '0.4s' }}>
-          <div className="p-6 border-b border-gray-100">
+          <div className="p-4 sm:p-6 border-b border-gray-100">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center hover:scale-110 hover:-rotate-3 transition-transform duration-300">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-pink-100 rounded-lg flex items-center justify-center hover:scale-110 hover:-rotate-3 transition-transform duration-300">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-pink-600">
                   <path d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" />
                 </svg>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Top European Fitness Influencers</h2>
+                <h2 className="text-base sm:text-xl font-bold text-gray-900">Top European Fitness Influencers</h2>
                 <p className="text-gray-600">Social media reach and follower counts (2025)</p>
               </div>
             </div>
           </div>
-          <div className="p-6">
+          <div className="p-3 sm:p-6">
             <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
-              <table className="w-full text-sm">
+              <table className="w-full text-sm min-w-[600px]">
                 <thead className="sticky top-0 bg-gray-50 z-10">
                   <tr>
                     <th className="text-left p-3 font-semibold">Rank</th>
@@ -440,22 +440,22 @@ export default function FitnessIntelligencePage() {
 
         {/* Section: Fitness Hashtag Statistics */}
         <section className="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden animate-fade-in-left hover:shadow-lg transition-shadow duration-300" style={{ animationDelay: '0.45s' }}>
-          <div className="p-6 border-b border-gray-100">
+          <div className="p-4 sm:p-6 border-b border-gray-100">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-violet-100 rounded-lg flex items-center justify-center hover:scale-110 hover:rotate-6 transition-transform duration-300">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-violet-100 rounded-lg flex items-center justify-center hover:scale-110 hover:rotate-6 transition-transform duration-300">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-violet-600">
                   <path d="M5.41,21L6.12,17H2.12L2.47,15H6.47L7.53,9H3.53L3.88,7H7.88L8.59,3H10.59L9.88,7H15.88L16.59,3H18.59L17.88,7H21.88L21.53,9H17.53L16.47,15H20.47L20.12,17H16.12L15.41,21H13.41L14.12,17H8.12L7.41,21H5.41M9.47,9L8.41,15H14.41L15.47,9H9.47Z" />
                 </svg>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Fitness Hashtag Statistics</h2>
+                <h2 className="text-base sm:text-xl font-bold text-gray-900">Fitness Hashtag Statistics</h2>
                 <p className="text-gray-600">Instagram vs TikTok comparison (2025)</p>
               </div>
             </div>
           </div>
-          <div className="p-6">
+          <div className="p-3 sm:p-6">
             <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
-              <table className="w-full text-sm">
+              <table className="w-full text-sm min-w-[600px]">
                 <thead className="sticky top-0 bg-gray-50 z-10">
                   <tr>
                     <th className="text-left p-3 font-semibold">Rank</th>
@@ -498,22 +498,22 @@ export default function FitnessIntelligencePage() {
 
         {/* Section: TikTok Top Fitness Hashtags */}
         <section className="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden animate-fade-in-right hover:shadow-lg transition-shadow duration-300" style={{ animationDelay: '0.5s' }}>
-          <div className="p-6 border-b border-gray-100">
+          <div className="p-4 sm:p-6 border-b border-gray-100">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center hover:scale-110 hover:-rotate-3 transition-transform duration-300">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-cyan-100 rounded-lg flex items-center justify-center hover:scale-110 hover:-rotate-3 transition-transform duration-300">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-cyan-600">
                   <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z"/>
                 </svg>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900">TikTok Fitness Engagement Leaders</h2>
+                <h2 className="text-base sm:text-xl font-bold text-gray-900">TikTok Fitness Engagement Leaders</h2>
                 <p className="text-gray-600">Highest views and engagement per video (2025)</p>
               </div>
             </div>
           </div>
-          <div className="p-6">
+          <div className="p-3 sm:p-6">
             <div className="overflow-x-auto max-h-[400px] overflow-y-auto">
-              <table className="w-full text-sm">
+              <table className="w-full text-sm min-w-[600px]">
                 <thead className="sticky top-0 bg-gray-50 z-10">
                   <tr>
                     <th className="text-left p-3 font-semibold">Rank</th>
@@ -549,14 +549,14 @@ export default function FitnessIntelligencePage() {
               <Icon path={ICONS.school} size={24} className="text-indigo-600" />
             </div>
             <div className="animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-              <h2 className="text-2xl font-bold text-gray-900">EU Legal Framework</h2>
-              <p className="text-gray-600">Fitness, Sports, Health Supplements & Influencer Marketing</p>
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">EU Legal Framework</h2>
+              <p className="text-sm sm:text-base text-gray-600">Fitness, Sports, Health Supplements & Influencer Marketing</p>
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {/* Sports */}
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-fade-in-up group" style={{ animationDelay: '0.45s' }}>
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-fade-in-up group" style={{ animationDelay: '0.45s' }}>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:scale-110 group-hover:bg-green-200 transition-all duration-300">
                   <Icon path={ICONS.run} size={20} className="text-green-600" />
@@ -571,7 +571,7 @@ export default function FitnessIntelligencePage() {
             </div>
 
             {/* Supplements */}
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-fade-in-up group" style={{ animationDelay: '0.5s' }}>
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-fade-in-up group" style={{ animationDelay: '0.5s' }}>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center group-hover:scale-110 group-hover:bg-orange-200 transition-all duration-300">
                   <Icon path={ICONS.shield} size={20} className="text-orange-600" />
@@ -587,7 +587,7 @@ export default function FitnessIntelligencePage() {
             </div>
 
             {/* Consumer */}
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-fade-in-up group" style={{ animationDelay: '0.55s' }}>
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-fade-in-up group" style={{ animationDelay: '0.55s' }}>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:scale-110 group-hover:bg-blue-200 transition-all duration-300">
                   <Icon path={ICONS.shield} size={20} className="text-blue-600" />
@@ -602,7 +602,7 @@ export default function FitnessIntelligencePage() {
             </div>
 
             {/* Influencer */}
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-fade-in-up group" style={{ animationDelay: '0.6s' }}>
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-fade-in-up group" style={{ animationDelay: '0.6s' }}>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center group-hover:scale-110 group-hover:bg-pink-200 transition-all duration-300">
                   <Icon path={ICONS.earth} size={20} className="text-pink-600" />
@@ -618,7 +618,7 @@ export default function FitnessIntelligencePage() {
             </div>
 
             {/* Anti-Doping */}
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-fade-in-up group" style={{ animationDelay: '0.65s' }}>
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-fade-in-up group" style={{ animationDelay: '0.65s' }}>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center group-hover:scale-110 group-hover:bg-red-200 transition-all duration-300">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="text-red-600">
@@ -635,7 +635,7 @@ export default function FitnessIntelligencePage() {
             </div>
 
             {/* Penalties */}
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 bg-gradient-to-br from-gray-50 to-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-fade-in-up group" style={{ animationDelay: '0.7s' }}>
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 bg-gradient-to-br from-gray-50 to-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-fade-in-up group" style={{ animationDelay: '0.7s' }}>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center group-hover:scale-110 group-hover:bg-gray-300 transition-all duration-300">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="text-gray-600">

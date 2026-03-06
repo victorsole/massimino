@@ -47,12 +47,13 @@ export type FitnessMetric =
   | 'trainers_count';
 
 // European market totals (2025 - EuropeActive/Deloitte Report)
+// Memberships grew by 3.9M between 2023 and 2024; >50% of active Europeans now visit fitness clubs
 export const EUROPE_TOTALS = {
-  total_members: 71000000,    // 71M+ (all-time high, surpassing pre-pandemic)
+  total_members: 71000000,    // 71M+ (all-time high, surpassing pre-pandemic levels)
   total_market_eur: 36000000000, // €36B (10% increase from 2023)
   total_clubs: 64000,         // 2% increase from 2023
-  average_penetration: 8.9,   // 0.5% increase from previous year
-  cagr_2024_2031: 8.2,
+  average_penetration: 8.9,   // 10.6% of population over 15; 0.5% increase YoY
+  cagr_2024_2031: 8.2,       // Target: 100M members by 2030
   year: 2025
 };
 

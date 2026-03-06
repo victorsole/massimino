@@ -10,6 +10,7 @@ import { ActivityAnalytics } from '@/components/dashboard/ActivityAnalytics';
 import { NutritionDonut } from '@/components/dashboard/NutritionDonut';
 import { CaloriesChart } from '@/components/dashboard/CaloriesChart';
 import { ExerciseCard } from '@/components/dashboard/ExerciseCard';
+import { MyAthletesDashboardSection } from '@/components/coaching/my-athletes-dashboard-section';
 
 interface WeeklyStat {
   week: string;
@@ -144,6 +145,11 @@ export default function DashboardPage() {
           <CaloriesChart />
         </div>
       </div>
+
+      {/* My Athletes section (trainers only) */}
+      {(session?.user?.role === 'TRAINER' || session?.user?.role === 'ADMIN' || session?.user?.role === 'trainer' || session?.user?.role === 'admin') && (
+        <MyAthletesDashboardSection />
+      )}
 
       {/* Quick links */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
