@@ -6,8 +6,8 @@
 // Firebase integration for notifications and authentication
 export * from './firebase';
 
-// Mollie payment processing integration
-export * from './mollie';
+// Stripe payment processing integration (replaced Mollie)
+export * from './stripe';
 
 // Social media platform integrations
 export * from './social_media';

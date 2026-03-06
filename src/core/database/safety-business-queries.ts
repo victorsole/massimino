@@ -1511,7 +1511,8 @@ export async function createMolliePayment(data: {
 }
 
 /**
- * Update payment status from Mollie webhook
+ * Update payment status from Stripe webhook
+ * (function name kept for backwards compatibility with existing imports)
  */
 export async function updatePaymentFromMollie(molliePaymentId: string, updates: {
   status: string;
@@ -1550,9 +1551,9 @@ export async function updatePaymentFromMollie(molliePaymentId: string, updates: 
     });
   }
 
-  console.log('Payment updated from Mollie:', {
+  console.log('Payment updated from Stripe:', {
     paymentId: payment.id,
-    molliePaymentId,
+    stripePaymentId: molliePaymentId,
     status: updates.status
   });
 
@@ -1560,10 +1561,9 @@ export async function updatePaymentFromMollie(molliePaymentId: string, updates: 
 }
 
 /**
- * Create Mollie customer record
+ * Create Stripe customer record
  */
-export async function createMollieCustomer(userId: string, mollieCustomerId: string) {
-  // Update user record with Mollie customer ID
+export async function createStripeCustomer(userId: string, stripeCustomerId: string) {
   const user = await prisma.users.findUnique({
     where: { id: userId }
   });
@@ -1572,11 +1572,9 @@ export async function createMollieCustomer(userId: string, mollieCustomerId: str
     throw new Error('User not found');
   }
 
-  // Store Mollie customer ID in user metadata or separate field
-  // For now, we'll use the payment records to track this
-  console.log('Mollie customer created for user:', userId, mollieCustomerId);
+  console.log('Stripe customer created for user:', userId, stripeCustomerId);
 
-  return { userId, mollieCustomerId };
+  return { userId, stripeCustomerId };
 }
 
 /**
