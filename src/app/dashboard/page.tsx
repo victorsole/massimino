@@ -147,7 +147,7 @@ export default function DashboardPage() {
       </div>
 
       {/* My Athletes section (trainers only) */}
-      {(session?.user?.role === 'TRAINER' || session?.user?.role === 'ADMIN' || session?.user?.role === 'trainer' || session?.user?.role === 'admin') && (
+      {(session?.user?.role === 'TRAINER' || session?.user?.role === 'ADMIN') && (
         <MyAthletesDashboardSection />
       )}
 
