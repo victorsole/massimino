@@ -20,13 +20,13 @@ async function main() {
     throw new Error('System user not found. Run periodization-seed.ts first.');
   }
 
-  // Get Arnold
+  // Get Golden Era Legend
   const arnold = await prisma.legendary_athletes.findUnique({
     where: { slug: 'arnold-schwarzenegger' }
   });
 
   if (!arnold) {
-    throw new Error('Arnold not found. Run periodization-seed.ts first.');
+    throw new Error('Golden Era Legend not found. Run periodization-seed.ts first.');
   }
 
   // Get exercises we need
@@ -36,10 +36,10 @@ async function main() {
   const shoulderPress = await prisma.exercises.findFirst({ where: { name: { contains: 'Shoulder Press', mode: 'insensitive' } } });
   const curl = await prisma.exercises.findFirst({ where: { name: { contains: 'Curl', mode: 'insensitive' } } });
 
-  console.log('📝 Creating Arnold\'s Golden Six Program...');
+  console.log('📝 Creating Golden Era Legend\'s Golden Six Program...');
 
   // ===========================
-  // ARNOLD'S GOLDEN SIX
+  // GOLDEN ERA LEGEND'S GOLDEN SIX
   // ===========================
 
   const goldenSix = await prisma.program_templates.upsert({
@@ -47,8 +47,8 @@ async function main() {
     update: {},
     create: {
       id: 'arnold-golden-six',
-      name: 'Arnold\'s Golden Six',
-      description: 'Arnold Schwarzenegger\'s foundational full-body routine from the 1960s. This beginner-friendly program builds overall mass and strength with 6 fundamental exercises trained 3 times per week. Perfect for establishing a solid base.',
+      name: 'Golden Era Legend\'s Golden Six',
+      description: 'A foundational full-body routine inspired by golden era training from the 1960s. This beginner-friendly program builds overall mass and strength with 6 fundamental exercises trained 3 times per week. Perfect for establishing a solid base.',
       createdBy: systemUser.id,
       duration: '12 weeks',
       difficulty: 'BEGINNER',
@@ -58,7 +58,7 @@ async function main() {
       rating: 5.0,
       ratingCount: 0,
       isActive: true,
-      tags: ['Arnold', 'Full Body', 'Beginner', 'Mass Building', 'Golden Era'],
+      tags: ['Golden Era', 'Full Body', 'Beginner', 'Mass Building', 'Classic'],
       programType: 'ATHLETE',
       athleteId: arnold.id,
       hasExerciseSlots: false,
@@ -154,7 +154,7 @@ async function main() {
     }
   }
 
-  console.log('✅ Created Arnold\'s Golden Six with 12 weeks, 36 workouts');
+  console.log('✅ Created Golden Era Legend\'s Golden Six with 12 weeks, 36 workouts');
 
   // ===========================
   // LINEAR PERIODIZATION TEMPLATE
@@ -397,20 +397,20 @@ async function main() {
   console.log('✅ Created Linear Periodization with 4 phases, 12 weeks, 48 workouts');
 
   // ===========================
-  // CBUM'S CLASSIC PHYSIQUE PPL
+  // CLASSIC PHYSIQUE CHAMPION'S PPL
   // ===========================
 
-  console.log('📝 Creating CBum\'s Classic Physique PPL Program...');
+  console.log('📝 Creating Classic Physique Champion\'s PPL Program...');
 
-  // Get CBum
+  // Get Classic Physique Champion
   const cbum = await prisma.legendary_athletes.findUnique({
     where: { slug: 'chris-bumstead' }
   });
 
   if (!cbum) {
-    console.log('⚠️ CBum not found, skipping CBum program');
+    console.log('⚠️ Classic Physique Champion not found, skipping program');
   } else {
-    // Get exercises for CBum's program
+    // Get exercises for Classic Physique Champion's program
     const inclineBench = await prisma.exercises.findFirst({ where: { name: { contains: 'Incline', mode: 'insensitive' } } });
     const cableFly = await prisma.exercises.findFirst({ where: { name: { contains: 'Cable', mode: 'insensitive' } } });
     const lateralRaise = await prisma.exercises.findFirst({ where: { name: { contains: 'Lateral Raise', mode: 'insensitive' } } });
@@ -424,8 +424,8 @@ async function main() {
       update: {},
       create: {
         id: 'cbum-classic-ppl',
-        name: 'CBum\'s Classic Physique PPL',
-        description: 'Chris Bumstead\'s signature Push/Pull/Legs split designed for building a classic aesthetic physique. This program emphasizes controlled tempo, mind-muscle connection, and balanced development. Train 6 days per week with perfect form and progressive overload. Perfect for intermediate to advanced lifters seeking that timeless look.',
+        name: 'Classic Physique Champion\'s PPL',
+        description: 'A signature Push/Pull/Legs split designed for building a classic aesthetic physique. This program emphasizes controlled tempo, mind-muscle connection, and balanced development. Train 6 days per week with perfect form and progressive overload. Perfect for intermediate to advanced lifters seeking that timeless look.',
         createdBy: systemUser.id,
         duration: '8 weeks',
         difficulty: 'INTERMEDIATE',
@@ -435,7 +435,7 @@ async function main() {
         rating: 5.0,
         ratingCount: 0,
         isActive: true,
-        tags: ['CBum', 'PPL', 'Classic Physique', 'Aesthetic', 'Modern'],
+        tags: ['Classic Physique', 'PPL', 'Aesthetic', 'Modern', 'Champion'],
         programType: 'ATHLETE',
         athleteId: cbum.id,
         hasExerciseSlots: false,
@@ -455,7 +455,7 @@ async function main() {
         phaseType: 'HYPERTROPHY',
         startWeek: 1,
         endWeek: 8,
-        description: 'Build balanced, aesthetic proportions with CBum\'s signature training style',
+        description: 'Build balanced, aesthetic proportions with a classic physique training style',
         trainingFocus: 'Aesthetic Development',
         targetIntensity: '75-85%',
         targetVolume: 'MEDIUM',
@@ -676,29 +676,29 @@ async function main() {
       }
     }
 
-    console.log('✅ Created CBum\'s Classic Physique PPL with 8 weeks, 24 workouts per week (Push/Pull/Legs x2)');
+    console.log('✅ Created Classic Physique Champion\'s PPL with 8 weeks, 24 workouts per week (Push/Pull/Legs x2)');
   }
 
   // ===========================
-  // RONNIE COLEMAN'S MASS BUILDER
+  // MASS BUILDING LEGEND'S MASS BUILDER
   // ===========================
 
-  console.log('📝 Creating Ronnie Coleman\'s Mass Builder Program...');
+  console.log('📝 Creating Mass Building Legend\'s Mass Builder Program...');
 
   const ronnie = await prisma.legendary_athletes.findUnique({
     where: { slug: 'ronnie-coleman' }
   });
 
   if (!ronnie) {
-    console.log('⚠️ Ronnie not found, skipping Ronnie program');
+    console.log('⚠️ Mass Building Legend not found, skipping program');
   } else {
     const ronnieMassBuilder = await prisma.program_templates.upsert({
       where: { id: 'ronnie-mass-builder' },
       update: {},
       create: {
         id: 'ronnie-mass-builder',
-        name: 'Ronnie Coleman\'s Mass Builder',
-        description: '8x Mr. Olympia Ronnie Coleman\'s legendary high-volume, heavy-weight program. "Everybody wants to be a bodybuilder, but nobody wants to lift no heavy-ass weights!" Train 6 days per week combining powerlifting intensity with bodybuilding volume. For advanced lifters only. Yeah buddy!',
+        name: 'Mass Building Legend\'s Mass Builder',
+        description: 'A legendary high-volume, heavy-weight program combining powerlifting intensity with bodybuilding volume. Train 6 days per week with extreme dedication to compound movements and relentless progressive overload. For advanced lifters only.',
         createdBy: systemUser.id,
         duration: '10 weeks',
         difficulty: 'ADVANCED',
@@ -708,7 +708,7 @@ async function main() {
         rating: 5.0,
         ratingCount: 0,
         isActive: true,
-        tags: ['Ronnie Coleman', 'Mass Building', 'High Volume', 'Heavy Weight', 'Advanced'],
+        tags: ['Mass Building', 'High Volume', 'Heavy Weight', 'Advanced', 'Powerbuilding'],
         programType: 'ATHLETE',
         athleteId: ronnie.id,
         hasExerciseSlots: false,
@@ -718,29 +718,29 @@ async function main() {
       }
     });
 
-    console.log('✅ Created Ronnie Coleman\'s Mass Builder (placeholder - detailed workouts would be added here)');
+    console.log('✅ Created Mass Building Legend\'s Mass Builder (placeholder - detailed workouts would be added here)');
   }
 
   // ===========================
-  // MIKE MENTZER'S HEAVY DUTY
+  // HIT TRAINING PIONEER'S HEAVY DUTY
   // ===========================
 
-  console.log('📝 Creating Mike Mentzer\'s Heavy Duty Program...');
+  console.log('📝 Creating HIT Training Pioneer\'s Heavy Duty Program...');
 
   const mike = await prisma.legendary_athletes.findUnique({
     where: { slug: 'mike-mentzer' }
   });
 
   if (!mike) {
-    console.log('⚠️ Mike Mentzer not found, skipping Heavy Duty program');
+    console.log('⚠️ HIT Training Pioneer not found, skipping Heavy Duty program');
   } else {
     const heavyDuty = await prisma.program_templates.upsert({
       where: { id: 'mentzer-heavy-duty' },
       update: {},
       create: {
         id: 'mentzer-heavy-duty',
-        name: 'Mike Mentzer\'s Heavy Duty',
-        description: 'Revolutionary high-intensity training system by Mike Mentzer. Train each body part once every 7-10 days with brief, infrequent, and brutally intense workouts taken beyond failure. Only 1-2 all-out sets per exercise using forced reps, negatives, and rest-pause. Maximum intensity, minimum volume. For experienced lifters ready to challenge conventional training wisdom.',
+        name: 'HIT Training Pioneer\'s Heavy Duty',
+        description: 'Revolutionary high-intensity training system. Train each body part once every 7-10 days with brief, infrequent, and brutally intense workouts taken beyond failure. Only 1-2 all-out sets per exercise using forced reps, negatives, and rest-pause. Maximum intensity, minimum volume. For experienced lifters ready to challenge conventional training wisdom.',
         createdBy: systemUser.id,
         duration: '8 weeks',
         difficulty: 'ADVANCED',
@@ -750,7 +750,7 @@ async function main() {
         rating: 5.0,
         ratingCount: 0,
         isActive: true,
-        tags: ['Mike Mentzer', 'Heavy Duty', 'HIT', 'Low Volume', 'High Intensity', 'Advanced'],
+        tags: ['Heavy Duty', 'HIT', 'Low Volume', 'High Intensity', 'Advanced', 'Pioneer'],
         programType: 'ATHLETE',
         athleteId: mike.id,
         hasExerciseSlots: false,
@@ -760,7 +760,7 @@ async function main() {
       }
     });
 
-    console.log('✅ Created Mike Mentzer\'s Heavy Duty (placeholder - detailed workouts would be added here)');
+    console.log('✅ Created HIT Training Pioneer\'s Heavy Duty (placeholder - detailed workouts would be added here)');
   }
 
   console.log('🎉 Program templates seeded successfully!');
