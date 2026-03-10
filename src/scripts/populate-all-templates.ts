@@ -80,10 +80,10 @@ async function findExerciseWithMedia(searchTerms: string[]): Promise<ExerciseMat
 }
 
 /**
- * Populate CBum's program
+ * Populate Classic Physique Champion's program
  */
 async function populateCBum() {
-  console.log('\n=== POPULATING CHRIS BUMSTEAD (CBUM) PROGRAM ===\n');
+  console.log('\n=== POPULATING CLASSIC PHYSIQUE CHAMPION PROGRAM ===\n');
 
   const athleteData = cbumData.athlete_info;
   const programData = cbumData.program_structure;
@@ -103,7 +103,7 @@ async function populateCBum() {
         eraLabel: 'Modern Era (2019-2024)',
         discipline: 'BODYBUILDING',
         achievements: [athleteData.achievements],
-        bio: `${athleteData.nickname} - ${athleteData.training_philosophy}`,
+        bio: `Classic Physique Champion - ${athleteData.training_philosophy}`,
         trainingPhilosophy: athleteData.training_philosophy,
         imageUrl: null,
         videoUrl: null,
@@ -145,7 +145,7 @@ async function populateCBum() {
     console.log(`✅ Created program: ${program.name}`);
   }
 
-  // Exercise mapping for CBum's program
+  // Exercise mapping for Classic Physique Champion's program
   const cbumExerciseMap: Record<string, string[]> = {
     // Leg Day 1
     'leg-extensions-warmup': ['Leg Extension', 'Machine Leg Extension'],
@@ -202,7 +202,7 @@ async function populateCBum() {
   const exerciseMapping: Record<string, string> = {};
   let withMediaCount = 0;
 
-  console.log('\n=== Searching for CBum exercises (prioritizing media) ===');
+  console.log('\n=== Searching for Classic Physique Champion exercises (prioritizing media) ===');
   for (const [key, searchTerms] of Object.entries(cbumExerciseMap)) {
     const match = await findExerciseWithMedia(searchTerms);
     if (match) {
@@ -457,7 +457,7 @@ async function main() {
     console.log('=================================================\n');
 
     console.log('📋 Summary:');
-    console.log(`  - CBum Program: ${Object.keys(cbum.exerciseMapping).length} exercises mapped`);
+    console.log(`  - Classic Physique Program: ${Object.keys(cbum.exerciseMapping).length} exercises mapped`);
     console.log(`  - Fat Loss: ${Object.keys(fatLoss.exerciseMapping).length} exercises mapped`);
     console.log(`  - Muscle Gain: ${Object.keys(muscleGain.exerciseMapping).length} exercises mapped`);
     console.log(`  - Performance: ${Object.keys(performance.exerciseMapping).length} exercises mapped`);

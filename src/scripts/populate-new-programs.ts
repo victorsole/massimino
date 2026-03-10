@@ -223,13 +223,13 @@ async function main() {
 
   // ATHLETE PROGRAMS
 
-  // Get Arnold Schwarzenegger legendary athlete
+  // Get Golden Era Legend legendary athlete
   const arnold = await prisma.legendary_athletes.findUnique({
     where: { slug: 'arnold-schwarzenegger' },
   });
 
   if (!arnold) {
-    console.log('⚠️  Arnold Schwarzenegger not found - skipping arnold-volume-workout');
+    console.log('⚠️  Golden Era Legend not found - skipping arnold-volume-workout');
   } else {
     // Arnold Volume Workout
     await prisma.program_templates.upsert({
@@ -248,7 +248,7 @@ async function main() {
         hasExerciseSlots: false,
         rating: 0,
         ratingCount: 0,
-        tags: ['Arnold Schwarzenegger', 'high volume', 'bodybuilding', 'advanced', '16 weeks', '6 days/week', 'Mr. Olympia'],
+        tags: ['Golden Era', 'high volume', 'bodybuilding', 'advanced', '16 weeks', '6 days/week', 'classic'],
         progressionStrategy: 'LINEAR',
         templateData: arnoldVolume as any,
         createdBy,
@@ -260,7 +260,7 @@ async function main() {
         templateData: arnoldVolume as any,
       },
     });
-    console.log('✅ Arnold Volume Workout');
+    console.log('✅ Golden Era Volume Workout');
   }
 
   // COMPONENT PROGRAMS
@@ -388,10 +388,10 @@ async function main() {
   console.log('\n=== SUMMARY ===');
   console.log('Created/Updated 11 new programs:');
   console.log('  - 6 LIFESTYLE programs (Aesthetics Hunter, Time-Efficient, Beer Belly, Stress Relief, New Dad, New Mum)');
-  console.log('  - 1 additional ATHLETE program (Arnold Volume Workout)');
+  console.log('  - 1 additional ATHLETE program (Golden Era Volume Workout)');
   console.log('  - 4 COMPONENT programs (Cardio, Flexibility, Balance, Plyometric)');
   console.log('\nNote: This script adds to the existing athlete programs from programs-seed.ts:');
-  console.log('  - Arnold\'s Golden Six, CBum PPL, Ronnie Mass Builder, Mentzer Heavy Duty');
+  console.log('  - Golden Era Golden Six, Classic Physique PPL, Mass Builder, Heavy Duty');
   console.log('\nAll programs are now active and public!');
 }
 
