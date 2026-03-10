@@ -42,6 +42,7 @@ export default function JoinProgramPage({ params }: Props) {
   const [alreadyJoined, setAlreadyJoined] = useState(false);
   const [subscriptionId, setSubscriptionId] = useState<string | null>(null);
   const [activating, setActivating] = useState(false);
+  const [joinStep, setJoinStep] = useState<string>('Checking enrollment status...');
 
   useEffect(() => {
     const init = async () => {
@@ -64,6 +65,7 @@ export default function JoinProgramPage({ params }: Props) {
         }
       }
       // Only fetch program if not already joined
+      setJoinStep('Loading program...');
       await fetchProgram();
     } catch (err) {
       console.error('Failed to check join status:', err);
@@ -75,25 +77,25 @@ export default function JoinProgramPage({ params }: Props) {
   const fetchProgram = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/workout/programs/templates');
+      // Fetch single program by ID instead of loading all templates
+      const res = await fetch(`/api/workout/programs/${params.id}`);
       if (res.ok) {
-        const data = await res.json();
-        // API returns { templates: [...], total: ... }
-        const programs = Array.isArray(data) ? data : (data.templates || []);
-        const found = programs.find((p: ProgramData) => p.id === params.id);
+        const found = await res.json();
 
-        if (!found) {
+        if (!found || !found.id) {
           setError('Program not found');
           return;
         }
 
-        if (!found.hasExerciseSlots || found.exercise_slots.length === 0) {
+        if (!found.hasExerciseSlots || !found.exercise_slots?.length) {
           // No customization needed - join directly
           await joinProgramDirectly(found.id);
           return;
         }
 
         setProgram(found);
+      } else if (res.status === 404) {
+        setError('Program not found');
       } else {
         setError('Failed to load program');
       }
@@ -128,6 +130,7 @@ export default function JoinProgramPage({ params }: Props) {
   };
 
   const joinProgramDirectly = async (programId: string) => {
+    setJoinStep('Joining program...');
     try {
       const res = await fetch('/api/workout/programs/join', {
         method: 'POST',
@@ -152,8 +155,12 @@ export default function JoinProgramPage({ params }: Props) {
   if (checkingStatus || loading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-center p-12">
+        <div className="flex flex-col items-center justify-center p-12 gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+          <p className="text-sm text-gray-500">{joinStep}</p>
+          <Link href={`/workout-log/programs/${params.id}`}>
+            <Button variant="ghost" size="sm" className="text-gray-400">Cancel</Button>
+          </Link>
         </div>
       </div>
     );

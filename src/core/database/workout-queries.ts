@@ -1655,6 +1655,9 @@ export async function getTrainingProgramById(id: string) {
         orderBy: { createdAt: 'desc' },
         take: 10
       },
+      exercise_slots: {
+        orderBy: { slotNumber: 'asc' },
+      },
       _count: {
         select: { program_ratings: true, program_subscriptions: true }
       }
