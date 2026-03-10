@@ -3,8 +3,8 @@ import ronnieData from '../templates/ronnie_coleman_volume.json';
 
 const prisma = new PrismaClient();
 
-async function populateRonnieColeman() {
-  console.log('Starting Ronnie Coleman program population...');
+async function populateMassBuilderProgram() {
+  console.log('Starting Mass Builder program population...');
 
   // Get all exercises from the template
   const allExercises = ronnieData.training_days.flatMap(day => day.exercises);

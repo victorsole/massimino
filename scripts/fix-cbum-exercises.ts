@@ -1,5 +1,5 @@
 /**
- * Fix CBum program exercises - add aliases for better matching
+ * Fix Classic Physique program exercises - add aliases for better matching
  */
 
 import * as dotenv from 'dotenv';
@@ -7,7 +7,7 @@ dotenv.config();
 
 import { prisma } from '../src/core/database/client';
 
-// Map CBum exercise names to likely database matches
+// Map Classic Physique exercise names to likely database matches
 const CBUM_ALIASES: Record<string, string[]> = {
   // Triceps
   'Overhead Triceps Extensions (Cable or Dumbbell)': ['Overhead Tricep Extension', 'Cable Overhead Tricep Extension', 'Dumbbell Tricep Extension'],

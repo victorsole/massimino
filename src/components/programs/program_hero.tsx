@@ -12,7 +12,7 @@ import {
 
 // Programs that should fetch a Pexels background image
 const PEXELS_HERO_QUERIES: Record<string, string> = {
-  // Celebrity
+  // Athlete-Inspired
   'cbum-classic-physique': 'classic physique bodybuilding stage',
   'arnold-volume-workout': 'bodybuilding gym training heavy weights',
   'arnold-golden-six': 'barbell strength training gym',

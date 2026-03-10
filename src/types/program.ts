@@ -338,7 +338,7 @@ export const PROGRAM_CATEGORY_COLORS: Record<ProgramCategory, {
 
 // Program image mapping (keys must match TEMPLATE_FILE_MAP in templates/route.ts)
 export const PROGRAM_IMAGES: Record<string, string> = {
-  // Celebrity
+  // Athlete-Inspired
   'cbum-classic-physique': '/images/programs/cbum.jpg',
   'arnold-volume-workout': '/images/programs/arnoldvolume.jpg',
   'arnold-golden-six': '/images/programs/arnoldgoldensix.jpg',
