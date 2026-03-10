@@ -1,5 +1,5 @@
 {
-  "program": "Heavy Duty — High Intensity",
+  "program": "Heavy Duty HIT Program",
   "author": "High Intensity Training",
   "originalInspiration": "heavy-duty-hit",
   "era": "High Intensity Training Era (1970s-1980s)",
@@ -22,7 +22,7 @@
   },
 
   "program_philosophy": {
-    "origin": "Heavy Duty was developed from High Intensity Training principles in the late 1970s. Its creator won the 1978 Mr. Universe with a perfect 300 score using this system.",
+    "origin": "Heavy Duty was developed from High Intensity Training principles in the late 1970s. This system emphasizes brief, intense workouts taken to absolute muscular failure.",
     "training_quote": "\"That last rep, where you're struggling with everything you have, that's where the growth stimulus occurs. Everything before that is just preparation.\"",
     "core_principles": [
       "Train to absolute momentary muscular failure",
@@ -199,7 +199,7 @@
   ],
 
   "metadata": {
-    "program_name": "Mike Mentzer's Heavy Duty",
+    "program_name": "Heavy Duty HIT Program",
     "description": "High-Intensity Training (HIT) program emphasizing maximum intensity, low volume, and training to absolute failure.",
     "goal": "Muscle Hypertrophy",
     "methodology": "High Intensity Training (HIT)",
