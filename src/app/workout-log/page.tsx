@@ -1619,7 +1619,13 @@ function WorkoutLogPageContent() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Workout Log</h1>
-            <p className="text-gray-600 mt-2">Track your workouts and see coach feedback</p>
+            <p className="text-gray-600 mt-2">
+              {activeTab === 'today' ? (
+                <>Today &mdash; {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</>
+              ) : (
+                'Track your workouts and see coach feedback'
+              )}
+            </p>
           </div>
           <div className="flex flex-wrap gap-2">
             {selectedEntries.size > 0 && (
@@ -1638,11 +1644,14 @@ function WorkoutLogPageContent() {
               </Button>
             )}
             {isTrainerOrAdmin && !activeSession ? (
-              <Button disabled title="Start a session first" onClick={() => {}} size="sm" className="text-xs sm:text-sm">
-                <Plus className="h-4 w-4 mr-1 sm:mr-2" />
-                <span className="hidden sm:inline">Add Workout Entry</span>
-                <span className="sm:hidden">Add</span>
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button disabled title="Start a session first" onClick={() => {}} size="sm" className="text-xs sm:text-sm">
+                  <Plus className="h-4 w-4 mr-1 sm:mr-2" />
+                  <span className="hidden sm:inline">Add Workout Entry</span>
+                  <span className="sm:hidden">Add</span>
+                </Button>
+                <span className="text-xs text-gray-400 hidden sm:inline">Start a session first</span>
+              </div>
             ) : (
               <Button onClick={() => setIsAddingEntry(true)} size="sm" className="text-xs sm:text-sm">
                 <Plus className="h-4 w-4 mr-1 sm:mr-2" />
@@ -2868,7 +2877,7 @@ function WorkoutLogPageContent() {
           </Card>
         )}
 
-        {!fetchingEntries && !error && workoutEntries.length > 0 && (
+        {!fetchingEntries && !error && groupedWorkoutEntries.length > 0 && (
           <>
             {/* View Toggle */}
             <div className="flex flex-col gap-2 mb-4">
@@ -2892,7 +2901,7 @@ function WorkoutLogPageContent() {
                   </Button>
                 </div>
                 <div className="text-sm text-muted-foreground">
-                  {workoutEntries.length} {workoutEntries.length === 1 ? 'entry' : 'entries'}
+                  {groupedWorkoutEntries.reduce((sum, g) => sum + g.length, 0)} {groupedWorkoutEntries.reduce((sum, g) => sum + g.length, 0) === 1 ? 'entry' : 'entries'}
                 </div>
               </div>
               {/* Delete All Button */}
@@ -2901,14 +2910,15 @@ function WorkoutLogPageContent() {
                 size="sm"
                 className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 w-fit"
                 onClick={async () => {
-                  if (!confirm(`Are you sure you want to delete all ${workoutEntries.length} entries? This action cannot be undone.`)) {
+                  const entriesToDelete = groupedWorkoutEntries.flat();
+                  if (!confirm(`Are you sure you want to delete all ${entriesToDelete.length} entries? This action cannot be undone.`)) {
                     return;
                   }
                   setLoading(true);
                   let deleted = 0;
                   let failed = 0;
                   try {
-                    for (const entry of workoutEntries) {
+                    for (const entry of entriesToDelete) {
                       const response = await fetch(`/api/workout/entries/${entry.id}`, { method: 'DELETE' });
                       if (response.ok) {
                         deleted++;

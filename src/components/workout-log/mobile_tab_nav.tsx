@@ -82,6 +82,7 @@ export function MobileTabNav({ activeTab, onTabChange, className }: MobileTabNav
 
   return (
     <nav
+      role="tablist"
       className={cn(
         'flex justify-between border-t border-gray-100 bg-white',
         className
@@ -95,6 +96,8 @@ export function MobileTabNav({ activeTab, onTabChange, className }: MobileTabNav
         return (
           <button
             key={tab.id}
+            role="tab"
+            aria-selected={isActive}
             onClick={() => {
               onTabChange(tab.id);
               setMoreOpen(false);
@@ -108,7 +111,6 @@ export function MobileTabNav({ activeTab, onTabChange, className }: MobileTabNav
                 ? 'border-brand-primary bg-brand-secondary/50'
                 : 'border-transparent hover:bg-gray-50'
             )}
-            aria-current={isActive ? 'page' : undefined}
           >
             <Icon
               className={cn(
@@ -203,37 +205,68 @@ export function MobileTabNav({ activeTab, onTabChange, className }: MobileTabNav
 
 // Desktop version - full tab bar (for larger screens)
 export function DesktopTabNav({ activeTab, onTabChange, className }: MobileTabNavProps) {
-  return (
-    <nav
-      className={cn(
-        'border-b border-gray-200',
-        '-mb-px flex space-x-6 overflow-x-auto',
-        className
-      )}
-    >
-      {TABS.map((tab) => {
-        const Icon = tab.icon;
-        const isActive = activeTab === tab.id;
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
-        return (
-          <button
-            key={tab.id}
-            onClick={() => onTabChange(tab.id)}
-            className={cn(
-              'py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap',
-              'transition-colors duration-200',
-              isActive
-                ? 'border-brand-primary text-brand-primary'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            )}
-            aria-current={isActive ? 'page' : undefined}
-          >
-            <Icon className="inline h-4 w-4 mr-2" />
-            {tab.label}
-          </button>
-        );
-      })}
-    </nav>
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const checkScroll = () => {
+      setCanScrollRight(el.scrollWidth > el.clientWidth + el.scrollLeft + 4);
+    };
+
+    checkScroll();
+    el.addEventListener('scroll', checkScroll);
+    const ro = new ResizeObserver(checkScroll);
+    ro.observe(el);
+
+    return () => {
+      el.removeEventListener('scroll', checkScroll);
+      ro.disconnect();
+    };
+  }, []);
+
+  return (
+    <div className="relative">
+      <nav
+        ref={scrollRef}
+        role="tablist"
+        className={cn(
+          'border-b border-gray-200',
+          '-mb-px flex space-x-6 overflow-x-auto scrollbar-hide',
+          className
+        )}
+      >
+        {TABS.map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+
+          return (
+            <button
+              key={tab.id}
+              role="tab"
+              aria-selected={isActive}
+              onClick={() => onTabChange(tab.id)}
+              className={cn(
+                'py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap',
+                'transition-colors duration-200',
+                isActive
+                  ? 'border-brand-primary text-brand-primary'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              )}
+            >
+              <Icon className="inline h-4 w-4 mr-2" />
+              {tab.label}
+            </button>
+          );
+        })}
+      </nav>
+      {/* Scroll fade indicator */}
+      {canScrollRight && (
+        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#fcfaf5] to-transparent pointer-events-none" />
+      )}
+    </div>
   );
 }
 
