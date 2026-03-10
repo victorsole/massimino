@@ -2,7 +2,7 @@
     "program_name": "Ultimate Mass Builder",
     "program_id": "ronnie-coleman-mass-builder",
     "originalInspiration": "mass-building-champion",
-    "description": "A high-volume, high-intensity bodybuilding routine inspired by 8x Mr. Olympia-level training. This is an advanced program requiring serious dedication and recovery capacity. As the saying goes: 'Everybody wants to be a bodybuilder, but nobody wants to lift heavy weights!'",
+    "description": "A high-volume, high-intensity bodybuilding routine designed for elite-level mass building. This is an advanced program requiring serious dedication and recovery capacity.",
     "frequency": "6 days per week + 1 rest day",
     "duration": "8-16 weeks (advanced lifters only)",
     "level": "Advanced to Elite",
@@ -145,7 +145,7 @@
             "tempo_description": "Controlled movement",
             "load_guidance": "25-40kg dumbbells (each)",
             "load_percentage": "70-80% capacity",
-            "notes": "Arnold press variation or standard front raise into press.",
+            "notes": "Rotating press variation or standard front raise into press.",
             "primary_muscle_groups": ["front_deltoids", "shoulders"],
             "equipment": ["dumbbells"]
           }
@@ -771,7 +771,8 @@
     "training_philosophy": {
       "motivational_sayings": [
         "Nothing to it but to do it!",
-        "Everybody wants results, but nobody wants to put in the work!"
+        "Everybody wants results, but nobody wants to put in the work!",
+        "Train like a champion every single day."
       ],
       "principles": [
         "Train heavy with perfect form",
