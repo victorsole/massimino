@@ -197,13 +197,11 @@ export async function GET(request: NextRequest) {
         programId,
         isActive: true,
       },
-      include: {
-        user_exercise_selections: {
-          include: {
-            exercise_slots: true,
-            exercises: true,
-          },
-        },
+      select: {
+        id: true,
+        currentWeek: true,
+        currentDay: true,
+        isCurrentlyActive: true,
       },
     });
 
