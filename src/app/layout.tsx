@@ -8,6 +8,23 @@ import Script from 'next/script'
 export const metadata = {
   title: 'Massimino - Safe Workouts for Everyone',
   description: 'The safety-first fitness community platform where trainers and athletes connect, track workouts, and achieve goals together.',
+  manifest: '/manifest.json',
+  themeColor: '#2b5069',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Massimino',
+  },
+  icons: {
+    icon: [
+      { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icons/icon-512x512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/icons/icon-152x152.png', sizes: '152x152', type: 'image/png' },
+      { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+    ],
+  },
 }
 
 export const viewport = {
@@ -35,6 +52,20 @@ export default function RootLayout({
             {children}
           </Layout>
         </SessionProvider>
+        {/* Service Worker Registration */}
+        <Script
+          id="sw-register"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js');
+                });
+              }
+            `,
+          }}
+        />
         {/* Facebook SDK */}
         <Script
           id="facebook-sdk-loader"
