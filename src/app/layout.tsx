@@ -9,7 +9,6 @@ export const metadata = {
   title: 'Massimino - Safe Workouts for Everyone',
   description: 'The safety-first fitness community platform where trainers and athletes connect, track workouts, and achieve goals together.',
   manifest: '/manifest.json',
-  themeColor: '#2b5069',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -31,6 +30,7 @@ export const viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
+  themeColor: '#2b5069',
 }
 
 export default function RootLayout({
