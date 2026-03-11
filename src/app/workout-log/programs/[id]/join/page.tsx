@@ -38,74 +38,94 @@ export default function JoinProgramPage({ params }: Props) {
   const [program, setProgram] = useState<ProgramData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [checkingStatus, setCheckingStatus] = useState(true);
   const [alreadyJoined, setAlreadyJoined] = useState(false);
   const [subscriptionId, setSubscriptionId] = useState<string | null>(null);
   const [activating, setActivating] = useState(false);
   const [joinStep, setJoinStep] = useState<string>('Checking enrollment status...');
 
   useEffect(() => {
+    let cancelled = false;
+
     const init = async () => {
-      await checkJoinStatus();
-    };
-    init();
-  }, [params.id]);
-
-  const checkJoinStatus = async () => {
-    try {
-      const res = await fetch(`/api/workout/programs/join?programId=${params.id}`);
-      if (res.ok) {
-        const data = await res.json();
-        // API returns hasJoined field
-        if (data.hasJoined) {
-          setAlreadyJoined(true);
-          setSubscriptionId(data.subscription?.id || null);
-          setCheckingStatus(false);
-          return; // Don't fetch program if already joined
+      try {
+        // Step 1: Check if already joined
+        setJoinStep('Checking enrollment status...');
+        let hasJoined = false;
+        try {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 8000);
+          const res = await fetch(`/api/workout/programs/join?programId=${params.id}`, {
+            signal: controller.signal,
+          });
+          clearTimeout(timeout);
+          if (res.ok) {
+            const data = await res.json();
+            if (data.hasJoined) {
+              hasJoined = true;
+              if (!cancelled) {
+                setAlreadyJoined(true);
+                setSubscriptionId(data.subscription?.id || null);
+                setLoading(false);
+              }
+              return;
+            }
+          }
+        } catch (err) {
+          console.error('Enrollment check failed, proceeding:', err);
         }
-      }
-      // Only fetch program if not already joined
-      setJoinStep('Loading program...');
-      await fetchProgram();
-    } catch (err) {
-      console.error('Failed to check join status:', err);
-    } finally {
-      setCheckingStatus(false);
-    }
-  };
 
-  const fetchProgram = async () => {
-    setLoading(true);
-    try {
-      // Fetch single program by ID instead of loading all templates
-      const res = await fetch(`/api/workout/programs/${params.id}`);
-      if (res.ok) {
+        if (cancelled || hasJoined) return;
+
+        // Step 2: Fetch the program
+        setJoinStep('Loading program...');
+        const res = await fetch(`/api/workout/programs/${params.id}`);
+        if (!res.ok) {
+          if (!cancelled) setError(res.status === 404 ? 'Program not found' : 'Failed to load program');
+          return;
+        }
         const found = await res.json();
-
         if (!found || !found.id) {
-          setError('Program not found');
+          if (!cancelled) setError('Program not found');
           return;
         }
 
-        if (!found.hasExerciseSlots || !found.exercise_slots?.length) {
-          // No customization needed - join directly
-          await joinProgramDirectly(found.id);
+        if (cancelled) return;
+
+        // Step 3: If program has exercise slots, show wizard
+        if (found.hasExerciseSlots && found.exercise_slots?.length) {
+          if (!cancelled) setProgram(found);
           return;
         }
 
-        setProgram(found);
-      } else if (res.status === 404) {
-        setError('Program not found');
-      } else {
-        setError('Failed to load program');
+        // Step 4: No customization needed - join directly
+        setJoinStep('Joining program...');
+        const joinRes = await fetch('/api/workout/programs/join', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ programId: found.id }),
+        });
+
+        if (cancelled) return;
+
+        if (joinRes.ok) {
+          const data = await joinRes.json();
+          alert(data.message || 'Successfully joined program!');
+          router.push('/workout-log?tab=today');
+        } else {
+          const errorData = await joinRes.json();
+          setError(errorData.error || 'Failed to join program');
+        }
+      } catch (err) {
+        console.error('Join flow error:', err);
+        if (!cancelled) setError('Something went wrong. Please try again.');
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-    } catch (err) {
-      console.error('Failed to fetch program:', err);
-      setError('Failed to load program');
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    init();
+    return () => { cancelled = true; };
+  }, [params.id, router]);
 
   const activateAndGoToToday = async () => {
     if (!subscriptionId) {
@@ -129,30 +149,7 @@ export default function JoinProgramPage({ params }: Props) {
     }
   };
 
-  const joinProgramDirectly = async (programId: string) => {
-    setJoinStep('Joining program...');
-    try {
-      const res = await fetch('/api/workout/programs/join', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ programId }),
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        alert(data.message || 'Successfully joined program!');
-        router.push('/workout-log?tab=today');
-      } else {
-        const errorData = await res.json();
-        setError(errorData.error || 'Failed to join program');
-      }
-    } catch (err) {
-      console.error('Failed to join program:', err);
-      setError('Failed to join program');
-    }
-  };
-
-  if (checkingStatus || loading) {
+  if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col items-center justify-center p-12 gap-4">
