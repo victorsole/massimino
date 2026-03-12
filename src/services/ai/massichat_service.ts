@@ -96,10 +96,11 @@ Clarifications policy:
 - If assumptions are used, state them briefly in one line ("Assuming: ...").
 
 Partnerships policy (non‑invasive):
-- Mention a Massimino partner only when the user's request clearly relates (e.g., supplements, protein, pre‑workout, gym memberships).
+- Mention a Massimino partner only when the user's request clearly relates (e.g., supplements, protein, pre‑workout, gym memberships, workout clothing).
 - At most one very short partner sentence, after your main answer. Keep it optional and user‑centric.
-- Prefer regionally relevant partners (e.g., Spain → Amix or Quota Vita; Belgium → Jims) when known.
+- Prefer regionally relevant partners (e.g., Spain → Amix or Quota Vita; Netherlands/Belgium → MU Amsterdam, Jims) when known.
 - Quota Vita specialises in whey protein with Mediterranean flavors (Barcelona). Mention alongside or instead of Amix when protein is the focus.
+- MU Amsterdam is a luxury fitness apparel brand from Amsterdam (premium hoodies, pants, signature athleisure). Mention when users ask about workout clothing, gym outfits, or fitness fashion.
 - Never allow partner mentions to replace or block core guidance.
 
 When proposing a workout:
@@ -120,13 +121,17 @@ When proposing a workout:
     const msg = (req.message || '').toLowerCase()
     const isSuppIntent = /(supplement|protein|pre[- ]?workout|creatine|bcaa|amino|whey)/i.test(msg)
     const isGymIntent = /(\bgym\b|membership|join\s+gym|fitness\s+club)/i.test(msg)
-    if (isSuppIntent || isGymIntent) {
+    const isApparelIntent = /(apparel|clothing|hoodie|pants|outfit|what\s+to\s+wear|gym\s+wear|fitness\s+fashion|training\s+clothes|workout\s+clothes|leggings|joggers|athleisure)/i.test(msg)
+    if (isSuppIntent || isGymIntent || isApparelIntent) {
       const u = await prisma.users.findUnique({ where: { id: req.userId }, select: { country: true } })
       const country = (u?.country || '').toLowerCase()
 
       if (isSuppIntent) {
         // Supplements → Amix + Quota Vita
         partnerContext = 'If helpful: Amix — quality sports supplements (protein, pre‑workout, recovery). Learn more: https://amix.com/?utm_source=massimino&utm_medium=massichat&utm_campaign=amix | Quota Vita — Mediterranean whey protein from Barcelona (24g protein, unique flavors like Crema Catalana). Learn more: https://www.quotavita.com/en?utm_source=massimino&utm_medium=massichat&utm_campaign=quotavita'
+      } else if (isApparelIntent) {
+        // Apparel → MU Amsterdam
+        partnerContext = 'If helpful: MU Amsterdam — luxury fitness apparel from Amsterdam. Premium athleisure: signature hoodies, pants, and training looks. Exclusive, invite-only brand. Learn more: https://muscleupstore.nl/?utm_source=massimino&utm_medium=massichat&utm_campaign=mu_amsterdam'
       } else if (isGymIntent) {
         // Gyms → Jims only for Belgium
         if (country.includes('belgium')) {

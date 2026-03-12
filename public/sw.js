@@ -1,10 +1,8 @@
 const CACHE_NAME = 'massimino-v1';
 const OFFLINE_URL = '/offline';
 
-// Assets to cache on install
+// Assets to cache on install (only static files — no dynamic pages)
 const PRECACHE_ASSETS = [
-  '/',
-  '/offline',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
   '/massimino_logo.png',
