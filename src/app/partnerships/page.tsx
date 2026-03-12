@@ -52,6 +52,14 @@ export default function PartnershipsPage() {
                 </span>
               </a>
             </StaggerItem>
+            <StaggerItem>
+              <a href="https://muscleupstore.nl/?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=mu_amsterdam" target="_blank" rel="noopener" className="group">
+                <span className="sr-only">MU Amsterdam</span>
+                <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
+                  <img src="/images/muscleupstore.png" alt="MU Amsterdam" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
+                </span>
+              </a>
+            </StaggerItem>
             {/** Temporarily removed Jims pending formal agreement **/}
             {/**
             <StaggerItem>
@@ -68,7 +76,7 @@ export default function PartnershipsPage() {
 
         {/* Partner Cards */}
         <section className="mb-12">
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <AnimatedCard>
               <Card>
                 <CardHeader>
@@ -129,6 +137,27 @@ export default function PartnershipsPage() {
                     <li>Focus on healthy habits and sustainable nutrition</li>
                   </ul>
                   <a href="https://www.quotavita.com/en?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=quotavita" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit Quota Vita &#x2192;</a>
+                </CardContent>
+              </Card>
+            </AnimatedCard>
+            <AnimatedCard>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-3">
+                    <img src="/images/muscleupstore.png" alt="MU Amsterdam" className="h-8 w-auto rounded" />
+                    MU Amsterdam • Netherlands
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="mb-3">
+                    Luxury fitness apparel from Amsterdam. Premium athleisure designed for athletes who train hard and dress sharp.
+                  </CardDescription>
+                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
+                    <li>Exclusive, invite-only luxury athleisure brand</li>
+                    <li>Signature hoodies, pants, and training looks</li>
+                    <li>Minimalist design with a premium edge</li>
+                  </ul>
+                  <a href="https://muscleupstore.nl/?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=mu_amsterdam" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit MU Amsterdam &#x2192;</a>
                 </CardContent>
               </Card>
             </AnimatedCard>

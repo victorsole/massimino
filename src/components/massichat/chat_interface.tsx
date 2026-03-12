@@ -367,6 +367,13 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
     if (!/jims\.be/i.test(safe)) {
       safe = safe.replace(/\bJims\b/g, '<a href="https://www.jims.be/nl?utm_source=massimino&utm_medium=massichat&utm_campaign=jims" target="_blank" rel="noopener" class="text-brand-primary underline">Jims</a>')
     }
+    if (!/muscleupstore\.nl/i.test(safe)) {
+      safe = safe.replace(/\bMU Amsterdam\b/g, '<a href="https://muscleupstore.nl/?utm_source=massimino&utm_medium=massichat&utm_campaign=mu_amsterdam" target="_blank" rel="noopener" class="text-brand-primary underline">MU Amsterdam</a>')
+      safe = safe.replace(/\bMuscle Up Store\b/g, '<a href="https://muscleupstore.nl/?utm_source=massimino&utm_medium=massichat&utm_campaign=mu_amsterdam" target="_blank" rel="noopener" class="text-brand-primary underline">Muscle Up Store</a>')
+    }
+    if (!/quotavita\.com/i.test(safe)) {
+      safe = safe.replace(/\bQuota Vita\b/g, '<a href="https://www.quotavita.com/en?utm_source=massimino&utm_medium=massichat&utm_campaign=quotavita" target="_blank" rel="noopener" class="text-brand-primary underline">Quota Vita</a>')
+    }
     return safe
   }
 
