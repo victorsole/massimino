@@ -60,6 +60,14 @@ export default function PartnershipsPage() {
                 </span>
               </a>
             </StaggerItem>
+            <StaggerItem>
+              <a href="https://pumpgymwear.com/en?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=pump_gymwear" target="_blank" rel="noopener" className="group">
+                <span className="sr-only">Pump Gymwear</span>
+                <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
+                  <img src="/images/pumpgymgear.png" alt="Pump Gymwear" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
+                </span>
+              </a>
+            </StaggerItem>
             {/** Temporarily removed Jims pending formal agreement **/}
             {/**
             <StaggerItem>
@@ -158,6 +166,27 @@ export default function PartnershipsPage() {
                     <li>Minimalist design with a premium edge</li>
                   </ul>
                   <a href="https://muscleupstore.nl/?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=mu_amsterdam" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit MU Amsterdam &#x2192;</a>
+                </CardContent>
+              </Card>
+            </AnimatedCard>
+            <AnimatedCard>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-3">
+                    <img src="/images/pumpgymgear.png" alt="Pump Gymwear" className="h-8 w-auto rounded" />
+                    Pump Gymwear • Netherlands
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="mb-3">
+                    Dutch fitness apparel brand focused on comfort and style. From oversized tees to joggers — gym wear that looks as good as it feels.
+                  </CardDescription>
+                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
+                    <li>Comfortable, stylish gym clothing for men</li>
+                    <li>Oversized and muscle-fit cuts</li>
+                    <li>Growing Dutch brand with a passionate community</li>
+                  </ul>
+                  <a href="https://pumpgymwear.com/en?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=pump_gymwear" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit Pump Gymwear &#x2192;</a>
                 </CardContent>
               </Card>
             </AnimatedCard>
