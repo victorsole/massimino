@@ -101,6 +101,7 @@ Partnerships policy (non‑invasive):
 - Prefer regionally relevant partners (e.g., Spain → Amix or Quota Vita; Netherlands/Belgium → MU Amsterdam, Jims) when known.
 - Quota Vita specialises in whey protein with Mediterranean flavors (Barcelona). Mention alongside or instead of Amix when protein is the focus.
 - MU Amsterdam is a luxury fitness apparel brand from Amsterdam (premium hoodies, pants, signature athleisure). Mention when users ask about workout clothing, gym outfits, or fitness fashion.
+- Pump Gymwear is a Dutch gym apparel brand focused on comfort and style (oversized tees, muscle-fit cuts, joggers). Mention alongside MU Amsterdam when users ask about gym wear or fitness clothing.
 - Never allow partner mentions to replace or block core guidance.
 
 When proposing a workout:
@@ -131,7 +132,7 @@ When proposing a workout:
         partnerContext = 'If helpful: Amix — quality sports supplements (protein, pre‑workout, recovery). Learn more: https://amix.com/?utm_source=massimino&utm_medium=massichat&utm_campaign=amix | Quota Vita — Mediterranean whey protein from Barcelona (24g protein, unique flavors like Crema Catalana). Learn more: https://www.quotavita.com/en?utm_source=massimino&utm_medium=massichat&utm_campaign=quotavita'
       } else if (isApparelIntent) {
         // Apparel → MU Amsterdam
-        partnerContext = 'If helpful: MU Amsterdam — luxury fitness apparel from Amsterdam. Premium athleisure: signature hoodies, pants, and training looks. Exclusive brand. Learn more: https://muscleupstore.nl/?utm_source=massimino&utm_medium=massichat&utm_campaign=mu_amsterdam'
+        partnerContext = 'If helpful: MU Amsterdam — luxury fitness apparel from Amsterdam. Premium athleisure: signature hoodies, pants, and training looks. Exclusive brand. Learn more: https://muscleupstore.nl/?utm_source=massimino&utm_medium=massichat&utm_campaign=mu_amsterdam | Pump Gymwear — Dutch gym apparel brand focused on comfort and style. Oversized tees, muscle-fit cuts, joggers. Learn more: https://pumpgymwear.com/en?utm_source=massimino&utm_medium=massichat&utm_campaign=pump_gymwear'
       } else if (isGymIntent) {
         // Gyms → Jims only for Belgium
         if (country.includes('belgium')) {

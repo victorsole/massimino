@@ -19,6 +19,7 @@ export async function GET() {
       { name: 'Bo', url: 'http://app.hellobo.eu?utm_source=massimino&utm_medium=partner_band&utm_campaign=bo', logoUrl: '/images/Bo_logo.png', blurb: 'Local producer network' },
       { name: 'Quota Vita', url: 'https://www.quotavita.com/en?utm_source=massimino&utm_medium=partner_band&utm_campaign=quotavita', logoUrl: '/images/quotavitalogo.jpg', blurb: 'Mediterranean whey protein' },
       { name: 'MU Amsterdam', url: 'https://muscleupstore.nl/?utm_source=massimino&utm_medium=partner_band&utm_campaign=mu_amsterdam', logoUrl: '/images/muscleupstore.png', blurb: 'Luxury fitness apparel' },
+      { name: 'Pump Gymwear', url: 'https://pumpgymwear.com/en?utm_source=massimino&utm_medium=partner_band&utm_campaign=pump_gymwear', logoUrl: '/images/pumpgymgear.png', blurb: 'Dutch gym apparel' },
     ];
 
     const byName = new Set<string>();
@@ -40,6 +41,7 @@ export async function GET() {
       { name: 'Bo', url: 'http://app.hellobo.eu?utm_source=massimino&utm_medium=partner_band&utm_campaign=bo', logoUrl: '/images/Bo_logo.png', blurb: 'Local producer network' },
       { name: 'Quota Vita', url: 'https://www.quotavita.com/en?utm_source=massimino&utm_medium=partner_band&utm_campaign=quotavita', logoUrl: '/images/quotavitalogo.jpg', blurb: 'Mediterranean whey protein' },
       { name: 'MU Amsterdam', url: 'https://muscleupstore.nl/?utm_source=massimino&utm_medium=partner_band&utm_campaign=mu_amsterdam', logoUrl: '/images/muscleupstore.png', blurb: 'Luxury fitness apparel' },
+      { name: 'Pump Gymwear', url: 'https://pumpgymwear.com/en?utm_source=massimino&utm_medium=partner_band&utm_campaign=pump_gymwear', logoUrl: '/images/pumpgymgear.png', blurb: 'Dutch gym apparel' },
     ];
     return NextResponse.json({ partners: fallback });
   }

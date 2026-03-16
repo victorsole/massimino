@@ -97,6 +97,7 @@ export default function HomePage() {
           { name: 'Bo', url: 'http://app.hellobo.eu?utm_source=massimino&utm_medium=partner_band&utm_campaign=bo', logoUrl: '/images/Bo_logo.png' },
           { name: 'Quota Vita', url: 'https://www.quotavita.com/en?utm_source=massimino&utm_medium=partner_band&utm_campaign=quotavita', logoUrl: '/images/quotavitalogo.jpg' },
           { name: 'MU Amsterdam', url: 'https://muscleupstore.nl/?utm_source=massimino&utm_medium=partner_band&utm_campaign=mu_amsterdam', logoUrl: '/images/muscleupstore.png' },
+          { name: 'Pump Gymwear', url: 'https://pumpgymwear.com/en?utm_source=massimino&utm_medium=partner_band&utm_campaign=pump_gymwear', logoUrl: '/images/pumpgymgear.png' },
         ]);
       }
     })();
