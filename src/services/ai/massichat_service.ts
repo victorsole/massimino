@@ -131,7 +131,7 @@ When proposing a workout:
         partnerContext = 'If helpful: Amix — quality sports supplements (protein, pre‑workout, recovery). Learn more: https://amix.com/?utm_source=massimino&utm_medium=massichat&utm_campaign=amix | Quota Vita — Mediterranean whey protein from Barcelona (24g protein, unique flavors like Crema Catalana). Learn more: https://www.quotavita.com/en?utm_source=massimino&utm_medium=massichat&utm_campaign=quotavita'
       } else if (isApparelIntent) {
         // Apparel → MU Amsterdam
-        partnerContext = 'If helpful: MU Amsterdam — luxury fitness apparel from Amsterdam. Premium athleisure: signature hoodies, pants, and training looks. Exclusive, invite-only brand. Learn more: https://muscleupstore.nl/?utm_source=massimino&utm_medium=massichat&utm_campaign=mu_amsterdam'
+        partnerContext = 'If helpful: MU Amsterdam — luxury fitness apparel from Amsterdam. Premium athleisure: signature hoodies, pants, and training looks. Exclusive brand. Learn more: https://muscleupstore.nl/?utm_source=massimino&utm_medium=massichat&utm_campaign=mu_amsterdam'
       } else if (isGymIntent) {
         // Gyms → Jims only for Belgium
         if (country.includes('belgium')) {

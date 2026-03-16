@@ -153,7 +153,7 @@ export default function PartnershipsPage() {
                     Luxury fitness apparel from Amsterdam. Premium athleisure designed for athletes who train hard and dress sharp.
                   </CardDescription>
                   <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
-                    <li>Exclusive, invite-only luxury athleisure brand</li>
+                    <li>Exclusive luxury athleisure brand</li>
                     <li>Signature hoodies, pants, and training looks</li>
                     <li>Minimalist design with a premium edge</li>
                   </ul>
