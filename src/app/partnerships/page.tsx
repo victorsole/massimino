@@ -64,7 +64,7 @@ export default function PartnershipsPage() {
               <a href="https://pumpgymwear.com/en?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=pump_gymwear" target="_blank" rel="noopener" className="group">
                 <span className="sr-only">Pump Gymwear</span>
                 <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
-                  <img src="/images/pumpgymgear.png" alt="Pump Gymwear" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
+                  <img src="/images/pumpgymwear.png" alt="Pump Gymwear" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
                 </span>
               </a>
             </StaggerItem>
@@ -173,7 +173,7 @@ export default function PartnershipsPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-3">
-                    <img src="/images/pumpgymgear.png" alt="Pump Gymwear" className="h-8 w-auto rounded" />
+                    <img src="/images/pumpgymwear.png" alt="Pump Gymwear" className="h-8 w-auto rounded" />
                     Pump Gymwear • Netherlands
                   </CardTitle>
                 </CardHeader>
