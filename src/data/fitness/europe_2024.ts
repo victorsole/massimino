@@ -1,7 +1,8 @@
 // src/data/fitness/europe_2024.ts
-// Data sources: EuropeActive/Deloitte European Health & Fitness Market Report 2025,
-// Statista, Health & Fitness Association, and industry reports.
-// Last updated: March 2026
+// Data sources: EuropeActive/Deloitte European Health & Fitness Market Report 2026 (FY2025),
+// national bodies (DSSV, AGAP, swiss active, ukactive), Statista, HFA, industry reports.
+// Europe-wide totals are FY2025; per-country figures blend FY2024 and FY2025 national data.
+// Last updated: June 2026
 
 import type { CountryFitnessData } from '@/types/fitness_data';
 
@@ -98,11 +99,11 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
   {
     iso_code: 'DE',
     name: 'Germany',
-    market_size_eur: 5800000000,
-    members_millions: 11.7,
-    penetration_rate: 13.8,
+    market_size_eur: 6250000000,  // DSSV Eckdaten 2026 (FY2025)
+    members_millions: 12.36,      // FY2025, up from 11.71M FY2024
+    penetration_rate: 14.8,       // FY2025
     growth_cagr: 3.6,
-    clubs_count: 9127,
+    clubs_count: 9647,            // FY2025
     trainers_count: 88000,
     top_chains: ['RSG Group', 'Clever fit', 'FitX'],
     year: 2025
@@ -160,11 +161,11 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
   {
     iso_code: 'CH',
     name: 'Switzerland',
-    market_size_eur: 1650000000,
-    members_millions: 1.35,
-    penetration_rate: 15.4,
+    market_size_eur: 1350000000,  // swiss active FY2024: ~CHF 1.3B
+    members_millions: 1.37,       // FY2024: 1.37M (+4.7% YoY)
+    penetration_rate: 15.2,       // FY2024
     growth_cagr: 4.8,
-    clubs_count: 850,
+    clubs_count: 1200,            // FY2024: ~1,200 (+3.5%)
     trainers_count: 10500,
     top_chains: ['Migros Fitnesspark', 'Activ Fitness', 'Update Fitness'],
     year: 2025
@@ -246,11 +247,11 @@ export const EUROPE_FITNESS_DATA_2024: CountryFitnessData[] = [
   {
     iso_code: 'PT',
     name: 'Portugal',
-    market_size_eur: 420000000,
-    members_millions: 0.92,
-    penetration_rate: 8.9,
+    market_size_eur: 375000000,   // AGAP Barómetro do Fitness 2025: €375.1M
+    members_millions: 0.85,       // FY2025: 851,730 members
+    penetration_rate: 8.2,        // FY2025
     growth_cagr: 8.2,
-    clubs_count: 720,
+    clubs_count: 1366,            // FY2025
     trainers_count: 6200,
     top_chains: ['Holmes Place', 'Fitness Hut', 'Solinca'],
     year: 2025
