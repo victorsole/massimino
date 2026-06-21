@@ -9,6 +9,7 @@ type MetricType = 'penetration' | 'market' | 'members' | 'growth';
 
 interface EuropeMapProps {
   data: CountryFitnessData[];
+  onCountrySelect?: (country: CountryFitnessData) => void;
 }
 
 // Country centroids for markers
@@ -50,6 +51,7 @@ const COUNTRY_CENTROIDS: Record<string, [number, number]> = {
   ME: [19.3744, 42.7087], // Montenegro
   AL: [20.1683, 41.1533], // Albania
   MK: [21.7453, 41.5124], // North Macedonia
+  XK: [20.9020, 42.6026], // Kosovo
   BG: [25.4858, 42.7339], // Bulgaria
   RO: [24.9668, 45.9432], // Romania
   // Baltic
@@ -59,6 +61,7 @@ const COUNTRY_CENTROIDS: Record<string, [number, number]> = {
   // Eastern Europe
   UA: [31.1656, 48.3794], // Ukraine
   MD: [28.3699, 47.4116], // Moldova
+  BY: [27.9534, 53.7098], // Belarus
   TR: [35.2433, 38.9637], // Turkey
 };
 
@@ -131,29 +134,31 @@ const METRIC_CONFIG: Record<MetricType, {
     label: 'Growth Rate (CAGR)',
     getValue: (d) => d.growth_cagr,
     getColor: (cagr) => {
-      if (cagr >= 8) return '#581c87';  // purple-800
-      if (cagr >= 7) return '#6b21a8';  // purple-700
-      if (cagr >= 6) return '#7c3aed';  // purple-600
-      if (cagr >= 5) return '#8b5cf6';  // purple-500
-      if (cagr >= 4) return '#a78bfa';  // purple-400
-      if (cagr >= 3) return '#c4b5fd';  // purple-300
+      if (cagr >= 10) return '#581c87'; // purple-800
+      if (cagr >= 9) return '#6b21a8';  // purple-700
+      if (cagr >= 8) return '#7c3aed';  // purple-600
+      if (cagr >= 7) return '#8b5cf6';  // purple-500
+      if (cagr >= 6) return '#a78bfa';  // purple-400
+      if (cagr >= 5) return '#c4b5fd';  // purple-300
       return '#ede9fe'; // purple-100
     },
     format: (v) => `${v}%`,
-    legendMin: '<3%',
-    legendMid: '5%',
-    legendMax: '8%+',
+    legendMin: '<5%',
+    legendMid: '7%',
+    legendMax: '10%+',
     colorScale: ['bg-purple-100', 'bg-purple-300', 'bg-purple-400', 'bg-purple-500', 'bg-purple-600', 'bg-purple-700', 'bg-purple-800'],
   },
 };
 
-export function EuropeMap({ data }: EuropeMapProps) {
+export function EuropeMap({ data, onCountrySelect }: EuropeMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const markersRef = useRef<maplibregl.Marker[]>([]);
   const markerElementsRef = useRef<Map<string, { content: HTMLDivElement; data: CountryFitnessData }>>(new Map());
   const popupRef = useRef<maplibregl.Popup | null>(null);
   const metricRef = useRef<MetricType>('penetration'); // Ref to track current metric for event handlers
+  const onSelectRef = useRef(onCountrySelect);
+  onSelectRef.current = onCountrySelect;
   const [isLoaded, setIsLoaded] = useState(false);
   const [metric, setMetric] = useState<MetricType>('penetration');
 
@@ -231,6 +236,12 @@ export function EuropeMap({ data }: EuropeMapProps) {
         if (popupRef.current) {
           popupRef.current.remove();
         }
+      });
+
+      // Click opens the country detail panel
+      wrapper.addEventListener('click', (e) => {
+        e.stopPropagation();
+        onSelectRef.current?.(countryData);
       });
 
       // Create and add marker
