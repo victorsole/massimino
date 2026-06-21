@@ -1,7 +1,8 @@
 // src/data/fitness/industry_2024.ts
-// Data sources: EuropeActive/Deloitte 2025 Report, company filings, fitness_new_metrics.md
-// Gym chains, supplement companies, influencers, and hashtag statistics
-// Last updated: March 2026
+// Data sources: company FY2025 filings (Basic-Fit, PureGym, The Gym Group, SATS, etc.),
+// EuropeActive/Deloitte EHFMR 2026, registry/press for supplements, live social trackers.
+// Gym chains, supplement companies, influencers, and hashtag statistics.
+// Last updated: June 2026
 
 import type {
   GymChainData,
@@ -16,9 +17,9 @@ export const EUROPE_GYM_CHAINS_2024: GymChainData[] = [
     rank: 1,
     name: 'Basic-Fit',
     country_code: 'NL',
-    members: 4800000,         // FY25: ~4.8M members (H1 4.51M + continued growth)
-    locations: 1670,          // FY25: ~1,670 clubs (H1 1,628 + ~42 new in H2)
-    revenue_eur: 1400000000,  // FY25: €1.375-1.425B (+16% YoY)
+    members: 4820000,         // FY2025: 4.82M owned-club members (+564K YoY)
+    locations: 1660,          // FY2025: 1,660 owned clubs
+    revenue_eur: 1420000000,  // FY2025: €1.42B (+17% YoY)
     website: 'https://www.basic-fit.com',
     year: 2026
   },
@@ -26,9 +27,9 @@ export const EUROPE_GYM_CHAINS_2024: GymChainData[] = [
     rank: 2,
     name: 'PureGym',
     country_code: 'GB',
-    members: 2400000,         // Q3 2025: 2.4M+ members
-    locations: 694,           // Q3 2025: 694 sites globally (439 UK)
-    revenue_eur: 880000000,   // FY25 est: ~£740M ≈ €880M (9-mo £555.5M, +25% YoY)
+    members: 2300000,         // FY2025: ~2.3M (record)
+    locations: 714,           // FY2025: 714 sites (UK 455, DK 128, CH 48, US 60, ME 23)
+    revenue_eur: 868000000,   // FY2025: £742M ≈ €868M (+23% YoY)
     website: 'https://www.puregym.com',
     year: 2026
   },
@@ -36,9 +37,9 @@ export const EUROPE_GYM_CHAINS_2024: GymChainData[] = [
     rank: 3,
     name: 'RSG Group (McFit)',
     country_code: 'DE',
-    members: 4500000,         // RSG Group total: 4.5M+ globally, McFit 1.7M alone
-    locations: 900,           // 900+ locations across 30+ countries, now franchising internationally
-    revenue_eur: 700000000,
+    members: 4500000,         // 4.5M+ worldwide (Gold's Gym franchise-inflated); ~1.7-1.8M owned core
+    locations: 900,           // 900+ locations across 30+ countries
+    revenue_eur: 523000000,   // FY2022 (latest confirmable; newer filings paywalled)
     website: 'https://www.mcfit.com',
     year: 2026
   },
@@ -46,9 +47,9 @@ export const EUROPE_GYM_CHAINS_2024: GymChainData[] = [
     rank: 4,
     name: 'David Lloyd Leisure',
     country_code: 'GB',
-    members: 811000,          // Aug 2025: 811,000+ members
-    locations: 135,           // 135 clubs (106 UK + 29 Europe)
-    revenue_eur: 1200000000,  // ~£1B+ / €1.2B
+    members: 785000,          // FY2024: ~785K (audited record); "811K+" is a marketing figure
+    locations: 134,           // 134 clubs (105 UK + 29 Europe)
+    revenue_eur: 995000000,   // FY2024: £860.7M ≈ €995M (first pre-tax profit in a decade)
     website: 'https://www.davidlloyd.co.uk',
     year: 2026
   },
@@ -56,104 +57,116 @@ export const EUROPE_GYM_CHAINS_2024: GymChainData[] = [
     rank: 5,
     name: 'The Gym Group',
     country_code: 'GB',
-    members: 945000,          // FY25: 945K average, 923K year-end
-    locations: 260,           // FY25: 260 gyms (+16 new sites)
-    revenue_eur: 290000000,   // FY25: £244.9M ≈ €290M (+8% YoY)
+    members: 945000,          // FY2025: 945K average, 923K year-end
+    locations: 260,           // FY2025: 260 gyms
+    revenue_eur: 287000000,   // FY2025: £244.9M ≈ €287M (+8% YoY)
     website: 'https://www.thegymgroup.com',
+    year: 2026
+  },
+  {
+    rank: 6,
+    name: 'SATS',
+    country_code: 'NO',
+    members: 757000,          // FY2025; members as of Q1 2026
+    locations: 275,
+    revenue_eur: 496000000,   // FY2025: NOK 5.51bn ≈ €496M (+9%)
+    website: 'https://www.sats.com',
+    year: 2026
+  },
+  {
+    rank: 7,
+    name: 'Nordic Wellness',
+    country_code: 'SE',
+    members: 560000,          // >560K (FY2024)
+    locations: 412,           // first Nordic chain past 400 clubs
+    revenue_eur: 178000000,   // FY2024: SEK 2,019M ≈ €178M (record)
+    website: 'https://www.nordicwellness.se',
     year: 2026
   }
 ];
 
 // ===== PAN-EUROPEAN SUPPLEMENT COMPANIES =====
+// Note: Foodspring (DE) ceased all operations 30 June 2025 and has been removed.
 export const EUROPE_SUPPLEMENTS_2024: SupplementCompanyData[] = [
   {
     rank: 1,
+    name: 'ESN / The Quality Group',
+    country_code: 'DE',
+    revenue_eur: 800000000,   // CY2024 pro-forma; >€1B expected for 2025
+    website: 'https://www.esn.com',
+    market_position: 'German leader; fastest-growing',
+    year: 2025
+  },
+  {
+    rank: 2,
     name: 'Myprotein',
     country_code: 'GB',
-    revenue_eur: 800000000,
+    revenue_eur: 713000000,   // THG Nutrition FY2025: £609M ≈ €713M (+5%)
     website: 'https://www.myprotein.com',
     market_position: '#1 Europe by Euromonitor',
     year: 2025
   },
   {
-    rank: 2,
-    name: 'Bulk',
-    country_code: 'GB',
-    revenue_eur: 99000000,
-    website: 'https://www.bulk.com',
-    market_position: 'UK #2',
-    year: 2025
-  },
-  {
     rank: 3,
-    name: 'ESN / The Quality Group',
-    country_code: 'DE',
-    revenue_eur: 680000000,
-    website: 'https://www.esn.com',
-    market_position: 'German market leader',
-    year: 2025
-  },
-  {
-    rank: 4,
-    name: 'Foodspring',
-    country_code: 'DE',
-    revenue_eur: 150000000,
-    website: 'https://www.foodspring.com',
-    market_position: 'DACH leader',
-    year: 2025
-  },
-  {
-    rank: 5,
     name: 'Optimum Nutrition',
     country_code: 'US',
-    revenue_eur: 500000000,
+    revenue_eur: 500000000,   // Glanbia PN brand est.; ~75% of PN segment
     website: 'https://www.optimumnutrition.com',
     market_position: 'Global premium leader',
     year: 2025
   },
   {
-    rank: 6,
+    rank: 4,
+    name: 'Bulk',
+    country_code: 'GB',
+    revenue_eur: 151000000,   // FY2024: £128.8M ≈ €151M (+4.6%)
+    website: 'https://www.bulk.com',
+    market_position: 'UK #2',
+    year: 2025
+  },
+  {
+    rank: 5,
     name: 'Olimp Sport Nutrition',
     country_code: 'PL',
-    revenue_eur: 200000000,
+    revenue_eur: 105000000,   // ~€105M est. FY2024 (PLN 474.5M FY2022 confirmed)
     website: 'https://olimpsport.com',
     market_position: 'Polish market leader',
     year: 2025
   },
   {
+    rank: 6,
+    name: 'Grenade',
+    country_code: 'GB',
+    revenue_eur: 95000000,    // FY2024: £80.6M ≈ €95M (Mondelez-owned)
+    website: 'https://www.grenade.com',
+    market_position: '#1 protein bar UK since 2016',
+    year: 2025
+  },
+  {
     rank: 7,
-    name: 'Yamamoto Nutrition',
-    country_code: 'IT',
-    revenue_eur: 100000000,
-    website: 'https://www.yamamotonutrition.com',
-    market_position: '#1 Italy by revenue',
+    name: 'HSN',
+    country_code: 'ES',
+    revenue_eur: 93000000,    // FY2024: €93M (+30%)
+    website: 'https://www.hsnstore.eu',
+    market_position: 'Spain #1 domestic brand',
     year: 2025
   },
   {
     rank: 8,
-    name: 'HSN',
-    country_code: 'ES',
-    revenue_eur: 80000000,
-    website: 'https://www.hsnstore.eu',
-    market_position: 'Spain #1 domestic brand',
+    name: 'Yamamoto Nutrition',
+    country_code: 'IT',
+    revenue_eur: 40000000,    // FY2024: €39.65M (down from ~€50M 2022 peak)
+    website: 'https://www.yamamotonutrition.com',
+    market_position: 'Leading Italian brand',
     year: 2025
   },
   {
     rank: 9,
     name: 'QNT',
     country_code: 'BE',
-    revenue_eur: 60000000,
+    revenue_eur: 21000000,    // FY2023: €20.99M
     website: 'https://www.qntsport.com',
     market_position: 'Belgium leader, 35+ years',
-    year: 2025
-  },
-  {
-    rank: 10,
-    name: 'Grenade',
-    country_code: 'GB',
-    revenue_eur: 96000000,
-    website: 'https://www.grenade.com',
-    market_position: '#1 protein bar UK since 2016',
     year: 2025
   }
 ];
@@ -164,8 +177,8 @@ export const EUROPE_INFLUENCERS_2024: FitnessInfluencerData[] = [
     rank: 1,
     name: 'Pamela Reif',
     country_code: 'DE',
-    instagram_followers: 9100000,   // Feb 2026: ~9.1M
-    youtube_followers: 10700000,    // 2026: 10.7M
+    instagram_followers: 8700000,   // Jun 2026: ~8.7M
+    youtube_followers: 10700000,    // Jun 2026: 10.7M
     handle: '@pamela_rf',
     specialty: 'Home workouts, HIIT',
     year: 2026
@@ -174,8 +187,8 @@ export const EUROPE_INFLUENCERS_2024: FitnessInfluencerData[] = [
     rank: 2,
     name: 'Tibo InShape',
     country_code: 'FR',
-    instagram_followers: 18000000,  // Oct 2025: ~18M
-    youtube_followers: 27000000,    // Feb 2026: ~27M
+    instagram_followers: 17500000,  // Mar 2026: ~17.5M
+    youtube_followers: 27000000,    // Jun 2026: ~27M (Europe's largest fitness creator)
     handle: '@tiboinshape',
     specialty: 'Fitness, comedy',
     year: 2026
@@ -203,7 +216,7 @@ export const EUROPE_INFLUENCERS_2024: FitnessInfluencerData[] = [
     rank: 5,
     name: 'Tom Daley',
     country_code: 'GB',
-    instagram_followers: 3900000,
+    instagram_followers: 3600000,   // Jun 2026 est.
     handle: '@tomdaley',
     specialty: 'Olympic diving, fitness',
     year: 2025
@@ -222,7 +235,7 @@ export const EUROPE_INFLUENCERS_2024: FitnessInfluencerData[] = [
     rank: 7,
     name: 'Krissy Cela',
     country_code: 'GB',
-    instagram_followers: 2200000,
+    instagram_followers: 3300000,   // 2026 est.
     youtube_followers: 2400000,
     handle: '@krissycela',
     specialty: 'Strength training, EvolveYou',
@@ -260,9 +273,9 @@ export const EUROPE_INFLUENCERS_2024: FitnessInfluencerData[] = [
     rank: 11,
     name: 'Patry Jordan',
     country_code: 'ES',
-    instagram_followers: 2200000,
-    youtube_followers: 13200000,
-    handle: '@gymvirtual_com',
+    instagram_followers: 1360000,   // Jun 2026: @patryjordan
+    youtube_followers: 13700000,    // Gym Virtual ES channel
+    handle: '@patryjordan',
     specialty: 'Home fitness pioneer',
     year: 2025
   },
@@ -287,9 +300,9 @@ export const EUROPE_INFLUENCERS_2024: FitnessInfluencerData[] = [
   {
     rank: 14,
     name: 'Sascha Huber',
-    country_code: 'DE',
-    youtube_followers: 2000000,
-    instagram_followers: 500000,
+    country_code: 'AT',              // Austrian (largest German-language fitness YouTuber)
+    youtube_followers: 1740000,     // Jun 2026
+    instagram_followers: 693000,    // Jun 2026
     handle: '@sascha_huber_official',
     specialty: 'Fitness challenges',
     year: 2025
@@ -302,6 +315,25 @@ export const EUROPE_INFLUENCERS_2024: FitnessInfluencerData[] = [
     handle: '@chodakowskaewa',
     specialty: 'BeDiet, BeActive pioneer',
     year: 2025
+  },
+  {
+    rank: 16,
+    name: 'Lazar Angelov',
+    country_code: 'BG',
+    instagram_followers: 6100000,   // Jun 2026
+    handle: '@lazarangelovofficial',
+    specialty: 'Bodybuilding, training programmes',
+    year: 2026
+  },
+  {
+    rank: 17,
+    name: 'Sergio Peinado',
+    country_code: 'ES',
+    instagram_followers: 2000000,
+    youtube_followers: 5000000,     // top male Spanish fitness creator
+    handle: '@sergiopeinadotrainer',
+    specialty: 'Home workouts, weight loss',
+    year: 2026
   }
 ];
 
