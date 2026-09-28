@@ -1,7 +1,7 @@
 // src/app/bio/[username]/page.tsx
 /**
  * Massitree Public Profile Pages
- * bio.massimino.fitness/{username}
+ * massimino.fitness/bio/{username} (see src/lib/bio-url.ts)
  * Server-side rendered trainer profiles with SEO optimization
  */
 
@@ -11,6 +11,7 @@ import { prisma } from '@/core/database/client'
 import { UserPublicProfile } from '@/components/layout/user_public_profile'
 import { Share2 } from 'lucide-react'
 import { ShareButton } from '@/components/ui/share_button'
+import { bioProfileUrl } from '@/lib/bio-url'
 
 // ===== INLINE FUNCTIONS =====
 
@@ -97,7 +98,7 @@ export async function generateMetadata({
     openGraph: {
       title: `${name} - Fitness ${user.role}`,
       description: bio.slice(0, 160),
-      url: `https://bio.massimino.fitness/${params.username}`,
+      url: bioProfileUrl(params.username),
       siteName: 'Massimino',
       images: user.image ? [
         {
@@ -117,7 +118,7 @@ export async function generateMetadata({
       images: user.image ? [user.image] : []
     },
     alternates: {
-      canonical: `https://bio.massimino.fitness/${params.username}`
+      canonical: bioProfileUrl(params.username)
     },
     other: {
       'profile:username': params.username,
@@ -158,7 +159,7 @@ export default async function BioPage({
   }
 
   // Share functionality (client-side)
-  const shareUrl = `https://bio.massimino.fitness/${params.username}`
+  const shareUrl = bioProfileUrl(params.username)
   const shareText = `Check out ${user.name || 'this trainer'}'s profile on Massimino!`
 
   return (

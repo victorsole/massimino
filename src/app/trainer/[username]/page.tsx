@@ -81,15 +81,17 @@ export async function generateMetadata({ params }: TrainerPageProps): Promise<Me
   }
 
   const trainerName = trainer.name || 'Professional Trainer';
+  // Only claim NASM certification for trainers whose credentials were verified
+  const trainerLabel = trainer.trainerVerified ? 'NASM Certified Trainer' : 'Personal Trainer';
   const description = trainer.trainerBio
     ? trainer.trainerBio.slice(0, 160) + '...'
-    : `${trainerName} is a NASM-certified trainer on Massimino, the safety-first fitness platform.`;
+    : `${trainerName} is a ${trainer.trainerVerified ? 'NASM-certified' : 'personal'} trainer on Massimino, the safety-first fitness platform.`;
 
   return {
-    title: `${trainerName} - NASM Certified Trainer | Massimino`,
+    title: `${trainerName} - ${trainerLabel} | Massimino`,
     description,
     openGraph: {
-      title: `${trainerName} - NASM Certified Trainer`,
+      title: `${trainerName} - ${trainerLabel}`,
       description,
       images: trainer.image ? [{ url: trainer.image }] : [],
       type: 'profile',
@@ -98,7 +100,7 @@ export async function generateMetadata({ params }: TrainerPageProps): Promise<Me
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${trainerName} - NASM Certified Trainer`,
+      title: `${trainerName} - ${trainerLabel}`,
       description,
       images: trainer.image ? [trainer.image] : [],
     },

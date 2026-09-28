@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/core/auth/config'
 import { prisma } from '@/core/database/client'
+import { bioProfileUrl } from '@/lib/bio-url'
 
 // ===== INLINE VALIDATION =====
 
@@ -208,7 +209,7 @@ export async function POST(request: NextRequest) {
       success: true,
       message: 'Username claimed successfully',
       username: normalizedUsername,
-      profileUrl: `https://bio.massimino.fitness/${normalizedUsername}`
+      profileUrl: bioProfileUrl(normalizedUsername)
     })
 
   } catch (error) {
