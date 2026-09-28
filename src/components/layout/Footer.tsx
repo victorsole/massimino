@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ChevronUp, ChevronDown } from 'lucide-react';
+import { openCookieSettings } from '@/components/ui/cookie_consent';
 
 export default function Footer() {
   const pathname = usePathname();
@@ -177,6 +178,13 @@ export default function Footer() {
                 <Link href="/cookies" className="text-sm text-gray-500 hover:text-gray-700">
                   Cookies
                 </Link>
+                <button
+                  type="button"
+                  onClick={openCookieSettings}
+                  className="text-sm text-gray-500 hover:text-gray-700"
+                >
+                  Cookie Settings
+                </button>
                 <Link href="/legal/subprocessors" className="text-sm text-gray-500 hover:text-gray-700">
                   Subprocessors
                 </Link>

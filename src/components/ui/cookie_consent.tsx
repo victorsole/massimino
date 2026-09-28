@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Cookie, Shield, X, Settings } from 'lucide-react';
 
 const COOKIE_CONSENT_KEY = 'massimino_cookie_consent';
+const CONSENT_CHANGED_EVENT = 'massimino-consent-changed';
+const OPEN_SETTINGS_EVENT = 'massimino-open-cookie-settings';
 
 type CookiePreferences = {
   essential: boolean; // Always true, required for site functionality
@@ -12,6 +14,23 @@ type CookiePreferences = {
   marketing: boolean;
   timestamp: number;
 };
+
+function readStoredConsent(): CookiePreferences | null {
+  try {
+    const stored = localStorage.getItem(COOKIE_CONSENT_KEY);
+    return stored ? JSON.parse(stored) : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Reopen the cookie banner with the detailed preferences expanded,
+ * so visitors can change or withdraw consent at any time.
+ */
+export function openCookieSettings() {
+  window.dispatchEvent(new Event(OPEN_SETTINGS_EVENT));
+}
 
 export function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false);
@@ -33,9 +52,21 @@ export function CookieConsent() {
     }
   }, []);
 
+  useEffect(() => {
+    const open = () => {
+      const current = readStoredConsent();
+      if (current) setPreferences(current);
+      setShowDetails(true);
+      setIsVisible(true);
+    };
+    window.addEventListener(OPEN_SETTINGS_EVENT, open);
+    return () => window.removeEventListener(OPEN_SETTINGS_EVENT, open);
+  }, []);
+
   const savePreferences = (prefs: CookiePreferences) => {
     const toSave = { ...prefs, timestamp: Date.now() };
     localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify(toSave));
+    window.dispatchEvent(new Event(CONSENT_CHANGED_EVENT));
     setIsVisible(false);
   };
 
@@ -236,14 +267,15 @@ export function useCookieConsent(): CookiePreferences | null {
   const [consent, setConsent] = useState<CookiePreferences | null>(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem(COOKIE_CONSENT_KEY);
-    if (stored) {
-      try {
-        setConsent(JSON.parse(stored));
-      } catch {
-        setConsent(null);
-      }
-    }
+    const sync = () => setConsent(readStoredConsent());
+    sync();
+    // Stay in sync when consent changes in this tab or another one
+    window.addEventListener(CONSENT_CHANGED_EVENT, sync);
+    window.addEventListener('storage', sync);
+    return () => {
+      window.removeEventListener(CONSENT_CHANGED_EVENT, sync);
+      window.removeEventListener('storage', sync);
+    };
   }, []);
 
   return consent;
