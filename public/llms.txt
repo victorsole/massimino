@@ -22,6 +22,7 @@ Massimino is a safety-first fitness community platform where trainers and athlet
 - `/` — Homepage
 - `/signup` — Create an account
 - `/exercises` — Exercise database browser
+- `/fitness-intelligence` — European fitness market and physical-activity data (FY2025, live Eurostat)
 - `/community` — Community feed and discovery
 - `/teams/discover` — Find and join training teams
 - `/massiminos` — Core platform features

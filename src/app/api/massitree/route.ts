@@ -5,6 +5,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core/auth/config';
 import { prisma } from '@/core/database/client';
 import { UserRole } from '@prisma/client';
+import { bioProfileUrl } from '@/lib/bio-url'
 
 export async function GET(request: NextRequest) {
   try {
@@ -91,7 +92,7 @@ export async function GET(request: NextRequest) {
 
       const baseUrl = process.env.NEXTAUTH_URL || 'https://massimino.fitness';
       const trainerUrl = `${baseUrl}/trainer/${username}`;
-      const bioUrl = `https://bio.massimino.fitness/${username}`;
+      const bioUrl = bioProfileUrl(username);
 
       // Generate URLs with UTM parameters for different platforms
       const urlVariants = {

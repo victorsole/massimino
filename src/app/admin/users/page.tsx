@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { updateUserAction, syncUserFromFirestoreAction, createUserAction, updateRedemptionStatusAction, adjustUserPointsAction, bulkAwardPointsAction, quickPointsAwardAction, createInvitationAction, updateInvitationAction } from './actions'
 import { Textarea } from '@/components/ui/textarea'
 import { prisma } from '@/core/database'
+import { bioProfileUrl } from '@/lib/bio-url'
 
 type PageProps = { searchParams?: { q?: string; page?: string } }
 
@@ -899,7 +900,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                 <td className="px-4 py-2">
                   {u.massiminoUsername ? (
                     <a
-                      href={`https://bio.massimino.fitness/${u.massiminoUsername}`}
+                      href={bioProfileUrl(u.massiminoUsername)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-mono text-sm text-purple-600 hover:text-purple-800 underline"
@@ -1010,7 +1011,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                   <div className="flex items-center gap-2 pt-2 border-t">
                     {u.massiminoUsername ? (
                       <a
-                        href={`https://bio.massimino.fitness/${u.massiminoUsername}`}
+                        href={bioProfileUrl(u.massiminoUsername)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-xs underline text-purple-700"
