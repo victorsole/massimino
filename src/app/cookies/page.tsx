@@ -20,8 +20,8 @@ export default function CookiesPage() {
           <p className="text-[15px]">
             Cookies are small text files stored on your device. We use cookies and similar technologies to
             keep you signed in, protect your account, improve performance, and remember your preferences.
-            You can change your preferences at any time in your browser settings or by using the cookie
-            controls described below.
+            You can change or withdraw your choices at any time with the Cookie Settings link in the footer,
+            or in your browser settings.
           </p>
 
           <section>
@@ -63,11 +63,11 @@ export default function CookiesPage() {
                     <td className="p-2 border">Session</td>
                   </tr>
                   <tr>
-                    <td className="p-2 border break-all">cookies-consent</td>
+                    <td className="p-2 border break-all">massimino_cookie_consent (local storage)</td>
                     <td className="p-2 border">Massimino</td>
                     <td className="p-2 border">Preferences</td>
                     <td className="p-2 border">Stores your cookie choices (e.g., analytics on/off).</td>
-                    <td className="p-2 border">6–12 months</td>
+                    <td className="p-2 border">Until you change your choice or clear site data</td>
                   </tr>
                   <tr>
                     <td className="p-2 border break-all">locale / ui-preferences</td>
@@ -75,6 +75,13 @@ export default function CookiesPage() {
                     <td className="p-2 border">Preferences</td>
                     <td className="p-2 border">Remembers language and interface settings.</td>
                     <td className="p-2 border">Up to 12 months</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2 border break-all">Facebook SDK (e.g., fr, _fbp, fbsr_*)</td>
+                    <td className="p-2 border">Meta Platforms</td>
+                    <td className="p-2 border">Marketing</td>
+                    <td className="p-2 border">Loaded only if you accept marketing cookies. Lets Meta measure page views and supports Facebook sharing.</td>
+                    <td className="p-2 border">Up to 3 months</td>
                   </tr>
                   {/* Add analytics/marketing rows here if/when enabled (e.g., _ga) */}
                 </tbody>
