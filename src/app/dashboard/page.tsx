@@ -8,7 +8,7 @@ import { useOnboardingTour } from '@/hooks/useOnboardingTour';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { ActivityAnalytics } from '@/components/dashboard/ActivityAnalytics';
 import { NutritionDonut } from '@/components/dashboard/NutritionDonut';
-import { CaloriesChart } from '@/components/dashboard/CaloriesChart';
+import { CaloriesChart, type MealCalories } from '@/components/dashboard/CaloriesChart';
 import { ExerciseCard } from '@/components/dashboard/ExerciseCard';
 import { MyAthletesDashboardSection } from '@/components/coaching/my-athletes-dashboard-section';
 
@@ -33,6 +33,29 @@ interface DashboardData {
   } | null;
 }
 
+interface TodayNutrition {
+  protein: number;
+  carbs: number;
+  fat: number;
+  meals: MealCalories[];
+  targetCalories: number | null;
+}
+
+const MEAL_LABELS: Array<[string, string]> = [
+  ['breakfast', 'Breakfast'],
+  ['lunch', 'Lunch'],
+  ['snack', 'Snack'],
+  ['dinner', 'Dinner'],
+];
+
+const EMPTY_NUTRITION: TodayNutrition = {
+  protein: 0,
+  carbs: 0,
+  fat: 0,
+  meals: MEAL_LABELS.map(([, label]) => ({ label, calories: 0 })),
+  targetCalories: null,
+};
+
 function getWeightUnit(): string {
   if (typeof window === 'undefined') return 'kg';
   return localStorage.getItem('pref_weightUnit') || 'kg';
@@ -49,6 +72,8 @@ export default function DashboardPage() {
   const searchParams = useSearchParams();
   const [dashData, setDashData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [nutrition, setNutrition] = useState<TodayNutrition>(EMPTY_NUTRITION);
+  const [nutritionLoading, setNutritionLoading] = useState(true);
   const [weightUnit, setWeightUnit] = useState('kg');
   const forceReplay = searchParams.get('tour') === 'replay';
   useOnboardingTour(forceReplay);
@@ -79,6 +104,35 @@ export default function DashboardPage() {
       }
     }
     fetchStats();
+  }, []);
+
+  useEffect(() => {
+    async function fetchNutrition() {
+      try {
+        // Same date convention as the nutrition page
+        const today = new Date().toISOString().split('T')[0];
+        const res = await fetch(`/api/nutrition?date=${today}`);
+        if (res.ok) {
+          const data = await res.json();
+          const grouped: Record<string, Array<{ calories: number }>> = data.groupedLogs ?? {};
+          setNutrition({
+            protein: data.totals?.protein ?? 0,
+            carbs: data.totals?.carbs ?? 0,
+            fat: data.totals?.fat ?? 0,
+            meals: MEAL_LABELS.map(([key, label]) => ({
+              label,
+              calories: (grouped[key] ?? []).reduce((sum, log) => sum + (log.calories || 0), 0),
+            })),
+            targetCalories: data.activePlan?.targetCalories ?? null,
+          });
+        }
+      } catch {
+        // Leave the empty state in place
+      } finally {
+        setNutritionLoading(false);
+      }
+    }
+    fetchNutrition();
   }, []);
 
   const stats = dashData || {
@@ -113,11 +167,11 @@ export default function DashboardPage() {
         />
         <StatCard
           icon={Clock}
-          value={loading ? '...' : (stats.thirtyDayStats?.avgSessionDuration ?? Math.round(stats.workoutsThisWeek * 45))}
-          unit="min"
+          value={loading ? '...' : (stats.thirtyDayStats?.avgSessionDuration ?? '-')}
+          unit={stats.thirtyDayStats ? 'min' : undefined}
           label="Avg Session"
           color="green"
-          meta={stats.thirtyDayStats ? `${stats.thirtyDayStats.durationTrend >= 0 ? '+' : ''}${stats.thirtyDayStats.durationTrend}% vs last month` : undefined}
+          meta={stats.thirtyDayStats ? `${stats.thirtyDayStats.durationTrend >= 0 ? '+' : ''}${stats.thirtyDayStats.durationTrend}% vs last month` : 'Log a workout to see this'}
         />
         <StatCard
           icon={TrendingUp}
@@ -140,9 +194,18 @@ export default function DashboardPage() {
       {/* Widget grid */}
       <div data-tour="widgets" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         <ActivityAnalytics weeklyStats={stats.weeklyStats} />
-        <NutritionDonut />
+        <NutritionDonut
+          protein={nutrition.protein}
+          carbs={nutrition.carbs}
+          fat={nutrition.fat}
+          loading={nutritionLoading}
+        />
         <div className="md:col-span-2 xl:col-span-1">
-          <CaloriesChart />
+          <CaloriesChart
+            meals={nutrition.meals}
+            targetCalories={nutrition.targetCalories}
+            loading={nutritionLoading}
+          />
         </div>
       </div>
 

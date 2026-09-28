@@ -1,38 +1,37 @@
 'use client';
 
-interface MacroData {
-  label: string;
-  value: number;
-  color: string;
-  change?: string;
-}
+import Link from 'next/link';
 
 interface NutritionDonutProps {
-  macros?: MacroData[];
-  centerLabel?: string;
-  centerValue?: string;
+  /** Grams logged today */
+  protein: number;
+  carbs: number;
+  fat: number;
+  loading?: boolean;
 }
 
-const defaultMacros: MacroData[] = [
-  { label: 'Protein', value: 35, color: '#2b5069', change: '+5%' },
-  { label: 'Carbs', value: 40, color: '#E8C547', change: '+2%' },
-  { label: 'Fats', value: 25, color: '#E855A0', change: '-3%' },
-];
+// Energy per gram, used to show each macro's share of calories
+const KCAL_PER_GRAM = { protein: 4, carbs: 4, fat: 9 };
 
-export function NutritionDonut({
-  macros = defaultMacros,
-  centerLabel = 'Balance',
-  centerValue = '78%',
-}: NutritionDonutProps) {
+export function NutritionDonut({ protein, carbs, fat, loading = false }: NutritionDonutProps) {
+  const macroKcal = [
+    { label: 'Protein', grams: protein, kcal: protein * KCAL_PER_GRAM.protein, color: '#2b5069' },
+    { label: 'Carbs', grams: carbs, kcal: carbs * KCAL_PER_GRAM.carbs, color: '#B8860B' },
+    { label: 'Fats', grams: fat, kcal: fat * KCAL_PER_GRAM.fat, color: '#BE185D' },
+  ];
+  const totalKcal = macroKcal.reduce((sum, m) => sum + m.kcal, 0);
+  const hasData = totalKcal > 0;
+
   const radius = 50;
   const circumference = 2 * Math.PI * radius;
   let cumulativeOffset = 0;
 
-  const segments = macros.map((m) => {
-    const dashLength = (m.value / 100) * circumference;
+  const segments = macroKcal.map((m) => {
+    const share = hasData ? m.kcal / totalKcal : 0;
+    const dashLength = share * circumference;
     const offset = circumference - cumulativeOffset;
     cumulativeOffset += dashLength;
-    return { ...m, dashLength, offset };
+    return { ...m, share, dashLength, offset };
   });
 
   return (
@@ -42,50 +41,60 @@ export function NutritionDonut({
 
       <div className="flex items-center justify-between mb-4 relative">
         <h3 className="text-base font-semibold text-gray-900">Nutrition Balance</h3>
-        <span className="text-xs text-gray-400">Today</span>
+        <span className="text-xs text-gray-500">Today</span>
       </div>
 
-      <div className="flex items-center gap-5 relative flex-col sm:flex-row">
-        {/* Donut */}
-        <div className="relative w-[140px] h-[140px] flex-shrink-0">
-          <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
-            {segments.map((seg, i) => (
-              <circle
-                key={i}
-                cx="60"
-                cy="60"
-                r={radius}
-                fill="none"
-                stroke={seg.color}
-                strokeWidth="20"
-                strokeDasharray={`${seg.dashLength} ${circumference - seg.dashLength}`}
-                strokeDashoffset={seg.offset}
-                strokeLinecap="round"
-              />
+      {loading ? (
+        <p className="text-sm text-gray-500 relative">Loading...</p>
+      ) : !hasData ? (
+        <div className="relative py-6 text-center">
+          <p className="text-sm text-gray-600">No meals logged today.</p>
+          <Link href="/dashboard/nutrition" className="text-sm font-medium text-brand-primary hover:underline">
+            Log a meal
+          </Link>
+        </div>
+      ) : (
+        <div className="flex items-center gap-5 relative flex-col sm:flex-row">
+          {/* Donut */}
+          <div className="relative w-[140px] h-[140px] flex-shrink-0">
+            <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120" role="img" aria-label="Share of calories by macronutrient">
+              {segments.map((seg) => (
+                <circle
+                  key={seg.label}
+                  cx="60"
+                  cy="60"
+                  r={radius}
+                  fill="none"
+                  stroke={seg.color}
+                  strokeWidth="20"
+                  strokeDasharray={`${seg.dashLength} ${circumference - seg.dashLength}`}
+                  strokeDashoffset={seg.offset}
+                />
+              ))}
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className="text-2xl font-bold text-gray-900">{Math.round(totalKcal)}</span>
+              <span className="text-xs text-gray-500">kcal from macros</span>
+            </div>
+          </div>
+
+          {/* Legend */}
+          <div className="flex flex-col gap-3">
+            {segments.map((m) => (
+              <div key={m.label} className="flex items-center gap-2">
+                <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: m.color }} />
+                <div>
+                  <p className="text-xs text-gray-500">{m.label}</p>
+                  <p className="text-sm font-semibold text-gray-900">
+                    {Math.round(m.share * 100)}%
+                    <span className="text-xs font-normal text-gray-500 ml-1">{Math.round(m.grams)} g</span>
+                  </p>
+                </div>
+              </div>
             ))}
-          </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-2xl font-bold text-gray-900">{centerValue}</span>
-            <span className="text-xs text-gray-400">{centerLabel}</span>
           </div>
         </div>
-
-        {/* Legend */}
-        <div className="flex flex-col gap-3">
-          {macros.map((m, i) => (
-            <div key={i} className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: m.color }} />
-              <div>
-                <p className="text-xs text-gray-400">{m.label}</p>
-                <p className="text-sm font-semibold text-gray-900">{m.value}%</p>
-              </div>
-              {m.change && (
-                <span className="text-xs text-[#4ADE80] ml-1">{m.change}</span>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
+      )}
     </div>
   );
 }
