@@ -9,11 +9,12 @@ interface StatCardProps {
   meta?: string;
 }
 
+// Label text uses darker shades of each accent so it passes WCAG AA on white
 const colorMap = {
-  yellow: { bg: 'bg-[#E8C547]/15', text: 'text-[#E8C547]', icon: 'bg-[#E8C547]' },
-  green: { bg: 'bg-[#4ADE80]/15', text: 'text-[#4ADE80]', icon: 'bg-[#4ADE80]' },
-  pink: { bg: 'bg-[#E855A0]/15', text: 'text-[#E855A0]', icon: 'bg-[#E855A0]' },
-  cyan: { bg: 'bg-[#22D3EE]/15', text: 'text-[#22D3EE]', icon: 'bg-[#22D3EE]' },
+  yellow: { bg: 'bg-[#E8C547]/15', text: 'text-[#8A6A00]', icon: 'bg-[#E8C547]' },
+  green: { bg: 'bg-[#4ADE80]/15', text: 'text-[#15803D]', icon: 'bg-[#4ADE80]' },
+  pink: { bg: 'bg-[#E855A0]/15', text: 'text-[#BE185D]', icon: 'bg-[#E855A0]' },
+  cyan: { bg: 'bg-[#22D3EE]/15', text: 'text-[#0E7490]', icon: 'bg-[#22D3EE]' },
 };
 
 export function StatCard({ icon: Icon, value, unit, label, color, meta }: StatCardProps) {
@@ -30,7 +31,7 @@ export function StatCard({ icon: Icon, value, unit, label, color, meta }: StatCa
           {unit && <span className="text-sm font-normal text-gray-400 ml-1">{unit}</span>}
         </p>
         <p className={`text-xs font-medium ${c.text} truncate`}>{label}</p>
-        {meta && <p className="text-[10px] text-gray-400 mt-0.5">{meta}</p>}
+        {meta && <p className="text-[10px] text-gray-500 mt-0.5">{meta}</p>}
       </div>
     </div>
   );
