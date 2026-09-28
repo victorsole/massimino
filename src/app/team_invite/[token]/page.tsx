@@ -73,10 +73,10 @@ export default async function TeamInvitePage({ params }: PageProps) {
           <p className="mt-2">
             Questions? Contact us at{' '}
             <a
-              href="mailto:support@massimino.app"
+              href="mailto:hello@beresol.eu"
               className="text-brand-primary hover:underline"
             >
-              support@massimino.app
+              hello@beresol.eu
             </a>
           </p>
         </div>

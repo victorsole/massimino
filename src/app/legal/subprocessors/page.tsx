@@ -63,7 +63,7 @@ export default function SubprocessorsPage() {
 
           <p className="text-[15px]">
             Questions about this list? Contact us at
-            {' '}<a href="mailto:privacy@massimino.fitness" className="text-blue-600 hover:underline">privacy@massimino.fitness</a>.
+            {' '}<a href="mailto:hello@beresol.eu" className="text-blue-600 hover:underline">hello@beresol.eu</a>.
           </p>
         </CardContent>
       </Card>
