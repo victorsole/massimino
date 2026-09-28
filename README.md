@@ -162,7 +162,7 @@ massimino/
 ├── public/
 │   └── images/programs/       # Program hero images
 ├── docs/                      # API and deployment guides
-├── .env.example               # Env variable template
+├── .env                       # All environment variables (gitignored, never commit)
 ├── tailwind.config.js         # Tailwind setup
 ├── next.config.js             # Next.js config
 └── README.md
