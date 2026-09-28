@@ -109,7 +109,7 @@ export default function CookiesPage() {
             <h2 className="text-xl font-semibold mt-2">Contact</h2>
             <p className="mt-2 text-[15px]">
               Questions about this Cookie Policy? Contact us at
-              {' '}<a href="mailto:hello@beresol.eu" className="text-blue-600 hover:underline">privacy@massimino.fitness</a>.
+              {' '}<a href="mailto:hello@beresol.eu" className="text-blue-600 hover:underline">hello@beresol.eu</a>.
             </p>
           </section>
         </CardContent>

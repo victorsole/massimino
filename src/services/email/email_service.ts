@@ -17,7 +17,7 @@ const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 const EMAIL_CONFIG = {
   // Use Resend's dev sender if no verified domain configured
   from: process.env.EMAIL_FROM || 'Massimino <onboarding@resend.dev>',
-  replyTo: process.env.EMAIL_REPLY_TO || 'support@massimino.app',
+  replyTo: process.env.EMAIL_REPLY_TO || 'hello@beresol.eu',
 } as const;
 
 /**

@@ -50,8 +50,8 @@ Auth-gated (NextAuth session needed):
 ## Environment
 
 Keys in `.env` (read with `grep '^KEY=' .env | cut -d= -f2-`, never `source` it):
-- `PEXELS_API_KEY` (b-roll, free). The app already reads it in `src/app/api/pexels/route.ts`; if it is missing locally (it may only live in Vercel), ask Victor to add it.
-- Optional, credit-costing: `IDEOGRAM_API_KEY` (stills), `MUAPI_API_KEY` (Seedance video). Not configured in Massimino as of 2026-09; ask before adding.
+- `PEXELS_API_KEY` (b-roll, free). Also read by the app in `src/app/api/pexels/route.ts`.
+- Optional, credit-costing: `IDEOGRAM_API_KEY` (stills), `MUAPI_API_KEY` (Seedance video). Both are set (shared with Beresol); ask Victor before spending credits.
 
 Tools: **ffmpeg** 8.x and **Playwright** are installed system-wide; `moviepy`, `kokoro`, `faster-whisper` are not. Install them on first run into a venv at `scripts/videos/.venv` (per the standard's install block). Working API clients can be copied, not symlinked, from `/Users/victorsole/Developer/beresol-eu-advocacy-hub/scripts/marketing-ai/` (`pexels_api.py`, `ideogram_api.py`, `seedance-api/`). Put reusable scripts where the standard says: `scripts/videos/` (`render_brand_frames.py`, `record_<feature>.py`, `assemble.py`, ...). None exist yet; wire minimal versions on the first run and keep them so later runs are turnkey.
 

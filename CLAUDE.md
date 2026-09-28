@@ -69,7 +69,7 @@ Massimino **must be fully responsive** across all screen sizes: smartphone (sm: 
 1. **Navigation Bug**: "Back to Programs" sometimes returns to "Today" tab instead of "Programs" tab
 2. **Exercise Media**: Several programs lack exercise media/demonstrations. ExerciseDB CDN (`static.exercisedb.dev`) is unreliable — prefer self-hosted images in `public/`.
 3. **Missing Exercises**: Some programs reference exercises not in the database
-4. **Build error on /api/ads**: `npm run build` fails with `ENOENT` for `/api/ads` page data collection — pre-existing, unrelated to most feature work.
+4. **Build error on /api/ads** (resolved as of 2026-09-28): `npm run build` used to fail with `ENOENT` for `/api/ads` page data collection. It now passes; if it comes back, it is not caused by unrelated feature work.
 
 ### API Endpoints
 

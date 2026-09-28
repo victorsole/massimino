@@ -160,7 +160,7 @@ Other logos in `public/images/` (`europe-active-logo.png`, `vitality_logo.png`, 
 
 ## Step 3: Pexels stock photos (only if needed)
 
-If the design needs an evocative image and no local asset fits (the programme covers and backgrounds above come first), use the Pexels API. No Pexels key is stored in this repo's `.env`; use the key Victor keeps in the Beresol repo or ask him for it, and never write it into this repo.
+If the design needs an evocative image and no local asset fits (the programme covers and backgrounds above come first), use the Pexels API. The key is `PEXELS_API_KEY` in this repo's gitignored `.env` (read it with `PEXELS_KEY=$(grep '^PEXELS_API_KEY=' .env | cut -d= -f2-)`, never `source` the file), and never write it into a tracked file.
 
 ```bash
 curl -s -H "Authorization: $PEXELS_KEY" "https://api.pexels.com/v1/search?query=woman+deadlift+gym&per_page=3" \

@@ -35,4 +35,4 @@ Next.js (App Router), TypeScript, Tailwind CSS, Supabase, Prisma
 ## Contact
 
 - Website: https://massimino.fitness
-- Support: support@massimino.app
+- Support: hello@beresol.eu
