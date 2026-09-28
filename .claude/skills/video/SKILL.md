@@ -49,7 +49,7 @@ Auth-gated (NextAuth session needed):
 
 ## Environment
 
-Keys in `.env.local` (read with `grep '^KEY=' .env.local | cut -d= -f2-`, never `source` it):
+Keys in `.env` (read with `grep '^KEY=' .env | cut -d= -f2-`, never `source` it):
 - `PEXELS_API_KEY` (b-roll, free). The app already reads it in `src/app/api/pexels/route.ts`; if it is missing locally (it may only live in Vercel), ask Victor to add it.
 - Optional, credit-costing: `IDEOGRAM_API_KEY` (stills), `MUAPI_API_KEY` (Seedance video). Not configured in Massimino as of 2026-09; ask before adding.
 

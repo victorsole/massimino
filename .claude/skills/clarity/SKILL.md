@@ -54,7 +54,7 @@ Clarity is not "another traffic counter". It is the behavioural evidence layer u
 In `clarity.microsoft.com`, create a project for `massimino.fitness`. Decide whether `bio.massimino.fitness` (used as the canonical host for `/bio/[username]` pages) is covered by the same project or not.
 
 - Project ID: `TODO_CLARITY_PROJECT_ID` (not created yet as far as the repo shows). It is public (it ships in the page), so it can live in code or in `NEXT_PUBLIC_CLARITY_PROJECT_ID` on Vercel.
-- API token (JWT, used for Data Export and MCP): secret. Keep it in `.env.local` / shell env and never commit it. `TODO: create token in Clarity Settings > Data Export`.
+- API token (JWT, used for Data Export and MCP): secret. Keep it in `.env` / shell env and never commit it. `TODO: create token in Clarity Settings > Data Export`.
 
 ### 2. How the existing consent works (read this before writing the loader)
 `src/components/ui/cookie_consent.tsx`:

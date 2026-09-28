@@ -15,8 +15,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
 
-// Load environment variables from .env.local
-dotenv.config({ path: path.join(process.cwd(), '.env.local') });
+// Load environment variables from .env
+dotenv.config({ path: path.join(process.cwd(), '.env') });
 
 import { PrismaClient } from '@prisma/client';
 

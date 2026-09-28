@@ -1709,7 +1709,7 @@ massimino/
 │   └── images/
 │       └── massimino-logo.png        # Brand assets
 │
-└── .env.local                        # Environment variables
+└── .env                              # Environment variables
 ```
 
 ---
@@ -1732,7 +1732,7 @@ npm install html-to-image sharp
 ### Environment Variables
 
 ```env
-# .env.local
+# .env
 
 # MapTiler (optional, for styled tiles)
 NEXT_PUBLIC_MAPTILER_KEY=your_key_here
