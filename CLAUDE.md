@@ -60,7 +60,7 @@ Massimino **must be fully responsive** across all screen sizes: smartphone (sm: 
 
 ### Database
 
-- Supabase is the primary database
+- Supabase Postgres is the primary database, accessed through Prisma (`prisma/schema.prisma`, client from `@/core/database`)
 - Exercise data is in JSON files under `public/databases/`
 - User data, workout logs, and programs are in Supabase
 
@@ -74,7 +74,7 @@ Massimino **must be fully responsive** across all screen sizes: smartphone (sm: 
 ### API Endpoints
 
 - All API routes are in `src/app/api/`
-- Authentication via Supabase Auth
+- Authentication via NextAuth (not Supabase Auth): `getServerSession(authOptions)` with `authOptions` from `@/core`. New routes should use `withAuth` / `ok` / `fail` from `@/lib/api` (see `docs/audit/runbooks/04-auth-middleware-and-rate-limits.md`)
 - Exercise data served from local JSON and Supabase
 
 ### Testing
@@ -117,6 +117,11 @@ Massimino **must be fully responsive** across all screen sizes: smartphone (sm: 
 - **What went wrong:** Media records belonged to the system account (`67f5fc78-...`) not Victor's account (`9462f027-...`). The profile preview passed the session user ID to the API, so it queried the wrong user's media.
 - **Fix:** Reassigned media records to Victor's actual user ID. Always verify `userId` matches the logged-in user when debugging missing data.
 - **Key user IDs:** System admin = `67f5fc78-9c33-4e0e-8eb5-7979e62d1f53`, Victor = `9462f027-9916-41db-8d39-294c7858b516`.
+
+### 2026-09-28: Bio share links pointed at a dead host
+- **What went wrong:** Bio canonicals, share links and Massitree URLs used `https://bio.massimino.fitness/{username}`, but that subdomain resolves to IONOS and serves a blank page. Every shared bio link was dead.
+- **Fix:** All bio URLs now go through `bioProfileUrl()` in `src/lib/bio-url.ts` (default `https://massimino.fitness/bio/{username}`). Only set `NEXT_PUBLIC_BIO_BASE_URL=https://bio.massimino.fitness` after the subdomain's DNS points at Vercel and the domain is added to the project.
+- **Rule:** Never hardcode a public URL for a host you have not curled. Third-party scripts go in `src/components/layout/consent_gated_scripts.tsx`, never straight into `src/app/layout.tsx`.
 
 ---
 
