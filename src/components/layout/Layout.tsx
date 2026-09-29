@@ -23,6 +23,7 @@ const publicRoutes = [
   '/terms',
   '/safety',
   '/cookies',
+  '/contact',
   '/legal',
   '/unauthorized',
   '/accept-invitation',

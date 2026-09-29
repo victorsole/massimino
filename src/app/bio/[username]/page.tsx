@@ -202,7 +202,7 @@ export default async function BioPage({
           <p className="mt-1">
             Want your own fitness profile?{' '}
             <a
-              href="https://massimino.fitness/register"
+              href="/signup"
               className="text-purple-600 hover:text-purple-800 font-medium"
             >
               Join now
