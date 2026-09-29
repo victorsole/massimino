@@ -85,9 +85,13 @@ export function BodyMetricsTab() {
       notify(body?.error?.message || 'Could not update the entry.', 'error');
       return;
     }
+    // Show the new value straight away; the full reload follows in the background
+    const apply = (list: Metric[]) => list.map((m) => (m.id === id ? { ...m, value } : m));
+    setWeights(apply);
+    setBodyFats(apply);
     setEditingId(null);
     notify('Entry updated.', 'success');
-    await load();
+    load();
   };
 
   const remove = async (id: string, label: string) => {
@@ -97,8 +101,11 @@ export function BodyMetricsTab() {
       notify('Could not delete the entry.', 'error');
       return;
     }
+    const drop = (list: Metric[]) => list.filter((m) => m.id !== id);
+    setWeights(drop);
+    setBodyFats(drop);
     notify('Entry deleted.', 'success');
-    await load();
+    load();
   };
 
   return (
