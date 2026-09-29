@@ -2,7 +2,13 @@ import { prisma } from '@/core/database';
 import { nanoid } from 'nanoid';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Created lazily so builds and environments without RESEND_API_KEY don't crash on import
+function getResend(): Resend {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY is not configured');
+  }
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 export interface AthleteInvitation {
   id: string;
@@ -201,7 +207,7 @@ export async function inviteAthlete(
 
   // Send email via Resend
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: 'Massimino <noreply@massimino.fitness>',
       to: email,
       subject: `${trainer?.name || 'Your coach'} invited you to Massimino`,
@@ -634,7 +640,7 @@ export async function resendInvitation(
 
   // Resend email
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: 'Massimino <noreply@massimino.fitness>',
       to: invitation.athleteEmail,
       subject: `${trainer?.name || 'Your coach'} invited you to Massimino`,
