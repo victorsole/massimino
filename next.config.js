@@ -58,6 +58,14 @@ const nextConfig = {
               : { key: 'Content-Security-Policy-Report-Only', value: cspValue },
           ],
         },
+        // Only the canonical host may be indexed. Every other host that serves this app
+        // (massimino.vercel.app, preview deployments, a hosting provider's temporary URL)
+        // tells search engines not to index it.
+        {
+          source: '/:path*',
+          missing: [{ type: 'host', value: 'massimino.fitness' }],
+          headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
+        },
       ];
     },
   
@@ -94,6 +102,13 @@ const nextConfig = {
     // Redirects for safety
     async redirects() {
       const redirects = [
+        // One canonical host: www redirects to the apex
+        {
+          source: '/:path*',
+          has: [{ type: 'host', value: 'www.massimino.fitness' }],
+          destination: 'https://massimino.fitness/:path*',
+          permanent: true,
+        },
         // Redirect HTTP to HTTPS in production
         ...(process.env.NODE_ENV === 'production'
           ? [
