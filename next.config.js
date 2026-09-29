@@ -129,7 +129,7 @@ const nextConfig = {
         // Redirect missing /bio routes to /login
         {
           source: '/bio/signup',
-          destination: '/login',
+          destination: '/signup',
           permanent: false,
         },
         {
@@ -137,13 +137,14 @@ const nextConfig = {
           destination: '/login',
           permanent: false,
         },
-        // Redirect bare usernames to /bio/:username, excluding known top-level routes
+        // Old registration URL (e.g. links in bio pages and emails)
         {
-          source:
-            '/:username((?!api|admin|profile|dashboard|messages|teams|exercises|workout-log|terms|privacy|safety|community|massiminos|login|signup|register|unauthorized|partnerships|assessments|my-athletes|bio|cookies|legal|trainer|athlete|static|uploads|public|images|_next|favicon\\.ico|settings|fitness-intelligence|massichat|accept-invitation|team_invite|.*\\..*).+)',
-          destination: '/bio/:username',
-          permanent: false,
+          source: '/register',
+          destination: '/signup',
+          permanent: true,
         },
+        // Bare usernames (massimino.fitness/{username}) are handled by src/app/[username]/page.tsx,
+        // which only redirects when the username exists and 404s otherwise.
       ];
       return redirects;
     },
