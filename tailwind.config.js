@@ -234,9 +234,10 @@ module.exports = {
         },
         // Typography for safety messaging
         fontFamily: {
-          sans: ['Nunito Sans', 'Lato', 'system-ui', 'sans-serif'],
-          display: ['Nunito Sans', 'sans-serif'],
-          body: ['Lato', 'sans-serif'],
+          // CSS variables are set by next/font in src/app/layout.tsx
+          sans: ['var(--font-nunito-sans)', 'var(--font-lato)', 'system-ui', 'sans-serif'],
+          display: ['var(--font-nunito-sans)', 'sans-serif'],
+          body: ['var(--font-lato)', 'sans-serif'],
           mono: ['JetBrains Mono', 'monospace'],
         },
         // Spacing for safety elements

@@ -178,17 +178,17 @@
   }
 
   .landing-eyebrow {
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: var(--font-nunito-sans), sans-serif;
     @apply text-sm font-medium uppercase tracking-[0.25em];
   }
 
   .landing-title {
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: var(--font-nunito-sans), sans-serif;
     @apply font-bold uppercase tracking-tight leading-none;
   }
 
   .landing-body {
-    font-family: 'Lato', sans-serif;
+    font-family: var(--font-lato), sans-serif;
     @apply leading-relaxed;
   }
 }
@@ -571,28 +571,28 @@
 }
 
 .massimino-tour-popover .driver-popover-title {
-  font-family: 'Nunito Sans', sans-serif !important;
+  font-family: var(--font-nunito-sans), sans-serif !important;
   color: #2b5069 !important;
   font-size: 1rem !important;
   font-weight: 700 !important;
 }
 
 .massimino-tour-popover .driver-popover-description {
-  font-family: 'Lato', sans-serif !important;
+  font-family: var(--font-lato), sans-serif !important;
   color: #4b5563 !important;
   font-size: 0.875rem !important;
   line-height: 1.5 !important;
 }
 
 .massimino-tour-popover .driver-popover-progress-text {
-  font-family: 'Lato', sans-serif !important;
+  font-family: var(--font-lato), sans-serif !important;
   color: #9ca3af !important;
   font-size: 0.75rem !important;
 }
 
 .massimino-tour-popover .driver-popover-next-btn,
 .massimino-tour-popover .driver-popover-prev-btn {
-  font-family: 'Nunito Sans', sans-serif !important;
+  font-family: var(--font-nunito-sans), sans-serif !important;
   border-radius: 8px !important;
   font-size: 0.8125rem !important;
   font-weight: 600 !important;

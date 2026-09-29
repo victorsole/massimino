@@ -4,7 +4,28 @@ import './globals.css'
 import Layout from '@/components/layout/Layout'
 import SessionProvider from '@/components/providers/SessionProvider'
 import Script from 'next/script'
+import { Nunito_Sans, Lato } from 'next/font/google'
 import { ConsentGatedScripts } from '@/components/layout/consent_gated_scripts'
+
+// Brand fonts are self-hosted by next/font (served from /_next/static), so no request
+// goes to Google and the CSP needs no third-party font or style origins.
+const nunitoSans = Nunito_Sans({
+  subsets: ['latin', 'latin-ext'],
+  style: ['normal', 'italic'],
+  axes: ['opsz', 'wdth', 'YTLC'],
+  variable: '--font-nunito-sans',
+  display: 'swap',
+  // next/font has no metric overrides for Nunito Sans, so skip the generated fallback face
+  adjustFontFallback: false,
+})
+
+const lato = Lato({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['100', '300', '400', '700', '900'],
+  style: ['normal', 'italic'],
+  variable: '--font-lato',
+  display: 'swap',
+})
 
 export const metadata = {
   metadataBase: new URL('https://massimino.fitness'),
@@ -41,11 +62,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${nunitoSans.variable} ${lato.variable}`}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap" rel="stylesheet" />
         <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
       </head>
       <body className="antialiased bg-brand-secondary font-sans">
