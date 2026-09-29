@@ -310,7 +310,7 @@ function generateFallbackSuggestions(request: WorkoutSuggestionRequest): Workout
 
 // Parse training knowledge base from converted markdown files
 export function parse_training_knowledge(): TrainingPrinciple[] {
-  const cpt_dir = path.join(process.cwd(), 'public/databases/NASM_CPT/converted');
+  const cpt_dir = path.join(process.cwd(), 'data/knowledge/NASM_CPT/converted');
   const principles: TrainingPrinciple[] = [];
 
   // Parse OPT Model (section_07)
@@ -347,7 +347,7 @@ export function parse_training_knowledge(): TrainingPrinciple[] {
 
 // Parse nutrition knowledge base from converted markdown files
 export function parse_nutrition_knowledge(): NutritionGuidelines {
-  const cnc_dir = path.join(process.cwd(), 'public/databases/NASM_CNC/converted');
+  const cnc_dir = path.join(process.cwd(), 'data/knowledge/NASM_CNC/converted');
 
   return {
     protein: read_section_file(cnc_dir, 'section_02_protein.md') || '',

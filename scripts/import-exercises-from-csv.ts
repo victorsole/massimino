@@ -104,8 +104,8 @@ function determineCategory(row: CSVExercise): string {
 async function importExercises() {
   try {
     console.log('Reading CSV files...');
-    const csvPath1 = path.join(process.cwd(), 'public', 'databases', 'exercises.csv');
-    const csvPath2 = path.join(process.cwd(), 'public', 'databases', 'megaGymDataset.csv');
+    const csvPath1 = path.join(process.cwd(), 'data', 'private', 'exercises.csv');
+    const csvPath2 = path.join(process.cwd(), 'data', 'private', 'megaGymDataset.csv');
     const csvContent1 = fs.readFileSync(csvPath1, 'utf-8');
     const csvContent2 = fs.existsSync(csvPath2) ? fs.readFileSync(csvPath2, 'utf-8') : '';
 

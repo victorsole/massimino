@@ -61,7 +61,9 @@ Massimino **must be fully responsive** across all screen sizes: smartphone (sm: 
 ### Database
 
 - Supabase Postgres is the primary database, accessed through Prisma (`prisma/schema.prisma`, client from `@/core/database`)
-- Exercise data is in JSON files under `public/databases/`
+- Exercise data lives in Supabase; programme templates are JSON in `src/templates/`
+- Server-only knowledge (converted NASM CPT/CNC notes, Massimino training notes) is in `data/knowledge/`, read at runtime by Massichat and workout suggestions. Never put it in `public/`
+- Licensed source documents, partner kits and personal files go in `data/private/` (gitignored, local only). Nothing private ever goes in `public/`, which is served to anyone
 - User data, workout logs, and programs are in Supabase
 
 ### Known Issues to Avoid
@@ -164,7 +166,7 @@ Massimino **must be fully responsive** across all screen sizes: smartphone (sm: 
 │  │  ├── /profile   - ProfileHeader, ProfilePreviewDialog    │
 │  │  └── /layout    - UserPublicProfile (public profile view)│
 │  /lib              - Utilities, Supabase client, helpers    │
-│  /public/databases - Exercise JSON databases (NASM, etc.)   │
+│  /data/knowledge   - Server-only NASM + training notes      │
 │  /public/victor    - Victor's training photos               │
 └─────────────────────────────────────────────────────────────┘
 ```

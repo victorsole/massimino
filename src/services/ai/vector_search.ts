@@ -77,10 +77,9 @@ export async function searchKnowledgeBase(query: string, limit = 5): Promise<{ d
   return deduped.slice(0, limit)
 }
 
+// Server-only knowledge files (never served from public/). Walked recursively.
 const LOCAL_KB_ROOTS = [
-  'public/databases/NASM_CPT/converted',
-  'public/databases/NASM_CNC/converted',
-  'public/databases',
+  'data/knowledge',
 ]
 
 async function searchLocalDocs(query: string, limit: number): Promise<{ documentName: string; content: string; similarity: number }[]> {

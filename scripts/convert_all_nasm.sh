@@ -54,8 +54,8 @@ echo -e "${GREEN}========================================${NC}"
 echo ""
 
 # Count converted files
-cpt_count=$(find public/databases/NASM_CPT/converted -name "*.md" 2>/dev/null | wc -l)
-cnc_count=$(find public/databases/NASM_CNC/converted -name "*.md" 2>/dev/null | wc -l)
+cpt_count=$(find data/knowledge/NASM_CPT/converted -name "*.md" 2>/dev/null | wc -l)
+cnc_count=$(find data/knowledge/NASM_CNC/converted -name "*.md" 2>/dev/null | wc -l)
 total_count=$((cpt_count + cnc_count))
 
 echo -e "📊 Conversion Summary:"
@@ -76,7 +76,7 @@ echo "   npm test -- nasm_nutrition_parsing.test.ts"
 echo "5. Generate embeddings for Massichat:"
 echo "   - Run embedding scripts (see IMPLEMENTATION_PLAN.md Part 3.2)"
 echo "6. Commit to git:"
-echo "   git add public/databases/"
+echo "   git add data/knowledge/"
 echo "   git commit -m \"Add NASM CPT/CNC knowledge base\""
 echo ""
 echo -e "${GREEN}✨ Ready to power Massichat with NASM knowledge!${NC}"
