@@ -1,4 +1,5 @@
 'use client';
+import { notify } from '@/lib/notify';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -109,7 +110,7 @@ export default function JoinProgramPage({ params }: Props) {
 
         if (joinRes.ok) {
           const data = await joinRes.json();
-          alert(data.message || 'Successfully joined program!');
+          notify(data.message || 'Successfully joined program!');
           router.push('/workout-log?tab=today');
         } else {
           const errorData = await joinRes.json();

@@ -1,5 +1,6 @@
 // src/components/training/session-view/add-goal-modal.tsx
 'use client';
+import { notify } from '@/lib/notify';
 
 import { useState } from 'react';
 import {
@@ -38,7 +39,7 @@ export function AddGoalModal({
 
   const handleSubmit = async () => {
     if (!description.trim()) {
-      alert('Please enter a goal description');
+      notify('Please enter a goal description');
       return;
     }
 
@@ -60,11 +61,11 @@ export function AddGoalModal({
         onGoalAdded();
         handleClose();
       } else {
-        alert('Failed to create goal. Please try again.');
+        notify('Failed to create goal. Please try again.');
       }
     } catch (error) {
       console.error('Error creating goal:', error);
-      alert('Error creating goal. Please try again.');
+      notify('Error creating goal. Please try again.');
     } finally {
       setSubmitting(false);
     }

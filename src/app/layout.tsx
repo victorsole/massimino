@@ -6,6 +6,7 @@ import SessionProvider from '@/components/providers/SessionProvider'
 import Script from 'next/script'
 import { Nunito_Sans, Lato } from 'next/font/google'
 import { ConsentGatedScripts } from '@/components/layout/consent_gated_scripts'
+import { NotifyHost } from '@/components/ui/notify_host'
 
 // Brand fonts are self-hosted by next/font (served from /_next/static), so no request
 // goes to Google and the CSP needs no third-party font or style origins.
@@ -86,6 +87,7 @@ export default function RootLayout({
             `,
           }}
         />
+        <NotifyHost />
         <ConsentGatedScripts />
       </body>
     </html>

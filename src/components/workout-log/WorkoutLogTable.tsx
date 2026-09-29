@@ -5,6 +5,7 @@
  */
 
 'use client';
+import { notify, confirmAction } from '@/lib/notify';
 
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
@@ -142,11 +143,11 @@ export function WorkoutLogTable({
         onRefresh();
       } else {
         const error = await response.json();
-        alert(`Error updating entry: ${error.error}`);
+        notify(`Error updating entry: ${error.error}`);
       }
     } catch (error) {
       console.error('Error updating entry:', error);
-      alert('Error updating entry');
+      notify('Error updating entry');
     }
   };
 
@@ -156,7 +157,7 @@ export function WorkoutLogTable({
   };
 
   const handleDelete = async (entryId: string) => {
-    if (!confirm('Are you sure you want to delete this entry?')) return;
+    if (!await confirmAction('Are you sure you want to delete this entry?')) return;
 
     try {
       const response = await fetch(`/api/workout/entries/${entryId}`, {
@@ -167,11 +168,11 @@ export function WorkoutLogTable({
         onRefresh();
       } else {
         const error = await response.json();
-        alert(`Error deleting entry: ${error.error}`);
+        notify(`Error deleting entry: ${error.error}`);
       }
     } catch (error) {
       console.error('Error deleting entry:', error);
-      alert('Error deleting entry');
+      notify('Error deleting entry');
     }
   };
 
@@ -187,11 +188,11 @@ export function WorkoutLogTable({
         onRefresh();
       } else {
         const error = await response.json();
-        alert(`Error adding feedback: ${error.error}`);
+        notify(`Error adding feedback: ${error.error}`);
       }
     } catch (error) {
       console.error('Error adding feedback:', error);
-      alert('Error adding feedback');
+      notify('Error adding feedback');
     }
   };
 
@@ -851,7 +852,7 @@ export function SessionHistoryTable() {
   }
 
   async function handle_delete_session(session_id: string) {
-    if (!confirm('Are you sure you want to delete this workout session?')) {
+    if (!await confirmAction('Are you sure you want to delete this workout session?')) {
       return;
     }
 
@@ -869,14 +870,14 @@ export function SessionHistoryTable() {
         });
         setTimeout(() => {
           load_sessions();
-          alert('Session deleted successfully');
+          notify('Session deleted successfully');
         }, 300);
       } else {
-        alert('We could not delete this session. Please try again.');
+        notify('We could not delete this session. Please try again.');
       }
     } catch (error) {
       console.error('Failed to delete session:', error);
-      alert('Failed to delete session');
+      notify('Failed to delete session');
     }
   }
 
@@ -1450,18 +1451,18 @@ export function CommentsPanel({ commentable_type, commentable_id }: CommentsPane
       if (response.ok) {
         set_new_comment('');
         load_comments();
-        alert('Comment added');
+        notify('Comment added');
       }
     } catch (error) {
       console.error('Failed to add comment:', error);
-      alert('Failed to add comment');
+      notify('Failed to add comment');
     } finally {
       set_submitting(false);
     }
   }
 
   async function handle_delete_comment(comment_id: string) {
-    if (!confirm('Delete this comment?')) return;
+    if (!await confirmAction('Delete this comment?')) return;
 
     try {
       const response = await fetch(`/api/workout/comments?id=${comment_id}`, {
@@ -1470,11 +1471,11 @@ export function CommentsPanel({ commentable_type, commentable_id }: CommentsPane
 
       if (response.ok) {
         load_comments();
-        alert('Comment deleted');
+        notify('Comment deleted');
       }
     } catch (error) {
       console.error('Failed to delete comment:', error);
-      alert('Failed to delete comment');
+      notify('Failed to delete comment');
     }
   }
 

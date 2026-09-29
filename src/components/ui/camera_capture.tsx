@@ -1,4 +1,5 @@
 'use client'
+import { notify } from '@/lib/notify';
 
 import { useState, useRef, useCallback } from 'react'
 import { Camera, Video, Upload, X, Check, Share2 } from 'lucide-react'
@@ -48,7 +49,7 @@ export default function CameraCapture({ onCapture, userId, workoutData }: Camera
       }
     } catch (error) {
       console.error('Error starting camera:', error)
-      alert('Unable to access camera. Please check permissions.')
+      notify('Unable to access camera. Please check permissions.')
     }
   }, [mediaType])
 
@@ -118,7 +119,7 @@ export default function CameraCapture({ onCapture, userId, workoutData }: Camera
       setIsRecording(true)
     } catch (error) {
       console.error('Error starting video recording:', error)
-      alert('Unable to record video. Your browser may not support this feature.')
+      notify('Unable to record video. Your browser may not support this feature.')
     }
   }, [stopCamera])
 
@@ -137,7 +138,7 @@ export default function CameraCapture({ onCapture, userId, workoutData }: Camera
     const isImage = file.type.startsWith('image/')
 
     if (!isVideo && !isImage) {
-      alert('Please select an image or video file.')
+      notify('Please select an image or video file.')
       return
     }
 

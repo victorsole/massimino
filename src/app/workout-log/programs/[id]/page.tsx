@@ -1,4 +1,5 @@
 'use client';
+import { notify } from '@/lib/notify';
 
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
@@ -710,7 +711,7 @@ export default function ProgramDetailPage() {
 
   const handleSaveForLater = () => {
     // TODO: Implement save for later functionality
-    alert('Save for later coming soon!');
+    notify('Save for later coming soon!');
   };
 
   if (loading) {

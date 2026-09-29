@@ -1,5 +1,6 @@
 // src/components/massichat/chat_interface.tsx
 'use client'
+import { notify, confirmAction } from '@/lib/notify';
 
 import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
@@ -220,7 +221,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
           if (lastAssistant) messageId = lastAssistant.id
         }
       }
-      if (!messageId) return alert('Unable to identify message for feedback')
+      if (!messageId) return notify('Unable to identify message for feedback')
       const payload = {
         type: 'AI',
         related_type: 'ai_chat_message',
@@ -232,7 +233,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
       const res = await fetch('/api/feedback', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
-        alert(data?.error || 'Failed to send feedback')
+        notify(data?.error || 'Failed to send feedback')
       }
     } catch {}
   }
@@ -290,10 +291,10 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
       const resp = await fetch('/api/workout/templates', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
       const out = await resp.json()
       if (!resp.ok) throw new Error(out?.error || 'Failed to save template')
-      alert('Template saved successfully')
+      notify('Template saved successfully')
       setShowTemplateModal(false)
     } catch (e: any) {
-      alert(e?.message || 'Failed to save template')
+      notify(e?.message || 'Failed to save template')
     } finally {
       setTemplateSaving(false)
     }
@@ -313,7 +314,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
       if (!res.ok) throw new Error(data.error || 'Failed to rename')
       setSessions((prev) => prev.map((s) => (s.id === sessionId ? { ...s, title: nextTitle } : s)))
     } catch (e: any) {
-      alert(e?.message || 'Rename failed')
+      notify(e?.message || 'Rename failed')
     } finally {
       setRenaming(null)
     }
@@ -321,7 +322,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
 
   async function deleteSessionById(id: string) {
     if (!id) return
-    if (!window.confirm('Delete this session? This cannot be undone.')) return
+    if (!await confirmAction('Delete this session? This cannot be undone.')) return
     try {
       const res = await fetch(`/api/massichat?sessionId=${encodeURIComponent(id)}`, { method: 'DELETE' })
       const data = await res.json().catch(() => ({}))
@@ -337,7 +338,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
         setEditMode(false)
       }
     } catch (e: any) {
-      alert(e?.message || 'Delete failed')
+      notify(e?.message || 'Delete failed')
     }
   }
 

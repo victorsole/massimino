@@ -1,5 +1,6 @@
 // src/components/layout/Footer.tsx
 "use client";
+import { notify } from '@/lib/notify';
 
 import Link from 'next/link';
 import { useState } from 'react';
@@ -55,7 +56,7 @@ export default function Footer() {
       setNps('');
       setType('GENERAL');
     } catch (e: any) {
-      alert(e?.message || 'Failed to submit feedback');
+      notify(e?.message || 'Failed to submit feedback');
     } finally {
       setSubmitting(false);
     }

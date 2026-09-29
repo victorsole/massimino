@@ -68,6 +68,10 @@ Massimino **must be fully responsive** across all screen sizes: smartphone (sm: 
 3. **Missing Exercises**: Some programs reference exercises not in the database
 4. **Build error on /api/ads** (resolved as of 2026-09-28): `npm run build` used to fail with `ENOENT` for `/api/ads` page data collection. It now passes; if it comes back, it is not caused by unrelated feature work.
 
+### UI feedback
+
+- Never use `window.alert()` or `window.confirm()`: they block the page (and browser automation). Use `notify(message)` and `await confirmAction(message)` from `@/lib/notify`, rendered by `<NotifyHost />` in the root layout.
+
 ### API Endpoints
 
 - All API routes are in `src/app/api/`

@@ -1,4 +1,5 @@
 'use client';
+import { notify, confirmAction } from '@/lib/notify';
 
 import { useState, useEffect } from 'react';
 import { Users, Plus, X, Trophy } from 'lucide-react';
@@ -80,7 +81,7 @@ export function TeamAssignment({ athletes }: TeamAssignmentProps) {
 
       if (!response.ok) {
         const error = await response.json();
-        alert(error.error || 'Failed to add athlete to team');
+        notify(error.error || 'Failed to add athlete to team');
         return;
       }
 
@@ -89,12 +90,12 @@ export function TeamAssignment({ athletes }: TeamAssignmentProps) {
       setSelectedTeam(null);
     } catch (error) {
       console.error('Error adding athlete to team:', error);
-      alert('Failed to add athlete to team');
+      notify('Failed to add athlete to team');
     }
   };
 
   const handleRemoveFromTeam = async (teamId: string, athleteId: string) => {
-    if (!confirm('Remove this athlete from the team?')) return;
+    if (!await confirmAction('Remove this athlete from the team?')) return;
 
     try {
       const response = await fetch(`/api/coaching/teams/assign?teamId=${teamId}&athleteId=${athleteId}`, {
@@ -103,14 +104,14 @@ export function TeamAssignment({ athletes }: TeamAssignmentProps) {
 
       if (!response.ok) {
         const error = await response.json();
-        alert(error.error || 'Failed to remove athlete from team');
+        notify(error.error || 'Failed to remove athlete from team');
         return;
       }
 
       await fetchTeams();
     } catch (error) {
       console.error('Error removing athlete from team:', error);
-      alert('Failed to remove athlete from team');
+      notify('Failed to remove athlete from team');
     }
   };
 

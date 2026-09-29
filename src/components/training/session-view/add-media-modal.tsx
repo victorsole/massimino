@@ -1,5 +1,6 @@
 // src/components/training/session-view/add-media-modal.tsx
 'use client';
+import { notify } from '@/lib/notify';
 
 import { useState } from 'react';
 import {
@@ -68,11 +69,11 @@ export function AddMediaModal({
         handleClose();
       } else {
         console.error('Failed to upload media:', data.error);
-        alert(data.error || 'Failed to upload media. Please try again.');
+        notify(data.error || 'Failed to upload media. Please try again.');
       }
     } catch (error) {
       console.error('Error uploading media:', error);
-      alert('Error uploading media. Please try again.');
+      notify('Error uploading media. Please try again.');
     } finally {
       setUploading(false);
     }
@@ -80,7 +81,7 @@ export function AddMediaModal({
 
   const handleLinkMedia = async () => {
     if (!mediaUrl.trim()) {
-      alert('Please enter a valid URL');
+      notify('Please enter a valid URL');
       return;
     }
 
@@ -102,11 +103,11 @@ export function AddMediaModal({
         handleClose();
       } else {
         console.error('Failed to link media');
-        alert('Failed to link media. Please try again.');
+        notify('Failed to link media. Please try again.');
       }
     } catch (error) {
       console.error('Error linking media:', error);
-      alert('Error linking media. Please try again.');
+      notify('Error linking media. Please try again.');
     } finally {
       setUploading(false);
     }

@@ -1,4 +1,5 @@
 'use client';
+import { notify } from '@/lib/notify';
 
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -76,7 +77,7 @@ export function SessionCard({ session, onContinue, onStatusChange, onRefresh }: 
       onRefresh?.();
     } catch (error) {
       console.error('Failed to update status:', error);
-      alert('Failed to update session status');
+      notify('Failed to update session status');
     } finally {
       setLoading(false);
     }

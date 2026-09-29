@@ -1,4 +1,5 @@
 'use client';
+import { notify } from '@/lib/notify';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -83,11 +84,11 @@ export function OpenSessionsTab() {
         // Navigate to workout log
         router.push('/workout-log');
       } else {
-        alert('Failed to set session as active');
+        notify('Failed to set session as active');
       }
     } catch (error) {
       console.error('Failed to continue session:', error);
-      alert('Failed to continue session');
+      notify('Failed to continue session');
     }
   };
 
@@ -112,7 +113,7 @@ export function OpenSessionsTab() {
 
   const handleCreateSession = () => {
     // TODO: Open modal or navigate to session creation
-    alert('Create new session - to be implemented');
+    notify('Create new session - to be implemented');
   };
 
   if (loading) {

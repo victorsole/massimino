@@ -1,4 +1,5 @@
 'use client';
+import { notify } from '@/lib/notify';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -46,7 +47,7 @@ export function CreateSessionModal({
 
   const handleCreateSession = async () => {
     if (!selectedClientId) {
-      alert('Please select an athlete');
+      notify('Please select an athlete');
       return;
     }
 
@@ -86,13 +87,13 @@ export function CreateSessionModal({
         onClose();
 
         // Show success message
-        alert(`Workout session created successfully!\n\nThe session is now ${isPendingInvitation ? 'prepared and will be transferred when the athlete accepts the invitation' : 'active for the athlete'}. You can assign programs or create workouts using Massichat Plus.`);
+        notify(`Workout session created successfully!\n\nThe session is now ${isPendingInvitation ? 'prepared and will be transferred when the athlete accepts the invitation' : 'active for the athlete'}. You can assign programs or create workouts using Massichat Plus.`);
       } else {
-        alert(data.error || 'Failed to create athlete session');
+        notify(data.error || 'Failed to create athlete session');
       }
     } catch (e) {
       console.error(e);
-      alert('Failed to create athlete session');
+      notify('Failed to create athlete session');
     } finally {
       setLoading(false);
     }

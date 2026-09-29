@@ -1,4 +1,5 @@
 'use client';
+import { notify } from '@/lib/notify';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -111,11 +112,11 @@ export function AthleteProgressModal({
         // Refresh sessions data
         await fetchSessions();
       } else {
-        alert('Failed to update session status');
+        notify('Failed to update session status');
       }
     } catch (error) {
       console.error('Error updating status:', error);
-      alert('Failed to update session status');
+      notify('Failed to update session status');
     } finally {
       setStatusLoading(null);
     }

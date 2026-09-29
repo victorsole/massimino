@@ -1,4 +1,5 @@
 'use client';
+import { notify, confirmAction } from '@/lib/notify';
 
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
@@ -146,7 +147,7 @@ export function TrainerMassichatInterface({ trainerId, sessionId, athleteId, onW
   }
 
   async function deleteSession(id: string) {
-    if (!confirm('Are you sure you want to delete this chat session?')) return;
+    if (!await confirmAction('Are you sure you want to delete this chat session?')) return;
 
     try {
       const response = await fetch(`/api/massichat?sessionId=${encodeURIComponent(id)}&athleteId=${selectedAthlete}`, {
@@ -166,11 +167,11 @@ export function TrainerMassichatInterface({ trainerId, sessionId, athleteId, onW
         setFlashMessage('Session deleted successfully');
         setTimeout(() => setFlashMessage(null), 3000);
       } else {
-        alert('Failed to delete session');
+        notify('Failed to delete session');
       }
     } catch (error) {
       console.error('Error deleting session:', error);
-      alert('Failed to delete session');
+      notify('Failed to delete session');
     }
   }
 
@@ -267,7 +268,7 @@ export function TrainerMassichatInterface({ trainerId, sessionId, athleteId, onW
       }
     } catch (error) {
       console.error('Error accepting workout:', error);
-      alert('Failed to add workout. Please try again.');
+      notify('Failed to add workout. Please try again.');
     }
   }
 

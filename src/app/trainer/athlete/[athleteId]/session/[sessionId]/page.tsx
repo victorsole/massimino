@@ -1,5 +1,6 @@
 // src/app/trainer/athlete/[athleteId]/session/[sessionId]/page.tsx
 'use client';
+import { confirmAction } from '@/lib/notify';
 
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
@@ -132,7 +133,7 @@ export default function TrainerSessionViewPage() {
   };
 
   const handleRemoveExercise = async (exerciseId: string) => {
-    if (!confirm('Are you sure you want to remove this exercise?')) return;
+    if (!await confirmAction('Are you sure you want to remove this exercise?')) return;
 
     try {
       const response = await fetch(
