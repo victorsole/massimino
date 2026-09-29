@@ -76,6 +76,12 @@ export default function SettingsPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
 
+  // Deep link to a tab, e.g. /dashboard/settings?tab=privacy
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get('tab');
+    if (tabs.some((t) => t.id === requested)) setActiveTab(requested as SettingsTab);
+  }, []);
+
   // Profile state
   const [profile, setProfile] = useState<ProfileData>({ name: '', email: '', trainerBio: '' });
   const [profileLoading, setProfileLoading] = useState(true);
