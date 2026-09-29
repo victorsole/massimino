@@ -53,6 +53,8 @@ function LoginContent() {
       setSuccess('Email verified successfully! You can now sign in.');
     } else if (successParam === 'already-verified') {
       setSuccess('Your email is already verified. You can sign in.');
+    } else if (successParam === 'password-reset') {
+      setSuccess('Your password has been changed. Sign in with your new password.');
     }
 
     if (errorParam === 'invalid-token') {
