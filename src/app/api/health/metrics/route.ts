@@ -6,6 +6,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
+import { HealthDataType } from '@prisma/client';
+
+const isHealthDataType = (value: unknown): value is HealthDataType =>
+  typeof value === 'string' && (Object.values(HealthDataType) as string[]).includes(value);
 
 export async function GET(request: NextRequest) {
   try {
@@ -18,7 +22,9 @@ export async function GET(request: NextRequest) {
     const start = searchParams.get('start');
     const end = searchParams.get('end');
 
-    if (!type) return NextResponse.json({ error: 'type is required' }, { status: 400 });
+    if (!isHealthDataType(type)) {
+      return NextResponse.json({ error: `type must be one of ${Object.values(HealthDataType).join(', ')}` }, { status: 400 });
+    }
 
     const where: any = { userId: session.user.id, dataType: type };
     if (start || end) {
@@ -46,8 +52,8 @@ export async function POST(request: NextRequest) {
     }
     const body = await request.json();
     const { type, value, unit, recordedAt, source } = body || {};
-    if (!type || typeof value !== 'number' || !unit) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    if (!isHealthDataType(type) || typeof value !== 'number' || !unit) {
+      return NextResponse.json({ error: 'Missing or invalid fields' }, { status: 400 });
     }
     const metric = await prisma.health_data.create({
       data: {

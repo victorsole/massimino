@@ -10,6 +10,9 @@ import { prisma } from '@/core/database'
 
 export const DELETION_GRACE_DAYS = 30
 const DELETION_PREFIX = 'account-deletion:'
+// Exercise-library media imported under a user id; not that user's personal data
+const LIBRARY_MEDIA_PROVIDERS = ['exercisedb', 'system']
+const personalMedia = (userId: string) => ({ userId, provider: { notIn: LIBRARY_MEDIA_PROVIDERS } })
 
 // Fields a user may see about themselves; excludes the password hash and
 // provider ids, and onboardingCompleted (in the schema but not the database).
@@ -37,7 +40,7 @@ export async function exportAccountData(userId: string) {
     prisma.habit_logs.findMany({ where: { userId } }),
     prisma.program_subscriptions.findMany({ where: { userId } }),
     prisma.ai_chat_sessions.findMany({ where: { userId }, include: { ai_chat_messages: true } }),
-    prisma.exercise_media.findMany({ where: { userId } }),
+    prisma.exercise_media.findMany({ where: personalMedia(userId) }),
   ])
   return {
     exportedAt: new Date().toISOString(),
@@ -84,7 +87,7 @@ export async function eraseAccount(userId: string): Promise<void> {
     prisma.nutrition_logs.deleteMany({ where: { userId } }),
     prisma.nutrition_plans.deleteMany({ where: { userId } }),
     prisma.habit_logs.deleteMany({ where: { userId } }),
-    prisma.exercise_media.deleteMany({ where: { userId } }),
+    prisma.exercise_media.deleteMany({ where: personalMedia(userId) }),
     prisma.push_notifications.deleteMany({ where: { userId } }),
     prisma.chat_messages.deleteMany({ where: { senderId: userId } }),
     prisma.email_verification_tokens.deleteMany({ where: { userId } }),
