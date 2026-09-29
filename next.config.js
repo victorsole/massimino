@@ -4,6 +4,11 @@ const nextConfig = {
       serverActions: {
         bodySizeLimit: '12mb',
       },
+      // Server-only knowledge files read at runtime with fs (Massichat, workout suggestions).
+      // They live outside public/ so they are never served; ship them with the API functions.
+      outputFileTracingIncludes: {
+        '/api/**/*': ['./data/knowledge/**/*'],
+      },
     },
     // Note: outputFileTracingRoot and serverExternalPackages are not used on Next 14
   

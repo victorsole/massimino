@@ -4,9 +4,9 @@
 
 set -e  # Exit on error
 
-SOURCE_DIR="public/databases/NASM_CPT/source_documents"
-OUTPUT_DIR="public/databases/NASM_CPT/converted"
-MEDIA_DIR="public/databases/NASM_CPT/media"
+SOURCE_DIR="data/private/NASM_CPT/source_documents"
+OUTPUT_DIR="data/knowledge/NASM_CPT/converted"
+MEDIA_DIR="data/private/NASM_CPT/media"
 
 # Colors for output
 GREEN='\033[0;32m'
