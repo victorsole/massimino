@@ -10,6 +10,7 @@ import {
   getWorkoutSessions,
   createWorkoutSession,
   completeWorkoutSession,
+  deleteWorkoutSession,
   calculate_session_experience_points,
   check_and_award_achievements,
   prisma
@@ -466,5 +467,33 @@ export async function PATCH(request: NextRequest) {
       { error: 'Internal server error' },
       { status: 500 }
     );
+  }
+}
+
+// ============================================================================
+// DELETE /api/workout/sessions?id={sessionId} - Delete a session and its sets
+// ============================================================================
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const id = new URL(request.url).searchParams.get('id');
+    if (!id) {
+      return NextResponse.json({ error: 'Session ID is required' }, { status: 400 });
+    }
+
+    const deleted = await deleteWorkoutSession(id, session.user.id);
+    if (!deleted) {
+      return NextResponse.json({ error: 'Workout session not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true, message: 'Workout session deleted' });
+  } catch (error) {
+    console.error('Error deleting workout session:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

@@ -871,6 +871,8 @@ export function SessionHistoryTable() {
           load_sessions();
           alert('Session deleted successfully');
         }, 300);
+      } else {
+        alert('We could not delete this session. Please try again.');
       }
     } catch (error) {
       console.error('Failed to delete session:', error);
