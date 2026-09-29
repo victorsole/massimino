@@ -822,7 +822,8 @@ function generateRecommendations(metrics: any, workoutStats: any) {
   if (metrics.consistency < 60) {
     recommendations.push('Focus on improving workout consistency. Aim for at least 3-4 sessions per week.');
   }
-  if (metrics.averageWorkoutDuration < 30) {
+  // Session durations are stored in seconds: recommend more time under 30 minutes
+  if (metrics.averageWorkoutDuration < 30 * 60) {
     recommendations.push('Consider extending workout duration to maximize training benefits.');
   }
   const muscleGroups = workoutStats.muscleGroupFocus || [];
