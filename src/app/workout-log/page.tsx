@@ -1130,27 +1130,31 @@ function WorkoutLogPageContent() {
     }
   };
 
-  // Session completion handler
-  const handleCompleteSession = async () => {
-    if (!activeSession) return;
-
+  // End the current session: close it on the server, award XP, and advance the
+  // active programme by one day. Used by both "Complete Session" and "End Session".
+  const handleEndSession = async () => {
     try {
-      const response = await fetch('/api/workout/sessions', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sessionId: activeSession.id,
-          endTime: new Date().toISOString(),
-          isComplete: true
-        })
-      });
+      const sessionIdFromEntries = workoutEntries.find(e => e.sessionId)?.sessionId;
+      const sessionToEnd = activeSession?.id || sessionIdFromEntries;
+      let xpTotal = 0;
 
-      const data = await response.json();
-
-      if (data.session) {
-        // If achievements were earned, show celebration
-        if (data.gamification?.achievements_earned?.length > 0) {
-          // Load achievement details
+      if (sessionToEnd) {
+        const response = await fetch('/api/workout/sessions', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sessionId: sessionToEnd,
+            endTime: new Date().toISOString(),
+            isComplete: true,
+          }),
+        });
+        if (!response.ok) {
+          alert('We could not end this session. Please try again.');
+          return;
+        }
+        const data = await response.json().catch(() => null);
+        xpTotal = data?.gamification?.experience_points?.total || 0;
+        if (data?.gamification?.achievements_earned?.length > 0) {
           try {
             const achievement_response = await fetch(
               `/api/achievements?ids=${data.gamification.achievements_earned.join(',')}`
@@ -1161,17 +1165,90 @@ function WorkoutLogPageContent() {
             console.error('Failed to load achievement details:', err);
           }
         }
-
-        // Show XP alert
-        const xpTotal = data.gamification?.experience_points?.total || 0;
-        alert(`Session complete! Earned ${xpTotal} XP`);
-
         setActiveSession(null);
-        fetchWorkoutEntries();
       }
-    } catch (error) {
-      console.error('Failed to complete session:', error);
-      alert('Failed to complete workout session');
+
+// Fetch fresh subscriptions if none loaded
+      let subs = programSubscriptions;
+      if (subs.length === 0) {
+        try {
+          const r = await fetch('/api/workout/programs?subscriptions=true');
+          if (r.ok) {
+            subs = await r.json();
+            if (Array.isArray(subs)) {
+              setProgramSubscriptions(subs);
+            }
+          }
+        } catch (e) {
+          console.error('Failed to fetch subscriptions:', e);
+        }
+      }
+
+      // Advance only the programme the user explicitly started (or their only one);
+      // never an arbitrary first subscription
+      const sub = subs.find((s: any) => s.isCurrentlyActive) || (subs.length === 1 ? subs[0] : null);
+      if (sub) {
+        const currentWeek = sub.currentWeek || 1;
+        const currentDay = sub.currentDay || 1;
+
+        // Get total days from microcycle - default to 7 if not found
+        const program = sub.program_templates;
+        let totalDaysInWeek = 7;
+
+        if (program?.program_phases) {
+          const currentPhase = program.program_phases.find((phase: any) =>
+            phase.microcycles?.some((micro: any) => micro.weekNumber === currentWeek)
+          );
+          if (currentPhase) {
+            const currentMicrocycle = currentPhase.microcycles?.find(
+              (micro: any) => micro.weekNumber === currentWeek
+            );
+            if (currentMicrocycle?.workouts) {
+              totalDaysInWeek = currentMicrocycle.workouts.length;
+            }
+          }
+        }
+
+        // Calculate next day/week
+        let nextDay = currentDay + 1;
+        let nextWeek = currentWeek;
+
+        if (nextDay > totalDaysInWeek) {
+          nextDay = 1;
+          nextWeek = currentWeek + 1;
+        }
+
+        // Update program progress
+        const progressRes = await fetch('/api/workout/programs/progress', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            subscriptionId: sub.id,
+            currentWeek: nextWeek,
+            currentDay: nextDay,
+          }),
+        });
+
+        if (progressRes.ok) {
+          // Update local state
+          setProgramSubscriptions(prev => prev.map(s =>
+            s.id === sub.id
+              ? { ...s, currentWeek: nextWeek, currentDay: nextDay }
+              : s
+          ));
+        } else {
+          console.error('Failed to advance program:', await progressRes.text());
+        }
+      }
+
+      // Mark session as completed - hides logged entries from Today view
+      setSessionCompletedToday(true);
+      fetchWorkoutEntries();
+
+      alert(xpTotal > 0 ? `Session complete! Earned ${xpTotal} XP` : 'Session completed! Great workout!');
+    } catch (err) {
+      console.error('Failed to end session:', err);
+      alert('Failed to end session. Please try again.');
     }
   };
 
@@ -1691,7 +1768,7 @@ function WorkoutLogPageContent() {
                 </div>
               </div>
               <Button
-                onClick={handleCompleteSession}
+                onClick={handleEndSession}
                 className="bg-white text-green-600 hover:bg-green-50 font-semibold whitespace-nowrap flex-shrink-0 w-full sm:w-auto"
               >
                 Complete Session
@@ -3106,104 +3183,7 @@ function WorkoutLogPageContent() {
                 {groupedWorkoutEntries.length > 0 && (
                   <div className="flex flex-col sm:flex-row gap-3 mt-6 pt-4 border-t border-gray-200">
                     <Button
-                      onClick={async () => {
-                        try {
-                          // Try to find the session ID from entries or use activeSession
-                          const sessionIdFromEntries = workoutEntries.find(e => e.sessionId)?.sessionId;
-                          const sessionToEnd = activeSession?.id || sessionIdFromEntries;
-
-                          // End the session if one exists
-                          if (sessionToEnd) {
-                            await fetch(`/api/workout/sessions/${sessionToEnd}`, {
-                              method: 'PUT',
-                              headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify({ status: 'COMPLETED' }),
-                            });
-                            setActiveSession(null);
-                          }
-
-                          // Fetch fresh subscriptions if none loaded
-                          let subs = programSubscriptions;
-                          if (subs.length === 0) {
-                            try {
-                              const r = await fetch('/api/workout/programs?subscriptions=true');
-                              if (r.ok) {
-                                subs = await r.json();
-                                if (Array.isArray(subs)) {
-                                  setProgramSubscriptions(subs);
-                                }
-                              }
-                            } catch (e) {
-                              console.error('Failed to fetch subscriptions:', e);
-                            }
-                          }
-
-                          // Advance program day (do this regardless of session)
-                          if (subs.length > 0) {
-                            const sub = subs[0];
-                            const currentWeek = sub.currentWeek || 1;
-                            const currentDay = sub.currentDay || 1;
-
-                            // Get total days from microcycle - default to 7 if not found
-                            const program = sub.program_templates;
-                            let totalDaysInWeek = 7;
-
-                            if (program?.program_phases) {
-                              const currentPhase = program.program_phases.find((phase: any) =>
-                                phase.microcycles?.some((micro: any) => micro.weekNumber === currentWeek)
-                              );
-                              if (currentPhase) {
-                                const currentMicrocycle = currentPhase.microcycles?.find(
-                                  (micro: any) => micro.weekNumber === currentWeek
-                                );
-                                if (currentMicrocycle?.workouts) {
-                                  totalDaysInWeek = currentMicrocycle.workouts.length;
-                                }
-                              }
-                            }
-
-                            // Calculate next day/week
-                            let nextDay = currentDay + 1;
-                            let nextWeek = currentWeek;
-
-                            if (nextDay > totalDaysInWeek) {
-                              nextDay = 1;
-                              nextWeek = currentWeek + 1;
-                            }
-
-                            // Update program progress
-                            const progressRes = await fetch('/api/workout/programs/progress', {
-                              method: 'PATCH',
-                              headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify({
-                                subscriptionId: sub.id,
-                                currentWeek: nextWeek,
-                                currentDay: nextDay,
-                              }),
-                            });
-
-                            if (progressRes.ok) {
-                              // Update local state
-                              setProgramSubscriptions(prev => prev.map(s =>
-                                s.id === sub.id
-                                  ? { ...s, currentWeek: nextWeek, currentDay: nextDay }
-                                  : s
-                              ));
-                            } else {
-                              console.error('Failed to advance program:', await progressRes.text());
-                            }
-                          } else {
-                          }
-
-                          // Mark session as completed - hides logged entries from Today view
-                          setSessionCompletedToday(true);
-
-                          alert('Session completed! Great workout!');
-                        } catch (err) {
-                          console.error('Failed to end session:', err);
-                          alert('Failed to end session. Please try again.');
-                        }
-                      }}
+                      onClick={handleEndSession}
                       className="flex-1 py-4 text-base font-semibold bg-green-600 hover:bg-green-700 text-white"
                     >
                       <span className="mdi mdi-check-circle mr-2" />

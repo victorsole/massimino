@@ -343,6 +343,7 @@ export async function createWorkoutLogEntry(
         ...(data.restSeconds !== undefined && { restSeconds: data.restSeconds }),
         trainingVolume,
         personalRecord: is_personal_record,
+        ...(data.sessionId && { sessionId: data.sessionId }),
         ...(data.userComments !== undefined && { userComments: data.userComments }),
         ...(data.coachFeedback !== undefined && { coachFeedback: data.coachFeedback }),
         updatedAt: new Date(),
@@ -358,7 +359,52 @@ export async function createWorkoutLogEntry(
     });
 
     return entry;
+  }).then(async (entry) => {
+    if (entry.sessionId) await recomputeSessionTotals(entry.sessionId);
+    return entry;
   });
+}
+
+/**
+ * Recalculate a session's totals from the sets linked to it.
+ * Called whenever a set is created, edited or deleted.
+ */
+export async function recomputeSessionTotals(sessionId: string): Promise<void> {
+  const agg = await prisma.workout_log_entries.aggregate({
+    where: { sessionId },
+    _count: { _all: true },
+    _sum: { reps: true, trainingVolume: true },
+  });
+  await prisma.workout_sessions.updateMany({
+    where: { id: sessionId },
+    data: {
+      totalSets: agg._count._all,
+      totalReps: agg._sum.reps ?? 0,
+      totalVolume: agg._sum.trainingVolume ?? 0,
+    },
+  });
+}
+
+/**
+ * Delete a workout session and the sets logged in it.
+ * Only the athlete or the coach who ran it may delete it.
+ * Returns false when the session does not exist or is not theirs.
+ */
+export async function deleteWorkoutSession(id: string, userId: string): Promise<boolean> {
+  const session = await prisma.workout_sessions.findFirst({
+    where: { id, OR: [{ userId }, { coachId: userId }] },
+    select: { id: true },
+  });
+  if (!session) return false;
+
+  await prisma.$transaction([
+    prisma.workout_log_entries.deleteMany({ where: { sessionId: id } }),
+    // Appointments keep their record; they just lose the link to the deleted session
+    prisma.appointments.updateMany({ where: { workoutSessionId: id }, data: { workoutSessionId: null } }),
+    // Comments and goals cascade with the session
+    prisma.workout_sessions.delete({ where: { id } }),
+  ]);
+  return true;
 }
 
 /**
@@ -420,6 +466,8 @@ export async function updateWorkoutLogEntry(
     });
   }
 
+  if (updated.sessionId) await recomputeSessionTotals(updated.sessionId);
+
   return updated;
 }
 
@@ -430,9 +478,17 @@ export async function deleteWorkoutLogEntry(
   id: string,
   userId: string
 ): Promise<boolean> {
+  const existing = await prisma.workout_log_entries.findFirst({
+    where: { id, userId },
+    select: { sessionId: true },
+  });
+  if (!existing) return false;
+
   const result = await prisma.workout_log_entries.deleteMany({
     where: { id, userId },
   });
+
+  if (existing.sessionId) await recomputeSessionTotals(existing.sessionId);
 
   return result.count > 0;
 }
@@ -1067,10 +1123,16 @@ export async function completeWorkoutSession(
   const endTimeToUse = endTime || new Date();
   const duration = Math.floor((endTimeToUse.getTime() - session.startTime.getTime()) / 1000);
 
-  // Calculate total volume and stats
-  const entries = await prisma.workout_log_entries.findMany({
-    where: { userId, date: session.date },
+  // Totals come from the sets linked to this session; older sessions logged
+  // before sets were linked fall back to that day's sets
+  const linked = await prisma.workout_log_entries.findMany({
+    where: { sessionId: id },
   });
+  const entries = linked.length > 0
+    ? linked
+    : await prisma.workout_log_entries.findMany({
+        where: { userId, date: session.date, sessionId: null },
+      });
 
   const totalVolume = entries.reduce((sum, entry) => sum + (entry.trainingVolume || 0), 0);
   const totalSets = entries.length;
@@ -1087,20 +1149,6 @@ export async function completeWorkoutSession(
       totalReps,
     },
   });
-}
-
-/**
- * Delete a workout session
- */
-export async function deleteWorkoutSession(
-  id: string,
-  userId: string
-): Promise<boolean> {
-  const result = await prisma.workout_sessions.deleteMany({
-    where: { id, userId },
-  });
-
-  return result.count > 0;
 }
 
 // ============================================================================
