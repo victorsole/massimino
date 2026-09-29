@@ -46,7 +46,7 @@ export const PATCH = withAuth<{ id: string }>(async ({ session }, req: NextReque
     case 'resume':
       await prisma.program_subscriptions.update({
         where: { id: params.id },
-        data: { status: 'ACTIVE', isActive: true, updatedAt: now },
+        data: { status: 'ACTIVE', isActive: true, endDate: null, updatedAt: now },
         select: { id: true },
       })
       break
