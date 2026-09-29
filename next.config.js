@@ -134,7 +134,7 @@ const nextConfig = {
         },
         {
           source: '/bio/forgot-password',
-          destination: '/login',
+          destination: '/forgot-password',
           permanent: false,
         },
         // Old registration URL (e.g. links in bio pages and emails)
