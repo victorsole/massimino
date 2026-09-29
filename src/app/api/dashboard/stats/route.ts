@@ -323,13 +323,18 @@ export async function GET() {
       select: { duration: true }
     })
 
-    const avgSessionDuration = last30DaysSessionsWithDuration.length > 0
-      ? last30DaysSessionsWithDuration.reduce((sum, s) => sum + (s.duration || 0), 0) / last30DaysSessionsWithDuration.length
-      : 0
+    // Durations are stored in seconds; the dashboard shows minutes.
+    // Ignore impossible values (negative, or sessions left open for hours or days).
+    const MAX_SESSION_SECONDS = 6 * 60 * 60
+    const averageMinutes = (rows: { duration: number | null }[]) => {
+      const valid = rows
+        .map((s) => s.duration || 0)
+        .filter((d) => d > 0 && d <= MAX_SESSION_SECONDS)
+      return valid.length > 0 ? valid.reduce((sum, d) => sum + d, 0) / valid.length / 60 : 0
+    }
 
-    const prevAvgSessionDuration = previous30DaysSessionsWithDuration.length > 0
-      ? previous30DaysSessionsWithDuration.reduce((sum, s) => sum + (s.duration || 0), 0) / previous30DaysSessionsWithDuration.length
-      : 0
+    const avgSessionDuration = averageMinutes(last30DaysSessionsWithDuration)
+    const prevAvgSessionDuration = averageMinutes(previous30DaysSessionsWithDuration)
 
     // Calculate trend indicators
     const sessionsTrend = previous30DaysSessions === 0
