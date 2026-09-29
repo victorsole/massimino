@@ -1,4 +1,5 @@
 'use client'
+import { notify } from '@/lib/notify';
 
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -458,12 +459,12 @@ export default function AssessmentClient({ trainerId, clients }: AssessmentClien
         // Save the assessment id for follow-up actions
         const id = (result as any)?.data?.id as string | undefined
         if (id) setLastCompletedAssessmentId(id)
-        alert('Assessment completed successfully!')
+        notify('Assessment completed successfully!')
       } else {
-        alert('Error completing assessment: ' + result.error)
+        notify('Error completing assessment: ' + result.error)
       }
     } catch (error) {
-      alert('Error completing assessment')
+      notify('Error completing assessment')
     } finally {
       setLoading(false)
     }
@@ -476,7 +477,7 @@ export default function AssessmentClient({ trainerId, clients }: AssessmentClien
       const res = await fetch(`/api/massichat/assessments/${encodeURIComponent(lastCompletedAssessmentId)}/generate`, { method: 'POST' })
       const data = await res.json().catch(() => ({}))
       if (!res.ok) {
-        alert(data?.error || 'Failed to generate workout from assessment')
+        notify(data?.error || 'Failed to generate workout from assessment')
         return
       }
       // Navigate to dashboard where Massichat lives, deep-linking to the session
@@ -484,7 +485,7 @@ export default function AssessmentClient({ trainerId, clients }: AssessmentClien
       const q = sid ? `?massichatSession=${encodeURIComponent(sid)}&generated=1` : ''
       window.location.href = `/dashboard${q}`
     } catch (e: any) {
-      alert(e?.message || 'Failed to generate workout')
+      notify(e?.message || 'Failed to generate workout')
     } finally {
       setGenerateLoading(false)
     }

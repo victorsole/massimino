@@ -1,4 +1,5 @@
 'use client';
+import { notify } from '@/lib/notify';
 
 import React, { useState } from 'react';
 import { ProgramSEO } from '@/types/program';
@@ -31,13 +32,13 @@ export function ShareBar({ programName, programUrl, seo }: ShareBarProps) {
   const handleShareInstagram = () => {
     // Instagram doesn't have a direct web share API, so we copy text and show instructions
     navigator.clipboard.writeText(shareText.instagram);
-    alert('Caption copied! Open Instagram and paste in your story or post.');
+    notify('Caption copied! Open Instagram and paste in your story or post.');
   };
 
   const handleShareTikTok = () => {
     // TikTok also doesn't have direct web share, copy caption
     navigator.clipboard.writeText(shareText.tiktok);
-    alert('Caption copied! Open TikTok and paste in your video description.');
+    notify('Caption copied! Open TikTok and paste in your video description.');
   };
 
   const handleShareTwitter = () => {

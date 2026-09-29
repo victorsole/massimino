@@ -1,5 +1,6 @@
 // src/components/training/session-view/goals-section.tsx
 'use client';
+import { confirmAction } from '@/lib/notify';
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -67,7 +68,7 @@ export function GoalsSection({ sessionId, onAddGoal, readOnly = false }: GoalsSe
   };
 
   const handleDeleteGoal = async (goalId: string) => {
-    if (!confirm('Are you sure you want to delete this goal?')) return;
+    if (!await confirmAction('Are you sure you want to delete this goal?')) return;
 
     try {
       const response = await fetch(`/api/training/sessions/${sessionId}/goals/${goalId}`, {

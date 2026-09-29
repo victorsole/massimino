@@ -1,5 +1,6 @@
 // src/components/layout/user_public_profile.tsx
 'use client'
+import { notify } from '@/lib/notify';
 
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
@@ -387,7 +388,7 @@ export function UserPublicProfile({
                   const copySummary = async () => {
                     try {
                       await navigator.clipboard.writeText(makeSummary());
-                      alert('Workout summary copied');
+                      notify('Workout summary copied');
                     } catch (e) {
                       console.error('Copy failed', e);
                     }
@@ -555,7 +556,7 @@ export function UserPublicProfile({
                       } else if (res.status === 401) {
                         window.location.href = '/login'
                       } else {
-                        alert(data?.error || 'Failed to start payment')
+                        notify(data?.error || 'Failed to start payment')
                       }
                     } finally {
                       setTipLoading(false)

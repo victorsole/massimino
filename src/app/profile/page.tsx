@@ -1,6 +1,7 @@
 // src/app/profile/page.tsx
 
 'use client';
+import { confirmAction } from '@/lib/notify';
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
@@ -1719,10 +1720,11 @@ export default function ProfilePage() {
                     {/* Delete credential button */}
                     <form action={deleteTrainerCredentialAction} className="absolute top-2 right-2" onSubmit={async (e) => {
                       e.preventDefault();
-                      if (!confirm('Delete this credential?')) {
+                      const form = e.currentTarget;
+                      if (!await confirmAction('Delete this credential?')) {
                         return;
                       }
-                      const formData = new FormData(e.currentTarget);
+                      const formData = new FormData(form);
                       await deleteTrainerCredentialAction(formData);
                       await refreshProfile(); // Refresh profile data after save
                       setUserCredentials(prev => prev.filter((_, i) => i !== index));

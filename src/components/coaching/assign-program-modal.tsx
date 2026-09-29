@@ -1,4 +1,5 @@
 'use client';
+import { notify } from '@/lib/notify';
 
 import { useState, useEffect } from 'react';
 import { X, Loader2, Dumbbell } from 'lucide-react';
@@ -58,7 +59,7 @@ export function AssignProgramModal({
 
   const handleAssignProgram = async () => {
     if (!selectedProgramId) {
-      alert('Please select a program');
+      notify('Please select a program');
       return;
     }
 
@@ -76,16 +77,16 @@ export function AssignProgramModal({
       const data = await response.json();
 
       if (response.ok) {
-        alert(data.message || 'Program assigned successfully');
+        notify(data.message || 'Program assigned successfully');
         setSelectedProgramId('');
         onSuccess?.();
         onClose();
       } else {
-        alert(data.error || 'Failed to assign program');
+        notify(data.error || 'Failed to assign program');
       }
     } catch (error) {
       console.error('Error assigning program:', error);
-      alert('Failed to assign program');
+      notify('Failed to assign program');
     } finally {
       setAssigning(false);
     }

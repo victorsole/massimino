@@ -1,5 +1,6 @@
 // src/app/workout-log/page.tsx
 'use client';
+import { notify, confirmAction } from '@/lib/notify';
 
 import { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSession } from 'next-auth/react';
@@ -1036,18 +1037,18 @@ function WorkoutLogPageContent() {
   // Prefill helpers
   const openPrefill = async () => {
     try {
-      if (!programSubscriptions.length) { alert('No active program'); return; }
+      if (!programSubscriptions.length) { notify('No active program'); return; }
       const sub = programSubscriptions[0];
       const pid = sub.programId || sub.program?.id || sub.id;
-      if (!pid) { alert('No program id found'); return; }
+      if (!pid) { notify('No program id found'); return; }
       const res = await fetch(`/api/workout/programs/${pid}`);
-      if (!res.ok) { alert('Failed to load program'); return; }
+      if (!res.ok) { notify('Failed to load program'); return; }
       const program = await res.json();
       setSelectedProgram(program);
       setShowPrefillModal(true);
     } catch (e) {
       console.error(e);
-      alert('Failed to load program');
+      notify('Failed to load program');
     }
   };
 
@@ -1123,11 +1124,11 @@ function WorkoutLogPageContent() {
         });
         setShowSessionCreationModal(false);
         setSessionTitle('');
-        alert('Workout session started!');
+        notify('Workout session started!');
       }
     } catch (error) {
       console.error('Failed to create session:', error);
-      alert('Failed to start workout session');
+      notify('Failed to start workout session');
     }
   };
 
@@ -1150,7 +1151,7 @@ function WorkoutLogPageContent() {
           }),
         });
         if (!response.ok) {
-          alert('We could not end this session. Please try again.');
+          notify('We could not end this session. Please try again.');
           return;
         }
         const data = await response.json().catch(() => null);
@@ -1246,10 +1247,10 @@ function WorkoutLogPageContent() {
       setSessionCompletedToday(true);
       fetchWorkoutEntries();
 
-      alert(xpTotal > 0 ? `Session complete! Earned ${xpTotal} XP` : 'Session completed! Great workout!');
+      notify(xpTotal > 0 ? `Session complete! Earned ${xpTotal} XP` : 'Session completed! Great workout!');
     } catch (err) {
       console.error('Failed to end session:', err);
-      alert('Failed to end session. Please try again.');
+      notify('Failed to end session. Please try again.');
     }
   };
 
@@ -1302,13 +1303,13 @@ function WorkoutLogPageContent() {
 
       if (newEntry.setType === 'SUPERSET') {
         if (!newEntry.exerciseBId) {
-          alert('Please select the second exercise for a Superset');
+          notify('Please select the second exercise for a Superset');
           setLoading(false);
           return;
         }
         const weightsB = parseWeights(newEntry.weightB);
         if (weightsA.length === 0 || weightsB.length === 0) {
-          alert('Please enter weights for both exercises (kg)');
+          notify('Please enter weights for both exercises (kg)');
           setLoading(false);
           return;
         }
@@ -1353,7 +1354,7 @@ function WorkoutLogPageContent() {
       } else if (newEntry.setType === 'DROP_SET') {
         // Drop set: use comma weights to create multiple drops per set as A, B, C...
         if (weightsA.length < 2) {
-          alert('Please enter at least two weights for a Drop Set (e.g., 60,50)');
+          notify('Please enter at least two weights for a Drop Set (e.g., 60,50)');
           setLoading(false);
           return;
         }
@@ -1383,7 +1384,7 @@ function WorkoutLogPageContent() {
       } else if (newEntry.setType === 'PYRAMID') {
         // Pyramid: map per-set weights from comma list (fallback to nearest value)
         if (setsNum < 2) {
-          alert('Pyramid requires at least 2 sets.');
+          notify('Pyramid requires at least 2 sets.');
           setLoading(false);
           return;
         }
@@ -1394,7 +1395,7 @@ function WorkoutLogPageContent() {
           if (gen.length >= 2) weightsUse = gen;
         }
         if (weightsUse.length < 2) {
-          alert('For Pyramid, enter multiple weights (e.g., 40,45,50) or specify Base and Step.');
+          notify('For Pyramid, enter multiple weights (e.g., 40,45,50) or specify Base and Step.');
           setLoading(false);
           return;
         }
@@ -1422,7 +1423,7 @@ function WorkoutLogPageContent() {
       } else {
         // Default: one entry per set
         if (weightsA.length === 0) {
-          alert('Please enter a valid weight in kg (e.g., 60)');
+          notify('Please enter a valid weight in kg (e.g., 60)');
           setLoading(false);
           return;
         }
@@ -1495,11 +1496,11 @@ function WorkoutLogPageContent() {
             msg = errorData.errors[0].error || msg;
           }
         } catch {}
-        alert(`Error adding workout entry: ${msg}`);
+        notify(`Error adding workout entry: ${msg}`);
       }
     } catch (error) {
       console.error('Error adding workout entry:', error);
-      alert('Failed to add workout entry. Please try again.');
+      notify('Failed to add workout entry. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -1541,18 +1542,18 @@ function WorkoutLogPageContent() {
         });
       } else {
         const errorData = await response.json();
-        alert(`Error updating entry: ${errorData.error || 'Unknown error'}`);
+        notify(`Error updating entry: ${errorData.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error updating entry:', error);
-      alert('Failed to update entry. Please try again.');
+      notify('Failed to update entry. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDeleteEntry = async (entryId: string) => {
-    if (!confirm('Are you sure you want to delete this workout entry?')) {
+  const handleDeleteEntry = async (entryId: string, options: { confirmed?: boolean } = {}) => {
+    if (!options.confirmed && !await confirmAction('Are you sure you want to delete this workout entry?')) {
       return;
     }
 
@@ -1567,11 +1568,11 @@ function WorkoutLogPageContent() {
         await fetchWorkoutEntries();
       } else {
         const errorData = await response.json();
-        alert(`Error deleting entry: ${errorData.error || 'Unknown error'}`);
+        notify(`Error deleting entry: ${errorData.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error deleting entry:', error);
-      alert('Failed to delete entry. Please try again.');
+      notify('Failed to delete entry. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -1603,12 +1604,12 @@ function WorkoutLogPageContent() {
 
   const handleSaveAsTemplate = async () => {
     if (selectedEntries.size === 0) {
-      alert('Please select at least one workout entry');
+      notify('Please select at least one workout entry');
       return;
     }
 
     if (!templateFormData.name) {
-      alert('Please enter a template name');
+      notify('Please enter a template name');
       return;
     }
 
@@ -1668,7 +1669,7 @@ function WorkoutLogPageContent() {
       });
 
       if (response.ok) {
-        alert('Template saved successfully!');
+        notify('Template saved successfully!');
         setShowSaveTemplateModal(false);
         setSelectedEntries(new Set());
         setTemplateFormData({
@@ -1681,11 +1682,11 @@ function WorkoutLogPageContent() {
         });
       } else {
         const errorData = await response.json();
-        alert(`Error saving template: ${errorData.error || 'Unknown error'}`);
+        notify(`Error saving template: ${errorData.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error saving template:', error);
-      alert('Failed to save template. Please try again.');
+      notify('Failed to save template. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -1961,8 +1962,8 @@ function WorkoutLogPageContent() {
                             size="sm"
                             variant="ghost"
                             className="text-gray-400 hover:text-red-500 hover:bg-red-50 p-2"
-                            onClick={() => {
-                              if (confirm('Dismiss today\'s workout? You can still access it from My Programs.')) {
+                            onClick={async () => {
+                              if (await confirmAction('Dismiss today\'s workout? You can still access it from My Programs.')) {
                                 setDismissedTodayWorkout(true);
                               }
                             }}
@@ -2990,7 +2991,7 @@ function WorkoutLogPageContent() {
                 className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 w-fit"
                 onClick={async () => {
                   const entriesToDelete = groupedWorkoutEntries.flat();
-                  if (!confirm(`Are you sure you want to delete all ${entriesToDelete.length} entries? This action cannot be undone.`)) {
+                  if (!await confirmAction(`Are you sure you want to delete all ${entriesToDelete.length} entries? This action cannot be undone.`)) {
                     return;
                   }
                   setLoading(true);
@@ -3007,11 +3008,11 @@ function WorkoutLogPageContent() {
                     }
                     await fetchWorkoutEntries();
                     if (failed > 0) {
-                      alert(`Deleted ${deleted} entries. ${failed} entries could not be deleted (they may belong to another user or were already deleted).`);
+                      notify(`Deleted ${deleted} entries. ${failed} entries could not be deleted (they may belong to another user or were already deleted).`);
                     }
                   } catch (error) {
                     console.error('Error deleting entries:', error);
-                    alert('Failed to delete some entries. Please try again.');
+                    notify('Failed to delete some entries. Please try again.');
                   } finally {
                     setLoading(false);
                   }
@@ -3070,9 +3071,9 @@ function WorkoutLogPageContent() {
                             <Button
                               variant="ghost"
                               size="icon"
-                              onClick={() => {
-                                if (confirm(`Delete all ${entriesGroup.length} sets of ${firstEntry.exercise.name}?`)) {
-                                  entriesGroup.forEach(e => handleDeleteEntry(e.id));
+                              onClick={async () => {
+                                if (await confirmAction(`Delete all ${entriesGroup.length} sets of ${firstEntry.exercise.name}?`)) {
+                                  entriesGroup.forEach(e => handleDeleteEntry(e.id, { confirmed: true }));
                                 }
                               }}
                               disabled={loading}
@@ -3697,16 +3698,16 @@ function WorkoutLogPageContent() {
                     });
                     const data = await res.json();
                     if (data.session) {
-                      alert('Athlete session started');
+                      notify('Athlete session started');
                       setShowCreateForClient(false);
                       setSelectedClientId('');
                       setSessionTitle('');
                     } else {
-                      alert(data.error || 'Failed to create athlete session');
+                      notify(data.error || 'Failed to create athlete session');
                     }
                   } catch (e) {
                     console.error(e);
-                    alert('Failed to create athlete session');
+                    notify('Failed to create athlete session');
                   }
                 }}
                 className="flex-1 bg-green-600 hover:bg-green-700"

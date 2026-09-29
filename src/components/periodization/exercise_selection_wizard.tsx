@@ -1,4 +1,5 @@
 'use client';
+import { notify } from '@/lib/notify';
 
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -194,15 +195,15 @@ export function ExerciseSelectionWizard({ programId, programName, slots }: Props
 
       if (res.ok) {
         const data = await res.json();
-        alert(data.message || 'Successfully joined program!');
+        notify(data.message || 'Successfully joined program!');
         router.push('/workout-log?tab=today');
       } else {
         const error = await res.json();
-        alert(error.error || 'Failed to join program');
+        notify(error.error || 'Failed to join program');
       }
     } catch (error) {
       console.error('Failed to join program:', error);
-      alert('Failed to join program');
+      notify('Failed to join program');
     } finally {
       setJoining(false);
     }

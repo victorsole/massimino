@@ -1,4 +1,5 @@
 'use client';
+import { notify } from '@/lib/notify';
 
 import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -108,19 +109,19 @@ export function ShareModal({ isOpen, onClose, sessionId, sessionName }: ShareMod
   const handleInstagramShare = () => {
     // Instagram doesn't support direct sharing via URL, so copy text
     handleCopy();
-    alert('Share text copied! Open Instagram and paste it in your story or post.');
+    notify('Share text copied! Open Instagram and paste it in your story or post.');
   };
 
   const handleTikTokShare = () => {
     // TikTok doesn't support direct sharing via URL, so copy text
     handleCopy();
-    alert('Share text copied! Open TikTok and paste it in your video description.');
+    notify('Share text copied! Open TikTok and paste it in your video description.');
   };
 
   const handleYouTubeShare = () => {
     // YouTube doesn't support direct sharing, copy for description
     handleCopy();
-    alert('Share text copied! Paste it in your YouTube video description.');
+    notify('Share text copied! Paste it in your YouTube video description.');
   };
 
   const generateImage = () => {

@@ -1,6 +1,7 @@
 // src/components/teams/team_management.tsx
 
 'use client';
+import { notify, confirmAction } from '@/lib/notify';
 
 /**
  * Team Management Component - Comprehensive team management interface
@@ -200,11 +201,11 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
         });
         loadTeams();
       } else {
-        alert(data.error || 'Failed to create team');
+        notify(data.error || 'Failed to create team');
       }
     } catch (error) {
       console.error('Failed to create team:', error);
-      alert('Failed to create team');
+      notify('Failed to create team');
     } finally {
       setLoading(false);
     }
@@ -226,7 +227,7 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
       if (data.success) {
         loadTeamDetails(selectedTeam.id);
       } else {
-        alert(data.error || 'Failed to accept application');
+        notify(data.error || 'Failed to accept application');
       }
     } catch (error) {
       console.error('Failed to accept application:', error);
@@ -249,7 +250,7 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
       if (data.success) {
         loadTeamDetails(selectedTeam.id);
       } else {
-        alert(data.error || 'Failed to reject application');
+        notify(data.error || 'Failed to reject application');
       }
     } catch (error) {
       console.error('Failed to reject application:', error);
@@ -277,7 +278,7 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
         setNewMessage('');
         loadTeamDetails(selectedTeam.id);
       } else {
-        alert(data.error || 'Failed to send message');
+        notify(data.error || 'Failed to send message');
       }
     } catch (error) {
       console.error('Failed to send message:', error);
@@ -286,7 +287,7 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
 
   // Remove team member
   const removeMember = async (memberId: string) => {
-    if (!selectedTeam || !confirm('Are you sure you want to remove this member?')) return;
+    if (!selectedTeam || !await confirmAction('Are you sure you want to remove this member?')) return;
 
     try {
       const response = await fetch(`/api/teams/${selectedTeam.id}/members/manage?memberId=${memberId}`, {
@@ -298,7 +299,7 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
       if (data.success) {
         loadTeamDetails(selectedTeam.id);
       } else {
-        alert(data.error || 'Failed to remove member');
+        notify(data.error || 'Failed to remove member');
       }
     } catch (error) {
       console.error('Failed to remove member:', error);
@@ -338,13 +339,13 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
           exercises: []
         });
         loadTeamDetails(selectedTeam.id);
-        alert('Workout created successfully!');
+        notify('Workout created successfully!');
       } else {
-        alert(data.error || 'Failed to create workout');
+        notify(data.error || 'Failed to create workout');
       }
     } catch (error) {
       console.error('Failed to create workout:', error);
-      alert('Failed to create workout');
+      notify('Failed to create workout');
     } finally {
       setLoading(false);
     }
@@ -367,11 +368,11 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
       if (data.success) {
         setShareableLink(data.data.inviteUrl);
       } else {
-        alert(data.error || 'Failed to generate invite link');
+        notify(data.error || 'Failed to generate invite link');
       }
     } catch (error) {
       console.error('Failed to generate invite link:', error);
-      alert('Failed to generate invite link');
+      notify('Failed to generate invite link');
     } finally {
       setGeneratingLink(false);
     }
@@ -424,11 +425,11 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
 
     // Validate based on invitation method
     if (inviteMethod === 'user-id' && !inviteUserId) {
-      alert('Please enter a User ID');
+      notify('Please enter a User ID');
       return;
     }
     if (inviteMethod === 'email' && !inviteEmail) {
-      alert('Please enter an email address');
+      notify('Please enter an email address');
       return;
     }
 
@@ -460,16 +461,16 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
         loadTeamDetails(selectedTeam.id);
 
         if (inviteMethod === 'email') {
-          alert('Email invitation sent successfully! ✉️');
+          notify('Email invitation sent successfully! ✉️');
         } else {
-          alert('User invited successfully!');
+          notify('User invited successfully!');
         }
       } else {
-        alert(data.error || 'Failed to send invitation');
+        notify(data.error || 'Failed to send invitation');
       }
     } catch (error) {
       console.error('Failed to invite user:', error);
-      alert('Failed to send invitation');
+      notify('Failed to send invitation');
     } finally {
       setLoading(false);
     }
@@ -495,13 +496,13 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
 
       if (data.success) {
         loadTeamDetails(selectedTeam.id);
-        alert('Workout marked as complete! 🎉');
+        notify('Workout marked as complete! 🎉');
       } else {
-        alert(data.error || 'Failed to complete workout');
+        notify(data.error || 'Failed to complete workout');
       }
     } catch (error) {
       console.error('Failed to complete workout:', error);
-      alert('Failed to complete workout');
+      notify('Failed to complete workout');
     }
   };
 
@@ -761,7 +762,7 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
                           const fileInput = document.getElementById('team-media-file') as HTMLInputElement;
                           const typeSelect = document.getElementById('team-media-type') as HTMLSelectElement;
                           const file = fileInput.files?.item(0);
-                          if (!file) return alert('Choose a file');
+                          if (!file) return notify('Choose a file');
                           const fd = new FormData();
                           fd.set('file', file);
                           fd.set('type', typeSelect.value);
@@ -769,15 +770,15 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
                             const res = await fetch(`/api/teams/${selectedTeam.id}/media`, { method: 'POST', body: fd });
                             const data = await res.json();
                             if (data.success) {
-                              alert('Media uploaded');
+                              notify('Media uploaded');
                               loadTeamDetails(selectedTeam.id);
                               fileInput.value = '';
                             } else {
-                              alert(data.error || 'Failed to upload');
+                              notify(data.error || 'Failed to upload');
                             }
                           } catch (e) {
                             console.error(e);
-                            alert('Failed to upload');
+                            notify('Failed to upload');
                           }
                         }}
                       >Upload</Button>

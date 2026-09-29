@@ -1,4 +1,5 @@
 'use client';
+import { notify, confirmAction } from '@/lib/notify';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -75,7 +76,7 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
 
     if (!response.ok) {
       const error = await response.json();
-      alert(error.error || 'Failed to resend invitation');
+      notify(error.error || 'Failed to resend invitation');
       return;
     }
 
@@ -83,7 +84,7 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
   };
 
   const handleCancelInvitation = async (invitationId: string) => {
-    if (!confirm('Are you sure you want to cancel this invitation?')) return;
+    if (!await confirmAction('Are you sure you want to cancel this invitation?')) return;
 
     const response = await fetch(`/api/coaching/athletes?id=${invitationId}`, {
       method: 'DELETE',
@@ -91,7 +92,7 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
 
     if (!response.ok) {
       const error = await response.json();
-      alert(error.error || 'Failed to cancel invitation');
+      notify(error.error || 'Failed to cancel invitation');
       return;
     }
 
@@ -107,7 +108,7 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
 
     if (!response.ok) {
       const error = await response.json();
-      alert(error.error || 'Failed to accept request');
+      notify(error.error || 'Failed to accept request');
       return;
     }
 
@@ -115,7 +116,7 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
   };
 
   const handleDeclineRequest = async (requestId: string) => {
-    if (!confirm('Are you sure you want to decline this request?')) return;
+    if (!await confirmAction('Are you sure you want to decline this request?')) return;
 
     const response = await fetch(`/api/coaching/requests/${requestId}/decline`, {
       method: 'PUT',
@@ -125,7 +126,7 @@ export function MyAthletesDashboard({ userId }: MyAthletesDashboardProps) {
 
     if (!response.ok) {
       const error = await response.json();
-      alert(error.error || 'Failed to decline request');
+      notify(error.error || 'Failed to decline request');
       return;
     }
 

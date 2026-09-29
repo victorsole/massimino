@@ -1,4 +1,5 @@
 'use client';
+import { notify } from '@/lib/notify';
 
 import { useState, useEffect, useRef } from 'react';
 import { X, Send, Loader2 } from 'lucide-react';
@@ -115,11 +116,11 @@ export function AthleteChatModal({
         await fetchMessages(); // Refresh messages
       } else {
         const data = await response.json();
-        alert(`Failed to send message: ${data.error || 'Unknown error'}`);
+        notify(`Failed to send message: ${data.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      alert('Failed to send message');
+      notify('Failed to send message');
     } finally {
       setSending(false);
     }

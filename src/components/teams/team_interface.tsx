@@ -1,6 +1,7 @@
 // src/components/teams/team_interface.tsx
 
 'use client';
+import { notify, confirmAction } from '@/lib/notify';
 
 /**
  * Team Interface Component - Universal team interface
@@ -109,13 +110,13 @@ export function TeamInterface({
 
       if (data.success) {
         setApplicationMessage('');
-        alert('Application submitted successfully!');
+        notify('Application submitted successfully!');
       } else {
-        alert(data.error || 'Failed to submit application');
+        notify(data.error || 'Failed to submit application');
       }
     } catch (error) {
       console.error('Failed to apply to team:', error);
-      alert('Failed to submit application');
+      notify('Failed to submit application');
     }
   };
 
@@ -155,14 +156,14 @@ export function TeamInterface({
       const data = await response.json();
 
       if (data.success) {
-        alert('Team profile updated successfully!');
+        notify('Team profile updated successfully!');
         setSelectedTeam(data.data);
       } else {
-        alert(data.error || 'Failed to update team profile');
+        notify(data.error || 'Failed to update team profile');
       }
     } catch (error) {
       console.error('Failed to update team:', error);
-      alert('Failed to update team profile');
+      notify('Failed to update team profile');
     } finally {
       setLoading(false);
     }
@@ -464,19 +465,19 @@ export function TeamInterface({
                         <button
                           className="text-xs font-body text-red-400 hover:text-red-600 transition-colors"
                           onClick={async () => {
-                            if (!confirm('Delete this team? This will deactivate the team.')) return;
+                            if (!await confirmAction('Delete this team? This will deactivate the team.')) return;
                             try {
                               const res = await fetch(`/api/teams/${team.id}`, { method: 'DELETE' });
                               const data = await res.json();
                               if (res.ok && data.success) {
-                                alert('Team deleted successfully');
+                                notify('Team deleted successfully');
                                 discoverTeams();
                               } else {
-                                alert(data.error || 'Failed to delete team');
+                                notify(data.error || 'Failed to delete team');
                               }
                             } catch (err) {
                               console.error(err);
-                              alert('Failed to delete team');
+                              notify('Failed to delete team');
                             }
                           }}
                         >Delete</button>
