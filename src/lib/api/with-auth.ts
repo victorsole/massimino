@@ -31,18 +31,19 @@ export interface RouteContext<P = Record<string, string>> {
   params: P
 }
 
-type Handler<P, R> = (
+// Handlers usually return both ok() and fail() responses, so accept any NextResponse
+type Handler<P> = (
   ctx: AuthContext,
   req: NextRequest,
   routeCtx: RouteContext<P>
-) => Promise<NextResponse<R>> | NextResponse<R>
+) => Promise<NextResponse<unknown>> | NextResponse<unknown>
 
 /**
  * Wrap a route handler so it only runs for authenticated users.
  * Returns a uniform 401 with the standard envelope when no session is present.
  */
-export function withAuth<P = Record<string, string>, R = unknown>(
-  handler: Handler<P, R>
+export function withAuth<P = Record<string, string>>(
+  handler: Handler<P>
 ) {
   // Next.js App Router always passes the route context object (with params) as
   // the second argument; no default is required.
