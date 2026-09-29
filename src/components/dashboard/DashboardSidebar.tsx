@@ -55,7 +55,7 @@ const appItems = [
 const trainerItems = [
   { href: '/my-athletes', label: 'My Athletes', icon: Users },
   { href: '/dashboard/business', label: 'Business', icon: DollarSign },
-  { href: '/dashboard/ai-coach', label: 'AI Coach', icon: MessageCircle },
+  { href: '/massichat', label: 'AI Coach', icon: MessageCircle },
 ];
 
 export function DashboardSidebar({ open, onClose, userRole, userName, userImage }: SidebarProps) {

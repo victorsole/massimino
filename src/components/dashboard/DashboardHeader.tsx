@@ -50,7 +50,6 @@ const pageTitles: Record<string, { title: string; subtitle: string }> = {
   '/dashboard/settings': { title: 'Settings', subtitle: 'Manage your account and preferences.' },
   '/dashboard/athletes': { title: 'My Athletes', subtitle: 'Manage and monitor your athletes.' },
   '/dashboard/business': { title: 'Business', subtitle: 'Business metrics and revenue tracking.' },
-  '/dashboard/ai-coach': { title: 'AI Coach', subtitle: 'Chat with your AI fitness assistant.' },
   // App pages
   '/workout-log': { title: 'Workout Log', subtitle: 'Log exercises and track your sessions.' },
   '/exercises': { title: 'Exercises', subtitle: 'Browse exercises by muscle group, equipment, and more.' },
