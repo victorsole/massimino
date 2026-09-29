@@ -189,6 +189,7 @@ function WorkoutLogPageContent() {
   // My Programs state
   const [myProgramsData, setMyProgramsData] = useState<UserProgram[]>([]);
   const [loadingMyPrograms, setLoadingMyPrograms] = useState(false);
+  const [myProgramsReloadKey, setMyProgramsReloadKey] = useState(0);
 
   // Recommendations collapsed state (collapsed by default on mobile)
   const [recommendationsExpanded, setRecommendationsExpanded] = useState(false);
@@ -362,6 +363,8 @@ function WorkoutLogPageContent() {
                     current_day: sub.currentDay || 1,
                     progress_percentage: sub.progressPercentage || 0,
                     is_active: sub.isActive,
+                    status: sub.status,
+                    is_currently_active: !!sub.isCurrentlyActive,
                     completed_workouts: sub.completedWorkouts || 0,
                     total_workouts: totalWorkouts,
                   },
@@ -413,7 +416,7 @@ function WorkoutLogPageContent() {
         }
       })();
     }
-  }, [activeTab]);
+  }, [activeTab, myProgramsReloadKey]);
 
   // Filter exercises based on search
   useEffect(() => {
@@ -3315,6 +3318,14 @@ function WorkoutLogPageContent() {
             <MyPrograms
               programs={myProgramsData}
               onAddProgram={() => setActiveTab('programs')}
+              onChanged={() => {
+                setMyProgramsReloadKey((k) => k + 1);
+                // Today's workout follows the current programme
+                fetch('/api/workout/programs?subscriptions=true')
+                  .then((r) => (r.ok ? r.json() : null))
+                  .then((subs) => { if (Array.isArray(subs)) setProgramSubscriptions(subs); })
+                  .catch(() => {});
+              }}
             />
           )
         )}

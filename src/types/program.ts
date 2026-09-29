@@ -294,6 +294,8 @@ export interface ProgramSubscription {
   is_active: boolean;
   completed_workouts: number;
   total_workouts: number;
+  status?: string; // ACTIVE | PAUSED | ARCHIVED | COMPLETED
+  is_currently_active?: boolean;
 }
 
 // User's followed programs

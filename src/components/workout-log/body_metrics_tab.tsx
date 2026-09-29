@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { format } from 'date-fns';
 import { movingAverage } from '@/core/utils/fitness';
+import { notify, confirmAction } from '@/lib/notify';
 
 type Metric = { id: string; value: number; unit: string; recordedAt: string };
 
@@ -54,6 +55,52 @@ export function BodyMetricsTab() {
     await load();
   };
 
+  // Recent entries, weight and body fat together, newest first
+  const entries = useMemo(
+    () =>
+      [
+        ...weights.map((m) => ({ ...m, kind: 'Weight' as const })),
+        ...bodyFats.map((m) => ({ ...m, kind: 'Body fat' as const })),
+      ]
+        .sort((a, b) => new Date(b.recordedAt).getTime() - new Date(a.recordedAt).getTime())
+        .slice(0, 20),
+    [weights, bodyFats]
+  );
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState('');
+
+  const saveEdit = async (id: string) => {
+    const value = parseFloat(editValue);
+    if (!Number.isFinite(value) || value <= 0) {
+      notify('Enter a valid positive number.', 'error');
+      return;
+    }
+    const res = await fetch(`/api/health/metrics/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ value }),
+    });
+    const body = await res.json().catch(() => null);
+    if (!res.ok) {
+      notify(body?.error?.message || 'Could not update the entry.', 'error');
+      return;
+    }
+    setEditingId(null);
+    notify('Entry updated.', 'success');
+    await load();
+  };
+
+  const remove = async (id: string, label: string) => {
+    if (!(await confirmAction(`Delete this ${label.toLowerCase()} entry?`))) return;
+    const res = await fetch(`/api/health/metrics/${id}`, { method: 'DELETE' });
+    if (!res.ok) {
+      notify('Could not delete the entry.', 'error');
+      return;
+    }
+    notify('Entry deleted.', 'success');
+    await load();
+  };
+
   return (
     <div className="space-y-4">
       <Card>
@@ -84,7 +131,7 @@ export function BodyMetricsTab() {
           <CardTitle>Weight Trend</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-xs text-muted-foreground mb-2">Shows last {weights.length} entries. 3‑day and 7‑day averages computed locally.</div>
+          <div className="text-xs text-muted-foreground mb-2">Based on your last {weights.length} weight {weights.length === 1 ? 'entry' : 'entries'}.</div>
           <div className="grid sm:grid-cols-3 gap-2">
             <div>
               <div className="text-sm">Most Recent</div>
@@ -99,6 +146,64 @@ export function BodyMetricsTab() {
               <div className="text-lg font-semibold">{ma7.length ? `${ma7[ma7.length - 1].toFixed(1)} kg` : '—'}</div>
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent entries</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {entries.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No entries yet. Add your first one above.</p>
+          ) : (
+            <ul className="divide-y">
+              {entries.map((m) => (
+                <li key={m.id} className="flex flex-wrap items-center gap-3 py-2">
+                  <span className="w-28 text-sm text-gray-600">{format(new Date(m.recordedAt), 'd MMM yyyy')}</span>
+                  <span className="w-20 text-sm text-gray-600">{m.kind}</span>
+                  {editingId === m.id ? (
+                    <>
+                      <Input
+                        inputMode="decimal"
+                        aria-label={`New ${m.kind.toLowerCase()} value`}
+                        className="w-28"
+                        value={editValue}
+                        onChange={(e) => setEditValue(e.target.value)}
+                      />
+                      <Button size="sm" onClick={() => saveEdit(m.id)}>Save</Button>
+                      <Button size="sm" variant="ghost" onClick={() => setEditingId(null)}>Cancel</Button>
+                    </>
+                  ) : (
+                    <>
+                      <span className="font-semibold">
+                        {m.value.toFixed(1)} {m.unit === 'KG' ? 'kg' : m.unit}
+                      </span>
+                      <span className="ml-auto flex gap-1">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => { setEditingId(m.id); setEditValue(String(m.value)); }}
+                          aria-label={`Edit ${m.kind.toLowerCase()} entry from ${format(new Date(m.recordedAt), 'd MMM yyyy')}`}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="text-red-700 hover:text-red-800"
+                          onClick={() => remove(m.id, m.kind)}
+                          aria-label={`Delete ${m.kind.toLowerCase()} entry from ${format(new Date(m.recordedAt), 'd MMM yyyy')}`}
+                        >
+                          Delete
+                        </Button>
+                      </span>
+                    </>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
         </CardContent>
       </Card>
     </div>
