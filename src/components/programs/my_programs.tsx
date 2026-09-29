@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import { notify, confirmAction } from '@/lib/notify';
 import {
   UserProgram,
   ProgramCategory,
@@ -12,7 +13,17 @@ import {
 interface MyProgramsProps {
   programs: UserProgram[];
   onAddProgram?: () => void;
+  onChanged?: () => void;
 }
+
+type SubscriptionAction = 'set-current' | 'pause' | 'resume' | 'leave';
+
+const ACTION_MESSAGES: Record<SubscriptionAction, string> = {
+  'set-current': 'is now your current programme.',
+  pause: 'is paused. Resume it any time.',
+  resume: 'is active again.',
+  leave: 'has been removed from your programmes.',
+};
 
 const CATEGORY_ICONS: Record<ProgramCategory, string> = {
   celebrity: 'mdi-star',
@@ -30,7 +41,7 @@ const CATEGORY_LABELS: Record<ProgramCategory, string> = {
   modality: 'Modality',
 };
 
-export function MyPrograms({ programs, onAddProgram }: MyProgramsProps) {
+export function MyPrograms({ programs, onAddProgram, onChanged }: MyProgramsProps) {
   // Filter out any invalid programs that don't have proper subscription data
   const validPrograms = (programs || []).filter(
     (p) => p && p.subscription && p.subscription.id && p.program
@@ -49,7 +60,7 @@ export function MyPrograms({ programs, onAddProgram }: MyProgramsProps) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {validPrograms.map((userProgram) => (
-          <ProgramCard key={userProgram.subscription.id} userProgram={userProgram} />
+          <ProgramCard key={userProgram.subscription.id} userProgram={userProgram} onChanged={onChanged} />
         ))}
 
         {/* Add Program Card */}
@@ -67,10 +78,45 @@ export function MyPrograms({ programs, onAddProgram }: MyProgramsProps) {
 
 interface ProgramCardProps {
   userProgram: UserProgram;
+  onChanged?: () => void;
 }
 
-function ProgramCard({ userProgram }: ProgramCardProps) {
+function ProgramCard({ userProgram, onChanged }: ProgramCardProps) {
   const { subscription, program, next_workout } = userProgram;
+  const [busy, setBusy] = useState(false);
+  const isPaused = subscription.status === 'PAUSED';
+  const isCurrent = !!subscription.is_currently_active;
+  const name = program.metadata.program_name;
+
+  const run = async (e: React.MouseEvent, action: SubscriptionAction) => {
+    // The whole card is a link: keep these buttons from navigating
+    e.preventDefault();
+    e.stopPropagation();
+    if (action === 'leave') {
+      const ok = await confirmAction(
+        `Leave ${name}? It will be removed from My Programs. Your logged workouts are kept.`,
+        { confirmLabel: 'Leave programme', destructive: true }
+      );
+      if (!ok) return;
+    }
+    setBusy(true);
+    try {
+      const res = await fetch(`/api/workout/programs/subscriptions/${subscription.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action }),
+      });
+      const body = await res.json().catch(() => null);
+      if (!res.ok) {
+        notify(body?.error?.message || 'Could not update this programme. Please try again.', 'error');
+        return;
+      }
+      notify(`${name} ${ACTION_MESSAGES[action]}`, 'success');
+      onChanged?.();
+    } finally {
+      setBusy(false);
+    }
+  };
 
   // Determine category from program
   const category: ProgramCategory = program.program_philosophy?.athlete_info
@@ -87,9 +133,8 @@ function ProgramCard({ userProgram }: ProgramCardProps) {
   const totalWeeks = program.metadata.duration_weeks;
 
   return (
-    <Link
-      href={`/workout-log/programs/${subscription.program_id}`}
-      className="block bg-white rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer"
+    <div
+      className="bg-white rounded-2xl overflow-hidden transition-all duration-300"
       style={{
         boxShadow: '0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06)',
       }}
@@ -102,6 +147,7 @@ function ProgramCard({ userProgram }: ProgramCardProps) {
         e.currentTarget.style.transform = 'translateY(0)';
       }}
     >
+      <Link href={`/workout-log/programs/${subscription.program_id}`} className="block cursor-pointer">
       {/* Hero Section */}
       <div
         className="p-6 text-white relative overflow-hidden"
@@ -163,7 +209,45 @@ function ProgramCard({ userProgram }: ProgramCardProps) {
           </div>
         )}
       </div>
-    </Link>
+      </Link>
+      <div className="px-5 pb-5">
+        {/* Status and actions (outside the link) */}
+        <div className="flex flex-wrap items-center gap-2">
+          {isCurrent && (
+            <span className="rounded-full bg-brand-primary/10 px-2.5 py-1 text-xs font-semibold text-brand-primary">
+              Current programme
+            </span>
+          )}
+          {isPaused && (
+            <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-900">Paused</span>
+          )}
+          <span className="ml-auto flex flex-wrap gap-1">
+            {!isCurrent && !isPaused && (
+              <button type="button" disabled={busy} onClick={(e) => run(e, 'set-current')}
+                className="rounded-md px-2 py-1 text-xs font-medium text-brand-primary hover:bg-brand-primary/10 disabled:opacity-50">
+                Make current
+              </button>
+            )}
+            {isPaused ? (
+              <button type="button" disabled={busy} onClick={(e) => run(e, 'resume')}
+                className="rounded-md px-2 py-1 text-xs font-medium text-brand-primary hover:bg-brand-primary/10 disabled:opacity-50">
+                Resume
+              </button>
+            ) : (
+              <button type="button" disabled={busy} onClick={(e) => run(e, 'pause')}
+                className="rounded-md px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-50">
+                Pause
+              </button>
+            )}
+            <button type="button" disabled={busy} onClick={(e) => run(e, 'leave')}
+              className="rounded-md px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-50 disabled:opacity-50">
+              Leave
+            </button>
+          </span>
+        </div>
+
+      </div>
+    </div>
   );
 }
 
