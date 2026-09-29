@@ -169,8 +169,8 @@ In the event of a merger, acquisition, or sale of assets, user information may b
 ### 7.2 Data Subject Rights (GDPR/CCPA)
 **Access:** Request copies of your personal information
 **Correction:** Update or correct inaccurate information
-**Deletion:** Request deletion of your personal information
-**Portability:** Receive your data in a portable format
+**Deletion:** Delete your account yourself in Settings > Privacy > Your data
+**Portability:** Download your data as a JSON file in Settings > Privacy > Your data
 **Restriction:** Limit how we process your information
 **Objection:** Object to certain processing activities
 
@@ -207,10 +207,10 @@ In the event of a merger, acquisition, or sale of assets, user information may b
 We retain your information for as long as your account is active or as needed to provide services.
 
 ### 9.2 Deleted accounts
-**Immediate deletion:**
-- Profile information and settings
-- Private messages and communications
-- Payment information (except as required for tax/legal purposes)
+When you delete your account, you are signed out and can no longer sign in. We keep your data for 30 days so that a deletion made by mistake can be reversed (email hello@beresol.eu). After 30 days:
+- Your profile, contact details, photos, body metrics, nutrition logs, AI coach conversations and messages you sent are permanently erased
+- Your training history (sets and sessions) is kept only in anonymised form, no longer linked to you
+- Payment records are kept only where tax or legal rules require it
 
 **Extended retention (for safety/legal purposes):**
 - Safety-related reports and investigations (up to 7 years)

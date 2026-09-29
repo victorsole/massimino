@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { User, Bell, Shield, Ruler, Check, Loader2, RotateCcw } from 'lucide-react';
+import { YourDataSection } from '@/components/settings/your_data_section';
 
 type SettingsTab = 'profile' | 'notifications' | 'privacy' | 'preferences';
 
@@ -397,6 +398,7 @@ export default function SettingsPage() {
                       </div>
                     ))}
                   </div>
+                  <YourDataSection />
                 </>
               )}
             </div>
