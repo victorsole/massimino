@@ -28,7 +28,7 @@ export function StatCard({ icon: Icon, value, unit, label, color, meta }: StatCa
       <div className="flex-1 min-w-0">
         <p className="text-2xl font-bold text-gray-900 leading-none mb-1 font-sans">
           {value}
-          {unit && <span className="text-sm font-normal text-gray-400 ml-1">{unit}</span>}
+          {unit && <span className="text-sm font-normal text-gray-500 ml-1">{unit}</span>}
         </p>
         <p className={`text-xs font-medium ${c.text} truncate`}>{label}</p>
         {meta && <p className="text-[10px] text-gray-500 mt-0.5">{meta}</p>}
