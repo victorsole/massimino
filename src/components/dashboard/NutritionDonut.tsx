@@ -57,7 +57,7 @@ export function NutritionDonut({ protein, carbs, fat, loading = false }: Nutriti
         <div className="flex items-center gap-5 relative flex-col sm:flex-row">
           {/* Donut */}
           <div className="relative w-[140px] h-[140px] flex-shrink-0">
-            <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120" role="img" aria-label="Share of calories by macronutrient">
+            <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120" role="img" aria-label="Share of calories by macronutrient, in kcal from protein, carbs and fat">
               {segments.map((seg) => (
                 <circle
                   key={seg.label}
@@ -74,7 +74,7 @@ export function NutritionDonut({ protein, carbs, fat, loading = false }: Nutriti
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span className="text-2xl font-bold text-gray-900">{Math.round(totalKcal)}</span>
-              <span className="text-xs text-gray-500">kcal from macros</span>
+              <span className="text-xs text-gray-500">kcal</span>
             </div>
           </div>
 
