@@ -23,6 +23,7 @@ import {
   OrderGenerationContext
 } from '@/types/workout';
 import { get_exercise_recommendations } from '@/services/ai/workout-suggestions';
+import { localDateTimeToUtc } from '@/lib/dates';
 
 // ============================================================================
 // WORKOUT LOG ENTRY QUERIES
@@ -1029,8 +1030,8 @@ export async function createWorkoutSession(
   data: WorkoutSessionFormData & { athleteInvitationId?: string; athleteInvitationEmail?: string },
   coachId?: string
 ): Promise<WorkoutSession> {
-  const startTime = new Date(`${data.date}T${data.startTime}`);
-  const endTime = data.endTime ? new Date(`${data.date}T${data.endTime}`) : null;
+  const startTime = localDateTimeToUtc(data.date, data.startTime, data.timezoneOffset);
+  const endTime = data.endTime ? localDateTimeToUtc(data.date, data.endTime, data.timezoneOffset) : null;
 
   let duration: number | undefined;
   if (startTime && endTime) {
@@ -1078,11 +1079,11 @@ export async function updateWorkoutSession(
   let duration = existing.duration;
 
   if (data.date && data.startTime) {
-    startTime = new Date(`${data.date}T${data.startTime}`);
+    startTime = localDateTimeToUtc(data.date, data.startTime, data.timezoneOffset);
   }
 
   if (data.date && data.endTime) {
-    endTime = new Date(`${data.date}T${data.endTime}`);
+    endTime = localDateTimeToUtc(data.date, data.endTime, data.timezoneOffset);
   }
 
   if (startTime && endTime) {

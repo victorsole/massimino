@@ -1108,6 +1108,7 @@ function WorkoutLogPageContent() {
           notes: undefined,
           date,
           startTime,
+          timezoneOffset: now.getTimezoneOffset(),
           assessmentId: sessionAssessmentId || undefined
         })
       });
@@ -1275,6 +1276,7 @@ function WorkoutLogPageContent() {
             title: 'Quick Workout',
             date,
             startTime,
+            timezoneOffset: now.getTimezoneOffset(),
           })
         });
 
@@ -3691,7 +3693,7 @@ function WorkoutLogPageContent() {
                     const res = await fetch('/api/workout/sessions', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ userId: selectedClientId, title: sessionTitle || undefined, date, startTime })
+                      body: JSON.stringify({ userId: selectedClientId, title: sessionTitle || undefined, date, startTime, timezoneOffset: now.getTimezoneOffset() })
                     });
                     const data = await res.json();
                     if (data.session) {

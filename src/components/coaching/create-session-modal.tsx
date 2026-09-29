@@ -71,7 +71,8 @@ export function CreateSessionModal({
           ),
           title: sessionTitle || undefined,
           date,
-          startTime
+          startTime,
+          timezoneOffset: now.getTimezoneOffset()
         })
       });
 

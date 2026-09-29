@@ -200,6 +200,8 @@ export const createWorkoutSessionSchema = z.object({
   location: z.string().max(100, 'Location must be less than 100 characters').optional(),
   startTime: timeStringSchema,
   endTime: timeStringSchema.optional(),
+  // Browser's getTimezoneOffset() so wall-clock times can be stored as true UTC
+  timezoneOffset: z.number().int().min(-840).max(840).optional(),
   isTemplate: z.boolean().default(false),
 });
 
