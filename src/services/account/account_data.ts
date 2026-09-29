@@ -11,7 +11,7 @@ import { prisma } from '@/core/database'
 export const DELETION_GRACE_DAYS = 30
 const DELETION_PREFIX = 'account-deletion:'
 // Exercise-library media imported under a user id; not that user's personal data
-const LIBRARY_MEDIA_PROVIDERS = ['exercisedb', 'system']
+const LIBRARY_MEDIA_PROVIDERS = ['exercisedb']
 const personalMedia = (userId: string) => ({ userId, provider: { notIn: LIBRARY_MEDIA_PROVIDERS } })
 
 // Fields a user may see about themselves; excludes the password hash and
