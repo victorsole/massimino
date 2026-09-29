@@ -166,6 +166,7 @@ export interface WorkoutLogEntryFormData {
  * Form data for workout sessions
  */
 export interface WorkoutSessionFormData {
+  timezoneOffset?: number;
   date: string; // YYYY-MM-DD format
   title?: string;
   notes?: string;
