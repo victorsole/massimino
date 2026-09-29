@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Medal, Frown, ChevronDown, ChevronUp, Send, Plus, Trash2, Pencil, Sparkles, Dumbbell, Apple, Clock, ArrowRight } from 'lucide-react'
 import Image from 'next/image'
 
-interface ChatMessage { id?: string; role: 'user' | 'assistant'; content: string }
+interface ChatMessage { id?: string; role: 'user' | 'assistant'; content: string; isError?: boolean }
 interface WorkoutItemPreview { exerciseName: string; sets?: number; reps?: number; restSeconds?: number; notes?: string }
 interface WorkoutProposalPreview { id: string; summary?: string; workoutData?: { title?: string; description?: string; items?: WorkoutItemPreview[] } }
 
@@ -106,11 +106,11 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
         }
         setSuggestions(Array.isArray(data.suggestions) ? data.suggestions : [])
       } else {
-        const errMsg: ChatMessage = { role: 'assistant', content: data.error || 'Something went wrong.' }
+        const errMsg: ChatMessage = { role: 'assistant', content: data.error || 'Something went wrong.', isError: true }
         setMessages([...prev, errMsg])
       }
     } catch (e) {
-      const failMsg: ChatMessage = { role: 'assistant', content: 'Failed to reach server.' }
+      const failMsg: ChatMessage = { role: 'assistant', content: 'Failed to reach server.', isError: true }
       setMessages([...messages, failMsg])
     } finally {
       setLoading(false)
@@ -587,8 +587,8 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
                 }`}>
                   {m.role === 'assistant' ? renderMarkdown(m.content) : m.content}
                 </div>
-                {/* Feedback buttons below assistant bubbles */}
-                {m.role === 'assistant' && (
+                {/* Feedback buttons below assistant bubbles (not on error notices) */}
+                {m.role === 'assistant' && !m.isError && (
                   <div className="flex gap-1 mt-1 ml-1">
                     <button
                       aria-label="Helpful"
