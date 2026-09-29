@@ -11,8 +11,7 @@ import {
   createWorkoutSession,
   completeWorkoutSession,
   deleteWorkoutSession,
-  calculate_session_experience_points,
-  check_and_award_achievements,
+  finalise_session_with_gamification,
   prisma
 } from '@/core/database';
 import { 
@@ -446,8 +445,9 @@ export async function PATCH(request: NextRequest) {
     if (!completedSession.userId) {
       return NextResponse.json({ error: 'Cannot complete session for pending athlete' }, { status: 400 });
     }
-    const xp = await calculate_session_experience_points(sessionId);
-    const awarded = await check_and_award_achievements(completedSession.userId, sessionId);
+    // Calculates XP, awards achievements and saves both on the session
+    const { experience_points: xp, achievements_earned: awarded } =
+      await finalise_session_with_gamification(sessionId);
 
     // Reload session to include updated XP/achievements if the awarder updated them
     const updated = await prisma.workout_sessions.findUnique({ where: { id: sessionId } });
