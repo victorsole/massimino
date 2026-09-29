@@ -55,6 +55,8 @@ export async function resetPasswordWithToken(rawToken: string, newPassword: stri
     where: { id: userId },
     // A working reset link proves control of the inbox, so the email counts as verified
     data: { password: passwordHash, emailVerified: new Date(), updatedAt: new Date() },
+    // Return only the id: selecting whole rows fails while the schema and database drift
+    select: { id: true },
   })
   return 'ok'
 }
