@@ -143,6 +143,12 @@ const nextConfig = {
           destination: '/signup',
           permanent: true,
         },
+        // The dashboard AI Coach and Massichat were the same chat; one page now
+        {
+          source: '/dashboard/ai-coach',
+          destination: '/massichat',
+          permanent: true,
+        },
         // Bare usernames (massimino.fitness/{username}) are handled by src/app/[username]/page.tsx,
         // which only redirects when the username exists and 404s otherwise.
       ];

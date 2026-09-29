@@ -18,6 +18,22 @@ const openai = new OpenAI({
 
 type Provider = 'mistral' | 'openai'
 
+export const MASSICHAT_UNAVAILABLE = 'Massichat is temporarily unavailable. Please try again later.'
+
+/** A provider or configuration failure; its message is safe to show users. The cause is logged. */
+export class MassichatUnavailableError extends Error {
+  constructor() {
+    super(MASSICHAT_UNAVAILABLE)
+    this.name = 'MassichatUnavailableError'
+  }
+}
+
+function logProviderError(label: string, err: unknown) {
+  const e = err as { status?: number; message?: string } | undefined
+  const detail = (e?.message || String(err)).replace(/\b(sk|pk|rk)[-_][A-Za-z0-9_-]{8,}/g, '[redacted]')
+  console.error(`Massichat ${label} failed${e?.status ? ` (HTTP ${e.status})` : ''}: ${detail}`)
+}
+
 function provider(): Provider {
   // Mistral is the primary provider; OpenAI is fallback
   if (process.env.MISTRAL_API_KEY) return 'mistral'
@@ -44,15 +60,14 @@ export interface MassichatResponse {
 
 export async function sendMassichatMessage(req: MassichatRequest): Promise<MassichatResponse> {
   const prov = provider()
-  if (prov === 'mistral' && !process.env.MISTRAL_API_KEY) {
-    throw new Error('MISTRAL_API_KEY not configured. Set it in your environment to use Massichat.')
-  }
-  if (prov === 'openai' && !process.env.OPENAI_API_KEY) {
-    throw new Error('OPENAI_API_KEY not configured. Set it in your environment to use Massichat.')
+  if (!process.env.MISTRAL_API_KEY && !process.env.OPENAI_API_KEY) {
+    console.error('Massichat: neither MISTRAL_API_KEY nor OPENAI_API_KEY is configured')
+    throw new MassichatUnavailableError()
   }
   const db: any = prisma as any
   if (!db?.ai_chat_sessions?.create || !db?.ai_chat_messages?.create) {
-    throw new Error('Massichat tables not available. Run: npm run db:generate && npm run db:migrate')
+    console.error('Massichat: ai_chat tables are missing from the Prisma client')
+    throw new MassichatUnavailableError()
   }
   // 1) ensure session
   let sessionId = req.sessionId
@@ -184,24 +199,23 @@ When proposing a workout:
     return { text: completion.choices[0]?.message?.content || '', model: 'gpt-4o-mini' }
   }
 
-  if (prov === 'mistral') {
+  // Try each configured provider in order; users only ever see a generic message
+  const attempts: Array<[string, () => Promise<{ text: string; model: string }>]> = []
+  if (prov === 'mistral') attempts.push(['Mistral', callMistral])
+  if (process.env.OPENAI_API_KEY) attempts.push(['OpenAI', callOpenAI])
+  let answered = false
+  for (const [label, call] of attempts) {
     try {
-      const result = await callMistral()
+      const result = await call()
       aiText = result.text || aiText
       modelUsed = result.model
-    } catch (mistralErr) {
-      console.warn('Mistral failed, falling back to OpenAI:', mistralErr)
-      if (process.env.OPENAI_API_KEY) {
-        const result = await callOpenAI()
-        aiText = result.text || aiText
-        modelUsed = result.model
-      }
+      answered = true
+      break
+    } catch (err) {
+      logProviderError(label, err)
     }
-  } else {
-    const result = await callOpenAI()
-    aiText = result.text || aiText
-    modelUsed = result.model
   }
+  if (!answered) throw new MassichatUnavailableError()
   const suggestions = extractFollowUps(aiText)
 
   // 6) detect workout proposal JSON
