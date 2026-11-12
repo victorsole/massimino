@@ -221,16 +221,36 @@
     }
   }
   .animate-scroll-cue {
-    animation: scrollCue 1.8s ease-in-out infinite;
+    animation: scrollCue 2s ease-in-out infinite;
+  }
+  /* Homepage hero entrance, played once on load */
+  .hero-rise {
+    animation: heroRise 0.9s ease-out both;
+  }
+  .hero-wordmark {
+    animation: heroWordmark 0.9s ease-out both;
   }
   @media (prefers-reduced-motion: reduce) {
-    .animate-scroll-cue { animation: none; }
+    .animate-scroll-cue,
+    .hero-rise,
+    .hero-wordmark { animation: none; }
   }
 }
 
 @keyframes scrollCue {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(6px); }
+}
+
+@keyframes heroRise {
+  from { opacity: 0; transform: translate3d(0, 18px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+/* Letters draw together; margin-right follows so the centred word stays centred */
+@keyframes heroWordmark {
+  from { opacity: 0; transform: translate3d(0, 18px, 0); letter-spacing: 0.5em; margin-right: -0.5em; }
+  to { opacity: 1; transform: translate3d(0, 0, 0); letter-spacing: 0.28em; margin-right: -0.28em; }
 }
 
 /* Custom animations */

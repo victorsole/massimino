@@ -6,6 +6,7 @@ import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { scrollRevealVariants } from '@/lib/animations/variants';
 import { Shield, TrendingUp, Users, Dumbbell, ArrowRight } from 'lucide-react';
+import { ScrollCue } from '@/components/ui/scroll_cue';
 
 /* ─── Pexels fallback image URLs (stable, publicly accessible) ─── */
 const FALLBACK_IMAGES = {
@@ -104,6 +105,37 @@ function PartnerLogo({ src, alt }: { src: string; alt: string }) {
 }
 
 export default function HomePage() {
+  const heroRef = useRef<HTMLElement>(null);
+  const heroImageRef = useRef<HTMLDivElement>(null);
+  const heroContentRef = useRef<HTMLDivElement>(null);
+
+  /* Soft hero parallax: the photo moves at ~0.3x the scroll speed (lighter on phones)
+     and the text fades a little as the page scrolls. Off with prefers-reduced-motion. */
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const hero = heroRef.current;
+      if (!hero) return;
+      const y = window.scrollY;
+      const height = hero.offsetHeight;
+      if (y > height) return;
+      const factor = window.innerWidth < 768 ? 0.15 : 0.3;
+      if (heroImageRef.current) heroImageRef.current.style.transform = `translate3d(0, ${y * factor}px, 0)`;
+      if (heroContentRef.current) heroContentRef.current.style.opacity = String(1 - 0.6 * Math.min(1, y / height));
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
+
   const [partners, setPartners] = useState<Array<any>>([]);
   const [pexelsImages, setPexelsImages] = useState<{
     hero?: string;
@@ -188,9 +220,9 @@ export default function HomePage() {
   return (
     <>
       {/* ════════ HERO ════════ */}
-      <section className="relative min-h-screen flex items-center justify-center text-center overflow-hidden">
-        {/* Background image */}
-        <div className="absolute inset-0">
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center text-center overflow-hidden">
+        {/* Background image (moves at ~0.3x scroll speed for a soft parallax) */}
+        <div ref={heroImageRef} className="absolute inset-0 will-change-transform">
           <Image
             src={pexelsImages.hero!}
             alt="Fitness training"
@@ -205,23 +237,21 @@ export default function HomePage() {
         </div>
 
         {/* Content */}
-        <motion.div
-          className="relative z-10 max-w-3xl sm:max-w-4xl px-4 sm:px-6"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <p className="font-display text-sm md:text-base font-medium uppercase tracking-[0.25em] text-brand-secondary/80 mb-5 [text-shadow:0_1px_12px_rgba(15,32,44,0.6)]">
+        <div ref={heroContentRef} className="relative z-10 w-full max-w-3xl sm:max-w-4xl px-4 sm:px-6">
+          <p className="hero-rise font-display text-sm md:text-base font-medium uppercase tracking-[0.25em] text-brand-secondary/80 mb-5 [text-shadow:0_1px_12px_rgba(15,32,44,0.6)]">
             Safe Workouts for Everyone
           </p>
-          <h1 className="font-display text-5xl sm:text-7xl lg:text-[7.5rem] font-bold uppercase tracking-tight leading-[0.95] text-white mb-3 [text-shadow:0_2px_30px_rgba(15,32,44,0.55)]">
-            MASSIMINO
+          {/* Light wordmark; flex-centred and nowrap so it never wraps or drifts while the letters draw together */}
+          <h1 className="flex justify-center whitespace-nowrap font-display font-extralight uppercase leading-none text-[#FBF8F2] mb-5 text-[clamp(2.25rem,10.5vw,6.5rem)] [text-shadow:0_2px_30px_rgba(15,32,44,0.55)]">
+            <span className="hero-wordmark tracking-[0.28em] -mr-[0.28em]" style={{ animationDelay: '150ms' }}>
+              MASSIMINO
+            </span>
           </h1>
-          <div className="inline-block rounded-full px-6 py-2 border border-brand-secondary/40 text-xs sm:text-sm font-display font-medium uppercase tracking-[0.15em] text-brand-secondary/80 mb-8">
+          <div className="hero-rise inline-block rounded-full px-6 py-2 border border-brand-secondary/40 text-xs sm:text-sm font-display font-medium uppercase tracking-[0.15em] text-brand-secondary/80 mb-8" style={{ animationDelay: '270ms' }}>
             Evidence-Based Fitness &bull; NASM-Aligned
           </div>
           <br />
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="hero-rise flex flex-col sm:flex-row gap-4 justify-center" style={{ animationDelay: '390ms' }}>
             <Link
               href="/signup"
               className="rounded-full inline-flex items-center justify-center gap-2 px-10 py-4 bg-brand-primary text-white font-display text-sm font-semibold uppercase tracking-wider hover:bg-brand-primary-dark transition-all hover:-translate-y-0.5"
@@ -235,11 +265,18 @@ export default function HomePage() {
               Sign In
             </Link>
           </div>
-        </motion.div>
+        </div>
+
+        {/* Scroll cue to the next section; hides once the page scrolls */}
+        <div className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2">
+          <div className="hero-rise" style={{ animationDelay: '510ms' }}>
+            <ScrollCue targetId="after-hero" gap={0} hideOnScroll ariaLabel="Scroll down" />
+          </div>
+        </div>
       </section>
 
       {/* ════════ MARQUEE ════════ */}
-      <div className="py-4 overflow-hidden bg-brand-primary">
+      <div id="after-hero" className="py-4 overflow-hidden bg-brand-primary">
         <div className="flex animate-marquee-scroll w-max">
           {[...Array(2)].map((_, i) => (
             <div key={i} className="flex items-center gap-6 px-6 whitespace-nowrap">

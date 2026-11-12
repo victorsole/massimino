@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { EUROPE_FITNESS_DATA_2024, getByPenetrationRate, getByMarketSize, getByGrowthRate } from '@/data/fitness/europe_2024';
 import { EUROPE_TOTALS } from '@/types/fitness_data';
 import { FitnessMapSection } from './components/fitness_map_section';
-import { ScrollCue } from './components/scroll_cue';
+import { ScrollCue } from '@/components/ui/scroll_cue';
 import {
   PenetrationTable,
   MarketTable,
@@ -188,7 +188,7 @@ export default function FitnessIntelligencePage() {
           </div>
 
           <div className="flex justify-center pb-5 sm:pb-7">
-            <ScrollCue targetId="map" />
+            <ScrollCue targetId="map" label="Explore the map" ariaLabel="Explore the map: scroll to the map" />
           </div>
         </section>
       </div>
