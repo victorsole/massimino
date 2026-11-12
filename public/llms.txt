@@ -1,38 +1,39 @@
 # Massimino
 
-> Safe Workouts for Everyone
+> Massimino is a safety-first fitness community where athletes and personal trainers log workouts, follow structured training programmes and connect, with moderation and anti-harassment tools built in. It is run by Beresol BV and its code is open source under the Apache License 2.0.
 
-## About
+Massimino offers general fitness information and isn't medical advice. The site is in English. Workout logs, profiles and messages need an account; the pages below are public.
 
-Massimino is a safety-first fitness community platform where trainers and athletes connect, track workouts, and achieve goals together. Built for real people who want structured, evidence-based training programs with professional guidance.
+## Main pages
 
-## Key Features
+- [Home](https://massimino.fitness/): what Massimino is, featured training programmes and partners
+- [About](https://massimino.fitness/about): who builds Massimino and what makes it different
+- [Exercise library](https://massimino.fitness/exercises): 1,200+ curated exercises, searchable by muscle group, equipment, difficulty and movement pattern, with instructions
+- [Fitness Intelligence](https://massimino.fitness/fitness-intelligence): European fitness market data (EuropeActive/Deloitte, FY2025) and physical-activity statistics from Eurostat, by country
+- [Safety guidelines](https://massimino.fitness/safety): community rules, how content is moderated and how to report a problem
+- [Community](https://massimino.fitness/community): community feed and discovery
+- [Find a team](https://massimino.fitness/teams/discover): public training teams to join
+- [Partnerships](https://massimino.fitness/partnerships): partner brands and how to become a partner
+- [Sign up](https://massimino.fitness/signup): create an account
 
-- **Workout Logging** — Track sets, reps, weight, and RPE for every session
-- **Training Programs** — Follow structured programs from classic bodybuilding to modern hypertrophy science
-- **Exercise Database** — Browse 1,300+ exercises with muscle group targeting and instructions
-- **Community** — Connect with trainers, athletes, and fitness enthusiasts
-- **Teams** — Create or join training teams for group accountability
-- **AI Coach (MassiChat)** — Get personalized training advice powered by sports science
-- **Partnerships** — Collaborate with fitness brands and professionals
-- **Nutrition Coaching** — Track macros and get dietary guidance
+## Features (signed-in users)
 
-## Public Pages
-
-- `/` — Homepage
-- `/signup` — Create an account
-- `/exercises` — Exercise database browser
-- `/fitness-intelligence` — European fitness market and physical-activity data (FY2025, live Eurostat)
-- `/community` — Community feed and discovery
-- `/teams/discover` — Find and join training teams
-- `/massiminos` — Core platform features
-- `/partnerships` — Partnership opportunities
-
-## Tech Stack
-
-Next.js (App Router), TypeScript, Tailwind CSS, Supabase, Prisma
+- Workout logging: sessions, sets, reps, weight, RPE, personal records and history
+- Training programmes: a catalogue of programme templates with subscriptions and progress tracking
+- Massichat: an AI fitness coach
+- Trainers and teams: public trainer profiles, coach and athlete management, invitations and challenges
+- Assessments and nutrition: posture, cardio and readiness forms, and nutrition tools
 
 ## Contact
 
-- Website: https://massimino.fitness
-- Support: hello@beresol.eu
+- [Contact page](https://massimino.fitness/contact): support, privacy requests, safety reports and partnerships
+- Email: hello@beresol.eu
+
+## Optional
+
+- [Privacy policy](https://massimino.fitness/privacy)
+- [Terms of service](https://massimino.fitness/terms)
+- [Cookie policy](https://massimino.fitness/cookies)
+- [Subprocessors](https://massimino.fitness/legal/subprocessors)
+- [Source code on GitHub](https://github.com/Beresol-BV/massimino): Next.js, TypeScript, Prisma and PostgreSQL
+- [Sitemap](https://massimino.fitness/sitemap.xml)
