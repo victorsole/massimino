@@ -334,6 +334,12 @@ export function TeamInterface({
             const primary = aesthetic.primaryColor || aesthetic.primary_colour || '#2b5069';
             const capacityPercent = team.maxMembers > 0 ? (team.memberCount / team.maxMembers) * 100 : 0;
             const isNearFull = capacityPercent >= 90;
+            // Edit/Delete only for the team owner or an admin. Both sides must be real ids:
+            // comparing undefined === undefined showed the buttons to signed-out visitors.
+            // UI only; the server must enforce this too (see notes for Victor).
+            const viewerId = session?.user?.id;
+            const ownerId = team.trainerId || team.trainer?.id;
+            const canManageTeam = session?.user?.role === 'ADMIN' || (!!viewerId && !!ownerId && viewerId === ownerId);
 
             return (
               <motion.div
@@ -459,7 +465,7 @@ export function TeamInterface({
                     </div>
 
                     {/* Trainer/Admin quick actions */}
-                    {(session?.user?.role === 'ADMIN' || session?.user?.id === team.trainer?.id) && (
+                    {canManageTeam && (
                       <div className="flex gap-3 justify-end pt-2 mt-2 border-t border-gray-50">
                         <a href="/dashboard" className="text-xs font-body text-muted-foreground hover:text-[#2b5069] transition-colors">Edit</a>
                         <button
