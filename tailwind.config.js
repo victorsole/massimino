@@ -262,9 +262,9 @@ module.exports = {
         // Typography for safety messaging
         fontFamily: {
           // CSS variables are set by next/font in src/app/layout.tsx
-          sans: ['var(--font-nunito-sans)', 'var(--font-lato)', 'system-ui', 'sans-serif'],
-          display: ['var(--font-nunito-sans)', 'sans-serif'],
-          body: ['var(--font-lato)', 'sans-serif'],
+          sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+          display: ['var(--font-inter-tight)', 'var(--font-inter)', 'sans-serif'],
+          body: ['var(--font-inter)', 'sans-serif'],
           mono: ['JetBrains Mono', 'monospace'],
         },
         // Spacing for safety elements
