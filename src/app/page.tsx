@@ -27,6 +27,13 @@ const FALLBACK_IMAGES = {
 };
 
 /* ─── Featured programs ─── */
+// Partners added on the home band only, alongside whatever /api/partners returns.
+// verdabros.com did not resolve when this was added, so Verdabros links to /partnerships for now.
+const HOME_EXTRA_PARTNERS = [
+  { name: 'Verdabros', url: '/partnerships', logoUrl: '/images/verdabros-logo.svg' },
+  { name: 'Pilates4Life', url: 'https://www.pilates4life.es/?utm_source=massimino&utm_medium=partner_band&utm_campaign=pilates4life', logoUrl: '/images/pilates4life-logo.webp' },
+];
+
 const FEATURED_PROGRAMS = [
   { name: 'The Golden Six', category: 'Classic', tag: 'Strength' },
   { name: 'HIIT Workout', category: 'Modality', tag: 'Cardio' },
@@ -135,6 +142,14 @@ export default function HomePage() {
 
   const normalizeLogo = (logoUrl: string | null | undefined) =>
     (logoUrl || '').replace(/^\/assets\/images\//, '/images/');
+
+  // Home-only partners shown next to those from /api/partners (the API is not changed)
+  const bandPartners = [
+    ...partners,
+    ...HOME_EXTRA_PARTNERS.filter(
+      (extra) => !partners.some((p: any) => (p.name || '').toLowerCase() === extra.name.toLowerCase())
+    ),
+  ];
 
   /* Stat counters */
   const statAthletes = useCountUp(500);
@@ -451,17 +466,18 @@ export default function HomePage() {
         <div className="flex animate-partners-scroll w-max">
           {[...Array(4)].map((_, setIndex) => (
             <div key={setIndex} className="flex items-center">
-              {partners.map((p: any) => (
+              {bandPartners.map((p: any) => (
                 <Link
                   key={`${setIndex}-${p.name || p.id}`}
                   href={p.url || '#'}
-                  target="_blank"
-                  rel="noopener"
+                  target={p.url?.startsWith('http') ? '_blank' : undefined}
+                  rel={p.url?.startsWith('http') ? 'noopener' : undefined}
                   className="flex-shrink-0 w-32 sm:w-40 h-10 sm:h-14 mx-2 sm:mx-5 flex items-center justify-center rounded-lg border border-[#2b5069]/10 px-3 sm:px-5 py-2 sm:py-2.5 opacity-40 hover:opacity-70 transition-opacity"
                 >
                   <Image
                     src={normalizeLogo(p.logoUrl)}
                     alt={p.name || 'Partner'}
+                    unoptimized={normalizeLogo(p.logoUrl).endsWith('.svg')}
                     width={120}
                     height={40}
                     className="object-contain max-h-8"
