@@ -462,7 +462,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
             )}
             <button
               onClick={() => { setSessionId(null); setMessages([]); setWorkoutProposal(null); setEditable(null); setSuggestions([]); }}
-              className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#2b5069] text-white hover:bg-[#2b5069]/90 transition-colors"
+              className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#2b5069] text-white hover:bg-brand-primary-dark transition-colors"
               title="New Chat"
             >
               <Plus size={16} />
@@ -676,7 +676,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
                   )}
                   <button
                     onClick={acceptWorkout}
-                    className="text-xs font-medium px-4 py-1.5 rounded-lg bg-[#2b5069] text-white hover:bg-[#2b5069]/90 transition-colors ml-auto"
+                    className="text-xs font-medium px-4 py-1.5 rounded-lg bg-[#2b5069] text-white hover:bg-brand-primary-dark transition-colors ml-auto"
                   >
                     Accept & Add
                   </button>
@@ -814,7 +814,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
               disabled={loading}
               className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all flex-shrink-0 ${
                 input.trim()
-                  ? 'bg-[#2b5069] text-white hover:bg-[#2b5069]/90 shadow-sm'
+                  ? 'bg-[#2b5069] text-white hover:bg-brand-primary-dark shadow-sm'
                   : 'bg-gray-100 text-gray-400'
               } disabled:opacity-50`}
             >
@@ -883,7 +883,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
               <button
                 onClick={saveAsTemplate}
                 disabled={templateSaving}
-                className="px-4 py-2 text-sm font-medium text-white bg-[#2b5069] rounded-xl hover:bg-[#2b5069]/90 transition-colors disabled:opacity-50"
+                className="px-4 py-2 text-sm font-medium text-white bg-[#2b5069] rounded-xl hover:bg-brand-primary-dark transition-colors disabled:opacity-50"
               >
                 {templateSaving ? 'Saving...' : 'Save'}
               </button>

@@ -455,7 +455,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
 
         <form className="flex gap-2" action="/admin/users" method="get">
           <Input name="q" placeholder="Search email or name" defaultValue={q} className="w-64 border-brand-primary/20 focus:border-brand-primary" />
-          <Button type="submit" className="bg-brand-primary hover:bg-brand-primary/90 text-white">Search</Button>
+          <Button type="submit" className="bg-brand-primary hover:bg-brand-primary-dark text-white">Search</Button>
         </form>
       </div>
 
@@ -642,7 +642,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                 <label className="text-sm text-indigo-700">Reason</label>
                 <Input name="description" placeholder="Holiday bonus, system appreciation..." required className="min-w-48" />
               </div>
-              <Button type="submit" className="bg-brand-primary hover:bg-brand-primary/90">Bulk Award</Button>
+              <Button type="submit" className="bg-brand-primary hover:bg-brand-primary-dark">Bulk Award</Button>
             </form>
           </div>
         </div>
@@ -705,7 +705,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button type="submit" className="bg-brand-primary hover:bg-brand-primary/90">Send Invitations</Button>
+            <Button type="submit" className="bg-brand-primary hover:bg-brand-primary-dark">Send Invitations</Button>
           </div>
         </form>
       </div>
@@ -849,7 +849,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
             <label className="text-sm text-gray-600">Warnings</label>
             <Input type="number" name="warningCount" placeholder="0" className="w-20" />
           </div>
-          <Button type="submit" className="bg-brand-primary hover:bg-brand-primary/90">Create User</Button>
+          <Button type="submit" className="bg-brand-primary hover:bg-brand-primary-dark">Create User</Button>
         </form>
       </div>
 
@@ -964,7 +964,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                     />
                     <input type="number" name="reputationScore" defaultValue={u.reputationScore} min={0} max={100} className="w-20 border rounded px-2 py-1" />
                     <input type="number" name="warningCount" defaultValue={u.warningCount} min={0} className="w-16 border rounded px-2 py-1" />
-                    <Button type="submit" size="sm" className="bg-brand-primary hover:bg-brand-primary/90">Save</Button>
+                    <Button type="submit" size="sm" className="bg-brand-primary hover:bg-brand-primary-dark">Save</Button>
                   </form>
 
                   <form action={syncUserFromFirestoreAction} className="flex items-center gap-2">

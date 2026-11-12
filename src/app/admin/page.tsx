@@ -380,7 +380,7 @@ export default async function AdminHomePage() {
                   </span>
                 </div>
               ))}
-              <Button asChild className="w-full mt-3 bg-brand-primary hover:bg-brand-primary/90">
+              <Button asChild className="w-full mt-3 bg-brand-primary hover:bg-brand-primary-dark">
                 <a href="/admin/credentials">Review All Credentials</a>
               </Button>
             </CardContent>

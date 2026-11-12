@@ -179,7 +179,7 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/signup"
-              className="rounded-full inline-flex items-center justify-center gap-2 px-10 py-4 bg-brand-primary text-white font-display text-sm font-semibold uppercase tracking-wider hover:bg-brand-primary-light transition-all hover:-translate-y-0.5"
+              className="rounded-full inline-flex items-center justify-center gap-2 px-10 py-4 bg-brand-primary text-white font-display text-sm font-semibold uppercase tracking-wider hover:bg-brand-primary-dark transition-all hover:-translate-y-0.5"
             >
               Get Started <ArrowRight className="w-4 h-4" />
             </Link>
@@ -501,7 +501,7 @@ export default function HomePage() {
             />
             <button
               type="submit"
-              className="rounded-full px-7 py-3.5 bg-brand-primary text-white font-display text-sm font-semibold uppercase tracking-wider border border-brand-primary hover:bg-brand-primary-light transition-colors"
+              className="rounded-full px-7 py-3.5 bg-brand-primary text-white font-display text-sm font-semibold uppercase tracking-wider border border-brand-primary hover:bg-brand-primary-dark transition-colors"
             >
               Subscribe
             </button>

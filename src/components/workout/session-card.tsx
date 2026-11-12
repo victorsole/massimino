@@ -237,7 +237,7 @@ export function SessionCard({ session, onContinue, onStatusChange, onRefresh }: 
         <div className="flex gap-2">
           <Button
             onClick={handleContinue}
-            className="flex-1 bg-brand-primary hover:bg-brand-primary/90"
+            className="flex-1 bg-brand-primary hover:bg-brand-primary-dark"
             disabled={loading}
           >
             <Play className="w-4 h-4 mr-2" />
