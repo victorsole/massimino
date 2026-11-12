@@ -75,6 +75,34 @@ function useCountUp(target: number, duration = 2000) {
 }
 
 /* ─── Main Page ─── */
+/* Partner logo at full colour, no box and no hover effect. Wide logos share one
+   max height; square or tall ones get a little more height so they read at a
+   similar size instead of looking tiny next to wide wordmarks. */
+function PartnerLogo({ src, alt }: { src: string; alt: string }) {
+  const [ratio, setRatio] = useState<number | null>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+  const readRatio = (img: HTMLImageElement | null) => {
+    if (img?.naturalWidth && img.naturalHeight) setRatio(img.naturalWidth / img.naturalHeight);
+  };
+  // Cached images can finish loading before hydration, so onLoad never fires for them
+  useEffect(() => {
+    if (imgRef.current?.complete) readRatio(imgRef.current);
+  }, []);
+  const wide = ratio === null || ratio >= 1.6;
+  return (
+    <Image
+      ref={imgRef}
+      src={src}
+      alt={alt}
+      unoptimized={src.endsWith('.svg')}
+      width={170}
+      height={56}
+      onLoad={(e) => readRatio(e.currentTarget)}
+      className={`w-auto object-contain ${wide ? 'h-8 sm:h-10 max-w-[140px] sm:max-w-[170px]' : 'h-12 sm:h-14 max-w-[64px] sm:max-w-[80px]'}`}
+    />
+  );
+}
+
 export default function HomePage() {
   const [partners, setPartners] = useState<Array<any>>([]);
   const [pexelsImages, setPexelsImages] = useState<{
@@ -472,16 +500,9 @@ export default function HomePage() {
                   href={p.url || '#'}
                   target={p.url?.startsWith('http') ? '_blank' : undefined}
                   rel={p.url?.startsWith('http') ? 'noopener' : undefined}
-                  className="flex-shrink-0 w-32 sm:w-40 h-10 sm:h-14 mx-2 sm:mx-5 flex items-center justify-center rounded-lg border border-[#2b5069]/10 px-3 sm:px-5 py-2 sm:py-2.5 opacity-40 hover:opacity-70 transition-opacity"
+                  className="flex-shrink-0 mx-6 sm:mx-10 h-14 sm:h-16 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-4 focus-visible:ring-offset-brand-secondary"
                 >
-                  <Image
-                    src={normalizeLogo(p.logoUrl)}
-                    alt={p.name || 'Partner'}
-                    unoptimized={normalizeLogo(p.logoUrl).endsWith('.svg')}
-                    width={120}
-                    height={40}
-                    className="object-contain max-h-8"
-                  />
+                  <PartnerLogo src={normalizeLogo(p.logoUrl)} alt={p.name || 'Partner'} />
                 </Link>
               ))}
             </div>
