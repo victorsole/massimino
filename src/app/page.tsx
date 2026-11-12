@@ -212,7 +212,7 @@ export default function HomePage() {
       {/* ════════ STATS ════════ */}
       <section className="py-24 md:py-28 px-6 md:px-12 bg-[#2b5069] text-center">
         <motion.p
-          className="font-display text-sm font-medium uppercase tracking-[0.2em] text-brand-secondary/60 mb-6"
+          className="font-display text-sm font-medium uppercase tracking-[0.2em] text-brand-secondary/80 mb-6"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -231,7 +231,7 @@ export default function HomePage() {
               <span className="font-display text-5xl md:text-7xl font-bold text-white leading-none">
                 {stat.count}{stat.suffix}
               </span>
-              <span className="font-body text-xs uppercase tracking-[0.12em] text-brand-secondary/50 mt-2">
+              <span className="font-body text-xs uppercase tracking-[0.12em] text-brand-secondary/80 mt-2">
                 {stat.label}
               </span>
             </div>
@@ -248,16 +248,16 @@ export default function HomePage() {
             viewport={{ once: true, amount: 0.3 }}
             variants={scrollRevealVariants}
           >
-            <p className="font-display text-xs font-medium uppercase tracking-[0.2em] text-brand-primary/60 mb-3">
+            <p className="font-display text-xs font-medium uppercase tracking-[0.2em] text-brand-primary/80 mb-3">
               About Massimino
             </p>
             <h2 className="font-display text-3xl md:text-5xl font-bold uppercase tracking-tight leading-[1.05] text-[#2b5069] mb-5">
               The Safety-First Fitness Platform
             </h2>
-            <p className="font-body text-base text-[#2b5069]/60 leading-relaxed mb-4">
+            <p className="font-body text-base text-[#2b5069]/80 leading-relaxed mb-4">
               Massimino is the professional-grade fitness platform built to protect personal trainers and athletes while enabling evidence-based, NASM-aligned programming. Our mission is to foster a respectful, secure, and effective training environment for all.
             </p>
-            <p className="font-body text-base text-[#2b5069]/60 leading-relaxed mb-6">
+            <p className="font-body text-base text-[#2b5069]/80 leading-relaxed mb-6">
               Connect with verified trainers, access 30+ curated training programs, and track your progress with our intelligent workout logging system.
             </p>
             <div className="flex flex-col sm:flex-row gap-5">
@@ -265,13 +265,13 @@ export default function HomePage() {
                 <div className="w-10 h-10 rounded-lg bg-[#2b5069]/10 border border-[#2b5069]/10 flex items-center justify-center flex-shrink-0">
                   <Shield className="w-5 h-5 text-brand-primary" />
                 </div>
-                <span className="font-body text-sm text-[#2b5069]/60">Anti-Harassment Protection</span>
+                <span className="font-body text-sm text-[#2b5069]/80">Anti-Harassment Protection</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-[#2b5069]/10 border border-[#2b5069]/10 flex items-center justify-center flex-shrink-0">
                   <TrendingUp className="w-5 h-5 text-brand-primary" />
                 </div>
-                <span className="font-body text-sm text-[#2b5069]/60">Evidence-Based Programs</span>
+                <span className="font-body text-sm text-[#2b5069]/80">Evidence-Based Programs</span>
               </div>
             </div>
           </motion.div>
@@ -310,7 +310,7 @@ export default function HomePage() {
             viewport={{ once: true }}
             variants={scrollRevealVariants}
           >
-            <p className="font-display text-xs font-medium uppercase tracking-[0.2em] text-brand-primary/60 mb-3">
+            <p className="font-display text-xs font-medium uppercase tracking-[0.2em] text-brand-primary/80 mb-3">
               Browse Programs
             </p>
             <h2 className="font-display text-3xl md:text-5xl font-bold uppercase tracking-tight text-[#2b5069]">
@@ -328,13 +328,13 @@ export default function HomePage() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.05 }}
               >
-                <span className="font-display text-xs font-medium uppercase tracking-wider text-brand-primary/60 mb-1 md:mb-0">
+                <span className="font-display text-xs font-medium uppercase tracking-wider text-brand-primary/80 mb-1 md:mb-0">
                   {program.category}
                 </span>
                 <span className="font-display text-lg md:text-xl font-semibold uppercase tracking-wide text-[#2b5069] text-center">
                   {program.name}
                 </span>
-                <span className="font-body text-xs uppercase tracking-wider text-[#2b5069]/40 text-right mt-1 md:mt-0">
+                <span className="font-body text-xs uppercase tracking-wider text-[#2b5069]/80 text-right mt-1 md:mt-0">
                   {program.tag}
                 </span>
               </motion.div>
@@ -361,7 +361,7 @@ export default function HomePage() {
           viewport={{ once: true }}
           variants={scrollRevealVariants}
         >
-          <p className="font-display text-xs font-medium uppercase tracking-[0.2em] text-brand-primary/60 mb-2">
+          <p className="font-display text-xs font-medium uppercase tracking-[0.2em] text-brand-primary/80 mb-2">
             Movement in Action
           </p>
           <h2 className="font-display text-3xl md:text-4xl font-bold uppercase text-[#2b5069]">
@@ -394,7 +394,7 @@ export default function HomePage() {
             viewport={{ once: true }}
             variants={scrollRevealVariants}
           >
-            <p className="font-display text-xs font-medium uppercase tracking-[0.2em] text-brand-primary/60 mb-3">
+            <p className="font-display text-xs font-medium uppercase tracking-[0.2em] text-brand-primary/80 mb-3">
               Why Massimino
             </p>
             <h2 className="font-display text-3xl md:text-5xl font-bold uppercase tracking-tight text-[#2b5069]">
@@ -430,7 +430,7 @@ export default function HomePage() {
                   <h3 className="font-display text-2xl font-bold uppercase tracking-wide text-white mb-1">
                     {feature.title}
                   </h3>
-                  <p className="font-body text-sm text-white/60">{feature.detail}</p>
+                  <p className="font-body text-sm text-white/80">{feature.detail}</p>
                 </div>
                 <span className="absolute top-4 left-4 rounded-full px-3 py-1.5 bg-brand-primary text-white font-display text-[0.65rem] font-bold uppercase tracking-wider">
                   {feature.tag}
@@ -443,7 +443,7 @@ export default function HomePage() {
 
       {/* ════════ PARTNERS ════════ */}
       <div className="py-16 md:py-20 px-6 border-t border-b border-[#2b5069]/10 overflow-hidden bg-brand-secondary">
-        <p className="text-center font-display text-xs uppercase tracking-[0.15em] text-[#2b5069]/40 mb-8">
+        <p className="text-center font-display text-xs uppercase tracking-[0.15em] text-[#2b5069]/80 mb-8">
           Trusted Partners
         </p>
         <div className="flex animate-partners-scroll w-max">
@@ -480,13 +480,13 @@ export default function HomePage() {
           viewport={{ once: true }}
           variants={scrollRevealVariants}
         >
-          <p className="font-display text-xs font-medium uppercase tracking-[0.2em] text-brand-primary/60 mb-3">
+          <p className="font-display text-xs font-medium uppercase tracking-[0.2em] text-brand-primary/80 mb-3">
             Stay Updated
           </p>
           <h2 className="font-display text-3xl md:text-5xl font-bold uppercase tracking-tight text-[#2b5069] mb-4">
             Join the Community
           </h2>
-          <p className="font-body text-base text-[#2b5069]/50 leading-relaxed mb-10">
+          <p className="font-body text-base text-[#2b5069]/80 leading-relaxed mb-10">
             Get the latest training tips, new program launches, and platform updates delivered to your inbox.
           </p>
           <form
@@ -531,7 +531,7 @@ export default function HomePage() {
           <h2 className="font-display text-4xl md:text-6xl font-bold uppercase tracking-tight text-white leading-none mb-4">
             Start Your <br /><span className="text-brand-secondary/70">Fitness Journey</span>
           </h2>
-          <p className="font-body text-base text-white/60 mb-8">
+          <p className="font-body text-base text-white/80 mb-8">
             Join hundreds of athletes and trainers already using Massimino to train smarter, safer, and together.
           </p>
           <Link
