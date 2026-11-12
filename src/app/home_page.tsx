@@ -247,8 +247,10 @@ export default function HomePage() {
               MASSIMINO
             </span>
           </h1>
-          <div className="hero-rise inline-block rounded-full px-6 py-2 border border-brand-secondary/40 text-xs sm:text-sm font-display font-medium uppercase tracking-[0.15em] text-brand-secondary/80 mb-8" style={{ animationDelay: '270ms' }}>
-            Evidence-Based Fitness &bull; NASM-Aligned
+          {/* Tagline without a box; the two halves never break inside, so a narrow screen wraps at the bullet */}
+          <div className="hero-rise inline-block py-2 text-xs sm:text-sm font-display font-medium uppercase tracking-[0.15em] text-brand-secondary/90 mb-8 [text-shadow:0_1px_12px_rgba(15,32,44,0.6)]" style={{ animationDelay: '270ms' }}>
+            <span className="whitespace-nowrap">Evidence-Based Fitness</span>{' '}
+            <span className="whitespace-nowrap">&bull; NASM-Aligned</span>
           </div>
           <br />
           <div className="hero-rise flex flex-col sm:flex-row gap-4 justify-center" style={{ animationDelay: '390ms' }}>
