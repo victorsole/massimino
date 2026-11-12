@@ -98,7 +98,7 @@ function PartnerLogo({ src, alt }: { src: string; alt: string }) {
       width={170}
       height={56}
       onLoad={(e) => readRatio(e.currentTarget)}
-      className={`w-auto object-contain ${wide ? 'h-8 sm:h-10 max-w-[140px] sm:max-w-[170px]' : 'h-12 sm:h-14 max-w-[64px] sm:max-w-[80px]'}`}
+      className={`w-auto object-contain ${wide ? 'h-6 sm:h-8 max-w-[110px] sm:max-w-[136px]' : 'h-9 sm:h-11 max-w-[50px] sm:max-w-[64px]'}`}
     />
   );
 }
@@ -500,7 +500,7 @@ export default function HomePage() {
                   href={p.url || '#'}
                   target={p.url?.startsWith('http') ? '_blank' : undefined}
                   rel={p.url?.startsWith('http') ? 'noopener' : undefined}
-                  className="flex-shrink-0 mx-6 sm:mx-10 h-14 sm:h-16 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-4 focus-visible:ring-offset-brand-secondary"
+                  className="flex-shrink-0 mx-6 sm:mx-10 h-12 sm:h-14 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-4 focus-visible:ring-offset-brand-secondary"
                 >
                   <PartnerLogo src={normalizeLogo(p.logoUrl)} alt={p.name || 'Partner'} />
                 </Link>
