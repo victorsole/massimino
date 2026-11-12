@@ -12,6 +12,8 @@ export interface DataColumn<T> {
   render: (row: T, index: number) => ReactNode;
   headerClassName?: string;
   cellClassName?: string;
+  /** Hide this column below the sm breakpoint so phones only see the key columns */
+  hideOnMobile?: boolean;
 }
 
 interface DataTableProps<T> {
@@ -24,6 +26,10 @@ interface DataTableProps<T> {
   initialSort?: { key: string; dir: 'asc' | 'desc' };
   maxHeight?: string;
   caption?: ReactNode;
+  /** Rows shown before "Show all"; the full list shows while searching. Default 10 */
+  initialLimit?: number;
+  /** Plural noun for the rows, used in the "Show all 41 countries" button */
+  itemLabel?: string;
 }
 
 type SortState = { key: string; dir: 'asc' | 'desc' } | null;
@@ -58,9 +64,12 @@ export function DataTable<T>({
   initialSort,
   maxHeight = '500px',
   caption,
+  initialLimit = 10,
+  itemLabel = 'rows',
 }: DataTableProps<T>) {
   const [sort, setSort] = useState<SortState>(initialSort ?? null);
   const [query, setQuery] = useState('');
+  const [showAll, setShowAll] = useState(false);
 
   const filtered = useMemo(() => {
     if (!searchText || !query.trim()) return data;
@@ -80,6 +89,11 @@ export function DataTable<T>({
       return String(av).localeCompare(String(bv)) * factor;
     });
   }, [filtered, sort, columns]);
+
+  const searching = query.trim().length > 0;
+  const canCollapse = !searching && sorted.length > initialLimit;
+  const visible = canCollapse && !showAll ? sorted.slice(0, initialLimit) : sorted;
+  const mobileClass = (col: DataColumn<T>) => (col.hideOnMobile ? 'hidden sm:table-cell' : '');
 
   const toggleSort = (key: string) => {
     setSort((prev) => {
@@ -122,8 +136,8 @@ export function DataTable<T>({
           )}
         </div>
       )}
-      <div className="overflow-x-auto overflow-y-auto rounded-lg" style={{ maxHeight }}>
-        <table className="w-full min-w-[600px] text-sm">
+      <div className="overflow-x-auto overflow-y-auto rounded-lg" style={{ maxHeight: showAll ? maxHeight : undefined }}>
+        <table className="w-full sm:min-w-[600px] text-sm">
           <thead className="sticky top-0 z-10 bg-brand-primary/5 backdrop-blur">
             <tr>
               {columns.map((col) => {
@@ -132,7 +146,7 @@ export function DataTable<T>({
                   <th
                     key={col.key}
                     scope="col"
-                    className={`p-3 font-semibold text-brand-primary ${alignClass(col.align)} ${col.headerClassName ?? ''} ${col.sortable ? 'cursor-pointer select-none hover:text-brand-primary-dark' : ''}`}
+                    className={`p-3 font-semibold text-brand-primary ${mobileClass(col)} ${alignClass(col.align)} ${col.headerClassName ?? ''} ${col.sortable ? 'cursor-pointer select-none hover:text-brand-primary-dark' : ''}`}
                     onClick={col.sortable ? () => toggleSort(col.key) : undefined}
                     aria-sort={active ? (sort!.dir === 'asc' ? 'ascending' : 'descending') : undefined}
                   >
@@ -144,13 +158,13 @@ export function DataTable<T>({
             </tr>
           </thead>
           <tbody>
-            {sorted.map((row, idx) => (
+            {visible.map((row, idx) => (
               <tr
                 key={rowKey(row)}
                 className="border-b border-gray-100 transition-colors hover:bg-brand-secondary"
               >
                 {columns.map((col) => (
-                  <td key={col.key} className={`p-3 ${alignClass(col.align)} ${col.cellClassName ?? ''}`}>
+                  <td key={col.key} className={`p-3 ${mobileClass(col)} ${alignClass(col.align)} ${col.cellClassName ?? ''}`}>
                     {col.render(row, idx)}
                   </td>
                 ))}
@@ -166,6 +180,18 @@ export function DataTable<T>({
           </tbody>
         </table>
       </div>
+      {canCollapse && (
+        <div className="mt-4 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setShowAll((v) => !v)}
+            aria-expanded={showAll}
+            className="rounded-full border border-brand-primary/30 px-5 py-2 text-sm font-semibold text-brand-primary hover:bg-brand-primary/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary"
+          >
+            {showAll ? `Show top ${initialLimit}` : `Show all ${sorted.length} ${itemLabel}`}
+          </button>
+        </div>
+      )}
       {caption && <p className="mt-4 text-sm text-gray-500">{caption}</p>}
     </div>
   );

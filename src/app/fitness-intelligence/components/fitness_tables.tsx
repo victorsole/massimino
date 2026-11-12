@@ -44,7 +44,7 @@ export function PenetrationTable({ data, totalMarketEur }: { data: CountryFitnes
       render: (r) => <span className="font-semibold text-brand-primary">{r.penetration_rate}%</span>,
     },
     {
-      key: 'members',
+      key: 'members', hideOnMobile: true,
       header: 'Members',
       align: 'right',
       sortable: true,
@@ -52,7 +52,7 @@ export function PenetrationTable({ data, totalMarketEur }: { data: CountryFitnes
       render: (r) => `${r.members_millions.toFixed(2)}M`,
     },
     {
-      key: 'chains',
+      key: 'chains', hideOnMobile: true,
       header: 'Top chains',
       render: (r) => <span className="text-xs text-gray-500">{r.top_chains.slice(0, 2).join(', ')}</span>,
     },
@@ -63,6 +63,7 @@ export function PenetrationTable({ data, totalMarketEur }: { data: CountryFitnes
       columns={columns}
       rowKey={(r) => r.iso_code}
       searchText={(r) => `${r.name} ${r.iso_code} ${r.top_chains.join(' ')}`}
+      itemLabel="countries"
       searchPlaceholder="Search countries…"
       initialSort={{ key: 'penetration', dir: 'desc' }}
     />
@@ -88,7 +89,7 @@ export function MarketTable({ data, totalMarketEur }: { data: CountryFitnessData
       render: (r) => <span className="font-semibold text-emerald-600">€{formatMarketSize(r.market_size_eur)}</span>,
     },
     {
-      key: 'clubs',
+      key: 'clubs', hideOnMobile: true,
       header: 'Clubs',
       align: 'right',
       sortable: true,
@@ -96,7 +97,7 @@ export function MarketTable({ data, totalMarketEur }: { data: CountryFitnessData
       render: (r) => r.clubs_count.toLocaleString(),
     },
     {
-      key: 'share',
+      key: 'share', hideOnMobile: true,
       header: 'Market share',
       align: 'right',
       sortable: true,
@@ -112,6 +113,7 @@ export function MarketTable({ data, totalMarketEur }: { data: CountryFitnessData
       columns={columns}
       rowKey={(r) => r.iso_code}
       searchText={(r) => `${r.name} ${r.iso_code}`}
+      itemLabel="countries"
       searchPlaceholder="Search countries…"
       initialSort={{ key: 'market', dir: 'desc' }}
     />
@@ -137,7 +139,7 @@ export function GrowthTable({ data }: { data: CountryFitnessData[] }) {
       render: (r) => <span className="font-semibold text-purple-600">{r.growth_cagr}%</span>,
     },
     {
-      key: 'penetration',
+      key: 'penetration', hideOnMobile: true,
       header: 'Penetration',
       align: 'right',
       sortable: true,
@@ -145,7 +147,7 @@ export function GrowthTable({ data }: { data: CountryFitnessData[] }) {
       render: (r) => `${r.penetration_rate}%`,
     },
     {
-      key: 'potential',
+      key: 'potential', hideOnMobile: true,
       header: 'Headroom',
       align: 'right',
       sortable: true,
@@ -166,6 +168,7 @@ export function GrowthTable({ data }: { data: CountryFitnessData[] }) {
       columns={columns}
       rowKey={(r) => r.iso_code}
       searchText={(r) => `${r.name} ${r.iso_code}`}
+      itemLabel="countries"
       searchPlaceholder="Search countries…"
       initialSort={{ key: 'cagr', dir: 'desc' }}
     />
@@ -191,7 +194,7 @@ export function GymChainsTable({ data }: { data: GymChainData[] }) {
           <span className="font-medium text-gray-900">{r.name}</span>
         ),
     },
-    { key: 'hq', header: 'HQ', render: (r) => <span className="text-gray-500">{r.country_code}</span> },
+    { key: 'hq', hideOnMobile: true, header: 'HQ', render: (r) => <span className="text-gray-500">{r.country_code}</span> },
     {
       key: 'members',
       header: 'Members',
@@ -201,7 +204,7 @@ export function GymChainsTable({ data }: { data: GymChainData[] }) {
       render: (r) => <span className="font-semibold text-orange-600">{formatNumber(r.members)}</span>,
     },
     {
-      key: 'locations',
+      key: 'locations', hideOnMobile: true,
       header: 'Locations',
       align: 'right',
       sortable: true,
@@ -209,7 +212,7 @@ export function GymChainsTable({ data }: { data: GymChainData[] }) {
       render: (r) => `${r.locations.toLocaleString()}+`,
     },
     {
-      key: 'revenue',
+      key: 'revenue', hideOnMobile: true,
       header: 'Revenue',
       align: 'right',
       sortable: true,
@@ -223,6 +226,7 @@ export function GymChainsTable({ data }: { data: GymChainData[] }) {
       columns={columns}
       rowKey={(r) => r.name}
       searchText={(r) => `${r.name} ${r.country_code}`}
+      itemLabel="chains"
       searchPlaceholder="Search chains…"
       initialSort={{ key: 'members', dir: 'desc' }}
     />
@@ -246,7 +250,7 @@ export function SupplementsTable({ data }: { data: SupplementCompanyData[] }) {
           <span className="font-medium text-gray-900">{r.name}</span>
         ),
     },
-    { key: 'hq', header: 'HQ', render: (r) => <span className="text-gray-500">{r.country_code}</span> },
+    { key: 'hq', hideOnMobile: true, header: 'HQ', render: (r) => <span className="text-gray-500">{r.country_code}</span> },
     {
       key: 'revenue',
       header: 'Revenue',
@@ -256,7 +260,7 @@ export function SupplementsTable({ data }: { data: SupplementCompanyData[] }) {
       render: (r) => <span className="font-semibold text-emerald-600">{r.revenue_eur ? formatRevenue(r.revenue_eur) : 'N/A'}</span>,
     },
     {
-      key: 'position',
+      key: 'position', hideOnMobile: true,
       header: 'Market position',
       render: (r) => <span className="text-xs text-gray-500">{r.market_position || '-'}</span>,
     },
@@ -267,6 +271,7 @@ export function SupplementsTable({ data }: { data: SupplementCompanyData[] }) {
       columns={columns}
       rowKey={(r) => r.name}
       searchText={(r) => `${r.name} ${r.country_code} ${r.market_position ?? ''}`}
+      itemLabel="companies"
       searchPlaceholder="Search companies…"
       initialSort={{ key: 'revenue', dir: 'desc' }}
     />
@@ -283,7 +288,7 @@ export function InfluencersTable({ data }: { data: FitnessInfluencerData[] }) {
       sortValue: (r) => r.name,
       render: (r) => <span className="font-medium text-gray-900">{r.name}</span>,
     },
-    { key: 'country', header: 'Country', render: (r) => <span className="text-gray-500">{r.country_code}</span> },
+    { key: 'country', hideOnMobile: true, header: 'Country', render: (r) => <span className="text-gray-500">{r.country_code}</span> },
     {
       key: 'instagram',
       header: 'Instagram',
@@ -293,7 +298,7 @@ export function InfluencersTable({ data }: { data: FitnessInfluencerData[] }) {
       render: (r) => <span className="font-semibold text-pink-600">{formatNumber(r.instagram_followers)}</span>,
     },
     {
-      key: 'youtube',
+      key: 'youtube', hideOnMobile: true,
       header: 'YouTube',
       align: 'right',
       sortable: true,
@@ -301,7 +306,7 @@ export function InfluencersTable({ data }: { data: FitnessInfluencerData[] }) {
       render: (r) => <span className="text-red-500">{r.youtube_followers ? formatNumber(r.youtube_followers) : '-'}</span>,
     },
     {
-      key: 'handle',
+      key: 'handle', hideOnMobile: true,
       header: 'Handle',
       render: (r) => <span className="text-xs text-gray-500">{r.handle}</span>,
     },
@@ -312,6 +317,7 @@ export function InfluencersTable({ data }: { data: FitnessInfluencerData[] }) {
       columns={columns}
       rowKey={(r) => r.name}
       searchText={(r) => `${r.name} ${r.country_code} ${r.handle} ${r.specialty}`}
+      itemLabel="creators"
       searchPlaceholder="Search creators…"
       initialSort={{ key: 'instagram', dir: 'desc' }}
     />
@@ -345,7 +351,7 @@ export function HashtagComparisonTable({ data }: { data: HashtagData[] }) {
       render: (r) => <span className="font-semibold text-cyan-600">{formatNumber(r.tiktok_views)}</span>,
     },
     {
-      key: 'ttvideos',
+      key: 'ttvideos', hideOnMobile: true,
       header: 'TikTok videos',
       align: 'right',
       sortable: true,
@@ -353,7 +359,7 @@ export function HashtagComparisonTable({ data }: { data: HashtagData[] }) {
       render: (r) => (r.tiktok_videos ? formatNumber(r.tiktok_videos) : '-'),
     },
     {
-      key: 'avg',
+      key: 'avg', hideOnMobile: true,
       header: 'Avg views',
       align: 'right',
       sortable: true,
@@ -361,7 +367,7 @@ export function HashtagComparisonTable({ data }: { data: HashtagData[] }) {
       render: (r) => <span className="text-emerald-600">{r.avg_views_per_video ? formatNumber(r.avg_views_per_video) : '-'}</span>,
     },
     {
-      key: 'leader',
+      key: 'leader', hideOnMobile: true,
       header: 'Leader',
       render: (r) => (
         <span
@@ -384,6 +390,7 @@ export function HashtagComparisonTable({ data }: { data: HashtagData[] }) {
       columns={columns}
       rowKey={(r) => r.hashtag}
       searchText={(r) => r.hashtag}
+      itemLabel="hashtags"
       searchPlaceholder="Search hashtags…"
       initialSort={{ key: 'ttviews', dir: 'desc' }}
     />
@@ -410,7 +417,7 @@ export function ActivityTable({ data }: { data: ActivityDatum[] }) {
       render: (r) => <span className="font-semibold text-teal-600">{r.activity_pct}%</span>,
     },
     {
-      key: 'vsavg',
+      key: 'vsavg', hideOnMobile: true,
       header: 'vs EU avg',
       align: 'right',
       sortable: true,
@@ -426,7 +433,7 @@ export function ActivityTable({ data }: { data: ActivityDatum[] }) {
       },
     },
     {
-      key: 'year',
+      key: 'year', hideOnMobile: true,
       header: 'Survey',
       align: 'right',
       render: (r) => <span className="text-xs text-muted-foreground">{r.year}</span>,
@@ -438,6 +445,7 @@ export function ActivityTable({ data }: { data: ActivityDatum[] }) {
       columns={columns}
       rowKey={(r) => r.iso_code}
       searchText={(r) => `${r.name} ${r.iso_code}`}
+      itemLabel="countries"
       searchPlaceholder="Search countries…"
       initialSort={{ key: 'activity', dir: 'desc' }}
     />
@@ -463,7 +471,7 @@ export function TikTokHashtagsTable({ data }: { data: HashtagData[] }) {
       render: (r) => <span className="font-semibold text-cyan-600">{formatNumber(r.tiktok_views)}</span>,
     },
     {
-      key: 'videos',
+      key: 'videos', hideOnMobile: true,
       header: 'Videos',
       align: 'right',
       sortable: true,
@@ -485,6 +493,7 @@ export function TikTokHashtagsTable({ data }: { data: HashtagData[] }) {
       columns={columns}
       rowKey={(r) => r.hashtag}
       searchText={(r) => r.hashtag}
+      itemLabel="hashtags"
       searchPlaceholder="Search hashtags…"
       initialSort={{ key: 'avg', dir: 'desc' }}
       maxHeight="400px"
