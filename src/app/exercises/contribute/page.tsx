@@ -71,7 +71,7 @@ export default function ContributePage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Hero */}
-      <div className="rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-5 sm:p-8">
+      <div className="rounded-lg bg-gradient-to-r from-brand-primary to-brand-primary-dark text-white p-5 sm:p-8">
         <h1 className="text-xl sm:text-3xl font-bold mb-2">Fill the Gym — Help Build the Best Exercise Library</h1>
         <p className="text-white/90 mb-4 sm:mb-6 text-sm sm:text-base">Contribute exercise videos and earn XP, achievements, and partner rewards.</p>
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">

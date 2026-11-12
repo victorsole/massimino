@@ -425,7 +425,7 @@ export default function ExercisesPage() {
               Browse and search through our comprehensive database of fitness exercises
             </p>
           </div>
-          <Button asChild className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 self-start flex-shrink-0">
+          <Button asChild className="bg-gradient-to-r from-brand-primary to-brand-primary-dark hover:from-brand-primary-dark hover:to-blue-900 self-start flex-shrink-0">
             <a href="/exercises/contribute">
               🏋️ Fill the Gym
             </a>
