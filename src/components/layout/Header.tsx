@@ -159,13 +159,13 @@ export default function Header({ user }: HeaderProps) {
                 <div>
                   {/* On the home hero only the logo shows (the hero already says Massimino); the name fades
                       back in once the header turns cream. Opacity only, so the header layout never shifts. */}
-                  <h1
+                  <p
                     className={`text-lg sm:text-xl font-bold text-brand-primary transition-opacity duration-300 motion-reduce:transition-none ${
                       isHome && overHero ? 'opacity-0' : 'opacity-100'
                     }`}
                   >
                     Massimino
-                  </h1>
+                  </p>
                   <p
                     aria-hidden={isHome || undefined}
                     className={`hidden sm:block text-xs text-brand-primary-light ${isHome ? 'h-0 overflow-hidden opacity-0' : ''}`}

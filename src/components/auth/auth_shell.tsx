@@ -29,7 +29,7 @@ export function AuthShell({
         </div>
         <Card className="shadow-xl border-0 bg-brand-secondary/90 backdrop-blur-sm">
           <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-2xl text-center text-brand-primary">{title}</CardTitle>
+            <CardTitle as="h1" className="text-2xl text-center text-brand-primary">{title}</CardTitle>
             <CardDescription className="text-center">{description}</CardDescription>
           </CardHeader>
           <CardContent>{children}</CardContent>

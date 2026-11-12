@@ -278,7 +278,7 @@ export default function TermsPage() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <Card className="border-l-4 border-l-blue-500">
         <CardHeader>
-          <CardTitle>Terms of Service</CardTitle>
+          <CardTitle as="h1">Terms of Service</CardTitle>
           <CardDescription>
             The rules and conditions for using Massimino
           </CardDescription>

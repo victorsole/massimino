@@ -94,7 +94,7 @@ export function DashboardHeader({ onMenuToggle, userName, userImage, userId }: D
               <Menu className="w-5 h-5 text-gray-600" />
             </button>
             <div className="min-w-0">
-              <h1 className="text-lg font-bold text-gray-900 truncate">{page.title}</h1>
+              <p className="text-lg font-bold text-gray-900 truncate">{page.title}</p>
               <p className="text-xs text-gray-500 hidden sm:block truncate">{page.subtitle}</p>
             </div>
           </div>

@@ -11,7 +11,7 @@ export default function CookiesPage() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <Card className="border-l-4 border-l-blue-500">
         <CardHeader>
-          <CardTitle>Cookie Policy</CardTitle>
+          <CardTitle as="h1">Cookie Policy</CardTitle>
           <CardDescription>
             What cookies we use, why we use them, and how you can control them
           </CardDescription>
