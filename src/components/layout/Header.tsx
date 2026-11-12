@@ -5,6 +5,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { NotificationsDropdown } from './notifications_dropdown';
@@ -75,6 +76,19 @@ export default function Header({ user }: HeaderProps) {
     xp_to_next_level: number;
     current_level_xp: number;
   } | null>(null);
+  const pathname = usePathname();
+  const isHome = pathname === '/';
+  const [scrolled, setScrolled] = useState(false);
+
+  // Sticky header: transparent over the homepage hero, solid once the page scrolls
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  const overHero = isHome && !scrolled && !isMenuOpen;
+  const navLinkClass = `p-2 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95 ${overHero ? 'text-white hover:bg-white/15' : 'text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10'}`;
 
   useEffect(() => {
     if (user?.id) {
@@ -98,13 +112,19 @@ export default function Header({ user }: HeaderProps) {
 
   return (
     <TooltipProvider>
-      <header className="bg-brand-secondary shadow-sm border-b border-brand-primary-dark">
+      <header
+        className={`sticky top-0 z-50 transition-[background-color,box-shadow,border-color] duration-300 ${isHome ? '-mb-16' : ''} ${
+          overHero
+            ? 'bg-transparent border-b border-transparent'
+            : 'bg-brand-secondary/95 backdrop-blur-md shadow-sm border-b border-brand-primary/10'
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo and Brand */}
-            <div className="flex items-center">
-              <Link href="/" className="flex items-center space-x-3">
-                <div className="relative w-10 h-10">
+            <div className="flex items-center min-w-0">
+              <Link href="/" className="flex items-center gap-2 sm:gap-3 min-w-0">
+                <div className={`relative w-10 h-10 transition-colors duration-300 ${overHero ? 'rounded-full bg-brand-secondary/90 p-1' : ''}`}>
                   <Image
                     src="/massimino_logo.png"
                     alt="Massimino Logo"
@@ -114,8 +134,8 @@ export default function Header({ user }: HeaderProps) {
                   />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold text-brand-primary">Massimino</h1>
-                  <p className="text-xs text-brand-primary-light">Safe Workouts for Everyone</p>
+                  <h1 className={`text-lg sm:text-xl font-bold ${overHero ? 'text-white' : 'text-brand-primary'}`}>Massimino</h1>
+                  <p className={`hidden sm:block text-xs ${overHero ? 'text-white/80' : 'text-brand-primary-light'}`}>Safe Workouts for Everyone</p>
                 </div>
               </Link>
             </div>
@@ -127,7 +147,7 @@ export default function Header({ user }: HeaderProps) {
                   <Link
                     href="/fitness-intelligence"
                     aria-label="Fitness Intelligence"
-                    className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
+                    className={navLinkClass}
                   >
                     <MdiIcon path={MDI_ICONS.earth} size={0.83} />
                   </Link>
@@ -142,7 +162,7 @@ export default function Header({ user }: HeaderProps) {
                   <Link
                     href="/dashboard"
                     aria-label="Dashboard"
-                    className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
+                    className={navLinkClass}
                   >
                     <MdiIcon path={MDI_ICONS.viewDashboard} size={0.83} />
                   </Link>
@@ -157,7 +177,7 @@ export default function Header({ user }: HeaderProps) {
                   <Link
                     href="/workout-log"
                     aria-label="Workout Log"
-                    className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
+                    className={navLinkClass}
                   >
                     <MdiIcon path={MDI_ICONS.dumbbell} size={0.83} />
                   </Link>
@@ -174,7 +194,7 @@ export default function Header({ user }: HeaderProps) {
                     <Link
                       href="/dashboard"
                       aria-label="Manage Teams"
-                      className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
+                      className={navLinkClass}
                     >
                     <MdiIcon path={MDI_ICONS.accountGroup} size={0.83} />
                     </Link>
@@ -189,7 +209,7 @@ export default function Header({ user }: HeaderProps) {
                     <Link
                       href="/teams/discover"
                       aria-label="Join Teams"
-                      className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
+                      className={navLinkClass}
                     >
                       <MdiIcon path={MDI_ICONS.accountGroup} size={0.83} />
                     </Link>
@@ -205,7 +225,7 @@ export default function Header({ user }: HeaderProps) {
                   <Link
                     href="/massiminos"
                     aria-label="Discover"
-                    className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
+                    className={navLinkClass}
                   >
                     <MdiIcon path={MDI_ICONS.compass} size={0.83} />
                   </Link>
@@ -220,7 +240,7 @@ export default function Header({ user }: HeaderProps) {
                   <Link
                     href="/exercises"
                     aria-label="Exercises"
-                    className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
+                    className={navLinkClass}
                   >
                     <MdiIcon path={MDI_ICONS.runFast} size={0.83} />
                   </Link>
@@ -235,7 +255,7 @@ export default function Header({ user }: HeaderProps) {
                   <Link
                     href="/partnerships"
                     aria-label="Partnerships"
-                    className="p-2 rounded-lg text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10 transition-all duration-200 hover:scale-110 active:scale-95"
+                    className={navLinkClass}
                   >
                     <MdiIcon path={MDI_ICONS.handshake} size={0.83} />
                   </Link>
@@ -247,7 +267,7 @@ export default function Header({ user }: HeaderProps) {
             </nav>
 
           {/* User Actions */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center gap-1 sm:gap-4 flex-shrink-0">
             {user ? (
               <>
                 {/* Notifications */}
@@ -339,14 +359,14 @@ export default function Header({ user }: HeaderProps) {
                 </div>
               </>
             ) : (
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center gap-1 sm:gap-2">
                 <Link href="/login">
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="sm" className={overHero ? 'px-2.5 sm:px-3 text-white hover:bg-white/15 hover:text-white' : 'px-2.5 sm:px-3'}>
                     Sign In
                   </Button>
                 </Link>
                 <Link href="/signup">
-                  <Button size="sm">
+                  <Button size="sm" className="px-3 sm:px-4">
                     Get Started
                   </Button>
                 </Link>
@@ -357,7 +377,7 @@ export default function Header({ user }: HeaderProps) {
             <Button
               variant="ghost"
               size="sm"
-              className="md:hidden"
+              className={`md:hidden px-2 ${overHero ? 'text-white hover:bg-white/15 hover:text-white' : ''}`}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
