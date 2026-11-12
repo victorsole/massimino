@@ -172,20 +172,20 @@ export default function HomePage() {
           <h1 className="font-display text-5xl sm:text-7xl lg:text-[7.5rem] font-bold uppercase tracking-tight leading-[0.95] text-white mb-3">
             MASSIMINO
           </h1>
-          <div className="inline-block px-6 py-2 border border-brand-secondary/40 text-xs sm:text-sm font-display font-medium uppercase tracking-[0.15em] text-brand-secondary/80 mb-8">
+          <div className="inline-block rounded-full px-6 py-2 border border-brand-secondary/40 text-xs sm:text-sm font-display font-medium uppercase tracking-[0.15em] text-brand-secondary/80 mb-8">
             Evidence-Based Fitness &bull; NASM-Aligned
           </div>
           <br />
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/signup"
-              className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-brand-primary text-white font-display text-sm font-semibold uppercase tracking-wider hover:bg-brand-primary-light transition-all hover:-translate-y-0.5"
+              className="rounded-full inline-flex items-center justify-center gap-2 px-10 py-4 bg-brand-primary text-white font-display text-sm font-semibold uppercase tracking-wider hover:bg-brand-primary-light transition-all hover:-translate-y-0.5"
             >
               Get Started <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/login"
-              className="inline-flex items-center justify-center gap-2 px-10 py-4 border border-white/40 text-white font-display text-sm font-semibold uppercase tracking-wider hover:bg-white/10 transition-all"
+              className="rounded-full inline-flex items-center justify-center gap-2 px-10 py-4 border border-white/40 text-white font-display text-sm font-semibold uppercase tracking-wider hover:bg-white/10 transition-all"
             >
               Sign In
             </Link>
@@ -262,13 +262,13 @@ export default function HomePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-5">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#2b5069]/10 border border-[#2b5069]/10 flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 rounded-lg bg-[#2b5069]/10 border border-[#2b5069]/10 flex items-center justify-center flex-shrink-0">
                   <Shield className="w-5 h-5 text-brand-primary" />
                 </div>
                 <span className="font-body text-sm text-[#2b5069]/60">Anti-Harassment Protection</span>
               </div>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#2b5069]/10 border border-[#2b5069]/10 flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 rounded-lg bg-[#2b5069]/10 border border-[#2b5069]/10 flex items-center justify-center flex-shrink-0">
                   <TrendingUp className="w-5 h-5 text-brand-primary" />
                 </div>
                 <span className="font-body text-sm text-[#2b5069]/60">Evidence-Based Programs</span>
@@ -277,7 +277,7 @@ export default function HomePage() {
           </motion.div>
 
           <motion.div
-            className="relative overflow-hidden"
+            className="relative overflow-hidden rounded-xl"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
@@ -318,7 +318,7 @@ export default function HomePage() {
             </h2>
           </motion.div>
 
-          <div className="flex flex-col gap-0.5">
+          <div className="flex flex-col gap-0.5 rounded-2xl overflow-hidden">
             {FEATURED_PROGRAMS.map((program, i) => (
               <motion.div
                 key={program.name}
@@ -344,7 +344,7 @@ export default function HomePage() {
           <div className="text-center mt-10">
             <Link
               href="/massiminos"
-              className="inline-flex items-center gap-2 px-8 py-3 border border-brand-primary text-brand-primary font-display text-sm font-semibold uppercase tracking-wider hover:bg-brand-primary hover:text-white transition-all"
+              className="rounded-full inline-flex items-center gap-2 px-8 py-3 border border-brand-primary text-brand-primary font-display text-sm font-semibold uppercase tracking-wider hover:bg-brand-primary hover:text-white transition-all"
             >
               View All Programs <ArrowRight className="w-4 h-4" />
             </Link>
@@ -370,7 +370,7 @@ export default function HomePage() {
         </motion.div>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-1 sm:gap-2">
           {pexelsImages.gallery.map((src, i) => (
-            <div key={i} className="overflow-hidden aspect-square">
+            <div key={i} className="overflow-hidden aspect-square rounded-xl">
               <Image
                 src={i === 0 ? '/victor/16_assistedpullup.png' : src}
                 alt={`Fitness gallery ${i + 1}`}
@@ -410,7 +410,7 @@ export default function HomePage() {
             ].map((feature, i) => (
               <motion.article
                 key={feature.title}
-                className="relative overflow-hidden cursor-pointer group"
+                className="relative overflow-hidden rounded-xl cursor-pointer group"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -432,7 +432,7 @@ export default function HomePage() {
                   </h3>
                   <p className="font-body text-sm text-white/60">{feature.detail}</p>
                 </div>
-                <span className="absolute top-4 left-4 px-3 py-1.5 bg-brand-primary text-white font-display text-[0.65rem] font-bold uppercase tracking-wider">
+                <span className="absolute top-4 left-4 rounded-full px-3 py-1.5 bg-brand-primary text-white font-display text-[0.65rem] font-bold uppercase tracking-wider">
                   {feature.tag}
                 </span>
               </motion.article>
@@ -455,7 +455,7 @@ export default function HomePage() {
                   href={p.url || '#'}
                   target="_blank"
                   rel="noopener"
-                  className="flex-shrink-0 w-32 sm:w-40 h-10 sm:h-14 mx-2 sm:mx-5 flex items-center justify-center border border-[#2b5069]/10 px-3 sm:px-5 py-2 sm:py-2.5 opacity-40 hover:opacity-70 transition-opacity"
+                  className="flex-shrink-0 w-32 sm:w-40 h-10 sm:h-14 mx-2 sm:mx-5 flex items-center justify-center rounded-lg border border-[#2b5069]/10 px-3 sm:px-5 py-2 sm:py-2.5 opacity-40 hover:opacity-70 transition-opacity"
                 >
                   <Image
                     src={normalizeLogo(p.logoUrl)}
@@ -490,18 +490,18 @@ export default function HomePage() {
             Get the latest training tips, new program launches, and platform updates delivered to your inbox.
           </p>
           <form
-            className="flex flex-col sm:flex-row gap-0 max-w-md mx-auto"
+            className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
             onSubmit={(e) => e.preventDefault()}
           >
             <input
               type="email"
               placeholder="your@email.com"
               aria-label="Email address"
-              className="flex-1 px-5 py-3.5 bg-white border border-[#2b5069]/15 sm:border-r-0 text-[#2b5069] font-body text-sm outline-none focus:border-brand-primary transition-colors"
+              className="flex-1 rounded-field px-5 py-3.5 bg-white border border-[#2b5069]/15 text-[#2b5069] font-body text-sm outline-none focus:border-brand-primary transition-colors"
             />
             <button
               type="submit"
-              className="px-7 py-3.5 bg-brand-primary text-white font-display text-sm font-semibold uppercase tracking-wider border border-brand-primary hover:bg-brand-primary-light transition-colors"
+              className="rounded-full px-7 py-3.5 bg-brand-primary text-white font-display text-sm font-semibold uppercase tracking-wider border border-brand-primary hover:bg-brand-primary-light transition-colors"
             >
               Subscribe
             </button>
@@ -536,7 +536,7 @@ export default function HomePage() {
           </p>
           <Link
             href="/signup"
-            className="inline-flex items-center gap-2 px-12 py-4 bg-brand-secondary text-[#2b5069] font-display text-base font-bold uppercase tracking-wider hover:bg-white hover:-translate-y-0.5 transition-all"
+            className="rounded-full inline-flex items-center gap-2 px-12 py-4 bg-brand-secondary text-[#2b5069] font-display text-base font-bold uppercase tracking-wider hover:bg-white hover:-translate-y-0.5 transition-all"
           >
             Get Started Today
           </Link>

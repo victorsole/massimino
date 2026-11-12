@@ -31,7 +31,11 @@
     --border: 40 18% 87%;
     --input: 40 18% 82%;
     --ring: 204 42% 29%;
-    --radius: 0.5rem;
+    /* Radius scale: fields and small boxes 14px, images 18px, cards and large boxes 24px, buttons pill */
+    --radius: 14px;
+    --radius-field: 14px;
+    --radius-image: 18px;
+    --radius-card: 24px;
   }
 
   .dark {
@@ -81,19 +85,19 @@
   }
   
   .massimino-card {
-    @apply bg-white rounded-lg shadow-sm border border-gray-200;
+    @apply bg-white rounded-card shadow-sm border border-gray-200;
   }
   
   .massimino-button-primary {
-    @apply bg-brand-primary hover:bg-brand-primary-dark text-white font-medium py-2 px-4 rounded-lg transition-colors;
+    @apply bg-brand-primary hover:bg-brand-primary-dark text-white font-medium py-2 px-4 rounded-full transition-colors;
   }
   
   .massimino-button-secondary {
-    @apply bg-brand-secondary hover:bg-brand-secondary-dark text-brand-primary font-medium py-2 px-4 rounded-lg transition-colors;
+    @apply bg-brand-secondary hover:bg-brand-secondary-dark text-brand-primary font-medium py-2 px-4 rounded-full transition-colors;
   }
   
   .massimino-input {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent;
+    @apply w-full px-3 py-2 border border-gray-300 rounded-field focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent;
   }
   
   .massimino-badge {
@@ -122,29 +126,29 @@
   
   /* Enhanced button styles with brand colors */
   .btn-primary {
-    @apply bg-brand-primary hover:bg-brand-primary-dark text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md;
+    @apply bg-brand-primary hover:bg-brand-primary-dark text-white font-medium py-2 px-4 rounded-full transition-all duration-200 shadow-sm hover:shadow-md;
   }
   
   .btn-secondary {
-    @apply bg-brand-secondary hover:bg-brand-secondary-dark text-brand-primary font-medium py-2 px-4 rounded-lg transition-all duration-200 border border-brand-primary;
+    @apply bg-brand-secondary hover:bg-brand-secondary-dark text-brand-primary font-medium py-2 px-4 rounded-full transition-all duration-200 border border-brand-primary;
   }
   
   .btn-outline {
-    @apply border border-brand-primary hover:bg-brand-secondary text-brand-primary font-medium py-2 px-4 rounded-lg transition-all duration-200;
+    @apply border border-brand-primary hover:bg-brand-secondary text-brand-primary font-medium py-2 px-4 rounded-full transition-all duration-200;
   }
   
   /* Enhanced card styles */
   .card-elevated {
-    @apply bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300;
+    @apply bg-white rounded-card shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300;
   }
   
   .card-interactive {
-    @apply bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-200 cursor-pointer;
+    @apply bg-white rounded-card border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-200 cursor-pointer;
   }
   
   /* Enhanced form styles with brand colors */
   .form-input {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all duration-200;
+    @apply w-full px-3 py-2 border border-gray-300 rounded-field focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all duration-200;
   }
   
   .form-label {
@@ -267,11 +271,11 @@
 
 /* Fitness-specific styles */
 .fitness-card {
-  @apply bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300;
+  @apply bg-white rounded-card shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300;
 }
 
 .fitness-card-header {
-  @apply bg-gradient-to-r from-brand-primary to-brand-primary-dark text-white p-6 rounded-t-xl;
+  @apply bg-gradient-to-r from-brand-primary to-brand-primary-dark text-white p-6 rounded-t-card;
 }
 
 .fitness-metric {
@@ -567,7 +571,7 @@
 /* ===== ONBOARDING TOUR (driver.js) ===== */
 .massimino-tour-popover {
   background: #FBF8F2 !important;
-  border-radius: 16px !important;
+  border-radius: 24px !important;
   border: 1px solid rgba(43, 80, 105, 0.15) !important;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12) !important;
   max-width: 340px !important;
@@ -596,7 +600,7 @@
 .massimino-tour-popover .driver-popover-next-btn,
 .massimino-tour-popover .driver-popover-prev-btn {
   font-family: var(--font-nunito-sans), sans-serif !important;
-  border-radius: 8px !important;
+  border-radius: 9999px !important;
   font-size: 0.8125rem !important;
   font-weight: 600 !important;
   padding: 6px 16px !important;

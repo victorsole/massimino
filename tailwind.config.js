@@ -101,9 +101,17 @@ module.exports = {
           },
         },
         borderRadius: {
+          // Softer scale: lg = fields/small boxes, xl = images, 2xl = cards/large boxes
+          sm: '6px',
+          md: '10px',
           lg: 'var(--radius)',
-          md: 'calc(var(--radius) - 2px)',
-          sm: 'calc(var(--radius) - 4px)',
+          xl: 'var(--radius-image)',
+          '2xl': 'var(--radius-card)',
+          '3xl': '32px',
+          field: 'var(--radius-field)',
+          image: 'var(--radius-image)',
+          card: 'var(--radius-card)',
+          pill: '9999px',
         },
         // Custom animations for safety feedback and page effects
         keyframes: {
