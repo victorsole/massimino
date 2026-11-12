@@ -124,16 +124,36 @@ export default function Header({ user }: HeaderProps) {
             {/* Logo and Brand */}
             <div className="flex items-center min-w-0">
               <Link href="/" aria-label="Massimino, home" className="flex items-center gap-2 sm:gap-3 min-w-0">
-                {/* Rounded cream badge (14px, like the small boxes) with a little air around the sun */}
-                <div className="w-10 h-10 flex-shrink-0 overflow-hidden rounded-[14px] bg-brand-secondary p-[3px]">
-                  <div className="relative h-full w-full">
-                    <Image
-                      src="/massimino_logo.png"
-                      alt="Massimino Logo"
-                      fill
-                      sizes="40px"
-                      className="object-contain"
-                    />
+                {/* Logo slot (40px). Over the home hero: the white sun with no box. Elsewhere, and once
+                    the header turns cream: the original logo in its rounded 14px cream badge. The two
+                    are stacked and cross-fade (opacity only), so the header never shifts. */}
+                <div className="relative w-10 h-10 flex-shrink-0">
+                  {isHome && (
+                    <div
+                      aria-hidden="true"
+                      className={`absolute inset-0 p-[6px] transition-opacity duration-300 motion-reduce:transition-none ${
+                        overHero ? 'opacity-100' : 'opacity-0'
+                      }`}
+                    >
+                      <div className="relative h-full w-full">
+                        <Image src="/massimino_logo_white.png" alt="" fill sizes="40px" className="object-contain" />
+                      </div>
+                    </div>
+                  )}
+                  <div
+                    className={`absolute inset-0 overflow-hidden rounded-[14px] bg-brand-secondary p-[3px] transition-opacity duration-300 motion-reduce:transition-none ${
+                      isHome && overHero ? 'opacity-0' : 'opacity-100'
+                    }`}
+                  >
+                    <div className="relative h-full w-full">
+                      <Image
+                        src="/massimino_logo.png"
+                        alt="Massimino Logo"
+                        fill
+                        sizes="40px"
+                        className="object-contain"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div>
