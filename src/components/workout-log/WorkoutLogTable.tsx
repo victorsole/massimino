@@ -1124,7 +1124,7 @@ export function SessionHistoryTable() {
                 {loading_details ? (
                   <div className="text-center py-4 text-gray-500">Loading exercises...</div>
                 ) : detail_entries.length === 0 ? (
-                  <div className="text-center py-4 text-gray-400 text-sm">No exercises logged for this session</div>
+                  <div className="text-center py-4 text-muted-foreground text-sm">No exercises logged for this session</div>
                 ) : (
                   <div className="space-y-3">
                     {/* Group entries by exercise */}

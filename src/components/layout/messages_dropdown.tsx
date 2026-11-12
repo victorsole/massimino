@@ -200,7 +200,7 @@ export function MessagesDropdown({ userId }: MessagesDropdownProps) {
                             <p className="text-sm font-medium text-gray-900 truncate">
                               {conversationName}
                             </p>
-                            <p className="text-xs text-gray-400">
+                            <p className="text-xs text-muted-foreground">
                               {conversation.lastMessage
                                 ? formatTime(conversation.lastMessage.createdAt)
                                 : formatTime(conversation.updatedAt)
@@ -216,7 +216,7 @@ export function MessagesDropdown({ userId }: MessagesDropdownProps) {
                           )}
 
                           {conversation.type === 'GROUP' && (
-                            <p className="text-xs text-gray-400 mt-1">
+                            <p className="text-xs text-muted-foreground mt-1">
                               {conversation.participants.length} participants
                             </p>
                           )}

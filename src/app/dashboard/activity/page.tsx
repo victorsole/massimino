@@ -130,7 +130,7 @@ export default function ActivityPage() {
                 key={w.id}
                 className="flex gap-4 p-4 bg-white rounded-xl shadow-sm"
               >
-                <div className="min-w-[80px] text-xs text-gray-400 pt-1">
+                <div className="min-w-[80px] text-xs text-muted-foreground pt-1">
                   {formatRelativeDate(w.date)}
                 </div>
                 <div className={`w-3 h-3 rounded-full ${colour} flex-shrink-0 mt-1.5`} />
@@ -138,7 +138,7 @@ export default function ActivityPage() {
                   <p className="font-medium text-gray-900 mb-0.5">{w.exercise}</p>
                   <p className="text-sm text-gray-500">{details}</p>
                   {w.userComments && (
-                    <p className="text-xs text-gray-400 mt-1 italic">{w.userComments}</p>
+                    <p className="text-xs text-muted-foreground mt-1 italic">{w.userComments}</p>
                   )}
                 </div>
               </div>

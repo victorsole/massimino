@@ -142,7 +142,7 @@ export default function WorkoutPage() {
                   {p.program_templates.description && (
                     <p className="text-xs text-gray-500 mb-3 line-clamp-2">{p.program_templates.description}</p>
                   )}
-                  <div className="flex gap-4 text-xs text-gray-400 mb-3">
+                  <div className="flex gap-4 text-xs text-muted-foreground mb-3">
                     <span>{p.program_templates.duration}</span>
                     <span>Week {p.currentWeek} of {totalWeeks}</span>
                   </div>
@@ -153,7 +153,7 @@ export default function WorkoutPage() {
                       style={{ width: `${progress}%` }}
                     />
                   </div>
-                  <p className="text-[11px] text-gray-400 mt-1">{progress}% complete</p>
+                  <p className="text-[11px] text-muted-foreground mt-1">{progress}% complete</p>
                 </div>
               </div>
             );

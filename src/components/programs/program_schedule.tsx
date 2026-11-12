@@ -249,7 +249,7 @@ function WorkoutDay({
                 </span>
               ) : (
                 <span
-                  className={`mdi mdi-chevron-down text-gray-400 transition-transform ${
+                  className={`mdi mdi-chevron-down text-muted-foreground transition-transform ${
                     isExpanded ? 'rotate-180' : ''
                   }`}
                 />
@@ -327,7 +327,7 @@ function ExerciseItem({ exercise, onClick }: ExerciseItemProps) {
           </>
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <span className="mdi mdi-dumbbell text-2xl text-gray-400" />
+            <span className="mdi mdi-dumbbell text-2xl text-muted-foreground" />
           </div>
         )}
       </div>
@@ -346,7 +346,7 @@ function ExerciseItem({ exercise, onClick }: ExerciseItemProps) {
             </span>
           )}
           {/* Click hint icon */}
-          <span className="mdi mdi-information-outline text-xs text-gray-400 ml-auto" title="Click for details" />
+          <span className="mdi mdi-information-outline text-xs text-muted-foreground ml-auto" title="Click for details" />
         </div>
         <div className="flex flex-wrap gap-3 text-xs text-gray-500">
           <span>
@@ -447,7 +447,7 @@ function ExerciseDetailModal({ exercise, onClose }: ExerciseDetailModalProps) {
                 className="object-cover"
               />
             ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 p-4">
+              <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground p-4">
                 <span className="mdi mdi-dumbbell text-5xl mb-2" />
                 <span className="text-sm">No media available</span>
               </div>

@@ -181,7 +181,7 @@ export function CountryDetailPanel({ country, onClose, totalMarketEur }: Country
           )}
 
           {chains.length === 0 && influencers.length === 0 && (
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted-foreground">
               Detailed chain and creator breakdowns are not yet available for {country.name}.
             </p>
           )}

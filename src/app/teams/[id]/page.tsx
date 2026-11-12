@@ -224,7 +224,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
             { label: 'Trainer', value: trainer.name || '—' },
           ].map((stat) => (
             <div key={stat.label} className="bg-white rounded-2xl shadow-sm p-5 text-center">
-              <p className="text-xs font-body text-gray-400 uppercase tracking-wider mb-1">{stat.label}</p>
+              <p className="text-xs font-body text-muted-foreground uppercase tracking-wider mb-1">{stat.label}</p>
               <p className="font-display text-lg font-bold capitalize" style={{ color: primary }}>{stat.value}</p>
             </div>
           ))}
@@ -239,7 +239,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
               </div>
               <div>
                 <p className="font-display text-sm font-bold text-[#2b5069]">Team Playlist</p>
-                <p className="font-body text-xs text-gray-400">Listen while you train</p>
+                <p className="font-body text-xs text-muted-foreground">Listen while you train</p>
               </div>
             </div>
             <a
@@ -340,7 +340,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                 View full program →
               </Link>
             </div>
-            <p className="font-body text-xs text-gray-400 mb-5">
+            <p className="font-body text-xs text-muted-foreground mb-5">
               {teamProgram.program || teamProgram.program_name} · {teamProgram.duration_weeks} weeks · {teamProgram.frequency_per_week}×/week
             </p>
 
@@ -380,7 +380,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                           {day.position}
                         </span>
                       )}
-                      <span className="inline-flex items-center gap-1 text-[10px] font-body text-gray-400 uppercase tracking-wider px-2 py-0.5 rounded-full bg-gray-50">
+                      <span className="inline-flex items-center gap-1 text-[10px] font-body text-muted-foreground uppercase tracking-wider px-2 py-0.5 rounded-full bg-gray-50">
                         <Dumbbell size={10} />
                         {day.exercises?.length || 0} exercises
                       </span>
@@ -401,14 +401,14 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                             <p className="font-body text-xs text-gray-700 truncate">
                               {ex.exercise_name}
                             </p>
-                            <p className="font-body text-[10px] text-gray-400">
+                            <p className="font-body text-[10px] text-muted-foreground">
                               {ex.sets}×{ex.reps}{ex.rest_seconds ? ` · ${ex.rest_seconds}s rest` : ''}
                             </p>
                           </div>
                         </div>
                       ))}
                       {(day.exercises?.length || 0) > 5 && (
-                        <p className="font-body text-[10px] text-gray-400 pl-5">
+                        <p className="font-body text-[10px] text-muted-foreground pl-5">
                           +{day.exercises.length - 5} more exercises
                         </p>
                       )}

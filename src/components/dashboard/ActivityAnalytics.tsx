@@ -17,7 +17,7 @@ export function ActivityAnalytics({ weeklyStats }: ActivityAnalyticsProps) {
     <div className="bg-white rounded-2xl p-5 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-base font-semibold text-gray-900">Activity Analytics</h3>
-        <span className="text-xs text-gray-400">Last 4 Weeks</span>
+        <span className="text-xs text-muted-foreground">Last 4 Weeks</span>
       </div>
 
       {/* Bar chart */}
@@ -33,7 +33,7 @@ export function ActivityAnalytics({ weeklyStats }: ActivityAnalyticsProps) {
                     style={{ height: `${Math.max(pct, 4)}%` }}
                   />
                 </div>
-                <span className="text-[11px] text-gray-400">{w.week}</span>
+                <span className="text-[11px] text-muted-foreground">{w.week}</span>
                 <span className="text-[11px] font-medium text-gray-600">{w.count}</span>
               </div>
             );
@@ -44,7 +44,7 @@ export function ActivityAnalytics({ weeklyStats }: ActivityAnalyticsProps) {
               <div className="flex items-end h-[120px] w-full justify-center">
                 <div className="w-8 sm:w-10 rounded-t bg-gray-100" style={{ height: '20%' }} />
               </div>
-              <span className="text-[11px] text-gray-400">Week {i}</span>
+              <span className="text-[11px] text-muted-foreground">Week {i}</span>
               <span className="text-[11px] font-medium text-gray-300">0</span>
             </div>
           ))

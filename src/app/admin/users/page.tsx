@@ -563,7 +563,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                         <div className="flex items-center">
                           <span className="font-medium text-gray-900">#{index + 1}</span>
                           {index === 0 && <span className="ml-1 text-amber-500">🏆</span>}
-                          {index === 1 && <span className="ml-1 text-gray-400">🥈</span>}
+                          {index === 1 && <span className="ml-1 text-muted-foreground">🥈</span>}
                           {index === 2 && <span className="ml-1 text-amber-600">🥉</span>}
                         </div>
                       </td>
@@ -908,7 +908,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                       @{u.massiminoUsername}
                     </a>
                   ) : (
-                    <span className="text-gray-400 text-xs">-</span>
+                    <span className="text-muted-foreground text-xs">-</span>
                   )}
                 </td>
                 <td className="px-4 py-2 font-mono">{(u as any).myLibPoints?.toLocaleString?.() || '0'}</td>
@@ -922,7 +922,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                       {u.pointsBalance > 0 && <span className="text-blue-500">🎯</span>}
                     </div>
                   ) : (
-                    <span className="text-gray-400">-</span>
+                    <span className="text-muted-foreground">-</span>
                   )}
                 </td>
                 <td className="px-4 py-2">
@@ -931,7 +931,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                       {u.totalEarned.toLocaleString()}
                     </span>
                   ) : (
-                    <span className="text-gray-400">-</span>
+                    <span className="text-muted-foreground">-</span>
                   )}
                 </td>
                 <td className="px-4 py-2">{u.reputationScore}</td>
@@ -1019,7 +1019,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                         View Public Profile
                       </a>
                     ) : (
-                      <span className="text-xs text-gray-400">No public username</span>
+                      <span className="text-xs text-muted-foreground">No public username</span>
                     )}
                     <a href="/admin/revenue" className="text-xs underline text-brand-primary">Revenue</a>
                   </div>

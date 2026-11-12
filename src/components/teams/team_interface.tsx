@@ -353,7 +353,7 @@ export function TeamInterface({
                       <h3 className="font-display text-lg font-bold text-[#2b5069] leading-tight">
                         {team.name}
                       </h3>
-                      <p className="text-[10px] font-body uppercase tracking-wider text-gray-400 mt-0.5">
+                      <p className="text-[10px] font-body uppercase tracking-wider text-muted-foreground mt-0.5">
                         {team.type.toLowerCase().replace('_', ' ')}
                       </p>
                     </div>
@@ -366,7 +366,7 @@ export function TeamInterface({
                     {/* Member progress bar */}
                     <div className="mb-4">
                       <div className="flex justify-between items-center mb-1">
-                        <span className="text-xs font-body text-gray-400">{team.memberCount}/{team.maxMembers} members</span>
+                        <span className="text-xs font-body text-muted-foreground">{team.memberCount}/{team.maxMembers} members</span>
                         {team.memberCount >= team.maxMembers && (
                           <span className="text-[10px] font-display uppercase tracking-wider text-red-500">Full</span>
                         )}
@@ -461,7 +461,7 @@ export function TeamInterface({
                     {/* Trainer/Admin quick actions */}
                     {(session?.user?.role === 'ADMIN' || session?.user?.id === team.trainer?.id) && (
                       <div className="flex gap-3 justify-end pt-2 mt-2 border-t border-gray-50">
-                        <a href="/dashboard" className="text-xs font-body text-gray-400 hover:text-[#2b5069] transition-colors">Edit</a>
+                        <a href="/dashboard" className="text-xs font-body text-muted-foreground hover:text-[#2b5069] transition-colors">Edit</a>
                         <button
                           className="text-xs font-body text-red-400 hover:text-red-600 transition-colors"
                           onClick={async () => {

@@ -157,7 +157,7 @@ export default function JoinProgramPage({ params }: Props) {
           <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
           <p className="text-sm text-gray-500">{joinStep}</p>
           <Link href={`/workout-log/programs/${params.id}`}>
-            <Button variant="ghost" size="sm" className="text-gray-400">Cancel</Button>
+            <Button variant="ghost" size="sm" className="text-muted-foreground">Cancel</Button>
           </Link>
         </div>
       </div>

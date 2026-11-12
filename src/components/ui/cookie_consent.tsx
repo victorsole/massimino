@@ -151,7 +151,7 @@ export function CookieConsent() {
               {/* Close button (accepts essential only) */}
               <button
                 onClick={acceptEssential}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0"
+                className="p-2 text-muted-foreground hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0"
                 aria-label="Close and accept essential cookies only"
               >
                 <X className="w-5 h-5" />

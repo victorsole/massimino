@@ -287,7 +287,7 @@ export default function SettingsPage() {
                       className="w-full px-3 py-2 rounded-lg border border-gray-200 bg-gray-100 text-sm text-gray-500 outline-none cursor-not-allowed"
                       placeholder="your@email.com"
                     />
-                    <p className="text-xs text-gray-400 mt-1">Email cannot be changed here.</p>
+                    <p className="text-xs text-muted-foreground mt-1">Email cannot be changed here.</p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Bio</label>
@@ -338,7 +338,7 @@ export default function SettingsPage() {
                     <div key={n.key} className="flex items-center justify-between py-4">
                       <div>
                         <p className="text-sm font-medium text-gray-900">{n.label}</p>
-                        <p className="text-xs text-gray-400">{n.desc}</p>
+                        <p className="text-xs text-muted-foreground">{n.desc}</p>
                       </div>
                       <div className="flex items-center gap-2">
                         <SaveFeedback show={settingSaved === n.key} />
@@ -392,7 +392,7 @@ export default function SettingsPage() {
                       <div key={n.key} className="flex items-center justify-between py-4">
                         <div>
                           <p className="text-sm font-medium text-gray-900">{n.label}</p>
-                          <p className="text-xs text-gray-400">{n.desc}</p>
+                          <p className="text-xs text-muted-foreground">{n.desc}</p>
                         </div>
                         <div className="flex items-center gap-2">
                           <SaveFeedback show={settingSaved === n.key} />
@@ -463,7 +463,7 @@ export default function SettingsPage() {
                 {/* Replay Onboarding Tour */}
                 <div className="mt-6 pt-6 border-t border-gray-100">
                   <h4 className="text-sm font-medium text-gray-700 mb-1">Onboarding Tour</h4>
-                  <p className="text-xs text-gray-400 mb-3">Replay the guided walkthrough of Massimino&apos;s features.</p>
+                  <p className="text-xs text-muted-foreground mb-3">Replay the guided walkthrough of Massimino&apos;s features.</p>
                   <button
                     onClick={() => {
                       localStorage.removeItem('massimino_tour_completed');

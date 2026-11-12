@@ -427,7 +427,7 @@ export default function SafetyPage() {
             <Link href="/dashboard" className="inline-block text-brand-primary hover:text-brand-primary-dark font-semibold">
               Return to Dashboard
             </Link>
-            <span className="text-gray-400 hidden sm:inline">•</span>
+            <span className="text-muted-foreground hidden sm:inline">•</span>
             <Link href="/community" className="inline-block text-brand-primary hover:text-brand-primary-dark font-semibold">
               Join the Community
             </Link>

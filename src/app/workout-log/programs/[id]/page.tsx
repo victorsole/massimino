@@ -722,7 +722,7 @@ export default function ProgramDetailPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <span className="mdi mdi-alert-circle text-5xl text-gray-400 mb-4 block" />
+          <span className="mdi mdi-alert-circle text-5xl text-muted-foreground mb-4 block" />
           <h2 className="text-xl font-bold text-gray-900 mb-2">
             {error || 'Program not found'}
           </h2>

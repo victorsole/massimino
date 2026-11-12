@@ -196,7 +196,7 @@ function EquipmentCard({
             key={`rec-${index}`}
             className="inline-flex items-center gap-1.5 px-3 py-2 bg-[#fcf8f2] rounded-lg text-xs"
           >
-            <span className="mdi mdi-minus text-sm text-gray-400" />
+            <span className="mdi mdi-minus text-sm text-muted-foreground" />
             {item}
           </span>
         ))}
@@ -205,7 +205,7 @@ function EquipmentCard({
             key={`opt-${index}`}
             className="inline-flex items-center gap-1.5 px-3 py-2 bg-[#fcf8f2] rounded-lg text-xs"
           >
-            <span className="mdi mdi-minus text-sm text-gray-400" />
+            <span className="mdi mdi-minus text-sm text-muted-foreground" />
             {item}
           </span>
         ))}

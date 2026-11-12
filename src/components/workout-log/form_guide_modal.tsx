@@ -132,7 +132,7 @@ export function FormGuideModal({
             <div className="text-center py-12">
               <Video className="h-12 w-12 text-gray-300 mx-auto mb-3" />
               <p className="text-gray-500">{error}</p>
-              <p className="text-sm text-gray-400 mt-2">
+              <p className="text-sm text-muted-foreground mt-2">
                 Be the first to contribute a form guide for this exercise!
               </p>
               <Button
@@ -232,7 +232,7 @@ export function FormGuideModal({
                   )}
                 </div>
                 {currentMedia.viewCount !== undefined && currentMedia.viewCount > 0 && (
-                  <span className="text-xs text-gray-400">
+                  <span className="text-xs text-muted-foreground">
                     {currentMedia.viewCount.toLocaleString()} views
                   </span>
                 )}

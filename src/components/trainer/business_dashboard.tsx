@@ -291,7 +291,7 @@ function MetricCard({ title, value, subtitle, icon: Icon, trend }: {
             {pct(trend)}
           </span>
         )}
-        <span className="text-xs text-gray-400">{subtitle}</span>
+        <span className="text-xs text-muted-foreground">{subtitle}</span>
       </div>
     </div>
   );
@@ -390,7 +390,7 @@ export default function BusinessDashboard() {
   const OverviewTab = () => {
     if (!dashboardData) {
       return (
-        <div className="text-center py-16 text-gray-400">
+        <div className="text-center py-16 text-muted-foreground">
           {loading ? (
             <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-3" />
           ) : (
@@ -643,7 +643,7 @@ export default function BusinessDashboard() {
                   <div className="flex items-center gap-1.5">
                     <Users className="h-4 w-4 text-gray-400" />
                     <span className="text-sm font-medium text-gray-700">{sub.activeSubscribers}</span>
-                    <span className="text-xs text-gray-400">subscribers</span>
+                    <span className="text-xs text-muted-foreground">subscribers</span>
                   </div>
                   <Button variant="ghost" size="sm" className="text-gray-500 hover:text-[#2b5069]">
                     <Edit className="h-3.5 w-3.5 mr-1" /> Edit
@@ -767,15 +767,15 @@ export default function BusinessDashboard() {
                   {pkg.description && <p className="text-sm text-gray-500 mb-4">{pkg.description}</p>}
                   <div className="flex items-baseline gap-2 mb-4">
                     <span className="text-2xl font-bold text-gray-900">{euro(pkg.price)}</span>
-                    <span className="text-xs text-gray-400">{perSession}/session</span>
+                    <span className="text-xs text-muted-foreground">{perSession}/session</span>
                   </div>
                   <div className="grid grid-cols-2 gap-4 py-3 border-t border-gray-50">
                     <div>
-                      <p className="text-xs text-gray-400">Sold</p>
+                      <p className="text-xs text-muted-foreground">Sold</p>
                       <p className="text-sm font-semibold text-gray-900">{pkg.totalSold}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-400">Revenue</p>
+                      <p className="text-xs text-muted-foreground">Revenue</p>
                       <p className="text-sm font-semibold text-gray-900">{euro(pkg.revenue)}</p>
                     </div>
                   </div>
@@ -870,7 +870,7 @@ export default function BusinessDashboard() {
                   {statusIcons[p.status] || statusIcons.PENDING}
                   <div className="min-w-0">
                     <p className="text-sm font-medium text-gray-900 truncate">{p.description}</p>
-                    <p className="text-xs text-gray-400">{p.clientName} &middot; {p.type}</p>
+                    <p className="text-xs text-muted-foreground">{p.clientName} &middot; {p.type}</p>
                   </div>
                 </div>
                 <div className="text-right shrink-0 ml-4">
@@ -879,7 +879,7 @@ export default function BusinessDashboard() {
                     <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded ${statusStyles[p.status] || 'bg-gray-50 text-gray-500'}`}>
                       {p.status}
                     </span>
-                    <span className="text-[10px] text-gray-400">
+                    <span className="text-[10px] text-muted-foreground">
                       {new Date(p.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
                     </span>
                   </div>
@@ -899,7 +899,7 @@ export default function BusinessDashboard() {
   const AnalyticsTab = () => {
     if (!dashboardData) {
       return (
-        <div className="text-center py-16 text-gray-400">
+        <div className="text-center py-16 text-muted-foreground">
           <BarChart3 className="h-10 w-10 mx-auto mb-3 text-gray-300" />
           <p className="text-sm">Analytics will appear once you start receiving payments.</p>
         </div>
@@ -937,7 +937,7 @@ export default function BusinessDashboard() {
             <h4 className="text-sm font-semibold text-gray-900 mb-4">Success Rate</h4>
             <div className="flex items-end gap-3">
               <span className="text-4xl font-bold text-emerald-600">{successRate.toFixed(1)}%</span>
-              <span className="text-sm text-gray-400 mb-1">of payments succeed</span>
+              <span className="text-sm text-muted-foreground mb-1">of payments succeed</span>
             </div>
             <div className="mt-4 h-3 rounded-full bg-gray-100 overflow-hidden">
               <div className="h-full rounded-full bg-emerald-500 transition-all duration-500" style={{ width: `${successRate}%` }} />
@@ -947,7 +947,7 @@ export default function BusinessDashboard() {
             <h4 className="text-sm font-semibold text-gray-900 mb-4">Average Payment</h4>
             <div className="flex items-end gap-3">
               <span className="text-4xl font-bold text-gray-900">{euro(a.averagePaymentAmount)}</span>
-              <span className="text-sm text-gray-400 mb-1">per transaction</span>
+              <span className="text-sm text-muted-foreground mb-1">per transaction</span>
             </div>
           </div>
         </div>
@@ -966,7 +966,7 @@ export default function BusinessDashboard() {
                       style={{ height: `${(t.revenue / max) * 100}%` }}
                       title={`${t.month}: ${euro(t.revenue)}`}
                     />
-                    <span className="text-[9px] text-gray-400 truncate w-full text-center">{t.month}</span>
+                    <span className="text-[9px] text-muted-foreground truncate w-full text-center">{t.month}</span>
                   </div>
                 ));
               })()}

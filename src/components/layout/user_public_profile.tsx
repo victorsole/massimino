@@ -262,7 +262,7 @@ export function UserPublicProfile({
           </div>
           <h3 className="font-semibold text-lg">Profile Not Visible</h3>
           <p className="text-sm text-gray-600 max-w-md mx-auto">{blockedReason}</p>
-          <p className="text-xs text-gray-400">Adjust your privacy settings to make your profile visible to this audience.</p>
+          <p className="text-xs text-muted-foreground">Adjust your privacy settings to make your profile visible to this audience.</p>
         </CardContent>
       </Card>
     )

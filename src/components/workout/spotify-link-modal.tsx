@@ -125,7 +125,7 @@ export function SpotifyLinkModal({
             </div>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600"
+              className="text-muted-foreground hover:text-gray-600"
               disabled={loading}
             >
               <X className="h-5 w-5" />

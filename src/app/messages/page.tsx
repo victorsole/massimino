@@ -380,7 +380,7 @@ export default function MessagesPage() {
                                 <p className="text-sm font-medium text-gray-900 truncate">
                                   {conversationName}
                                 </p>
-                                <p className="text-xs text-gray-400">
+                                <p className="text-xs text-muted-foreground">
                                   {conversation.lastMessage
                                     ? formatTime(conversation.lastMessage.createdAt)
                                     : formatTime(conversation.updatedAt)
@@ -397,7 +397,7 @@ export default function MessagesPage() {
 
                               <div className="flex items-center justify-between mt-1">
                                 {conversation.type === 'GROUP' && (
-                                  <p className="text-xs text-gray-400">
+                                  <p className="text-xs text-muted-foreground">
                                     {conversation.participants.length} participants
                                   </p>
                                 )}

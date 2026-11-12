@@ -492,19 +492,19 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
                     <div className={`text-sm truncate ${sessionId === s.id ? 'font-medium text-[#2b5069]' : 'text-gray-700'}`}>
                       {s.title || 'Untitled'}
                     </div>
-                    {s.last && <div className="text-xs text-gray-400 truncate mt-0.5">{s.last.slice(0, 60)}</div>}
+                    {s.last && <div className="text-xs text-muted-foreground truncate mt-0.5">{s.last.slice(0, 60)}</div>}
                   </div>
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
                     <button
                       onClick={(e) => { e.stopPropagation(); setSessionId(s.id); renameCurrentSession(); }}
-                      className="p-1 rounded hover:bg-gray-200 text-gray-400 hover:text-gray-600"
+                      className="p-1 rounded hover:bg-gray-200 text-muted-foreground hover:text-gray-600"
                       title="Rename"
                     >
                       <Pencil size={14} />
                     </button>
                     <button
                       onClick={(e) => { e.stopPropagation(); deleteSessionById(s.id); }}
-                      className="p-1 rounded hover:bg-red-50 text-gray-400 hover:text-red-500"
+                      className="p-1 rounded hover:bg-red-50 text-muted-foreground hover:text-red-500"
                       title="Delete"
                     >
                       <Trash2 size={14} />
@@ -513,7 +513,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
                 </div>
               ))}
               {sessions.length > 10 && (
-                <div className="px-4 py-1.5 text-xs text-gray-400">+{sessions.length - 10} more sessions</div>
+                <div className="px-4 py-1.5 text-xs text-muted-foreground">+{sessions.length - 10} more sessions</div>
               )}
             </div>
           </div>
@@ -701,12 +701,12 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
                       <table className="w-full text-sm">
                         <thead>
                           <tr className="bg-gray-50">
-                            <th className="px-3 py-2 text-left text-[10px] uppercase tracking-wider text-gray-400 font-medium w-12">#</th>
-                            <th className="px-3 py-2 text-left text-[10px] uppercase tracking-wider text-gray-400 font-medium">Exercise</th>
-                            <th className="px-3 py-2 text-left text-[10px] uppercase tracking-wider text-gray-400 font-medium">Sets</th>
-                            <th className="px-3 py-2 text-left text-[10px] uppercase tracking-wider text-gray-400 font-medium">Reps</th>
-                            <th className="px-3 py-2 text-left text-[10px] uppercase tracking-wider text-gray-400 font-medium">Rest</th>
-                            <th className="px-3 py-2 text-left text-[10px] uppercase tracking-wider text-gray-400 font-medium">Notes</th>
+                            <th className="px-3 py-2 text-left text-[10px] uppercase tracking-wider text-muted-foreground font-medium w-12">#</th>
+                            <th className="px-3 py-2 text-left text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Exercise</th>
+                            <th className="px-3 py-2 text-left text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Sets</th>
+                            <th className="px-3 py-2 text-left text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Reps</th>
+                            <th className="px-3 py-2 text-left text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Rest</th>
+                            <th className="px-3 py-2 text-left text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Notes</th>
                             {editMode && <th className="px-3 py-2 w-20" />}
                           </tr>
                         </thead>
@@ -720,7 +720,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
                                     <button className="px-1 py-0.5 border rounded text-xs text-gray-500 hover:bg-gray-100" onClick={() => moveItem(idx, 1)}>&#8595;</button>
                                   </div>
                                 ) : (
-                                  <span className="text-gray-400 text-xs">{idx + 1}</span>
+                                  <span className="text-muted-foreground text-xs">{idx + 1}</span>
                                 )}
                               </td>
                               <td className="px-3 py-2 font-medium text-gray-800">
@@ -815,7 +815,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
               className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all flex-shrink-0 ${
                 input.trim()
                   ? 'bg-[#2b5069] text-white hover:bg-brand-primary-dark shadow-sm'
-                  : 'bg-gray-100 text-gray-400'
+                  : 'bg-gray-100 text-muted-foreground'
               } disabled:opacity-50`}
             >
               {loading ? (

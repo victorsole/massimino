@@ -158,7 +158,7 @@ export function DataTable<T>({
             ))}
             {sorted.length === 0 && (
               <tr>
-                <td colSpan={columns.length} className="p-6 text-center text-gray-400">
+                <td colSpan={columns.length} className="p-6 text-center text-muted-foreground">
                   No matches.
                 </td>
               </tr>

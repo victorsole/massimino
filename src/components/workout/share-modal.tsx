@@ -333,7 +333,7 @@ export function ShareModal({ isOpen, onClose, sessionId, sessionName }: ShareMod
             </div>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600"
+              className="text-muted-foreground hover:text-gray-600"
             >
               <X className="h-5 w-5" />
             </button>

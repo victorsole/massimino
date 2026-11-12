@@ -305,7 +305,7 @@ export default async function AdminRevenuePage() {
                     <div className="flex items-center">
                       <span className="font-medium text-gray-900">#{index + 1}</span>
                       {index === 0 && <span className="ml-1 text-amber-500">🏆</span>}
-                      {index === 1 && <span className="ml-1 text-gray-400">🥈</span>}
+                      {index === 1 && <span className="ml-1 text-muted-foreground">🥈</span>}
                       {index === 2 && <span className="ml-1 text-amber-600">🥉</span>}
                     </div>
                   </td>

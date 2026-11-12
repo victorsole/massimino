@@ -39,7 +39,7 @@ export function TrainingStats({
     <Card className={cn('hover-lift animate-fade-in-up', className)}>
       <CardHeader className="pb-3">
         <CardTitle className="text-lg flex items-center gap-2">
-          <span className="mdi mdi-chart-bar text-xl text-gray-400" />
+          <span className="mdi mdi-chart-bar text-xl text-muted-foreground" />
           Training Stats
         </CardTitle>
       </CardHeader>

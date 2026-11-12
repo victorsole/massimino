@@ -220,7 +220,7 @@ export function FillTheGymSection({
                           style={{ width: 'auto', height: 'auto', maxWidth: 32, maxHeight: 32 }}
                         />
                       ) : (
-                        <span className={`mdi ${PartnerIcons[partner.id]} text-xl ${currentDiscount ? 'text-gray-700' : 'text-gray-400'}`} />
+                        <span className={`mdi ${PartnerIcons[partner.id]} text-xl ${currentDiscount ? 'text-gray-700' : 'text-muted-foreground'}`} />
                       )}
                     </div>
                     <div>

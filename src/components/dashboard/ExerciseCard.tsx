@@ -22,7 +22,7 @@ export function ExerciseCard({ title, description, duration, icon: Icon, gradien
       {/* Info */}
       <div className="p-3">
         <h4 className="text-sm font-semibold text-gray-900 mb-0.5">{title}</h4>
-        <p className="text-xs text-gray-400 line-clamp-2">{description}</p>
+        <p className="text-xs text-muted-foreground line-clamp-2">{description}</p>
       </div>
     </div>
   );

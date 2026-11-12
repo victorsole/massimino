@@ -145,7 +145,7 @@ export default async function AthleteApplicationsPage() {
                     <div className="text-sm text-gray-600">
                       {app.email} | {getDisciplineLabel(app.discipline)}
                     </div>
-                    <div className="text-xs text-gray-400">
+                    <div className="text-xs text-muted-foreground">
                       Applied: {new Date(app.appliedAt).toLocaleString()}
                       {app.reviewedAt && (
                         <> | Reviewed: {new Date(app.reviewedAt).toLocaleString()}</>

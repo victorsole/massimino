@@ -125,7 +125,7 @@ export default function SchedulePage() {
 
           <div className="grid grid-cols-7 gap-1">
             {dayNames.map((d) => (
-              <div key={d} className="text-center text-xs font-medium text-gray-400 py-2">
+              <div key={d} className="text-center text-xs font-medium text-muted-foreground py-2">
                 {d}
               </div>
             ))}
@@ -186,7 +186,7 @@ export default function SchedulePage() {
                   key={p.id}
                   className={`bg-white rounded-xl shadow-sm border border-gray-100 p-4 border-l-[3px] ${borderColour}`}
                 >
-                  <p className="text-xs text-gray-400 mb-1">
+                  <p className="text-xs text-muted-foreground mb-1">
                     Week {p.currentWeek} · {p.program_templates.duration}
                   </p>
                   <p className="font-medium text-gray-900 mb-0.5">{p.program_templates.name}</p>

@@ -186,7 +186,7 @@ export function NotificationsDropdown({ userId }: NotificationsDropdownProps) {
                         <p className="text-xs text-gray-500 mt-1 line-clamp-2">
                           {notification.body}
                         </p>
-                        <p className="text-xs text-gray-400 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           {formatTime(notification.createdAt)}
                         </p>
                       </div>

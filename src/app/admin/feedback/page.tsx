@@ -164,7 +164,7 @@ export default async function AdminFeedbackPage() {
                       {r.severity ? (
                         <span className="text-xs px-2 py-1 rounded bg-orange-100 text-orange-800">{r.severity}</span>
                       ) : (
-                        <span className="text-xs text-gray-400">—</span>
+                        <span className="text-xs text-muted-foreground">—</span>
                       )}
                     </td>
                     <td className="px-2 py-2 max-w-[520px]">
@@ -251,7 +251,7 @@ export default async function AdminFeedbackPage() {
                           </div>
                         ))}
                         {(!commentMap[r.id] || commentMap[r.id]?.length === 0) && (
-                          <div className="text-xs text-gray-400">No comments yet.</div>
+                          <div className="text-xs text-muted-foreground">No comments yet.</div>
                         )}
                       </div>
                       <form action={addComment} className="space-y-2">

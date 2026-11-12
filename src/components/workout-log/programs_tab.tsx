@@ -228,8 +228,8 @@ export function ProgramsTab() {
                 onClick={scrollToBrowse}
                 className="bg-white border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center min-h-[180px] w-full max-w-[340px] transition-all hover:border-[#254967] hover:bg-[#fcf8f2] cursor-pointer"
               >
-                <span className="mdi mdi-plus-circle-outline text-5xl text-gray-400 mb-3" />
-                <span className="text-base font-semibold text-gray-400">Browse Programs</span>
+                <span className="mdi mdi-plus-circle-outline text-5xl text-muted-foreground mb-3" />
+                <span className="text-base font-semibold text-muted-foreground">Browse Programs</span>
               </button>
             </div>
           )}

@@ -1733,7 +1733,7 @@ function WorkoutLogPageContent() {
                   <span className="hidden sm:inline">Add Workout Entry</span>
                   <span className="sm:hidden">Add</span>
                 </Button>
-                <span className="text-xs text-gray-400 hidden sm:inline">Start a session first</span>
+                <span className="text-xs text-muted-foreground hidden sm:inline">Start a session first</span>
               </div>
             ) : (
               <Button onClick={() => setIsAddingEntry(true)} size="sm" className="text-xs sm:text-sm">
@@ -1929,7 +1929,7 @@ function WorkoutLogPageContent() {
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="text-gray-400 hover:text-red-500"
+                            className="text-muted-foreground hover:text-red-500"
                             onClick={() => setDismissedTodayWorkout(true)}
                           >
                             <Trash2 className="h-4 w-4 mr-1" />
@@ -1964,7 +1964,7 @@ function WorkoutLogPageContent() {
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="text-gray-400 hover:text-red-500 hover:bg-red-50 p-2"
+                            className="text-muted-foreground hover:text-red-500 hover:bg-red-50 p-2"
                             onClick={async () => {
                               if (await confirmAction('Dismiss today\'s workout? You can still access it from My Programs.')) {
                                 setDismissedTodayWorkout(true);
@@ -2123,7 +2123,7 @@ function WorkoutLogPageContent() {
                                     <div className="font-medium text-sm">{exerciseName}</div>
                                     <div className="text-xs text-muted-foreground mt-1">
                                       {ex.section && <span>{ex.section}</span>}
-                                      {ex.notes && <span className="ml-2 text-gray-400">• {ex.notes}</span>}
+                                      {ex.notes && <span className="ml-2 text-muted-foreground">• {ex.notes}</span>}
                                     </div>
                                   </div>
                                   <div className="text-sm font-medium text-gray-900 ml-4">

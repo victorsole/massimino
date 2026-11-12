@@ -431,7 +431,7 @@ export default function ProfilePage() {
                 <p className="text-sm font-medium">{notif.message}</p>
                 <button
                   onClick={() => setNotifications(prev => prev.filter(n => n.id !== notif.id))}
-                  className="ml-auto text-gray-400 hover:text-gray-600"
+                  className="ml-auto text-muted-foreground hover:text-gray-600"
                 >
                   ×
                 </button>
@@ -542,7 +542,7 @@ export default function ProfilePage() {
                           onError={() => setAvatarLoadError(true)}
                         />
                       ) : (
-                        <span className="mdi mdi-camera text-3xl text-gray-400" />
+                        <span className="mdi mdi-camera text-3xl text-muted-foreground" />
                       )}
                     </div>
                     {(avatarPreview || user?.image) && (
@@ -572,7 +572,7 @@ export default function ProfilePage() {
                       onDragLeave={handleDragLeave}
                       onDrop={handleDrop}
                     >
-                      <span className="mdi mdi-cloud-upload text-3xl text-gray-400 mb-2 block" />
+                      <span className="mdi mdi-cloud-upload text-3xl text-muted-foreground mb-2 block" />
                       <p className="text-sm text-gray-600 mb-2">Drag & drop your image here, or click to browse</p>
                       <Input
                         name="avatar"

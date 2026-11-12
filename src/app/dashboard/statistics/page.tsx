@@ -202,7 +202,7 @@ export default function StatisticsPage() {
               >
                 <div className="flex items-center justify-between mb-4">
                   <h4 className="text-base font-semibold text-gray-900">{s.title}</h4>
-                  <span className="text-xs text-gray-400">Last 4 weeks</span>
+                  <span className="text-xs text-muted-foreground">Last 4 weeks</span>
                 </div>
 
                 <p className="text-3xl font-bold text-gray-900 mb-2">{s.value}</p>

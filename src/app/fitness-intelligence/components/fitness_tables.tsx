@@ -17,7 +17,7 @@ function formatMarketSize(eur: number): string {
 }
 
 const rankCell = (_: unknown, idx: number) => (
-  <span className="font-semibold text-gray-400">{idx + 1}</span>
+  <span className="font-semibold text-muted-foreground">{idx + 1}</span>
 );
 
 const rankCol = { key: 'rank', header: '#', align: 'left' as const, render: rankCell };
@@ -429,7 +429,7 @@ export function ActivityTable({ data }: { data: ActivityDatum[] }) {
       key: 'year',
       header: 'Survey',
       align: 'right',
-      render: (r) => <span className="text-xs text-gray-400">{r.year}</span>,
+      render: (r) => <span className="text-xs text-muted-foreground">{r.year}</span>,
     },
   ];
   return (

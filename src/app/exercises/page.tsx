@@ -736,7 +736,7 @@ export default function ExercisesPage() {
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={coverUrl} alt={exercise.name} className="absolute inset-0 h-full w-full object-cover" />
                         ) : (
-                          <div className="absolute inset-0 flex items-center justify-center text-gray-400">No image</div>
+                          <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">No image</div>
                         )}
                         <div className="absolute top-2 right-2 flex items-center gap-1">
                           {mediaCount !== undefined && mediaCount > 0 && (
