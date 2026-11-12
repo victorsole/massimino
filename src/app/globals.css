@@ -204,6 +204,35 @@
   }
 }
 
+/* Fitness Intelligence: full-screen hero and large map (svh with a vh fallback). 4rem = sticky header */
+@layer components {
+  .fi-hero-h {
+    min-height: calc(100vh - 4rem - 2rem);
+    min-height: calc(100svh - 4rem - 2rem);
+  }
+  .fi-map-h {
+    height: max(380px, 70vh);
+    height: max(380px, 70svh);
+  }
+  @media (min-width: 1024px) {
+    .fi-map-h {
+      height: clamp(520px, calc(100vh - 4rem - 8rem), 900px);
+      height: clamp(520px, calc(100svh - 4rem - 8rem), 900px);
+    }
+  }
+  .animate-scroll-cue {
+    animation: scrollCue 1.8s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-scroll-cue { animation: none; }
+  }
+}
+
+@keyframes scrollCue {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
 /* Custom animations */
 @layer utilities {
   .animate-fade-in {

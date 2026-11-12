@@ -5,11 +5,15 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import type { CountryFitnessData } from '@/types/fitness_data';
 
-type MetricType = 'penetration' | 'market' | 'members' | 'growth';
+export type MetricType = 'penetration' | 'market' | 'members' | 'growth';
 
 interface EuropeMapProps {
   data: CountryFitnessData[];
   onCountrySelect?: (country: CountryFitnessData) => void;
+  /** Called when the metric selector changes, so the page can retitle the map */
+  onMetricChange?: (metric: MetricType) => void;
+  /** Classes for the map canvas (height); defaults to the original fixed height */
+  containerClassName?: string;
 }
 
 // Country centroids for markers
@@ -150,7 +154,10 @@ const METRIC_CONFIG: Record<MetricType, {
   },
 };
 
-export function EuropeMap({ data, onCountrySelect }: EuropeMapProps) {
+// Whole of Europe, from Iceland and Portugal to the Urals foothills and Cyprus
+const EUROPE_BOUNDS: [[number, number], [number, number]] = [[-25, 34], [42, 71]];
+
+export function EuropeMap({ data, onCountrySelect, onMetricChange, containerClassName }: EuropeMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const markersRef = useRef<maplibregl.Marker[]>([]);
@@ -307,11 +314,15 @@ export function EuropeMap({ data, onCountrySelect }: EuropeMapProps) {
           }
         ]
       },
-      center: [15, 54], // Center on Europe
-      zoom: 3.5,
-      minZoom: 2,
+      // Fit the whole of Europe on load, whatever the canvas size
+      bounds: EUROPE_BOUNDS,
+      fitBoundsOptions: { padding: 16 },
+      minZoom: 1,
+      // On touch screens one finger scrolls the page and two fingers move the map
+      cooperativeGestures: typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches,
       maxZoom: 8,
-      maxBounds: [[-30, 30], [50, 75]] // Limit to Europe
+      // Pan limit around Europe; wide enough that the whole-Europe fit is never forced to zoom in
+      maxBounds: [[-60, 20], [85, 80]]
     });
 
     // Add navigation controls
@@ -326,6 +337,14 @@ export function EuropeMap({ data, onCountrySelect }: EuropeMapProps) {
 
     map.current.on('load', () => {
       setIsLoaded(true);
+      // Refit once the canvas has its final size so the whole of Europe shows
+      map.current?.resize();
+      const narrow = (mapContainer.current?.clientWidth ?? 1024) < 640;
+      // Leave room for the metric selector (top) and the legend (bottom)
+      map.current?.fitBounds(EUROPE_BOUNDS, {
+        padding: narrow ? { top: 60, bottom: 96, left: 8, right: 8 } : { top: 64, bottom: 24, left: 24, right: 24 },
+        duration: 0,
+      });
       // Create initial markers with default metric
       createMarkers('penetration');
     });
@@ -357,8 +376,10 @@ export function EuropeMap({ data, onCountrySelect }: EuropeMapProps) {
             setMetric(newMetric);
             // Recreate all markers with the new metric's colors
             createMarkers(newMetric);
+            onMetricChange?.(newMetric);
           }}
-          className="bg-white border border-gray-300 rounded-lg px-4 py-2 text-sm font-medium shadow-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          aria-label="Map metric"
+          className="max-w-[calc(100vw-7rem)] rounded-field border border-brand-primary/15 bg-brand-secondary px-4 py-2 text-sm font-medium text-brand-primary shadow-soft focus:outline-none focus:ring-2 focus:ring-brand-primary"
         >
           <option value="penetration">Gym Penetration Rate</option>
           <option value="market">Market Size (EUR)</option>
@@ -370,8 +391,8 @@ export function EuropeMap({ data, onCountrySelect }: EuropeMapProps) {
       {/* Map Container */}
       <div
         ref={mapContainer}
-        className="w-full h-[500px] md:h-[600px]"
-        style={{ minHeight: '500px' }}
+        className={containerClassName ?? 'w-full h-[500px] md:h-[600px]'}
+        style={containerClassName ? undefined : { minHeight: '500px' }}
       />
 
       {/* Loading indicator */}
@@ -382,13 +403,13 @@ export function EuropeMap({ data, onCountrySelect }: EuropeMapProps) {
       )}
 
       {/* Legend - Dynamic based on selected metric */}
-      <div className="absolute bottom-4 left-4 bg-white rounded-lg shadow-lg p-4 min-w-[240px] z-10">
-        <h4 className="text-sm font-semibold text-gray-700 mb-3">{config.label}</h4>
+      <div className="absolute bottom-4 left-4 z-10 min-w-[168px] rounded-field bg-brand-secondary/95 p-2.5 shadow-soft sm:min-w-[240px] sm:p-4">
+        <h4 className="mb-2 text-xs font-semibold text-brand-primary sm:mb-3 sm:text-sm">{config.label}</h4>
         <div className="flex gap-1 mb-2">
           {config.colorScale.map((colorClass, idx) => (
             <div
               key={idx}
-              className={`flex-1 h-4 ${colorClass} ${idx === 0 ? 'rounded-l' : ''} ${idx === config.colorScale.length - 1 ? 'rounded-r' : ''}`}
+              className={`flex-1 h-3 sm:h-4 ${colorClass} ${idx === 0 ? 'rounded-l' : ''} ${idx === config.colorScale.length - 1 ? 'rounded-r' : ''}`}
             />
           ))}
         </div>
@@ -397,11 +418,6 @@ export function EuropeMap({ data, onCountrySelect }: EuropeMapProps) {
           <span>{config.legendMid}</span>
           <span>{config.legendMax}</span>
         </div>
-      </div>
-
-      {/* Attribution */}
-      <div className="absolute bottom-4 right-4 bg-white/90 rounded px-2 py-1 text-xs text-gray-600 z-10">
-        Powered by MapLibre GL JS
       </div>
     </div>
   );
