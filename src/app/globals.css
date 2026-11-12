@@ -9,26 +9,28 @@
 @tailwind utilities;
 
 @layer base {
+  /* Massimino palette: petrol #2B5069 on cream #FBF8F2, cards in warm white #FFFDF8 */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --background: 40 53% 97%;          /* #FBF8F2 cream */
+    --foreground: 205 35% 13%;         /* deep petrol ink */
+    --card: 40 100% 99%;               /* #FFFDF8 warm white */
+    --card-foreground: 205 35% 13%;
+    --popover: 40 100% 99%;
+    --popover-foreground: 205 35% 13%;
+    --primary: 204 42% 29%;            /* #2B5069 petrol */
+    --primary-hover: 204 46% 22%;      /* #1E3D52 darker petrol */
+    --primary-foreground: 40 53% 97%;
+    --secondary: 40 30% 93%;
+    --secondary-foreground: 204 42% 22%;
+    --muted: 40 25% 93%;
+    --muted-foreground: 205 12% 38%;
+    --accent: 204 30% 93%;
+    --accent-foreground: 204 42% 22%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 40 53% 97%;
+    --border: 40 18% 87%;
+    --input: 40 18% 82%;
+    --ring: 204 42% 29%;
     --radius: 0.5rem;
   }
 
@@ -39,8 +41,9 @@
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 84% 4.9%;
+    --primary: 204 38% 58%;
+    --primary-hover: 204 38% 50%;
+    --primary-foreground: 205 35% 10%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
@@ -51,7 +54,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 94.1%;
+    --ring: 204 38% 58%;
   }
 }
 
@@ -268,7 +271,7 @@
 }
 
 .fitness-card-header {
-  @apply bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-6 rounded-t-xl;
+  @apply bg-gradient-to-r from-brand-primary to-brand-primary-dark text-white p-6 rounded-t-xl;
 }
 
 .fitness-metric {
@@ -563,7 +566,7 @@
 
 /* ===== ONBOARDING TOUR (driver.js) ===== */
 .massimino-tour-popover {
-  background: #fcfaf5 !important;
+  background: #FBF8F2 !important;
   border-radius: 16px !important;
   border: 1px solid rgba(43, 80, 105, 0.15) !important;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12) !important;

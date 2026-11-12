@@ -82,7 +82,7 @@ export function DashboardHeader({ onMenuToggle, userName, userImage, userId }: D
 
   return (
     <TooltipProvider>
-      <header className="sticky top-0 z-30 bg-[#fcfaf5]/90 backdrop-blur-md border-b border-gray-200/50">
+      <header className="sticky top-0 z-30 bg-brand-secondary/90 backdrop-blur-md border-b border-gray-200/50">
         <div className="flex items-center justify-between px-4 sm:px-5 md:px-6 lg:px-8 h-16">
           {/* Left: menu + title */}
           <div className="flex items-center gap-3 min-w-0">

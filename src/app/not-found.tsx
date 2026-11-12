@@ -15,7 +15,7 @@ const suggestions = [
 
 export default function NotFound() {
   return (
-    <div className="min-h-[70vh] bg-[#fcfaf5] flex items-center justify-center px-4 py-16">
+    <div className="min-h-[70vh] bg-brand-secondary flex items-center justify-center px-4 py-16">
       <div className="text-center max-w-md">
         <p className="font-display text-6xl font-bold text-[#2b5069] mb-2">404</p>
         <h1 className="font-display text-2xl font-bold text-gray-900 mb-2">This page could not be found</h1>

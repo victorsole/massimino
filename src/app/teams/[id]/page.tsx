@@ -63,7 +63,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
   if (!team) {
     return (
-      <div className="min-h-screen bg-[#fcfaf5] flex items-center justify-center px-4">
+      <div className="min-h-screen bg-brand-secondary flex items-center justify-center px-4">
         <div className="text-center">
           <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
             <Users className="h-8 w-8 text-gray-400" />
@@ -84,7 +84,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
   const aesthetic = team.aestheticSettings || team.aesthetic_settings || {};
   const primary = aesthetic.primaryColor || aesthetic.primary_colour || '#2b5069';
-  const secondary = aesthetic.secondaryColor || aesthetic.secondary_colour || '#93c5fd';
+  const secondary = aesthetic.secondaryColor || aesthetic.secondary_colour || '#94b2c6';
   const background = aesthetic.backgroundColor || aesthetic.background_colour || '#ffffff';
   const coverImage: string | null = aesthetic.coverImage || null;
   const social = aesthetic.socialLinks || aesthetic.social_links || {};
@@ -109,7 +109,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
   };
 
   return (
-    <div className="min-h-screen bg-[#fcfaf5]">
+    <div className="min-h-screen bg-brand-secondary">
       {/* Hero section */}
       <div className="relative overflow-hidden" style={{ backgroundColor: primary }}>
         {/* Cover image */}

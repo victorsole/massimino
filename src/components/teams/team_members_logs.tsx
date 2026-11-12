@@ -38,7 +38,7 @@ export function TeamMembersLogs({ team_id, accent_colour }: { team_id: string; a
     })();
   }, [team_id, selected]);
 
-  const colour = accent_colour || '#2563eb';
+  const colour = accent_colour || '#2b5069';
 
   return (
     <div className="rounded-lg border p-4 bg-white" style={{ borderColor: colour + '33' }}>

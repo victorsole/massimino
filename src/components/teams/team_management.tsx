@@ -660,8 +660,8 @@ export function TeamManagement({ className, onTeamSelect }: TeamManagementProps)
             <div className="grid gap-4">
               {teams.map((team) => {
                 const aesthetic: any = (team as any).aestheticSettings || (team as any).aesthetic_settings || {};
-                const primary = aesthetic.primaryColor || aesthetic.primary_colour || '#2563eb';
-                const secondary = aesthetic.secondaryColor || aesthetic.secondary_colour || '#93c5fd';
+                const primary = aesthetic.primaryColor || aesthetic.primary_colour || '#2b5069';
+                const secondary = aesthetic.secondaryColor || aesthetic.secondary_colour || '#94b2c6';
                 return (
                 <Card key={team.id} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => {
                   setSelectedTeam(team);

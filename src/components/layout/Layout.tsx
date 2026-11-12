@@ -56,7 +56,7 @@ export default function Layout({ children }: LayoutProps) {
 
   if (shouldUseDashboardShell) {
     return (
-      <div className="min-h-screen bg-[#fcfaf5] flex font-sans">
+      <div className="min-h-screen bg-brand-secondary flex font-sans">
         {/* Mobile overlay */}
         {sidebarOpen && (
           <div

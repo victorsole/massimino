@@ -27,7 +27,7 @@ export function TeamJoinButton({
   isLoggedIn,
   isFull,
   visibility,
-  accentColor = '#2563eb'
+  accentColor = '#2b5069'
 }: TeamJoinButtonProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);

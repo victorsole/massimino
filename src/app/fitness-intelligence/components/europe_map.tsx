@@ -80,13 +80,13 @@ const METRIC_CONFIG: Record<MetricType, {
     label: 'Gym Penetration Rate',
     getValue: (d) => d.penetration_rate,
     getColor: (rate) => {
-      if (rate >= 20) return '#1e40af'; // blue-800
-      if (rate >= 17) return '#1d4ed8'; // blue-700
-      if (rate >= 14) return '#2563eb'; // blue-600
-      if (rate >= 11) return '#3b82f6'; // blue-500
-      if (rate >= 8) return '#60a5fa';  // blue-400
-      if (rate >= 5) return '#93c5fd';  // blue-300
-      return '#dbeafe'; // blue-100
+      if (rate >= 20) return '#1e3d52'; // petrol-800
+      if (rate >= 17) return '#24475d'; // petrol-700
+      if (rate >= 14) return '#2b5069'; // petrol-600
+      if (rate >= 11) return '#3d6a85'; // petrol-500
+      if (rate >= 8) return '#6489a3';  // petrol-400
+      if (rate >= 5) return '#94b2c6';  // petrol-300
+      return '#e0e9ef'; // petrol-100
     },
     format: (v) => `${v}%`,
     legendMin: '<5%',

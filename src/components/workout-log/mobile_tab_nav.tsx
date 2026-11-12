@@ -264,7 +264,7 @@ export function DesktopTabNav({ activeTab, onTabChange, className }: MobileTabNa
       </nav>
       {/* Scroll fade indicator */}
       {canScrollRight && (
-        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#fcfaf5] to-transparent pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-brand-secondary to-transparent pointer-events-none" />
       )}
     </div>
   );

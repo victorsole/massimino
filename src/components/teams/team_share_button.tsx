@@ -21,7 +21,7 @@ interface TeamShareButtonProps {
 export function TeamShareButton({
   teamId,
   teamName,
-  accentColor = '#2563eb'
+  accentColor = '#2b5069'
 }: TeamShareButtonProps) {
   const [showDialog, setShowDialog] = useState(false);
   const [shareableLink, setShareableLink] = useState<string | null>(null);

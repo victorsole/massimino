@@ -24,7 +24,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-[#fcfaf5] flex items-center justify-center font-sans">
+      <div className="min-h-screen bg-brand-secondary flex items-center justify-center font-sans">
         <div className="flex flex-col items-center gap-3">
           <div className="animate-spin rounded-full h-10 w-10 border-2 border-gray-200 border-t-[#2b5069]" />
           <p className="text-sm text-gray-400">Loading...</p>
@@ -36,7 +36,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   if (!session) return null;
 
   return (
-    <div className="min-h-screen bg-[#fcfaf5] flex font-sans">
+    <div className="min-h-screen bg-brand-secondary flex font-sans">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div

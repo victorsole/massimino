@@ -2,7 +2,7 @@
 
 export default function OfflinePage() {
   return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: '#fcfaf5' }}>
+    <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: '#FBF8F2' }}>
       <div className="text-center">
         <img src="/massimino_logo.png" alt="Massimino" className="w-24 h-24 mx-auto mb-6" />
         <h1 className="text-2xl font-bold mb-2" style={{ color: '#2b5069' }}>You&apos;re Offline</h1>

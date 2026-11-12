@@ -520,7 +520,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
         )}
 
         {/* Message area */}
-        <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-4 bg-[#fcfaf5]/50">
+        <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-4 bg-brand-secondary/50">
           {/* Welcome / Empty state */}
           {messages.length === 0 && !loading && (
             <div className="flex flex-col items-center justify-center h-full text-center px-4">

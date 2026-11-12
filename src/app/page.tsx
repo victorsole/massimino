@@ -166,13 +166,13 @@ export default function HomePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <p className="font-display text-sm md:text-base font-medium uppercase tracking-[0.25em] text-[#fcfaf5]/80 mb-5">
+          <p className="font-display text-sm md:text-base font-medium uppercase tracking-[0.25em] text-brand-secondary/80 mb-5">
             Safe Workouts for Everyone
           </p>
           <h1 className="font-display text-5xl sm:text-7xl lg:text-[7.5rem] font-bold uppercase tracking-tight leading-[0.95] text-white mb-3">
             MASSIMINO
           </h1>
-          <div className="inline-block px-6 py-2 border border-[#fcfaf5]/40 text-xs sm:text-sm font-display font-medium uppercase tracking-[0.15em] text-[#fcfaf5]/80 mb-8">
+          <div className="inline-block px-6 py-2 border border-brand-secondary/40 text-xs sm:text-sm font-display font-medium uppercase tracking-[0.15em] text-brand-secondary/80 mb-8">
             Evidence-Based Fitness &bull; NASM-Aligned
           </div>
           <br />
@@ -201,7 +201,7 @@ export default function HomePage() {
               {['#TrainSafe', '#MassiminoFitness', '#ExpertGuidance', '#TrackProgress', '#NASMAligned', '#FitnessForAll'].map((tag) => (
                 <span key={tag} className="flex items-center gap-6">
                   <span className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-white">{tag}</span>
-                  <span className="w-1.5 h-1.5 bg-[#fcfaf5] rounded-full flex-shrink-0" />
+                  <span className="w-1.5 h-1.5 bg-brand-secondary rounded-full flex-shrink-0" />
                 </span>
               ))}
             </div>
@@ -212,7 +212,7 @@ export default function HomePage() {
       {/* ════════ STATS ════════ */}
       <section className="py-20 px-6 md:px-12 bg-[#2b5069] text-center">
         <motion.p
-          className="font-display text-sm font-medium uppercase tracking-[0.2em] text-[#fcfaf5]/60 mb-6"
+          className="font-display text-sm font-medium uppercase tracking-[0.2em] text-brand-secondary/60 mb-6"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -231,7 +231,7 @@ export default function HomePage() {
               <span className="font-display text-5xl md:text-7xl font-bold text-white leading-none">
                 {stat.count}{stat.suffix}
               </span>
-              <span className="font-body text-xs uppercase tracking-[0.12em] text-[#fcfaf5]/50 mt-2">
+              <span className="font-body text-xs uppercase tracking-[0.12em] text-brand-secondary/50 mt-2">
                 {stat.label}
               </span>
             </div>
@@ -240,7 +240,7 @@ export default function HomePage() {
       </section>
 
       {/* ════════ ABOUT / INTRO ════════ */}
-      <section id="about" className="py-24 px-6 md:px-12 bg-[#fcfaf5]">
+      <section id="about" className="py-24 px-6 md:px-12 bg-brand-secondary">
         <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <motion.div
             initial="hidden"
@@ -442,7 +442,7 @@ export default function HomePage() {
       </section>
 
       {/* ════════ PARTNERS ════════ */}
-      <div className="py-12 px-6 border-t border-b border-[#2b5069]/10 overflow-hidden bg-[#fcfaf5]">
+      <div className="py-12 px-6 border-t border-b border-[#2b5069]/10 overflow-hidden bg-brand-secondary">
         <p className="text-center font-display text-xs uppercase tracking-[0.15em] text-[#2b5069]/40 mb-8">
           Trusted Partners
         </p>
@@ -472,7 +472,7 @@ export default function HomePage() {
       </div>
 
       {/* ════════ NEWSLETTER ════════ */}
-      <section id="contact" className="py-24 px-6 bg-[#fcfaf5]">
+      <section id="contact" className="py-24 px-6 bg-brand-secondary">
         <motion.div
           className="max-w-[700px] mx-auto text-center"
           initial="hidden"
@@ -529,14 +529,14 @@ export default function HomePage() {
           variants={scrollRevealVariants}
         >
           <h2 className="font-display text-4xl md:text-6xl font-bold uppercase tracking-tight text-white leading-none mb-4">
-            Start Your <br /><span className="text-[#fcfaf5]/70">Fitness Journey</span>
+            Start Your <br /><span className="text-brand-secondary/70">Fitness Journey</span>
           </h2>
           <p className="font-body text-base text-white/60 mb-8">
             Join hundreds of athletes and trainers already using Massimino to train smarter, safer, and together.
           </p>
           <Link
             href="/signup"
-            className="inline-flex items-center gap-2 px-12 py-4 bg-[#fcfaf5] text-[#2b5069] font-display text-base font-bold uppercase tracking-wider hover:bg-white hover:-translate-y-0.5 transition-all"
+            className="inline-flex items-center gap-2 px-12 py-4 bg-brand-secondary text-[#2b5069] font-display text-base font-bold uppercase tracking-wider hover:bg-white hover:-translate-y-0.5 transition-all"
           >
             Get Started Today
           </Link>

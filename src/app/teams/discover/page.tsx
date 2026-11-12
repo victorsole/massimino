@@ -32,7 +32,7 @@ export default async function TeamsDiscoverPage() {
   const hero = await getHeroImage();
 
   return (
-    <div className="min-h-screen bg-[#fcfaf5]">
+    <div className="min-h-screen bg-brand-secondary">
       {/* Hero banner */}
       <div className="relative bg-[#2b5069] overflow-hidden">
         {/* Pexels background image */}
