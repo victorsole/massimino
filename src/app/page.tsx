@@ -156,7 +156,9 @@ export default function HomePage() {
             priority
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#2b5069]/50 via-[#2b5069]/30 to-[#2b5069]/90" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#2b5069]/60 via-[#2b5069]/45 to-[#2b5069]/90" />
+          {/* Soft radial scrim behind the centred title so it reads on any photo */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(15,32,44,0.55)_0%,rgba(15,32,44,0.25)_45%,transparent_75%)]" />
         </div>
 
         {/* Content */}
@@ -166,10 +168,10 @@ export default function HomePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <p className="font-display text-sm md:text-base font-medium uppercase tracking-[0.25em] text-brand-secondary/80 mb-5">
+          <p className="font-display text-sm md:text-base font-medium uppercase tracking-[0.25em] text-brand-secondary/80 mb-5 [text-shadow:0_1px_12px_rgba(15,32,44,0.6)]">
             Safe Workouts for Everyone
           </p>
-          <h1 className="font-display text-5xl sm:text-7xl lg:text-[7.5rem] font-bold uppercase tracking-tight leading-[0.95] text-white mb-3">
+          <h1 className="font-display text-5xl sm:text-7xl lg:text-[7.5rem] font-bold uppercase tracking-tight leading-[0.95] text-white mb-3 [text-shadow:0_2px_30px_rgba(15,32,44,0.55)]">
             MASSIMINO
           </h1>
           <div className="inline-block rounded-full px-6 py-2 border border-brand-secondary/40 text-xs sm:text-sm font-display font-medium uppercase tracking-[0.15em] text-brand-secondary/80 mb-8">
