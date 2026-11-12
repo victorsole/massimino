@@ -49,7 +49,7 @@ function LoadingSkeleton() {
   return (
     <div className="flex flex-col gap-3">
       {[1, 2, 3, 4, 5].map((i) => (
-        <div key={i} className="flex gap-4 p-4 bg-white rounded-xl shadow-sm border border-gray-100 animate-pulse">
+        <div key={i} className="flex gap-4 p-4 bg-white rounded-xl shadow-sm animate-pulse">
           <div className="min-w-[80px] h-4 bg-gray-100 rounded" />
           <div className="w-3 h-3 rounded-full bg-gray-100 flex-shrink-0 mt-1" />
           <div className="flex-1 space-y-2">
@@ -128,7 +128,7 @@ export default function ActivityPage() {
             return (
               <div
                 key={w.id}
-                className="flex gap-4 p-4 bg-white rounded-xl shadow-sm border border-gray-100"
+                className="flex gap-4 p-4 bg-white rounded-xl shadow-sm"
               >
                 <div className="min-w-[80px] text-xs text-gray-400 pt-1">
                   {formatRelativeDate(w.date)}

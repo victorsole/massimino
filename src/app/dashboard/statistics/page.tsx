@@ -107,7 +107,7 @@ function LoadingSkeleton() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
       {[1, 2, 3, 4].map((i) => (
-        <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 animate-pulse">
+        <div key={i} className="bg-white rounded-2xl shadow-sm p-6 animate-pulse">
           <div className="flex items-center justify-between mb-4">
             <div className="h-4 bg-gray-100 rounded w-1/3" />
             <div className="h-3 bg-gray-100 rounded w-1/4" />
@@ -198,7 +198,7 @@ export default function StatisticsPage() {
             {statCards.map((s, i) => (
               <div
                 key={i}
-                className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
+                className="bg-white rounded-2xl shadow-sm p-6"
               >
                 <div className="flex items-center justify-between mb-4">
                   <h4 className="text-base font-semibold text-gray-900">{s.title}</h4>
@@ -234,7 +234,7 @@ export default function StatisticsPage() {
                 {personalRecords.slice(0, 6).map((pr) => (
                   <div
                     key={pr.id}
-                    className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex items-center gap-3"
+                    className="bg-white rounded-xl shadow-sm p-4 flex items-center gap-3"
                   >
                     <div className="w-10 h-10 rounded-lg bg-[#E8C547]/15 flex items-center justify-center flex-shrink-0">
                       <span className="text-lg">&#127942;</span>

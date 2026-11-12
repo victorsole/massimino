@@ -475,7 +475,7 @@ export default function NutritionPage() {
           {/* ── Right Column: Sidebar ── */}
           <div className="flex flex-col gap-4">
             {/* Macro Targets */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+            <div className="bg-white rounded-2xl shadow-sm p-5">
               <div className="flex items-center gap-2 mb-4">
                 <Target className="w-4 h-4 text-[#2b5069]" />
                 <h3 className="text-base font-semibold text-gray-900">
@@ -541,7 +541,7 @@ export default function NutritionPage() {
             </div>
 
             {/* Hydration Quick Ref */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+            <div className="bg-white rounded-2xl shadow-sm p-5">
               <div className="flex items-center gap-2 mb-3">
                 <Droplets className="w-4 h-4 text-cyan-500" />
                 <h3 className="text-sm font-semibold text-gray-900">Hydration (NASM)</h3>
@@ -555,7 +555,7 @@ export default function NutritionPage() {
             </div>
 
             {/* NASM Guidelines Accordion */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
               <button
                 onClick={() => setShowGuidelines(!showGuidelines)}
                 className="w-full flex items-center justify-between p-5 hover:bg-gray-50 transition-colors"
@@ -594,7 +594,7 @@ export default function NutritionPage() {
             </div>
 
             {/* Nutrient Timing Accordion */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
               <button
                 onClick={() => setShowTiming(!showTiming)}
                 className="w-full flex items-center justify-between p-5 hover:bg-gray-50 transition-colors"
@@ -625,7 +625,7 @@ export default function NutritionPage() {
             </div>
 
             {/* Energy Stores Reference */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+            <div className="bg-white rounded-2xl shadow-sm p-5">
               <h3 className="text-sm font-semibold text-gray-900 mb-3">Energy Stores in the Body</h3>
               <div className="overflow-x-auto">
                 <table className="w-full text-xs">

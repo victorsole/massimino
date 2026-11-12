@@ -274,6 +274,14 @@ module.exports = {
         },
         // Custom shadows for depth and safety indicators
         boxShadow: {
+          // Soft, diffuse petrol-tinted shadows replace hard card borders
+          sm: '0 1px 2px rgba(30, 61, 82, 0.04), 0 4px 14px -4px rgba(30, 61, 82, 0.08)',
+          DEFAULT: '0 1px 2px rgba(30, 61, 82, 0.04), 0 6px 20px -6px rgba(30, 61, 82, 0.10)',
+          md: '0 2px 4px rgba(30, 61, 82, 0.04), 0 10px 30px -8px rgba(30, 61, 82, 0.12)',
+          lg: '0 4px 8px rgba(30, 61, 82, 0.04), 0 18px 44px -12px rgba(30, 61, 82, 0.16)',
+          xl: '0 6px 12px rgba(30, 61, 82, 0.05), 0 28px 60px -16px rgba(30, 61, 82, 0.20)',
+          soft: '0 1px 2px rgba(30, 61, 82, 0.04), 0 8px 24px -6px rgba(30, 61, 82, 0.10)',
+          'soft-lg': '0 2px 6px rgba(30, 61, 82, 0.05), 0 20px 48px -12px rgba(30, 61, 82, 0.16)',
           'safety-glow': '0 0 20px rgba(16, 185, 129, 0.3)',
           'warning-glow': '0 0 20px rgba(245, 158, 11, 0.3)',
           'danger-glow': '0 0 20px rgba(239, 68, 68, 0.3)',

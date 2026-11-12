@@ -20,7 +20,7 @@ export function CaloriesChart({ meals, targetCalories, loading = false, unit = '
   const hasData = totalCalories > 0;
 
   return (
-    <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-gray-100">
+    <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm">
       <div className="flex items-start justify-between gap-2 mb-4">
         <div className="min-w-0">
           <h3 className="text-sm sm:text-base font-semibold text-gray-900">Calories Intake</h3>

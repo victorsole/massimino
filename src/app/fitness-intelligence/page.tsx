@@ -167,7 +167,7 @@ export default function FitnessIntelligencePage() {
           ].map((stat, i) => (
             <div
               key={stat.label}
-              className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md animate-fade-in-up"
+              className="rounded-2xl bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md animate-fade-in-up"
               style={{ animationDelay: `${0.05 * i}s` }}
             >
               <div className={`text-xl font-bold sm:text-2xl ${stat.accent}`}>{stat.value}</div>
@@ -262,7 +262,7 @@ export default function FitnessIntelligencePage() {
         </Section>
 
         {/* Top Operators */}
-        <div className="mt-8 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-6 animate-fade-in-up">
+        <div className="mt-8 rounded-2xl bg-white p-4 shadow-sm sm:p-6 animate-fade-in-up">
           <h3 className="mb-4 text-base font-semibold text-brand-primary sm:text-lg">Top European Operators (2026)</h3>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
             {[
@@ -416,7 +416,7 @@ export default function FitnessIntelligencePage() {
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
             {/* Sports */}
-            <div className="group rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md sm:p-6">
+            <div className="group rounded-2xl bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md sm:p-6">
               <div className="mb-4 flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 transition-all duration-300 group-hover:scale-110 group-hover:bg-green-200">
                   <Icon path={ICONS.run} size={20} className="text-green-600" />
@@ -431,7 +431,7 @@ export default function FitnessIntelligencePage() {
             </div>
 
             {/* Supplements */}
-            <div className="group rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md sm:p-6">
+            <div className="group rounded-2xl bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md sm:p-6">
               <div className="mb-4 flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100 transition-all duration-300 group-hover:scale-110 group-hover:bg-orange-200">
                   <Icon path={ICONS.shield} size={20} className="text-orange-600" />
@@ -447,7 +447,7 @@ export default function FitnessIntelligencePage() {
             </div>
 
             {/* Consumer */}
-            <div className="group rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md sm:p-6">
+            <div className="group rounded-2xl bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md sm:p-6">
               <div className="mb-4 flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 transition-all duration-300 group-hover:scale-110 group-hover:bg-blue-200">
                   <Icon path={ICONS.shield} size={20} className="text-blue-600" />
@@ -462,7 +462,7 @@ export default function FitnessIntelligencePage() {
             </div>
 
             {/* Influencer */}
-            <div className="group rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md sm:p-6">
+            <div className="group rounded-2xl bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md sm:p-6">
               <div className="mb-4 flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-pink-100 transition-all duration-300 group-hover:scale-110 group-hover:bg-pink-200">
                   <Icon path={ICONS.earth} size={20} className="text-pink-600" />
@@ -478,7 +478,7 @@ export default function FitnessIntelligencePage() {
             </div>
 
             {/* Anti-Doping */}
-            <div className="group rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md sm:p-6">
+            <div className="group rounded-2xl bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md sm:p-6">
               <div className="mb-4 flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-100 transition-all duration-300 group-hover:scale-110 group-hover:bg-red-200">
                   <Icon path={ICONS.shield} size={20} className="text-red-600" />

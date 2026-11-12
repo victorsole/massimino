@@ -14,7 +14,7 @@ export function ActivityAnalytics({ weeklyStats }: ActivityAnalyticsProps) {
   const maxCount = hasData ? Math.max(...weeklyStats.map(w => w.count), 1) : 1;
 
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+    <div className="bg-white rounded-2xl p-5 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-base font-semibold text-gray-900">Activity Analytics</h3>
         <span className="text-xs text-gray-400">Last 4 Weeks</span>

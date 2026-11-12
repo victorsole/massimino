@@ -102,7 +102,7 @@ export default function SchedulePage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
         {/* Calendar */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-white rounded-2xl shadow-sm p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <button
@@ -161,14 +161,14 @@ export default function SchedulePage() {
           <h3 className="text-base font-semibold text-gray-900">Active Programmes</h3>
           {loading ? (
             [1, 2].map((i) => (
-              <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 border-l-[3px] border-l-gray-200 animate-pulse">
+              <div key={i} className="bg-white rounded-xl shadow-sm p-4 border-l-[3px] border-l-gray-200 animate-pulse">
                 <div className="h-3 bg-gray-100 rounded w-1/2 mb-2" />
                 <div className="h-4 bg-gray-100 rounded w-3/4 mb-1" />
                 <div className="h-3 bg-gray-100 rounded w-1/3" />
               </div>
             ))
           ) : programs.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-8 text-center bg-white rounded-xl shadow-sm border border-gray-100">
+            <div className="flex flex-col items-center justify-center py-8 text-center bg-white rounded-xl shadow-sm">
               <CalendarDays className="w-8 h-8 text-gray-300 mb-2" />
               <p className="text-sm text-gray-500">No active programmes</p>
               <a

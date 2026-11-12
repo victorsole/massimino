@@ -219,7 +219,7 @@ export default function DashboardPage() {
         <a
           href="/exercises"
           data-tour="quick-exercises"
-          className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-[#2b5069]/30 transition-colors group"
+          className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm hover:border-[#2b5069]/30 transition-colors group"
         >
           <div className="w-10 h-10 rounded-lg bg-[#2b5069]/10 flex items-center justify-center flex-shrink-0">
             <Search className="w-5 h-5 text-[#2b5069]" />
@@ -232,7 +232,7 @@ export default function DashboardPage() {
         <a
           href="/community"
           data-tour="quick-community"
-          className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-[#2b5069]/30 transition-colors group"
+          className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm hover:border-[#2b5069]/30 transition-colors group"
         >
           <div className="w-10 h-10 rounded-lg bg-[#4ADE80]/10 flex items-center justify-center flex-shrink-0">
             <Users className="w-5 h-5 text-[#4ADE80]" />

@@ -210,7 +210,7 @@ export default function HomePage() {
       </div>
 
       {/* ════════ STATS ════════ */}
-      <section className="py-20 px-6 md:px-12 bg-[#2b5069] text-center">
+      <section className="py-24 md:py-28 px-6 md:px-12 bg-[#2b5069] text-center">
         <motion.p
           className="font-display text-sm font-medium uppercase tracking-[0.2em] text-brand-secondary/60 mb-6"
           initial="hidden"
@@ -240,7 +240,7 @@ export default function HomePage() {
       </section>
 
       {/* ════════ ABOUT / INTRO ════════ */}
-      <section id="about" className="py-24 px-6 md:px-12 bg-brand-secondary">
+      <section id="about" className="py-28 md:py-36 px-6 md:px-12 bg-brand-secondary">
         <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <motion.div
             initial="hidden"
@@ -301,7 +301,7 @@ export default function HomePage() {
       </section>
 
       {/* ════════ FEATURED PROGRAMS (Schedule-style) ════════ */}
-      <section id="programs" className="py-24 px-6 md:px-12 bg-[#2b5069]/[0.04]">
+      <section id="programs" className="py-28 md:py-36 px-6 md:px-12 bg-[#2b5069]/[0.04]">
         <div className="max-w-[1200px] mx-auto">
           <motion.div
             className="text-center mb-14"
@@ -353,7 +353,7 @@ export default function HomePage() {
       </section>
 
       {/* ════════ GALLERY ════════ */}
-      <section id="gallery" className="py-20">
+      <section id="gallery" className="py-28 md:py-36">
         <motion.div
           className="text-center mb-10 px-6"
           initial="hidden"
@@ -385,7 +385,7 @@ export default function HomePage() {
       </section>
 
       {/* ════════ FEATURE CARDS (Venues-style) ════════ */}
-      <section className="py-24 px-6 md:px-12 bg-[#2b5069]/[0.04]">
+      <section className="py-28 md:py-36 px-6 md:px-12 bg-[#2b5069]/[0.04]">
         <div className="max-w-[1200px] mx-auto">
           <motion.div
             className="text-center mb-14"
@@ -442,7 +442,7 @@ export default function HomePage() {
       </section>
 
       {/* ════════ PARTNERS ════════ */}
-      <div className="py-12 px-6 border-t border-b border-[#2b5069]/10 overflow-hidden bg-brand-secondary">
+      <div className="py-16 md:py-20 px-6 border-t border-b border-[#2b5069]/10 overflow-hidden bg-brand-secondary">
         <p className="text-center font-display text-xs uppercase tracking-[0.15em] text-[#2b5069]/40 mb-8">
           Trusted Partners
         </p>
@@ -472,7 +472,7 @@ export default function HomePage() {
       </div>
 
       {/* ════════ NEWSLETTER ════════ */}
-      <section id="contact" className="py-24 px-6 bg-brand-secondary">
+      <section id="contact" className="py-28 md:py-36 px-6 bg-brand-secondary">
         <motion.div
           className="max-w-[700px] mx-auto text-center"
           initial="hidden"
@@ -510,7 +510,7 @@ export default function HomePage() {
       </section>
 
       {/* ════════ CTA ════════ */}
-      <section className="relative py-32 px-6 text-center overflow-hidden">
+      <section className="relative py-36 md:py-44 px-6 text-center overflow-hidden">
         <div className="absolute inset-0">
           <Image
             src={pexelsImages.cta!}

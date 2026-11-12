@@ -223,7 +223,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
             { label: 'Visibility', value: formatVisibility(team.visibility) },
             { label: 'Trainer', value: trainer.name || '—' },
           ].map((stat) => (
-            <div key={stat.label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 text-center">
+            <div key={stat.label} className="bg-white rounded-2xl shadow-sm p-5 text-center">
               <p className="text-xs font-body text-gray-400 uppercase tracking-wider mb-1">{stat.label}</p>
               <p className="font-display text-lg font-bold capitalize" style={{ color: primary }}>{stat.value}</p>
             </div>
@@ -232,7 +232,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
         {/* Spotify bar */}
         {team.spotifyPlaylistUrl && (
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-8 flex items-center justify-between">
+          <div className="bg-white rounded-2xl shadow-sm p-5 mb-8 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: primary + '15' }}>
                 <Music size={18} style={{ color: primary }} />
@@ -327,7 +327,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
         {/* Team Program Workouts */}
         {teamProgram?.training_days && teamProgram.training_days.length > 0 && (
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+          <div className="bg-white rounded-2xl shadow-sm p-6">
             <div className="flex items-center justify-between mb-1">
               <h3 className="font-display text-sm font-bold text-[#2b5069] uppercase tracking-wider">
                 Team Workouts
@@ -449,7 +449,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
         {/* Fallback workouts + Members — 2 column grid */}
         {(!teamProgram?.training_days || teamProgram.training_days.length === 0) && (
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <div className="bg-white rounded-2xl shadow-sm p-6">
               <h3 className="font-display text-sm font-bold text-[#2b5069] uppercase tracking-wider mb-3">Team Workouts</h3>
               <p className="font-body text-sm text-gray-500 mb-4">
                 Team workouts are managed by the trainer. Members can complete team sessions from the dashboard.

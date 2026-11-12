@@ -229,7 +229,7 @@ export default function SettingsPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6">
         {/* Settings nav */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 h-fit">
+        <div className="bg-white rounded-2xl shadow-sm p-4 h-fit">
           <nav className="flex flex-row md:flex-col gap-1">
             {tabs.map((t) => {
               const Icon = t.icon;
@@ -254,7 +254,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Settings content */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-white rounded-2xl shadow-sm p-6">
           {activeTab === 'profile' && (
             <div>
               <h3 className="text-base font-semibold text-gray-900 mb-4 pb-3 border-b border-gray-100">

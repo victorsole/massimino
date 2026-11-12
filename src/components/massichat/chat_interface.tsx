@@ -435,7 +435,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
 
   return (
     <>
-      <div className="flex flex-col h-[600px] sm:h-[650px] lg:h-[calc(100vh-14rem)] bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="flex flex-col h-[600px] sm:h-[650px] lg:h-[calc(100vh-14rem)] bg-white rounded-2xl shadow-sm overflow-hidden">
         {/* Header */}
         <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white">
           <div className="flex items-center gap-3">
@@ -616,7 +616,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
               <div className="w-8 h-8 rounded-full bg-[#2b5069] flex items-center justify-center flex-shrink-0 mb-1">
                 <Image src="/massimino-logo.svg" alt="M" width={18} height={18} className="brightness-0 invert" />
               </div>
-              <div className="bg-white border border-gray-100 shadow-sm rounded-2xl rounded-bl-md px-4 py-3">
+              <div className="bg-white shadow-sm rounded-2xl rounded-bl-md px-4 py-3">
                 <div className="flex gap-1">
                   <span className="w-2 h-2 rounded-full bg-[#2b5069]/40 animate-bounce" style={{ animationDelay: '0ms' }} />
                   <span className="w-2 h-2 rounded-full bg-[#2b5069]/40 animate-bounce" style={{ animationDelay: '150ms' }} />

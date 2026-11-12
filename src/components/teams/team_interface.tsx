@@ -211,7 +211,7 @@ export function TeamInterface({
         animate={!prefersReducedMotion ? "visible" : undefined}
         transition={{ delay: 0.1 }}
       >
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+        <div className="bg-white rounded-2xl shadow-lg p-6">
           {/* Search input */}
           <div className="relative">
             <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -284,7 +284,7 @@ export function TeamInterface({
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 animate-pulse">
+            <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm animate-pulse">
               <div className="h-0.5 bg-gray-200" />
               <div className="p-5 space-y-4">
                 <div className="h-4 bg-gray-200 rounded w-2/3" />
@@ -343,7 +343,7 @@ export function TeamInterface({
                 transition={{ type: 'spring', stiffness: 400, damping: 17 }}
                 className="group"
               >
-                <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
                   {/* Accent stripe */}
                   <div className="h-0.5" style={{ backgroundColor: primary }} />
 

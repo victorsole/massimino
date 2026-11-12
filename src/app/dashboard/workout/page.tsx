@@ -60,7 +60,7 @@ function LoadingSkeleton() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4">
       {[1, 2, 3].map((i) => (
-        <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 animate-pulse">
+        <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm animate-pulse">
           <div className="h-[120px] bg-gray-100" />
           <div className="p-4 space-y-3">
             <div className="h-4 bg-gray-100 rounded w-2/3" />
@@ -130,7 +130,7 @@ export default function WorkoutPage() {
             return (
               <div
                 key={p.id}
-                className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 cursor-pointer transition-transform hover:-translate-y-1"
+                className="bg-white rounded-2xl overflow-hidden shadow-sm cursor-pointer transition-transform hover:-translate-y-1"
               >
                 {/* Banner */}
                 <div className={`h-[120px] flex items-center justify-center ${config.gradient}`}>

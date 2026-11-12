@@ -88,7 +88,7 @@
   }
   
   .massimino-card {
-    @apply bg-white rounded-card shadow-sm border border-gray-200;
+    @apply bg-white rounded-card shadow-soft;
   }
   
   .massimino-button-primary {
@@ -142,11 +142,11 @@
   
   /* Enhanced card styles */
   .card-elevated {
-    @apply bg-white rounded-card shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300;
+    @apply bg-white rounded-card shadow-soft hover:shadow-soft-lg transition-shadow duration-300;
   }
   
   .card-interactive {
-    @apply bg-white rounded-card border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-200 cursor-pointer;
+    @apply bg-white rounded-card shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-200 cursor-pointer;
   }
   
   /* Enhanced form styles with brand colors */
@@ -274,7 +274,7 @@
 
 /* Fitness-specific styles */
 .fitness-card {
-  @apply bg-white rounded-card shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300;
+  @apply bg-white rounded-card shadow-soft hover:shadow-soft-lg transition-shadow duration-300;
 }
 
 .fitness-card-header {

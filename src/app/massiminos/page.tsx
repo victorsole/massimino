@@ -276,7 +276,7 @@ function UserCard({
 
   return (
     <div
-      className="user-card bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden cursor-pointer transition-all duration-400 hover:-translate-y-2 hover:shadow-xl"
+      className="user-card bg-white rounded-2xl shadow-sm overflow-hidden cursor-pointer transition-all duration-400 hover:-translate-y-2 hover:shadow-xl"
       style={{ animationDelay: `${index * 0.05}s` }}
       onClick={() => onViewProfile(user.id)}
     >

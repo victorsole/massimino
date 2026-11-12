@@ -11,7 +11,7 @@ interface ExerciseCardProps {
 
 export function ExerciseCard({ title, description, duration, icon: Icon, gradient, badgeColor = 'bg-[#E8C547]' }: ExerciseCardProps) {
   return (
-    <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
+    <div className="bg-white rounded-xl overflow-hidden shadow-sm cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
       {/* Image area */}
       <div className={`relative aspect-[4/3] ${gradient} flex items-center justify-center`}>
         <Icon className="w-12 h-12 text-white/50" />

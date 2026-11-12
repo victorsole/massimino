@@ -94,7 +94,7 @@ export function ProfileHeader({
                       onClick={() => setShowPreviewDropdown(false)}
                     />
                     {/* Dropdown */}
-                    <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-50">
+                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-1 z-50">
                       <div className="px-4 py-2 border-b border-gray-100">
                         <p className="text-xs text-gray-500 uppercase font-medium">
                           Preview your public profile as:
@@ -146,7 +146,7 @@ export function ProfileHeader({
       </header>
 
       {/* Tab Navigation */}
-      <nav className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+      <nav className="bg-white rounded-lg shadow-sm overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
         <div className="flex min-w-max">
           {filteredTabs.map(tab => (
             <button

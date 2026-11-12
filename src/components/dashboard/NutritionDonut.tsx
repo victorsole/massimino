@@ -35,7 +35,7 @@ export function NutritionDonut({ protein, carbs, fat, loading = false }: Nutriti
   });
 
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 relative overflow-hidden">
+    <div className="bg-white rounded-2xl p-5 shadow-sm relative overflow-hidden">
       {/* Subtle glow */}
       <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-[radial-gradient(circle,rgba(43,80,105,0.08)_0%,transparent_70%)] pointer-events-none" />
 
