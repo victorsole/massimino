@@ -123,7 +123,7 @@ export default function Header({ user }: HeaderProps) {
           <div className="flex justify-between items-center h-16">
             {/* Logo and Brand */}
             <div className="flex items-center min-w-0">
-              <Link href="/" className="flex items-center gap-2 sm:gap-3 min-w-0">
+              <Link href="/" aria-label="Massimino, home" className="flex items-center gap-2 sm:gap-3 min-w-0">
                 {/* Rounded cream badge (14px, like the small boxes) with a little air around the sun */}
                 <div className="w-10 h-10 flex-shrink-0 overflow-hidden rounded-[14px] bg-brand-secondary p-[3px]">
                   <div className="relative h-full w-full">
@@ -137,8 +137,21 @@ export default function Header({ user }: HeaderProps) {
                   </div>
                 </div>
                 <div>
-                  <h1 className={`text-lg sm:text-xl font-bold ${overHero ? 'text-white' : 'text-brand-primary'}`}>Massimino</h1>
-                  <p className={`hidden sm:block text-xs ${overHero ? 'text-white/80' : 'text-brand-primary-light'}`}>Safe Workouts for Everyone</p>
+                  {/* On the home hero only the logo shows (the hero already says Massimino); the name fades
+                      back in once the header turns cream. Opacity only, so the header layout never shifts. */}
+                  <h1
+                    className={`text-lg sm:text-xl font-bold text-brand-primary transition-opacity duration-300 motion-reduce:transition-none ${
+                      isHome && overHero ? 'opacity-0' : 'opacity-100'
+                    }`}
+                  >
+                    Massimino
+                  </h1>
+                  <p
+                    aria-hidden={isHome || undefined}
+                    className={`hidden sm:block text-xs text-brand-primary-light ${isHome ? 'h-0 overflow-hidden opacity-0' : ''}`}
+                  >
+                    Safe Workouts for Everyone
+                  </p>
                 </div>
               </Link>
             </div>
