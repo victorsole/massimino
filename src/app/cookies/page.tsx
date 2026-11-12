@@ -2,7 +2,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export const metadata = {
-  title: 'Cookie Policy • Massimino',
+  title: 'Cookie Policy',
+  alternates: { canonical: '/cookies' },
   description: 'Learn about cookies used on Massimino and manage your preferences.',
 }
 

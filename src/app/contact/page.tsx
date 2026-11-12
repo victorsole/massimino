@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export const metadata: Metadata = {
-  title: 'Contact | Massimino',
+  title: 'Contact',
   description: 'How to reach the Massimino team for support, privacy requests, safety reports and partnerships.',
   alternates: { canonical: '/contact' },
 }

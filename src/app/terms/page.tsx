@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 
 export const metadata = {
-  title: 'Terms of Service • Massimino',
+  title: 'Terms of Service',
+  alternates: { canonical: '/terms' },
   description: 'Read the terms that govern your use of Massimino.',
 }
 

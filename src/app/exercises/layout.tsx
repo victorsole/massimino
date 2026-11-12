@@ -4,7 +4,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Exercise Library | Massimino',
+  title: 'Exercise Library',
   description:
     'Browse the Massimino exercise library: movements by muscle group, equipment and difficulty, with form cues and safety guidance.',
   alternates: { canonical: '/exercises' },

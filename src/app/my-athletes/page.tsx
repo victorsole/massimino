@@ -6,7 +6,7 @@ import { MyAthletesDashboard } from '@/components/coaching/my-athletes-dashboard
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'My Athletes | Massimino',
+  title: 'My Athletes',
   description: 'Manage your athletes, track progress, and create workouts',
 };
 

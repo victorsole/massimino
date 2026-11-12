@@ -3,7 +3,7 @@ import { AuthShell } from '@/components/auth/auth_shell'
 import { ForgotPasswordForm } from './forgot_password_form'
 
 export const metadata: Metadata = {
-  title: 'Forgot your password? | Massimino',
+  title: 'Forgot your password?',
   description: 'Reset the password for your Massimino account.',
   robots: { index: false },
 }

@@ -1,4 +1,13 @@
 // src/app/partnerships/page.tsx
+import type { Metadata } from 'next';
+
+// Head metadata only; the page content is unchanged
+export const metadata: Metadata = {
+  title: 'Partnerships',
+  description: 'Partner with Massimino to reach athletes and personal trainers on a safety-first fitness platform.',
+  alternates: { canonical: '/partnerships' },
+};
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';

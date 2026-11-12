@@ -29,12 +29,16 @@ import {
 } from '@/data/fitness/industry_2024';
 
 export const metadata: Metadata = {
-  title: 'Fitness Intelligence - Massimino',
+  title: 'Fitness Intelligence',
+  alternates: { canonical: '/fitness-intelligence' },
   description: 'European fitness industry data visualization. Explore gym penetration rates, market sizes, and growth trends across Europe.',
   openGraph: {
-    title: 'Fitness Intelligence - Massimino',
+    title: 'Fitness Intelligence | Massimino',
     description: 'European fitness industry data visualization with interactive maps.',
     type: 'website',
+    url: '/fitness-intelligence',
+    // Setting openGraph here replaces the layout's, so point back to the default card
+    images: ['/opengraph-image'],
   },
 };
 

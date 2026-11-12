@@ -9,7 +9,7 @@ import { LoggedInAcceptance } from '@/components/coaching/logged-in-acceptance';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Accept Invitation | Massimino',
+  title: 'Accept Invitation',
   description: 'Join your trainer on Massimino',
 };
 

@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 
 export const metadata = {
-  title: 'Admin • Massimino',
+  title: 'Admin',
 }
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {

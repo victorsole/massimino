@@ -92,12 +92,12 @@ export async function generateMetadata({ params }: PageProps) {
 
   if (!invite) {
     return {
-      title: 'Invitation Not Found | Massimino',
+      title: 'Invitation Not Found',
     };
   }
 
   return {
-    title: `Join ${invite.teamName} | Massimino`,
+    title: `Join ${invite.teamName}`,
     description: `You've been invited to join ${invite.teamName} on Massimino. Accept your invitation to start training with your team!`,
   };
 }

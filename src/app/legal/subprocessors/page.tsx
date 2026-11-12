@@ -2,7 +2,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export const metadata = {
-  title: 'Subprocessors • Massimino',
+  title: 'Subprocessors',
+  alternates: { canonical: '/legal/subprocessors' },
   description: 'Current list of Massimino’s data subprocessors and purposes.',
 }
 

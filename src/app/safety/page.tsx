@@ -3,7 +3,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 export const metadata = {
-  title: 'Safety Guidelines | Massimino',
+  title: 'Safety Guidelines',
+  alternates: { canonical: '/safety' },
   description: 'Safety guidelines and best practices for using Massimino fitness platform',
 };
 

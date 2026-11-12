@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 
 export const metadata = {
-  title: 'Privacy Policy • Massimino',
+  title: 'Privacy Policy',
+  alternates: { canonical: '/privacy' },
   description: 'Read how Massimino collects, uses, and protects your data.',
 }
 

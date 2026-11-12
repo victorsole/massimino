@@ -75,7 +75,7 @@ export async function generateMetadata({ params }: TrainerPageProps): Promise<Me
 
   if (!trainer) {
     return {
-      title: 'Trainer Not Found - Massimino',
+      title: 'Trainer Not Found',
       description: 'The trainer profile you are looking for could not be found.',
     };
   }
@@ -88,12 +88,12 @@ export async function generateMetadata({ params }: TrainerPageProps): Promise<Me
     : `${trainerName} is a ${trainer.trainerVerified ? 'NASM-certified' : 'personal'} trainer on Massimino, the safety-first fitness platform.`;
 
   return {
-    title: `${trainerName} - ${trainerLabel} | Massimino`,
+    title: `${trainerName} - ${trainerLabel}`,
     description,
     openGraph: {
       title: `${trainerName} - ${trainerLabel}`,
       description,
-      images: trainer.image ? [{ url: trainer.image }] : [],
+      images: trainer.image ? [{ url: trainer.image }] : ['/opengraph-image'],
       type: 'profile',
       url: `https://massimino.fitness/trainer/${params.username}`,
       siteName: 'Massimino - Safety-First Fitness Community',
@@ -102,7 +102,7 @@ export async function generateMetadata({ params }: TrainerPageProps): Promise<Me
       card: 'summary_large_image',
       title: `${trainerName} - ${trainerLabel}`,
       description,
-      images: trainer.image ? [trainer.image] : [],
+      images: trainer.image ? [trainer.image] : ['/twitter-image'],
     },
   };
 }

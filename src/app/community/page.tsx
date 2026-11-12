@@ -5,7 +5,8 @@ import Image from 'next/image';
 import { HeroSection, AnimatedSection, StaggerContainer, StaggerItem, AnimatedCard } from '@/components/ui/animated_section';
 
 export const metadata = {
-  title: 'Community | Massimino',
+  title: 'Community',
+  alternates: { canonical: '/community' },
   description: 'Join the Massimino fitness community and connect with trainers and athletes',
 };
 

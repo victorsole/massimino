@@ -83,7 +83,7 @@ export async function generateMetadata({
 
   if (!user) {
     return {
-      title: 'Profile Not Found | Massimino',
+      title: 'Profile Not Found',
       description: 'This trainer profile could not be found.'
     }
   }
@@ -93,7 +93,7 @@ export async function generateMetadata({
   const location = user.city && user.state ? `${user.city}, ${user.state}` : ''
 
   return {
-    title: `${name} - ${user.role} | Massimino`,
+    title: `${name} - ${user.role}`,
     description: bio.slice(0, 160),
     openGraph: {
       title: `${name} - Fitness ${user.role}`,
@@ -107,7 +107,7 @@ export async function generateMetadata({
           height: 800,
           alt: `${name}'s profile picture`
         }
-      ] : [],
+      ] : ['/opengraph-image'],
       locale: 'en_US',
       type: 'profile'
     },
@@ -115,7 +115,7 @@ export async function generateMetadata({
       card: 'summary_large_image',
       title: `${name} - Fitness ${user.role}`,
       description: bio.slice(0, 160),
-      images: user.image ? [user.image] : []
+      images: user.image ? [user.image] : ['/twitter-image']
     },
     alternates: {
       canonical: bioProfileUrl(params.username)

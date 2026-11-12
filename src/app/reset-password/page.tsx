@@ -4,7 +4,7 @@ import { AuthShell } from '@/components/auth/auth_shell'
 import { ResetPasswordForm } from './reset_password_form'
 
 export const metadata: Metadata = {
-  title: 'Choose a new password | Massimino',
+  title: 'Choose a new password',
   robots: { index: false },
 }
 

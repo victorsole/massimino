@@ -1,6 +1,7 @@
 // src/app/layout.tsx
 
 import './globals.css'
+import type { Metadata } from 'next'
 import Layout from '@/components/layout/Layout'
 import SessionProvider from '@/components/providers/SessionProvider'
 import Script from 'next/script'
@@ -26,10 +27,30 @@ const inter = Inter({
   display: 'swap',
 })
 
-export const metadata = {
+const siteDescription = 'The safety-first fitness community platform where trainers and athletes connect, track workouts, and achieve goals together.'
+
+// Pages set only the first part of the title ("Safety Guidelines"); the template adds the brand.
+// No canonical here: it would be inherited by every page. Each public page sets its own.
+export const metadata: Metadata = {
   metadataBase: new URL('https://massimino.fitness'),
-  title: 'Massimino - Safe Workouts for Everyone',
-  description: 'The safety-first fitness community platform where trainers and athletes connect, track workouts, and achieve goals together.',
+  title: {
+    default: 'Massimino - Safe Workouts for Everyone',
+    template: '%s | Massimino',
+  },
+  description: siteDescription,
+  // Defaults for link previews; the image comes from src/app/opengraph-image.tsx
+  openGraph: {
+    type: 'website',
+    siteName: 'Massimino',
+    locale: 'en_US',
+    title: 'Massimino - Safe Workouts for Everyone',
+    description: siteDescription,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Massimino - Safe Workouts for Everyone',
+    description: siteDescription,
+  },
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,

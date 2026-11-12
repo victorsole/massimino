@@ -4,7 +4,14 @@
  */
 
 import Image from 'next/image';
+import type { Metadata } from 'next';
 import { TeamInterface } from '@/components/teams/team_interface';
+
+export const metadata: Metadata = {
+  title: 'Find Your Team',
+  description: 'Join a fitness community on Massimino, train together and push each other to new heights.',
+  alternates: { canonical: '/teams/discover' },
+};
 
 const PEXELS_API_KEY = process.env.PEXELS_API_KEY;
 
