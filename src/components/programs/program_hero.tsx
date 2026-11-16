@@ -198,16 +198,25 @@ export function ProgramHero({
         {/* Actions */}
         <div className="flex flex-wrap gap-3">
           {isFollowing ? (
-            <button
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold transition-all"
-              style={{
-                background: 'rgba(16, 185, 129, 0.2)',
-                border: '1px solid rgba(16, 185, 129, 0.5)',
-              }}
-            >
-              <span className="mdi mdi-check" />
-              Following
-            </button>
+            <>
+              <span
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold"
+                style={{
+                  background: 'rgba(16, 185, 129, 0.2)',
+                  border: '1px solid rgba(16, 185, 129, 0.5)',
+                }}
+              >
+                <span className="mdi mdi-check" />
+                Following
+              </span>
+              <a
+                href="/workout-log?tab=my-programs"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold bg-white text-[#254967] hover:bg-[#fcf8f2] transition-all hover:-translate-y-0.5"
+              >
+                <span className="mdi mdi-dumbbell" />
+                Go to My Programs
+              </a>
+            </>
           ) : (
             <button
               onClick={onFollow}

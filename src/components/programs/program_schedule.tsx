@@ -119,7 +119,7 @@ export function ProgramSchedule({
       <div className="flex items-center gap-2.5 mb-5">
         <span className="mdi mdi-calendar-month text-xl text-[#254967]" />
         <h3 className="text-base font-bold text-gray-900">
-          {cycleDays ? `${cycleDays}-Day Training Cycle` : title}
+          {cycleDays ? `${cycleDays} training sessions` : title}
         </h3>
       </div>
 

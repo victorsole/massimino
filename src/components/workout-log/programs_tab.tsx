@@ -46,6 +46,17 @@ export function ProgramsTab() {
   const [sortBy, setSortBy] = useState<'popularity' | 'duration' | 'difficulty' | 'new'>('popularity');
   const [equipmentFilters, setEquipmentFilters] = useState<string[]>([]);
   const browseRef = useRef<HTMLDivElement>(null);
+  // Programmes the user already follows, so their cards do not offer "Start Program" again
+  const [joinedIds, setJoinedIds] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    fetch('/api/workout/programs?subscriptions=true')
+      .then((r) => (r.ok ? r.json() : []))
+      .then((subs) => {
+        if (Array.isArray(subs)) setJoinedIds(new Set(subs.map((s: any) => s.programId).filter(Boolean)));
+      })
+      .catch(() => {});
+  }, []);
+
 
   // Initialize state from URL
   useEffect(() => {
@@ -340,10 +351,15 @@ export function ProgramsTab() {
                     )}
                   </CardDescription>
                 </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-yellow-500">★</span>
-                  <span className="font-medium">{program.rating?.toFixed(1) || 'New'}</span>
-                </div>
+                {/* A star score only when members have actually rated the programme;
+                    the stored default made every unrated programme read "5.0". */}
+                {program.ratingCount > 0 && program.rating ? (
+                  <div className="flex items-center gap-1" title={`${program.ratingCount} rating${program.ratingCount === 1 ? '' : 's'}`}>
+                    <span className="text-yellow-500" aria-hidden="true">★</span>
+                    <span className="font-medium">{program.rating.toFixed(1)}</span>
+                    <span className="text-xs text-muted-foreground">({program.ratingCount})</span>
+                  </div>
+                ) : null}
               </div>
             </CardHeader>
 
@@ -421,9 +437,17 @@ export function ProgramsTab() {
                 <Link href={`/workout-log/programs/${program.id}`} className="flex-1">
                   <Button variant="outline" className="w-full">View Details</Button>
                 </Link>
-                <Link href={`/workout-log/programs/${program.id}/join`} className="flex-1">
-                  <Button className="w-full">Start Program</Button>
-                </Link>
+                {joinedIds.has(program.id) ? (
+                  <Link href="/workout-log?tab=my-programs" className="flex-1">
+                    <Button variant="outline" className="w-full border-green-600 text-green-700 hover:bg-green-50">
+                      Following
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link href={`/workout-log/programs/${program.id}/join`} className="flex-1">
+                    <Button className="w-full">Start Program</Button>
+                  </Link>
+                )}
               </div>
             </CardContent>
           </Card>

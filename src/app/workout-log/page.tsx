@@ -749,7 +749,53 @@ function WorkoutLogPageContent() {
   };
 
   // Get current workout from active program subscription
-  const getCurrentProgramWorkout = () => {
+  // Programmes such as Hyrox and HIIT keep their sessions in templateData.training_days
+  // (a flat list named "Week 1 - Session 2: ...") and have no microcycles in the database.
+  // Returns the sessions of one week, in order.
+  const templateSessionsForWeek = (templateData: any, week: number): any[] => {
+    const days: any[] = Array.isArray(templateData?.training_days) ? templateData.training_days : [];
+    if (days.length === 0) return [];
+    const parsed = days.map((d) => {
+      const m = String(d.day_name || '').match(/Week\s+(\d+)\s*-\s*Session\s+(\d+)/i);
+      return m ? { week: parseInt(m[1], 10), session: parseInt(m[2], 10), day: d } : null;
+    });
+    if (parsed.every(Boolean)) {
+      return (parsed as { week: number; session: number; day: any }[])
+        .filter((x) => x.week === week)
+        .sort((a, b) => a.session - b.session)
+        .map((x) => x.day);
+    }
+    // No week in the names: split the list evenly over the programme's weeks
+    const weeks = Number(templateData?.duration_weeks) || 1;
+    const perWeek = Number(templateData?.frequency_per_week) || Math.ceil(days.length / weeks);
+    return days.slice((week - 1) * perWeek, week * perWeek);
+  };
+
+  const workoutFromTemplateDays = (activeSub: any, program: any, currentWeek: number, currentDay: number): any => {
+    const sessions = templateSessionsForWeek(program?.templateData, currentWeek);
+    if (sessions.length === 0) return null;
+    const base = { subscription: activeSub, program, phase: null, microcycle: null, exercises: [] as any[] };
+    const today = sessions[currentDay - 1];
+    if (!today) {
+      // Past the last session of this week
+      return { ...base, workout: null, templateExercises: [] as any[], isRestDay: true, currentDay, nextWorkoutDay: null };
+    }
+    return {
+      ...base,
+      workout: { dayNumber: currentDay, name: today.day_name, focus: today.focus },
+      templateExercises: (today.exercises || []).map((ex: any) => ({
+        exerciseName: ex.exercise_name || ex.exercise || ex.name,
+        sets: ex.sets,
+        repsMin: ex.reps,
+        repsMax: ex.reps,
+        rest: ex.rest_seconds,
+        notes: ex.notes,
+      })),
+      isRestDay: false,
+    };
+  };
+
+  const getCurrentProgramWorkout = (): any => {
     if (!programSubscriptions || programSubscriptions.length === 0) return null;
 
     // Prioritize the currently active subscription, fall back to first
@@ -757,8 +803,9 @@ function WorkoutLogPageContent() {
     const currentWeek = activeSub.currentWeek || 1;
     const currentDay = activeSub.currentDay || 1;
     const program = activeSub.program_templates;
-    if (!program || !program.program_phases || program.program_phases.length === 0) {
-      return null;
+    if (!program) return null;
+    if (!program.program_phases || program.program_phases.length === 0) {
+      return workoutFromTemplateDays(activeSub, program, currentWeek, currentDay);
     }
 
     // Find the phase that contains the current week
@@ -773,13 +820,13 @@ function WorkoutLogPageContent() {
     }
 
     if (!currentPhase) {
-      return null;
+      return workoutFromTemplateDays(activeSub, program, currentWeek, currentDay);
     }
 
     // Find the microcycle for current week
-    const currentMicrocycle = currentPhase.microcycles.find((micro: any) => micro.weekNumber === currentWeek);
+    const currentMicrocycle = (currentPhase.microcycles || []).find((micro: any) => micro.weekNumber === currentWeek);
     if (!currentMicrocycle || !currentMicrocycle.workouts) {
-      return null;
+      return workoutFromTemplateDays(activeSub, program, currentWeek, currentDay);
     }
 
     // Find the workout for current day
@@ -1230,6 +1277,9 @@ function WorkoutLogPageContent() {
         // Get total days from microcycle - default to 7 if not found
         const program = sub.program_templates;
         let totalDaysInWeek = 7;
+        // Template-only programmes (Hyrox, HIIT): the week is as long as its sessions
+        const templateSessions = templateSessionsForWeek(program?.templateData, currentWeek).length;
+        if (templateSessions > 0) totalDaysInWeek = templateSessions;
 
         if (program?.program_phases) {
           const currentPhase = program.program_phases.find((phase: any) =>
@@ -1983,7 +2033,7 @@ function WorkoutLogPageContent() {
                         Rest Day - {program.name}
                       </CardTitle>
                       <CardDescription>
-                        {athleteName} • Week {subscription.currentWeek}, Day {subscription.currentDay}
+                        {program.legendary_athlete?.name ? `${athleteName} • ` : ''}Week {subscription.currentWeek}, Day {subscription.currentDay}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -2030,7 +2080,7 @@ function WorkoutLogPageContent() {
                   <CardHeader>
                     <CardTitle className="text-base">Today's Workout - {program.name}</CardTitle>
                     <CardDescription>
-                      {athleteName} • Week {subscription.currentWeek}, Day {subscription.currentDay}
+                      {program.legendary_athlete?.name ? `${athleteName} • ` : ''}Week {subscription.currentWeek}, Day {subscription.currentDay}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -2038,9 +2088,9 @@ function WorkoutLogPageContent() {
                       {/* Workout Info */}
                       <div className="flex items-start justify-between gap-3 pb-3 border-b">
                         <div>
-                          <div className="font-medium text-sm">{workout?.dayLabel || `Day ${workout?.dayNumber}`}</div>
+                          <div className="font-medium text-sm">{workout?.dayLabel || workout?.name || `Day ${workout?.dayNumber}`}</div>
                           <div className="text-xs text-muted-foreground mt-1">
-                            {phase?.title} • {phase?.description}
+                            {[phase?.title, phase?.description, workout?.focus].filter(Boolean).join(' • ')}
                           </div>
                         </div>
                         <div className="flex items-center gap-2">

@@ -125,7 +125,7 @@ function transformApiResponse(apiData: any): {
   const goals: ProgramGoalsType = templateData.goals || {
     primary_goal: apiData.category || 'Improve fitness',
     outcome_goals: [
-      `Complete ${metadata.duration_weeks}-week ${metadata.goal} program`,
+      `Complete ${metadata.duration_weeks}-week ${/^[A-Z0-9_]+$/.test(metadata.goal || '') ? metadata.goal.toLowerCase().split('_').join(' ') : metadata.goal} program`,
       'Build strength and conditioning',
       'Improve overall fitness',
     ],
@@ -698,7 +698,8 @@ export default function ProgramDetailPage() {
       const res = await fetch(`/api/workout/programs/join?programId=${programId}`);
       if (res.ok) {
         const data = await res.json();
-        setIsFollowing(data.isJoined || false);
+        // The endpoint answers { hasJoined }; reading isJoined left every joined programme on 'Start Program'
+        setIsFollowing(Boolean(data.hasJoined ?? data.isJoined));
       }
     } catch (err) {
       console.error('Failed to check following status:', err);
