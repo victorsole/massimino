@@ -92,15 +92,30 @@ export default function RootLayout({
             {children}
           </Layout>
         </SessionProvider>
-        {/* Service Worker Registration */}
+        {/* Service worker: production only. In development the chunk URLs are not hashed,
+            so a caching worker serves stale scripts and breaks hydration; there we remove
+            any worker and cache left behind by an earlier run on the same origin. */}
         <Script
           id="sw-register"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
-            __html: `
+            __html: process.env.NODE_ENV === 'production'
+              ? `
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
                   navigator.serviceWorker.register('/sw.js');
+                });
+              }
+            `
+              : `
+              if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function(regs) {
+                  regs.forEach(function(reg) { reg.unregister(); });
+                });
+              }
+              if ('caches' in window) {
+                caches.keys().then(function(keys) {
+                  keys.forEach(function(key) { caches.delete(key); });
                 });
               }
             `,

@@ -1,4 +1,5 @@
-const CACHE_NAME = 'massimino-v1';
+// Bump the version to drop every cache from the previous worker on activate
+const CACHE_NAME = 'massimino-v2';
 const OFFLINE_URL = '/offline';
 
 // Assets to cache on install (only static files — no dynamic pages)
@@ -30,7 +31,7 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch: network-first for pages, cache-first for static assets
+// Fetch: network-first for pages, cache-first for hashed build files, stale-while-revalidate for other assets
 self.addEventListener('fetch', (event) => {
   const { request } = event;
 
@@ -44,15 +45,38 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Static assets (images, fonts, css, js): cache-first
-  if (request.destination === 'image' || request.destination === 'font' ||
-      request.destination === 'style' || request.destination === 'script') {
+  // Build output under /_next/static/ has a content hash in its name, so a URL never
+  // changes content: cache-first is safe there.
+  if (new URL(request.url).pathname.startsWith('/_next/static/')) {
     event.respondWith(
       caches.match(request).then((cached) => {
         return cached || fetch(request).then((response) => {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+          }
           return response;
+        });
+      })
+    );
+    return;
+  }
+
+  // Other static assets (images in /public, uploads, fonts, css, js) keep the same URL
+  // when their content changes, so serve the cached copy at once and refresh it in the
+  // background. A replaced logo or avatar shows on the next visit instead of never.
+  if (request.destination === 'image' || request.destination === 'font' ||
+      request.destination === 'style' || request.destination === 'script') {
+    event.respondWith(
+      caches.open(CACHE_NAME).then((cache) => {
+        return cache.match(request).then((cached) => {
+          const refresh = fetch(request)
+            .then((response) => {
+              if (response.ok) cache.put(request, response.clone());
+              return response;
+            })
+            .catch(() => cached);
+          return cached || refresh;
         });
       })
     );
