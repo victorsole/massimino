@@ -86,7 +86,7 @@ export default function PublicProfileCard({
                 {trainer.trainerVerified && (
                   <Badge className="bg-green-100 text-green-800 border-green-200 text-xs">
                     <CheckCircle className="w-3 h-3 mr-1" />
-                    NASM
+                    Verified
                   </Badge>
                 )}
               </div>
@@ -151,7 +151,7 @@ export default function PublicProfileCard({
               {trainer.trainerVerified && (
                 <Badge className="bg-green-100 text-green-800 border-green-200">
                   <CheckCircle className="w-3 h-3 mr-1" />
-                  NASM Verified
+                  Verified
                 </Badge>
               )}
             </div>

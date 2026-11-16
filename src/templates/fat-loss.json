@@ -1,7 +1,7 @@
 {
     "program_name": "Fat Loss Training Program",
     "program_id": "fat-loss-12-workout",
-    "description": "12-workout fat loss program following NASM's OPT Model, progressing through Stabilization, Strength Endurance, and Muscular Development phases optimized for fat loss and body composition improvement",
+    "description": "12-workout fat loss program progressing through Stabilization, Strength Endurance, and Muscular Development phases optimized for fat loss and body composition improvement",
     "goal": "Fat Loss",
     "methodology": "OPT Model",
     "total_workouts": 12,

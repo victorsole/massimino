@@ -24,7 +24,7 @@
       {
         "id": "ymca_step_test",
         "title": "YMCA 3-Minute Step Test",
-        "description": "Compare recovery heart rate to Table 11.11 in NASM textbook",
+        "description": "Compare recovery heart rate to the normative table for this test",
         "fields": [
           {"id": "ymca_recovery_hr", "type": "number", "label": "Recovery Heart Rate (bpm)", "min": 50, "max": 200},
           {"id": "ymca_fitness_rating", "type": "select", "label": "Fitness Rating", "options": ["Excellent", "Good", "Above Average", "Average", "Below Average", "Poor", "Very Poor"]}
@@ -33,7 +33,7 @@
       {
         "id": "rockport_walk",
         "title": "Rockport Walk Test",
-        "description": "Compare completion time to Table 11.12 in NASM textbook",
+        "description": "Compare completion time to the normative table for this test",
         "fields": [
           {"id": "rockport_time_minutes", "type": "number", "label": "Time - Minutes", "min": 0, "max": 30},
           {"id": "rockport_time_seconds", "type": "number", "label": "Time - Seconds", "min": 0, "max": 59},
@@ -44,7 +44,7 @@
       {
         "id": "mile_run",
         "title": "1.5 Mile Run Test",
-        "description": "Compare completion time to Table 11.13 in NASM textbook",
+        "description": "Compare completion time to the normative table for this test",
         "fields": [
           {"id": "mile_time_minutes", "type": "number", "label": "Time - Minutes", "min": 0, "max": 30},
           {"id": "mile_time_seconds", "type": "number", "label": "Time - Seconds", "min": 0, "max": 59},

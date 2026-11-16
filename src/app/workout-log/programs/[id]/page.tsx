@@ -397,7 +397,7 @@ function transformApiResponse(apiData: any): {
       };
     });
   } else if (Array.isArray(templateData.workouts)) {
-    // Handle NASM format - workouts array with workout_structure
+    // Handle the goal-based format - workouts array with workout_structure
     workoutSessions = templateData.workouts.map((workout: any, index: number) => {
       const sections: any[] = [];
       const structure = workout.workout_structure || workout;

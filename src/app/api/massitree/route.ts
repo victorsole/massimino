@@ -183,7 +183,7 @@ export async function GET(request: NextRequest) {
       const checks = [
         { name: 'Basic Info', completed: !!user.name, weight: 20 },
         { name: 'Profile Photo', completed: !!user.image, weight: 15 },
-        { name: 'NASM Verification', completed: user.trainerVerified, weight: 25 },
+        { name: 'Trainer verification', completed: user.trainerVerified, weight: 25 },
         { name: 'Bio Description', completed: !!user.trainerBio && user.trainerBio.length > 50, weight: 20 },
         { name: 'Social Media', completed: user.showSocialMedia && (!!user.instagramUrl || !!user.youtubeUrl || !!user.linkedinUrl), weight: 10 },
         { name: 'Team Leadership', completed: (await prisma.teams.count({ where: { trainerId: session.user.id } })) > 0, weight: 10 }

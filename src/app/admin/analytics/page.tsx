@@ -536,7 +536,7 @@ export default async function AdminAnalyticsPage() {
               <span className="text-gray-600">Victor Solé</span>
               <div className="flex items-center gap-2">
                 <code className="text-xs bg-blue-50 px-2 py-1 rounded">massimino.fitness/trainer/victorsole</code>
-                <Badge className="bg-green-100 text-green-800 text-xs">NASM Verified</Badge>
+                <Badge className="bg-green-100 text-green-800 text-xs">Verified</Badge>
               </div>
             </div>
             <p className="text-xs text-gray-500 mt-2">

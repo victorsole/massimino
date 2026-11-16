@@ -33,7 +33,7 @@ export interface TrainerLocation {
   latitude: number;
   longitude: number;
   country_code: string;
-  certifications: string[];   // ["NASM", "ACE"]
+  certifications: string[];   // ["ACE", "NSCA"]
   specializations: string[];  // ["strength", "yoga"]
   massimino_verified: boolean;
 }

@@ -39,7 +39,7 @@ const FEATURED_PROGRAMS = [
   { name: 'The Golden Six', category: 'Classic', tag: 'Strength' },
   { name: 'HIIT Workout', category: 'Modality', tag: 'Cardio' },
   { name: 'Hyrox Training', category: 'Competition', tag: 'Endurance' },
-  { name: 'NASM Fat Loss', category: 'Goal-Based', tag: 'Weight Loss' },
+  { name: 'Fat Loss', category: 'Goal-Based', tag: 'Weight Loss' },
   { name: 'Classic Physique PPL', category: 'Classic', tag: 'Hypertrophy' },
   { name: 'Postpartum Recovery', category: 'Lifestyle', tag: 'Wellness' },
 ];
@@ -250,7 +250,7 @@ export default function HomePage() {
           {/* Tagline without a box; the two halves never break inside, so a narrow screen wraps at the bullet */}
           <div className="hero-rise inline-block py-2 text-xs sm:text-sm font-display font-medium uppercase tracking-[0.15em] text-brand-secondary/90 mb-8 [text-shadow:0_1px_12px_rgba(15,32,44,0.6)]" style={{ animationDelay: '270ms' }}>
             <span className="whitespace-nowrap">Evidence-Based Fitness</span>{' '}
-            <span className="whitespace-nowrap">&bull; NASM-Aligned</span>
+            <span className="whitespace-nowrap">&bull; Safety First</span>
           </div>
           <br />
           <div className="hero-rise flex flex-col sm:flex-row gap-4 justify-center" style={{ animationDelay: '390ms' }}>
@@ -282,7 +282,7 @@ export default function HomePage() {
         <div className="flex animate-marquee-scroll w-max">
           {[...Array(2)].map((_, i) => (
             <div key={i} className="flex items-center gap-6 px-6 whitespace-nowrap">
-              {['#TrainSafe', '#MassiminoFitness', '#ExpertGuidance', '#TrackProgress', '#NASMAligned', '#FitnessForAll'].map((tag) => (
+              {['#TrainSafe', '#MassiminoFitness', '#ExpertGuidance', '#TrackProgress', '#EvidenceBased', '#FitnessForAll'].map((tag) => (
                 <span key={tag} className="flex items-center gap-6">
                   <span className="font-display text-sm font-semibold uppercase tracking-[0.15em] text-white">{tag}</span>
                   <span className="w-1.5 h-1.5 bg-brand-secondary rounded-full flex-shrink-0" />
@@ -339,7 +339,7 @@ export default function HomePage() {
               The Safety-First Fitness Platform
             </h2>
             <p className="font-body text-base text-[#2b5069]/80 leading-relaxed mb-4">
-              Massimino is the professional-grade fitness platform built to protect personal trainers and athletes while enabling evidence-based, NASM-aligned programming. Our mission is to foster a respectful, secure, and effective training environment for all.
+              Massimino is the professional-grade fitness platform built to protect personal trainers and athletes while enabling evidence-based programming. Our mission is to foster a respectful, secure, and effective training environment for all.
             </p>
             <p className="font-body text-base text-[#2b5069]/80 leading-relaxed mb-6">
               Connect with verified trainers, access 30+ curated training programs, and track your progress with our intelligent workout logging system.
@@ -377,7 +377,7 @@ export default function HomePage() {
             />
             <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#2b5069]/90 to-transparent">
               <p className="font-display text-lg font-semibold uppercase tracking-wider text-white">
-                NASM Certified &bull; Evidence Based
+                Certified Coaching &bull; Evidence Based
               </p>
             </div>
           </motion.div>
@@ -489,7 +489,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { title: 'Safety First', detail: 'AI moderation & anti-harassment', tag: 'Protection', icon: Shield, img: pexelsImages.features[0] },
-              { title: 'Expert Guidance', detail: 'NASM-certified programming', tag: 'Coaching', icon: Users, img: pexelsImages.features[1] },
+              { title: 'Expert Guidance', detail: 'Evidence-based programming', tag: 'Coaching', icon: Users, img: pexelsImages.features[1] },
               { title: 'Smart Tracking', detail: 'Intelligent workout logging', tag: 'Analytics', icon: Dumbbell, img: pexelsImages.features[2] },
             ].map((feature, i) => (
               <motion.article
@@ -626,7 +626,7 @@ export default function HomePage() {
         <div className="flex animate-marquee-scroll w-max">
           {[...Array(2)].map((_, i) => (
             <span key={i} className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-white/80 px-12 whitespace-nowrap">
-              #MassiminoFitness &bull; #TrainSafe &bull; #ExpertGuidance &bull; #TrackProgress &bull; #NASMAligned &bull; #FitnessForAll &bull; #SafeWorkouts &bull; #BuildStrength
+              #MassiminoFitness &bull; #TrainSafe &bull; #ExpertGuidance &bull; #TrackProgress &bull; #EvidenceBased &bull; #FitnessForAll &bull; #SafeWorkouts &bull; #BuildStrength
             </span>
           ))}
         </div>

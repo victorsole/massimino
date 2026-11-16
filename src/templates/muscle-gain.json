@@ -1,9 +1,9 @@
 {
     "program_name": "Muscle Gain Training Program",
     "program_id": "muscle-gain-12-workout",
-    "description": "12-workout muscle building program following NASM's OPT Model, progressing through Stabilization, Strength Endurance, Muscular Development, and Maximal Strength phases optimized for hypertrophy and strength gains",
+    "description": "12-workout muscle building program progressing through Stabilization, Strength Endurance, Muscular Development, and Maximal Strength phases optimized for hypertrophy and strength gains",
     "goal": "Muscle Gain",
-    "methodology": "NASM OPT Model",
+    "methodology": "OPT Model",
     "total_workouts": 12,
     "duration": "4-12 weeks",
     "target_audience": "Individuals seeking muscle hypertrophy, strength development, and lean mass gains",

@@ -1765,7 +1765,7 @@ export default function ProfilePage() {
                               value={editCredentialData.providerName}
                               onChange={(e) => setEditCredentialData(prev => ({ ...prev, providerName: e.target.value }))}
                               className="mt-1"
-                              placeholder="e.g., NASM, ACE, ACSM"
+                              placeholder="e.g., ACE, ACSM, NSCA"
                             />
                           </div>
                           <div>

@@ -57,10 +57,10 @@ export async function searchKnowledgeBase(query: string, limit = 5): Promise<{ d
     // Swallow and continue with local docs fallback
   }
 
-  // 2) Local NASM docs (lexical fallback; no new files/routes required)
+  // 2) Local knowledge docs (lexical fallback; no new files/routes required)
   try {
-    const nasmHits = await searchLocalDocs(query, limit)
-    results.push(...nasmHits)
+    const localHits = await searchLocalDocs(query, limit)
+    results.push(...localHits)
   } catch (e) {
     // ignore if FS not available
   }

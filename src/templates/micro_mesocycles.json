@@ -646,7 +646,6 @@
       ]
     },
     "opt_model_reference": {
-      "source": "NASM (National Academy of Sports Medicine)",
       "certification": "CPT (Certified Personal Trainer)",
       "model": "OPT Model (Optimum Performance Training)",
       "evidence_base": "Integrated approach combining flexibility, core, balance, plyometric, speed/agility/quickness, resistance training, and cardiorespiratory training"

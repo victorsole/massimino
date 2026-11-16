@@ -1,7 +1,7 @@
 {
     "program_name": "Performance Training Program",
     "program_id": "performance-12-workout",
-    "description": "12-workout sport performance program following NASM's OPT Model, progressing through Stabilization, Strength Endurance, and Power phases for athletic development",
+    "description": "12-workout sport performance program progressing through Stabilization, Strength Endurance, and Power phases for athletic development",
     "goal": "Sport Performance",
     "methodology": "OPT Model",
     "total_workouts": 12,

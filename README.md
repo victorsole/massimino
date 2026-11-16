@@ -1,6 +1,6 @@
 # 🛡️ Massimino - 
 
-**Massimino** is a professional-grade, anti-creep fitness platform built to protect personal trainers and athletes while enabling evidence-based, NASM-aligned programming. Our mission is to foster a respectful, secure, and effective training environment for all.
+**Massimino** is a professional-grade, anti-creep fitness platform built to protect personal trainers and athletes while enabling evidence-based programming. Our mission is to foster a respectful, secure, and effective training environment for all.
 
 ## 🎯 Mission
 
@@ -11,9 +11,9 @@ Massimino creates a zero-tolerance, anti-creep environment for fitness professio
 ## ✨ Features
 
 ### 🔐 Core Platform
-- **Certified Coach Profiles** — NASM/ACE/ACSM credential validation
+- **Certified Coach Profiles** — Credential validation
 - **Team-Based Management** — Coach-led athlete communities
-- **NASM-Based Assessments** — Static/dynamic posture, cardio, and mobility testing
+- **Assessments** — Static/dynamic posture, cardio, and mobility testing
 - **Professional Workout Programming** — OPT model-based, phase-driven templates
 - **Progress Tracking** — Strength, endurance, mobility, and wellness analytics
 - **Secure Messaging** — Real-time, moderated, professional communication
@@ -23,7 +23,7 @@ Massimino creates a zero-tolerance, anti-creep environment for fitness professio
 - **30+ Pre-Built Training Programs** — Classic, goal-based, lifestyle, sport-specific, and modality programs
 - **Program Categories:**
   - **Classic Programs** — The Golden Six, Classic Physique PPL, Ultimate Mass Builder, Heavy Duty HIT, The 28-Day Experiment, Classic Physique Blueprint
-  - **Goal-Based** — NASM Fat Loss, Muscle Gain, Performance, Aesthetics Hunter
+  - **Goal-Based** — Fat Loss, Muscle Gain, Performance, Aesthetics Hunter
   - **Lifestyle** — Postpartum (Mum/Dad), Stress Management, Time-Constrained, Medical Conditions
   - **Training Modality** — HIIT, [Hyrox](https://hyrox.com/), Cardio, Flexibility, Balance, Plyometric
   - **Sport-Specific** — Castellers, Basketball, Football, Tennis conditioning
