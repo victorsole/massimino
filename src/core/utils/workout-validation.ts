@@ -37,10 +37,11 @@ export const durationStringSchema = z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5]
 export const weightStringSchema = z.string().refine(
   (value) => {
     const weights = value.split(',').map(w => w.trim());
-    return weights.every(w => !isNaN(parseFloat(w)) && parseFloat(w) > 0);
+    // 0 is valid: bodyweight exercises (push-ups, pull-ups, burpees) carry no external load
+    return weights.every(w => !isNaN(parseFloat(w)) && parseFloat(w) >= 0);
   },
   {
-    message: 'Weight must be a single number or comma-separated numbers (e.g., "40" or "40,45,50")',
+    message: 'Weight must be a single number or comma-separated numbers (e.g., "40" or "40,45,50"; use 0 for bodyweight)',
   }
 );
 

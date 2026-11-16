@@ -1083,7 +1083,8 @@ function WorkoutLogPageContent() {
     .map(w => w.trim())
     .filter(Boolean)
     .map(w => parseFloat(w))
-    .filter((n) => !isNaN(n) && n > 0);
+    // 0 kg is a valid entry: bodyweight exercises
+    .filter((n) => !isNaN(n) && n >= 0);
 
   const generatePyramidWeights = (setsNum: number): number[] => {
     const base = parseFloat(newEntry.pyramidBase || '');
@@ -1546,7 +1547,7 @@ function WorkoutLogPageContent() {
       } else {
         // Default: one entry per set
         if (weightsA.length === 0) {
-          notify('Please enter a valid weight in kg (e.g., 60)');
+          notify('Please enter a weight in kg (e.g., 60, or 0 for bodyweight)');
           setLoading(false);
           return;
         }
@@ -2310,10 +2311,16 @@ function WorkoutLogPageContent() {
                           key={ex.id}
                           type="button"
                           onClick={() => {
-                            const exercise = exercises.find(e => e.id === ex.id);
-                            if (exercise) {
-                              handleExerciseSelect(exercise);
-                            }
+                            // Not every logged exercise is in the loaded list (it is capped
+                            // and filtered); fall back to what the entry itself knows.
+                            const exercise = exercises.find(e => e.id === ex.id) || {
+                              id: ex.id,
+                              name: ex.name,
+                              category: '',
+                              muscleGroups: [],
+                              equipment: [],
+                            };
+                            handleExerciseSelect(exercise as ExerciseListItem);
                           }}
                           className="px-4 py-2 bg-white border-2 border-gray-300 rounded-full text-sm font-medium text-gray-700 hover:border-brand-primary hover:bg-brand-secondary transition-all"
                         >
@@ -2508,7 +2515,7 @@ function WorkoutLogPageContent() {
                   <Input
                     value={newEntry.weight}
                     onChange={(e) => setNewEntry({...newEntry, weight: e.target.value})}
-                    placeholder="e.g. 60"
+                    placeholder="e.g. 60 (0 for bodyweight)"
                     className="text-lg font-semibold"
                   />
                 </div>
@@ -3407,7 +3414,9 @@ function WorkoutLogPageContent() {
             {/* Table View */}
             {view_mode === 'table' && (
               <WorkoutSummaryTable
-                entries={workoutEntries}
+                // Same entries as the Cards view: on Today that means today's sets only
+                // (the table used to list every past day under a "1 entry" counter)
+                entries={groupedWorkoutEntries.flat()}
                 on_view_details={(date, entries) => {
                   set_workout_details_modal({
                     is_open: true,

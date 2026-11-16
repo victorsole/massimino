@@ -51,6 +51,8 @@ function MdiIcon({ path, size = 1 }: { path: string; size?: number }) {
 }
 
 interface HeaderProps {
+  /** True while the session is still being fetched */
+  sessionLoading?: boolean;
   user?: {
     id: string;
     name?: string | null;
@@ -66,7 +68,7 @@ interface HeaderProps {
   } | undefined;
 }
 
-export default function Header({ user }: HeaderProps) {
+export default function Header({ user, sessionLoading = false }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [avatarError, setAvatarError] = useState(false);
@@ -394,6 +396,9 @@ export default function Header({ user }: HeaderProps) {
                   )}
                 </div>
               </>
+            ) : sessionLoading ? (
+              // Session not known yet: do not offer "Sign In" to someone who may be signed in
+              <div className="h-9 w-[168px]" aria-hidden="true" />
             ) : (
               <div className="flex items-center gap-1 sm:gap-2">
                 <Link href="/login">

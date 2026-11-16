@@ -42,7 +42,7 @@ function isPublicRoute(pathname: string): boolean {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -97,7 +97,7 @@ export default function Layout({ children }: LayoutProps) {
             userId={session?.user?.id}
           />
         ) : (
-          <Header user={session?.user || undefined} />
+          <Header user={session?.user || undefined} sessionLoading={status === 'loading' && !!pathname && !isPublicRoute(pathname)} />
         )}
         <main className={shell ? 'flex-1 p-4 sm:p-5 md:p-6 lg:p-8' : 'flex-1'}>
           {children}
