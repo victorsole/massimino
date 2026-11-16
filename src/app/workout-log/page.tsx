@@ -180,6 +180,9 @@ function WorkoutLogPageContent() {
   const [showAddEntryModal, setShowAddEntryModal] = useState(false);
   const [showRestTimerOverlay, setShowRestTimerOverlay] = useState(false);
   const [endingSession, setEndingSession] = useState(false);
+  // Set when "Start Workout" is pressed on the programme card: the next (or current)
+  // session is that programme's session of the day.
+  const [programIntentSubId, setProgramIntentSubId] = useState<string | null>(null);
   const [restTimerSeconds, setRestTimerSeconds] = useState(90);
   const [currentSetNumber, setCurrentSetNumber] = useState(1);
   const [totalSetsCount, setTotalSetsCount] = useState(3);
@@ -1268,9 +1271,12 @@ function WorkoutLogPageContent() {
         }
       }
 
-      // Advance only the programme the user explicitly started (or their only one);
-      // never an arbitrary first subscription
-      const sub = subs.find((s: any) => s.isCurrentlyActive) || (subs.length === 1 ? subs[0] : null);
+      // Advance a programme only when this session is that programme's session of the day,
+      // i.e. it was started with "Start Workout" on the programme card. A free session
+      // (or a test) leaves every programme where it is.
+      const sub = sessionToEnd
+        ? subs.find((s: any) => s.progressData?.activeSessionId === sessionToEnd) || null
+        : null;
       if (sub) {
         const currentWeek = sub.currentWeek || 1;
         const currentDay = sub.currentDay || 1;
@@ -1318,11 +1324,17 @@ function WorkoutLogPageContent() {
 
         if (progressRes.ok) {
           // Update local state
-          setProgramSubscriptions(prev => prev.map(s =>
+          setProgramSubscriptions(prev => prev.map((s: any) =>
             s.id === sub.id
-              ? { ...s, currentWeek: nextWeek, currentDay: nextDay }
+              ? { ...s, currentWeek: nextWeek, currentDay: nextDay, progressData: { ...(s.progressData || {}), activeSessionId: null } }
               : s
           ));
+          // The link has done its job
+          fetch(`/api/workout/programs/subscriptions/${sub.id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'link-session', sessionId: null }),
+          }).catch(() => {});
         } else {
           console.error('Failed to advance program:', await progressRes.text());
         }
@@ -1343,6 +1355,27 @@ function WorkoutLogPageContent() {
 
   // Throw away the running session and the sets logged in it. Nothing is completed,
   // so no XP is awarded and the current programme stays on the same day.
+  // Link the running session to the programme once both are known. The link is stored
+  // on the subscription (progressData.activeSessionId), so it survives a reload.
+  useEffect(() => {
+    if (!programIntentSubId || !activeSession?.id) return;
+    const subId = programIntentSubId;
+    const sessionId = activeSession.id;
+    setProgramIntentSubId(null);
+    fetch(`/api/workout/programs/subscriptions/${subId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'link-session', sessionId }),
+    })
+      .then((r) => {
+        if (!r.ok) return;
+        setProgramSubscriptions((prev) => prev.map((s: any) =>
+          s.id === subId ? { ...s, progressData: { ...(s.progressData || {}), activeSessionId: sessionId } } : s
+        ));
+      })
+      .catch((err) => console.error('Failed to link session to programme:', err));
+  }, [programIntentSubId, activeSession?.id]);
+
   const handleDiscardSession = async () => {
     if (!activeSession?.id || endingSession) return;
     if (!await confirmAction('Discard this session? The sets logged in it will be deleted. This cannot be undone.')) return;
@@ -2160,6 +2193,8 @@ function WorkoutLogPageContent() {
                               }
 
                               setIsAddingEntry(true);
+                              // This session belongs to the programme: finishing it moves the programme on
+                              setProgramIntentSubId(subscription.id);
 
                               // Scroll to form
                               setTimeout(() => {

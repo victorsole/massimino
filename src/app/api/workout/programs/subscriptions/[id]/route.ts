@@ -1,5 +1,8 @@
 // PATCH /api/workout/programs/subscriptions/{id}
 // Body: { action: 'set-current' | 'pause' | 'resume' | 'leave' }
+//    or { action: 'link-session', sessionId: string | null }
+// link-session records which workout session is this programme's session of the day,
+// so that only finishing that session moves the programme on (null clears it).
 // Only the subscriber can change their own subscription.
 
 import type { NextRequest } from 'next/server'
@@ -9,7 +12,10 @@ import { withAuth, ok, fail } from '@/lib/api'
 
 export const dynamic = 'force-dynamic'
 
-const BodySchema = z.object({ action: z.enum(['set-current', 'pause', 'resume', 'leave']) })
+const BodySchema = z.object({
+  action: z.enum(['set-current', 'pause', 'resume', 'leave', 'link-session']),
+  sessionId: z.string().min(1).nullable().optional(),
+})
 
 export const PATCH = withAuth<{ id: string }>(async ({ session }, req: NextRequest, { params }) => {
   const parsed = BodySchema.safeParse(await req.json().catch(() => ({})))
@@ -17,7 +23,7 @@ export const PATCH = withAuth<{ id: string }>(async ({ session }, req: NextReque
 
   const subscription = await prisma.program_subscriptions.findFirst({
     where: { id: params.id, userId: session.user.id },
-    select: { id: true },
+    select: { id: true, progressData: true },
   })
   if (!subscription) return fail('NOT_FOUND', 'Programme not found.', 404)
 
@@ -50,6 +56,26 @@ export const PATCH = withAuth<{ id: string }>(async ({ session }, req: NextReque
         select: { id: true },
       })
       break
+    case 'link-session': {
+      const sessionId = parsed.data.sessionId ?? null
+      if (sessionId) {
+        const owned = await prisma.workout_sessions.findFirst({
+          where: { id: sessionId, userId: session.user.id },
+          select: { id: true },
+        })
+        if (!owned) return fail('NOT_FOUND', 'Workout session not found.', 404)
+      }
+      const previous =
+        subscription.progressData && typeof subscription.progressData === 'object' && !Array.isArray(subscription.progressData)
+          ? (subscription.progressData as Record<string, unknown>)
+          : {}
+      await prisma.program_subscriptions.update({
+        where: { id: params.id },
+        data: { progressData: { ...previous, activeSessionId: sessionId } as any, updatedAt: now },
+        select: { id: true },
+      })
+      break
+    }
     case 'leave':
       // Keep the record (and its history) but take it out of the user's programmes
       await prisma.program_subscriptions.update({
