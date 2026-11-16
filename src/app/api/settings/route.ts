@@ -19,10 +19,18 @@ export async function GET() {
     });
 
     // Fetch onboarding status from users table
-    const user = await prisma.users.findUnique({
-      where: { id: session.user.id },
-      select: { onboardingCompleted: true },
-    });
+    // The users.onboardingCompleted column is in the schema but has never been added to
+    // the production database (P2022). Until that migration is applied, treat the flag
+    // as unknown instead of failing the whole settings request.
+    const user = await prisma.users
+      .findUnique({
+        where: { id: session.user.id },
+        select: { onboardingCompleted: true },
+      })
+      .catch((error) => {
+        console.error('onboardingCompleted lookup failed (column missing?):', error?.code || error);
+        return null;
+      });
 
     if (!settings) {
       // Return default settings if none exist - profile is PUBLIC by default
