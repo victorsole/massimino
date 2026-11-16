@@ -137,7 +137,8 @@ export function DataTable<T>({
         </div>
       )}
       <div className="overflow-x-auto overflow-y-auto rounded-lg" style={{ maxHeight: showAll ? maxHeight : undefined }}>
-        <table className="w-full sm:min-w-[600px] text-sm">
+        {/* No fixed minimum from lg up: the rankings sit two per row there, in cards narrower than 600px */}
+        <table className="w-full sm:min-w-[600px] lg:min-w-0 text-sm">
           <thead className="sticky top-0 z-10 bg-brand-primary/5 backdrop-blur">
             <tr>
               {columns.map((col) => {
