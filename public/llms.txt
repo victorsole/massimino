@@ -7,7 +7,6 @@ Massimino offers general fitness information and isn't medical advice. The site 
 ## Main pages
 
 - [Home](https://massimino.fitness/): what Massimino is, featured training programmes and partners
-- [About](https://massimino.fitness/about): who builds Massimino and what makes it different
 - [Exercise library](https://massimino.fitness/exercises): 1,200+ curated exercises, searchable by muscle group, equipment, difficulty and movement pattern, with instructions
 - [Fitness Intelligence](https://massimino.fitness/fitness-intelligence): European fitness market data (EuropeActive/Deloitte, FY2025) and physical-activity statistics from Eurostat, by country
 - [Safety guidelines](https://massimino.fitness/safety): community rules, how content is moderated and how to report a problem
