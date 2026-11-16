@@ -42,6 +42,11 @@ export function ProgressTab() {
           <CardTitle>Top Lifts</CardTitle>
         </CardHeader>
         <CardContent>
+          {bestByExercise.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-4">
+              No personal records yet. Log a few sets and your best lift for each exercise will show here.
+            </p>
+          ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm">
               <thead>
@@ -64,6 +69,7 @@ export function ProgressTab() {
               </tbody>
             </table>
           </div>
+          )}
         </CardContent>
       </Card>
 

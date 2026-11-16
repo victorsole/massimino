@@ -85,6 +85,8 @@ export default function RootLayout({
     <html lang="en" className={`${interTight.variable} ${inter.variable}`}>
       <head>
         <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
+        {/* Icon font for the `mdi mdi-*` classes used across the app (self-hosted subset) */}
+        <link rel="stylesheet" href="/fonts/mdi/mdi.css" />
       </head>
       <body className="antialiased bg-brand-secondary font-sans">
         <SessionProvider>

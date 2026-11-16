@@ -52,42 +52,61 @@ export default function Layout({ children }: LayoutProps) {
   }
 
   // Logged-in users on app pages get the dashboard shell
-  const shouldUseDashboardShell = session?.user && pathname && !isPublicRoute(pathname);
+  const shell = Boolean(session?.user && pathname && !isPublicRoute(pathname));
 
-  if (shouldUseDashboardShell) {
-    return (
-      <div className="min-h-screen bg-brand-secondary flex font-sans">
-        {/* Mobile overlay */}
-        {sidebarOpen && (
-          <div
-            className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-40 md:hidden transition-opacity"
-            onClick={() => setSidebarOpen(false)}
+  // One tree for both layouts. The page ({children}) always sits at the same place
+  // (root div > content div > main), so when the session arrives and the public layout
+  // turns into the app shell, React keeps the page mounted. With two separate trees the
+  // page was unmounted and mounted again, which fired every data request a second time.
+  return (
+    <div className={shell ? 'min-h-screen bg-brand-secondary flex font-sans' : 'min-h-screen flex flex-col relative'}>
+      {shell ? (
+        <>
+          {/* Mobile overlay */}
+          {sidebarOpen && (
+            <div
+              className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-40 md:hidden transition-opacity"
+              onClick={() => setSidebarOpen(false)}
+            />
+          )}
+          <DashboardSidebar
+            open={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+            userRole={session?.user?.role as string | undefined}
+            userName={session?.user?.name || ''}
+            userImage={session?.user?.image || ''}
           />
-        )}
+        </>
+      ) : (
+        <DynamicBackground />
+      )}
 
-        {/* Sidebar */}
-        <DashboardSidebar
-          open={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
-          userRole={session.user?.role as string | undefined}
-          userName={session.user?.name || ''}
-          userImage={session.user?.image || ''}
-        />
-
-        {/* Main content area */}
-        <div className="flex-1 min-w-0 lg:ml-[200px] md:ml-[70px] ml-0 min-h-screen flex flex-col transition-[margin] duration-300 overflow-x-clip">
+      {/* Content column */}
+      <div
+        className={
+          shell
+            ? 'flex-1 min-w-0 lg:ml-[200px] md:ml-[70px] ml-0 min-h-screen flex flex-col transition-[margin] duration-300 overflow-x-clip'
+            : 'relative z-10 flex flex-col min-h-screen'
+        }
+      >
+        {shell ? (
           <DashboardHeader
             onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
-            userName={session.user?.name || ''}
-            userImage={session.user?.image || ''}
-            userId={session.user?.id}
+            userName={session?.user?.name || ''}
+            userImage={session?.user?.image || ''}
+            userId={session?.user?.id}
           />
-          <main className="flex-1 p-4 sm:p-5 md:p-6 lg:p-8">
-            {children}
-          </main>
-        </div>
+        ) : (
+          <Header user={session?.user || undefined} />
+        )}
+        <main className={shell ? 'flex-1 p-4 sm:p-5 md:p-6 lg:p-8' : 'flex-1'}>
+          {children}
+        </main>
+        {shell ? null : <Footer />}
+      </div>
 
-        {/* Mobile FAB */}
+      {/* Mobile FAB (app shell only) */}
+      {shell ? (
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="fixed bottom-5 right-5 w-14 h-14 rounded-full bg-[#2b5069] text-white shadow-lg shadow-[#2b5069]/25 z-[60] flex items-center justify-center md:hidden hover:bg-[#1e3a4d] active:scale-95 transition-all"
@@ -108,23 +127,8 @@ export default function Layout({ children }: LayoutProps) {
             )}
           </svg>
         </button>
+      ) : null}
 
-        <CookieConsent />
-      </div>
-    );
-  }
-
-  // Public / unauthenticated layout
-  return (
-    <div className="min-h-screen flex flex-col relative">
-      <DynamicBackground />
-      <div className="relative z-10 flex flex-col min-h-screen">
-        <Header user={session?.user || undefined} />
-        <main className="flex-1">
-          {children}
-        </main>
-        <Footer />
-      </div>
       <CookieConsent />
     </div>
   );

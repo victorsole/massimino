@@ -41,31 +41,11 @@ type ProgramTemplate = {
 
 export function ProgramsTab() {
   const [programs, setPrograms] = useState<ProgramTemplate[]>([]);
-  const [userPrograms, setUserPrograms] = useState<UserProgram[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadingUserPrograms, setLoadingUserPrograms] = useState(true);
   const [filter, setFilter] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'popularity' | 'duration' | 'difficulty' | 'new'>('popularity');
   const [equipmentFilters, setEquipmentFilters] = useState<string[]>([]);
   const browseRef = useRef<HTMLDivElement>(null);
-
-  // Fetch user's program subscriptions
-  useEffect(() => {
-    async function fetchUserPrograms() {
-      try {
-        const res = await fetch('/api/workout/programs?subscriptions=true');
-        if (res.ok) {
-          const data = await res.json();
-          setUserPrograms(Array.isArray(data) ? data : []);
-        }
-      } catch (error) {
-        console.error('Failed to fetch user programs:', error);
-      } finally {
-        setLoadingUserPrograms(false);
-      }
-    }
-    fetchUserPrograms();
-  }, []);
 
   // Initialize state from URL
   useEffect(() => {
@@ -86,10 +66,6 @@ export function ProgramsTab() {
     fetchPrograms();
   }, [filter]);
 
-  // Scroll to browse section when user clicks "Add Another Program"
-  const scrollToBrowse = () => {
-    browseRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   const fetchPrograms = async () => {
     try {
@@ -211,33 +187,8 @@ export function ProgramsTab() {
 
   return (
     <div className="space-y-8">
-      {/* My Programs Section */}
-      {!loadingUserPrograms && (
-        <div className="mb-8">
-          {userPrograms.length > 0 ? (
-            <MyPrograms programs={userPrograms} onAddProgram={scrollToBrowse} />
-          ) : (
-            <div className="max-w-[1400px] mx-auto px-5 py-10">
-              <div className="mb-8">
-                <h1 className="text-3xl font-extrabold text-gray-900 mb-2">My Programs</h1>
-                <p className="text-gray-500">
-                  Start your fitness journey by choosing a program below.
-                </p>
-              </div>
-              <button
-                onClick={scrollToBrowse}
-                className="bg-white border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center min-h-[180px] w-full max-w-[340px] transition-all hover:border-[#254967] hover:bg-[#fcf8f2] cursor-pointer"
-              >
-                <span className="mdi mdi-plus-circle-outline text-5xl text-muted-foreground mb-3" />
-                <span className="text-base font-semibold text-muted-foreground">Browse Programs</span>
-              </button>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Separator */}
-      <div className="border-t border-gray-200 pt-8" ref={browseRef}>
+      {/* The user's own programmes live in the My Programs tab; this tab is the catalogue. */}
+      <div ref={browseRef}>
         <div className="max-w-[1400px] mx-auto px-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>

@@ -1,5 +1,6 @@
 'use client';
 
+import { exerciseImageUrl, hideBrokenImage } from '@/lib/exercise-image';
 import { useState } from 'react';
 import { cn } from '@/core/utils/common';
 import { Trophy, MessageCircle, ChevronDown, ChevronUp } from 'lucide-react';
@@ -172,7 +173,8 @@ export function WorkoutEntryCardV2({
             {entry.exercise.imageUrl && (
               <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 border border-gray-200">
                 <img
-                  src={entry.exercise.imageUrl}
+                  src={exerciseImageUrl(entry.exercise.imageUrl)}
+                  onError={hideBrokenImage}
                   alt={entry.exercise.name}
                   className="w-full h-full object-cover"
                 />

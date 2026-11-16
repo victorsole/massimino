@@ -1,5 +1,6 @@
 // src/app/workout-log/page.tsx
 'use client';
+import { exerciseImageUrl, hideBrokenImage } from '@/lib/exercise-image';
 import { notify, confirmAction } from '@/lib/notify';
 
 import { useState, useEffect, useMemo, Suspense } from 'react';
@@ -178,6 +179,7 @@ function WorkoutLogPageContent() {
   // New mobile UI state
   const [showAddEntryModal, setShowAddEntryModal] = useState(false);
   const [showRestTimerOverlay, setShowRestTimerOverlay] = useState(false);
+  const [endingSession, setEndingSession] = useState(false);
   const [restTimerSeconds, setRestTimerSeconds] = useState(90);
   const [currentSetNumber, setCurrentSetNumber] = useState(1);
   const [totalSetsCount, setTotalSetsCount] = useState(3);
@@ -421,11 +423,23 @@ function WorkoutLogPageContent() {
   // Filter exercises based on search
   useEffect(() => {
     if (exerciseSearch) {
+      const q = exerciseSearch.trim().toLowerCase();
       const filtered = exercises.filter(exercise =>
-        exercise.name.toLowerCase().includes(exerciseSearch.toLowerCase()) ||
-        exercise.category.toLowerCase().includes(exerciseSearch.toLowerCase()) ||
-        exercise.muscleGroups.some(mg => mg.toLowerCase().includes(exerciseSearch.toLowerCase()))
+        exercise.name.toLowerCase().includes(q) ||
+        exercise.category.toLowerCase().includes(q) ||
+        exercise.muscleGroups.some(mg => mg.toLowerCase().includes(q))
       );
+      // Best name matches first: "bench press" should list "Bench Press" before
+      // "30 Arms Close Grip Bench Press". Ties go to the shorter name.
+      const rank = (name: string) => {
+        const n = name.toLowerCase();
+        if (n === q) return 0;
+        if (n.startsWith(q)) return 1;
+        if (n.includes(` ${q}`)) return 2;
+        if (n.includes(q)) return 3;
+        return 4;
+      };
+      filtered.sort((a, b) => rank(a.name) - rank(b.name) || a.name.length - b.name.length);
       setFilteredExercises(filtered.slice(0, 20)); // Limit to 20 for performance
     } else {
       setFilteredExercises(exercises.slice(0, 20));
@@ -559,7 +573,9 @@ function WorkoutLogPageContent() {
       return [];
     }
 
-    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    // Local calendar day, not UTC: near midnight toISOString() is a different date
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     const groups = new Map<string, WorkoutEntry[]>();
 
     for (const entry of workoutEntries) {
@@ -587,6 +603,16 @@ function WorkoutLogPageContent() {
     }
     return Array.from(groups.values());
   }, [workoutEntries, activeTab, sessionCompletedToday]);
+
+  // "Same as Last": the most recent set of the selected exercise, or of any exercise
+  // when none is selected or it has never been logged.
+  const lastLoggedSet = useMemo(() => {
+    const time = (e: WorkoutEntry) => new Date(e.date).getTime();
+    const newestFirst = [...workoutEntries].sort((a, b) => time(b) - time(a) || b.setNumber - a.setNumber);
+    const sameExercise = selectedExercise ? newestFirst.find((e) => e.exerciseId === selectedExercise.id) : undefined;
+    const pick = sameExercise || newestFirst[0];
+    return pick ? { weight: pick.weight, reps: pick.reps } : null;
+  }, [workoutEntries, selectedExercise]);
 
   // Load saved pyramid settings (if opted-in)
   useEffect(() => {
@@ -1138,6 +1164,11 @@ function WorkoutLogPageContent() {
   // End the current session: close it on the server, award XP, and advance the
   // active programme by one day. Used by both "Complete Session" and "End Session".
   const handleEndSession = async () => {
+    if (endingSession) return;
+    setEndingSession(true);
+    // The rest countdown belongs to the session that is ending
+    setRestVisible(false);
+    setRestRemaining(0);
     try {
       const sessionIdFromEntries = workoutEntries.find(e => e.sessionId)?.sessionId;
       const sessionToEnd = activeSession?.id || sessionIdFromEntries;
@@ -1254,6 +1285,34 @@ function WorkoutLogPageContent() {
     } catch (err) {
       console.error('Failed to end session:', err);
       notify('Failed to end session. Please try again.');
+    } finally {
+      setEndingSession(false);
+    }
+  };
+
+  // Throw away the running session and the sets logged in it. Nothing is completed,
+  // so no XP is awarded and the current programme stays on the same day.
+  const handleDiscardSession = async () => {
+    if (!activeSession?.id || endingSession) return;
+    if (!await confirmAction('Discard this session? The sets logged in it will be deleted. This cannot be undone.')) return;
+    setEndingSession(true);
+    setRestVisible(false);
+    setRestRemaining(0);
+    try {
+      const response = await fetch(`/api/workout/sessions?id=${encodeURIComponent(activeSession.id)}`, { method: 'DELETE' });
+      if (!response.ok) {
+        notify('We could not discard this session. Please try again.');
+        return;
+      }
+      setActiveSession(null);
+      setIsAddingEntry(false);
+      await fetchWorkoutEntries();
+      notify('Session discarded.');
+    } catch (err) {
+      console.error('Failed to discard session:', err);
+      notify('We could not discard this session. Please try again.');
+    } finally {
+      setEndingSession(false);
     }
   };
 
@@ -1300,7 +1359,18 @@ function WorkoutLogPageContent() {
       const setsNum = parseInt(newEntry.sets || '1', 10) || 1;
       const repsNum = parseInt(newEntry.reps || '0', 10) || 0;
       const weightsA = parseWeights(newEntry.weight);
-      const today = new Date().toISOString().split('T')[0];
+      // Local calendar day (the Today tab filters on the same value)
+      const nowLocal = new Date();
+      const today = `${nowLocal.getFullYear()}-${String(nowLocal.getMonth() + 1).padStart(2, '0')}-${String(nowLocal.getDate()).padStart(2, '0')}`;
+      // Continue the numbering when this exercise already has sets today: a second
+      // "LOG SET" used to create another "#1".
+      const setsLoggedToday = (exerciseId: string) =>
+        workoutEntries.reduce((max, e) => {
+          const d = e.date instanceof Date ? e.date.toISOString().split('T')[0] : String(e.date).split('T')[0];
+          return e.exerciseId === exerciseId && d === today ? Math.max(max, e.setNumber || 0) : max;
+        }, 0);
+      const setOffsetA = setsLoggedToday(newEntry.exerciseId);
+      const setOffsetB = newEntry.exerciseBId ? setsLoggedToday(newEntry.exerciseBId) : 0;
 
       const entries: any[] = [];
 
@@ -1322,7 +1392,7 @@ function WorkoutLogPageContent() {
           entries.push({
             date: today,
             exerciseId: newEntry.exerciseId,
-            setNumber: i + 1,
+            setNumber: setOffsetA + i + 1,
             setType: newEntry.setType as any,
             reps: repsNum,
             weight: wA,
@@ -1339,7 +1409,7 @@ function WorkoutLogPageContent() {
           entries.push({
             date: today,
             exerciseId: newEntry.exerciseBId,
-            setNumber: i + 1,
+            setNumber: setOffsetB + i + 1,
             setType: newEntry.setType as any,
             reps: repsNum,
             weight: wB,
@@ -1368,7 +1438,7 @@ function WorkoutLogPageContent() {
             entries.push({
               date: today,
               exerciseId: newEntry.exerciseId,
-              setNumber: i + 1,
+              setNumber: setOffsetA + i + 1,
               setType: newEntry.setType as any,
               reps: repsNum,
               weight: w,
@@ -1408,7 +1478,7 @@ function WorkoutLogPageContent() {
           entries.push({
             date: today,
             exerciseId: newEntry.exerciseId,
-            setNumber: i + 1,
+            setNumber: setOffsetA + i + 1,
             setType: newEntry.setType as any,
             reps: repsScheme[i] || repsNum,
             weight: w,
@@ -1435,7 +1505,7 @@ function WorkoutLogPageContent() {
           entries.push({
             date: today,
             exerciseId: newEntry.exerciseId,
-            setNumber: i + 1,
+            setNumber: setOffsetA + i + 1,
             setType: newEntry.setType as any,
             reps: repsNum,
             weight: w,
@@ -1773,12 +1843,25 @@ function WorkoutLogPageContent() {
                   </p>
                 </div>
               </div>
-              <Button
-                onClick={handleEndSession}
-                className="bg-white text-green-600 hover:bg-green-50 font-semibold whitespace-nowrap flex-shrink-0 w-full sm:w-auto"
-              >
-                Complete Session
-              </Button>
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-shrink-0 w-full sm:w-auto">
+                {/* A session started by mistake could only be "completed", which also moved the
+                    current programme on a day. Discard removes it and its sets instead. */}
+                <button
+                  type="button"
+                  onClick={handleDiscardSession}
+                  disabled={endingSession}
+                  className="text-sm text-white/90 underline underline-offset-2 hover:text-white px-2 py-1 disabled:opacity-60"
+                >
+                  Discard session
+                </button>
+                <Button
+                  onClick={handleEndSession}
+                  disabled={endingSession}
+                  className="bg-white text-green-600 hover:bg-green-50 font-semibold whitespace-nowrap w-full sm:w-auto"
+                >
+                  {endingSession ? 'Saving…' : 'Complete Session'}
+                </Button>
+              </div>
             </div>
           </div>
         )}
@@ -2237,7 +2320,7 @@ function WorkoutLogPageContent() {
                               <div>
                                 <div className="font-medium text-gray-900">{exercise.name}</div>
                                 <div className="text-sm text-gray-500">
-                                  {exercise.category} • {exercise.muscleGroups.slice(0, 2).join(', ')}
+                                  {[exercise.category, exercise.muscleGroups.slice(0, 2).join(', ')].filter(Boolean).join(' • ')}
                                   {exercise.muscleGroups.length > 2 && ` +${exercise.muscleGroups.length - 2} more`}
                                 </div>
                               </div>
@@ -2261,7 +2344,8 @@ function WorkoutLogPageContent() {
                         {selectedExercise.imageUrl && (
                           <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-white border border-blue-200">
                             <img
-                              src={selectedExercise.imageUrl}
+                              src={exerciseImageUrl(selectedExercise.imageUrl)}
+                              onError={hideBrokenImage}
                               alt={selectedExercise.name}
                               className="w-full h-full object-cover"
                             />
@@ -2398,7 +2482,7 @@ function WorkoutLogPageContent() {
                   disabled={!selectedExercise || !newEntry.reps || !newEntry.weight}
                   className="w-full py-6 text-xl font-bold bg-brand-primary hover:bg-brand-primary-dark text-white shadow-lg"
                 >
-                  LOG SET {newEntry.sets || '1'}/{newEntry.sets || '1'}
+                  LOG SET
                 </Button>
 
                 {/* Quick Actions */}
@@ -2407,8 +2491,11 @@ function WorkoutLogPageContent() {
                     type="button"
                     variant="outline"
                     className="border-2 border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white font-semibold"
+                    disabled={!lastLoggedSet}
+                    title={lastLoggedSet ? `${lastLoggedSet.weight} kg x ${lastLoggedSet.reps}` : 'No earlier set to copy yet'}
                     onClick={() => {
-                      // TODO: Implement "Same as Last" logic
+                      if (!lastLoggedSet) return;
+                      setNewEntry({ ...newEntry, weight: String(lastLoggedSet.weight), reps: String(lastLoggedSet.reps) });
                     }}
                   >
                     Same as Last
@@ -2863,7 +2950,7 @@ function WorkoutLogPageContent() {
                       disabled={!selectedExercise || !newEntry.reps || !newEntry.weight}
                       className="w-full py-6 text-xl font-bold bg-brand-primary hover:bg-brand-primary-dark text-white shadow-lg mt-4"
                     >
-                      LOG SET {newEntry.sets || '1'}/{newEntry.sets || '1'}
+                      LOG SET
                     </Button>
                   </div>
                 )}
@@ -2881,8 +2968,8 @@ function WorkoutLogPageContent() {
 
                   {/* Form Validation Messages */}
                   {!selectedExercise && (
-                    <div className="text-sm text-red-600">
-                      Please select an exercise
+                    <div className="text-sm text-muted-foreground">
+                      Search for an exercise above to log a set
                     </div>
                   )}
                 </div>
@@ -3094,7 +3181,8 @@ function WorkoutLogPageContent() {
                           {firstEntry.exercise.imageUrl ? (
                             <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 border border-gray-200">
                               <img
-                                src={firstEntry.exercise.imageUrl}
+                                src={exerciseImageUrl(firstEntry.exercise.imageUrl)}
+                                onError={hideBrokenImage}
                                 alt={firstEntry.exercise.name}
                                 className="w-full h-full object-cover"
                               />
@@ -3144,6 +3232,54 @@ function WorkoutLogPageContent() {
                                   <td className="py-2 px-2">
                                     <span className="font-medium">#{entry.setNumber}</span>
                                   </td>
+                                  {editingEntry === entry.id ? (
+                                    <>
+                                      {/* Inline edit: the pencil used to do nothing in this view */}
+                                      <td className="py-1 px-2">
+                                        <Input
+                                          type="number"
+                                          min="1"
+                                          inputMode="numeric"
+                                          aria-label="Reps"
+                                          value={editFormData.reps}
+                                          onChange={(e) => setEditFormData({ ...editFormData, reps: e.target.value })}
+                                          className="h-8 w-20"
+                                        />
+                                      </td>
+                                      <td className="py-1 px-2">
+                                        <Input
+                                          type="text"
+                                          inputMode="decimal"
+                                          aria-label="Weight in kg"
+                                          value={editFormData.weight}
+                                          onChange={(e) => setEditFormData({ ...editFormData, weight: e.target.value })}
+                                          className="h-8 w-24"
+                                        />
+                                      </td>
+                                      <td className="py-1 px-2">
+                                        <Input
+                                          type="number"
+                                          min="0"
+                                          inputMode="numeric"
+                                          aria-label="Rest in seconds"
+                                          value={editFormData.restSeconds}
+                                          onChange={(e) => setEditFormData({ ...editFormData, restSeconds: e.target.value })}
+                                          className="h-8 w-20"
+                                        />
+                                      </td>
+                                      <td className="py-1 px-2 text-right">
+                                        <div className="flex items-center justify-end gap-2">
+                                          <Button size="sm" onClick={() => handleEditEntry(entry.id)} disabled={loading} className="h-8">
+                                            Save
+                                          </Button>
+                                          <Button size="sm" variant="outline" onClick={() => setEditingEntry(null)} disabled={loading} className="h-8">
+                                            Cancel
+                                          </Button>
+                                        </div>
+                                      </td>
+                                    </>
+                                  ) : (
+                                    <>
                                   <td className="py-2 px-2">{entry.reps}</td>
                                   <td className="py-2 px-2">{entry.weight} {entry.unit}</td>
                                   <td className="py-2 px-2">{entry.restSeconds ? `${entry.restSeconds}s` : '-'}</td>
@@ -3154,21 +3290,27 @@ function WorkoutLogPageContent() {
                                         size="icon"
                                         onClick={() => startEditing(entry)}
                                         disabled={loading}
-                                        className="h-7 w-7 hover:bg-gray-100"
+                                        aria-label={`Edit set ${entry.setNumber}`}
+                                        title="Edit set"
+                                        className="h-9 w-9 hover:bg-gray-100"
                                       >
-                                        <Edit className="h-3 w-3 text-gray-600" />
+                                        <Edit className="h-4 w-4 text-gray-600" />
                                       </Button>
                                       <Button
                                         variant="ghost"
                                         size="icon"
                                         onClick={() => handleDeleteEntry(entry.id)}
                                         disabled={loading}
-                                        className="h-7 w-7 hover:bg-red-50 hover:text-red-600"
+                                        aria-label={`Delete set ${entry.setNumber}`}
+                                        title="Delete set"
+                                        className="h-9 w-9 hover:bg-red-50 hover:text-red-600"
                                       >
-                                        <Trash2 className="h-3 w-3" />
+                                        <Trash2 className="h-4 w-4" />
                                       </Button>
                                     </div>
                                   </td>
+                                    </>
+                                  )}
                                 </tr>
                               ))}
                             </tbody>
@@ -3190,10 +3332,11 @@ function WorkoutLogPageContent() {
                   <div className="flex flex-col sm:flex-row gap-3 mt-6 pt-4 border-t border-gray-200">
                     <Button
                       onClick={handleEndSession}
+                      disabled={endingSession}
                       className="flex-1 py-4 text-base font-semibold bg-green-600 hover:bg-green-700 text-white"
                     >
                       <span className="mdi mdi-check-circle mr-2" />
-                      End Session
+                      {endingSession ? 'Saving…' : 'End Session'}
                     </Button>
                     <Button
                       variant="outline"
@@ -3248,18 +3391,49 @@ function WorkoutLogPageContent() {
           </>
         )}
 
-        {!fetchingEntries && !error && workoutEntries.length === 0 && (
+        {/* Nothing to show today: either no entries at all, or none logged today.
+            The old check looked at every entry ever logged, so a returning user saw a blank tab. */}
+        {!fetchingEntries && !error && !isAddingEntry && groupedWorkoutEntries.length === 0 && (
           <Card className="text-center py-12">
             <CardContent>
-              <Dumbbell className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No workout entries yet</h3>
-              <p className="text-gray-600 mb-6">
-                Start tracking your workouts and see your progress over time
+              <Dumbbell className="h-12 w-12 text-brand-primary/50 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                {sessionCompletedToday
+                  ? 'Session complete. Well done!'
+                  : workoutEntries.length === 0
+                    ? 'No workout entries yet'
+                    : 'Nothing logged today yet'}
+              </h3>
+              <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                {sessionCompletedToday
+                  ? 'Your sets are saved. You can find this session under History.'
+                  : activeSession
+                    ? 'Your session is running. Add your first exercise to start logging sets.'
+                    : 'Start a session to time your workout and log sets as you train, or pick a programme to follow.'}
               </p>
-              <Button onClick={() => setIsAddingEntry(true)}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Your First Workout
-              </Button>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                {sessionCompletedToday ? (
+                  <Button onClick={() => setActiveTab('history')}>
+                    <Calendar className="h-4 w-4 mr-2" />
+                    View History
+                  </Button>
+                ) : activeSession ? (
+                  <Button onClick={() => setIsAddingEntry(true)}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Workout Entry
+                  </Button>
+                ) : (
+                  <>
+                    <Button onClick={() => setShowSessionCreationModal(true)}>
+                      <Zap className="h-4 w-4 mr-2" />
+                      Start Session
+                    </Button>
+                    <Button variant="outline" onClick={() => setActiveTab('programs')}>
+                      Browse Programs
+                    </Button>
+                  </>
+                )}
+              </div>
             </CardContent>
           </Card>
         )}
@@ -3906,7 +4080,7 @@ function WorkoutLogPageContent() {
               ) : (
                 /* For images and GIFs - GIFs will auto-animate */
                 <img
-                  src={selectedExercise.imageUrl}
+                  src={exerciseImageUrl(selectedExercise.imageUrl)}
                   alt={`${selectedExercise.name} demonstration`}
                   className="w-full h-auto rounded-lg"
                 />

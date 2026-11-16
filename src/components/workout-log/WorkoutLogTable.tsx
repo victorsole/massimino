@@ -9,7 +9,7 @@ import { notify, confirmAction } from '@/lib/notify';
 
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { format, formatDuration, intervalToDuration, eachDayOfInterval, startOfMonth, endOfMonth, getDay, isSameDay, formatDistanceToNow } from 'date-fns';
+import { format, eachDayOfInterval, startOfMonth, endOfMonth, getDay, isSameDay, formatDistanceToNow } from 'date-fns';
 import { 
   Table, 
   TableBody, 
@@ -51,6 +51,29 @@ interface WorkoutLogTableProps {
   onFiltersChange: (filters: WorkoutFilterOptions) => void;
   onSortChange: (sort: WorkoutSortOptions) => void;
   onPaginationChange: (pagination: WorkoutPagination) => void;
+}
+
+// A session that was never ended, or was ended days later, has no meaningful length:
+// "2 months 23 days 23 hours" is the time until someone closed it, not a workout.
+const MAX_SESSION_MS = 12 * 60 * 60 * 1000;
+
+function sessionSpanMs(start: unknown, end: unknown): number | null {
+  if (!start || !end) return null;
+  const ms = new Date(end as string).getTime() - new Date(start as string).getTime();
+  return Number.isFinite(ms) && ms > 0 && ms <= MAX_SESSION_MS ? ms : null;
+}
+
+function sessionEndLabel(start: unknown, end: unknown): string {
+  return sessionSpanMs(start, end) === null ? '' : ` - ${format(new Date(end as string), 'HH:mm')}`;
+}
+
+function sessionDurationLabel(start: unknown, end: unknown): string {
+  const ms = sessionSpanMs(start, end);
+  if (ms === null) return 'duration not recorded';
+  const minutes = Math.max(1, Math.round(ms / 60000));
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return h > 0 ? `${h} h ${m} min` : `${m} min`;
 }
 
 export function WorkoutLogTable({
@@ -925,15 +948,10 @@ export function SessionHistoryTable() {
                     </CardTitle>
                     <CardDescription>
                       {session.startTime ? format(new Date(session.startTime), 'HH:mm') : '--:--'}
-                      {session.endTime && session.endTime && ` - ${format(new Date(session.endTime), 'HH:mm')}`}
+                      {sessionEndLabel(session.startTime, session.endTime)}
                       {session.endTime && session.startTime && (
                         <span className="ml-2 text-gray-500">
-                          ({formatDuration(
-                            intervalToDuration({
-                              start: new Date(session.startTime),
-                              end: new Date(session.endTime)
-                            })
-                          )})
+                          ({sessionDurationLabel(session.startTime, session.endTime)})
                         </span>
                       )}
                     </CardDescription>
@@ -1070,15 +1088,10 @@ export function SessionHistoryTable() {
                 </h3>
                 <p className="text-sm text-gray-600">
                   {detail_session.startTime ? format(new Date(detail_session.startTime), 'HH:mm') : '--:--'}
-                  {detail_session.endTime && ` - ${format(new Date(detail_session.endTime), 'HH:mm')}`}
+                  {sessionEndLabel(detail_session.startTime, detail_session.endTime)}
                   {detail_session.endTime && detail_session.startTime && (
                     <span className="ml-2">
-                      ({formatDuration(
-                        intervalToDuration({
-                          start: new Date(detail_session.startTime),
-                          end: new Date(detail_session.endTime)
-                        })
-                      )})
+                      ({sessionDurationLabel(detail_session.startTime, detail_session.endTime)})
                     </span>
                   )}
                 </p>
@@ -1385,12 +1398,7 @@ export function WorkoutCalendar({ month, sessions }: WorkoutCalendarProps) {
                   {/* Duration */}
                   {session.endTime && session.startTime && (
                     <div className="mt-2 text-xs text-gray-500 text-center">
-                      Duration: {formatDuration(
-                        intervalToDuration({
-                          start: new Date(session.startTime),
-                          end: new Date(session.endTime)
-                        })
-                      )}
+                      Duration: {sessionDurationLabel(session.startTime, session.endTime)}
                     </div>
                   )}
                 </div>

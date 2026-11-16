@@ -2,6 +2,7 @@
 
 'use client';
 
+import { exerciseImageUrl } from '@/lib/exercise-image';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -718,7 +719,7 @@ export default function ExercisesPage() {
                 key={currentPage}
               >
                 {currentExercises.map((exercise) => {
-                  const coverUrl = (exercise as any).coverUrl as string | undefined
+                  const coverUrl = exerciseImageUrl((exercise as any).coverUrl as string | undefined)
                   const mediaCount = (exercise as any).mediaCount as number | undefined
                   return (
                     <motion.div
