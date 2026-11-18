@@ -95,54 +95,60 @@ export function CookieConsent() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6">
+    // On a phone the banner is a short strip (about a quarter of the screen), not a sheet:
+    // one sentence, two equal buttons side by side, and the details one tap away.
+    <div className="fixed bottom-0 left-0 right-0 z-50 p-2 sm:p-4 md:p-6" role="region" aria-label="Cookie choices">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden max-h-[85vh] overflow-y-auto">
           {/* Main Banner */}
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             <div className="flex items-start gap-4">
               {/* Cookie Icon */}
-              <div className="hidden sm:flex items-center justify-center w-12 h-12 bg-purple-100 rounded-full flex-shrink-0">
-                <Cookie className="w-6 h-6 text-purple-600" />
+              <div className="hidden sm:flex items-center justify-center w-12 h-12 bg-brand-primary/10 rounded-full flex-shrink-0">
+                <Cookie className="w-6 h-6 text-brand-primary" />
               </div>
 
               {/* Content */}
               <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <Cookie className="w-5 h-5 text-purple-600 sm:hidden" />
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    We Value Your Privacy
+                <div className="flex items-center gap-2 mb-1 sm:mb-2">
+                  <Cookie className="w-5 h-5 text-brand-primary sm:hidden" />
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+                    Cookies on Massimino
                   </h3>
                 </div>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                  We use cookies to enhance your experience on Massimino. Essential cookies keep things running smoothly,
-                  while optional cookies help us improve our platform and show you relevant content.
-                  You're in control of your choices.
+                {/* Phone: one sentence. Larger screens: the full explanation. */}
+                <p className="text-gray-600 text-sm leading-snug mb-3 sm:hidden">
+                  Essential cookies keep the site working. Optional ones help us improve it. Your choice.
+                </p>
+                <p className="hidden sm:block text-gray-600 text-sm leading-relaxed mb-4">
+                  Essential cookies keep Massimino working. Optional cookies help us improve the platform and show you
+                  relevant content. You are in control of your choices.
                 </p>
 
                 {/* Buttons - Main View */}
                 {!showDetails && (
-                  <div className="flex flex-col sm:flex-row gap-3">
+                  // Accepting and declining are the same size and sit side by side
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                     <Button
                       onClick={acceptAll}
-                      className="bg-purple-600 hover:bg-purple-700 text-white"
+                      className="flex-1 sm:flex-none bg-brand-primary hover:bg-brand-primary-dark text-white"
                     >
-                      Accept All
+                      Accept all
                     </Button>
                     <Button
                       onClick={acceptEssential}
                       variant="outline"
-                      className="border-gray-300"
+                      className="flex-1 sm:flex-none border-brand-primary text-brand-primary"
                     >
-                      Essential Only
+                      Essential only
                     </Button>
                     <Button
                       onClick={() => setShowDetails(true)}
                       variant="ghost"
-                      className="text-purple-600 hover:text-purple-700 hover:bg-purple-50"
+                      className="w-full sm:w-auto h-8 sm:h-10 text-brand-primary hover:text-brand-primary-dark hover:bg-brand-primary/10"
                     >
                       <Settings className="w-4 h-4 mr-2" />
-                      Customize
+                      Customise
                     </Button>
                   </div>
                 )}
@@ -151,7 +157,7 @@ export function CookieConsent() {
               {/* Close button (accepts essential only) */}
               <button
                 onClick={acceptEssential}
-                className="p-2 text-muted-foreground hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0"
+                className="-mr-1 -mt-1 p-2 text-muted-foreground hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0"
                 aria-label="Close and accept essential cookies only"
               >
                 <X className="w-5 h-5" />
@@ -161,7 +167,7 @@ export function CookieConsent() {
 
           {/* Expanded Details */}
           {showDetails && (
-            <div className="border-t border-gray-200 bg-gray-50 p-6">
+            <div className="border-t border-gray-200 bg-gray-50 p-4 sm:p-6">
               <div className="space-y-4">
                 {/* Essential Cookies */}
                 <div className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200">
@@ -197,7 +203,7 @@ export function CookieConsent() {
                       onChange={(e) => setPreferences({ ...preferences, analytics: e.target.checked })}
                       className="sr-only peer"
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-brand-primary/30 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-primary"></div>
                   </label>
                 </div>
 
@@ -221,7 +227,7 @@ export function CookieConsent() {
                       onChange={(e) => setPreferences({ ...preferences, marketing: e.target.checked })}
                       className="sr-only peer"
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-brand-primary/30 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-primary"></div>
                   </label>
                 </div>
               </div>
@@ -230,7 +236,7 @@ export function CookieConsent() {
               <div className="flex flex-col sm:flex-row gap-3 mt-6">
                 <Button
                   onClick={saveCustom}
-                  className="bg-purple-600 hover:bg-purple-700 text-white"
+                  className="bg-brand-primary hover:bg-brand-primary-dark text-white"
                 >
                   Save Preferences
                 </Button>
@@ -246,7 +252,7 @@ export function CookieConsent() {
               {/* Privacy Policy Link */}
               <p className="text-xs text-gray-500 mt-4">
                 Learn more about how we use cookies in our{' '}
-                <a href="/privacy" className="text-purple-600 hover:text-purple-700 underline">
+                <a href="/privacy" className="text-brand-primary hover:text-brand-primary-dark underline">
                   Privacy Policy
                 </a>
                 .
