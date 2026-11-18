@@ -5,10 +5,14 @@ node_modules
 .env.*
 *.env
 
-# Secrets
-.env
-.env.*
-*.env
+# Firebase service account credentials
+*-firebase-adminsdk-*.json
+firebase-adminsdk-*.json
+*serviceAccount*.json
+
+# Generic credential JSON
+google-credentials.json
+gcp-credentials.json
 
 # Next.js build output
 .next
@@ -21,8 +25,23 @@ tsconfig 2.tsbuildinfo
 
 # OS/editor junk
 .DS_Store
+**/.DS_Store
 *.swp
 *.log
+
+# macOS Finder duplicates and backup files
+* 2.tsx
+* 2.ts
+* 2.json
+* 2.md
+* 2.prisma
+*.backup
+*.bak
+Save
+
+# Security audits and runbooks: they describe unfixed issues and where old
+# credentials sit in history, so they stay local, never in this public repo
+docs/audit/
 
 # Uploads (credentials are user content; don’t track)
 public/uploads/credentials/
