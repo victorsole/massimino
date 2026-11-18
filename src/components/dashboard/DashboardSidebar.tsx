@@ -19,6 +19,7 @@ import {
   Search,
   Globe,
   HeartHandshake,
+  Braces,
   Compass,
   Mail,
   ClipboardList,
@@ -51,6 +52,7 @@ const appItems = [
   { href: '/messages', label: 'Messages', icon: Mail },
   { href: '/community', label: 'Community', icon: ClipboardList },
   { href: '/partnerships', label: 'Partnerships', icon: HeartHandshake },
+  { href: '/developers', label: 'API', icon: Braces },
 ];
 
 const trainerItems = [

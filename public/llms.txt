@@ -13,6 +13,7 @@ Massimino offers general fitness information and isn't medical advice. The site 
 - [Community](https://massimino.fitness/community): community feed and discovery
 - [Find a team](https://massimino.fitness/teams/discover): public training teams to join
 - [Partnerships](https://massimino.fitness/partnerships): partner brands and how to become a partner
+- [API](https://massimino.fitness/developers): open, read-only JSON API for exercises, training programmes, public teams and Eurostat fitness figures. Contract at https://massimino.fitness/api/v1/openapi.json
 - [Sign up](https://massimino.fitness/signup): create an account
 
 ## Features (signed-in users)
