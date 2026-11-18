@@ -3,11 +3,22 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/core'
 import { prisma } from '@/core/database'
 import { sendMassichatMessage } from '@/services/ai/massichat_service'
+import { checkRateLimit, getClientIdentifier, getRateLimitHeaders, RATE_LIMITS } from '@/lib/rate-limit'
 
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+    // Rate-limit per authenticated user; LLM calls are expensive.
+    const rl = checkRateLimit(`user:${session.user.id}`, RATE_LIMITS.ai)
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'AI rate limit exceeded. Please wait a minute and try again.' },
+        { status: 429, headers: getRateLimitHeaders(rl) }
+      )
+    }
+
     const { message, sessionId, includeAssessments, includeWorkoutHistory, athleteId } = await request.json()
     if (!message || typeof message !== 'string') {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 })
@@ -45,6 +56,16 @@ export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+    // Rate-limit reads too: GET enumerates chat sessions and is cheap to spam.
+    const rl = checkRateLimit(`user:${session.user.id}`, RATE_LIMITS.standard)
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'Rate limit exceeded.' },
+        { status: 429, headers: getRateLimitHeaders(rl) }
+      )
+    }
+
     const { searchParams } = new URL(request.url)
     const list = searchParams.get('list') === 'true'
     const sessionId = searchParams.get('sessionId')
@@ -93,6 +114,15 @@ export async function PATCH(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+    const rl = checkRateLimit(`user:${session.user.id}`, RATE_LIMITS.standard)
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'Rate limit exceeded.' },
+        { status: 429, headers: getRateLimitHeaders(rl) }
+      )
+    }
+
     const body = await request.json().catch(() => ({})) as { sessionId?: string; title?: string }
     const sessionId = body.sessionId
     const title = (body.title || '').trim()
@@ -114,6 +144,15 @@ export async function DELETE(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+    const rl = checkRateLimit(`user:${session.user.id}`, RATE_LIMITS.standard)
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'Rate limit exceeded.' },
+        { status: 429, headers: getRateLimitHeaders(rl) }
+      )
+    }
+
     const { searchParams } = new URL(request.url)
     const sessionId = searchParams.get('sessionId')
     const athleteId = searchParams.get('athleteId')

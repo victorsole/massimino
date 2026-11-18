@@ -115,9 +115,15 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ received: true });
   } catch (error) {
+    // Fail closed on processing errors so Stripe retries with exponential backoff.
+    // Stripe treats 5xx as transient and 4xx as permanent. Returning 200 here would
+    // cause silent data loss on a transient DB outage.
     console.error('Webhook processing error:', error);
-    // Return 200 to prevent Stripe from retrying for unrecoverable errors
-    return NextResponse.json({ error: 'Processing failed' }, { status: 200 });
+    const message = error instanceof Error ? error.message : 'Processing failed';
+    return NextResponse.json(
+      { error: 'Processing failed', message },
+      { status: 500 }
+    );
   }
 }
 
@@ -398,8 +404,10 @@ async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent) {
   });
 
   if (payment) {
-    const platformFee = Math.round(payment.amount * PLATFORM_FEE_RATE);
-    const trainerEarnings = payment.amount - platformFee;
+    // Number() works under both the legacy Float (number) and the new Decimal type.
+    const amount = Number(payment.amount);
+    const platformFee = Math.round(amount * PLATFORM_FEE_RATE);
+    const trainerEarnings = amount - platformFee;
 
     await prisma.payments.update({
       where: { id: payment.id },

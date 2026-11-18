@@ -1,12 +1,20 @@
 // src/app/api/auth/verify-email/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/core/database';
+import { checkRateLimit, getClientIdentifier, RATE_LIMITS } from '@/lib/rate-limit';
 
 // Mark this route as dynamic since it uses request.url
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
+    const rl = checkRateLimit(getClientIdentifier(request), RATE_LIMITS.auth);
+    if (!rl.success) {
+      // For a GET redirect endpoint, surface the rate limit as an error redirect
+      // so users see a meaningful message instead of a 429 JSON.
+      return NextResponse.redirect(new URL('/login?error=too-many-requests', request.url));
+    }
+
     const { searchParams } = new URL(request.url);
     const token = searchParams.get('token');
 

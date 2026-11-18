@@ -1,11 +1,20 @@
 // src/app/api/auth/register/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/core/database';
+import { checkRateLimit, getClientIdentifier, getRateLimitHeaders, RATE_LIMITS } from '@/lib/rate-limit';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 
 export async function POST(request: NextRequest) {
   try {
+    const rl = checkRateLimit(getClientIdentifier(request), RATE_LIMITS.auth);
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429, headers: getRateLimitHeaders(rl) }
+      );
+    }
+
     const { name, email, password } = await request.json();
 
     // Validate input

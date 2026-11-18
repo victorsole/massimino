@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/core'
 import { prisma } from '@/core/database'
 import { generateWorkoutSuggestions } from '@/services/ai/workout-suggestions'
+import { checkRateLimit, getRateLimitHeaders, RATE_LIMITS } from '@/lib/rate-limit'
 
 export async function GET() {
   try {
@@ -13,6 +14,15 @@ export async function GET() {
     }
 
     const userId = session.user.id
+
+    // Rate-limit AI suggestions per user.
+    const rl = checkRateLimit(`user:${userId}`, RATE_LIMITS.ai)
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'AI rate limit exceeded. Please wait a minute and try again.' },
+        { status: 429, headers: getRateLimitHeaders(rl) }
+      )
+    }
 
     // Get user's fitness preferences
     const user = await prisma.users.findUnique({
