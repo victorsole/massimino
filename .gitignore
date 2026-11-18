@@ -46,6 +46,12 @@ docs/
 CLAUDE.md
 CLAUDE.local.md
 
+# Licensed NASM textbook notes and scripts with real account passwords: local only
+data/knowledge/NASM_CPT/
+data/knowledge/NASM_CNC/
+scripts/add-victor-user.ts
+scripts/create-first-user.ts
+
 # Uploads (credentials are user content; don’t track)
 public/uploads/credentials/
 .next*
