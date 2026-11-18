@@ -39,9 +39,12 @@ tsconfig 2.tsbuildinfo
 *.bak
 Save
 
-# Internal docs, audits and Claude skills/commands stay local: this repo is public
+# Internal docs, audits and Claude instructions, skills and commands stay local:
+# this repo is public
 docs/
 .claude/
+CLAUDE.md
+CLAUDE.local.md
 
 # Uploads (credentials are user content; don’t track)
 public/uploads/credentials/
