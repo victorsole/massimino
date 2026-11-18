@@ -18,7 +18,7 @@ import { prisma } from '@/core/database';
 import { exerciseImageUrl } from '@/lib/exercise-image';
 import { EUROSTAT_ACTIVITY, EUROSTAT_ACTIVITY_META } from '@/data/fitness/eurostat_activity';
 import { SPORT_EUROPE, SPORT_EUROPE_META } from '@/data/fitness/sport_europe';
-import { SITE_URL, type Page } from './http';
+import { ApiError, SITE_URL, type Page } from './http';
 import { heading, list, paragraph, redactContacts, renderBody, slugValue, steps, timestamp, type Block } from './text';
 
 // ── Exercises ────────────────────────────────────────────────────────────────────────
@@ -87,16 +87,71 @@ export interface ExerciseFilter {
   difficulty?: string | null;
 }
 
-const insensitive = (value: string) => ({ equals: value, mode: 'insensitive' as const });
+// ── Exercise filters ─────────────────────────────────────────────────────────────────
+// A filter accepts exactly the values the API returns ("lower_back", "e_z_curl_bar").
+// Stored values are free text ("lower back", "e-z curl bar"), so each API value is mapped
+// back to the stored spellings. Anything else is rejected with the list of valid values,
+// instead of quietly returning nothing.
+
+const DIFFICULTIES = ['beginner', 'intermediate', 'advanced'];
+
+type Vocabulary = Map<string, string[]>;
+let vocabularyCache: { at: number; muscle: Vocabulary; equipment: Vocabulary } | null = null;
+
+async function vocabulary() {
+  if (vocabularyCache && Date.now() - vocabularyCache.at < 10 * 60 * 1000) return vocabularyCache;
+  const rows = await prisma.exercises.findMany({
+    where: { isActive: true, source: OPEN_EXERCISE_SOURCE },
+    select: { muscleGroups: true, equipment: true },
+  });
+  const collect = (pick: (row: (typeof rows)[number]) => string[]): Vocabulary => {
+    const map: Vocabulary = new Map();
+    for (const row of rows) {
+      for (const stored of pick(row)) {
+        const slug = slugValue(stored);
+        if (!slug) continue;
+        const list = map.get(slug) ?? [];
+        if (!list.includes(stored)) list.push(stored);
+        map.set(slug, list);
+      }
+    }
+    return map;
+  };
+  vocabularyCache = { at: Date.now(), muscle: collect((r) => r.muscleGroups), equipment: collect((r) => r.equipment) };
+  return vocabularyCache;
+}
+
+function unknownValue(parameter: string, value: string, allowed: string[]): never {
+  throw new ApiError('INVALID_ARGUMENT', 'FILTER_VALUE_UNKNOWN', `"${value}" is not a valid ${parameter}.`, {
+    parameter,
+    value,
+    allowed: [...allowed].sort().join(', '),
+  });
+}
+
+function storedValues(parameter: string, value: string, vocab: Vocabulary): string[] {
+  const stored = vocab.get(slugValue(value) ?? '');
+  if (!stored) unknownValue(parameter, value, [...vocab.keys()]);
+  return stored!;
+}
 
 export async function listExercises(filter: ExerciseFilter, page: Page) {
   const where: Prisma.exercisesWhereInput = { isActive: true, source: OPEN_EXERCISE_SOURCE };
-  if (filter.q) where.name = { contains: filter.q, mode: 'insensitive' };
-  if (filter.difficulty) where.difficulty = insensitive(filter.difficulty);
-  // Stored values are free text ("triceps", "Body Only"); match the slug form the API returns
-  const spaced = (value: string) => value.replace(/_/g, ' ');
-  if (filter.muscle_group) where.muscleGroups = { hasSome: variants(spaced(filter.muscle_group)) };
-  if (filter.equipment) where.equipment = { hasSome: variants(spaced(filter.equipment)) };
+  if (filter.q) {
+    // "%" and "_" are wildcards to the database; a search for them means the characters
+    const literal = filter.q.trim().replace(/[\\%_]/g, (c) => `\\${c}`);
+    where.name = { contains: literal, mode: 'insensitive' };
+  }
+  if (filter.difficulty) {
+    const difficulty = slugValue(filter.difficulty) ?? '';
+    if (!DIFFICULTIES.includes(difficulty)) unknownValue('difficulty', filter.difficulty, DIFFICULTIES);
+    where.difficulty = { equals: difficulty, mode: 'insensitive' };
+  }
+  if (filter.muscle_group || filter.equipment) {
+    const vocab = await vocabulary();
+    if (filter.muscle_group) where.muscleGroups = { hasSome: storedValues('muscle_group', filter.muscle_group, vocab.muscle) };
+    if (filter.equipment) where.equipment = { hasSome: storedValues('equipment', filter.equipment, vocab.equipment) };
+  }
 
   const [total, rows] = await Promise.all([
     prisma.exercises.count({ where }),
@@ -109,14 +164,6 @@ export async function listExercises(filter: ExerciseFilter, page: Page) {
     }),
   ]);
   return { total, items: rows.map(toExercise) };
-}
-
-/** "body only" also matches "Body Only" and "Body only" */
-function variants(value: string): string[] {
-  const lower = value.toLowerCase();
-  const title = lower.replace(/\b[a-z]/g, (c) => c.toUpperCase());
-  const sentence = lower.charAt(0).toUpperCase() + lower.slice(1);
-  return [...new Set([value, lower, title, sentence])];
 }
 
 export async function getExercise(uid: string) {

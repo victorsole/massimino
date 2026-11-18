@@ -5,7 +5,7 @@
 // the live API and see the response with the matching curl command. Signed-in users
 // also manage their API keys here.
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { Check, Copy, KeyRound, Play, Trash2 } from 'lucide-react';
@@ -103,24 +103,55 @@ type Result = { status: number; ms: number; limit: string | null; remaining: str
 
 type KeyRecord = { id: string; label: string; prefix: string; createdAt: string; lastUsedAt: string | null; revokedAt: string | null };
 
+/**
+ * Copies text. The Clipboard API can refuse, or never answer (no permission, page not
+ * focused), so it gets a short time limit and an old-fashioned fallback.
+ */
+async function copyText(text: string): Promise<boolean> {
+  try {
+    if (navigator.clipboard?.writeText) {
+      const done = await Promise.race([
+        navigator.clipboard.writeText(text).then(() => true),
+        new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 800)),
+      ]);
+      if (done) return true;
+    }
+  } catch {
+    // fall through to the fallback
+  }
+  try {
+    const area = document.createElement('textarea');
+    area.value = text;
+    area.setAttribute('readonly', '');
+    area.style.position = 'fixed';
+    area.style.opacity = '0';
+    document.body.appendChild(area);
+    area.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(area);
+    return ok;
+  } catch {
+    return false;
+  }
+}
+
 function CopyButton({ text, label }: { text: string; label: string }) {
   const [copied, setCopied] = useState(false);
   return (
     <button
       type="button"
       onClick={async () => {
-        try {
-          await navigator.clipboard.writeText(text);
+        if (await copyText(text)) {
           setCopied(true);
           setTimeout(() => setCopied(false), 1500);
-        } catch {
+        } else {
           notify('Copying is not available in this browser. Select the text and copy it by hand.');
         }
       }}
       className="inline-flex items-center gap-1.5 rounded-full border border-white/25 px-3 py-1 text-xs font-medium text-white/90 transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
     >
       {copied ? <Check className="h-3.5 w-3.5" aria-hidden="true" /> : <Copy className="h-3.5 w-3.5" aria-hidden="true" />}
-      {copied ? 'Copied' : label}
+      <span aria-live="polite">{copied ? 'Copied' : label}</span>
     </button>
   );
 }
@@ -132,6 +163,7 @@ export function ApiConsole() {
   const [apiKey, setApiKey] = useState('');
   const [running, setRunning] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
+  const responseRef = useRef<HTMLDivElement>(null);
 
   const endpoint = ENDPOINTS.find((e) => e.id === endpointId) ?? ENDPOINTS[0];
 
@@ -152,7 +184,12 @@ export function ApiConsole() {
     return { url: qs ? `${path}?${qs}` : path, missing: missingParams };
   }, [endpoint, values]);
 
-  const origin = typeof window === 'undefined' ? 'https://massimino.fitness' : window.location.origin;
+  // Same text on the server and on first paint (no hydration mismatch); the real origin
+  // is filled in once the page is running in the browser.
+  const [origin, setOrigin] = useState('https://massimino.fitness');
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
   const curl = `curl ${apiKey ? `-H "Authorization: Bearer ${apiKey}" ` : ''}"${origin}${url}"`;
 
   const selectEndpoint = (id: string) => {
@@ -188,6 +225,10 @@ export function ApiConsole() {
       setResult({ status: 0, ms: Math.round(performance.now() - started), limit: null, remaining: null, body: 'The request did not reach the API. Check your connection and try again.' });
     } finally {
       setRunning(false);
+      // On a narrow screen the response sits below the form: bring it into view
+      if (window.matchMedia('(max-width: 1023px)').matches) {
+        responseRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
   };
 
@@ -248,7 +289,11 @@ export function ApiConsole() {
         notify(json?.error?.message || 'We could not revoke the key. Please try again.');
         return;
       }
+      // If the revoked key is the one in the console, take it out: it no longer works
+      if (apiKey.startsWith(key.prefix)) setApiKey('');
+      if (freshKey?.startsWith(key.prefix)) setFreshKey(null);
       await loadKeys();
+      notify(`The key "${key.label}" has been revoked.`);
     } catch {
       notify('We could not revoke the key. Please try again.');
     }
@@ -413,8 +458,8 @@ export function ApiConsole() {
         </div>
       </div>
 
-      {/* ── Response ── */}
-      <div className="lg:col-span-7">
+      {/* ── Response: stays in view while the (longer) request form scrolls ── */}
+      <div ref={responseRef} className="scroll-mt-20 lg:sticky lg:top-24 lg:col-span-7 lg:self-start">
         <div className="overflow-hidden rounded-card bg-[#0f202c] shadow-soft-lg">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-5 py-3">
             <code className="min-w-0 break-all font-mono text-xs text-white/90">
@@ -443,7 +488,7 @@ export function ApiConsole() {
               <span>Run the request to see the response.</span>
             )}
           </div>
-          <pre className="max-h-[640px] min-h-[320px] overflow-auto px-5 pb-6 font-mono text-xs leading-relaxed text-emerald-100" tabIndex={0}>
+          <pre className="max-h-[min(640px,calc(100vh-18rem))] min-h-[240px] overflow-auto px-5 pb-6 font-mono text-xs leading-relaxed text-emerald-100" tabIndex={0}>
             {result ? result.body : ''}
           </pre>
         </div>

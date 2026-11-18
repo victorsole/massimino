@@ -262,9 +262,9 @@ export const openApiDocument = {
         tags: ['Exercises'],
         ...listOperation('listExercises', 'List exercises', 'exercises', 'Exercise', [
           queryParam('q', 'Text to find in the title. Case-insensitive.'),
-          queryParam('muscle_group', 'A muscle group as returned in muscle_groups, for example triceps.'),
-          queryParam('equipment', 'A piece of equipment as returned in equipment, for example dumbbell.'),
-          queryParam('difficulty', 'beginner, intermediate or advanced.'),
+          queryParam('muscle_group', 'A muscle group exactly as returned in muscle_groups, for example lower_back. An unknown value is a 400 that lists the valid ones.'),
+          queryParam('equipment', 'A piece of equipment exactly as returned in equipment, for example dumbbell. An unknown value is a 400 that lists the valid ones.'),
+          queryParam('difficulty', 'beginner, intermediate or advanced. Anything else is a 400.'),
         ]),
       },
     },

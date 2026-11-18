@@ -18,7 +18,8 @@ const keyView = { id: true, label: true, prefix: true, createdAt: true, lastUsed
 
 export const GET = withAuth(async ({ session }) => {
   const keys = await prisma.api_keys.findMany({
-    where: { userId: session.user.id },
+    // Revoked keys are kept in the table for the record but are no use to their owner
+    where: { userId: session.user.id, revokedAt: null },
     select: keyView,
     orderBy: { createdAt: 'desc' },
     take: 50,

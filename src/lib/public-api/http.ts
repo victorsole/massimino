@@ -202,7 +202,7 @@ export function readPage(req: NextRequest): Page {
   const rawSize = params.get('page_size');
   let size = PAGE_SIZE_DEFAULT;
   if (rawSize !== null && rawSize !== '' && rawSize !== '0') {
-    const parsed = Number(rawSize);
+    const parsed = /^\d{1,9}$/.test(rawSize) ? Number(rawSize) : NaN;
     if (!Number.isInteger(parsed) || parsed < 0) {
       throw new ApiError('INVALID_ARGUMENT', 'PAGE_SIZE_INVALID', 'page_size must be a whole number of 0 or more.', { page_size: rawSize });
     }
@@ -243,6 +243,28 @@ export function allowParams(req: NextRequest, allowed: string[]): void {
       });
     }
   }
+}
+
+const TEXT_PARAM_MAX = 100;
+
+/**
+ * Reads a free-text query parameter. Control characters (a null byte makes the database
+ * reject the query) and over-long values are refused rather than passed on.
+ */
+export function textParam(req: NextRequest, name: string): string | null {
+  const value = req.nextUrl.searchParams.get(name);
+  if (value === null || value === '') return null;
+  if (value.length > TEXT_PARAM_MAX) {
+    throw new ApiError('INVALID_ARGUMENT', 'PARAMETER_TOO_LONG', `${name} can be at most ${TEXT_PARAM_MAX} characters.`, {
+      parameter: name,
+      max_length: String(TEXT_PARAM_MAX),
+    });
+  }
+  // eslint-disable-next-line no-control-regex
+  if (/[\u0000-\u001f\u007f]/.test(value)) {
+    throw new ApiError('INVALID_ARGUMENT', 'PARAMETER_INVALID', `${name} contains characters that are not allowed.`, { parameter: name });
+  }
+  return value;
 }
 
 // ── The route wrapper ────────────────────────────────────────────────────────────────
