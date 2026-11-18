@@ -20,6 +20,7 @@ import {
   Globe,
   HeartHandshake,
   Braces,
+  Plug,
   Compass,
   Mail,
   ClipboardList,
@@ -53,6 +54,7 @@ const appItems = [
   { href: '/community', label: 'Community', icon: ClipboardList },
   { href: '/partnerships', label: 'Partnerships', icon: HeartHandshake },
   { href: '/developers', label: 'API', icon: Braces },
+  { href: '/mcp', label: 'MCP', icon: Plug },
 ];
 
 const trainerItems = [

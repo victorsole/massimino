@@ -35,11 +35,15 @@ function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  // Where to go after signing in. Only a path on this site is accepted, never another host.
+  const requested = searchParams.get('callbackUrl') || '';
+  const afterLogin = /^\/(?![\/\\])/.test(requested) ? requested : '/dashboard';
+
   useEffect(() => {
     if (status === 'authenticated' && session?.user) {
-      router.replace('/dashboard');
+      router.replace(afterLogin);
     }
-  }, [status, session, router]);
+  }, [status, session, router, afterLogin]);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -90,7 +94,7 @@ function LoginContent() {
       if (result?.error) {
         setError('Invalid email or password');
       } else if (result?.ok) {
-        router.push('/dashboard');
+        router.push(afterLogin);
       }
     } catch (error) {
       setError('An error occurred. Please try again.');
@@ -111,7 +115,7 @@ function LoginContent() {
       };
       
       const providerId = providerMap[provider] || provider.toLowerCase();
-      await signIn(providerId, { callbackUrl: '/dashboard' });
+      await signIn(providerId, { callbackUrl: afterLogin });
     } catch (error) {
       setError(`Error signing in with ${provider}`);
     } finally {

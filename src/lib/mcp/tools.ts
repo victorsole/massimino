@@ -259,7 +259,7 @@ function countryData(args: Json) {
 
 async function myWorkoutLog(args: Json, caller: Caller) {
   // The owner comes from the key, never from the arguments
-  if (!caller.ownerId) throw new ToolInputError('This tool needs an API key with the workout log permission.');
+  if (!caller.ownerId) throw new ToolInputError('This tool needs a Massimino sign-in or an API key with the workout log permission.');
   const size = limit(args, 20, 100);
   const [sets, sessions] = await Promise.all([listMySets(caller.ownerId, { size, offset: 0 }), listMySessions(caller.ownerId, { size: 10, offset: 0 })]);
   return {
@@ -337,7 +337,7 @@ export const TOOLS: McpTool[] = [
   {
     name: 'get_my_workout_log',
     title: 'My workout log',
-    description: 'The workout log of the person whose API key is connected: the sets they logged (date, exercise, repetitions, weight) and their recent sessions. Personal data, read-only.',
+    description: 'The workout log of the person who signed in (or whose API key is connected): the sets they logged (date, exercise, repetitions, weight) and their recent sessions. Personal data, read-only.',
     inputSchema: object({ limit: { type: 'integer', minimum: 1, maximum: 100, description: 'How many recent sets to return. Default 20.' } }),
     scope: SCOPES.workoutLogRead,
     run: myWorkoutLog,

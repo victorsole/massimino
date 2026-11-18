@@ -5,7 +5,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { TOOLS } from '@/lib/mcp/tools';
-import { RATE_LIMIT, SITE_URL } from '@/lib/public-api/http';
+import { SITE_URL } from '@/lib/public-api/http';
+import { MCP_RATE_LIMIT } from '@/lib/mcp/server';
 
 export const metadata: Metadata = {
   title: 'MCP server',
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
 };
 
 const ENDPOINT = `${SITE_URL}/api/mcp`;
+const PERSONAL_ENDPOINT = `${SITE_URL}/api/mcp/me`;
 
 const HOSTS = [
   {
@@ -38,10 +40,10 @@ const HOSTS = [
 ];
 
 const FACTS = [
-  { number: '01', title: 'No key needed', text: `About ${RATE_LIMIT.anonymous.maxRequests} requests a minute without a key, about ${RATE_LIMIT.keyed.maxRequests} with a free one from the API page.` },
+  { number: '01', title: 'No key needed', text: `About ${MCP_RATE_LIMIT.anonymous.maxRequests} requests a minute, counted per address. Assistant apps share addresses, so signing in or using a free key gets you an allowance of your own.` },
   { number: '02', title: 'Read-only', text: 'Every tool only reads. Nothing an assistant does here can change Massimino or your account.' },
   { number: '03', title: 'The same open data', text: 'The tools serve exactly what the open API serves, with the same licences. Never members, emails or contact details.' },
-  { number: '04', title: 'Your own log, if you choose', text: 'A key with the workout log permission adds one tool that reads the log of the account that owns the key, and nobody else\'s.' },
+  { number: '04', title: 'Your own log, if you choose', text: 'The second URL adds one tool that reads the workout log of the account you sign in with, and nobody else\'s. You approve it once and can end it at any time.' },
 ];
 
 export default function McpPage() {
@@ -88,6 +90,31 @@ export default function McpPage() {
             ))}
           </ul>
           <p className="mt-4 text-sm text-gray-600">Then ask something real, for example: &quot;Use Massimino to build me a beginner leg workout with dumbbells.&quot;</p>
+
+          {/* ── The personal URL: two equal columns ── */}
+          <div className="mt-16 grid grid-cols-1 gap-10 border-t-2 border-brand-primary pt-10 lg:grid-cols-2 lg:gap-16">
+            <div className="min-w-0">
+              <p className="landing-eyebrow text-brand-primary/70">With your account</p>
+              <h3 className="landing-title mt-3 text-2xl text-brand-primary sm:text-3xl">Add your own workout log</h3>
+              <p className="mt-4 text-sm leading-relaxed text-gray-600">
+                Use this URL instead of the first one. It serves the same open data, plus the sets and sessions you logged, so you can ask &quot;how did my squat go this month?&quot;
+              </p>
+              <pre className="mt-6 overflow-x-auto rounded-field bg-brand-primary/5 px-4 py-3 font-mono text-sm text-brand-primary">{PERSONAL_ENDPOINT}</pre>
+            </div>
+            <ol className="min-w-0 space-y-4 self-center">
+              {[
+                'Add the URL in the same place as above. In ChatGPT, choose OAuth as the authentication.',
+                'Your assistant opens a Massimino window. Sign in as you normally do.',
+                'Massimino shows which app is asking and what it will read. Choose Allow.',
+                'To end it, open the API page: the connection is in your key list, with a Revoke button.',
+              ].map((step, index) => (
+                <li key={step} className="flex gap-3 text-sm leading-relaxed text-gray-600">
+                  <span className="font-display font-semibold tabular-nums text-brand-primary/50">{index + 1}</span>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
       </section>
 
@@ -101,7 +128,7 @@ export default function McpPage() {
               <div key={tool.name} className="border-t border-brand-primary/10 py-5">
                 <dt className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                   <code className="font-mono text-sm font-semibold text-brand-primary">{tool.name}</code>
-                  {tool.scope && <span className="text-xs font-semibold uppercase tracking-wider text-brand-primary/70">Needs your key</span>}
+                  {tool.scope && <span className="text-xs font-semibold uppercase tracking-wider text-brand-primary/70">Needs your sign-in</span>}
                 </dt>
                 <dd className="mt-2 text-sm leading-relaxed text-gray-600">{tool.description}</dd>
               </div>
@@ -125,8 +152,8 @@ export default function McpPage() {
             ))}
           </div>
           <p className="mt-10 max-w-3xl text-sm leading-relaxed text-gray-600">
-            To use a key, send it as an <code className="font-mono text-xs">Authorization: Bearer</code> header. Where an app only accepts a URL, add{' '}
-            <code className="font-mono text-xs">?key=</code> to it instead; a key in a URL can end up in logs and history, so revoke it on the{' '}
+            Clients configured by file can send an API key as an <code className="font-mono text-xs">Authorization: Bearer</code> header on either URL. The first URL also accepts{' '}
+            <code className="font-mono text-xs">?key=</code> for apps that take nothing but a URL; a key in a URL can end up in logs and history, so prefer signing in, and revoke the key on the{' '}
             <Link href="/developers#console" className="font-semibold text-brand-primary underline-offset-4 hover:underline">
               API page
             </Link>{' '}

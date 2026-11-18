@@ -32,6 +32,7 @@ const publicRoutes = [
   '/team_invite',
   '/bio',
   '/trainer',
+  '/oauth',
 ];
 
 function isPublicRoute(pathname: string): boolean {

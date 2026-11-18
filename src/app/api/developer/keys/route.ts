@@ -37,7 +37,8 @@ export const POST = withAuth(async ({ session }, req: NextRequest) => {
   const parsed = BodySchema.safeParse(await req.json().catch(() => ({})));
   if (!parsed.success) return fail('VALIDATION_ERROR', 'The key needs a name, and any permissions must be ones the API knows.', 400, parsed.error.flatten().fieldErrors);
 
-  const active = await prisma.api_keys.count({ where: { userId: session.user.id, revokedAt: null } });
+  // Assistant sign-ins are listed with the keys but do not use up the allowance
+  const active = await prisma.api_keys.count({ where: { userId: session.user.id, revokedAt: null, prefix: { not: 'sign-in' } } });
   if (active >= MAX_ACTIVE_KEYS) {
     return fail('CONFLICT', `You already have ${MAX_ACTIVE_KEYS} active keys. Revoke one before creating another.`, 409);
   }

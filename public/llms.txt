@@ -14,7 +14,7 @@ Massimino offers general fitness information and isn't medical advice. The site 
 - [Find a team](https://massimino.fitness/teams/discover): public training teams to join
 - [Partnerships](https://massimino.fitness/partnerships): partner brands and how to become a partner
 - [API](https://massimino.fitness/developers): open, read-only JSON API for exercises, training programmes, public teams and Eurostat fitness figures. Contract at https://massimino.fitness/api/v1/openapi.json
-- [MCP server](https://massimino.fitness/mcp): connect Claude, ChatGPT or another assistant to the same open data. Endpoint https://massimino.fitness/api/mcp (Streamable HTTP, no key needed)
+- [MCP server](https://massimino.fitness/mcp): connect Claude, ChatGPT or another assistant to the same open data. Endpoint https://massimino.fitness/api/mcp (Streamable HTTP, no key needed). With a Massimino sign-in, https://massimino.fitness/api/mcp/me adds the person's own workout log
 - [Sign up](https://massimino.fitness/signup): create an account
 
 ## Features (signed-in users)

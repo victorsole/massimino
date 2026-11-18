@@ -68,6 +68,7 @@ const pageTitles: Record<string, { title: string; subtitle: string }> = {
   '/assessments': { title: 'Assessments', subtitle: 'Fitness assessments and evaluations.' },
   '/massichat': { title: 'MassiChat', subtitle: 'Chat with your AI fitness assistant.' },
   '/developers': { title: 'API', subtitle: 'Open fitness data to build on.' },
+  '/mcp': { title: 'MCP server', subtitle: 'Massimino in your AI assistant.' },
 };
 
 export function DashboardHeader({ onMenuToggle, userName, userImage, userId }: DashboardHeaderProps) {

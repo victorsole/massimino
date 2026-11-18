@@ -494,7 +494,7 @@ export function ApiConsole() {
                     <div className="min-w-0">
                       <p className={`truncate text-sm font-medium ${key.revokedAt ? 'text-gray-500 line-through' : 'text-gray-900'}`}>{key.label}</p>
                       <p className="font-mono text-xs text-gray-500">
-                        {key.prefix}… · {key.revokedAt ? 'revoked' : key.lastUsedAt ? `last used ${new Date(key.lastUsedAt).toLocaleDateString('en-GB')}` : 'never used'}
+                        {key.prefix === 'sign-in' ? 'signed in from an assistant app' : `${key.prefix}…`} · {key.revokedAt ? 'revoked' : key.lastUsedAt ? `last used ${new Date(key.lastUsedAt).toLocaleDateString('en-GB')}` : 'never used'}
                       </p>
                       <p className="text-xs text-gray-500">
                         {key.scopes.includes(WORKOUT_LOG_SCOPE) ? 'Open data and your workout log' : 'Open data only'}
