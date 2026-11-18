@@ -59,6 +59,8 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
+      // Vector first: browsers that support SVG favicons get a sharp icon at any size
+      { url: '/massimino_logo.svg', type: 'image/svg+xml' },
       { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
       { url: '/icons/icon-512x512.png', sizes: '512x512', type: 'image/png' },
     ],

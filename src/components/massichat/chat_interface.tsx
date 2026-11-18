@@ -1,12 +1,12 @@
 // src/components/massichat/chat_interface.tsx
 'use client'
+import { MassiminoLogo } from '@/components/brand/massimino_logo';
 import { notify, confirmAction } from '@/lib/notify';
 
 import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Medal, Frown, ChevronDown, ChevronUp, Send, Plus, Trash2, Pencil, Sparkles, Dumbbell, Apple, Clock, ArrowRight } from 'lucide-react'
-import Image from 'next/image'
 
 interface ChatMessage { id?: string; role: 'user' | 'assistant'; content: string; isError?: boolean }
 interface WorkoutItemPreview { exerciseName: string; sets?: number; reps?: number; restSeconds?: number; notes?: string }
@@ -440,7 +440,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
         <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-[#2b5069]/10 flex items-center justify-center overflow-hidden flex-shrink-0">
-              <Image src="/massimino_logo.png" alt="MassiChat" width={24} height={24} />
+              <MassiminoLogo title="Massichat" className="h-6 w-6 text-brand-primary" />
             </div>
             <div>
               <h3 className="text-sm font-bold text-gray-900 font-display leading-tight">MassiChat</h3>
@@ -525,7 +525,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
           {messages.length === 0 && !loading && (
             <div className="flex flex-col items-center justify-center h-full text-center px-4">
               <div className="w-16 h-16 rounded-full bg-[#2b5069]/10 flex items-center justify-center mb-4 overflow-hidden">
-                <Image src="/massimino_logo.png" alt="MassiChat" width={40} height={40} />
+                <MassiminoLogo title="Massichat" className="h-10 w-10 text-brand-primary" />
               </div>
               <h3 className="text-lg font-bold text-gray-900 font-display mb-1">Welcome to MassiChat</h3>
               <p className="text-sm text-gray-500 mb-6 max-w-xs">Your AI-powered fitness coach. Ask me anything about workouts, nutrition, or training.</p>
@@ -576,7 +576,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
               {/* Assistant avatar */}
               {m.role === 'assistant' && (
                 <div className="w-8 h-8 rounded-full bg-[#2b5069]/10 flex items-center justify-center flex-shrink-0 mb-1 overflow-hidden">
-                  <Image src="/massimino_logo.png" alt="M" width={22} height={22} />
+                  <MassiminoLogo title="" className="h-[22px] w-[22px] text-brand-primary" />
                 </div>
               )}
               <div className="flex flex-col max-w-[75%] sm:max-w-[70%]">
@@ -614,7 +614,7 @@ export function MassichatInterface({ initialSessionId, flashMessage }: { initial
           {loading && (
             <div className="flex justify-start items-end gap-2">
               <div className="w-8 h-8 rounded-full bg-[#2b5069] flex items-center justify-center flex-shrink-0 mb-1">
-                <Image src="/massimino-logo.svg" alt="M" width={18} height={18} className="brightness-0 invert" />
+                <MassiminoLogo title="" className="h-[18px] w-[18px] text-white" />
               </div>
               <div className="bg-white shadow-sm rounded-2xl rounded-bl-md px-4 py-3">
                 <div className="flex gap-1">

@@ -1,4 +1,5 @@
 // Shared frame for the small auth pages (forgot / reset password), matching /login.
+import { MassiminoLogo } from '@/components/brand/massimino_logo';
 import Image from 'next/image'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -25,7 +26,7 @@ export function AuthShell({
       </div>
       <div className="w-full max-w-md relative z-10">
         <div className="flex justify-center mb-6">
-          <Image src="/massimino_logo.png" alt="Massimino" width={96} height={96} className="object-contain" />
+          <MassiminoLogo className="h-24 w-24 text-brand-primary" />
         </div>
         <Card className="shadow-xl border-0 bg-brand-secondary/90 backdrop-blur-sm">
           <CardHeader className="space-y-1 pb-4">

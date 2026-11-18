@@ -162,7 +162,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
               <div className="mt-4 flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <img
-                    src={trainer.image || '/massimino-logo.svg'}
+                    src={trainer.image || '/massimino_logo.svg'}
                     alt={trainer.name || 'Trainer'}
                     className="w-7 h-7 rounded-full border-2 border-white/30"
                   />

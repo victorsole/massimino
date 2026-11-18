@@ -2,6 +2,7 @@
 
 'use client';
 
+import { MassiminoLogo } from '@/components/brand/massimino_logo';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
@@ -138,7 +139,7 @@ export default function Header({ user, sessionLoading = false }: HeaderProps) {
                       }`}
                     >
                       <div className="relative h-full w-full">
-                        <Image src="/massimino_logo_white.png" alt="" fill sizes="40px" className="object-contain" />
+                        <MassiminoLogo title="" className="h-full w-full text-white" />
                       </div>
                     </div>
                   )}
@@ -148,13 +149,7 @@ export default function Header({ user, sessionLoading = false }: HeaderProps) {
                     }`}
                   >
                     <div className="relative h-full w-full">
-                      <Image
-                        src="/massimino_logo.png"
-                        alt="Massimino Logo"
-                        fill
-                        sizes="40px"
-                        className="object-contain"
-                      />
+                      <MassiminoLogo title="" className="h-full w-full text-brand-primary" />
                     </div>
                   </div>
                 </div>

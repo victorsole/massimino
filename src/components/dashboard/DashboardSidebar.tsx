@@ -1,5 +1,6 @@
 'use client';
 
+import { MassiminoLogo } from '@/components/brand/massimino_logo';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -83,7 +84,7 @@ export function DashboardSidebar({ open, onClose, userRole, userName, userImage 
       <div className="p-5 md:p-3 lg:p-5 mb-2">
         <Link href="/dashboard" className="flex items-center gap-3" onClick={onClose}>
           <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
-            <Image src="/massimino_logo.png" alt="Massimino" width={32} height={32} className="object-contain" />
+            <MassiminoLogo title="" className="h-7 w-7 text-white" />
           </div>
           <span className={`text-white font-semibold text-lg tracking-tight ${open ? 'block' : 'hidden'} md:hidden lg:block`}>
             Massimino

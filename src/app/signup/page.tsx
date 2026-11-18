@@ -1,6 +1,7 @@
 // src/app/signup/page.tsx
 'use client';
 
+import { MassiminoLogo } from '@/components/brand/massimino_logo';
 import { useState, useEffect } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -160,13 +161,7 @@ export default function SignupPage() {
               animate={{ scale: 1, rotate: 0 }}
               transition={{ type: 'spring', stiffness: 200, damping: 15 }}
             >
-              <Image
-                src="/massimino_logo.png"
-                alt="Massimino Logo"
-                width={120}
-                height={120}
-                className="object-contain"
-              />
+              <MassiminoLogo className="h-[120px] w-[120px] text-brand-primary" />
             </motion.div>
           </div>
           <h1 className="text-3xl font-bold text-brand-primary mb-2">Join Massimino</h1>

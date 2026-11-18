@@ -392,10 +392,10 @@ export function TeamInterface({
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
                         <img
-                          src={team.trainer?.image || '/massimino-logo.svg'}
+                          src={team.trainer?.image || '/massimino_logo.svg'}
                           alt={team.trainer?.name || 'Trainer'}
                           className="w-6 h-6 rounded-full border border-gray-200"
-                          onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/massimino-logo.svg'; }}
+                          onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/massimino_logo.svg'; }}
                         />
                         <span className="font-body text-sm text-gray-600">{team.trainer?.name}</span>
                         {team.trainer?.trainerVerified && (

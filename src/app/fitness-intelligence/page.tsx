@@ -556,7 +556,7 @@ export default function FitnessIntelligencePage() {
               <div className="flex h-full gap-6">
                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-xl bg-white/95 p-2 shadow-lg backdrop-blur group-hover:animate-float">
                   <div className="relative h-full w-full">
-                    <Image src="/massimino_logo_word.png" alt="Massimino" fill className="object-contain" sizes="96px" />
+                    <Image src="/massimino_logo_word.svg" alt="Massimino" fill className="object-contain" sizes="96px" unoptimized />
                   </div>
                 </div>
                 <div className="flex min-w-0 flex-col justify-between">
