@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { prisma } from '@/core/database'
+import { toNumber } from '@/lib/decimal'
 
 export default async function AdminRevenuePage() {
   // Get comprehensive revenue analytics
@@ -115,9 +116,10 @@ export default async function AdminRevenuePage() {
       prisma.trainer_earnings.aggregate({
         _sum: { amount: true }
       })
-    ]).then(([totalPayments, trainerEarnings]: [{ _sum: { amount: number | null } }, { _sum: { amount: number | null } }]) => {
-      const totalRevenue = totalPayments._sum.amount || 0
-      const actualTrainerEarnings = trainerEarnings._sum.amount || 0
+    ]).then(([totalPayments, trainerEarnings]) => {
+      // toNumber handles both legacy Float (number) and new Decimal (string/Decimal) shapes.
+      const totalRevenue = toNumber(totalPayments._sum.amount)
+      const actualTrainerEarnings = toNumber(trainerEarnings._sum.amount)
       const platformRevenue = totalRevenue - actualTrainerEarnings
       return {
         totalRevenue,
@@ -135,9 +137,11 @@ export default async function AdminRevenuePage() {
   ])
 
   // Calculate key metrics
-  const averagePayment = totalPayments._avg.amount || 0
-  const monthlyRecurringRevenue = subscriptionRevenue._sum.price || 0
-  const totalTrainerEarnings = trainerEarnings._sum.amount || 0
+  // toNumber wraps every aggregation read so the page renders correctly
+  // under both the legacy Float and the new Decimal generated client.
+  const averagePayment = toNumber(totalPayments._avg.amount)
+  const monthlyRecurringRevenue = toNumber(subscriptionRevenue._sum.price)
+  const totalTrainerEarnings = toNumber(trainerEarnings._sum.amount)
 
   return (
     <div className="space-y-8">
@@ -247,10 +251,10 @@ export default async function AdminRevenuePage() {
                   <p className="text-xs text-gray-600">{method._count.toLocaleString()} transactions</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-green-600">€{(method._sum?.amount || 0).toLocaleString()}</p>
+                  <p className="font-bold text-green-600">€{toNumber(method._sum?.amount).toLocaleString()}</p>
                   <p className="text-xs text-gray-500">
-                    {totalPayments._sum.amount ?
-                      Math.round(((method._sum?.amount || 0) / totalPayments._sum.amount) * 100) : 0}%
+                    {toNumber(totalPayments._sum.amount) ?
+                      Math.round((toNumber(method._sum?.amount) / toNumber(totalPayments._sum.amount)) * 100) : 0}%
                   </p>
                 </div>
               </div>
@@ -299,7 +303,7 @@ export default async function AdminRevenuePage() {
               </tr>
             </thead>
             <tbody className="bg-white">
-              {(topEarningTrainers as Array<{ trainerId: string; _sum: { amount: number | null }; _count: number; trainer?: { name: string | null; email: string; trainerVerified: boolean | null } }>).map((trainer, index: number) => (
+              {(topEarningTrainers as Array<{ trainerId: string; _sum: { amount: number | string | null }; _count: number; trainer?: { name: string | null; email: string; trainerVerified: boolean | null } }>).map((trainer, index: number) => (
                 <tr key={trainer.trainerId} className="border-t border-gray-100">
                   <td className="px-4 py-3">
                     <div className="flex items-center">
@@ -324,12 +328,12 @@ export default async function AdminRevenuePage() {
                   </td>
                   <td className="px-4 py-3">
                     <span className="font-bold text-green-600">
-                      €{(trainer._sum.amount || 0).toLocaleString()}
+                      €{toNumber(trainer._sum.amount).toLocaleString()}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-gray-600">{trainer._count}</td>
                   <td className="px-4 py-3 text-gray-600">
-                    €{trainer._count > 0 ? Math.round((trainer._sum.amount || 0) / trainer._count).toLocaleString() : '0'}
+                    €{trainer._count > 0 ? Math.round(toNumber(trainer._sum.amount) / trainer._count).toLocaleString() : '0'}
                   </td>
                   <td className="px-4 py-3">
                     <Badge className={trainer.trainer?.trainerVerified ? 'bg-green-600' : 'bg-gray-600'}>
@@ -364,7 +368,7 @@ export default async function AdminRevenuePage() {
               </tr>
             </thead>
             <tbody className="bg-white">
-              {(recentPayments as Array<{ id: string; createdAt: Date; clientId: string; amount: number; method: string | null; status: string; type: string | null }>).map((payment) => (
+              {(recentPayments as Array<{ id: string; createdAt: Date; clientId: string; amount: Parameters<typeof toNumber>[0]; method: string | null; status: string; type: string | null }>).map((payment) => (
                 <tr key={payment.id} className="border-t border-gray-100">
                   <td className="px-4 py-3 text-sm text-gray-600">
                     {new Date(payment.createdAt).toLocaleDateString()}
@@ -376,7 +380,7 @@ export default async function AdminRevenuePage() {
                     </div>
                   </td>
                   <td className="px-4 py-3 font-bold text-green-600">
-                    €{payment.amount.toLocaleString()}
+                    €{toNumber(payment.amount).toLocaleString()}
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-600">
                     {payment.method || 'Unknown'}
@@ -405,14 +409,14 @@ export default async function AdminRevenuePage() {
         <h2 className="text-xl font-semibold text-red-700 mb-4">⚠️ Financial Health</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="text-center p-4 bg-white rounded border border-red-200">
-            <div className="text-2xl font-bold text-red-600">€{(refundsAndChargebacks._sum.amount || 0).toLocaleString()}</div>
+            <div className="text-2xl font-bold text-red-600">€{toNumber(refundsAndChargebacks._sum.amount).toLocaleString()}</div>
             <p className="text-sm text-gray-600">Total Refunds</p>
             <p className="text-xs text-red-600">{refundsAndChargebacks._count} transactions</p>
           </div>
           <div className="text-center p-4 bg-white rounded border border-red-200">
             <div className="text-2xl font-bold text-orange-600">
-              {totalPayments._sum.amount ?
-                Math.round(((refundsAndChargebacks._sum.amount || 0) / totalPayments._sum.amount) * 100 * 100) / 100 : 0}%
+              {toNumber(totalPayments._sum.amount) ?
+                Math.round((toNumber(refundsAndChargebacks._sum.amount) / toNumber(totalPayments._sum.amount)) * 100 * 100) / 100 : 0}%
             </div>
             <p className="text-sm text-gray-600">Refund Rate</p>
             <p className="text-xs text-gray-500">Industry avg: 2-5%</p>

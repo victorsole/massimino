@@ -125,8 +125,12 @@ export async function createAppointment(data: CreateAppointmentData): Promise<ap
     });
 
     // Calculate price (use provided price or trainer's hourly rate)
+    // Number() supports both the legacy Float and the new Decimal column type.
+    const hourlyRate = trainerProfile.hourlyRate != null
+      ? Number(trainerProfile.hourlyRate)
+      : null;
     const appointmentPrice = data.price ||
-      (trainerProfile.hourlyRate ? (trainerProfile.hourlyRate * ((data.duration || 60) / 60)) : undefined);
+      (hourlyRate ? (hourlyRate * ((data.duration || 60) / 60)) : undefined);
 
     // Create appointment
     const appointment = await prisma.appointments.create({

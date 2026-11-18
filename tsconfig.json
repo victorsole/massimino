@@ -67,7 +67,8 @@
     "mobile/**/*",
     "**/*_backup.*",
     "**/*.backup.*",
-    "src/scripts/**/*"
+    "src/scripts/**/*",
+    "massimino/**/*"
   ],
   "ts-node": {
     "compilerOptions": {

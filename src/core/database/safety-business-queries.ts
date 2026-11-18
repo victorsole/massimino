@@ -7,6 +7,7 @@
 
 import { prisma } from './client';
 import { Prisma } from '@prisma/client';
+import { toNumber } from '@/lib/decimal';
 
 // Define types locally since Prisma client may not be available
 export const UserRole = {
@@ -1340,9 +1341,11 @@ export async function getTrainerEarnings(
   });
 
   return {
-    totalAmount: earnings._sum.amount || 0,
-    trainerEarnings: earnings._sum.trainerEarnings || 0,
-    platformFee: earnings._sum.platformFee || 0,
+    // Wrap in toNumber so the API serialises plain numbers regardless of
+    // whether the Prisma client returns Float (number) or Decimal.
+    totalAmount: toNumber(earnings._sum.amount),
+    trainerEarnings: toNumber(earnings._sum.trainerEarnings),
+    platformFee: toNumber(earnings._sum.platformFee),
     transactionCount: earnings._count,
     period
   };
@@ -1627,7 +1630,7 @@ export async function processRefund(paymentId: string, refundAmount: number, rea
     where: { id: paymentId },
     data: {
       refundAmount,
-      status: refundAmount >= payment.amount ? 'REFUNDED' : 'PARTIALLY_REFUNDED',
+      status: refundAmount >= toNumber(payment.amount) ? 'REFUNDED' : 'PARTIALLY_REFUNDED',
       metadata: {
         ...payment.metadata as any,
         refundReason: reason,
@@ -1638,7 +1641,7 @@ export async function processRefund(paymentId: string, refundAmount: number, rea
 
   // Update trainer earnings
   if (payment.trainerEarnings && refundAmount > 0) {
-    const refundFromEarnings = Math.min(refundAmount, payment.trainerEarnings);
+    const refundFromEarnings = Math.min(refundAmount, toNumber(payment.trainerEarnings));
     await prisma.trainer_profiles.update({
       where: { id: payment.trainerId },
       data: {
@@ -1717,9 +1720,9 @@ export async function getTrainerPaymentAnalytics(
   ]);
 
   return {
-    totalAmount: payments._sum.amount || 0,
-    trainerEarnings: payments._sum.trainerEarnings || 0,
-    platformFee: payments._sum.platformFee || 0,
+    totalAmount: toNumber(payments._sum.amount),
+    trainerEarnings: toNumber(payments._sum.trainerEarnings),
+    platformFee: toNumber(payments._sum.platformFee),
     transactionCount: payments._count,
     paymentsByType,
     paymentsByStatus,
@@ -1940,7 +1943,7 @@ export async function joinPremiumTeam(teamId: string, userId: string, paymentId?
   let isTrialActive = false;
   let trialEndsAt: Date | undefined;
 
-  if (team.price > 0 && !paymentId) {
+  if (toNumber(team.price) > 0 && !paymentId) {
     status = 'SUSPENDED';
   } else if (team.requireApproval) {
     status = 'SUSPENDED';
@@ -2241,8 +2244,8 @@ export async function getTeamAnalytics(teamId: string, ownerId: string) {
       return acc;
     }, {} as Record<string, number>),
     revenue: {
-      totalRevenue: revenueStats._sum.amount || 0,
-      trainerEarnings: revenueStats._sum.trainerEarnings || 0,
+      totalRevenue: toNumber(revenueStats._sum.amount),
+      trainerEarnings: toNumber(revenueStats._sum.trainerEarnings),
       totalPayments: revenueStats._count
     },
     trends: {
@@ -2463,7 +2466,7 @@ export async function joinChallenge(challengeId: string, userId: string, payment
   }
 
   // Determine status based on entry fee
-  const status = (challenge.entryFee && challenge.entryFee > 0 && !paymentId)
+  const status = (toNumber(challenge.entryFee) > 0 && !paymentId)
     ? 'PENDING_PAYMENT'
     : 'REGISTERED';
 

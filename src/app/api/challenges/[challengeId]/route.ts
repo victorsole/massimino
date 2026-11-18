@@ -646,10 +646,12 @@ async function handleJoinChallenge(challengeId: string, body: any, session: any)
   let paymentId: string | undefined;
   let participantStatus: ParticipantStatus = 'REGISTERED';
 
-  if ((challenge.entryFee ?? 0) > 0) {
+  // Number() handles both legacy Float and new Decimal column types.
+  const entryFeeNum = Number(challenge.entryFee ?? 0);
+  if (entryFeeNum > 0) {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://massimino.fitness';
     const payment = await createPayment({
-      amount: { value: String((challenge.entryFee ?? 0) / 100), currency: challenge.currency },
+      amount: { value: String(entryFeeNum / 100), currency: challenge.currency },
       description: `Challenge entry: ${challenge.title}`,
       redirectUrl: `${baseUrl}/payments/return`,
       webhookUrl: `${baseUrl}/api/payments/webhook`,

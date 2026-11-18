@@ -4,6 +4,7 @@
  */
 
 import { prisma } from '@/core/database';
+import { toNumber } from '@/lib/decimal';
 import {
   trainer_profiles,
   users,
@@ -37,7 +38,7 @@ export interface UpdateTrainerProfileData extends Partial<CreateTrainerProfileDa
   verificationLevel?: string;
 }
 
-export interface TrainerProfileWithStats extends trainer_profiles {
+export interface TrainerProfileWithStats extends Omit<trainer_profiles, 'monthlyEarnings'> {
   user: Pick<users, 'id' | 'name' | 'email' | 'image' | 'role'>;
   _count: {
     trainer_clients: number;
@@ -193,7 +194,7 @@ export async function getTrainerProfileWithStats(userId: string): Promise<Traine
       ...profile,
       user: profile.users,
       averageRating: ratingStats._avg.rating || 0,
-      monthlyEarnings: earningsStats._sum.trainerEarnings || 0,
+      monthlyEarnings: toNumber(earningsStats._sum.trainerEarnings),
       activeClients
     } as any;
 
@@ -624,8 +625,9 @@ export async function getTrainerDashboardStats(trainerId: string): Promise<{
       ? ((activeClientsCount - lastMonthClients) / lastMonthClients) * 100
       : 100;
 
-    const earningsGrowth = (lastMonthEarnings._sum.trainerEarnings || 0) > 0
-      ? ((trainerProfile.monthlyEarnings - (lastMonthEarnings._sum.trainerEarnings || 0)) / (lastMonthEarnings._sum.trainerEarnings || 1)) * 100
+    const lastMonthTotal = toNumber(lastMonthEarnings._sum.trainerEarnings);
+    const earningsGrowth = lastMonthTotal > 0
+      ? ((toNumber(trainerProfile.monthlyEarnings) - lastMonthTotal) / lastMonthTotal) * 100
       : 100;
 
     const totalSessions = sessionStats.reduce((sum: number, stat: { _count: number }) => sum + stat._count, 0);
@@ -636,8 +638,8 @@ export async function getTrainerDashboardStats(trainerId: string): Promise<{
       overview: {
         totalClients: trainerProfile.totalClients,
         activeClients: activeClientsCount,
-        totalEarnings: trainerProfile.totalEarnings,
-        monthlyEarnings: trainerProfile.monthlyEarnings,
+        totalEarnings: toNumber(trainerProfile.totalEarnings),
+        monthlyEarnings: toNumber(trainerProfile.monthlyEarnings),
         averageRating: reviewStats._avg.rating || 0,
         totalReviews: reviewStats._count
       },

@@ -315,7 +315,7 @@ model appointments {
   location           String?
   isVirtual          Boolean           @default(false)
   meetingLink        String?
-  price              Float?
+  price              Decimal?          @db.Decimal(10, 2)
   currency           String            @default("USD")
   isPaid             Boolean           @default(false)
   paymentId          String?
@@ -327,7 +327,7 @@ model appointments {
   clientNotes        String?
   rating             Int?
   feedback           String?
-  noShowFee          Float?
+  noShowFee          Decimal?          @db.Decimal(10, 2)
   reminderSent       Boolean           @default(false)
   workoutSessionId   String?           @unique
   createdAt          DateTime          @default(now())
@@ -564,9 +564,9 @@ model challenges {
   isPublic               Boolean                  @default(true)
   maxParticipants        Int?
   currentParticipants    Int                      @default(0)
-  entryFee               Float?                   @default(0.0)
+  entryFee               Decimal?                 @default(0.0) @db.Decimal(10, 2)
   currency               String                   @default("USD")
-  prizePool              Float?                   @default(0.0)
+  prizePool              Decimal?                 @default(0.0) @db.Decimal(10, 2)
   rules                  String
   metrics                Json                     @default("{}")
   rewards                Json?                    @default("[]")
@@ -790,7 +790,7 @@ model equipment_recommendations {
   description                    String
   category                       String
   brand                          String?
-  price                          Float?
+  price                          Decimal?                         @db.Decimal(10, 2)
   currency                       String                           @default("USD")
   affiliateUrl                   String
   affiliateCode                  String?
@@ -923,7 +923,7 @@ model group_classes {
   duration            Int                  @default(60)
   maxParticipants     Int                  @default(20)
   currentParticipants Int                  @default(0)
-  price               Float?
+  price               Decimal?             @db.Decimal(10, 2)
   currency            String               @default("USD")
   scheduledAt         DateTime
   endTime             DateTime
@@ -1235,7 +1235,7 @@ model payments {
   trainerId        String
   clientId         String
   trainerClientId  String?
-  amount           Float
+  amount           Decimal           @db.Decimal(10, 2)
   currency         String            @default("USD")
   type             PaymentType       @default(SESSION)
   status           PaymentStatus     @default(PENDING)
@@ -1244,9 +1244,9 @@ model payments {
   sessionDate      DateTime?
   packageId        String?
   subscriptionId   String?
-  refundAmount     Float?            @default(0.0)
-  platformFee      Float?            @default(0.0)
-  trainerEarnings  Float?
+  refundAmount     Decimal?          @default(0.0) @db.Decimal(10, 2)
+  platformFee      Decimal?          @default(0.0) @db.Decimal(10, 2)
+  trainerEarnings  Decimal?          @db.Decimal(10, 2)
   paymentDate      DateTime?
   refundDate       DateTime?
   failureReason    String?
@@ -1332,7 +1332,7 @@ model premium_communities {
   name                String
   description         String
   ownerId             String
-  price               Float
+  price               Decimal               @db.Decimal(10, 2)
   currency            String                @default("USD")
   billingCycle        String                @default("MONTHLY")
   maxMembers          Int?
@@ -1412,7 +1412,7 @@ model program_purchases {
   id                String            @id
   userId            String
   programId         String
-  price             Float
+  price             Decimal           @db.Decimal(10, 2)
   currency          String            @default("USD")
   purchasedAt       DateTime          @default(now())
   program_templates program_templates @relation(fields: [programId], references: [id])
@@ -1487,7 +1487,7 @@ model program_templates {
   difficulty    String   @default("BEGINNER")
   category      String?
   isPublic      Boolean  @default(false)
-  price         Float?
+  price         Decimal? @db.Decimal(10, 2)
   currency      String   @default("USD")
   purchaseCount Int      @default(0)
   rating        Float?   @default(0.0)
@@ -1662,7 +1662,7 @@ model subscriptions {
   cancelAtPeriodEnd    Boolean            @default(false)
   cancelledAt          DateTime?
   trialEnd             DateTime?
-  price                Float
+  price                Decimal            @db.Decimal(10, 2)
   currency             String             @default("USD")
   features             Json               @default("[]")
   usageStats           Json?              @default("{}")
@@ -1925,7 +1925,7 @@ model template_purchases {
   id                String            @id
   userId            String
   templateId        String
-  price             Float
+  price             Decimal           @db.Decimal(10, 2)
   currency          String            @default("USD")
   purchasedAt       DateTime          @default(now())
   workout_templates workout_templates @relation(fields: [templateId], references: [id])
@@ -1972,7 +1972,7 @@ model trainer_clients {
   packageId         String?
   sessionsRemaining Int                @default(0)
   totalSessions     Int                @default(0)
-  monthlyRate       Float?
+  monthlyRate       Decimal?           @db.Decimal(10, 2)
   billingCycle      String             @default("MONTHLY")
   lastSessionDate   DateTime?
   nextSessionDate   DateTime?
@@ -2083,7 +2083,7 @@ model trainer_packages {
   trainerId          String
   name               String
   description        String?
-  price              Float
+  price              Decimal           @db.Decimal(10, 2)
   currency           String            @default("USD")
   sessionCount       Int
   duration           Int
@@ -2144,7 +2144,7 @@ model trainer_profiles {
   userId              String             @unique
   businessName        String?
   businessDescription String?
-  hourlyRate          Float?
+  hourlyRate          Decimal?           @db.Decimal(10, 2)
   currency            String             @default("USD")
   taxId               String?
   businessAddress     Json?
@@ -2159,8 +2159,8 @@ model trainer_profiles {
   trainerRating       Float              @default(0.0)
   totalClients        Int                @default(0)
   activeClients       Int                @default(0)
-  totalEarnings       Float              @default(0.0)
-  monthlyEarnings     Float              @default(0.0)
+  totalEarnings       Decimal            @default(0.0) @db.Decimal(12, 2)
+  monthlyEarnings     Decimal            @default(0.0) @db.Decimal(12, 2)
   createdAt           DateTime           @default(now())
   updatedAt           DateTime
   availability        Json?
@@ -2769,7 +2769,7 @@ model workout_templates {
   duration                   String?
   equipment                  String[]                     @default([])
   isPublic                   Boolean                      @default(false)
-  price                      Float?
+  price                      Decimal?                     @db.Decimal(10, 2)
   currency                   String                       @default("USD")
   purchaseCount              Int                          @default(0)
   rating                     Float?                       @default(0.0)

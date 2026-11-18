@@ -7,6 +7,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
+import { toNumber } from '@/lib/decimal';
 import { createPayment } from '@/core/integrations/stripe';
 import crypto from 'crypto';
 //
@@ -150,7 +151,7 @@ export async function POST(
     }
 
     // Calculate pricing
-    let finalPrice = team.price;
+    let finalPrice = toNumber(team.price);
     let trialDays = team.trialPeriodDays;
 
     // Apply coupon if provided

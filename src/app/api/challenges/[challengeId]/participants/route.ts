@@ -7,6 +7,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/core';
 import { prisma } from '@/core/database';
+import { toNumber } from '@/lib/decimal';
 import { createPayment } from '@/core/integrations/stripe';
 import { ParticipantStatus } from '@prisma/client';
 import crypto from 'crypto';
@@ -176,10 +177,12 @@ export async function POST(
     let paymentId: string | undefined;
     let participantStatus: ParticipantStatus = 'REGISTERED';
 
-    if ((challenge.entryFee ?? 0) > 0) {
+    // Number() handles both legacy Float and new Decimal column types.
+    const entryFeeNum = Number(challenge.entryFee ?? 0);
+    if (entryFeeNum > 0) {
       const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.BASE_URL || 'https://massimino.fitness';
       const payment = await createPayment({
-        amount: { value: String((challenge.entryFee ?? 0) / 100), currency: challenge.currency },
+        amount: { value: String(entryFeeNum / 100), currency: challenge.currency },
         description: `Challenge entry: ${challenge.title}`,
         redirectUrl: `${baseUrl}/payments/return`,
         webhookUrl: `${baseUrl}/api/payments/webhook`,
@@ -331,11 +334,11 @@ export async function DELETE(
     }
 
     // TODO: Handle refund if user paid entry fee and challenge hasn't started
-    if (participation.paymentId && ((participation.challenges.entryFee ?? 0) > 0)) {
+    if (participation.paymentId && toNumber(participation.challenges.entryFee) > 0) {
       console.log('TODO: Process refund for challenge exit:', {
         participationId: participation.id,
         paymentId: participation.paymentId,
-        entryFee: participation.challenges.entryFee ?? 0
+        entryFee: toNumber(participation.challenges.entryFee)
       });
     }
 

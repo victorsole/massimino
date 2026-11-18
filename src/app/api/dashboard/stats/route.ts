@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/core'
 import { prisma } from '@/core/database'
+import { toNumber } from '@/lib/decimal'
 import { UserRole } from '@prisma/client'
 
 export const dynamic = 'force-dynamic'
@@ -426,8 +427,8 @@ export async function GET() {
         trainerStats = {
           totalClients: trainerProfile.totalClients,
           activeClients: trainerProfile.activeClients,
-          totalEarnings: trainerProfile.totalEarnings,
-          monthlyEarnings: monthlyPayments._sum.trainerEarnings || 0,
+          totalEarnings: toNumber(trainerProfile.totalEarnings),
+          monthlyEarnings: toNumber(monthlyPayments._sum.trainerEarnings),
           averageRating: reviewStats._avg.rating || 0,
           totalReviews: reviewStats._count,
           upcomingAppointments,
