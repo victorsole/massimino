@@ -81,16 +81,20 @@ const FORBIDDEN_KEY = /^(password|passwordhash|hash|keyhash|apikeyhash|secret|to
 const SECRET_VALUE = /(sk_live_|sk_test_|msk_live_[A-Za-z0-9]{8,}|eyJhbGciOi|-----BEGIN [A-Z ]*PRIVATE KEY-----|postgres(ql)?:\/\/[^\s"]+:[^\s"]+@)/;
 const EMAIL_VALUE = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/;
 
-export function findLeak(value: unknown, path = '$'): string | null {
+/**
+ * `personal` is for the caller's own data (their notes may legitimately hold an address
+ * they typed): email values are allowed there, forbidden field names and credentials never.
+ */
+export function findLeak(value: unknown, path = '$', personal = false): string | null {
   if (value === null || value === undefined) return null;
   if (typeof value === 'string') {
     if (SECRET_VALUE.test(value)) return `${path}: looks like a credential`;
-    if (EMAIL_VALUE.test(value)) return `${path}: contains an email address`;
+    if (!personal && EMAIL_VALUE.test(value)) return `${path}: contains an email address`;
     return null;
   }
   if (Array.isArray(value)) {
     for (let i = 0; i < value.length; i++) {
-      const hit = findLeak(value[i], `${path}[${i}]`);
+      const hit = findLeak(value[i], `${path}[${i}]`, personal);
       if (hit) return hit;
     }
     return null;
@@ -98,7 +102,7 @@ export function findLeak(value: unknown, path = '$'): string | null {
   if (typeof value === 'object') {
     for (const [key, child] of Object.entries(value as Record<string, unknown>)) {
       if (FORBIDDEN_KEY.test(key)) return `${path}.${key}: forbidden field name`;
-      const hit = findLeak(child, `${path}.${key}`);
+      const hit = findLeak(child, `${path}.${key}`, personal);
       if (hit) return hit;
     }
   }
@@ -135,16 +139,26 @@ function presentedKey(req: NextRequest): string | null {
   return header ? header.trim() : null;
 }
 
-interface Caller {
+/** What a key may do beyond reading open data. A key has none unless its owner granted it. */
+export const SCOPES = {
+  workoutLogRead: 'workout_log.read',
+} as const;
+export type Scope = (typeof SCOPES)[keyof typeof SCOPES];
+export const ALL_SCOPES: Scope[] = Object.values(SCOPES);
+
+export interface Caller {
   /** Identifier used for rate limiting */
   id: string;
   /** True when a valid key was presented */
   keyed: boolean;
+  /** The account the key belongs to. Never returned in a response. */
+  ownerId: string | null;
+  scopes: string[];
 }
 
 async function identifyCaller(req: NextRequest): Promise<Caller> {
   const key = presentedKey(req);
-  if (!key) return { id: `ip:${getClientIdentifier(req)}`, keyed: false };
+  if (!key) return { id: `ip:${getClientIdentifier(req)}`, keyed: false, ownerId: null, scopes: [] };
 
   const unauthenticated = new ApiError('UNAUTHENTICATED', 'API_KEY_INVALID', 'This API key is not recognised.', {}, {
     'WWW-Authenticate': 'Bearer realm="Massimino API", error="invalid_token"',
@@ -153,7 +167,7 @@ async function identifyCaller(req: NextRequest): Promise<Caller> {
 
   const record = await prisma.api_keys.findUnique({
     where: { keyHash: hashKey(key) },
-    select: { id: true, revokedAt: true, lastUsedAt: true },
+    select: { id: true, userId: true, scopes: true, revokedAt: true, lastUsedAt: true },
   });
   if (!record) throw unauthenticated;
   if (record.revokedAt) {
@@ -165,7 +179,7 @@ async function identifyCaller(req: NextRequest): Promise<Caller> {
   if (!record.lastUsedAt || record.lastUsedAt.getTime() < hourAgo) {
     prisma.api_keys.update({ where: { id: record.id }, data: { lastUsedAt: new Date() }, select: { id: true } }).catch(() => {});
   }
-  return { id: `key:${record.id}`, keyed: true };
+  return { id: `key:${record.id}`, keyed: true, ownerId: record.userId, scopes: record.scopes };
 }
 
 // ── Rate limits ──────────────────────────────────────────────────────────────────────
@@ -269,17 +283,43 @@ export function textParam(req: NextRequest, name: string): string | null {
 
 // ── The route wrapper ────────────────────────────────────────────────────────────────
 
-type Handler<P> = (req: NextRequest, ctx: { params: P }) => Promise<unknown> | unknown;
+type Handler<P> = (req: NextRequest, ctx: { params: P }, caller: Caller) => Promise<unknown> | unknown;
+
+interface RouteOptions {
+  /**
+   * Makes the route personal: a key is required, it must carry this scope, and the handler
+   * serves only the key owner's data. Responses are never cached.
+   */
+  scope?: Scope;
+}
+
+/** For personal routes: the account behind the key. */
+export function ownerOf(caller: Caller): string {
+  if (!caller.ownerId) throw new ApiError('INTERNAL', 'INTERNAL_ERROR', 'Something went wrong on our side. Please try again.');
+  return caller.ownerId;
+}
 
 /**
  * Wraps a public GET handler: identifies the caller, applies the rate limit, runs the
  * handler, checks the result for private data and adds the common headers.
  */
-export function publicRoute<P = Record<string, string>>(handler: Handler<P>) {
+export function publicRoute<P = Record<string, string>>(handler: Handler<P>, options: RouteOptions = {}) {
   return async (req: NextRequest, ctx: { params: P }) => {
     let rateHeaders: Record<string, string> = {};
     try {
       const caller = await identifyCaller(req);
+      if (options.scope) {
+        if (!caller.keyed) {
+          throw new ApiError('UNAUTHENTICATED', 'API_KEY_REQUIRED', 'This endpoint serves personal data and needs an API key. Create one at massimino.fitness/developers.', {}, {
+            'WWW-Authenticate': 'Bearer realm="Massimino API"',
+          });
+        }
+        if (!caller.scopes.includes(options.scope)) {
+          throw new ApiError('PERMISSION_DENIED', 'SCOPE_MISSING', `This API key is not allowed to do this. Create a key with the "${options.scope}" permission.`, {
+            required_scope: options.scope,
+          });
+        }
+      }
       const result = checkRateLimit(caller.id, caller.keyed ? RATE_LIMIT.keyed : RATE_LIMIT.anonymous);
       rateHeaders = getRateLimitHeaders(result) as Record<string, string>;
       if (!result.success) {
@@ -295,9 +335,9 @@ export function publicRoute<P = Record<string, string>>(handler: Handler<P>) {
         );
       }
 
-      const body = await handler(req, ctx);
+      const body = await handler(req, ctx, caller);
 
-      const leak = findLeak(body);
+      const leak = findLeak(body, '$', Boolean(options.scope));
       if (leak) {
         console.error(`[public-api] response blocked, private data detected at ${leak} (${req.nextUrl.pathname})`);
         throw new ApiError('INTERNAL', 'RESPONSE_BLOCKED', 'This response was withheld by a safety check. The problem has been logged.');
@@ -309,7 +349,9 @@ export function publicRoute<P = Record<string, string>>(handler: Handler<P>) {
           ...CORS_HEADERS,
           ...rateHeaders,
           // Reference data changes rarely; let browsers and the CDN hold it briefly.
-          'Cache-Control': caller.keyed ? 'private, max-age=60' : 'public, max-age=60, s-maxage=300',
+          // Personal data is never stored by a cache
+          'Cache-Control': options.scope ? 'private, no-store' : caller.keyed ? 'private, max-age=60' : 'public, max-age=60, s-maxage=300',
+          ...(options.scope ? { Vary: 'Authorization, X-API-Key' } : {}),
         },
       });
     } catch (error) {

@@ -578,3 +578,182 @@ export function listCountries(page: Page) {
 export function getCountry(code: string) {
   return toCountry(code.toUpperCase());
 }
+
+// ── The caller's own workout sessions (personal, key with scope required) ────────────
+// Every query here is filtered by the owner of the key. There is no way to ask for
+// another person's sessions: the owner comes from the key, never from the request.
+
+const sessionSelect = {
+  id: true,
+  title: true,
+  notes: true,
+  startTime: true,
+  endTime: true,
+  isComplete: true,
+  createdAt: true,
+  updatedAt: true,
+  workout_log_entries: {
+    select: {
+      exerciseId: true,
+      setNumber: true,
+      reps: true,
+      weight: true,
+      unit: true,
+      restSeconds: true,
+      userComments: true,
+      createdAt: true,
+      exercises: { select: { name: true, source: true } },
+    },
+    orderBy: [{ createdAt: 'asc' as const }, { setNumber: 'asc' as const }],
+  },
+} satisfies Prisma.workout_sessionsSelect;
+
+type SessionRow = Prisma.workout_sessionsGetPayload<{ select: typeof sessionSelect }>;
+
+const KG_PER_LB = 0.45359237;
+const MAX_SESSION_MINUTES = 12 * 60;
+
+function toSession(row: SessionRow) {
+  const sets = row.workout_log_entries.map((entry) => {
+    const raw = parseFloat(entry.weight);
+    const weight = Number.isFinite(raw) ? (entry.unit === 'LB' ? Math.round(raw * KG_PER_LB * 100) / 100 : raw) : null;
+    return {
+      // A resource name only when the exercise is one the open API serves
+      exercise: entry.exercises?.source === OPEN_EXERCISE_SOURCE ? `exercises/${entry.exerciseId}` : null,
+      exercise_title: entry.exercises?.name ?? 'Exercise',
+      set_number: entry.setNumber,
+      reps: entry.reps,
+      weight_kg: weight,
+      rest_seconds: entry.restSeconds ?? null,
+      notes: entry.userComments ?? null,
+    };
+  });
+
+  // A session closed long after it started has no meaningful length
+  const minutes = row.endTime ? Math.round((row.endTime.getTime() - row.startTime.getTime()) / 60000) : null;
+  const duration = minutes !== null && minutes > 0 && minutes <= MAX_SESSION_MINUTES ? minutes : null;
+  const volume = sets.reduce((sum, s) => sum + (s.weight_kg ?? 0) * s.reps, 0);
+  const day = row.startTime.toISOString().slice(0, 10);
+
+  const byExercise = new Map<string, string[]>();
+  for (const s of sets) {
+    const line = `${s.reps} x ${s.weight_kg ?? 0} kg`;
+    byExercise.set(s.exercise_title, [...(byExercise.get(s.exercise_title) ?? []), line]);
+  }
+  const blocks: Block[] = [
+    ...paragraph(row.notes),
+    ...list([...byExercise.entries()].map(([title, lines]) => `${title}: ${lines.join(', ')}`)),
+  ];
+
+  return {
+    name: `me/workout-sessions/${row.id}`,
+    uid: row.id,
+    title: row.title?.trim() || `Workout on ${day}`,
+    ...renderBody(blocks),
+    lang: null,
+    start_time: timestamp(row.startTime),
+    end_time: duration !== null ? timestamp(row.endTime) : null,
+    duration_minutes: duration,
+    completed: row.isComplete,
+    set_count: sets.length,
+    total_reps: sets.reduce((sum, s) => sum + s.reps, 0),
+    total_volume_kg: Math.round(volume * 100) / 100,
+    sets,
+    uri: `${SITE_URL}/workout-log`,
+    source: { title: 'Massimino', uri: SITE_URL },
+    // Your own data: yours to use, not published under a licence
+    license: null,
+    create_time: timestamp(row.createdAt),
+    update_time: timestamp(row.updatedAt),
+  };
+}
+
+export async function listMySessions(ownerId: string, page: Page) {
+  const where = { userId: ownerId, isTemplate: false };
+  const [total, rows] = await Promise.all([
+    prisma.workout_sessions.count({ where }),
+    prisma.workout_sessions.findMany({
+      where,
+      select: sessionSelect,
+      orderBy: [{ startTime: 'desc' }, { id: 'asc' }],
+      skip: page.offset,
+      take: page.size,
+    }),
+  ]);
+  return { total, items: rows.map(toSession) };
+}
+
+export async function getMySession(ownerId: string, uid: string) {
+  const row = await prisma.workout_sessions.findFirst({ where: { id: uid, userId: ownerId, isTemplate: false }, select: sessionSelect });
+  return row ? toSession(row) : null;
+}
+
+// ── The caller's own logged sets ─────────────────────────────────────────────────────
+// Sets are the log itself. Older sets were saved without a session, so this collection,
+// not the sessions one, is the complete record.
+
+const setSelect = {
+  id: true,
+  sessionId: true,
+  date: true,
+  exerciseId: true,
+  setNumber: true,
+  reps: true,
+  weight: true,
+  unit: true,
+  restSeconds: true,
+  userComments: true,
+  createdAt: true,
+  updatedAt: true,
+  exercises: { select: { name: true, source: true } },
+} satisfies Prisma.workout_log_entriesSelect;
+
+type SetRow = Prisma.workout_log_entriesGetPayload<{ select: typeof setSelect }>;
+
+function toSet(row: SetRow) {
+  const raw = parseFloat(row.weight);
+  const weight = Number.isFinite(raw) ? (row.unit === 'LB' ? Math.round(raw * KG_PER_LB * 100) / 100 : raw) : null;
+  const exerciseTitle = row.exercises?.name ?? 'Exercise';
+  const dose = `${row.reps} x ${weight ?? 0} kg`;
+  return {
+    name: `me/workout-sets/${row.id}`,
+    uid: row.id,
+    title: `${exerciseTitle}: ${dose}`,
+    ...renderBody([...paragraph(`${exerciseTitle}, set ${row.setNumber}: ${dose}.`), ...paragraph(row.userComments)]),
+    lang: null,
+    performed_date: row.date.toISOString().slice(0, 10),
+    workout_session: row.sessionId ? `me/workout-sessions/${row.sessionId}` : null,
+    exercise: row.exercises?.source === OPEN_EXERCISE_SOURCE ? `exercises/${row.exerciseId}` : null,
+    exercise_title: exerciseTitle,
+    set_number: row.setNumber,
+    reps: row.reps,
+    weight_kg: weight,
+    rest_seconds: row.restSeconds ?? null,
+    notes: row.userComments ?? null,
+    uri: `${SITE_URL}/workout-log`,
+    source: { title: 'Massimino', uri: SITE_URL },
+    license: null,
+    create_time: timestamp(row.createdAt),
+    update_time: timestamp(row.updatedAt),
+  };
+}
+
+export async function listMySets(ownerId: string, page: Page) {
+  const where = { userId: ownerId };
+  const [total, rows] = await Promise.all([
+    prisma.workout_log_entries.count({ where }),
+    prisma.workout_log_entries.findMany({
+      where,
+      select: setSelect,
+      orderBy: [{ date: 'desc' }, { createdAt: 'desc' }, { id: 'asc' }],
+      skip: page.offset,
+      take: page.size,
+    }),
+  ]);
+  return { total, items: rows.map(toSet) };
+}
+
+export async function getMySet(ownerId: string, uid: string) {
+  const row = await prisma.workout_log_entries.findFirst({ where: { id: uid, userId: ownerId }, select: setSelect });
+  return row ? toSet(row) : null;
+}

@@ -4,6 +4,7 @@
 #   scripts/api-smoke.sh                                   # http://localhost:3000
 #   BASE=https://massimino.fitness scripts/api-smoke.sh
 #   KEY=msk_live_... REVOKED_KEY=msk_live_... scripts/api-smoke.sh
+#   LOG_KEY=msk_live_... scripts/api-smoke.sh          # a key with the workout_log.read permission
 #
 # It checks every endpoint, the error paths, paging to the last page, and that no
 # response contains private data. Exits non-zero if any check fails.
@@ -13,6 +14,7 @@ BASE="${BASE:-http://localhost:3000}"
 API="$BASE/api/v1"
 KEY="${KEY:-}"
 REVOKED_KEY="${REVOKED_KEY:-}"
+LOG_KEY="${LOG_KEY:-}"
 pass=0
 fail=0
 TMP="$(mktemp -d)"
@@ -38,7 +40,7 @@ echo "1. Entry points"
 request index 200 "$API"
 request openapi 200 "$API/openapi.json"
 check "contract is OpenAPI 3.1" "$(field openapi "d['openapi']")" "3.1.0"
-check "contract lists 10 paths" "$(field openapi "len(d['paths'])")" "10"
+check "contract lists 14 paths" "$(field openapi "len(d['paths'])")" "14"
 
 echo "2. Collections"
 request exercises 200 "$API/exercises?page_size=3"
@@ -123,6 +125,43 @@ if [ -n "$REVOKED_KEY" ]; then
   check "403 reason" "$(field revoked_key "d['error']['details'][0]['reason']")" "API_KEY_REVOKED"
 else
   echo "  skip  revoked key (set REVOKED_KEY to test)"
+fi
+
+echo "8b. Personal data: your own workout log"
+request me_no_key 401 "$API/me/workout-sessions"
+request me_sets_no_key 401 "$API/me/workout-sets"
+check "401 reason" "$(field me_no_key "d['error']['details'][0]['reason']")" "API_KEY_REQUIRED"
+request me_wrong_key 401 "$API/me/workout-sessions" -H "Authorization: Bearer msk_live_this-key-does-not-exist"
+if [ -n "$KEY" ]; then
+  request me_no_scope 403 "$API/me/workout-sessions" -H "Authorization: Bearer $KEY"
+  check "403 reason" "$(field me_no_scope "d['error']['details'][0]['reason']")" "SCOPE_MISSING"
+else
+  echo "  skip  key without the permission (set KEY to test)"
+fi
+if [ -n "$REVOKED_KEY" ]; then request me_revoked 403 "$API/me/workout-sessions" -H "Authorization: Bearer $REVOKED_KEY"; fi
+if [ -n "$LOG_KEY" ]; then
+  request me_sessions 200 "$API/me/workout-sessions?page_size=2" -H "Authorization: Bearer $LOG_KEY"
+  if grep -qi '^cache-control: private, no-store' "$TMP/me_sessions.headers"; then ok "personal responses are not cached"; else bad "personal response may be cached"; fi
+  request me_missing 404 "$API/me/workout-sessions/does-not-exist" -H "Authorization: Bearer $LOG_KEY"
+  request me_sets 200 "$API/me/workout-sets?page_size=3" -H "Authorization: Bearer $LOG_KEY"
+  request me_set_missing 404 "$API/me/workout-sets/does-not-exist" -H "Authorization: Bearer $LOG_KEY"
+  SET=$(field me_sets "d['workout_sets'][0]['uid'] if d['workout_sets'] else ''")
+  if [ -n "$SET" ]; then
+    request me_set 200 "$API/me/workout-sets/$SET" -H "Authorization: Bearer $LOG_KEY"
+    check "set has the canonical fields" "$(field me_set "all(k in d for k in ['name','uid','title','body_txt','body_html','create_time','update_time','reps','weight_kg'])")" "True"
+  else
+    ok "set detail (this account has no sets)"
+  fi
+  MS=$(field me_sessions "d['workout_sessions'][0]['uid'] if d['workout_sessions'] else ''")
+  if [ -n "$MS" ]; then
+    request me_session 200 "$API/me/workout-sessions/$MS" -H "Authorization: Bearer $LOG_KEY"
+    check "session has the canonical fields" "$(field me_session "all(k in d for k in ['name','uid','title','body_txt','body_html','create_time','update_time','sets'])")" "True"
+    if [ -n "$KEY" ]; then request me_session_other_key 403 "$API/me/workout-sessions/$MS" -H "Authorization: Bearer $KEY"; fi
+  else
+    ok "session detail (this account has no sessions)"
+  fi
+else
+  echo "  skip  key with the permission (set LOG_KEY to test)"
 fi
 
 echo "9. Headers"

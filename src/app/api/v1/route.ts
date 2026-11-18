@@ -18,6 +18,11 @@ export const GET = publicRoute(async (req) => {
       teams: `${base}/teams`,
       countries: `${base}/fitness-intelligence/countries`,
     },
+    personal: {
+      workout_sets: `${base}/me/workout-sets`,
+      workout_sessions: `${base}/me/workout-sessions`,
+      requires: 'An API key with the workout_log.read permission. Returns only the key owner\'s sessions.',
+    },
     pagination: { page_size_default: PAGE_SIZE_DEFAULT, page_size_max: PAGE_SIZE_MAX },
     rate_limits: {
       without_key_per_minute: RATE_LIMIT.anonymous.maxRequests,

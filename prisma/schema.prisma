@@ -3618,6 +3618,8 @@ model api_keys {
   label      String
   prefix     String
   keyHash    String    @unique
+  // What the key may do beyond reading open data, e.g. "workout_log.read"
+  scopes     String[]  @default([])
   createdAt  DateTime  @default(now())
   lastUsedAt DateTime?
   revokedAt  DateTime?

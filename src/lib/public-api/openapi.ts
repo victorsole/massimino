@@ -132,6 +132,53 @@ const schemas: Record<string, Schema> = {
     },
     required: [...CANONICAL_REQUIRED, 'iso_code', 'indicators'],
   },
+  WorkoutSession: {
+    type: 'object',
+    description: 'One of your own logged workout sessions. Personal: served only to a key that belongs to you and has the workout_log.read permission.',
+    properties: {
+      ...canonical('workout session', 'me/workout-sessions/0f8fad5b-d9cb-469f-a165-70867728950e'),
+      start_time: str('When the session started. RFC 3339, UTC.', { format: 'date-time' }),
+      end_time: nullableStr('When it ended, or null when it was not closed or was closed much later.'),
+      duration_minutes: nullableNum('Length in minutes, or null when it was not recorded.'),
+      completed: { type: 'boolean', description: 'Whether the session was finished.' },
+      set_count: int('Number of sets logged.', { minimum: 0 }),
+      total_reps: int('Repetitions across all sets.', { minimum: 0 }),
+      total_volume_kg: { type: 'number', description: 'Sum of weight times repetitions, in kilograms.' },
+      sets: arr({ $ref: '#/components/schemas/LoggedSet' }, 'The sets, in the order they were logged.'),
+    },
+    required: [...CANONICAL_REQUIRED, 'start_time', 'end_time', 'duration_minutes', 'completed', 'set_count', 'total_reps', 'total_volume_kg', 'sets'],
+  },
+  WorkoutSet: {
+    type: 'object',
+    description: 'One set you logged. Personal. This collection is your complete log: older sets were saved without a session.',
+    properties: {
+      ...canonical('logged set', 'me/workout-sets/1b4e28ba-2fa1-11d2-883f-0016d3cca427'),
+      performed_date: str('The day the set was performed, as the calendar date you logged it under.', { format: 'date' }),
+      workout_session: nullableStr('Resource name of the session the set belongs to, or null when it was logged without one.'),
+      exercise: nullableStr('Resource name of the exercise when it is one the open API serves, otherwise null.'),
+      exercise_title: str('Name of the exercise.'),
+      set_number: int('Position of the set within its exercise that day, starting at 1.'),
+      reps: int('Repetitions.', { minimum: 0 }),
+      weight_kg: nullableNum('Load in kilograms. 0 for bodyweight.'),
+      rest_seconds: nullableNum('Rest after the set, in seconds.'),
+      notes: nullableStr('Your own note on the set.'),
+    },
+    required: [...CANONICAL_REQUIRED, 'performed_date', 'workout_session', 'exercise', 'exercise_title', 'set_number', 'reps', 'weight_kg', 'rest_seconds', 'notes'],
+  },
+  LoggedSet: {
+    type: 'object',
+    description: 'One logged set.',
+    properties: {
+      exercise: nullableStr('Resource name of the exercise when it is one the open API serves, otherwise null.'),
+      exercise_title: str('Name of the exercise.'),
+      set_number: int('Position of the set within its exercise, starting at 1.'),
+      reps: int('Repetitions.', { minimum: 0 }),
+      weight_kg: nullableNum('Load in kilograms. 0 for bodyweight.'),
+      rest_seconds: nullableNum('Rest after the set, in seconds.'),
+      notes: nullableStr('Your own note on the set.'),
+    },
+    required: ['exercise', 'exercise_title', 'set_number', 'reps', 'weight_kg', 'rest_seconds', 'notes'],
+  },
   Error: {
     type: 'object',
     description: 'The one error shape for the whole API.',
@@ -185,8 +232,8 @@ const errorResponse = (description: string) => ({
 
 const commonErrors = {
   '400': errorResponse('A parameter is not valid.'),
-  '401': errorResponse('The API key is malformed or not recognised.'),
-  '403': errorResponse('The API key has been revoked.'),
+  '401': errorResponse('The API key is malformed or not recognised, or the endpoint needs a key and none was sent.'),
+  '403': errorResponse('The API key has been revoked, or lacks the permission this endpoint needs.'),
   '429': errorResponse('Too many requests. See the Retry-After header.'),
 };
 
@@ -227,6 +274,9 @@ const getOperation = (id: string, summary: string, schema: string, parameters: u
   },
 });
 
+/** Personal endpoints: a key is mandatory and must carry the permission */
+const personalSecurity = [{ bearerKey: ['workout_log.read'] }, { headerKey: ['workout_log.read'] }];
+
 const pathParam = (name: string, description: string) => ({ name, in: 'path', required: true, description, schema: { type: 'string' } });
 const queryParam = (name: string, description: string) => ({ name, in: 'query', description, schema: { type: 'string' } });
 
@@ -243,6 +293,8 @@ export const openApiDocument = {
       '',
       'Every resource carries the same core fields: name, uid, title, body_txt, body_html, lang, uri, source, license, create_time and update_time. Check license before reusing content: null means the content is public but not licensed for reuse.',
       '',
+      'Your own workout log is available under /me. It is personal: it needs a key you created with the "read my workout log" permission, and it only ever returns the sessions of the account that owns the key.',
+      '',
       'Field names use American English (program, not programme). Fields are only ever added within version 1, never renamed or removed.',
     ].join('\n'),
     license: { name: 'Apache-2.0', identifier: 'Apache-2.0' },
@@ -255,6 +307,7 @@ export const openApiDocument = {
     { name: 'Programs', description: 'Training programmes and their workouts.' },
     { name: 'Teams' },
     { name: 'Fitness Intelligence' },
+    { name: 'Me', description: 'Your own data. A key with the right permission is required; nothing here is cached.' },
   ],
   paths: {
     '/exercises': {
@@ -307,6 +360,34 @@ export const openApiDocument = {
       get: {
         tags: ['Fitness Intelligence'],
         ...getOperation('getCountry', 'Get the figures for one country', 'Country', [pathParam('country', 'Two-letter ISO country code, for example SE.')]),
+      },
+    },
+    '/me/workout-sets': {
+      get: {
+        tags: ['Me'],
+        security: personalSecurity,
+        ...listOperation('listMyWorkoutSets', 'List every set you have logged, newest first', 'workout_sets', 'WorkoutSet'),
+      },
+    },
+    '/me/workout-sets/{set}': {
+      get: {
+        tags: ['Me'],
+        security: personalSecurity,
+        ...getOperation('getMyWorkoutSet', 'Get one set you logged', 'WorkoutSet', [pathParam('set', 'The uid of the set.')]),
+      },
+    },
+    '/me/workout-sessions': {
+      get: {
+        tags: ['Me'],
+        security: personalSecurity,
+        ...listOperation('listMyWorkoutSessions', 'List your own workout sessions, newest first', 'workout_sessions', 'WorkoutSession'),
+      },
+    },
+    '/me/workout-sessions/{session}': {
+      get: {
+        tags: ['Me'],
+        security: personalSecurity,
+        ...getOperation('getMyWorkoutSession', 'Get one of your own workout sessions', 'WorkoutSession', [pathParam('session', 'The uid of the session.')]),
       },
     },
   },

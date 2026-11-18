@@ -16,3 +16,6 @@ CREATE TABLE IF NOT EXISTS "api_keys" (
 
 CREATE UNIQUE INDEX IF NOT EXISTS "api_keys_keyHash_key" ON "api_keys" ("keyHash");
 CREATE INDEX IF NOT EXISTS "api_keys_userId_idx" ON "api_keys" ("userId");
+
+-- Phase 2 (same day): what a key may do beyond reading open data.
+ALTER TABLE "api_keys" ADD COLUMN IF NOT EXISTS "scopes" TEXT[] NOT NULL DEFAULT '{}';

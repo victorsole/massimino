@@ -13,7 +13,7 @@ import { notify, confirmAction } from '@/lib/notify';
 
 type Param = { name: string; in: 'path' | 'query'; placeholder: string; hint: string; required?: boolean; example?: string };
 
-type Endpoint = { id: string; group: string; label: string; path: string; summary: string; params: Param[] };
+type Endpoint = { id: string; group: string; label: string; path: string; summary: string; params: Param[]; needsKey?: boolean };
 
 const PAGE_PARAMS: Param[] = [
   { name: 'page_size', in: 'query', placeholder: '25', hint: 'Items per page, up to 100.' },
@@ -97,11 +97,49 @@ const ENDPOINTS: Endpoint[] = [
     summary: 'The figures for one country.',
     params: [{ name: 'country', in: 'path', placeholder: 'SE', hint: 'Two-letter ISO code.', required: true, example: 'SE' }],
   },
+  {
+    id: 'listMySets',
+    group: 'Your workout log',
+    label: 'List your logged sets',
+    path: '/api/v1/me/workout-sets',
+    summary: 'Every set you have logged, newest first: your complete log. Needs a key with the workout log permission.',
+    params: PAGE_PARAMS,
+    needsKey: true,
+  },
+  {
+    id: 'getMySet',
+    group: 'Your workout log',
+    label: 'Get one logged set',
+    path: '/api/v1/me/workout-sets/{set}',
+    summary: 'One set by its uid. Needs a key with the workout log permission.',
+    params: [{ name: 'set', in: 'path', placeholder: 'uid from the list', hint: 'The uid of one of your sets.', required: true }],
+    needsKey: true,
+  },
+  {
+    id: 'listMySessions',
+    group: 'Your workout log',
+    label: 'List your sessions',
+    path: '/api/v1/me/workout-sessions',
+    summary: 'Your own logged sessions, newest first. Needs a key with the workout log permission.',
+    params: PAGE_PARAMS,
+    needsKey: true,
+  },
+  {
+    id: 'getMySession',
+    group: 'Your workout log',
+    label: 'Get one of your sessions',
+    path: '/api/v1/me/workout-sessions/{session}',
+    summary: 'One of your own sessions by its uid. Needs a key with the workout log permission.',
+    params: [{ name: 'session', in: 'path', placeholder: 'uid from the list', hint: 'The uid of one of your sessions.', required: true }],
+    needsKey: true,
+  },
 ];
 
 type Result = { status: number; ms: number; limit: string | null; remaining: string | null; body: string };
 
-type KeyRecord = { id: string; label: string; prefix: string; createdAt: string; lastUsedAt: string | null; revokedAt: string | null };
+type KeyRecord = { id: string; label: string; prefix: string; scopes: string[]; createdAt: string; lastUsedAt: string | null; revokedAt: string | null };
+
+const WORKOUT_LOG_SCOPE = 'workout_log.read';
 
 /**
  * Copies text. The Clipboard API can refuse, or never answer (no permission, page not
@@ -237,6 +275,7 @@ export function ApiConsole() {
   const [keysLoaded, setKeysLoaded] = useState(false);
   const [label, setLabel] = useState('');
   const [creating, setCreating] = useState(false);
+  const [allowWorkoutLog, setAllowWorkoutLog] = useState(false);
   const [freshKey, setFreshKey] = useState<string | null>(null);
 
   const loadKeys = async () => {
@@ -262,7 +301,7 @@ export function ApiConsole() {
       const response = await fetch('/api/developer/keys', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ label }),
+        body: JSON.stringify({ label, scopes: allowWorkoutLog ? [WORKOUT_LOG_SCOPE] : [] }),
       });
       const json = await response.json();
       if (!json?.success) {
@@ -272,6 +311,7 @@ export function ApiConsole() {
       setFreshKey(json.data.key);
       setApiKey(json.data.key);
       setLabel('');
+      setAllowWorkoutLog(false);
       await loadKeys();
     } catch {
       notify('We could not create the key. Please try again.');
@@ -380,6 +420,9 @@ export function ApiConsole() {
             {running ? 'Running…' : 'Run request'}
           </button>
           {missing.length > 0 && <p className="mt-2 text-xs text-gray-600">Fill in {missing.join(', ')} to run this request.</p>}
+          {endpoint.needsKey && !apiKey && (
+            <p className="mt-2 text-xs text-gray-600">This endpoint needs a key with the workout log permission. Without one it answers 401.</p>
+          )}
         </div>
 
         {/* ── Keys ── */}
@@ -429,6 +472,21 @@ export function ApiConsole() {
                 </button>
               </div>
 
+              <label className="mt-3 flex items-start gap-2.5 text-sm text-gray-700">
+                <input
+                  type="checkbox"
+                  checked={allowWorkoutLog}
+                  onChange={(e) => setAllowWorkoutLog(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 rounded border-gray-300 text-brand-primary focus:ring-brand-primary"
+                />
+                <span>
+                  Let this key read my workout log
+                  <span className="block text-xs text-gray-500">
+                    Off by default. Only turn it on for a key you keep private: anyone holding it can read your sessions.
+                  </span>
+                </span>
+              </label>
+
               <ul className="mt-4 divide-y divide-brand-primary/10">
                 {keysLoaded && keys.length === 0 && <li className="py-3 text-sm text-gray-600">No keys yet.</li>}
                 {keys.map((key) => (
@@ -437,6 +495,9 @@ export function ApiConsole() {
                       <p className={`truncate text-sm font-medium ${key.revokedAt ? 'text-gray-500 line-through' : 'text-gray-900'}`}>{key.label}</p>
                       <p className="font-mono text-xs text-gray-500">
                         {key.prefix}… · {key.revokedAt ? 'revoked' : key.lastUsedAt ? `last used ${new Date(key.lastUsedAt).toLocaleDateString('en-GB')}` : 'never used'}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {key.scopes.includes(WORKOUT_LOG_SCOPE) ? 'Open data and your workout log' : 'Open data only'}
                       </p>
                     </div>
                     {!key.revokedAt && (

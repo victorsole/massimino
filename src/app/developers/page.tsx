@@ -9,7 +9,7 @@ import { PAGE_SIZE_DEFAULT, PAGE_SIZE_MAX, RATE_LIMIT } from '@/lib/public-api/h
 export const metadata: Metadata = {
   title: 'API',
   description:
-    'The Massimino API: open, read-only fitness data. Exercises, training programmes with their workouts, public teams and Eurostat fitness figures, with a live console.',
+    'The Massimino API: open, read-only fitness data. Exercises, training programmes with their workouts, public teams and Eurostat fitness figures, plus your own workout log with your own key. With a live console.',
   alternates: { canonical: '/developers' },
 };
 
@@ -122,7 +122,9 @@ export default function DevelopersPage() {
             ))}
           </ul>
           <p className="mt-4 text-sm text-gray-600">
-            Workout logs are personal, so they are not open data. Access to your own log with your own key is planned for a later version.
+            Workout logs are personal, so they are not open data. You can read your own log at <code className="font-mono text-xs">/api/v1/me/workout-sets</code> and{' '}
+            <code className="font-mono text-xs">/api/v1/me/workout-sessions</code>{' '}
+            with a key you created with the workout log permission. It only ever returns the sessions of the account that owns the key.
           </p>
         </div>
       </section>
