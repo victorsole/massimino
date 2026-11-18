@@ -99,6 +99,9 @@ export default function DevelopersPage() {
             >
               OpenAPI contract <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
             </a>
+            <a href="/mcp" className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-white underline-offset-4 hover:underline">
+              Use it from Claude or ChatGPT <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            </a>
           </div>
           <pre className="mt-10 max-w-2xl overflow-x-auto rounded-field bg-black/30 px-5 py-4 font-mono text-sm text-emerald-100">
             curl &quot;https://massimino.fitness/api/v1/exercises?q=squat&amp;page_size=2&quot;

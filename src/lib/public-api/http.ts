@@ -48,7 +48,7 @@ export class ApiError extends Error {
   }
 }
 
-const CORS_HEADERS: Record<string, string> = {
+export const CORS_HEADERS: Record<string, string> = {
   // Public, read-only data: any origin may call it. No credentials are ever accepted
   // from a cookie, so there is nothing for a hostile page to ride on.
   'Access-Control-Allow-Origin': '*',
@@ -124,7 +124,12 @@ export function generateKey(): { key: string; prefix: string; hash: string } {
   return { key, prefix: key.slice(0, KEY_PREFIX.length + 6), hash: hashKey(key) };
 }
 
-function presentedKey(req: NextRequest): string | null {
+/**
+ * `allowQueryKey` is for the MCP endpoint only: some assistant apps (claude.ai's connector
+ * dialog among them) have no field for a header, so the key has to ride in the URL.
+ * A key in a URL ends up in logs and history; the REST API does not accept it.
+ */
+function presentedKey(req: NextRequest, allowQueryKey = false): string | null {
   const auth = req.headers.get('authorization');
   if (auth) {
     const match = auth.match(/^Bearer\s+(.+)$/i);
@@ -136,7 +141,12 @@ function presentedKey(req: NextRequest): string | null {
     return match[1].trim();
   }
   const header = req.headers.get('x-api-key');
-  return header ? header.trim() : null;
+  if (header) return header.trim();
+  if (allowQueryKey) {
+    const fromQuery = req.nextUrl.searchParams.get('key') || req.nextUrl.searchParams.get('api_key');
+    if (fromQuery) return fromQuery.trim();
+  }
+  return null;
 }
 
 /** What a key may do beyond reading open data. A key has none unless its owner granted it. */
@@ -156,8 +166,8 @@ export interface Caller {
   scopes: string[];
 }
 
-async function identifyCaller(req: NextRequest): Promise<Caller> {
-  const key = presentedKey(req);
+export async function identifyCaller(req: NextRequest, options: { allowQueryKey?: boolean } = {}): Promise<Caller> {
+  const key = presentedKey(req, options.allowQueryKey);
   if (!key) return { id: `ip:${getClientIdentifier(req)}`, keyed: false, ownerId: null, scopes: [] };
 
   const unauthenticated = new ApiError('UNAUTHENTICATED', 'API_KEY_INVALID', 'This API key is not recognised.', {}, {

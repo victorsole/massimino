@@ -28,6 +28,7 @@ const STATIC_ROUTES: StaticRoute[] = [
   { path: '/teams/discover', priority: 0.7, changeFrequency: 'weekly' },
   { path: '/partnerships', priority: 0.7, changeFrequency: 'monthly' },
   { path: '/developers', priority: 0.7, changeFrequency: 'monthly' },
+  { path: '/mcp', priority: 0.6, changeFrequency: 'monthly' },
   { path: '/safety', priority: 0.6, changeFrequency: 'yearly' },
   { path: '/contact', priority: 0.5, changeFrequency: 'yearly' },
   { path: '/signup', priority: 0.5, changeFrequency: 'yearly' },
