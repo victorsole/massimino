@@ -39,9 +39,9 @@ tsconfig 2.tsbuildinfo
 *.bak
 Save
 
-# Security audits and runbooks: they describe unfixed issues and where old
-# credentials sit in history, so they stay local, never in this public repo
-docs/audit/
+# Internal docs, audits and Claude skills/commands stay local: this repo is public
+docs/
+.claude/
 
 # Uploads (credentials are user content; don’t track)
 public/uploads/credentials/
