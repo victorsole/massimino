@@ -7,6 +7,8 @@ import { EUROPE_FITNESS_DATA_2024, getByPenetrationRate, getByMarketSize, getByG
 import { EUROPE_TOTALS } from '@/types/fitness_data';
 import { FitnessMapSection } from './components/fitness_map_section';
 import { ScrollCue } from '@/components/ui/scroll_cue';
+import { SportAtlas } from './components/sport_atlas';
+import { SportStory } from './components/sport_story';
 import {
   PenetrationTable,
   MarketTable,
@@ -31,10 +33,10 @@ import {
 export const metadata: Metadata = {
   title: 'Fitness Intelligence',
   alternates: { canonical: '/fitness-intelligence' },
-  description: 'European fitness industry data visualization. Explore gym penetration rates, market sizes, and growth trends across Europe.',
+  description: 'European fitness and sport data, mapped. Gym penetration, market size and growth, plus who plays sport, who works in sport and who wins across Europe, in an interactive atlas with downloadable data.',
   openGraph: {
     title: 'Fitness Intelligence | Massimino',
-    description: 'European fitness industry data visualization with interactive maps.',
+    description: 'Europe\'s fitness market and sport participation, employment and Olympic results, in interactive maps.',
     type: 'website',
     url: '/fitness-intelligence',
     // Setting openGraph here replaces the layout's, so point back to the default card
@@ -201,6 +203,31 @@ export default function FitnessIntelligencePage() {
         {/* ════════ Map, as large as possible ════════ */}
         <section id="map" className="scroll-mt-20">
           <FitnessMapSection data={EUROPE_FITNESS_DATA_2024} totalMarketEur={EUROPE_TOTALS.total_market_eur} />
+        </section>
+
+        {/* ════════ Sport in Europe (data.europa.eu data story, recomputed from source) ════════ */}
+        <section id="sport-in-europe" className="mt-16 scroll-mt-20" aria-labelledby="sport-in-europe-title">
+          <p className="font-display text-xs font-medium uppercase tracking-[0.2em] text-gray-600">Beyond the gym</p>
+          <h2 id="sport-in-europe-title" className="mt-1 font-display text-2xl font-bold tracking-tight text-brand-primary sm:text-3xl">
+            Sport in Europe: who plays, who works, who wins
+          </h2>
+          <p className="mt-2 mb-6 max-w-3xl text-sm text-gray-600 sm:text-base">
+            Gym membership is one part of the picture. Fewer than four in ten Europeans exercise every week, the sport workforce is
+            young and growing, and medals do not follow population.
+          </p>
+          <SportStory />
+        </section>
+
+        {/* ════════ Sport Europe atlas: thematic GIS map over every dataset on this page ════════ */}
+        <section id="atlas" className="mt-16 scroll-mt-20" aria-labelledby="atlas-title">
+          <h2 id="atlas-title" className="font-display text-2xl font-bold tracking-tight text-brand-primary sm:text-3xl">
+            Sport Europe atlas
+          </h2>
+          <p className="mt-2 mb-6 max-w-3xl text-sm text-gray-600 sm:text-base">
+            Every dataset on this page joined to the map of Europe. Pick a layer, change how it is classified, compare two layers at
+            once, add circles for counts, click a country for all its figures, and download the lot as CSV or GeoJSON.
+          </p>
+          <SportAtlas />
         </section>
 
         {/* ════════ Rankings, two per row on desktop ════════ */}
@@ -651,6 +678,10 @@ export default function FitnessIntelligencePage() {
                 <li><a href="https://www.healthandfitness.org/" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">Health &amp; Fitness Association (HFA)</a> - 2026 Global Report</li>
                 <li>National bodies: ukactive, DSSV (Germany), AGAP (Portugal), swiss active</li>
                 <li>Company filings: Basic-Fit, PureGym, The Gym Group, SATS, Benefit Systems FY2025</li>
+                <li><a href="https://europa.eu/eurobarometer/surveys/detail/2668" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">Special Eurobarometer 525</a> - Sport and physical activity (2022)</li>
+                <li><a href="https://ec.europa.eu/eurostat/databrowser/view/sprt_emp_sex/default/table?lang=en" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">Eurostat sprt_emp_sex, sprt_emp_age</a> - Employment in sport (2025)</li>
+                <li><a href="https://data.education.gouv.fr/explore/assets/paris-2024-results-medals-oly-eng/" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">Paris 2024 medal results</a> - data.education.gouv.fr; population from Eurostat tps00001</li>
+                <li><a href="https://data.europa.eu/en/publications/datastories/sport-europe-who-plays-who-works-who-wins" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">data.europa.eu data story</a> - Sport in Europe (27 October 2026)</li>
               </ul>
             </div>
             <div>
@@ -658,7 +689,8 @@ export default function FitnessIntelligencePage() {
               <ul className="space-y-1">
                 <li><a href="https://maplibre.org/" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">MapLibre GL JS</a> - Open-source map rendering (BSD-3)</li>
                 <li><a href="https://www.openstreetmap.org/" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">OpenStreetMap</a> - Geographic data (ODbL)</li>
-                <li><a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">Natural Earth</a> - GeoJSON boundaries</li>
+                <li><a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">Natural Earth</a> - 1:50m country boundaries (public domain), clipped and simplified, self-hosted</li>
+                <li>Atlas classification: natural breaks (Fisher-Jenks), quantile and equal interval; bivariate view uses tertiles</li>
               </ul>
             </div>
           </div>

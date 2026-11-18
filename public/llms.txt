@@ -8,7 +8,7 @@ Massimino offers general fitness information and isn't medical advice. The site 
 
 - [Home](https://massimino.fitness/): what Massimino is, featured training programmes and partners
 - [Exercise library](https://massimino.fitness/exercises): 1,200+ curated exercises, searchable by muscle group, equipment, difficulty and movement pattern, with instructions
-- [Fitness Intelligence](https://massimino.fitness/fitness-intelligence): European fitness market data (EuropeActive/Deloitte, FY2025) and physical-activity statistics from Eurostat, by country
+- [Fitness Intelligence](https://massimino.fitness/fitness-intelligence): European fitness market data (EuropeActive/Deloitte, FY2025), Eurostat physical-activity and sport-employment statistics, Eurobarometer 525 sport participation by gender, and Paris 2024 medals per capita, by country, in an interactive atlas with CSV and GeoJSON download
 - [Safety guidelines](https://massimino.fitness/safety): community rules, how content is moderated and how to report a problem
 - [Community](https://massimino.fitness/community): community feed and discovery
 - [Find a team](https://massimino.fitness/teams/discover): public training teams to join

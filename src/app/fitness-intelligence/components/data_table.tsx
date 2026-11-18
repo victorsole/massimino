@@ -30,6 +30,10 @@ interface DataTableProps<T> {
   initialLimit?: number;
   /** Plural noun for the rows, used in the "Show all 41 countries" button */
   itemLabel?: string;
+  /** Linked-map hooks: hover and click a row, and the row to show as active */
+  onRowHover?: (row: T | null) => void;
+  onRowClick?: (row: T) => void;
+  activeRowKey?: string | null;
 }
 
 type SortState = { key: string; dir: 'asc' | 'desc' } | null;
@@ -66,6 +70,9 @@ export function DataTable<T>({
   caption,
   initialLimit = 10,
   itemLabel = 'rows',
+  onRowHover,
+  onRowClick,
+  activeRowKey,
 }: DataTableProps<T>) {
   const [sort, setSort] = useState<SortState>(initialSort ?? null);
   const [query, setQuery] = useState('');
@@ -162,7 +169,12 @@ export function DataTable<T>({
             {visible.map((row, idx) => (
               <tr
                 key={rowKey(row)}
-                className="border-b border-gray-100 transition-colors hover:bg-brand-secondary"
+                className={`border-b border-gray-100 transition-colors hover:bg-brand-secondary ${onRowClick ? 'cursor-pointer' : ''} ${activeRowKey === rowKey(row) ? 'bg-brand-primary/10' : ''}`}
+                onMouseEnter={onRowHover ? () => onRowHover(row) : undefined}
+                onMouseLeave={onRowHover ? () => onRowHover(null) : undefined}
+                onClick={onRowClick ? () => onRowClick(row) : undefined}
+                onKeyDown={onRowClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRowClick(row); } } : undefined}
+                tabIndex={onRowClick ? 0 : undefined}
               >
                 {columns.map((col) => (
                   <td key={col.key} className={`p-3 ${mobileClass(col)} ${alignClass(col.align)} ${col.cellClassName ?? ''}`}>
