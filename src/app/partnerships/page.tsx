@@ -1,712 +1,356 @@
 // src/app/partnerships/page.tsx
-import type { Metadata } from 'next';
+// Layout rules for this page: every section sits on the same 12-column container,
+// every grid has equal columns and equal-height cells, and colour comes from the brand
+// tokens only (no per-card accent colours).
 
-// Head metadata only; the page content is unchanged
+import type { Metadata } from 'next';
+import Image from 'next/image';
+import { ArrowRight, ArrowUpRight, Check, Mail, Phone } from 'lucide-react';
+import { LeadDialog } from './lead_dialogs';
+
 export const metadata: Metadata = {
   title: 'Partnerships',
   description: 'Partner with Massimino to reach athletes and personal trainers on a safety-first fitness platform.',
   alternates: { canonical: '/partnerships' },
 };
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import {
-  Building2,
-  Users,
-  Zap,
-  Target,
-  Shield,
-  BarChart3,
-  Smartphone,
-  Globe,
-  Heart,
-  CheckCircle,
-  ArrowRight,
-  Mail,
-  Phone
-} from 'lucide-react';
-import { LeadDialog, KitDownloadButton } from './lead_dialogs';
-import { HeroSection, AnimatedSection, StaggerContainer, StaggerItem, AnimatedCard } from '@/components/ui/animated_section';
+type Partner = {
+  name: string;
+  place?: string;
+  logo: string;
+  line: string;
+  href?: string;
+};
+
+// UTM parameters let partners see the visits Massimino sends them.
+const utm = (campaign: string) => `utm_source=massimino&utm_medium=partnerships_page&utm_campaign=${campaign}`;
+
+const PARTNERS: Partner[] = [
+  {
+    name: 'Amix',
+    place: 'Spain',
+    logo: '/images/amix-logo.png',
+    line: 'Sports supplements: protein, pre-workout and recovery.',
+    href: `https://amix.com/?${utm('amix')}`,
+  },
+  {
+    name: 'Quota Vita',
+    place: 'Spain',
+    logo: '/images/quotavitalogo.jpg',
+    line: 'Whey protein with Mediterranean flavours, made in Barcelona.',
+    href: `https://www.quotavita.com/en?${utm('quotavita')}`,
+  },
+  {
+    name: 'MU Amsterdam',
+    place: 'Netherlands',
+    logo: '/images/muscleupstore.png',
+    line: 'Premium training apparel designed in Amsterdam.',
+    href: `https://muscleupstore.nl/?${utm('mu_amsterdam')}`,
+  },
+  {
+    name: 'Pump Gymwear',
+    place: 'Netherlands',
+    logo: '/images/pumpgymwear.png',
+    line: 'Dutch gym wear: oversized tees, muscle-fit cuts and joggers.',
+    href: `https://pumpgymwear.com/en?${utm('pump_gymwear')}`,
+  },
+  {
+    name: 'Pilates4Life',
+    place: 'Spain',
+    logo: '/images/pilates4life-logo.webp',
+    line: 'Reformer Pilates classes in Barcelona.',
+    href: `https://www.pilates4life.es/?${utm('pilates4life')}`,
+  },
+  {
+    name: 'Bo',
+    place: 'Europe',
+    logo: '/images/Bo_logo.png',
+    line: 'A network linking visitors with local producers across Europe.',
+    href: `http://app.hellobo.eu?${utm('bo')}`,
+  },
+  {
+    // No link: verdabros.com does not resolve (checked 2026-11-16).
+    name: 'Verdabros',
+    logo: '/images/verdabros-logo.svg',
+    line: 'Authors of the Pro Ski Fitness programme on Massimino.',
+  },
+];
+
+const WAYS = [
+  {
+    id: 'gyms',
+    number: '01',
+    eyebrow: 'For gyms and studios',
+    title: 'Bring Massimino to your members',
+    body: 'Give your trainers and members one place for programmes, workout logs and coach feedback, under your own name.',
+    points: [
+      'Your branding on teams and programmes',
+      'Trainer and athlete accounts for your staff and members',
+      'Member progress your coaches can act on',
+      'Revenue sharing on paid programmes',
+    ],
+    steps: [
+      { name: 'Explore', text: 'A scoping call and a look at the platform.' },
+      { name: 'Set up', text: 'Your teams, trainers and programmes go in.' },
+      { name: 'Launch', text: 'A pilot with one location, then the rest.' },
+    ],
+    variant: 'gym' as const,
+    note: 'API and white-label integration are on the roadmap, not available yet.',
+  },
+  {
+    id: 'brands',
+    number: '02',
+    eyebrow: 'For brands',
+    title: 'Reach people who train',
+    body: 'Show supplements, equipment, apparel or services next to the workouts and programmes they belong with.',
+    points: [
+      'Placements in the feed, workouts and teams',
+      'Every creative reviewed against the safety guidelines',
+      'Impressions, clicks and click-through rate reported',
+      'Budgets sized for a small, focused audience',
+    ],
+    steps: [
+      { name: 'Brief', text: 'Goals, placements and dates.' },
+      { name: 'Submit', text: 'Creatives to spec; we review them.' },
+      { name: 'Measure', text: 'A report when the campaign ends.' },
+    ],
+    variant: 'ad' as const,
+    note: 'Massimino is a young community. Expect relevance, not scale.',
+  },
+];
+
+const REASONS = [
+  {
+    number: '01',
+    title: 'A safety-first setting',
+    text: 'Moderation and anti-harassment rules shape the whole platform, so your brand appears somewhere people trust.',
+  },
+  {
+    number: '02',
+    title: 'An audience that trains',
+    text: 'Athletes and personal trainers who log workouts and follow programmes, not a general lifestyle feed.',
+  },
+  {
+    number: '03',
+    title: 'Plain reporting',
+    text: 'What ran, where, and what it did. No estimated reach, no modelled numbers.',
+  },
+];
 
 export default function PartnershipsPage() {
   return (
-    <>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Featured Partners */}
-        <AnimatedSection className="mb-10">
-          <h2 className="text-2xl font-semibold text-gray-900 text-center mb-6">Featured Partners</h2>
-          <StaggerContainer className="flex items-center justify-center gap-8 flex-wrap">
-            <StaggerItem>
-              <a href="https://amix.com/?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=amix" target="_blank" rel="noopener" className="group">
-                <span className="sr-only">Amix</span>
-                <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
-                  <img src="/images/amix-logo.png" alt="Amix" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
-                </span>
-              </a>
-            </StaggerItem>
-            <StaggerItem>
-              <a href="http://app.hellobo.eu?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=bo" target="_blank" rel="noopener" className="group">
-                <span className="sr-only">Bo</span>
-                <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
-                  <img src="/images/Bo_logo.png" alt="Bo" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
-                </span>
-              </a>
-            </StaggerItem>
-            <StaggerItem>
-              <a href="https://www.quotavita.com/en?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=quotavita" target="_blank" rel="noopener" className="group">
-                <span className="sr-only">Quota Vita</span>
-                <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
-                  <img src="/images/quotavitalogo.jpg" alt="Quota Vita" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
-                </span>
-              </a>
-            </StaggerItem>
-            <StaggerItem>
-              <a href="https://muscleupstore.nl/?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=mu_amsterdam" target="_blank" rel="noopener" className="group">
-                <span className="sr-only">MU Amsterdam</span>
-                <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
-                  <img src="/images/muscleupstore.png" alt="MU Amsterdam" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
-                </span>
-              </a>
-            </StaggerItem>
-            <StaggerItem>
-              <a href="https://pumpgymwear.com/en?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=pump_gymwear" target="_blank" rel="noopener" className="group">
-                <span className="sr-only">Pump Gymwear</span>
-                <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
-                  <img src="/images/pumpgymwear.png" alt="Pump Gymwear" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
-                </span>
-              </a>
-            </StaggerItem>
-            <StaggerItem>
-              {/* No link: verdabros.com does not resolve (checked 2026-11-16). Add one when the site is live. */}
-              <span className="inline-block rounded-xl border bg-white">
-                <img src="/images/verdabros-logo.svg" alt="Verdabros" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
-              </span>
-            </StaggerItem>
-            <StaggerItem>
-              <a href="https://www.pilates4life.es/?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=pilates4life" target="_blank" rel="noopener" className="group">
-                <span className="sr-only">Pilates4Life</span>
-                <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
-                  <img src="/images/pilates4life-logo.webp" alt="Pilates4Life" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
-                </span>
-              </a>
-            </StaggerItem>
-            {/** Temporarily removed Jims pending formal agreement **/}
-            {/**
-            <StaggerItem>
-              <a href="https://www.jims.be/nl?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=jims" target="_blank" rel="noopener" className="group">
-                <span className="sr-only">Jims</span>
-                <span className="inline-block rounded-xl border bg-white transition-all group-hover:shadow-md group-hover:scale-[1.02]">
-                  <img src="/images/jims-logo.png" alt="Jims" className="h-12 md:h-14 w-auto object-contain rounded-xl p-2" />
-                </span>
-              </a>
-            </StaggerItem>
-            **/}
-          </StaggerContainer>
-        </AnimatedSection>
-
-        {/* Partner Cards */}
-        <section className="mb-12">
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <AnimatedCard>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-3">
-                    <img src="/images/amix-logo.png" alt="Amix" className="h-8 w-auto rounded" />
-                    Amix • Spain
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="mb-3">
-                    Quality sports supplements — protein, pre‑workout, and recovery essentials.
-                  </CardDescription>
-                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
-                    <li>Wide range of evidence‑based products</li>
-                    <li>Supports training performance and recovery</li>
-                    <li>Trusted by athletes and coaches</li>
-                  </ul>
-                  <a href="https://amix.com/?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=amix" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit Amix →</a>
-                </CardContent>
-              </Card>
-            </AnimatedCard>
-            <AnimatedCard>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-3">
-                    <img src="/images/Bo_logo.png" alt="Bo" className="h-8 w-auto rounded" />
-                    Bo • Europe
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="mb-3">
-                    Bo is a social network that links visitors to local producers from all over Europe, whom are called hosts in Bo. Local producers of any category (i.e., wine, beer, vegetables, fruit, fish, crafts, etc.). Bo also shows the geographical indications (GIs) of Europe.
-                  </CardDescription>
-                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
-                    <li>Connects visitors with local producer "hosts" across Europe</li>
-                    <li>Covers all categories: wine, beer, produce, fish, crafts</li>
-                    <li>Highlights Europe's geographical indications (GIs)</li>
-                  </ul>
-                  <a href="http://app.hellobo.eu?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=bo" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit Bo →</a>
-                </CardContent>
-              </Card>
-            </AnimatedCard>
-            <AnimatedCard>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-3">
-                    <img src="/images/quotavitalogo.jpg" alt="Quota Vita" className="h-8 w-auto rounded" />
-                    Quota Vita • Spain
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="mb-3">
-                    Whey protein supplements with unique Mediterranean flavors, crafted in Barcelona for healthy supplementation.
-                  </CardDescription>
-                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
-                    <li>24g protein per serving with complete amino acid profile</li>
-                    <li>Unique flavors like Crema Catalana</li>
-                    <li>Focus on healthy habits and sustainable nutrition</li>
-                  </ul>
-                  <a href="https://www.quotavita.com/en?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=quotavita" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit Quota Vita &#x2192;</a>
-                </CardContent>
-              </Card>
-            </AnimatedCard>
-            <AnimatedCard>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-3">
-                    <img src="/images/muscleupstore.png" alt="MU Amsterdam" className="h-8 w-auto rounded" />
-                    MU Amsterdam • Netherlands
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="mb-3">
-                    Luxury fitness apparel from Amsterdam. Premium athleisure designed for athletes who train hard and dress sharp.
-                  </CardDescription>
-                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
-                    <li>Exclusive luxury athleisure brand</li>
-                    <li>Signature hoodies, pants, and training looks</li>
-                    <li>Minimalist design with a premium edge</li>
-                  </ul>
-                  <a href="https://muscleupstore.nl/?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=mu_amsterdam" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit MU Amsterdam &#x2192;</a>
-                </CardContent>
-              </Card>
-            </AnimatedCard>
-            <AnimatedCard>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-3">
-                    <img src="/images/pumpgymwear.png" alt="Pump Gymwear" className="h-8 w-auto rounded" />
-                    Pump Gymwear • Netherlands
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="mb-3">
-                    Dutch fitness apparel brand focused on comfort and style. From oversized tees to joggers — gym wear that looks as good as it feels.
-                  </CardDescription>
-                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
-                    <li>Comfortable, stylish gym clothing for men</li>
-                    <li>Oversized and muscle-fit cuts</li>
-                    <li>Growing Dutch brand with a passionate community</li>
-                  </ul>
-                  <a href="https://pumpgymwear.com/en?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=pump_gymwear" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit Pump Gymwear &#x2192;</a>
-                </CardContent>
-              </Card>
-            </AnimatedCard>
-            {/** Temporarily removed Jims card pending formal agreement **/}
-            {/**
-            <AnimatedCard>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-3">
-                    <img src="/images/jims-logo.png" alt="Jims" className="h-8 w-auto rounded" />
-                    Jims • Belgium
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="mb-3">
-                    Accessible gym network with multiple locations and flexible memberships.
-                  </CardDescription>
-                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">
-                    <li>Convenient locations across Belgium</li>
-                    <li>Great value membership options</li>
-                    <li>Friendly, supportive environment</li>
-                  </ul>
-                  <a href="https://www.jims.be/nl?utm_source=massimino&utm_medium=partnerships_page&utm_campaign=jims" target="_blank" rel="noopener" className="inline-block text-brand-primary hover:underline">Visit Jims →</a>
-                </CardContent>
-              </Card>
-            </AnimatedCard>
-            **/}
-          </StaggerContainer>
-          <p className="text-xs text-gray-500 mt-3">Partnership details subject to change.</p>
-        </section>
-
-        {/* Hero Section */}
-        <HeroSection className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Partner with Massimino
+    <div className="bg-brand-secondary">
+      {/* ── Hero ───────────────────────────────────────────────────────────── */}
+      <section className="relative isolate overflow-hidden bg-brand-primary-dark">
+        <Image
+          src="/images/background/barbell.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="-z-10 object-cover opacity-25"
+        />
+        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+          <p className="landing-eyebrow text-brand-secondary/75">Partnerships</p>
+          <h1 className="landing-title mt-4 max-w-4xl text-4xl text-white sm:text-5xl lg:text-6xl">
+            Brands and gyms we train with
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Join the future of fitness technology. Partner with Massimino to reach
-            millions of fitness enthusiasts and professionals worldwide.
+          <p className="landing-body mt-6 max-w-2xl text-lg text-brand-secondary/90">
+            Massimino is a safety-first fitness community for athletes and personal trainers.
+            We work with a small number of partners whose products and places we would use ourselves.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <LeadDialog variant="generic" size="lg" />
-            {/* Download Partnership Kit button - temporarily hidden */}
-            {/* <KitDownloadButton variant="outline" size="lg" /> */}
+          <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <LeadDialog variant="generic" size="lg" className="bg-white text-brand-primary hover:bg-brand-secondary" />
+            <a
+              href="#partners"
+              className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-white underline-offset-4 hover:underline"
+            >
+              See our partners <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </a>
           </div>
-        </HeroSection>
+        </div>
+      </section>
 
-        {/* Highlights */}
-        <section className="mb-12">
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <AnimatedCard>
-              <Card className="text-center h-full">
-                <CardHeader>
-                  <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                    <CheckCircle className="h-6 w-6 text-green-600" />
-                  </div>
-                  <CardTitle>Easy Integration</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>SDK/API/white‑label options with branded experiences.</CardDescription>
-                </CardContent>
-              </Card>
-            </AnimatedCard>
-            <AnimatedCard>
-              <Card className="text-center h-full">
-                <CardHeader>
-                  <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                    <Target className="h-6 w-6 text-blue-600" />
-                  </div>
-                  <CardTitle>Targeted Reach</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>Contextual placements across feed, workouts, teams.</CardDescription>
-                </CardContent>
-              </Card>
-            </AnimatedCard>
-            <AnimatedCard>
-              <Card className="text-center h-full">
-                <CardHeader>
-                  <div className="mx-auto w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mb-4">
-                    <BarChart3 className="h-6 w-6 text-amber-600" />
-                  </div>
-                  <CardTitle>Clear Analytics</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>Impressions, clicks, CTR, and pacing transparency.</CardDescription>
-                </CardContent>
-              </Card>
-            </AnimatedCard>
-          </StaggerContainer>
-        </section>
-
-        {/* Partnership Types */}
-        <section className="mb-16">
-          <AnimatedSection>
-            <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-              Partnership Opportunities
-            </h2>
-          </AnimatedSection>
-
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Gym Partnerships */}
-            <AnimatedCard>
-            <Card className="border-2 border-blue-200 h-full">
-              <CardHeader>
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                    <Building2 className="h-6 w-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-xl">Gym Partnerships</CardTitle>
-                    <Badge variant="secondary">Plugin Integration</Badge>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="mb-4">
-                  Integrate Massimino directly into your gym's mobile app or management system. 
-                  Your trainers and athletes can seamlessly access Massimino's features.
-                </CardDescription>
-                
-                <div className="space-y-3 mb-6">
-                  <div className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                    <span>White-label integration options</span>
-                  </div>
-                  <div className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                    <span>Custom branding and themes</span>
-                  </div>
-                  <div className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                    <span>API access for seamless data sync</span>
-                  </div>
-                  <div className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                    <span>Revenue sharing opportunities</span>
-                  </div>
-                </div>
-
-                <LeadDialog variant="gym" fullWidth />
-              </CardContent>
-            </Card>
-            </AnimatedCard>
-
-            {/* Advertising Partnerships */}
-            <AnimatedCard>
-            <Card className="border-2 border-green-200 h-full">
-              <CardHeader>
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
-                    <Target className="h-6 w-6 text-green-600" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-xl">Advertising Partnerships</CardTitle>
-                    <Badge variant="secondary">Sponsored Content</Badge>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="mb-4">
-                  Reach our engaged fitness community with targeted advertising for 
-                  supplements, equipment, apparel, and fitness services.
-                </CardDescription>
-                
-                <div className="space-y-3 mb-6">
-                  <div className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                    <span>Highly targeted fitness audience</span>
-                  </div>
-                  <div className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                    <span>Multiple ad formats and placements</span>
-                  </div>
-                  <div className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                    <span>Detailed analytics and reporting</span>
-                  </div>
-                  <div className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                    <span>Flexible budget options</span>
-                  </div>
-                </div>
-
-                <LeadDialog variant="ad" fullWidth />
-              </CardContent>
-            </Card>
-            </AnimatedCard>
-          </StaggerContainer>
-        </section>
-
-        {/* Features Section */}
-        <section className="mb-16">
-          <AnimatedSection>
-            <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-              Why Partner with Massimino?
-            </h2>
-          </AnimatedSection>
-
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <AnimatedCard>
-              <Card className="text-center h-full">
-                <CardHeader>
-                  <div className="mx-auto w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
-                    <Users className="h-6 w-6 text-purple-600" />
-                  </div>
-                  <CardTitle>Growing Community</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Access to thousands of active fitness enthusiasts and professionals
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            </AnimatedCard>
-
-            <AnimatedCard>
-              <Card className="text-center h-full">
-                <CardHeader>
-                  <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                    <Shield className="h-6 w-6 text-blue-600" />
-                  </div>
-                  <CardTitle>Safety First</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Trusted platform with advanced safety and moderation features
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            </AnimatedCard>
-
-            <AnimatedCard>
-              <Card className="text-center h-full">
-                <CardHeader>
-                  <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                    <BarChart3 className="h-6 w-6 text-green-600" />
-                  </div>
-                  <CardTitle>Data Insights</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Comprehensive analytics and insights for better decision making
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            </AnimatedCard>
-
-            <AnimatedCard>
-              <Card className="text-center h-full">
-                <CardHeader>
-                  <div className="mx-auto w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mb-4">
-                    <Zap className="h-6 w-6 text-orange-600" />
-                  </div>
-                  <CardTitle>Easy Integration</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Simple APIs and documentation for quick implementation
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            </AnimatedCard>
-          </StaggerContainer>
-        </section>
-
-        {/* How It Works */}
-        <section className="mb-16">
-          <AnimatedSection>
-            <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">How It Works</h2>
-          </AnimatedSection>
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <StaggerItem>
-            <Card className="border-blue-200 h-full">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Building2 className="h-5 w-5 text-blue-600" /> Gyms
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div>
-                    <div className="flex items-center gap-2 text-sm font-medium"><Globe className="h-4 w-4 text-blue-600" />Explore</div>
-                    <CardDescription>Scoping call + sandbox access</CardDescription>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 text-sm font-medium"><Smartphone className="h-4 w-4 text-blue-600" />Integrate</div>
-                    <CardDescription>SDK/API with branding & features</CardDescription>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 text-sm font-medium"><CheckCircle className="h-4 w-4 text-blue-600" />Launch</div>
-                    <CardDescription>Pilot → rollout with analytics</CardDescription>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            </StaggerItem>
-            <StaggerItem>
-            <Card className="border-amber-200 h-full">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-amber-600" /> Advertisers
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                  <div>
-                    <div className="flex items-center gap-2 text-sm font-medium"><Mail className="h-4 w-4 text-amber-600" />Brief</div>
-                    <CardDescription>Goals + placements + dates</CardDescription>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 text-sm font-medium"><Zap className="h-4 w-4 text-amber-600" />Submit</div>
-                    <CardDescription>Upload creatives with specs</CardDescription>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 text-sm font-medium"><Shield className="h-4 w-4 text-amber-600" />Approve</div>
-                    <CardDescription>Moderation + QA review</CardDescription>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 text-sm font-medium"><BarChart3 className="h-4 w-4 text-amber-600" />Measure</div>
-                    <CardDescription>Impressions, clicks, CTR</CardDescription>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            </StaggerItem>
-          </StaggerContainer>
-        </section>
-
-        {/* Integration Examples — commented out for later */}
-        {/*
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-            Integration Examples
-          </h2>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <Card>
-              <CardHeader>
-                <div className="flex items-center mb-4">
-                  <Smartphone className="h-8 w-8 text-blue-600 mr-3" />
-                  <CardTitle>Mobile Apps</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  Integrate Massimino's workout tracking and coach features directly 
-                  into your gym's mobile application.
-                </CardDescription>
-                <div className="mt-4">
-                  <Badge variant="outline">iOS & Android</Badge>
-                  <Badge variant="outline" className="ml-2">React Native</Badge>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <div className="flex items-center mb-4">
-                  <Globe className="h-8 w-8 text-green-600 mr-3" />
-                  <CardTitle>Web Platforms</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  Embed Massimino's features into your gym's website or member portal 
-                  for seamless user experience.
-                </CardDescription>
-                <div className="mt-4">
-                  <Badge variant="outline">JavaScript SDK</Badge>
-                  <Badge variant="outline" className="ml-2">REST API</Badge>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <div className="flex items-center mb-4">
-                  <Heart className="h-8 w-8 text-red-600 mr-3" />
-                  <CardTitle>Wearable Devices</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  Connect with fitness trackers and smartwatches to automatically 
-                  sync workout data and progress.
-                </CardDescription>
-                <div className="mt-4">
-                  <Badge variant="outline">Apple Watch</Badge>
-                  <Badge variant="outline" className="ml-2">Fitbit</Badge>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-        */}
-
-        {/* Success Stories — commented out for later */}
-        {/*
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-            Success Stories
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                    <Building2 className="h-6 w-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">FitLife Gym Chain</h3>
-                    <p className="text-sm text-gray-500">50+ locations</p>
-                  </div>
-                </div>
-                <p className="text-gray-600 mb-4">
-                  "Integrating Massimino into our app increased member engagement by 40% 
-                  and helped our trainers provide better personalized guidance."
-                </p>
-                <div className="flex space-x-2">
-                  <Badge variant="secondary">+40% Engagement</Badge>
-                  <Badge variant="secondary">+25% Retention</Badge>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
-                    <Target className="h-6 w-6 text-green-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">ProteinPlus Supplements</h3>
-                    <p className="text-sm text-gray-500">Fitness Brand</p>
-                  </div>
-                </div>
-                <p className="text-gray-600 mb-4">
-                  "Our targeted ads on Massimino resulted in 3x higher conversion rates 
-                  compared to other fitness platforms."
-                </p>
-                <div className="flex space-x-2">
-                  <Badge variant="secondary">3x Conversions</Badge>
-                  <Badge variant="secondary">ROI +150%</Badge>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-        */}
-
-        {/* Contact Section */}
-        <AnimatedSection className="bg-gray-50 rounded-lg p-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Ready to Partner with Us?
-            </h2>
-            <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-              Get in touch with our partnership team to discuss how Massimino can 
-              help grow your business.
+      {/* ── Partners: 4 x 2 grid, the eighth cell is the invitation ───────── */}
+      <section id="partners" className="scroll-mt-20 py-20 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-end">
+            <div className="lg:col-span-7">
+              <p className="landing-eyebrow text-brand-primary/70">Our partners</p>
+              <h2 className="landing-title mt-3 text-3xl text-brand-primary sm:text-4xl">Seven partners so far</h2>
+            </div>
+            <p className="landing-body text-gray-600 lg:col-span-5">
+              Each one was chosen by hand. Links carry a tag so partners can see the visits we send them.
             </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <Button size="lg">
-                <Mail className="h-5 w-5 mr-2" />
-                hello@beresol.eu
-              </Button>
-              <Button variant="outline" size="lg">
-                <Phone className="h-5 w-5 mr-2" />
-                +32 493 36 5423
-              </Button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              <div className="text-center">
-                <h3 className="font-semibold text-gray-900 mb-2">Technical Support</h3>
-                <p className="text-sm text-gray-600">
-                  Dedicated technical team for seamless integration
-                </p>
-              </div>
-              <div className="text-center">
-                <h3 className="font-semibold text-gray-900 mb-2">Marketing Support</h3>
-                <p className="text-sm text-gray-600">
-                  Co-marketing opportunities and promotional materials
-                </p>
-              </div>
-              <div className="text-center">
-                <h3 className="font-semibold text-gray-900 mb-2">24/7 Support</h3>
-                <p className="text-sm text-gray-600">
-                  Round-the-clock support for all partnership needs
-                </p>
-              </div>
-            </div>
           </div>
-        </AnimatedSection>
-      </div>
-    </>
+
+          <ul className="mt-12 grid grid-cols-1 gap-px overflow-hidden rounded-card bg-brand-primary/10 shadow-soft sm:grid-cols-2 lg:grid-cols-4">
+            {PARTNERS.map((partner) => {
+              const body = (
+                <>
+                  <div className="flex h-24 items-center justify-center">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={partner.logo}
+                      alt={`${partner.name} logo`}
+                      className="max-h-14 w-auto max-w-[70%] object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="mt-6 flex items-baseline justify-between gap-3">
+                    <h3 className="font-display text-lg font-semibold text-brand-primary">{partner.name}</h3>
+                    {partner.place && (
+                      <span className="text-xs font-medium uppercase tracking-wider text-gray-500">{partner.place}</span>
+                    )}
+                  </div>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-600">{partner.line}</p>
+                  {partner.href && (
+                    <span className="mt-auto inline-flex items-center gap-1 pt-6 text-sm font-semibold text-brand-primary">
+                      Visit {partner.name}
+                      <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+                    </span>
+                  )}
+                </>
+              );
+              return (
+                <li key={partner.name} className="bg-card">
+                  {partner.href ? (
+                    <a
+                      href={partner.href}
+                      target="_blank"
+                      rel="noopener"
+                      className="group flex h-full min-h-[280px] flex-col p-8 transition-colors hover:bg-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-primary"
+                    >
+                      {body}
+                    </a>
+                  ) : (
+                    <div className="flex h-full min-h-[280px] flex-col p-8">{body}</div>
+                  )}
+                </li>
+              );
+            })}
+            <li className="bg-brand-primary">
+              <div className="flex h-full min-h-[280px] flex-col p-8 text-white">
+                <p className="landing-eyebrow text-brand-secondary/70">Next</p>
+                <h3 className="mt-4 font-display text-2xl font-semibold leading-tight">Your brand could sit here</h3>
+                <p className="mt-3 text-sm leading-relaxed text-brand-secondary/85">
+                  Tell us what you make and who it is for.
+                </p>
+                <div className="mt-auto pt-6">
+                  <LeadDialog variant="generic" className="bg-white text-brand-primary hover:bg-brand-secondary" fullWidth />
+                </div>
+              </div>
+            </li>
+          </ul>
+          <p className="mt-4 text-xs text-gray-500">Partnership details are subject to change.</p>
+        </div>
+      </section>
+
+      {/* ── Two ways to partner: two equal columns ────────────────────────── */}
+      <section className="border-y border-brand-primary/10 bg-card py-20 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <p className="landing-eyebrow text-brand-primary/70">Work with us</p>
+          <h2 className="landing-title mt-3 text-3xl text-brand-primary sm:text-4xl">Two ways to partner</h2>
+
+          <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-2">
+            {WAYS.map((way) => (
+              <article
+                key={way.id}
+                id={way.id}
+                className="flex scroll-mt-20 flex-col rounded-card bg-brand-secondary p-8 shadow-soft sm:p-10"
+              >
+                <div className="flex items-baseline gap-4">
+                  <span className="font-display text-sm font-semibold tabular-nums text-brand-primary/50">{way.number}</span>
+                  <p className="landing-eyebrow text-brand-primary/70">{way.eyebrow}</p>
+                </div>
+                <h3 className="mt-4 font-display text-2xl font-semibold leading-tight text-brand-primary sm:text-3xl">
+                  {way.title}
+                </h3>
+                <p className="landing-body mt-4 text-gray-700">{way.body}</p>
+
+                <ul className="mt-8 divide-y divide-brand-primary/10 border-y border-brand-primary/10">
+                  {way.points.map((point) => (
+                    <li key={point} className="flex items-start gap-3 py-3 text-sm text-gray-800">
+                      <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-brand-primary" aria-hidden="true" />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+
+                <ol className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
+                  {way.steps.map((step, index) => (
+                    <li key={step.name}>
+                      <p className="font-display text-xs font-semibold uppercase tracking-wider text-brand-primary/60">
+                        Step {index + 1}
+                      </p>
+                      <p className="mt-1 font-display font-semibold text-brand-primary">{step.name}</p>
+                      <p className="mt-1 text-sm leading-relaxed text-gray-600">{step.text}</p>
+                    </li>
+                  ))}
+                </ol>
+
+                <p className="mt-8 text-xs leading-relaxed text-gray-500">{way.note}</p>
+                <div className="mt-auto pt-6">
+                  <LeadDialog variant={way.variant} fullWidth />
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Why Massimino: three equal columns ────────────────────────────── */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <p className="landing-eyebrow text-brand-primary/70">Why Massimino</p>
+          <h2 className="landing-title mt-3 text-3xl text-brand-primary sm:text-4xl">What a partner gets</h2>
+
+          <div className="mt-12 grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-3">
+            {REASONS.map((reason) => (
+              <div key={reason.number} className="border-t-2 border-brand-primary pt-6">
+                <span className="font-display text-sm font-semibold tabular-nums text-brand-primary/50">{reason.number}</span>
+                <h3 className="mt-3 font-display text-xl font-semibold text-brand-primary">{reason.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-gray-600">{reason.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Contact ───────────────────────────────────────────────────────── */}
+      <section className="bg-brand-primary">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8">
+          <div>
+            <p className="landing-eyebrow text-brand-secondary/70">Get in touch</p>
+            <h2 className="landing-title mt-3 text-3xl text-white sm:text-4xl">Talk to the team behind it</h2>
+            <p className="landing-body mt-4 max-w-xl text-brand-secondary/90">
+              Massimino is built and run by Beresol BV. Write or call and we will come back to you.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <a
+              href="mailto:hello@beresol.eu"
+              className="flex items-center gap-3 rounded-field bg-white/10 px-5 py-4 text-white transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            >
+              <Mail className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+              <span className="min-w-0">
+                <span className="block text-xs uppercase tracking-wider text-brand-secondary/70">Email</span>
+                <span className="block truncate font-semibold">hello@beresol.eu</span>
+              </span>
+            </a>
+            <a
+              href="tel:+32493365423"
+              className="flex items-center gap-3 rounded-field bg-white/10 px-5 py-4 text-white transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            >
+              <Phone className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+              <span className="min-w-0">
+                <span className="block text-xs uppercase tracking-wider text-brand-secondary/70">Phone</span>
+                <span className="block truncate font-semibold">+32 493 36 5423</span>
+              </span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
